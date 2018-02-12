@@ -1,0 +1,1189 @@
+﻿<Window x:Name="window" x:Class="Lemon_App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lemon_App"
+        mc:Ignorable="d"
+        Title="LemonApp" Height="670" Width="1050" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded">
+    <Window.Resources>
+        <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
+        <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="#FFDCECFC"/>
+        <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="#FF7Eb4EA"/>
+        <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="#FFDAECFC"/>
+        <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="#FF569DE5"/>
+        <SolidColorBrush x:Key="SliderThumb.Disabled.Background" Color="#FFF0F0F0"/>
+        <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="#FFD9D9D9"/>
+        <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="#FFF0F0F0"/>
+        <SolidColorBrush x:Key="SliderThumb.Static.Border" Color="#FFACACAC"/>
+        <ControlTemplate x:Key="SliderThumbHorizontalTop" TargetType="{x:Type Thumb}">
+            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                <Path x:Name="grip" Data="M 0,6 C0,6 5.5,0 5.5,0 5.5,0 11,6 11,6 11,6 11,18 11,18 11,18 0,18 0,18 0,18 0,6 0,6 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" SnapsToDevicePixels="True" Stroke="{StaticResource SliderThumb.Static.Border}" StrokeThickness="1" UseLayoutRounding="True" VerticalAlignment="Center"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderThumbHorizontalBottom" TargetType="{x:Type Thumb}">
+            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                <Path x:Name="grip" Data="M 0,12 C0,12 5.5,18 5.5,18 5.5,18 11,12 11,12 11,12 11,0 11,0 11,0 0,0 0,0 0,0 0,12 0,12 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" SnapsToDevicePixels="True" Stroke="{StaticResource SliderThumb.Static.Border}" StrokeThickness="1" UseLayoutRounding="True" VerticalAlignment="Center"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="#FFD6D6D6"/>
+        <SolidColorBrush x:Key="SliderThumb.Track.Background" Color="#FFE7EAEA"/>
+        <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="#FF93A1AE" Height="3" CornerRadius="1" Margin="0,0,-1,0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
+            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                <Border Width="12" Height="12" Background="#FF8B8B8B" CornerRadius="10"/>
+                <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" SnapsToDevicePixels="True" Stroke="{StaticResource SliderThumb.Static.Border}" StrokeThickness="1" UseLayoutRounding="True" VerticalAlignment="Center" Visibility="Collapsed"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderHorizontal" TargetType="{x:Type Slider}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
+                    <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
+                    <Border x:Name="TrackBackground" BorderBrush="{StaticResource SliderThumb.Track.Border}" BorderThickness="1" Background="{StaticResource SliderThumb.Track.Background}" Height="4.0" Margin="5,0" Grid.Row="1" VerticalAlignment="center" Visibility="Collapsed">
+                        <Canvas Margin="-6,-1">
+                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
+                        </Canvas>
+                    </Border>
+                    <Track x:Name="PART_Track" Grid.Row="1">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
+                        </Track.DecreaseRepeatButton>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{DynamicResource RepeatButtonStyle}"/>
+                        </Track.IncreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb x:Name="Thumb" Focusable="False" Height="12" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbHorizontalDefault}" VerticalAlignment="Center" Width="12"/>
+                        </Track.Thumb>
+                    </Track>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalTop}"/>
+                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,2,5,0"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalBottom}"/>
+                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,0,5,2"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsSelectionRangeEnabled" Value="true">
+                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="true">
+                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderThumbVerticalLeft" TargetType="{x:Type Thumb}">
+            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                <Path x:Name="grip" Data="M 6,11 C6,11 0,5.5 0,5.5 0,5.5 6,0 6,0 6,0 18,0 18,0 18,0 18,11 18,11 18,11 6,11 6,11 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderThumbVerticalRight" TargetType="{x:Type Thumb}">
+            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                <Path x:Name="grip" Data="M 12,11 C12,11 18,5.5 18,5.5 18,5.5 12,0 12,0 12,0 0,0 0,0 0,0 0,11 0,11 0,11 12,11 12,11 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderThumbVerticalDefault" TargetType="{x:Type Thumb}">
+            <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
+                <Path x:Name="grip" Data="M0.5,0.5 L18.5,0.5 18.5,11.5 0.5,11.5z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" Stroke="{StaticResource SliderThumb.Static.Border}"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsDragging" Value="true">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Fill" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Background}"/>
+                    <Setter Property="Stroke" TargetName="grip" Value="{StaticResource SliderThumb.Disabled.Border}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderVertical" TargetType="{x:Type Slider}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Margin="0,0,2,0" Placement="Left" Visibility="Collapsed" Width="4"/>
+                    <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Margin="2,0,0,0" Placement="Right" Visibility="Collapsed" Width="4"/>
+                    <Border x:Name="TrackBackground" BorderBrush="{StaticResource SliderThumb.Track.Border}" BorderThickness="1" Background="{StaticResource SliderThumb.Track.Background}" Grid.Column="1" HorizontalAlignment="center" Margin="0,5" Width="4.0">
+                        <Canvas Margin="-1,-6">
+                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Visibility="Hidden" Width="4.0"/>
+                        </Canvas>
+                    </Border>
+                    <Track x:Name="PART_Track" Grid.Column="1">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
+                        </Track.DecreaseRepeatButton>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
+                        </Track.IncreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb x:Name="Thumb" Focusable="False" Height="11" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbVerticalDefault}" VerticalAlignment="Top" Width="18"/>
+                        </Track.Thumb>
+                    </Track>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbVerticalLeft}"/>
+                    <Setter Property="Margin" TargetName="TrackBackground" Value="2,5,0,5"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                    <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbVerticalRight}"/>
+                    <Setter Property="Margin" TargetName="TrackBackground" Value="0,5,2,5"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsSelectionRangeEnabled" Value="true">
+                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="true">
+                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource SliderThumb.Static.Foreground}"/>
+            <Setter Property="Template" Value="{StaticResource SliderHorizontal}"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="Template" Value="{StaticResource SliderVertical}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="RepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="#FFF0F0F0" Height="3" CornerRadius="1" Margin="-1,0,0,0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Storyboard x:Key="Loading">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="grid">
+                <EasingThicknessKeyFrame KeyTime="0" Value="315,1010,315,0"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="20">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="Closing">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="grid">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="315,1010,315,20">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
+            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Rectangle x:Name="Corner" Grid.Column="1" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Row="1"/>
+                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="0" Margin="{TemplateBinding Padding}" Grid.Row="0"/>
+                <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyle}" Width="5" MinWidth="0"/>
+                <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
+            </Grid>
+        </ControlTemplate>
+        <SolidColorBrush x:Key="ScrollBar.Static.Background" Color="#F0F0F0"/>
+        <SolidColorBrush x:Key="ScrollBar.Static.Border" Color="#F0F0F0"/>
+        <SolidColorBrush x:Key="ScrollBar.Pressed.Glyph" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="ScrollBar.MouseOver.Glyph" Color="#000000"/>
+        <SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="#BFBFBF"/>
+        <SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="#606060"/>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="#DADADA"/>
+        <SolidColorBrush x:Key="ScrollBar.MouseOver.Border" Color="#DADADA"/>
+        <SolidColorBrush x:Key="ScrollBar.Pressed.Background" Color="#606060"/>
+        <SolidColorBrush x:Key="ScrollBar.Pressed.Border" Color="#606060"/>
+        <SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="#F0F0F0"/>
+        <SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="#F0F0F0"/>
+        <Style x:Key="ScrollBarButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border x:Name="border" BorderBrush="{StaticResource ScrollBar.Static.Border}" BorderThickness="1" Background="{StaticResource ScrollBar.Static.Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource ScrollBar.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ScrollBar.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource ScrollBar.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ScrollBar.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource ScrollBar.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource ScrollBar.Disabled.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RepeatButtonTransparent2" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="{TemplateBinding Background}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="ScrollBar.MouseOver.Thumb" Color="#A6A6A6"/>
+        <SolidColorBrush x:Key="ScrollBar.Pressed.Thumb" Color="#606060"/>
+        <SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="#CDCDCD"/>
+        <Style x:Key="ScrollBarThumbVertical" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle x:Name="rectangle" Fill="#FFF1F1F1" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}" RadiusX="3" RadiusY="3"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumbHorizontal" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle x:Name="rectangle" Fill="{StaticResource ScrollBar.Static.Thumb}" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Fill" TargetName="rectangle" Value="{StaticResource ScrollBar.MouseOver.Thumb}"/>
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="true">
+                                <Setter Property="Fill" TargetName="rectangle" Value="{StaticResource ScrollBar.Pressed.Thumb}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+            <Setter Property="Background" Value="{StaticResource ScrollBar.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ScrollBar.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1,0"/>
+            <Setter Property="Width" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+            <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                            <Grid.RowDefinitions>
+                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" Height="0*"/>
+                                <RowDefinition Height="448*"/>
+                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" Height="17*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="1" Background="#00000000"/>
+                            <RepeatButton x:Name="PART_LineUpButton" Command="{x:Static ScrollBar.LineUpCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Style="{StaticResource ScrollBarButton}" Visibility="Collapsed">
+                                <Path x:Name="ArrowTop" Data="M 0,4 C0,4 0,6 0,6 0,6 3.5,2.5 3.5,2.5 3.5,2.5 7,6 7,6 7,6 7,4 7,4 7,4 3.5,0.5 3.5,0.5 3.5,0.5 0,4 0,4 z" Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3,4,3,3" Stretch="Uniform"/>
+                            </RepeatButton>
+                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1" Width="Auto">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource RepeatButtonTransparent}" Visibility="Collapsed"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource RepeatButtonTransparent}" Visibility="Collapsed"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ScrollBarThumbVertical}"/>
+                                </Track.Thumb>
+                            </Track>
+                            <RepeatButton x:Name="PART_LineDownButton" Command="{x:Static ScrollBar.LineDownCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="2" Style="{StaticResource ScrollBarButton}" Visibility="Collapsed">
+                                <Path x:Name="ArrowBottom" Data="M 0,2.5 C0,2.5 0,0.5 0,0.5 0,0.5 3.5,4 3.5,4 3.5,4 7,0.5 7,0.5 7,0.5 7,2.5 7,2.5 7,2.5 3.5,6 3.5,6 3.5,6 0,2.5 0,2.5 z" Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3,4,3,3" Stretch="Uniform"/>
+                            </RepeatButton>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineDownButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineDownButton}" Value="true"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowBottom" Value="{StaticResource ScrollBar.Pressed.Glyph}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineUpButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineUpButton}" Value="true"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowTop" Value="{StaticResource ScrollBar.Pressed.Glyph}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineDownButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineDownButton}" Value="false"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowBottom" Value="{StaticResource ScrollBar.MouseOver.Glyph}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineUpButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineUpButton}" Value="false"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowTop" Value="{StaticResource ScrollBar.MouseOver.Glyph}"/>
+                            </MultiDataTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Fill" TargetName="ArrowTop" Value="{StaticResource ScrollBar.Disabled.Glyph}"/>
+                                <Setter Property="Fill" TargetName="ArrowBottom" Value="{StaticResource ScrollBar.Disabled.Glyph}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Width" Value="Auto"/>
+                    <Setter Property="MinWidth" Value="0"/>
+                    <Setter Property="Height" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+                    <Setter Property="MinHeight" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+                    <Setter Property="BorderThickness" Value="0,1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
+                                        <ColumnDefinition Width="0.00001*"/>
+                                        <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1"/>
+                                    <RepeatButton x:Name="PART_LineLeftButton" Command="{x:Static ScrollBar.LineLeftCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Style="{StaticResource ScrollBarButton}">
+                                        <Path x:Name="ArrowLeft" Data="M 3.18,7 C3.18,7 5,7 5,7 5,7 1.81,3.5 1.81,3.5 1.81,3.5 5,0 5,0 5,0 3.18,0 3.18,0 3.18,0 0,3.5 0,3.5 0,3.5 3.18,7 3.18,7 z" Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3" Stretch="Uniform"/>
+                                    </RepeatButton>
+                                    <Track x:Name="PART_Track" Grid.Column="1" IsEnabled="{TemplateBinding IsMouseOver}">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Style="{StaticResource RepeatButtonTransparent}"/>
+                                        </Track.IncreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Style="{StaticResource ScrollBarThumbHorizontal}"/>
+                                        </Track.Thumb>
+                                    </Track>
+                                    <RepeatButton x:Name="PART_LineRightButton" Grid.Column="2" Command="{x:Static ScrollBar.LineRightCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Style="{StaticResource ScrollBarButton}">
+                                        <Path x:Name="ArrowRight" Data="M 1.81,7 C1.81,7 0,7 0,7 0,7 3.18,3.5 3.18,3.5 3.18,3.5 0,0 0,0 0,0 1.81,0 1.81,0 1.81,0 5,3.5 5,3.5 5,3.5 1.81,7 1.81,7 z" Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3" Stretch="Uniform"/>
+                                    </RepeatButton>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineRightButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineRightButton}" Value="true"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowRight" Value="{StaticResource ScrollBar.Pressed.Glyph}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineLeftButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineLeftButton}" Value="true"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowLeft" Value="{StaticResource ScrollBar.Pressed.Glyph}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineRightButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineRightButton}" Value="false"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowRight" Value="{StaticResource ScrollBar.MouseOver.Glyph}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineLeftButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineLeftButton}" Value="false"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowLeft" Value="{StaticResource ScrollBar.MouseOver.Glyph}"/>
+                                    </MultiDataTrigger>
+                                    <Trigger Property="IsEnabled" Value="false">
+                                        <Setter Property="Fill" TargetName="ArrowLeft" Value="{StaticResource ScrollBar.Disabled.Glyph}"/>
+                                        <Setter Property="Fill" TargetName="ArrowRight" Value="{StaticResource ScrollBar.Disabled.Glyph}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Storyboard x:Key="ClickTop">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Data">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TopIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ControlBtnChanTop">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TopIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ControlBtnChanSinger">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SingerIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ControlBtnChanZJ">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ZJIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ControlBtnChanRadio">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RadioIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ControlBtnChanLike">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LikeIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ControlBtnChanGD">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MyGDIndexPage">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+        <Style x:Key="SearchBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" CornerRadius="3">
+                            <Grid>
+                                <Path Data="M936.831196,923.623895L732.420666,719.216435C763.016498,685.258019 787.168571,646.729517 804.328393,604.413759 823.422263,557.329394 833.100693,507.587503 833.10274,456.562386 833.100693,405.536246 823.422263,355.790262 804.328393,308.707943 784.556071,259.951496 755.515664,216.213342 718.010469,178.710193 680.509367,141.208067 636.771213,112.166638 588.012719,92.3932919999999 540.928354,73.3004449999999 491.18544,63.6209919999999 440.161346,63.6209919999999 389.136229,63.6209919999999 339.391268,73.3004449999999 292.307927,92.3932919999999 243.55148,112.164591 199.812303,141.207044 162.308131,178.710193 124.806005,216.213342 95.7655990000001,259.951495 75.9943000000001,308.707943 56.8994060000001,355.791284 47.2199530000001,405.536245 47.2189300000001,456.562386 47.2199530000001,507.587503 56.8994070000001,557.330417 75.9922540000001,604.413759 95.7645760000001,653.170206 124.804983,696.909383 162.308132,734.411509 199.812304,771.913635 243.551481,800.956088 292.307928,820.729433 339.392293,839.820233 389.13623,849.501733 440.161347,849.50378 491.185441,849.501733 540.931425,839.820233 588.01272,820.729433 630.328478,803.570635 668.855956,779.419585 702.815396,748.82273L907.222856,953.231213C915.399073,961.40743 928.653958,961.405383 936.832221,953.229166 945.00332,945.054997 945.00639,931.800112 936.831196,923.623895z M440.160323,806.832935C346.597391,806.830888 258.635013,770.399141 192.480314,704.241372 126.323568,638.084626 89.887728,550.122249 89.885681,456.562386 89.885681,362.999454 126.322545,275.038099 192.480314,208.882377 258.635013,142.724608 346.597391,106.288767 440.160323,106.287744 533.722232,106.288767 621.68154,142.723585 687.840332,208.882377 753.997078,275.038099 790.430872,362.999454 790.430872,456.562386 790.430872,550.122248 753.997078,638.083603 687.840332,704.241372 621.68154,770.399141 533.722232,806.832935 440.160323,806.832935z" Fill="{TemplateBinding Foreground}" Stretch="Fill" Width="12" Height="12" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="20,4,0,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+        <SolidColorBrush x:Key="RadioButton.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="RadioButton.Static.Border" Color="#FF707070"/>
+        <Style x:Key="OptionMarkFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Storyboard x:Key="OpenDataPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Data">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OpenLyricPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LyricPage">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseLyricPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LyricPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Loading}"/>
+            <BeginStoryboard Storyboard="{StaticResource CloseLyricPage}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="closeBtn">
+            <BeginStoryboard x:Name="Closing_BeginStoryboard" Storyboard="{StaticResource Closing}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="TopBtn">
+            <BeginStoryboard x:Name="ControlBtnChanTop_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanTop}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="SingerBtn">
+            <BeginStoryboard x:Name="ControlBtnChanSinger_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanSinger}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="ZJBtn">
+            <BeginStoryboard x:Name="ControlBtnChanZJ_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanZJ}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="RadioBtn">
+            <BeginStoryboard x:Name="ControlBtnChanRadio_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanRadio}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="LikeBtn">
+            <BeginStoryboard x:Name="ControlBtnChanLike_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanLike}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="GDBtn">
+            <BeginStoryboard x:Name="ControlBtnChanGD_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanGD}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Window.Effect>
+        <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0"/>
+    </Window.Effect>
+    <Grid x:Name="grid" Margin="20" Background="White">
+        <Grid.Clip>
+            <RectangleGeometry RadiusX="5" RadiusY="5">
+                <RectangleGeometry.Rect>
+                    <Rect Width="1010" Height="630"/>
+                </RectangleGeometry.Rect>
+            </RectangleGeometry>
+        </Grid.Clip>
+        <Grid x:Name="ContentPage" Margin="236,0,0,75">
+            <Grid x:Name="TopIndexPage">
+                <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
+                <ScrollViewer  Margin="30,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <WrapPanel x:Name="topIndexList"/>
+                </ScrollViewer>
+            </Grid>
+            <Grid x:Name="SingerIndexPage" Visibility="Collapsed">
+                <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
+                <ScrollViewer  Margin="30,80,30,0" Template="{DynamicResource ScrollViewerControlTemplate}" VerticalAlignment="Top">
+                    <WrapPanel>
+                        <WrapPanel>
+                            <RadioButton Content="全部" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True" Checked="SingerPageChecked" Uid="all_all_"/>
+                            <RadioButton Content="华语男" Checked="SingerPageChecked" Uid="cn_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="华语女" Checked="SingerPageChecked" Uid="cn_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="华语组合" Checked="SingerPageChecked" Uid="cn_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="韩国男" Checked="SingerPageChecked" Uid="k_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="韩国女" Checked="SingerPageChecked" Uid="k_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="韩国组合" Checked="SingerPageChecked" Uid="k_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="日本男" Checked="SingerPageChecked" Uid="j_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="日本女" Checked="SingerPageChecked" Uid="j_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="日本组合" Checked="SingerPageChecked" Uid="j_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="欧美男" Checked="SingerPageChecked" Uid="eu_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="欧美女" Checked="SingerPageChecked" Uid="eu_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="欧美组合" Checked="SingerPageChecked" Uid="eu_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="乐团" Checked="SingerPageChecked" Uid="c_orchestra_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="演奏家" Checked="SingerPageChecked" Uid="c_performer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="作曲家" Checked="SingerPageChecked" Uid="c_composer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="指挥家" Checked="SingerPageChecked" Uid="c_cantor_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="其他" Checked="SingerPageChecked" Uid="other_other_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                        </WrapPanel>
+                        <WrapPanel Margin="0,20,0,0">
+                            <RadioButton Content="热门" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="A" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="B" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="C" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="D" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="E" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="F" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="G" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="H" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="I" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="J" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="K" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="L" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="M" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="N" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="O" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="P" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="Q" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="R" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="S" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="T" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="U" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="V" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="W" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="X" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="Y" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="Z" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                            <RadioButton Content="#" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                </ScrollViewer>
+                <ScrollViewer  Margin="10,210,10,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <WrapPanel x:Name="singerItemsList"/>
+                </ScrollViewer>
+            </Grid>
+            <Grid x:Name="ZJIndexPage" Visibility="Collapsed">
+                <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="专辑&amp;分类歌单" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
+                <WrapPanel x:Name="FLGDIndexList" Margin="30,90,0,0" VerticalAlignment="Top" Height="145"/>
+                <ScrollViewer  Margin="30,240,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <WrapPanel x:Name="FLGDItemsList"/>
+                </ScrollViewer>
+            </Grid>
+            <Grid x:Name="RadioIndexPage" Visibility="Collapsed">
+                <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="在线电台" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
+                <WrapPanel x:Name="RadioIndexList" Margin="30,90,30,0" VerticalAlignment="Top">
+                    <RadioButton Content="热门" Uid="0" IsChecked="True" Margin="20,0,0,0" Checked="RadioPageChecked"/>
+                    <RadioButton Content="下午" Uid="1" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="情感" Uid="2" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="主题" Uid="3" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="场景" Uid="4"  Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="曲风" Uid="5" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="语言" Uid="6" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="人群" Uid="7" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton Content="乐器" Uid="8" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                </WrapPanel>
+                <ScrollViewer  Margin="30,125,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <WrapPanel x:Name="RadioItemsList"/>
+                </ScrollViewer>
+            </Grid>
+            <Grid x:Name="LikeIndexPage" Visibility="Collapsed"/>
+            <Grid x:Name="MyGDIndexPage" Visibility="Collapsed"/>
+            <Grid x:Name="Data" Visibility="Collapsed">
+                <Border BorderBrush="#FFE7E8EC" Height="200" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFDFDFD">
+                    <Grid>
+                        <Border x:Name="TX" BorderThickness="1" HorizontalAlignment="Left" Width="139" Margin="30,30,0,30" Height="139" BorderBrush="#FFE7E8EC" Background="#FFFEFEFE" CornerRadius="5"/>
+                        <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" VerticalAlignment="Top" Margin="180,30,10,0" Foreground="#FF7A7A7A" FontSize="36"/>
+                        <Border BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="180,0,0,30" VerticalAlignment="Bottom" Width="90" BorderBrush="#FF007ACC" Background="#FF4EB7FB" CornerRadius="5">
+                            <TextBlock TextWrapping="Wrap" Text="播放全部" Margin="0,9,0,0" Foreground="#FFFDFDFD" TextAlignment="Center"/>
+                        </Border>
+                        <Border BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="285,0,0,30" VerticalAlignment="Bottom" Width="90" BorderBrush="#FFE7E8EC" Background="#FFFEFEFE" CornerRadius="5">
+                            <TextBlock TextWrapping="Wrap" Text="下载" Margin="0,9,0,0" Foreground="#FF555555" TextAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+                <ScrollViewer  Margin="10,210,10,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <WrapPanel x:Name="DataItemsList"/>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+        <Border x:Name="ControlPage" HorizontalAlignment="Left" Width="236" Margin="0,0,0,75" Background="#FFFAFAFA" BorderThickness="0,0,1,0" BorderBrush="#FFE7E8EC">
+            <Grid>
+                <Border x:Name="closeBtn" HorizontalAlignment="Left" Height="10" Margin="20,20,0,0" VerticalAlignment="Top" Width="10" Background="#FFF95852" CornerRadius="10"/>
+                <Border x:Name="bigBtn" HorizontalAlignment="Left" Height="10" Margin="40,20,0,0" VerticalAlignment="Top" Width="10" Background="#FFEFC000" CornerRadius="10"/>
+                <Border x:Name="smallBtn" HorizontalAlignment="Left" Height="10" Margin="60,20,0,0" VerticalAlignment="Top" Width="10" Background="#FF00D00F" CornerRadius="10"/>
+                <Border HorizontalAlignment="Left" Height="15" Margin="71.5,210,0,0" VerticalAlignment="Top" Width="15">
+                    <Path x:Name="path" Data="M903.490346,189.772134L261.212211,189.772134C230.409671,189.772134,205.362205,214.826763,205.362205,245.62214L205.362205,887.900275C205.362205,918.695652,230.410694,943.750281,261.212211,943.750281L763.701603,943.750281 959.341375,750.619656 959.341375,245.62214C959.341375,214.826763,934.292885,189.772134,903.490346,189.772134z M903.490346,727.275995L740.767264,887.900276 261.21221,887.900276 261.21221,245.622141 903.490345,245.622141 903.490346,727.275995z M120.018467 136.532583l642.278135 0 0 23.282263 55.850006 0L818.146609 136.532583c0-30.795377-25.048489-55.850006-55.850006-55.850006l-642.278135 0c-30.80254 0-55.850006 25.054629-55.850006 55.850006l0 642.278135c0 30.795377 25.048489 55.850006 55.850006 55.850006l51.201126 0L171.219593 778.810718l-51.201126 0L120.018467 136.532583z M502.917134 735.333508c32.863479 0.981351 66.808592-15.391549 85.724407-45.886073 5.265934-8.487302 10.829649-19.618826 12.626575-29.523407l39.049365-208.832236 0.13917-0.719384c0 0 18.160615-2.472308 40.031738 1.50426 0.858554 0.165776 1.726318 0.300852 2.581802 0.476861 3.465938 0.716314 6.89913 1.723248 10.582009 2.876514 4.815679 1.36509 9.365298 3.071965 13.719466 4.997827 0.148379 0.072655 0.195451 0.105401 0.324388 0.168846 13.146415 6.574742 39.845497 26.323529 42.063001 68.89716 14.207583-31.402197 7.326872-79.960123-20.662599-102.8259-37.758975-30.886451-109.667725-35.509748-109.667725-35.509748l-41.302685 227.263004c-17.179264-16.457834-38.947034-19.87056-66.051345-20.583804-49.92404-1.571798-92.444459 28.081569-94.958722 66.152653C414.563854 701.860139 453.014584 733.855854 502.917134 735.333508z" Stretch="Uniform" Fill="#FF4EB7FB" StrokeThickness="0"/>
+                </Border>
+                <Label x:Name="MusicKuBtn" Content="音乐库" Margin="96.5,205,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="TopBtn" Content="排行" Margin="96.5,247,33.5,0" VerticalAlignment="Top" Foreground="#FF4EB7FB"/>
+                <Label x:Name="SingerBtn" Content="歌手" Margin="96.5,287,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="ZJBtn" Content="专辑" Margin="96.5,327,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="RadioBtn" Content="电台" Margin="96.5,367,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Border HorizontalAlignment="Left" Height="15" Margin="71.5,415,0,0" VerticalAlignment="Top" Width="15">
+                    <Path Data="M461.1,887.1C461.1,887.1 210.6,784 98.3,552.5 46.6,446 46.3,303.3 147,202.1 247.6,101 410.8,100.9 511.4,202.1 612,101 775.2,101 875.8,202.1 976.5,303.3 979.1,458 924.5,552.5 789,787.1 570.3,885.1 570.3,885.1 540.5,901.4 491.4,901.9 461.1,887.1z M481.2,845.7C498.5,854.2,531.9,853.6,548,844.7L551.6,843C554.3,841.8 560.1,839 568.6,834.5 583.2,826.7 599.6,817.2 617.4,805.9 668.4,773.3 719.5,732.8 767.1,684 812.3,637.7 852.1,586.3 884.9,529.5 934.9,442.9 921.8,313.3 843.4,234.6 760.7,151.5 626.8,151.5 544.2,234.6L511.6,267.4 479,234.6C396.3,151.5 262.4,151.5 179.7,234.6 101.7,313 90.1999999999998,430.3 139.7,532.4 173.3,601.5 222.5,663.2 283.6,717.4 326.6,755.6 372.8,787.8 419,814.1 435.2,823.3 450,831 463.3,837.4 471.1,841.1 476.3,843.5 478.8,844.5L481.2,845.7z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=LikeBtn}" StrokeThickness="0"/>
+                </Border>
+                <Label x:Name="LikeBtn" Content="我喜欢" Margin="96.5,410,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Border HorizontalAlignment="Left" Height="15" Margin="71.5,457,0,0" VerticalAlignment="Top" Width="15">
+                    <Path Data="M819.2 459.776l-215.04-28.4672L512 225.28l-92.16 206.2336L204.8 459.776l158.1056 155.8528-40.96 224.0512L512 729.7024 701.6448 839.68l-40.96-223.8464zM512 677.0688L372.5312 757.76l29.9008-163.84L286.72 479.232l157.696-20.48L512 307.2l67.584 151.3472 157.696 20.48L621.1584 593.92l29.9008 163.84z M512 61.44A471.04 471.04 0 0 0 144.7936 827.392L174.08 798.72a430.08 430.08 0 1 1 92.16 87.04l-29.4912 29.4912A471.04 471.04 0 1 0 512 61.44z M200.9088 829.0304L171.8272 858.112q15.9744 16.5888 33.3824 31.5392L234.496 860.16a436.0192 436.0192 0 0 1-33.5872-31.1296z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=GDBtn}" StrokeThickness="5"/>
+                </Border>
+                <Label x:Name="GDBtn" Content="我的歌单" Margin="96.5,452,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Border Height="75" Margin="79,80,81,0" VerticalAlignment="Top" Width="75" CornerRadius="75" Background="#FFE7E8EC">
+                </Border>
+                <TextBlock Margin="9,160,11,0" TextWrapping="Wrap" Text="Twilight./Lemon" VerticalAlignment="Top" Foreground="#FF979797" TextAlignment="Center"/>
+                <TextBox x:Name="SearchBox" Height="25" TextWrapping="Wrap" Text="搜索" VerticalAlignment="Top" Margin="20,45,20,0" Style="{DynamicResource SearchBox}" Foreground="#FFA4A4A4" KeyDown="SearchBox_KeyDown"/>
+            </Grid>
+        </Border>
+        <Grid x:Name="LyricPage" Background="#FFFDFDFD" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="#FFE7E8EC" Width="300" Height="300" Margin="0,127.5,25,202.5" HorizontalAlignment="Right" Background="{Binding Background, ElementName=MusicImage}" CornerRadius="500" BorderThickness="3"/>
+            <TextBlock Grid.Column="1" Margin="25,127.5,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFACACAC" FontSize="24"/>
+            <TextBlock Grid.Column="1" Margin="25,157.98,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFC7C7C7" FontSize="20"/>
+            <Grid x:Name="ly" Grid.Column="1" Margin="25,188,10,140"/>
+        </Grid>
+        <Border x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#FFFDFDFD" BorderThickness="0,1,0,0" BorderBrush="#FFE7E8EC">
+            <Grid>
+                <Border x:Name="MusicImage" HorizontalAlignment="Left" Margin="10" Width="54" Height="54" CornerRadius="5" Background="#FFFAFAFA" BorderBrush="#FFE7E8EC" BorderThickness="1" MouseDown="MusicImage_MouseDown"/>
+                <TextBlock x:Name="MusicName" HorizontalAlignment="Left" Margin="70,20,0,0" TextWrapping="Wrap" Text="MusicName" VerticalAlignment="Top" Width="165" Foreground="#FF666666" FontSize="14" Height="18"/>
+                <TextBlock x:Name="Singer" HorizontalAlignment="Left" Margin="70,37.78,0,0" TextWrapping="Wrap" Text="Singer" VerticalAlignment="Top" Width="165" Foreground="#FF999999" Height="16"/>
+                <Border HorizontalAlignment="Left" Width="15" Margin="235,0,0,0" Height="15">
+                    <Path Data="M174.087409,63.83998C160.252309,63.83998,149.057339,75.03495,149.057339,88.87005L149.057339,935.127903C149.057339,948.964026 160.252309,960.158996 174.087409,960.158996 187.923532,960.158996 199.117479,948.965049 199.117479,935.127903L199.117479,530.400068C199.117479,544.79594,207.795116,557.385676,220.970183,565.672409L771.763721,912.787081C781.933338,919.190931 796.599362,922.564772 808.428782,922.564772 843.433017,922.564772 874.941638,894.063648 874.941638,859.107508L874.941638,164.890444C874.941638,129.910768 842.185607,101.458763 807.207977,101.458763 795.400047,101.458763 781.639648,104.83158 771.470031,111.211894L222.021118,458.31531C208.846051,466.577484,199.117479,479.189733,199.117479,493.563092L199.117478,88.87005C199.117478,75.03495,187.922509,63.83998,174.087409,63.83998z M242.701113,500.700653L795.939329,153.621796C798.16195,152.229076 804.786834,151.519925 807.207977,151.519925 813.635363,151.519925 824.880475,156.62827 824.880475,164.890444L824.880475,859.107509C824.880475,870.449835,808.356127,875.486548,800.216749,870.40174L244.852102,523.287067C239.230058,519.717775 237.51909,514.193968 237.51909,511.99386 237.51909,509.744633 237.079068,504.220826 242.701113,500.700653z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                </Border>
+                <Border x:Name="PlayBtn" HorizontalAlignment="Left" Width="15" Margin="266,29.5,0,29.5" Height="15" MouseDown="PlayBtn_MouseDown" Background="#00000000">
+                    <Path Data="M844.704269,475.730473L222.284513,116.380385A43.342807,43.342807,0,0,0,157.259465,153.928738L157.259465,872.621689A43.335582,43.335582,0,0,0,222.284513,910.162817L844.697044,550.819953A43.357257,43.357257,0,0,0,844.704269,475.730473z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                </Border>
+                <Border HorizontalAlignment="Left" Width="15" Margin="295,29.5,0,29.5" Height="15">
+                    <Path Data="M849.911568,960.158996C863.746668,960.158996,874.942661,948.965049,874.942661,935.127903L874.942661,88.87005C874.942661,75.03495 863.746668,63.83998 849.911568,63.83998 836.076468,63.83998 824.880475,75.03495 824.880475,88.87005L824.880475,489.50466C824.880475,477.55142,809.260729,467.064578,797.942963,459.976136L237.640863,109.330034C227.790518,103.146195 219.259214,99.894128 207.81865,99.894128 173.890933,99.894128 149.056315,127.467114 149.056315,161.370271L149.056316,862.629729C149.056316,896.508327 173.181783,924.130432 207.1095,924.130432 218.550063,924.130432 228.083184,920.854829 237.933529,914.644384L798.823006,564.010562C810.139749,556.921097,824.879452,546.436301,824.879452,534.483062L824.879452,935.128928C824.880475,948.96505,836.076468,960.158996,849.911568,960.158996z M768.464581,521.648754L209.60432,872.25904C207.697901,873.431749 209.164298,874.068245 207.110523,874.068245 202.490296,874.068245 199.117478,870.402762 199.117478,862.629728L199.117478,161.371294C199.117478,153.549141 202.490295,149.956313 207.110523,149.956313 209.164299,149.956313 209.433428,150.567227 211.339848,151.740959L769.296529,502.363525C773.939269,505.272785 774.232958,509.648442 774.232958,512.019442 774.232958,514.364861 773.083785,518.740518 768.464581,521.648754z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                </Border>
+                <Slider x:Name="jd" Margin="355,28,115,28" Height="12" Style="{DynamicResource SliderStyle}" ValueChanged="jd_ValueChanged"/>
+                <Border x:Name="likeBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,55,0" Height="15" MouseDown="PlayBtn_MouseDown" Background="#00000000">
+                    <Path Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                </Border>
+                <Border x:Name="XHBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,20,0" Height="15" MouseDown="XHBtn_MouseDown" Background="#00000000">
+                    <Path Data="M694.4,854.4L195.2,854.4 243.2,899.2C252.8,905.6 259.2,915.2 259.2,928 256,947.2 240,960 220.8,960 211.2,960 198.4,953.6 192,947.2L83.2,851.2C70.4,838.4,67.2,816,83.2,803.2L192,704C198.4,697.6 211.2,694.4 220.8,694.4 240,694.4 256,710.4 256,729.6 256,739.2 249.6,748.8 243.2,755.2L201.6,793.6 697.6,793.6C809.6,793.6,896,704,896,595.2L896,508.8C896,489.6 908.8,476.8 928,476.8 947.2,476.8 960,489.6 960,508.8L960,595.2C960,736,841.6,854.4,694.4,854.4z M329.6,169.6L825.6,169.6 777.6,124.8C768,118.4 761.6,108.8 761.6,96 764.8,76.8 780.8,64 800,64 809.6,64 822.4,70.4 828.8,76.8L937.6,172.8C950.4,185.6,953.6,208,937.6,220.8L832,320C825.6,326.4 812.8,329.6 803.2,329.6 784,329.6 768,313.6 768,294.4 768,284.8 774.4,275.2 780.8,268.8L822.4,230.4 326.4,230.4C217.6,233.6,128,323.2,128,435.2L128,524.8C128,544 115.2,556.8 96,556.8 76.8,556.8 64,544 64,524.8L64,438.4C64,288,182.4,169.6,329.6,169.6z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                </Border>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>
