@@ -8,7 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+//TODO: 完成我喜欢模块和我的歌单模块
+//悬浮窗 登录模块
 namespace Lemon_App
 {
     /// <summary>
@@ -20,6 +21,7 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
+            FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
         }
         LemonLibrary.MusicLib ml = new MusicLib();
 
@@ -364,6 +366,20 @@ namespace Lemon_App
             }else{
                 xh = true;
                 (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Dqxh);
+            }
+        }
+
+        private void BigBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (WindowState == WindowState.Normal){
+                Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0), TimeSpan.FromSeconds(0)));
+                WindowState = WindowState.Maximized;
+                Page.Clip = new RectangleGeometry() { RadiusX = 0, RadiusY = 0, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
+            }
+            else {
+                Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(30), TimeSpan.FromSeconds(0)));
+                WindowState = WindowState.Normal;
+                Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
         }
     }
