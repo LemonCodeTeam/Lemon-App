@@ -50,8 +50,15 @@ namespace Lemon_App
             };
             (Resources["Closing"] as Storyboard).Completed += delegate { Environment.Exit(0); };
             ml.m.MediaEnded += delegate{
-                if (xh){
-                    
+                if (xh)
+                    if (IsRadio)
+                        PlayMusic(RadioData.MusicID, new ImageBrush(new BitmapImage(new Uri(RadioData.ImageUrl))), RadioData.MusicName, RadioData.Singer, true);
+                    else PlayMusic(MusicData, null); 
+                else {
+                    if (IsRadio)
+                        GetRadioAsync(new RadioItem(RadioID, "", ""), null);
+                    else
+                        PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
                 }
             };
             ////////////
@@ -269,11 +276,14 @@ namespace Lemon_App
             catch { }
         }
         DataItem MusicData;
+        InfoHelper.Music RadioData;
         public void PlayMusic(object sender, MouseEventArgs e) {
             var dt = sender as DataItem;
             PlayMusic(dt.ID, dt.im.Background, dt.SongName, dt.Singer);
         }
-        public void PlayMusic(string id,Brush x,string name,string singer) {
+        bool IsRadio = false;
+        public void PlayMusic(string id,Brush x,string name,string singer,bool isRadio=false) {
+            IsRadio = isRadio;
             ml.GetAndPlayMusicUrlAsync(id, true, delegate { }, delegate { });
             MusicImage.Background = x;
             MusicName.Text = name;
@@ -300,10 +310,12 @@ namespace Lemon_App
             }
                (Resources["OpenDataPage"] as Storyboard).Begin();
         }
-
+        string RadioID = "";
         public async void GetRadioAsync(object sender,MouseEventArgs e) {
             var dt = sender as RadioItem;
+            RadioID = dt.id;
             var data =await ml.GetRadioMusicAsync(dt.id);
+            RadioData = data;
             ml.mldata.Add(data.MusicID, data.MusicName+" - "+data.Singer);
             PlayMusic(data.MusicID, new ImageBrush(new BitmapImage(new Uri(data.ImageUrl))), data.MusicName, data.Singer);
         }
