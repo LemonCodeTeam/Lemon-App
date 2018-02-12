@@ -32,5 +32,8 @@ namespace Lemon_App
             this.name.Text = Nam;
             im.Background = new ImageBrush(new BitmapImage(new Uri(img)));
         }
+        public RadioItem(string ID) {
+            id = ID;
+        }
     }
 }

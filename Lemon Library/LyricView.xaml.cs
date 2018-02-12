@@ -50,9 +50,9 @@ namespace LemonLibrary
             Lrcs.Clear();
             c_lrc_items.Children.Clear();
             foucslrc = null;
-            foreach (string str in lrcstr.Split('|'))
+            foreach (string str in lrcstr.Split("\r\n".ToCharArray()))
             {
-                if (str.Length > 0 && str.IndexOf(":") != -1)
+                if (str.Length > 0 && str.IndexOf(":") != -1&& !str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:"))
                 {
                     TimeSpan time = GetTime(str);
                     string lrc = str.Split(']')[1];
@@ -64,6 +64,7 @@ namespace LemonLibrary
                     c_lrcbk.Text = lrc.Replace("^","\n").Replace("//","").Replace("null","");
                     if (c_lrc_items.Children.Count > 0)
                         c_lrcbk.Margin = new Thickness(0, 20, 0, 0);
+                    if(!Lrcs.ContainsKey(time.TotalMilliseconds))
                     Lrcs.Add(time.TotalMilliseconds, new LrcModel()
                     {
                         c_LrcTb = c_lrcbk,

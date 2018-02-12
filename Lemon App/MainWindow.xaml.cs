@@ -50,13 +50,15 @@ namespace Lemon_App
             };
             (Resources["Closing"] as Storyboard).Completed += delegate { Environment.Exit(0); };
             ml.m.MediaEnded += delegate{
+                t.Stop();
+                jd.Value = 0;
                 if (xh)
                     if (IsRadio)
                         PlayMusic(RadioData.MusicID, new ImageBrush(new BitmapImage(new Uri(RadioData.ImageUrl))), RadioData.MusicName, RadioData.Singer, true);
                     else PlayMusic(MusicData, null); 
                 else {
                     if (IsRadio)
-                        GetRadioAsync(new RadioItem(RadioID, "", ""), null);
+                        GetRadioAsync(new RadioItem(RadioID), null);
                     else
                         PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
                 }
@@ -279,6 +281,7 @@ namespace Lemon_App
         InfoHelper.Music RadioData;
         public void PlayMusic(object sender, MouseEventArgs e) {
             var dt = sender as DataItem;
+            MusicData = dt;
             PlayMusic(dt.ID, dt.im.Background, dt.SongName, dt.Singer);
         }
         bool IsRadio = false;
@@ -317,7 +320,7 @@ namespace Lemon_App
             var data =await ml.GetRadioMusicAsync(dt.id);
             RadioData = data;
             ml.mldata.Add(data.MusicID, data.MusicName+" - "+data.Singer);
-            PlayMusic(data.MusicID, new ImageBrush(new BitmapImage(new Uri(data.ImageUrl))), data.MusicName, data.Singer);
+            PlayMusic(data.MusicID, new ImageBrush(new BitmapImage(new Uri(data.ImageUrl))), data.MusicName, data.Singer,true);
         }
         bool isplay = false;
         private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)

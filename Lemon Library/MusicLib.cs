@@ -45,8 +45,8 @@ namespace LemonLibrary
                     };
                     string Singer = "";
                     for (int osxc = 0; osxc != o["data"]["song"]["list"][i]["singer"].Count(); osxc++)
-                    { Singer += o["data"]["song"]["list"][i]["singer"][osxc]["name"] + "/"; }
-                    m.Singer = Singer.Substring(0, Singer.LastIndexOf("/"));
+                    { Singer += o["data"]["song"]["list"][i]["singer"][osxc]["name"] + "&"; }
+                    m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                     m.ZJ = o["data"]["song"]["list"][i]["album"]["name"].ToString();
                     m.MusicID = o["data"]["song"]["list"][i]["mid"].ToString();
                     m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["data"]["song"]["list"][i]["album"]["mid"]}.jpg";
@@ -141,68 +141,72 @@ namespace LemonLibrary
                 Console.WriteLine(s);
                 JObject o = JObject.Parse(s);
                 string t = Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())).Replace("&apos;", "\'");
-                string x = Encoding.UTF8.GetString(Convert.FromBase64String(o["trans"].ToString())).Replace("&apos;", "\'");
-                Console.WriteLine(t+"\r\n"+x);
-                List<string> datatime = new List<string>();
-                List<string> datatext = new List<string>();
-                Dictionary<string, string> gcdata = new Dictionary<string, string>();
-                string[] dta = t.Split('\n');
-                foreach (var dt in dta)
+                if (o["trans"].ToString() == "") return t;
+                else
                 {
-                    try { LyricView.parserLine(dt, datatime, datatext, gcdata); } catch { }
-                }
-                List<String> dataatimes = new List<String>();
-                List<String> dataatexs = new List<String>();
-                Dictionary<String, String> fydata = new Dictionary<String, String>();
-                String[] dtaa = x.Split('\n');
-                foreach (var dt in dtaa)
-                {
-                    try { LyricView.parserLine(dt, dataatimes, dataatexs, fydata); } catch { }
-                }
-                List<String> KEY = new List<String>();
-                Dictionary<String, String> gcfydata = new Dictionary<String, String>();
-                Dictionary<String, String> list = new Dictionary<String, String>();
-                foreach (var dt in datatime)
-                {
-                    try
+                    string x = Encoding.UTF8.GetString(Convert.FromBase64String(o["trans"].ToString())).Replace("&apos;", "\'");
+                    Console.WriteLine(t + "\r\n" + x);
+                    List<string> datatime = new List<string>();
+                    List<string> datatext = new List<string>();
+                    Dictionary<string, string> gcdata = new Dictionary<string, string>();
+                    string[] dta = t.Split('\n');
+                    foreach (var dt in dta)
                     {
-                        KEY.Add(dt);
-                        gcfydata.Add(dt, "");
+                        try { LyricView.parserLine(dt, datatime, datatext, gcdata); } catch { }
                     }
-                    catch { }
-                }
-                //sdm("d3");
-                foreach (var dt in dataatimes)
-                {
-                    if (!KEY.Contains(dt))
+                    List<String> dataatimes = new List<String>();
+                    List<String> dataatexs = new List<String>();
+                    Dictionary<String, String> fydata = new Dictionary<String, String>();
+                    String[] dtaa = x.Split('\n');
+                    foreach (var dt in dtaa)
                     {
-                        KEY.Add(dt);
-                        gcfydata.Add(dt, "");
+                        try { LyricView.parserLine(dt, dataatimes, dataatexs, fydata); } catch { }
                     }
-                }
-                //sdm("d4");
-                for (int i = 0; i != gcfydata.Count; i++)
-                {
-                    try
+                    List<String> KEY = new List<String>();
+                    Dictionary<String, String> gcfydata = new Dictionary<String, String>();
+                    Dictionary<String, String> list = new Dictionary<String, String>();
+                    foreach (var dt in datatime)
                     {
-                        gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                        try
+                        {
+                            KEY.Add(dt);
+                            gcfydata.Add(dt, "");
+                        }
+                        catch { }
                     }
-                    catch { }
-                }
-                string LyricData = "";
-                //sdm("d5   "+dataatexs.size()+"   "+dataatimes.size()+"   "+datatexs.size()+"   "+datatimes.size()+"   "+KEY.size());
-                for (int i = 0; i != KEY.Count; i++)
-                {
-                    try
+                    //sdm("d3");
+            //        foreach (var dt in dataatimes)
+        //            {
+             //           if (!KEY.Contains(dt))
+               //         {
+                       //     KEY.Add(dt);//q
+                  //          gcfydata.Add(dt, "");
+           //             }
+    //                }
+                    //sdm("d4");
+                    for (int i = 0; i != gcfydata.Count; i++)
                     {
-                        String value = gcfydata[KEY[i]];
-                        String key = KEY[i];
-                        LyricData += $"[{key}]{value}|";
+                        try
+                        {
+                            gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                        }
+                        catch { }
                     }
-                    catch { }
+                    string LyricData = "";
+                    //sdm("d5   "+dataatexs.size()+"   "+dataatimes.size()+"   "+datatexs.size()+"   "+datatimes.size()+"   "+KEY.size());
+                    for (int i = 0; i != KEY.Count; i++)
+                    {
+                        try
+                        {
+                            String value = gcfydata[KEY[i]].Replace("[", "").Replace("]", "");
+                            String key = KEY[i];
+                            LyricData += $"[{key}]{value}\r\n";
+                        }
+                        catch { }
+                    }
+                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc", LyricData);
+                    return LyricData;
                 }
-                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc", LyricData);
-                return LyricData;
             }
             else
             {
@@ -246,8 +250,8 @@ namespace LemonLibrary
                 m.MusicName = o["songlist"][i]["data"]["songname"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", "");
                 string Singer = "";
                 for (int osxc = 0; osxc != o["songlist"][i]["data"]["singer"].Count(); osxc++)
-                { Singer += o["songlist"][i]["data"]["singer"][osxc]["name"] + "/"; }
-                m.Singer = Singer.Substring(0, Singer.LastIndexOf("/"));
+                { Singer += o["songlist"][i]["data"]["singer"][osxc]["name"] + "&"; }
+                m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                 m.ZJ = o["songlist"][i]["data"]["albumname"].ToString();
                 m.MusicID = o["songlist"][i]["data"]["songmid"].ToString();
                 m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["songlist"][i]["data"]["albummid"]}.jpg";
@@ -463,11 +467,11 @@ namespace LemonLibrary
                 var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/rcmusic2/fcgi-bin/fcg_guess_youlike_pc.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=703&uin=2728578956"));
                 string Singer = "";
                 for (int osxc = 0; osxc != o["songlist"][0]["singer"].Count(); osxc++)
-                { Singer += o["songlist"][0]["singer"][osxc]["name"] + "/"; }
+                { Singer += o["songlist"][0]["singer"][osxc]["name"] + "&"; }
                 var data = new Music
                 {
                     MusicName = o["songlist"][0]["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
-                    Singer = Singer.Substring(0, Singer.LastIndexOf("/")),
+                    Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
                     ZJ = o["songlist"][0]["album"]["name"].ToString(),
                     GC = o["songlist"][0]["mid"].ToString(),
                     MusicID = o["songlist"][0]["mid"].ToString(),
@@ -479,11 +483,11 @@ namespace LemonLibrary
                 var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&data=%7B\"songlist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiosonglist\"%2C\"param\"%3A%7B\"id\"%3A{id}%2C\"firstplay\"%3A1%2C\"num\"%3A10%7D%7D%2C\"radiolist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiolist\"%2C\"param\"%3A%7B\"ct\"%3A\"24\"%7D%7D%2C\"comm\"%3A%7B\"ct\"%3A\"24\"%7D%7D"));
                 string Singer = "";
                 for (int osxc = 0; osxc != o["songlist"]["data"]["track_list"][0]["singer"].Count(); osxc++)
-                { Singer += o["songlist"]["data"]["track_list"][0]["singer"][osxc]["name"] + "/"; }
+                { Singer += o["songlist"]["data"]["track_list"][0]["singer"][osxc]["name"] + "&"; }
                 var data = new Music
                 {
                     MusicName = o["songlist"]["data"]["track_list"][0]["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
-                    Singer = Singer.Substring(0, Singer.LastIndexOf("/")),
+                    Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
                     ZJ = o["songlist"]["data"]["track_list"][0]["album"]["name"].ToString(),
                     GC = o["songlist"]["data"]["track_list"][0]["mid"].ToString(),
                     MusicID = o["songlist"]["data"]["track_list"][0]["mid"].ToString(),
