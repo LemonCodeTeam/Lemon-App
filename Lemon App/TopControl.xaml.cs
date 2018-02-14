@@ -23,7 +23,7 @@ namespace Lemon_App
         public string topID { set; get; }
         public string pic { set; get; }
         public string name { set; get; }
-        public TopControl(string id,string img,string n)
+        public TopControl(string id, string img, string n)
         {
             InitializeComponent();
             topID = id;

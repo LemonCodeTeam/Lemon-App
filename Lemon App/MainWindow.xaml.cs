@@ -131,6 +131,12 @@ namespace Lemon_App
                 FLGDItemsList.Children.Add(new FLGDIndexItem(d.ID, d.Name, d.Photo));
             }
             //////FLGDPage Loaded//////
+            var ks = new FLGDIndexItem("2591355982", "TwilightMusicWorld", "https://p.qpic.cn/music_cover/P5HCeFMBBWcs4IIdcdJTBVz8Nl9WdEQj8LcIwfxmeia5OJGKRJlkEcg/300?n=1") { Margin = new Thickness(20, 0, 0, 20) };
+            ks.MouseDown += delegate (object s, MouseButtonEventArgs se)
+            {
+                GetGD((s as FLGDIndexItem).id);
+            };
+            GDItemsList.Children.Add(ks);
         }
         string SingerKey1 = "all_all_";
         string SingerKey2 = "all";
@@ -381,6 +387,11 @@ namespace Lemon_App
                 WindowState = WindowState.Normal;
                 Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
+        }
+
+        private void window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
         }
     }
 }

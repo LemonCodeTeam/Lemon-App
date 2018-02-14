@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lemon_App"
         mc:Ignorable="d"
-        Title="LemonApp" Height="670" Width="1050" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded">
+        Title="LemonApp" Height="690" Width="1070" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged">
     <Window.Resources>
         <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
         <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="#FFDCECFC"/>
@@ -276,7 +276,7 @@
         <Storyboard x:Key="Loading">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="Page">
                 <EasingThicknessKeyFrame KeyTime="0" Value="315,1010,315,0"/>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="20">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="30">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -604,7 +604,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -656,7 +656,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -705,7 +705,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -754,7 +754,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -806,7 +806,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -815,7 +815,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LikeIndexPage">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MineIndexPage">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
@@ -858,7 +858,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -943,7 +943,7 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LikeIndexPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
@@ -994,13 +994,16 @@
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="RadioBtn">
             <BeginStoryboard x:Name="ControlBtnChanRadio_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanRadio}"/>
         </EventTrigger>
-        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="LikeBtn">
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="UserTX">
             <BeginStoryboard x:Name="ControlBtnChanLike_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanLike}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="GDBtn">
             <BeginStoryboard x:Name="ControlBtnChanGD_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanGD}"/>
         </EventTrigger>
     </Window.Triggers>
+    <WindowChrome.WindowChrome>
+        <WindowChrome  GlassFrameThickness="0" ResizeBorderThickness="28" CaptionHeight="10" CornerRadius="0" />
+    </WindowChrome.WindowChrome>
     <Window.Effect>
         <DropShadowEffect BlurRadius="30" Opacity="0.3" ShadowDepth="0"/>
     </Window.Effect>
@@ -1103,8 +1106,13 @@
                     <WrapPanel x:Name="RadioItemsList"/>
                 </ScrollViewer>
             </Grid>
-            <Grid x:Name="LikeIndexPage" Visibility="Collapsed"/>
-            <Grid x:Name="MyGDIndexPage" Visibility="Collapsed"/>
+            <Grid x:Name="MineIndexPage" Visibility="Collapsed"/>
+            <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
+                <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
+                <ScrollViewer  Margin="30,125,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <WrapPanel x:Name="GDItemsList"/>
+                </ScrollViewer>
+            </Grid>
             <Grid x:Name="Data" Visibility="Collapsed">
                 <Border BorderBrush="#FFE7E8EC" Height="200" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFDFDFD">
                     <Grid>
@@ -1144,9 +1152,9 @@
                     <Path Data="M819.2 459.776l-215.04-28.4672L512 225.28l-92.16 206.2336L204.8 459.776l158.1056 155.8528-40.96 224.0512L512 729.7024 701.6448 839.68l-40.96-223.8464zM512 677.0688L372.5312 757.76l29.9008-163.84L286.72 479.232l157.696-20.48L512 307.2l67.584 151.3472 157.696 20.48L621.1584 593.92l29.9008 163.84z M512 61.44A471.04 471.04 0 0 0 144.7936 827.392L174.08 798.72a430.08 430.08 0 1 1 92.16 87.04l-29.4912 29.4912A471.04 471.04 0 1 0 512 61.44z M200.9088 829.0304L171.8272 858.112q15.9744 16.5888 33.3824 31.5392L234.496 860.16a436.0192 436.0192 0 0 1-33.5872-31.1296z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=GDBtn}" StrokeThickness="5"/>
                 </Border>
                 <Label x:Name="GDBtn" Content="我的歌单" Margin="96.5,452,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
-                <Border Height="75" Margin="79,80,81,0" VerticalAlignment="Top" Width="75" CornerRadius="75" Background="#FFE7E8EC">
+                <Border x:Name="UserTX" Height="75" Margin="79,80,81,0" VerticalAlignment="Top" Width="75" CornerRadius="75" Background="#FFE7E8EC">
                 </Border>
-                <TextBlock Margin="9,160,11,0" TextWrapping="Wrap" Text="Twilight./Lemon" VerticalAlignment="Top" Foreground="#FF979797" TextAlignment="Center"/>
+                <TextBlock x:Name="UserName" Margin="9,160,11,0" TextWrapping="Wrap" Text="Twilight./Lemon" VerticalAlignment="Top" Foreground="#FF979797" TextAlignment="Center"/>
                 <TextBox x:Name="SearchBox" Height="25" TextWrapping="Wrap" Text="搜索" VerticalAlignment="Top" Margin="20,45,20,0" Style="{DynamicResource SearchBox}" Foreground="#FFA4A4A4" KeyDown="SearchBox_KeyDown"/>
             </Grid>
         </Border>
