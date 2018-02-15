@@ -974,10 +974,21 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="LikeBtnDown">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path1">
+                <EasingColorKeyFrame KeyTime="0:0:0.2" Value="#FFD81E1E"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LikeBtnUp">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path1">
+                <EasingColorKeyFrame KeyTime="0:0:0.2" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard Storyboard="{StaticResource Loading}"/>
+            <BeginStoryboard Storyboard="{StaticResource LikeBtnUp}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="CloseBtn">
             <BeginStoryboard x:Name="Closing_BeginStoryboard" Storyboard="{StaticResource Closing}"/>
@@ -1002,7 +1013,7 @@
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
-        <WindowChrome  GlassFrameThickness="0" ResizeBorderThickness="28" CaptionHeight="10" CornerRadius="0" />
+        <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="30" CaptionHeight="10" CornerRadius="0" />
     </WindowChrome.WindowChrome>
     <Window.Effect>
         <DropShadowEffect BlurRadius="30" Opacity="0.3" ShadowDepth="0"/>
@@ -1085,7 +1096,7 @@
             <Grid x:Name="ZJIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="专辑&amp;分类歌单" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
                 <WrapPanel x:Name="FLGDIndexList" Margin="30,90,0,0" VerticalAlignment="Top" Height="145"/>
-                <ScrollViewer  Margin="30,240,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                <ScrollViewer  Margin="10,240,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="FLGDItemsList"/>
                 </ScrollViewer>
             </Grid>
@@ -1109,7 +1120,7 @@
             <Grid x:Name="MineIndexPage" Visibility="Collapsed"/>
             <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
-                <ScrollViewer  Margin="30,125,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                <ScrollViewer  Margin="10,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="GDItemsList"/>
                 </ScrollViewer>
             </Grid>
@@ -1183,8 +1194,8 @@
                     <Path Data="M849.911568,960.158996C863.746668,960.158996,874.942661,948.965049,874.942661,935.127903L874.942661,88.87005C874.942661,75.03495 863.746668,63.83998 849.911568,63.83998 836.076468,63.83998 824.880475,75.03495 824.880475,88.87005L824.880475,489.50466C824.880475,477.55142,809.260729,467.064578,797.942963,459.976136L237.640863,109.330034C227.790518,103.146195 219.259214,99.894128 207.81865,99.894128 173.890933,99.894128 149.056315,127.467114 149.056315,161.370271L149.056316,862.629729C149.056316,896.508327 173.181783,924.130432 207.1095,924.130432 218.550063,924.130432 228.083184,920.854829 237.933529,914.644384L798.823006,564.010562C810.139749,556.921097,824.879452,546.436301,824.879452,534.483062L824.879452,935.128928C824.880475,948.96505,836.076468,960.158996,849.911568,960.158996z M768.464581,521.648754L209.60432,872.25904C207.697901,873.431749 209.164298,874.068245 207.110523,874.068245 202.490296,874.068245 199.117478,870.402762 199.117478,862.629728L199.117478,161.371294C199.117478,153.549141 202.490295,149.956313 207.110523,149.956313 209.164299,149.956313 209.433428,150.567227 211.339848,151.740959L769.296529,502.363525C773.939269,505.272785 774.232958,509.648442 774.232958,512.019442 774.232958,514.364861 773.083785,518.740518 768.464581,521.648754z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
                 </Border>
                 <Slider x:Name="jd" Margin="355,28,115,28" Height="12" Style="{DynamicResource SliderStyle}" ValueChanged="jd_ValueChanged"/>
-                <Border x:Name="likeBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,55,0" Height="15" MouseDown="PlayBtn_MouseDown" Background="#00000000">
-                    <Path Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                <Border x:Name="likeBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,55,0" Height="15" MouseDown="likeBtn_MouseDown" Background="#00000000">
+                    <Path x:Name="path1" Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
                 </Border>
                 <Border x:Name="XHBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,20,0" Height="15" MouseDown="XHBtn_MouseDown" Background="#00000000">
                     <Path Data="M694.4,854.4L195.2,854.4 243.2,899.2C252.8,905.6 259.2,915.2 259.2,928 256,947.2 240,960 220.8,960 211.2,960 198.4,953.6 192,947.2L83.2,851.2C70.4,838.4,67.2,816,83.2,803.2L192,704C198.4,697.6 211.2,694.4 220.8,694.4 240,694.4 256,710.4 256,729.6 256,739.2 249.6,748.8 243.2,755.2L201.6,793.6 697.6,793.6C809.6,793.6,896,704,896,595.2L896,508.8C896,489.6 908.8,476.8 928,476.8 947.2,476.8 960,489.6 960,508.8L960,595.2C960,736,841.6,854.4,694.4,854.4z M329.6,169.6L825.6,169.6 777.6,124.8C768,118.4 761.6,108.8 761.6,96 764.8,76.8 780.8,64 800,64 809.6,64 822.4,70.4 828.8,76.8L937.6,172.8C950.4,185.6,953.6,208,937.6,220.8L832,320C825.6,326.4 812.8,329.6 803.2,329.6 784,329.6 768,313.6 768,294.4 768,284.8 774.4,275.2 780.8,268.8L822.4,230.4 326.4,230.4C217.6,233.6,128,323.2,128,435.2L128,524.8C128,544 115.2,556.8 96,556.8 76.8,556.8 64,544 64,524.8L64,438.4C64,288,182.4,169.6,329.6,169.6z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>

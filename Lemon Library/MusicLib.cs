@@ -39,15 +39,12 @@ namespace LemonLibrary
                 int i = 0;
                 while (i < o["data"]["song"]["list"].Count())
                 {
-                    Music m = new Music()
-                    {
-                        MusicName = o["data"]["song"]["list"][i]["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", "")
-                    };
+                    Music m = new Music();
+                    m.MusicName = o["data"]["song"]["list"][i]["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", "");
                     string Singer = "";
                     for (int osxc = 0; osxc != o["data"]["song"]["list"][i]["singer"].Count(); osxc++)
                     { Singer += o["data"]["song"]["list"][i]["singer"][osxc]["name"] + "&"; }
                     m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
-                    m.ZJ = o["data"]["song"]["list"][i]["album"]["name"].ToString();
                     m.MusicID = o["data"]["song"]["list"][i]["mid"].ToString();
                     m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["data"]["song"]["list"][i]["album"]["mid"]}.jpg";
                     m.GC = o["data"]["song"]["list"][i]["id"].ToString();
@@ -77,7 +74,6 @@ namespace LemonLibrary
                 {
                     MusicName = o["cdlist"][0]["songlist"][i]["songname"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
                     Singer = o["cdlist"][0]["songlist"][i]["singer"][0]["name"].ToString(),
-                    ZJ = o["cdlist"][0]["songlist"][i]["albumdesc"].ToString(),
                     GC = o["cdlist"][0]["songlist"][i]["songid"].ToString(),
                     MusicID = o["cdlist"][0]["songlist"][i]["songmid"].ToString(),
                     ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg"
@@ -252,7 +248,6 @@ namespace LemonLibrary
                 for (int osxc = 0; osxc != o["songlist"][i]["data"]["singer"].Count(); osxc++)
                 { Singer += o["songlist"][i]["data"]["singer"][osxc]["name"] + "&"; }
                 m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
-                m.ZJ = o["songlist"][i]["data"]["albumname"].ToString();
                 m.MusicID = o["songlist"][i]["data"]["songmid"].ToString();
                 m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["songlist"][i]["data"]["albummid"]}.jpg";
                 m.GC = o["songlist"][i]["data"]["songmid"].ToString();
@@ -472,7 +467,6 @@ namespace LemonLibrary
                 {
                     MusicName = o["songlist"][0]["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
                     Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
-                    ZJ = o["songlist"][0]["album"]["name"].ToString(),
                     GC = o["songlist"][0]["mid"].ToString(),
                     MusicID = o["songlist"][0]["mid"].ToString(),
                     ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["songlist"][0]["album"]["mid"]}.jpg"
@@ -488,7 +482,6 @@ namespace LemonLibrary
                 {
                     MusicName = o["songlist"]["data"]["track_list"][0]["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
                     Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
-                    ZJ = o["songlist"]["data"]["track_list"][0]["album"]["name"].ToString(),
                     GC = o["songlist"]["data"]["track_list"][0]["mid"].ToString(),
                     MusicID = o["songlist"]["data"]["track_list"][0]["mid"].ToString(),
                     ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["songlist"]["data"]["track_list"][0]["album"]["mid"]}.jpg"

@@ -33,6 +33,12 @@ namespace Lemon_App
 
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (System.IO.File.Exists(Settings.USettings.UserImage))
+            {
+                var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
+                UserTX.Background = new ImageBrush(image.ToImageSource());
+            }UserName.Text = Settings.USettings.UserName;
+            ////////////
             LyricView lv = new LyricView();
             lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(48, 195, 124));
             lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(199, 199, 199));
@@ -128,18 +134,21 @@ namespace Lemon_App
             FLGDItemsList.Children.Clear();
             foreach (var d in dat)
             {
-                FLGDItemsList.Children.Add(new FLGDIndexItem(d.ID, d.Name, d.Photo));
+                var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) {Margin=new Thickness(20,0,0,20)};
+                kss.MouseDown += GDMouseDown;
+                FLGDItemsList.Children.Add(kss);
             }
             //////FLGDPage Loaded//////
             var ks = new FLGDIndexItem("2591355982", "TwilightMusicWorld", "https://p.qpic.cn/music_cover/P5HCeFMBBWcs4IIdcdJTBVz8Nl9WdEQj8LcIwfxmeia5OJGKRJlkEcg/300?n=1") { Margin = new Thickness(20, 0, 0, 20) };
-            ks.MouseDown += delegate (object s, MouseButtonEventArgs se)
-            {
-                GetGD((s as FLGDIndexItem).id);
-            };
+            ks.MouseDown += GDMouseDown;
             GDItemsList.Children.Add(ks);
         }
         string SingerKey1 = "all_all_";
         string SingerKey2 = "all";
+        public void GDMouseDown(object s, MouseButtonEventArgs se)
+        {
+            GetGD((s as FLGDIndexItem).id);
+        }
         private async void SingerPageChecked(object sender, RoutedEventArgs e)
         {
             if (sender != null)
@@ -190,10 +199,7 @@ namespace Lemon_App
                     foreach (var d in data)
                     {
                         var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
-                        k.MouseDown +=delegate (object s,MouseButtonEventArgs se)
-                        {
-                            GetGD((s as FLGDIndexItem).id);
-                        };
+                        k.MouseDown +=GDMouseDown;
                         FLGDItemsList.Children.Add(k);
                     }
                 }
@@ -295,6 +301,9 @@ namespace Lemon_App
         bool IsRadio = false;
         public void PlayMusic(string id,Brush x,string name,string singer,bool isRadio=false) {
             IsRadio = isRadio;
+            if (Settings.USettings.MusicLike.ContainsKey(id))
+                (Resources["LikeBtnDown"] as Storyboard).Begin();
+            else (Resources["LikeBtnUp"] as Storyboard).Begin();
             ml.GetAndPlayMusicUrlAsync(id, true, delegate { }, delegate { });
             MusicImage.Background = x;
             MusicName.Text = name;
@@ -378,11 +387,13 @@ namespace Lemon_App
         private void BigBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (WindowState == WindowState.Normal){
+                c.ResizeBorderThickness = new Thickness(0);
                 Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0), TimeSpan.FromSeconds(0)));
                 WindowState = WindowState.Maximized;
                 Page.Clip = new RectangleGeometry() { RadiusX = 0, RadiusY = 0, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
             else {
+                c.ResizeBorderThickness = new Thickness(30);
                 Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(30), TimeSpan.FromSeconds(0)));
                 WindowState = WindowState.Normal;
                 Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
@@ -392,6 +403,31 @@ namespace Lemon_App
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
+        }
+
+        private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MusicName.Text != "MusicName") {
+                if (IsRadio){
+                    if (Settings.USettings.MusicLike.ContainsKey(RadioData.MusicID)){
+                        (Resources["LikeBtnUp"] as Storyboard).Begin();
+                        Settings.USettings.MusicLike.Remove(RadioData.MusicID);}
+                    else {
+                        Settings.USettings.MusicLike.Add(RadioData.MusicID, RadioData);
+                        (Resources["LikeBtnDown"] as Storyboard).Begin();}}
+                else {
+                    if (Settings.USettings.MusicLike.ContainsKey(MusicData.ID)){
+                        (Resources["LikeBtnUp"] as Storyboard).Begin();
+                        Settings.USettings.MusicLike.Remove(MusicData.ID);}
+                    else{
+                        Settings.USettings.MusicLike.Add(MusicData.ID, new InfoHelper.Music(){
+                            GC = MusicData.ID,
+                            Singer = MusicData.Singer,
+                            ImageUrl = MusicData.Image,
+                            MusicID = MusicData.ID,
+                            MusicName = MusicData.SongName});
+                        (Resources["LikeBtnDown"] as Storyboard).Begin();}}Settings.SaveSettings();
+            }
         }
     }
 }

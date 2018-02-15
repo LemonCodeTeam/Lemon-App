@@ -603,7 +603,6 @@ namespace LemonLibrary
             public string Singer { set; get; }
             public string MusicID { set; get; }
             public string ImageUrl { set; get; }
-            public string ZJ { set; get; }
             public string GC { set; get; }
         }
         public class MusicSinger {
