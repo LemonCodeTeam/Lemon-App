@@ -73,11 +73,17 @@
     <Compile Include="DataItem.xaml.cs">
       <DependentUpon>DataItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FC.xaml.cs">
+      <DependentUpon>FC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FLGDIndexItem.xaml.cs">
       <DependentUpon>FLGDIndexItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Msg.xaml.cs">
+      <DependentUpon>Msg.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadioItem.xaml.cs">
       <DependentUpon>RadioItem.xaml</DependentUpon>
@@ -89,6 +95,10 @@
       <DependentUpon>TopControl.xaml</DependentUpon>
     </Compile>
     <Page Include="DataItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,6 +122,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Msg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RadioItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

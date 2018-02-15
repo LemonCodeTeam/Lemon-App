@@ -45,10 +45,9 @@ namespace Lemon_App
             }
             else { if (oldtext != "已开启大写锁定") rk.Text = oldtext; else { rk.Text = ""; oldtext = ""; } }
             (Resources["l"] as Storyboard).Begin();
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Settings.st"))
-                Settings.LoadLSettings(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"Settings.st"));
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"))
+                Settings.LoadLSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string("Settings.st")))));
             else LemonLibrary.Settings.SaveLoadSettings();
-
         }
         int index = 0;
         private async void NaAsync(object sender, WebBrowserNavigatedEventArgs e)
@@ -59,7 +58,7 @@ namespace Lemon_App
                 {
                     op.IsOpen = false;
                     var qq = LemonLibrary.TextHelper.XtoYGetTo(wb.Document.Cookie, "uin=o", ";", 0);
-                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + "@.st"))
+                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
                         Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
                     else LemonLibrary.Settings.SaveSettings(qq);
                     var sl = LemonLibrary.TextHelper.XtoYGetTo(await LemonLibrary.HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
@@ -112,7 +111,7 @@ namespace Lemon_App
         {
             if (Settings.LSettings.RNBM)
             {
-                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + "@.st"))
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
                     Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
                 else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME);
                 (Resources["OnLoaded1"] as Storyboard).Begin();
@@ -182,7 +181,7 @@ namespace Lemon_App
                 {
                     op.IsOpen = false;
                     var qq = LemonLibrary.TextHelper.XtoYGetTo(wb.Document.Cookie, "uin=o", ";", 0);
-                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + "@.st"))
+                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
                         Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
                     else LemonLibrary.Settings.SaveSettings(qq);
                     var sl = LemonLibrary.TextHelper.XtoYGetTo(await LemonLibrary.HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);

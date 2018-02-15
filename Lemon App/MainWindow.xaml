@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lemon_App"
+        xmlns:lemonlib="clr-namespace:LemonLibrary;assembly=LemonLibrary"
         mc:Ignorable="d"
         Title="LemonApp" Height="690" Width="1070" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged">
     <Window.Resources>
@@ -768,7 +768,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-        <Storyboard x:Key="ControlBtnChanLike">
+        <Storyboard x:Key="ControlBtnChanTX">
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
             </ColorAnimationUsingKeyFrames>
@@ -786,12 +786,11 @@
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
-                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
             </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="patc">
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
             </ColorAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
@@ -843,7 +842,7 @@
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
                 <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
             </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="path">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="patc">
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
             </ColorAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
@@ -984,11 +983,79 @@
                 <EasingColorKeyFrame KeyTime="0:0:0.2" Value="#FF93A1AE"/>
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="ControlBtnChanLike">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="MusicKuBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="SingerBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="ZJBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="RadioBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="LikeBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF4EB7FB"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="GDBtn">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="patc">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
+            </ColorAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SingerIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="ZJIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RadioIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MineIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MyGDIndexPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Data">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Data">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OpenL">
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(Popup.IsOpen)" Storyboard.TargetName="popup">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+            </BooleanAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseL">
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(Popup.IsOpen)" Storyboard.TargetName="popup">
+                <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+            </BooleanAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard Storyboard="{StaticResource Loading}"/>
-            <BeginStoryboard Storyboard="{StaticResource LikeBtnUp}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="LikeBtn">
+            <BeginStoryboard x:Name="ControlBtnChanLike_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanLike}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="CloseBtn">
             <BeginStoryboard x:Name="Closing_BeginStoryboard" Storyboard="{StaticResource Closing}"/>
@@ -1006,10 +1073,16 @@
             <BeginStoryboard x:Name="ControlBtnChanRadio_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanRadio}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="UserTX">
-            <BeginStoryboard x:Name="ControlBtnChanLike_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanLike}"/>
+            <BeginStoryboard x:Name="ControlBtnChanTX_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanTX}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="GDBtn">
             <BeginStoryboard x:Name="ControlBtnChanGD_BeginStoryboard" Storyboard="{StaticResource ControlBtnChanGD}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="grid">
+            <BeginStoryboard x:Name="OpenL_BeginStoryboard" Storyboard="{StaticResource OpenL}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="border1">
+            <BeginStoryboard x:Name="CloseL_BeginStoryboard" Storyboard="{StaticResource CloseL}"/>
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
@@ -1117,7 +1190,48 @@
                     <WrapPanel x:Name="RadioItemsList"/>
                 </ScrollViewer>
             </Grid>
-            <Grid x:Name="MineIndexPage" Visibility="Collapsed"/>
+            <Grid x:Name="MineIndexPage" Loaded="UserControl_Loaded" Visibility="Collapsed">
+                <Grid Width="10" Height="10">
+                    <Popup x:Name="popup" lemonlib:PopopHelper.PopupPlacementTarget="{Binding ElementName=border}" Width="280" Height="120" AllowsTransparency="True" PopupAnimation="Fade" Placement="Top" HorizontalOffset="-125" VerticalOffset="50">
+                        <Border x:Name="border" Background="White" CornerRadius="5" BorderBrush="#FFC9C9C9" BorderThickness="1" Margin="10">
+                            <Border.Effect>
+                                <DropShadowEffect Opacity="0.4" ShadowDepth="0" BlurRadius="10"/>
+                            </Border.Effect>
+                            <Grid Margin="0,0,-1,-1">
+                                <Label Content="©2018 Twilight all rights reserved. &#xD;&#xA;QQ:2728578956    &#xD;&#xA;Lemon App Professional" Margin="10,24,0,10" Foreground="#FF959597" Background="{x:Null}"/>
+                                <Border x:Name="border1" HorizontalAlignment="Left" Height="13" VerticalAlignment="Top" Width="13" Background="#FF5B5B5B" CornerRadius="100" Margin="5,5,0,0"/>
+                            </Grid>
+                        </Border>
+                    </Popup>
+                </Grid>
+                <Grid x:Name="grid" HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top" Margin="0,0,5,0" Background="#00000000">
+                    <Path x:Name="patc" StrokeThickness="0" Margin="0,5,5,0" Fill="Gray" Data="M22,11c0-6.075-4.925-11-11-11C4.925,0,0,4.925,0,11c0,6.075,4.925,11,11,11
+	C17.075,22,22,17.075,22,11z M11.25,5c0.69,0,1.25,0.56,1.25,1.25c0,0.69-0.56,1.25-1.25,1.25C10.56,7.5,10,6.94,10,6.25
+	C10,5.56,10.56,5,11.25,5z M8.5,16.5H10v-7H8.5v-1h4v8H14v1H8.5V16.5z" Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="Fill" />
+                </Grid>
+                <Grid Height="150" Margin="0,0,0,100">
+                    <Border x:Name="TX" Height="100" Margin="0,10,0,0" VerticalAlignment="Top" CornerRadius="125" MouseDown="TX_MouseDown" BorderThickness="10" Width="100" BorderBrush="#99FFFFFF"/>
+                    <TextBlock x:Name="NM" Height="28.313" Margin="10,115,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF494949" FontSize="20" TextAlignment="Center"><Run Text="Lemon User"/></TextBlock>
+                </Grid>
+                <Grid HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top" Margin="0,0,30,0" Background="#00000000" MouseDown="Grid_MouseDown">
+                    <Path StrokeThickness="0" Margin="0,5,5,0" Fill="Gray" Data="M32.001,3.56C16.317,3.56,3.56,16.317,3.56,32c0,15.683,12.757,28.44,28.442,28.44
+		C47.683,60.44,60.44,47.683,60.44,32C60.44,16.317,47.683,3.56,32.001,3.56z M24.227,26.593l0.057-0.063
+		c0.232-0.168,0.345-0.432,0.303-0.708c-0.573-3.446-0.197-4.883-0.07-5.244c1.001-3.072,4.143-4.493,4.76-4.745
+		c0.131-0.052,0.374-0.125,0.62-0.163l0.073-0.017l0.505-0.027l0.004,0.031l0.117-0.011c0.104-0.011,0.204-0.025,0.329-0.051
+		l0.111-0.024c0.099,0.001,1.322,0.156,3.139,0.713l1.263,0.435c2.31,0.682,3.372,1.951,3.569,2.207
+		c1.85,2.095,1.354,5.259,0.896,6.958c-0.052,0.2-0.021,0.406,0.092,0.577l0.105,0.129c0.134,0.182,0.254,0.884-0.148,2.376
+		c-0.076,0.453-0.243,0.821-0.492,1.069c-0.092,0.101-0.156,0.229-0.179,0.374c-0.625,3.665-3.909,7.764-7.37,7.764
+		c-2.937,0-6.289-3.771-6.892-7.761c-0.023-0.149-0.085-0.28-0.188-0.393c-0.251-0.26-0.411-0.635-0.508-1.19
+		C24.029,27.785,24,26.944,24.227,26.593z M17.634,42.485c0.127-0.161,0.837-0.993,2.273-1.541c1.263-0.388,4.384-1.425,6.09-2.661
+		c0.08-0.044,0.159-0.127,0.224-0.194c0.158-0.17,0.399-0.429,0.685-0.694l0.159-0.151l0.162,0.152
+		c1.503,1.417,3.166,2.194,4.683,2.194c1.594,0,3.237-0.69,4.756-1.996l0.119-0.103l0.322,0.157
+		c0.288,0.264,0.786,0.626,1.018,0.736l0.296,0.145l-0.031,0.032l0.132,0.08c0.28,0.169,0.585,0.333,0.943,0.51
+		c0.361,0.159,0.663,0.277,0.976,0.379c0.264,0.086,1.668,0.558,3.265,1.296l0.305,0.092c1.562,0.598,2.256,1.429,2.325,1.516
+		c1.854,2.748,2.565,7.876,2.829,10.733c-4.843,3.933-10.935,6.098-17.162,6.098c-6.23,0-12.323-2.165-17.164-6.099
+		C15.098,50.316,15.803,45.204,17.634,42.485z" Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="Fill" />
+                </Grid>
+
+            </Grid>
             <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
                 <ScrollViewer  Margin="10,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
@@ -1127,12 +1241,12 @@
             <Grid x:Name="Data" Visibility="Collapsed">
                 <Border BorderBrush="#FFE7E8EC" Height="200" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFDFDFD">
                     <Grid>
-                        <Border x:Name="TX" BorderThickness="1" HorizontalAlignment="Left" Width="139" Margin="30,30,0,30" Height="139" BorderBrush="#FFE7E8EC" Background="#FFFEFEFE" CornerRadius="5"/>
+                        <Border x:Name="TXx" BorderThickness="1" HorizontalAlignment="Left" Width="139" Margin="30,30,0,30" Height="139" BorderBrush="#FFE7E8EC" Background="#FFFEFEFE" CornerRadius="5"/>
                         <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" VerticalAlignment="Top" Margin="180,30,10,0" Foreground="#FF7A7A7A" FontSize="36"/>
-                        <Border BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="180,0,0,30" VerticalAlignment="Bottom" Width="90" BorderBrush="#FF007ACC" Background="#FF4EB7FB" CornerRadius="5">
+                        <Border x:Name="DataPlayBtn" BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="180,0,0,30" VerticalAlignment="Bottom" Width="90" BorderBrush="#FF007ACC" Background="#FF4EB7FB" CornerRadius="5" MouseDown="DataPlayBtn_MouseDown">
                             <TextBlock TextWrapping="Wrap" Text="播放全部" Margin="0,9,0,0" Foreground="#FFFDFDFD" TextAlignment="Center"/>
                         </Border>
-                        <Border BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="285,0,0,30" VerticalAlignment="Bottom" Width="90" BorderBrush="#FFE7E8EC" Background="#FFFEFEFE" CornerRadius="5">
+                        <Border x:Name="DataDownloadBtn" BorderThickness="1" HorizontalAlignment="Left" Height="35" Margin="285,0,0,30" VerticalAlignment="Bottom" Width="90" BorderBrush="#FFE7E8EC" Background="#FFFEFEFE" CornerRadius="5" MouseDown="DataDownloadBtn_MouseDown">
                             <TextBlock TextWrapping="Wrap" Text="下载" Margin="0,9,0,0" Foreground="#FF555555" TextAlignment="Center"/>
                         </Border>
                     </Grid>
@@ -1158,7 +1272,7 @@
                 <Border HorizontalAlignment="Left" Height="15" Margin="71.5,415,0,0" VerticalAlignment="Top" Width="15">
                     <Path Data="M461.1,887.1C461.1,887.1 210.6,784 98.3,552.5 46.6,446 46.3,303.3 147,202.1 247.6,101 410.8,100.9 511.4,202.1 612,101 775.2,101 875.8,202.1 976.5,303.3 979.1,458 924.5,552.5 789,787.1 570.3,885.1 570.3,885.1 540.5,901.4 491.4,901.9 461.1,887.1z M481.2,845.7C498.5,854.2,531.9,853.6,548,844.7L551.6,843C554.3,841.8 560.1,839 568.6,834.5 583.2,826.7 599.6,817.2 617.4,805.9 668.4,773.3 719.5,732.8 767.1,684 812.3,637.7 852.1,586.3 884.9,529.5 934.9,442.9 921.8,313.3 843.4,234.6 760.7,151.5 626.8,151.5 544.2,234.6L511.6,267.4 479,234.6C396.3,151.5 262.4,151.5 179.7,234.6 101.7,313 90.1999999999998,430.3 139.7,532.4 173.3,601.5 222.5,663.2 283.6,717.4 326.6,755.6 372.8,787.8 419,814.1 435.2,823.3 450,831 463.3,837.4 471.1,841.1 476.3,843.5 478.8,844.5L481.2,845.7z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=LikeBtn}" StrokeThickness="0"/>
                 </Border>
-                <Label x:Name="LikeBtn" Content="我喜欢" Margin="96.5,410,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="LikeBtn" Content="我喜欢" Margin="96.5,410,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="LikeBtn_MouseDown_1"/>
                 <Border HorizontalAlignment="Left" Height="15" Margin="71.5,457,0,0" VerticalAlignment="Top" Width="15">
                     <Path Data="M819.2 459.776l-215.04-28.4672L512 225.28l-92.16 206.2336L204.8 459.776l158.1056 155.8528-40.96 224.0512L512 729.7024 701.6448 839.68l-40.96-223.8464zM512 677.0688L372.5312 757.76l29.9008-163.84L286.72 479.232l157.696-20.48L512 307.2l67.584 151.3472 157.696 20.48L621.1584 593.92l29.9008 163.84z M512 61.44A471.04 471.04 0 0 0 144.7936 827.392L174.08 798.72a430.08 430.08 0 1 1 92.16 87.04l-29.4912 29.4912A471.04 471.04 0 1 0 512 61.44z M200.9088 829.0304L171.8272 858.112q15.9744 16.5888 33.3824 31.5392L234.496 860.16a436.0192 436.0192 0 0 1-33.5872-31.1296z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=GDBtn}" StrokeThickness="5"/>
                 </Border>
@@ -1184,13 +1298,13 @@
                 <Border x:Name="MusicImage" HorizontalAlignment="Left" Margin="10" Width="54" Height="54" CornerRadius="5" Background="#FFFAFAFA" BorderBrush="#FFE7E8EC" BorderThickness="1" MouseDown="MusicImage_MouseDown"/>
                 <TextBlock x:Name="MusicName" HorizontalAlignment="Left" Margin="70,20,0,0" TextWrapping="Wrap" Text="MusicName" VerticalAlignment="Top" Width="165" Foreground="#FF666666" FontSize="14" Height="18"/>
                 <TextBlock x:Name="Singer" HorizontalAlignment="Left" Margin="70,37.78,0,0" TextWrapping="Wrap" Text="Singer" VerticalAlignment="Top" Width="165" Foreground="#FF999999" Height="16"/>
-                <Border HorizontalAlignment="Left" Width="15" Margin="235,0,0,0" Height="15">
+                <Border HorizontalAlignment="Left" Width="15" Margin="235,0,0,0" Height="15" MouseDown="Border_MouseDown">
                     <Path Data="M174.087409,63.83998C160.252309,63.83998,149.057339,75.03495,149.057339,88.87005L149.057339,935.127903C149.057339,948.964026 160.252309,960.158996 174.087409,960.158996 187.923532,960.158996 199.117479,948.965049 199.117479,935.127903L199.117479,530.400068C199.117479,544.79594,207.795116,557.385676,220.970183,565.672409L771.763721,912.787081C781.933338,919.190931 796.599362,922.564772 808.428782,922.564772 843.433017,922.564772 874.941638,894.063648 874.941638,859.107508L874.941638,164.890444C874.941638,129.910768 842.185607,101.458763 807.207977,101.458763 795.400047,101.458763 781.639648,104.83158 771.470031,111.211894L222.021118,458.31531C208.846051,466.577484,199.117479,479.189733,199.117479,493.563092L199.117478,88.87005C199.117478,75.03495,187.922509,63.83998,174.087409,63.83998z M242.701113,500.700653L795.939329,153.621796C798.16195,152.229076 804.786834,151.519925 807.207977,151.519925 813.635363,151.519925 824.880475,156.62827 824.880475,164.890444L824.880475,859.107509C824.880475,870.449835,808.356127,875.486548,800.216749,870.40174L244.852102,523.287067C239.230058,519.717775 237.51909,514.193968 237.51909,511.99386 237.51909,509.744633 237.079068,504.220826 242.701113,500.700653z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
                 </Border>
                 <Border x:Name="PlayBtn" HorizontalAlignment="Left" Width="15" Margin="266,29.5,0,29.5" Height="15" MouseDown="PlayBtn_MouseDown" Background="#00000000">
                     <Path Data="M844.704269,475.730473L222.284513,116.380385A43.342807,43.342807,0,0,0,157.259465,153.928738L157.259465,872.621689A43.335582,43.335582,0,0,0,222.284513,910.162817L844.697044,550.819953A43.357257,43.357257,0,0,0,844.704269,475.730473z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
                 </Border>
-                <Border HorizontalAlignment="Left" Width="15" Margin="295,29.5,0,29.5" Height="15">
+                <Border HorizontalAlignment="Left" Width="15" Margin="295,29.5,0,29.5" Height="15" MouseDown="Border_MouseDown_1">
                     <Path Data="M849.911568,960.158996C863.746668,960.158996,874.942661,948.965049,874.942661,935.127903L874.942661,88.87005C874.942661,75.03495 863.746668,63.83998 849.911568,63.83998 836.076468,63.83998 824.880475,75.03495 824.880475,88.87005L824.880475,489.50466C824.880475,477.55142,809.260729,467.064578,797.942963,459.976136L237.640863,109.330034C227.790518,103.146195 219.259214,99.894128 207.81865,99.894128 173.890933,99.894128 149.056315,127.467114 149.056315,161.370271L149.056316,862.629729C149.056316,896.508327 173.181783,924.130432 207.1095,924.130432 218.550063,924.130432 228.083184,920.854829 237.933529,914.644384L798.823006,564.010562C810.139749,556.921097,824.879452,546.436301,824.879452,534.483062L824.879452,935.128928C824.880475,948.96505,836.076468,960.158996,849.911568,960.158996z M768.464581,521.648754L209.60432,872.25904C207.697901,873.431749 209.164298,874.068245 207.110523,874.068245 202.490296,874.068245 199.117478,870.402762 199.117478,862.629728L199.117478,161.371294C199.117478,153.549141 202.490295,149.956313 207.110523,149.956313 209.164299,149.956313 209.433428,150.567227 211.339848,151.740959L769.296529,502.363525C773.939269,505.272785 774.232958,509.648442 774.232958,512.019442 774.232958,514.364861 773.083785,518.740518 768.464581,521.648754z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
                 </Border>
                 <Slider x:Name="jd" Margin="355,28,115,28" Height="12" Style="{DynamicResource SliderStyle}" ValueChanged="jd_ValueChanged"/>

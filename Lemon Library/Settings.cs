@@ -16,7 +16,7 @@ namespace LemonLibrary
         public static void SaveSettings(string id = "id")
         {
             if (id == "id") id = Settings.USettings.LemonAreeunIts;
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + id + @".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
         }
         public static void LoadUSettings(string data)
         {
@@ -51,14 +51,14 @@ namespace LemonLibrary
         }
         public static void SaveLoadSettings()
         {
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"Settings.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.LSettings))), TextHelper.MD5.EncryptToMD5string("Settings.st")));
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.LSettings))), TextHelper.MD5.EncryptToMD5string("Settings.st")));
         }
         public class UserSettings {
             public UserSettings() {
 
             }
-            public Dictionary<string, Music> MusicLike { get; set; } = new Dictionary<string, Music>();
-            public Dictionary<string, MusicGD> MusicGD { get; set; } = new Dictionary<string, MusicGD>();
+            public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
+            public SortedDictionary<string, MusicGD> MusicGD { get; set; } = new SortedDictionary<string, MusicGD>();
             public string LemonAreeunIts { get; set; } = "你的QQ";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";

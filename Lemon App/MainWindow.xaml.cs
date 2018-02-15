@@ -1,6 +1,9 @@
 ﻿using LemonLibrary;
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -428,6 +431,85 @@ namespace Lemon_App
                             MusicName = MusicData.SongName});
                         (Resources["LikeBtnDown"] as Storyboard).Begin();}}Settings.SaveSettings();
             }
+        }
+
+        private void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            TB.Text = "我喜欢";
+            TX.Background = new ImageBrush(new BitmapImage(new Uri("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg")));
+            DataItemsList.Children.Clear();
+            foreach (var dt in Settings.USettings.MusicLike.Values) {
+                var jm = new DataItem(dt.MusicID, dt.MusicName, dt.Singer, dt.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
+                jm.MouseDown += PlayMusic;
+                DataItemsList.Children.Add(jm);
+            }
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(!IsRadio)
+                PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) - 1] as DataItem, null);
+        }
+
+        private void Border_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            if (!IsRadio)
+                PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
+            else GetRadioAsync(new RadioItem(RadioID), null);
+        }
+
+        private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            PlayMusic(DataItemsList.Children[0] as DataItem, null);
+        }
+
+        private async void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var data = DataItemsList.Children;
+            int index = 0;
+            Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")");
+            msg.Show();
+            for (index = 0; index < data.Count; index++)
+            {
+                var cl = new WebClient();
+                string mid = (data[index] as DataItem).ID;
+                string url = await ml.GetUrlAsync(mid);
+                string name = (data[index] as DataItem).SongName + " - " + (data[index] as DataItem).Singer;
+                msg.tb.Text = "正在下载全部歌曲(" + data .Count + ")\n已完成:" + (index + 1) + "  " + name;
+                string file = AppDomain.CurrentDomain.BaseDirectory + $@"Download\{name}.mp3";
+                cl.DownloadFileAsync(new Uri(url), file);
+                cl.DownloadFileCompleted += delegate { cl.Dispose(); };
+            }
+            msg.tb.Text = "已完成.";
+            await Task.Delay(3000);
+            msg.tbclose();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (System.IO.File.Exists(Settings.USettings.UserImage))
+            {
+                var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
+                TX.Background = new ImageBrush(image.ToImageSource());
+            }
+            NM.Text = Settings.USettings.UserName;
+        }
+
+        private void TX_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog o = new Microsoft.Win32.OpenFileDialog();
+            if (o.ShowDialog() == true)
+            {
+                var image = new System.Drawing.Bitmap(o.FileName);
+                TX.Background = new ImageBrush(image.ToImageSource());
+                Settings.USettings.UserImage = o.FileName;
+                Settings.SaveSettings();
+            }
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            new FC().Show();
         }
     }
 }

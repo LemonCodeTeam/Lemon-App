@@ -1,0 +1,87 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lemon_App"
+        xmlns:Controls="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit" x:Class="Lemon_App.FC"
+        mc:Ignorable="d"
+        Title="录入面部识别信息" FontFamily=".PingFang SC,Microsoft YaHei UI" Height="340" Width="460" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Storyboard x:Key="START">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="400"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="280"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="grid">
+                <EasingThicknessKeyFrame KeyTime="0" Value="30,340,30,30"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="30"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CLOSE">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="grid">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="30,340,30,30"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="STAR">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="b">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="b">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="border">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock1">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.4" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <StringAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Text)" Storyboard.TargetName="textBlock1">
+                <DiscreteStringKeyFrame KeyTime="0:0:0.3" Value="正在处理数据"/>
+                <DiscreteStringKeyFrame KeyTime="0:0:0.5" Value="正在处理数据"/>
+                <DiscreteStringKeyFrame KeyTime="0:0:1" Value="正在处理数据"/>
+                <DiscreteStringKeyFrame KeyTime="0:0:1.2" Value="已完成"/>
+            </StringAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Effect>
+        <DropShadowEffect BlurRadius="30" Opacity="0.4" ShadowDepth="0"/>
+    </Window.Effect>
+    <Grid x:Name="grid" Margin="30" Background="White" Width="400" Height="280">
+        <Grid.Clip>
+            <RectangleGeometry RadiusX="3" RadiusY="3">
+                <RectangleGeometry.Rect>
+                    <Rect Width="400" Height="280"/>
+                </RectangleGeometry.Rect>
+            </RectangleGeometry>
+        </Grid.Clip>
+        <Border x:Name="CLOSE" ToolTip="关闭" HorizontalAlignment="Left" Margin="10,10,0,0" Width="13" Height="13" Background="#FFB8B8B8" CornerRadius="13" MouseDown="TextBlock_MouseDown" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock" Height="18" Margin="28,7,28,0" TextWrapping="Wrap" Text="录入面部识别信息" VerticalAlignment="Top" Foreground="#FFCFCFCF" TextAlignment="Center"/>
+        <Border x:Name="b" BorderBrush="#FF3399FF" BorderThickness="1" Width="240" Height="175">
+            <Controls:VideoCaptureElement  x:Name="vce"/>
+        </Border>
+        <Border x:Name="border" Height="30" VerticalAlignment="Bottom" Width="75" Margin="162.5,0,162.5,12" Background="#FF3399FF" CornerRadius="5" MouseDown="Border_MouseDown">
+            <TextBlock Margin="0,7,0,0" TextWrapping="Wrap" Text="录入" Foreground="#FFF9F9F9" TextAlignment="Center"/>
+        </Border>
+        <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="正在处理数据" Height="30" FontSize="24" TextAlignment="Center" Foreground="#FF5F5F5F" Opacity="0"/>
+    </Grid>
+</Window>
