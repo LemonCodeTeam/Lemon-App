@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,7 +32,13 @@ namespace Lemon_App
             Nam = name;
             img = pic;
             this.name.Text = Nam;
-            im.Background = new ImageBrush(new BitmapImage(new Uri(img)));
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg"))
+            {
+                WebClient v = new WebClient();
+                v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg");
+                v.DownloadFileCompleted += delegate { im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg", UriKind.Relative))); };
+            }
+            else im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg", UriKind.Relative)));
         }
         public RadioItem(string ID) {
             id = ID;

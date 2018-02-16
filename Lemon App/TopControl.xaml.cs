@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,10 +28,15 @@ namespace Lemon_App
         public TopControl(string id, string img, string n)
         {
             InitializeComponent();
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Top" + id + ".jpg"))
+            {
+                WebClient v = new WebClient();
+                v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Top" + id + ".jpg");
+                v.DownloadFileCompleted += delegate { im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Top" + id + ".jpg", UriKind.Relative))); };
+            }else im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Top" + id + ".jpg", UriKind.Relative)));
             topID = id;
             pic = img;
             name = n;
-            im.Background = new ImageBrush(new BitmapImage(new Uri(pic)));
         }
     }
 }

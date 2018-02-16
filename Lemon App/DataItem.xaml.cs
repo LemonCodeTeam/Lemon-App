@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,7 +33,13 @@ namespace Lemon_App
             SongName = songname;
             Singer = singer;
             Image = img;
-            im.Background = new ImageBrush(new BitmapImage(new Uri(Image)));
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg"))
+            {
+                WebClient v = new WebClient();
+                v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg");
+                v.DownloadFileCompleted += delegate { im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg", UriKind.Relative))); };
+            }
+            else im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg", UriKind.Relative)));
             name.Text = SongName;
             ser.Text = Singer;
         }

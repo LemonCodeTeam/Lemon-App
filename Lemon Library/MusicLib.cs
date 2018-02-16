@@ -19,8 +19,10 @@ namespace LemonLibrary
 {
     public class MusicLib{
         public MusicLib(LyricView LV) {
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download") == false)
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + $@"Download");
+            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Download") == false)
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Download");
+            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache") == false)
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Cache");
             lv = LV;
         }
         public MusicLib() {
@@ -79,7 +81,8 @@ namespace LemonLibrary
                     ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg"
                 };
                 dt.Data.Add(m);
-                mldata.Add(m.MusicID, m.MusicName+" - "+m.Singer);
+                if(!mldata.ContainsKey(m.MusicID))
+                   mldata.Add(m.MusicID, m.MusicName+" - "+m.Singer);
                 i++;
             }
             return dt;

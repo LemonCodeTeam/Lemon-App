@@ -434,7 +434,13 @@ namespace Lemon_App
         private void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
             TB.Text = "我喜欢";
-            TX.Background = new ImageBrush(new BitmapImage(new Uri("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg")));
+            if (!System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache\\MyLove.jpg"))
+            {
+                WebClient v = new WebClient();
+                v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg"), AppDomain.CurrentDomain.BaseDirectory + "Cache\\MyLove.jpg");
+                v.DownloadFileCompleted += delegate { TX.Background = new ImageBrush(System.IO.File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "Cache\\MyLove.jpg").ToBitmapImage()); };
+            }
+            else TX.Background = new ImageBrush(System.IO.File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "Cache\\MyLove.jpg").ToBitmapImage());
             DataItemsList.Children.Clear();
             foreach (var dt in Settings.USettings.MusicLike.Values) {
                 var jm = new DataItem(dt.MusicID, dt.MusicName, dt.Singer, dt.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
