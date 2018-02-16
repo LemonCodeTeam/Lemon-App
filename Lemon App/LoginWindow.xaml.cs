@@ -310,14 +310,14 @@ namespace Lemon_App
                     {
                         if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
                             Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
-                        else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME);
+                        else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME+".st");
                         (Resources["OnLoaded1"] as Storyboard).Begin();
                         tr.Start();
                     }
                     else txb.Text = "识别失败";
                 }
             }
-            catch { txb.Text = "识别失败"; }
+            catch(Exception ex) { throw ex; }
         }
 
         private void face_MouseDown(object sender, MouseButtonEventArgs e)

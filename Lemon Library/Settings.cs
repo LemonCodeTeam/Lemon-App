@@ -28,6 +28,7 @@ namespace LemonLibrary
             {
                 foreach (var jm in jx)
                 {
+                    if(!USettings.MusicLike.ContainsKey(jm["MusicID"].ToString()))
                     USettings.MusicLike.Add(jm["MusicID"].ToString(), new Music()
                     {
                         GC = jm["GC"].ToString(),
@@ -40,7 +41,8 @@ namespace LemonLibrary
             }
             foreach (var jcm in o["MusicGD"])
             {
-                USettings.MusicGD.Add(jcm["ID"].ToString(), new MusicGD() {ID= jcm["ID"].ToString(),Name= jcm["Name"].ToString(),Photo= jcm["Photo"].ToString()});
+                if (!USettings.MusicGD.ContainsKey(jcm["ID"].ToString()))
+                    USettings.MusicGD.Add(jcm["ID"].ToString(), new MusicGD() {ID= jcm["ID"].ToString(),Name= jcm["Name"].ToString(),Photo= jcm["Photo"].ToString()});
             }
         }
         public static void LoadLSettings(string data) {

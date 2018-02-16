@@ -599,11 +599,11 @@ namespace LemonLibrary
         public class Music
         {
             public Music() { }
-            public string MusicName { set; get; }
-            public string Singer { set; get; }
-            public string MusicID { set; get; }
-            public string ImageUrl { set; get; }
-            public string GC { set; get; }
+            public string MusicName { set; get; } = "";
+            public string Singer { set; get; } = "";
+            public string MusicID { set; get; } = "";
+            public string ImageUrl { set; get; } = "";
+            public string GC { set; get; } = "";
         }
         public class MusicSinger {
             public string Name { set; get; }
