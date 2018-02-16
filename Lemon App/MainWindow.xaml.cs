@@ -11,8 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-//TODO: 完成我喜欢模块和我的歌单模块
-//悬浮窗 登录模块
 namespace Lemon_App
 {
     /// <summary>
