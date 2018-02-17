@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using static LemonLibrary.InfoHelper;
 /*
    作者:Twilight./Lemon        QQ:2728578956
@@ -94,7 +97,7 @@ namespace LemonLibrary
             string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
             return $"http://182.247.250.19/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
         }
-        public async void GetAndPlayMusicUrlAsync(string mid,Boolean openlyric,Action loadingdelegate,Action finishesloadingdelegate)
+        public async void GetAndPlayMusicUrlAsync(string mid,Boolean openlyric,TextBlock x,Window s,bool doesplay=true)
         {
             string name = mldata[mid];
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3"))
@@ -107,16 +110,30 @@ namespace LemonLibrary
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate {
                     m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
-                    m.Play();
-                    finishesloadingdelegate();
+                    if(doesplay)
+                       m.Play();
+                    s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                    {
+                        x.Text = TextHelper.XtoYGetTo("["+name,"["," -",0);
+                    }));
                 };
                 dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
-                loadingdelegate();
+                dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
+                    s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                    {
+                        x.Text = "加载中..."+e.ProgressPercentage+"%";
+                    }));
+                };
             }
             else
             {
                 m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
-                m.Play();
+                if(doesplay)
+                   m.Play();
+                s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                {
+                    x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0);
+                }));
             }
             if (openlyric)
             {

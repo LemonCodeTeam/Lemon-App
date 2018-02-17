@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -22,6 +23,23 @@ using System.Windows.Media.Imaging;
 
 namespace LemonLibrary
 {
+    public class UIHelper {
+        public static void G(FrameworkElement d)
+        {
+            d.FocusVisualStyle = null;
+            if (d is Panel)
+            {
+                foreach (var s in (d as Panel).Children)
+                {
+                    G(s as FrameworkElement);
+                }
+            }
+            if (d is ScrollViewer)
+            {
+                G((d as ScrollViewer).Content as FrameworkElement);
+            }
+        }
+    }
     public static class ImageHelper
     {
         /// <summary>

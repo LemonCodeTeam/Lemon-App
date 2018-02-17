@@ -24,6 +24,13 @@ namespace LemonLibrary
             USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
             USettings.UserImage = o["UserImage"].ToString();
             USettings.UserName = o["UserName"].ToString();
+            USettings.Playing.GC= o["Playing"]["GC"].ToString();
+            USettings.Playing.ImageUrl = o["Playing"]["ImageUrl"].ToString();
+            USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
+            USettings.Playing.MusicName= o["Playing"]["MusicName"].ToString();
+            USettings.Playing.Singer = o["Playing"]["Singer"].ToString();
+            USettings.jd = Double.Parse(o["jd"].ToString());
+            USettings.alljd = Double.Parse(o["alljd"].ToString());
             foreach (var jx in o["MusicLike"].ToArray())
             {
                 foreach (var jm in jx)
@@ -64,6 +71,9 @@ namespace LemonLibrary
             public string LemonAreeunIts { get; set; } = "你的QQ";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";
+            public Music Playing { get; set; } = new Music();
+            public double jd { get; set; } = 0;
+            public double alljd { get; set; } = 0;
         }
         public class LoadSettingsData
         {

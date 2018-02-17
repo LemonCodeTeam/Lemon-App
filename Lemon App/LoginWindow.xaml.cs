@@ -241,9 +241,9 @@ namespace Lemon_App
                 {
                     var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + Email.Text + ".jpg");
                     TX.Background = new ImageBrush(image.ToImageSource());
+                    TX.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2)));
                 }
                 else { TX.Background = new ImageBrush(new BitmapImage(new Uri("http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100"))); }
-                TX.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2)));
             }
         }
 

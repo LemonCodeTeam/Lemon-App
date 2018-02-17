@@ -21,5 +21,11 @@ namespace Lemon_App
             t.Completed += delegate { Close(); };
             t.Begin();
         }
+        public bool IsClose = false;
+        private void border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            IsClose = true;
+            tbclose();
+        }
     }
 }
