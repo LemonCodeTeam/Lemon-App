@@ -1396,11 +1396,6 @@
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="LikeBtn">
             <BeginStoryboard x:Name="OpenDataPage_BeginStoryboard" Storyboard="{StaticResource OpenDataPage}"/>
         </EventTrigger>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource FxLoading}"/>
-            <BeginStoryboard Storyboard="{StaticResource OpenLoadingFx}"/>
-            <BeginStoryboard Storyboard="{StaticResource CloseLoadingFx}"/>
-        </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
         <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="30" CaptionHeight="10" CornerRadius="0" />
@@ -1427,55 +1422,55 @@
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
                 <ScrollViewer  Margin="30,80,30,0" Template="{DynamicResource ScrollViewerControlTemplate}" VerticalAlignment="Top">
                     <WrapPanel>
-                        <WrapPanel>
-                            <RadioButton Content="全部" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True" Checked="SingerPageChecked" Uid="all_all_"/>
-                            <RadioButton Content="华语男" Checked="SingerPageChecked" Uid="cn_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="华语女" Checked="SingerPageChecked" Uid="cn_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="华语组合" Checked="SingerPageChecked" Uid="cn_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="韩国男" Checked="SingerPageChecked" Uid="k_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="韩国女" Checked="SingerPageChecked" Uid="k_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="韩国组合" Checked="SingerPageChecked" Uid="k_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="日本男" Checked="SingerPageChecked" Uid="j_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="日本女" Checked="SingerPageChecked" Uid="j_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="日本组合" Checked="SingerPageChecked" Uid="j_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="欧美男" Checked="SingerPageChecked" Uid="eu_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="欧美女" Checked="SingerPageChecked" Uid="eu_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="欧美组合" Checked="SingerPageChecked" Uid="eu_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="乐团" Checked="SingerPageChecked" Uid="c_orchestra_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="演奏家" Checked="SingerPageChecked" Uid="c_performer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="作曲家" Checked="SingerPageChecked" Uid="c_composer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="指挥家" Checked="SingerPageChecked" Uid="c_cantor_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="其他" Checked="SingerPageChecked" Uid="other_other_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                        <WrapPanel x:Name="Singerws">
+                            <RadioButton Content="全部" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True"   Uid="all_all_"/>
+                            <RadioButton Content="华语男"   Uid="cn_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="华语女"   Uid="cn_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="华语组合"   Uid="cn_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="韩国男"   Uid="k_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="韩国女"   Uid="k_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="韩国组合"   Uid="k_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="日本男"   Uid="j_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="日本女"   Uid="j_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="日本组合"   Uid="j_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="欧美男"   Uid="eu_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="欧美女"   Uid="eu_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="欧美组合"   Uid="eu_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="乐团"   Uid="c_orchestra_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="演奏家"   Uid="c_performer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="作曲家"   Uid="c_composer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="指挥家"   Uid="c_cantor_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton Content="其他"   Uid="other_other_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
                         </WrapPanel>
-                        <WrapPanel Margin="0,20,0,0">
-                            <RadioButton Content="热门" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="A" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="B" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="C" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="D" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="E" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="F" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="G" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="H" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="I" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="J" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="K" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="L" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="M" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="N" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="O" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="P" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="Q" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="R" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="S" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="T" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="U" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="V" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="W" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="X" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="Y" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="Z" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
-                            <RadioButton Content="#" Margin="0,0,10,10"   Foreground="#FFA0A0A0" Checked="SIngerPageChecked"/>
+                        <WrapPanel x:Name="Singersx" Margin="0,20,0,0">
+                            <RadioButton Content="热门" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True"  />
+                            <RadioButton Content="A" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="B" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="C" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="D" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="E" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="F" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="G" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="H" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="I" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="J" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="K" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="L" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="M" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="N" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="O" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="P" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="Q" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="R" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="S" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="T" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="U" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="V" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="W" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="X" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="Y" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="Z" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton Content="#" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
                         </WrapPanel>
                     </WrapPanel>
                 </ScrollViewer>
@@ -1572,7 +1567,7 @@
                     <WrapPanel x:Name="DataItemsList"/>
                 </ScrollViewer>
             </Grid>
-            <Grid x:Name="LoadingPage" Width="180" Height="180" Margin="0,300,0,0" Visibility="Collapsed" Opacity="0">
+            <Grid x:Name="LoadingPage" Width="180" Height="180" Margin="0,300,0,0" Opacity="0" Visibility="Collapsed">
                 <Border x:Name="border2" Background="#CC3698DB" CornerRadius="100" RenderTransformOrigin="0.5,0.5" Width="100" Height="100">
                     <Border.RenderTransform>
                         <TransformGroup>
@@ -1606,8 +1601,8 @@
                 </Border>
                 <Label x:Name="MusicKuBtn" Content="音乐库" Margin="96.5,205,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
                 <Label x:Name="TopBtn" Content="排行" Margin="96.5,247,33.5,0" VerticalAlignment="Top" Foreground="#FF4EB7FB"/>
-                <Label x:Name="SingerBtn" Content="歌手" Margin="96.5,287,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
-                <Label x:Name="ZJBtn" Content="专辑" Margin="96.5,327,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="SingerBtn" Content="歌手" Margin="96.5,287,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="SingerBtn_MouseDown"/>
+                <Label x:Name="ZJBtn" Content="专辑" Margin="96.5,327,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="ZJBtn_MouseDown"/>
                 <Label x:Name="RadioBtn" Content="电台" Margin="96.5,367,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
                 <Border HorizontalAlignment="Left" Height="15" Margin="71.5,415,0,0" VerticalAlignment="Top" Width="15">
                     <Path Data="M461.1,887.1C461.1,887.1 210.6,784 98.3,552.5 46.6,446 46.3,303.3 147,202.1 247.6,101 410.8,100.9 511.4,202.1 612,101 775.2,101 875.8,202.1 976.5,303.3 979.1,458 924.5,552.5 789,787.1 570.3,885.1 570.3,885.1 540.5,901.4 491.4,901.9 461.1,887.1z M481.2,845.7C498.5,854.2,531.9,853.6,548,844.7L551.6,843C554.3,841.8 560.1,839 568.6,834.5 583.2,826.7 599.6,817.2 617.4,805.9 668.4,773.3 719.5,732.8 767.1,684 812.3,637.7 852.1,586.3 884.9,529.5 934.9,442.9 921.8,313.3 843.4,234.6 760.7,151.5 626.8,151.5 544.2,234.6L511.6,267.4 479,234.6C396.3,151.5 262.4,151.5 179.7,234.6 101.7,313 90.1999999999998,430.3 139.7,532.4 173.3,601.5 222.5,663.2 283.6,717.4 326.6,755.6 372.8,787.8 419,814.1 435.2,823.3 450,831 463.3,837.4 471.1,841.1 476.3,843.5 478.8,844.5L481.2,845.7z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=LikeBtn}" StrokeThickness="0"/>
@@ -1616,7 +1611,7 @@
                 <Border HorizontalAlignment="Left" Height="15" Margin="71.5,457,0,0" VerticalAlignment="Top" Width="15">
                     <Path Data="M819.2 459.776l-215.04-28.4672L512 225.28l-92.16 206.2336L204.8 459.776l158.1056 155.8528-40.96 224.0512L512 729.7024 701.6448 839.68l-40.96-223.8464zM512 677.0688L372.5312 757.76l29.9008-163.84L286.72 479.232l157.696-20.48L512 307.2l67.584 151.3472 157.696 20.48L621.1584 593.92l29.9008 163.84z M512 61.44A471.04 471.04 0 0 0 144.7936 827.392L174.08 798.72a430.08 430.08 0 1 1 92.16 87.04l-29.4912 29.4912A471.04 471.04 0 1 0 512 61.44z M200.9088 829.0304L171.8272 858.112q15.9744 16.5888 33.3824 31.5392L234.496 860.16a436.0192 436.0192 0 0 1-33.5872-31.1296z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=GDBtn}" StrokeThickness="5"/>
                 </Border>
-                <Label x:Name="GDBtn" Content="我的歌单" Margin="96.5,452,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="GDBtn" Content="我的歌单" Margin="96.5,452,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="GDBtn_MouseDown"/>
                 <Border x:Name="UserTX" Height="75" Margin="79,80,81,0" VerticalAlignment="Top" Width="75" CornerRadius="75" Background="#FFECECEC"/>
                 <TextBlock x:Name="UserName" Margin="9,160,11,0" TextWrapping="Wrap" Text="Twilight./Lemon" VerticalAlignment="Top" Foreground="#FF979797" TextAlignment="Center"/>
                 <TextBox x:Name="SearchBox" Height="25" TextWrapping="Wrap" Text="搜索" VerticalAlignment="Top" Margin="20,45,20,0" Style="{DynamicResource SearchBox}" Foreground="#FFA4A4A4" KeyDown="SearchBox_KeyDown"/>

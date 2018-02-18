@@ -452,7 +452,7 @@ namespace LemonLibrary
             }
             catch { return ""; }
         }
-        public static async Task HttpDownloadFileAsync(string url, string path)
+        public static async Task HttpDownloadFile(string url, string path)
         {
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;

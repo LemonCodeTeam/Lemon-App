@@ -58,7 +58,7 @@ namespace Lemon_App
             else LemonLibrary.Settings.SaveSettings(qq);
             var sl = TextHelper.XtoYGetTo(await HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
             JObject o = JObject.Parse(sl);
-            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
+            await HttpHelper.HttpDownloadFile($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
             var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
             this.Dispatcher.Invoke(new Action(() => { TX.Background = new ImageBrush(image.ToImageSource()); }));
             Settings.USettings.UserName = o[qq][6].ToString();
@@ -240,7 +240,7 @@ namespace Lemon_App
             var d = (Resources["l"] as Storyboard);
             d.Completed += delegate {
                 RM.IsChecked = LemonLibrary.Settings.LSettings.RNBM;
-                tr.Interval = 4000;
+                tr.Interval = 3000;
                 tr.Tick += T;
                 trs.Interval = 1000;
                 trs.Tick += Trs;

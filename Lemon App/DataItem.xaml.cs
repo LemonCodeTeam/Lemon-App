@@ -36,7 +36,7 @@ namespace Lemon_App
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg"))
             {
                 WebClient v = new WebClient();
-                v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg");
+                v.DownloadFile(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg");
                 v.DownloadFileCompleted += delegate { im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg", UriKind.Relative))); };
             }
             else im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg", UriKind.Relative)));

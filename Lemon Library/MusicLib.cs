@@ -117,7 +117,7 @@ namespace LemonLibrary
                         x.Text = TextHelper.XtoYGetTo("["+name,"["," -",0);
                     }));
                 };
-                dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
+                dc.DownloadFile(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
@@ -272,6 +272,7 @@ namespace LemonLibrary
                 m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["songlist"][i]["data"]["albummid"]}.jpg";
                 m.GC = o["songlist"][i]["data"]["songmid"].ToString();
                 dt.Add(m);
+                if(!mldata.ContainsKey(m.MusicID))
                 mldata.Add(m.MusicID, m.MusicName);
                 i++;
             }

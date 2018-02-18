@@ -50,7 +50,7 @@ namespace Lemon_App
                 string name = data[index].Content.ToString();
                 msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n已完成:" + (index + 1) + "  " + name;
                 string file = filepath.Text+$"\\{name}.mp3";
-                cl.DownloadFileAsync(new Uri(url), file);
+                cl.DownloadFile(new Uri(url), file);
                 cl.DownloadFileCompleted += delegate { cl.Dispose(); };
             }
             if (!msg.IsClose)
