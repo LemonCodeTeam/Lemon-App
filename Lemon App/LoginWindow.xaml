@@ -8,7 +8,7 @@
         xmlns:Forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
        xmlns:Controls="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit" x:Class="Lemon_App.LoginWindow"
         mc:Ignorable="d"
-        Title="登录到小萌" Height="340" MouseLeftButtonDown="Window_MouseLeftButtonDown" Width="460" Background="{x:Null}" ResizeMode="NoResize" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" MouseDown="Window_MouseDown" KeyDown="Window_KeyDown" BorderThickness="30" FontFamily=".PingFang SC,Microsoft YaHei UI">
+        Title="登录到小萌" Height="340" MouseLeftButtonDown="Window_MouseLeftButtonDown" Width="460" Background="{x:Null}" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" KeyDown="Window_KeyDown" BorderThickness="30" FontFamily=".PingFang SC,Microsoft YaHei UI" Loaded="Window_Loaded">
     <Window.Resources>
         <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
         <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
@@ -397,12 +397,8 @@
         </Grid.Clip>
         <Popup x:Name="op" Width="350" LemonLib:PopopHelper.PopupPlacementTarget="{Binding ElementName=CLOSE}" Height="280" Placement="Right" HorizontalOffset="10">
             <Border x:Name="po" Background="White" BorderThickness="2" BorderBrush="#FFDEDEDE">
-                <Grid KeyDown="Grid_KeyDown">
-                    <TextBlock x:Name="ns" TextWrapping="Wrap" Foreground="#FF686868" TextAlignment="Center" FontSize="14" Height="40"/>
-                    <WindowsFormsHost >
-                        <Forms:WebBrowser x:Name="wb" ScriptErrorsSuppressed="True"/>
-                    </WindowsFormsHost>
-                </Grid>
+                <WindowsFormsHost x:Name="wfh" >
+                </WindowsFormsHost>
             </Border>
         </Popup>
         <Border x:Name="OS" BorderBrush="#FFECECEC" Width="260" CornerRadius="5" Background="White" Height="60" Margin="0,103,25,0" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1.5">
@@ -417,7 +413,7 @@
             </Grid>
         </Border>
         <CheckBox x:Name="RM" Content="记住我" HorizontalAlignment="Left" Height="18" Margin="115,167,0,0" VerticalAlignment="Top" Width="111" Style="{DynamicResource CheckBoxStyle}" Foreground="#FFB1B1B1"/>
-        <Border x:Name="TX" Margin="25,95,0,0" Height="75" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" BorderThickness="2" BorderBrush="#FFECECEC" RenderTransformOrigin="0.5,0.5">
+        <Border x:Name="TX" Margin="25,95,0,0" Height="75" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" BorderThickness="2" BorderBrush="#FFECECEC" RenderTransformOrigin="0.5,0.5" MouseDown="TX_MouseDown">
             <Border.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -450,7 +446,7 @@
         <Border x:Name="qrcode" BorderBrush="#FFB8B8B8" BorderThickness="1" Width="123" Height="123" Margin="0,50,0,0" Visibility="Collapsed" Opacity="0" MouseDown="qrcode_MouseDown"/>
         <TextBlock x:Name="textBlock1" Height="25" Margin="10,73,10,0" TextWrapping="Wrap" Text="请拿起最新版手机企鹅扫码登陆" VerticalAlignment="Top" Foreground="#FFB8B8B8" FontSize="16" TextAlignment="Center" Visibility="Collapsed" Opacity="0"/>
         <TextBlock x:Name="textBlock2" Height="21" Margin="10,235,10,0" TextWrapping="Wrap" Text="返回" VerticalAlignment="Top" Foreground="#FFB8B8B8" TextAlignment="Center" Background="#00000000" Visibility="Collapsed" Opacity="0"/>
-        <Grid x:Name="qr" HorizontalAlignment="Right" Height="15" Margin="0,167,28,0" VerticalAlignment="Top" Width="15" Background="#00000000" MouseDown="Grid_MouseDown">
+        <Grid x:Name="qr" HorizontalAlignment="Right" Height="15" Margin="0,167,28,0" VerticalAlignment="Top" Width="15" Background="#00000000" MouseDown="qrcode_MouseDown">
             <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="6" VerticalAlignment="Top" Width="6"/>
             <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Right" Height="6" VerticalAlignment="Top" Width="6"/>
             <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="6" VerticalAlignment="Bottom" Width="6"/>

@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using WPFMediaKit.DirectShow.Controls;
+using System.Threading;
 
 namespace Lemon_App
 {
@@ -32,65 +33,45 @@ namespace Lemon_App
         public LoginWindow()
         {
             InitializeComponent();
-            wb.Navigated += NaAsync;
-            RM.IsChecked = LemonLibrary.Settings.LSettings.RNBM;
-            tr.Interval = 5000;
-            tr.Tick += T;
-            trs.Interval = 1000;
-            trs.Tick += Trs;
-            if (Console.CapsLock)
-            {
-                oldtext = rk.Text;
-                rk.Text = "已开启大写锁定";
-            }
-            else { if (oldtext != "已开启大写锁定") rk.Text = oldtext; else { rk.Text = ""; oldtext = ""; } }
-            (Resources["l"] as Storyboard).Begin();
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"))
-                Settings.LoadLSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string("Settings.st")))));
-            else LemonLibrary.Settings.SaveLoadSettings();
         }
-        int index = 0;
-        private async void NaAsync(object sender, WebBrowserNavigatedEventArgs e)
+        private void NaAsync(object sender, WebBrowserNavigatedEventArgs e)
         {
-            if (index != 0)
+            var wb = sender as System.Windows.Forms.WebBrowser;
+            op.IsOpen = false;
+            if (wb.DocumentTitle == "我的QQ中心")
+                LoginAsync(wb.Document.Cookie).Start();
+            else if (wb.DocumentTitle != "我的QQ中心" || !wb.DocumentText.Contains("安全验证"))
+                rk.Text = "登录失败,请检查账号和密码.";
+            else if (wb.DocumentText.Contains("安全验证"))
             {
-                if (wb.DocumentTitle == "我的QQ中心")
-                {
-                    op.IsOpen = false;
-                    var qq = LemonLibrary.TextHelper.XtoYGetTo(wb.Document.Cookie, "uin=o", ";", 0);
-                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
-                        Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
-                    else LemonLibrary.Settings.SaveSettings(qq);
-                    var sl = LemonLibrary.TextHelper.XtoYGetTo(await LemonLibrary.HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
-                    JObject o = JObject.Parse(sl);
-                    try
-                    {
-                        await LemonLibrary.HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
-                        var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
-                        TX.Background = new ImageBrush(image.ToImageSource());
-                    }
-                    catch { }
-                    Settings.USettings.UserName = o[qq][6].ToString();
-                    Settings.USettings.UserImage = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
-                    Settings.USettings.LemonAreeunIts = qq;
-                    Settings.SaveSettings();
-                    Settings.LSettings.NAME = qq;
-                    Settings.LSettings.RNBM = (Boolean)RM.IsChecked;
-                    Settings.LSettings.TX = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
-                    Settings.SaveLoadSettings();
-                    (Resources["OnLoaded1"] as Storyboard).Begin();
-                    tr.Start();
-                }
-                else if (wb.DocumentText.Contains("安全验证"))
-                {
-                    op.IsOpen = true;
-                    rk.Text = "请输入验证码";
-                }
-                else { rk.Text = "登录失败,请检查账号和密码."; op.IsOpen = false; }
+                op.IsOpen = true;
+                rk.Text = "请输入验证码";
+                wfh.Child = wb;
             }
-            else { index++; }
         }
 
+        public async Task LoginAsync(string Cookie)
+        {
+            var qq = LemonLibrary.TextHelper.XtoYGetTo(Cookie, "uin=o", ";", 0);
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
+                Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
+            else LemonLibrary.Settings.SaveSettings(qq);
+            var sl = TextHelper.XtoYGetTo(await HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
+            JObject o = JObject.Parse(sl);
+            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
+            var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
+            this.Dispatcher.Invoke(new Action(() => { TX.Background = new ImageBrush(image.ToImageSource()); }));
+            Settings.USettings.UserName = o[qq][6].ToString();
+            Settings.USettings.UserImage = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
+            Settings.USettings.LemonAreeunIts = qq;
+            Settings.SaveSettings();
+            Settings.LSettings.NAME = qq;
+            Settings.LSettings.RNBM = (Boolean)RM.IsChecked;
+            Settings.LSettings.TX = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
+            Settings.SaveLoadSettings();
+            Dispatcher.Invoke(new Action(() => { (Resources["OnLoaded1"] as Storyboard).Begin(); }));
+            tr.Start();
+        }
         private void Trs(object sender, EventArgs e)
         {
             OS.Visibility = Visibility.Visible;
@@ -104,26 +85,6 @@ namespace Lemon_App
             new MainWindow().Show();
             this.Close();
             tr.Stop();
-            wb.Dispose();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (Settings.LSettings.RNBM)
-            {
-                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
-                    Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
-                else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME);
-                (Resources["OnLoaded1"] as Storyboard).Begin();
-                tr.Start();
-            }
-            Email.Text = Settings.LSettings.NAME;
-            if (System.IO.File.Exists(Settings.LSettings.TX))
-            {
-                var image = new System.Drawing.Bitmap(Settings.LSettings.TX);
-                TX.Background = new ImageBrush(image.ToImageSource());
-            }
-            RM.IsChecked = Settings.LSettings.RNBM;
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -140,87 +101,28 @@ namespace Lemon_App
         private void Email_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                Border_MouseDown_1(null, null);
-        }
-        private bool IsValidEmail(string strIn)
-        {
-            return Regex.IsMatch(strIn, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)" + @"|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
-        }
-        //   System.Windows.Forms.WebBrowser wb = new System.Windows.Forms.WebBrowser();
-        private async void Border_MouseDown_1(object sender, MouseButtonEventArgs e)
-        {
-            if (Email.Text != string.Empty || PSW.Password != string.Empty)
             {
-                wb.Navigate("http://ui.ptlogin2.qq.com/cgi-bin/login?appid=1006102&s_url=http://id.qq.com/index.html&hide_close_icon=1");
-                rk.Text = "登录中...";
-                await Task.Delay(2000);
-                System.Windows.Forms.HtmlDocument doc = wb.Document;
-                doc.GetElementById("switcher_plogin").InvokeMember("click");
-                await Task.Delay(200);
-                doc.GetElementById("u").InnerText = Email.Text;
-                await Task.Delay(200);
-                doc.GetElementById("p").InnerText = PSW.Password;
-                await Task.Delay(200);
-                doc.GetElementById("login_button").InvokeMember("click");
-                await Task.Delay(1000);
-                if (wb.DocumentTitle != "我的QQ中心" || !wb.DocumentText.Contains("安全验证"))
-                    rk.Text = "登录失败,请检查账号和密码.";
-                else if (wb.DocumentText.Contains("安全验证"))
+                if (Email.Text != string.Empty || PSW.Password != string.Empty)
                 {
-                    op.IsOpen = true;
-                    rk.Text = "请输入验证码";
+                    var wb = new System.Windows.Forms.WebBrowser();
+                    wb.ScriptErrorsSuppressed = true;
+                    wb.Navigate("http://ui.ptlogin2.qq.com/cgi-bin/login?appid=1006102&s_url=http://id.qq.com/index.html&hide_close_icon=1");
+                    rk.Text = "登录中...";
+                    wb.Navigated += CAsync;
+                    wfh.Child = wb;
                 }
             }
         }
-
-        private async void Grid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (wb.DocumentTitle == "我的QQ中心")
-                {
-                    op.IsOpen = false;
-                    var qq = LemonLibrary.TextHelper.XtoYGetTo(wb.Document.Cookie, "uin=o", ";", 0);
-                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
-                        Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
-                    else LemonLibrary.Settings.SaveSettings(qq);
-                    var sl = LemonLibrary.TextHelper.XtoYGetTo(await LemonLibrary.HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
-                    JObject o = JObject.Parse(sl);
-                    try
-                    {
-                        await LemonLibrary.HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
-                        var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
-                        TX.Background = new ImageBrush(image.ToImageSource());
-                    }
-                    catch { }
-                    Settings.USettings.UserName = o[qq][6].ToString();
-                    Settings.USettings.UserImage = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
-                    Settings.USettings.LemonAreeunIts = qq ;
-                    Settings.SaveSettings();
-                    Settings.LSettings.NAME = qq;
-                    Settings.LSettings.RNBM = (Boolean)RM.IsChecked;
-                    Settings.LSettings.TX = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
-                    Settings.SaveLoadSettings();
-                    (Resources["OnLoaded1"] as Storyboard).Begin();
-                    tr.Start();
-                }
-                else if (wb.DocumentText.Contains("安全验证"))
-                {
-                    op.IsOpen = true;
-                    rk.Text = "请输入验证码";
-                }
-                else { rk.Text = "登录失败,请检查账号和密码."; op.IsOpen = false; }
-
-            }
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 3)
-            {
-                op.IsOpen = !op.IsOpen;
-                wb.Navigate("http://ui.ptlogin2.qq.com/cgi-bin/login?appid=1006102&s_url=http://id.qq.com/index.html&hide_close_icon=1");
-            }
+        public async void CAsync(object sender,WebBrowserNavigatedEventArgs e) {
+            await Task.Delay(2000);
+            var wb = sender as System.Windows.Forms.WebBrowser;
+            var doc = wb.Document;
+            doc.GetElementById("switcher_plogin").InvokeMember("click");
+            doc.GetElementById("u").InnerText = Email.Text;
+            doc.GetElementById("p").InnerText = PSW.Password;
+            doc.GetElementById("login_button").InvokeMember("click");
+            wb.Navigated += NaAsync;
+            wb.Navigated -= CAsync;
         }
         string oldtext = "";
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -253,11 +155,24 @@ namespace Lemon_App
             (Resources["OnLoaded1"] as Storyboard).Stop();
             (Resources["FXC"] as Storyboard).Begin();
         }
-        private async void qrcode_MouseDown(object sender, MouseButtonEventArgs e)
+        private void qrcode_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            var wb = new System.Windows.Forms.WebBrowser();
+            wb.ScriptErrorsSuppressed = true;
             wb.Navigate("http://ui.ptlogin2.qq.com/cgi-bin/login?appid=1006102&s_url=http://id.qq.com/index.html&hide_close_icon=1");
-            await Task.Delay(1000);
+            wb.Navigated += X;
+            wfh.Child = wb;
+        }
+        public void X(object sender, WebBrowserNavigatedEventArgs e) {
+            var wb = sender as System.Windows.Forms.WebBrowser;
             string str = wb.Document.Body.OuterHtml;
+            Task task = new Task(() => { T(str); });
+            task.Start();
+            wb.Navigated += NaAsync;
+            wb.Navigated -= X;
+        }
+        public void T(string str)
+        {
             MatchCollection matches;
             matches = Regex.Matches(str, @"<img\b[^<>]*?\bsrc[\s\t\r\n]*=[\s\t\r\n]*[""']?[\s\t\r\n]*(?<imgUrl>[^\s\t\r\n""'<>]*)[^<>]*?/?[\s\t\r\n]*>", RegexOptions.IgnoreCase);
             var t = matches[1].Value.ToString();
@@ -265,29 +180,11 @@ namespace Lemon_App
             MatchCollection mc = reg.Matches(t);
             var content = mc[0].Groups["src"].Value;
             t = TextHelper.XtoYGetTo(content + "\"", "t=", "\"", 0);
-            qrcode.Background = new ImageBrush(new BitmapImage(new Uri(content)));
-            //       op.IsOpen = true;
-            index = 0;
+            this.Dispatcher.Invoke(() => { qrcode.Background = new ImageBrush(new BitmapImage(new Uri(content))); });
         }
-
-        private async void Grid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            wb.Navigate("http://ui.ptlogin2.qq.com/cgi-bin/login?appid=1006102&s_url=http://id.qq.com/index.html&hide_close_icon=1");
-            await Task.Delay(5000);
-            string str = wb.Document.Body.OuterHtml;
-            MatchCollection matches;
-            matches = Regex.Matches(str, @"<img\b[^<>]*?\bsrc[\s\t\r\n]*=[\s\t\r\n]*[""']?[\s\t\r\n]*(?<imgUrl>[^\s\t\r\n""'<>]*)[^<>]*?/?[\s\t\r\n]*>", RegexOptions.IgnoreCase);
-            var t = matches[1].Value.ToString();
-            Regex reg = new Regex(@"<img.*?src=""(?<src>[^""]*)""[^>]*>", RegexOptions.IgnoreCase);
-            MatchCollection mc = reg.Matches(t);
-            var content = mc[0].Groups["src"].Value;
-            qrcode.Background = new ImageBrush(new BitmapImage(new Uri(content)));
-            index = 0;
-        }
-
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            try
+            new Task(new Action(delegate
             {
                 vce.Play();
                 RenderTargetBitmap bmp = new RenderTargetBitmap(
@@ -310,14 +207,16 @@ namespace Lemon_App
                     {
                         if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
                             Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
-                        else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME+".st");
-                        (Resources["OnLoaded1"] as Storyboard).Begin();
-                        tr.Start();
+                        else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME + ".st");
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            (Resources["OnLoaded1"] as Storyboard).Begin();
+                            tr.Start();
+                        }));
                     }
                     else txb.Text = "识别失败";
                 }
-            }
-            catch(Exception ex) { throw ex; }
+            })).Start();
         }
 
         private void face_MouseDown(object sender, MouseButtonEventArgs e)
@@ -328,6 +227,57 @@ namespace Lemon_App
                 (Resources["FACESTAR"] as Storyboard).Begin();
             }
             else { rk.Text = "没有录入面部数据"; }
+        }
+
+        private void TX_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+                op.IsOpen = !op.IsOpen;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var d = (Resources["l"] as Storyboard);
+            d.Completed += delegate {
+                RM.IsChecked = LemonLibrary.Settings.LSettings.RNBM;
+                tr.Interval = 4000;
+                tr.Tick += T;
+                trs.Interval = 1000;
+                trs.Tick += Trs;
+                if (Console.CapsLock)
+                {
+                    oldtext = rk.Text;
+                    rk.Text = "已开启大写锁定";
+                }
+                else { if (oldtext != "已开启大写锁定") rk.Text = oldtext; else { rk.Text = ""; oldtext = ""; } }
+                var c = new Task(new Action(delegate
+                 {
+                     if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"))
+                         Settings.LoadLSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string("Settings.st")))));
+                     else LemonLibrary.Settings.SaveLoadSettings();
+                 }));
+                c.Start();
+                c.Wait();
+                if (Settings.LSettings.RNBM)
+                {
+                    new Task(new Action(delegate
+                    {
+                        if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
+                            Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
+                        else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME);
+                    })).Start();
+                    (Resources["OnLoaded1"] as Storyboard).Begin();
+                    tr.Start();
+                }
+                Email.Text = Settings.LSettings.NAME;
+                if (System.IO.File.Exists(Settings.LSettings.TX))
+                {
+                    var image = new System.Drawing.Bitmap(Settings.LSettings.TX);
+                    TX.Background = new ImageBrush(image.ToImageSource());
+                }
+                RM.IsChecked = Settings.LSettings.RNBM;
+            };
+            d.Begin();
         }
     }
 }

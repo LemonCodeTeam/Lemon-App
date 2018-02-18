@@ -1296,9 +1296,6 @@
         </Storyboard>
     </Window.Resources>
     <Window.Triggers>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource Loading}"/>
-        </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="CloseBtn">
             <BeginStoryboard x:Name="Closing_BeginStoryboard" Storyboard="{StaticResource Closing}"/>
         </EventTrigger>
