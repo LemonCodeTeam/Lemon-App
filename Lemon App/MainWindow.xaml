@@ -1294,6 +1294,76 @@
                 <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="FxLoading" RepeatBehavior="Forever" AutoReverse="False">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="border3">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="-10"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="12"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="12"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="-8"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="-10"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border3">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="10"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="10"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="-10"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="4"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="10"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border2">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="-10"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="10"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="-5"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="-10"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="border2">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="8"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-3"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="7"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="17"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.0" Value="8"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="textBlock">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#99FFFFFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.6" Value="#E5FFFFFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.9" Value="#CCFFFFFF"/>
+                <EasingColorKeyFrame KeyTime="0:0:1" Value="#E5FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border3">
+                <EasingColorKeyFrame KeyTime="0" Value="#CC56D78B"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#CC3698DB"/>
+                <EasingColorKeyFrame KeyTime="0:0:1" Value="#CC56D78B"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border2">
+                <EasingColorKeyFrame KeyTime="0" Value="#CC3698DB"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#CC56D78B"/>
+                <EasingColorKeyFrame KeyTime="0:0:1" Value="#CC3698DB"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OpenLoadingFx">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LoadingPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LoadingPage">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LoadingPage">
+                <EasingThicknessKeyFrame KeyTime="0" Value="0,300,0,0"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseLoadingFx">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LoadingPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LoadingPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LoadingPage">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,300,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="CloseBtn">
@@ -1325,6 +1395,11 @@
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="LikeBtn">
             <BeginStoryboard x:Name="OpenDataPage_BeginStoryboard" Storyboard="{StaticResource OpenDataPage}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource FxLoading}"/>
+            <BeginStoryboard Storyboard="{StaticResource OpenLoadingFx}"/>
+            <BeginStoryboard Storyboard="{StaticResource CloseLoadingFx}"/>
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
@@ -1496,6 +1571,29 @@
                 <ScrollViewer  Margin="10,210,10,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="DataItemsList"/>
                 </ScrollViewer>
+            </Grid>
+            <Grid x:Name="LoadingPage" Width="180" Height="180" Margin="0,300,0,0" Visibility="Collapsed" Opacity="0">
+                <Border x:Name="border2" Background="#CC3698DB" CornerRadius="100" RenderTransformOrigin="0.5,0.5" Width="100" Height="100">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="-10" Y="8"/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                </Border>
+                <Border x:Name="border3" Background="#CC56D78B" CornerRadius="100" RenderTransformOrigin="0.5,0.5" Width="100" Height="100">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="-10" X="10"/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                </Border>
+                <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="加载中" Width="48" Height="20" FontSize="16" Foreground="#E5FFFFFF"/>
             </Grid>
         </Grid>
         <Border x:Name="ControlPage" HorizontalAlignment="Left" Width="236" Margin="0,0,0,75" Background="#FFFAFAFA" BorderThickness="0,0,1,0" BorderBrush="#FFE7E8EC">

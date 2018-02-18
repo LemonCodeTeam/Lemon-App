@@ -30,6 +30,146 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
+
+            var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
+            ds.Tick += delegate { UIHelper.G(Page); };
+            ds.Start();
+            FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
+            if (System.IO.File.Exists(Settings.USettings.UserImage))
+            {
+                var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
+                UserTX.Background = new ImageBrush(image.ToImageSource());
+            }
+            ////////////
+            LyricView lv = new LyricView();
+            lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(48, 195, 124));
+            lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(199, 199, 199));
+            lv.TextAlignment = TextAlignment.Left;
+            lv.tbWidth = 470;
+            ly.Children.Add(lv);
+            ml = new MusicLib(lv);
+            if (Settings.USettings.Playing.MusicName != "")
+            {
+                PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
+                jd.Maximum = Settings.USettings.alljd;
+                jd.Value = Settings.USettings.jd;
+            }
+            t.Interval = 500;
+            t.Tick += delegate {
+                try
+                {
+                    jd.Maximum = ml.m.NaturalDuration.TimeSpan.TotalMilliseconds;
+                    jd.Value = ml.m.Position.TotalMilliseconds;
+                    ml.lv.LrcRoll(ml.m.Position.TotalMilliseconds);
+                    Settings.USettings.alljd = jd.Maximum;
+                    Settings.USettings.jd = jd.Value;
+                }
+                catch { }
+            };
+            (Resources["Closing"] as Storyboard).Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
+            ml.m.MediaEnded += delegate {
+                t.Stop();
+                jd.Value = 0;
+                if (xh)
+                    if (IsRadio)
+                        PlayMusic(RadioData.MusicID, RadioData.ImageUrl, RadioData.MusicName, RadioData.Singer, true);
+                    else PlayMusic(MusicData, null);
+                else
+                {
+                    if (IsRadio)
+                        GetRadioAsync(new RadioItem(RadioID), null);
+                    else
+                        PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
+                }
+            };
+            ////////////
+            new Task(new Action(async delegate {
+            var dt = await ml.GetTopIndexAsync();
+                Dispatcher.Invoke(() =>
+                {
+                    foreach (var d in dt)
+                    {
+                        var top = new TopControl(d.ID, d.Photo, d.Name);
+                        top.MouseDown += async delegate (object seb, MouseButtonEventArgs ed)
+                        {
+                            var g = seb as TopControl;
+                            (Resources["ClickTop"] as Storyboard).Begin();
+                            var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\Top" + g.topID + ".jpg";
+                            if (!System.IO.File.Exists(file))
+                            {
+                                var s = new WebClient();
+                                s.DownloadFileAsync(new Uri(g.pic), file);
+                                s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
+                            }
+                            else TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
+                            TB.Text = g.name;
+                            var dta = await ml.GetToplistAsync(int.Parse(g.topID));
+                            DataItemsList.Children.Clear();
+                            foreach (var j in dta)
+                            {
+                                var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
+                                k.MouseDown += PlayMusic;
+                                DataItemsList.Children.Add(k);
+                            }
+                        };
+                        top.Margin = new Thickness(0, 0, 20, 20);
+                        topIndexList.Children.Add(top);
+                    }
+                });
+            })).Start();
+            //////TopPage Loaded//////
+            var sin = await ml.GetSingerAsync("all_all_all");
+            foreach (var d in sin)
+            {
+                var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                singerItemsList.Children.Add(sinx);
+            }
+            //////SingerPage Loaded//////
+            var wk = await ml.GetFLGDIndexAsync();
+            FLGDIndexList.Children.Add(new RadioButton() { Content = wk.Hot[0].name, Uid = wk.Hot[0].id, Margin = new Thickness(0, 0, 30, 10) });
+            FLGDIndexList.Children.Add(new TextBlock() { Text = "语种:" });
+            foreach (var d in wk.Lauch)
+            {
+                FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
+            }
+            FLGDIndexList.Children.Add(new TextBlock() { Text = "流派:" });
+            foreach (var d in wk.LiuPai)
+            {
+                FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
+            }
+            FLGDIndexList.Children.Add(new TextBlock() { Text = "主题:" });
+            foreach (var d in wk.Theme)
+            {
+                FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
+            }
+            FLGDIndexList.Children.Add(new TextBlock() { Text = "心情:" });
+            foreach (var d in wk.Heart)
+            {
+                FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
+            }
+            FLGDIndexList.Children.Add(new TextBlock() { Text = "场景:" });
+            foreach (var d in wk.Changjing)
+            {
+                FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
+            }
+            foreach (var d in FLGDIndexList.Children)
+            {
+                if (d is RadioButton)
+                    (d as RadioButton).Checked += FLGDPageChecked;
+            }
+            var dat = await ml.GetFLGDAsync(int.Parse(wk.Hot[0].id));
+            FLGDItemsList.Children.Clear();
+            foreach (var d in dat)
+            {
+                var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                kss.MouseDown += GDMouseDown;
+                FLGDItemsList.Children.Add(kss);
+            }
+            //////FLGDPage Loaded//////
+            var ks = new FLGDIndexItem("2591355982", "TwilightMusicWorld", "https://p.qpic.cn/music_cover/P5HCeFMBBWcs4IIdcdJTBVz8Nl9WdEQj8LcIwfxmeia5OJGKRJlkEcg/300?n=1") { Margin = new Thickness(20, 0, 0, 20) };
+            ks.MouseDown += GDMouseDown;
+            GDItemsList.Children.Add(ks);
+            UIHelper.G(Page);
         }
         LemonLibrary.MusicLib ml = new MusicLib();
 
@@ -42,141 +182,6 @@ namespace Lemon_App
         private  void window_Loaded(object sender, RoutedEventArgs e)
         {
             var ani = Resources["Loading"] as Storyboard;
-            ani.Completed += async delegate {
-                var ds= new System.Windows.Forms.Timer() { Interval = 2000 };
-                ds.Tick += delegate { UIHelper.G(Page); };
-                ds.Start();
-                FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
-                if (System.IO.File.Exists(Settings.USettings.UserImage))
-                {
-                    var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
-                    UserTX.Background = new ImageBrush(image.ToImageSource());
-                }
-                ////////////
-                LyricView lv = new LyricView();
-                lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(48, 195, 124));
-                lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(199, 199, 199));
-                lv.TextAlignment = TextAlignment.Left;
-                lv.tbWidth = 470;
-                ly.Children.Add(lv);
-                ml = new MusicLib(lv);
-                if (Settings.USettings.Playing.MusicName != "")
-                {
-                    PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
-                    jd.Maximum = Settings.USettings.alljd;
-                    jd.Value = Settings.USettings.jd;
-                }
-                t.Interval = 500;
-                t.Tick += delegate {
-                    try
-                    {
-                        jd.Maximum = ml.m.NaturalDuration.TimeSpan.TotalMilliseconds;
-                        jd.Value = ml.m.Position.TotalMilliseconds;
-                        ml.lv.LrcRoll(ml.m.Position.TotalMilliseconds);
-                        Settings.USettings.alljd = jd.Maximum;
-                        Settings.USettings.jd = jd.Value;
-                    }
-                    catch { }
-                };
-                (Resources["Closing"] as Storyboard).Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
-                ml.m.MediaEnded += delegate {
-                    t.Stop();
-                    jd.Value = 0;
-                    if (xh)
-                        if (IsRadio)
-                            PlayMusic(RadioData.MusicID, RadioData.ImageUrl, RadioData.MusicName, RadioData.Singer, true);
-                        else PlayMusic(MusicData, null);
-                    else
-                    {
-                        if (IsRadio)
-                            GetRadioAsync(new RadioItem(RadioID), null);
-                        else
-                            PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
-                    }
-                };
-                ////////////
-                var dt = await ml.GetTopIndexAsync();
-                foreach (var d in dt)
-                {
-                    var top = new TopControl(d.ID, d.Photo, d.Name);
-                    top.MouseDown += async delegate (object seb, MouseButtonEventArgs ed) {
-                        var g = seb as TopControl;
-                        (Resources["ClickTop"] as Storyboard).Begin();
-                        var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\Top" + g.topID + ".jpg";
-                        if (!System.IO.File.Exists(file))
-                        {
-                            var s = new WebClient();
-                            s.DownloadFileAsync(new Uri(g.pic), file);
-                            s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
-                        }
-                        else TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
-                        TB.Text = g.name;
-                        var dta = await ml.GetToplistAsync(int.Parse(g.topID));
-                        DataItemsList.Children.Clear();
-                        foreach (var j in dta)
-                        {
-                            var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
-                            k.MouseDown += PlayMusic;
-                            DataItemsList.Children.Add(k);
-                        }
-                    };
-                    top.Margin = new Thickness(0, 0, 20, 20);
-                    topIndexList.Children.Add(top);
-                }
-                //////TopPage Loaded//////
-                var sin = await ml.GetSingerAsync("all_all_all");
-                foreach (var d in sin)
-                {
-                    var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
-                    singerItemsList.Children.Add(sinx);
-                }
-                //////SingerPage Loaded//////
-                var wk = await ml.GetFLGDIndexAsync();
-                FLGDIndexList.Children.Add(new RadioButton() { Content = wk.Hot[0].name, Uid = wk.Hot[0].id, Margin = new Thickness(0, 0, 30, 10) });
-                FLGDIndexList.Children.Add(new TextBlock() { Text = "语种:" });
-                foreach (var d in wk.Lauch)
-                {
-                    FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
-                }
-                FLGDIndexList.Children.Add(new TextBlock() { Text = "流派:" });
-                foreach (var d in wk.LiuPai)
-                {
-                    FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
-                }
-                FLGDIndexList.Children.Add(new TextBlock() { Text = "主题:" });
-                foreach (var d in wk.Theme)
-                {
-                    FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
-                }
-                FLGDIndexList.Children.Add(new TextBlock() { Text = "心情:" });
-                foreach (var d in wk.Heart)
-                {
-                    FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
-                }
-                FLGDIndexList.Children.Add(new TextBlock() { Text = "场景:" });
-                foreach (var d in wk.Changjing)
-                {
-                    FLGDIndexList.Children.Add(new RadioButton() { Content = d.name, Uid = d.id, Margin = new Thickness(0, 0, 10, 10) });
-                }
-                foreach (var d in FLGDIndexList.Children)
-                {
-                    if (d is RadioButton)
-                        (d as RadioButton).Checked += FLGDPageChecked;
-                }
-                var dat = await ml.GetFLGDAsync(int.Parse(wk.Hot[0].id));
-                FLGDItemsList.Children.Clear();
-                foreach (var d in dat)
-                {
-                    var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
-                    kss.MouseDown += GDMouseDown;
-                    FLGDItemsList.Children.Add(kss);
-                }
-                //////FLGDPage Loaded//////
-                var ks = new FLGDIndexItem("2591355982", "TwilightMusicWorld", "https://p.qpic.cn/music_cover/P5HCeFMBBWcs4IIdcdJTBVz8Nl9WdEQj8LcIwfxmeia5OJGKRJlkEcg/300?n=1") { Margin = new Thickness(20, 0, 0, 20) };
-                ks.MouseDown += GDMouseDown;
-                GDItemsList.Children.Add(ks);
-                UIHelper.G(Page);
-            };
             ani.Begin();
         }
         string SingerKey1 = "all_all_";
@@ -185,7 +190,7 @@ namespace Lemon_App
         {
             GetGD((s as FLGDIndexItem).id);
         }
-        private async void SingerPageChecked(object sender, RoutedEventArgs e)
+        private void SingerPageChecked(object sender, RoutedEventArgs e)
         {
             if (sender != null)
             {
@@ -193,14 +198,19 @@ namespace Lemon_App
                 string sk = SingerKey1 + SingerKey2;
                 if (sk == "all")
                     sk = "all_all_all";
-                var sin = await ml.GetSingerAsync(sk);
-                singerItemsList.Children.Clear();
-                foreach (var d in sin)
+                new Task(new Action(async delegate
                 {
-                    var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
-                    sinx.MouseDown += GetSinger;
-                    singerItemsList.Children.Add(sinx);
-                }
+                    var sin = await ml.GetSingerAsync(sk);
+                    Dispatcher.Invoke(() => {
+                        singerItemsList.Children.Clear();
+                        foreach (var d in sin)
+                        {
+                            var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                            sinx.MouseDown += GetSinger;
+                            singerItemsList.Children.Add(sinx);
+                        }
+                    });
+                })).Start();
             }
         }
         public async void GetSinger(object sender, MouseEventArgs e) {
