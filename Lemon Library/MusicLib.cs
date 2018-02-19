@@ -51,7 +51,7 @@ namespace LemonLibrary
                     { Singer += o["data"]["song"]["list"][i]["singer"][osxc]["name"] + "&"; }
                     m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                     m.MusicID = o["data"]["song"]["list"][i]["mid"].ToString();
-                    m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["data"]["song"]["list"][i]["album"]["mid"]}.jpg";
+                    m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["data"]["song"]["list"][i]["album"]["mid"]}.jpg";
                     m.GC = o["data"]["song"]["list"][i]["id"].ToString();
                     dt.Add(m);
                     try
@@ -81,7 +81,7 @@ namespace LemonLibrary
                     Singer = o["cdlist"][0]["songlist"][i]["singer"][0]["name"].ToString(),
                     GC = o["cdlist"][0]["songlist"][i]["songid"].ToString(),
                     MusicID = o["cdlist"][0]["songlist"][i]["songmid"].ToString(),
-                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg"
+                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg"
                 };
                 dt.Data.Add(m);
                 if(!mldata.ContainsKey(m.MusicID))
@@ -117,7 +117,7 @@ namespace LemonLibrary
                         x.Text = TextHelper.XtoYGetTo("["+name,"["," -",0);
                     }));
                 };
-                dc.DownloadFile(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
+                dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
@@ -269,7 +269,7 @@ namespace LemonLibrary
                 { Singer += o["songlist"][i]["data"]["singer"][osxc]["name"] + "&"; }
                 m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                 m.MusicID = o["songlist"][i]["data"]["songmid"].ToString();
-                m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["songlist"][i]["data"]["albummid"]}.jpg";
+                m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["songlist"][i]["data"]["albummid"]}.jpg";
                 m.GC = o["songlist"][i]["data"]["songmid"].ToString();
                 dt.Add(m);
                 if(!mldata.ContainsKey(m.MusicID))
@@ -490,7 +490,7 @@ namespace LemonLibrary
                     Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
                     GC = o["songlist"][0]["mid"].ToString(),
                     MusicID = o["songlist"][0]["mid"].ToString(),
-                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R500x500M000{o["songlist"][0]["album"]["mid"]}.jpg"
+                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["songlist"][0]["album"]["mid"]}.jpg"
                 };
                 return data;
             }
