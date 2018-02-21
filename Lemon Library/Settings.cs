@@ -48,8 +48,28 @@ namespace LemonLibrary
             }
             foreach (var jcm in o["MusicGD"])
             {
-                if (!USettings.MusicGD.ContainsKey(jcm["ID"].ToString()))
-                    USettings.MusicGD.Add(jcm["ID"].ToString(), new MusicGD() {ID= jcm["ID"].ToString(),Name= jcm["Name"].ToString(),Photo= jcm["Photo"].ToString()});
+                foreach (var jm in jcm) {
+                    if (!USettings.MusicGD.ContainsKey(jm["id"].ToString()))
+                    {
+                        var datae = new List<Music>();
+                        foreach (var dt in jm["Data"]) {
+                            datae.Add(new Music() {
+                                GC = dt["GC"].ToString(),
+                                Singer = dt["Singer"].ToString(),
+                                ImageUrl = dt["ImageUrl"].ToString(),
+                                MusicID = dt["MusicID"].ToString(),
+                                MusicName = dt["MusicName"].ToString()
+                            });
+                        }
+                        USettings.MusicGD.Add(jm["id"].ToString(), new MusicGData()
+                        {
+                            id = jm["id"].ToString(),
+                            name = jm["name"].ToString(),
+                            pic = jm["pic"].ToString(),
+                            Data=datae
+                        });
+                    }
+                }
             }
         }
         public static void LoadLSettings(string data) {
@@ -67,7 +87,7 @@ namespace LemonLibrary
 
             }
             public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
-            public SortedDictionary<string, MusicGD> MusicGD { get; set; } = new SortedDictionary<string, MusicGD>();
+            public SortedDictionary<string, MusicGData> MusicGD { get; set; } = new SortedDictionary<string, MusicGData>();
             public string LemonAreeunIts { get; set; } = "你的QQ";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";

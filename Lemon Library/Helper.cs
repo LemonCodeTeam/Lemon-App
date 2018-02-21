@@ -677,6 +677,7 @@ namespace LemonLibrary
             public List<Music> Data { get; set; } = new List<Music>();
             public string name { get; set; }
             public string pic { get; set; }
+            public string id { get; set; }
         }
         ////////Weather Helper/////
         public class Weather {

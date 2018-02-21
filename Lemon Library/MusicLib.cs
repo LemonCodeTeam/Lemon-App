@@ -72,21 +72,26 @@ namespace LemonLibrary
             var dt = new MusicGData();
             dt.name = o["cdlist"][0]["dissname"].ToString();
             dt.pic = o["cdlist"][0]["logo"].ToString();
+            dt.id = id;
             int i = 0;
             while (i != o["cdlist"][0]["songlist"].Count())
             {
-                Music m = new Music()
+                try
                 {
-                    MusicName = o["cdlist"][0]["songlist"][i]["songname"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
-                    Singer = o["cdlist"][0]["songlist"][i]["singer"][0]["name"].ToString(),
-                    GC = o["cdlist"][0]["songlist"][i]["songid"].ToString(),
-                    MusicID = o["cdlist"][0]["songlist"][i]["songmid"].ToString(),
-                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg"
-                };
-                dt.Data.Add(m);
-                if(!mldata.ContainsKey(m.MusicID))
-                   mldata.Add(m.MusicID, m.MusicName+" - "+m.Singer);
-                i++;
+                    Music m = new Music()
+                    {
+                        MusicName = o["cdlist"][0]["songlist"][i]["songname"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
+                        Singer = o["cdlist"][0]["songlist"][i]["singer"][0]["name"].ToString(),
+                        GC = o["cdlist"][0]["songlist"][i]["songid"].ToString(),
+                        MusicID = o["cdlist"][0]["songlist"][i]["songmid"].ToString(),
+                        ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg"
+                    };
+                    dt.Data.Add(m);
+                    if (!mldata.ContainsKey(m.MusicID))
+                        mldata.Add(m.MusicID, m.MusicName + " - " + m.Singer);
+                    i++;
+                }
+                catch { i++; }
             }
             return dt;
         }

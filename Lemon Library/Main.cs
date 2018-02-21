@@ -10,7 +10,7 @@ namespace LemonLibrary
     {
         static void Main() {
             var ml = new MusicLib();
-            var s = ml.GetTopIndexAsync().GetAwaiter().GetResult();
+            var s = ml.GetGDAsync("2623830636");
             Console.ReadLine();
             Console.ReadLine();
         }

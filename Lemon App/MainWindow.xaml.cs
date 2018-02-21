@@ -684,11 +684,47 @@ namespace Lemon_App
 
         private void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var ks = new FLGDIndexItem("2591355982", "TwilightMusicWorld", "https://p.qpic.cn/music_cover/P5HCeFMBBWcs4IIdcdJTBVz8Nl9WdEQj8LcIwfxmeia5OJGKRJlkEcg/300?n=1") { Margin = new Thickness(20, 0, 0, 20) };
-            ks.MouseDown += GDMouseDown;
-            GDItemsList.Children.Add(ks);
+            GDItemsList.Children.Clear();
+            foreach (var jm in Settings.USettings.MusicGD)
+            {
+                var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic) { Margin = new Thickness(20, 0, 0, 20) };
+                ks.MouseDown += FxGDMouseDown;
+                GDItemsList.Children.Add(ks);
+            }
             UIHelper.G(Page);
         }
+
+        private void FxGDMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenLoading();
+            var sx = new Task(new Action(delegate
+            {
+                var dt = sender as FLGDIndexItem;
+                var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\GD" + dt.id + ".jpg";
+                if (!System.IO.File.Exists(file))
+                {
+                    var s = new WebClient();
+                    s.DownloadFileAsync(new Uri(dt.img), file);
+                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); }); };
+                }
+                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); });
+                Dispatcher.Invoke(() =>
+                {
+                    TB.Text = dt.name.Text;
+                    DataItemsList.Children.Clear();
+                    foreach (var j in Settings.USettings.MusicGD[dt.id].Data)
+                    {
+                        var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
+                        k.MouseDown += PlayMusic;
+                        DataItemsList.Children.Add(k);
+                    }
+               (Resources["OpenDataPage"] as Storyboard).Begin();
+                });
+                Dispatcher.Invoke(() => { CloseLoading(); });
+            }));
+            sx.Start();
+        }
+
         bool issingerloaded = false;
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -718,6 +754,12 @@ namespace Lemon_App
                 }));
                 s.Start();
             }
+        }
+
+        private void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
+        {
+            new AddGDWindow().ShowDialog();
+            GDBtn_MouseDown(null, null);
         }
     }
 }

@@ -1412,7 +1412,7 @@
             </RectangleGeometry>
         </Grid.Clip>
         <Grid x:Name="ContentPage" Margin="236,0,0,75">
-            <Grid x:Name="TopIndexPage">
+            <Grid x:Name="TopIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
                 <ScrollViewer  Margin="30,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="topIndexList"/>
@@ -1544,11 +1544,14 @@
                 </Grid>
 
             </Grid>
-            <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
+            <Grid x:Name="MyGDIndexPage">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
                 <ScrollViewer  Margin="10,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="GDItemsList"/>
                 </ScrollViewer>
+                <Border HorizontalAlignment="Left" Height="30" Margin="131,30,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="Border_MouseDown_2">
+                    <Path Data="M512 64a448 448 0 1 1-448 448 448 448 0 0 1 448-448m0-64a512 512 0 1 0 512 512 512 512 0 0 0-512-512z M768 512a32 32 0 0 0-31.36-32h-192v-192a32 32 0 0 0-64 0v192h-192a32 32 0 0 0 0 64h192v192a32 32 0 0 0 64 0v-192h192A32 32 0 0 0 768 512z" Stretch="UniformToFill" Fill="#FF999999"/>
+                </Border>
             </Grid>
             <Grid x:Name="Data" Visibility="Collapsed">
                 <Border BorderBrush="#FFE7E8EC" Height="200" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFDFDFD">
