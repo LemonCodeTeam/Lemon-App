@@ -58,7 +58,8 @@ namespace Lemon_App
             }
             else
             {
-
+                if (!Settings.USettings.MusicGD.ContainsKey(id.Text))
+                    Settings.USettings.MusicGD.Add(id.Text, await ml.GetGDbyWYAsync(id.Text));
             }
             Close();
         }

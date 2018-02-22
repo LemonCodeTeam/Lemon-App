@@ -68,7 +68,7 @@ namespace Lemon_App
                 lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(199, 199, 199));
                 lv.TextAlignment = TextAlignment.Left;
                 lv.tbWidth = 470;
-                ly.Children.Add(lv);
+                ly.Child = lv;
                 ml = new MusicLib(lv);
                 if (Settings.USettings.Playing.MusicName != "")
                 {
@@ -760,6 +760,29 @@ namespace Lemon_App
         {
             new AddGDWindow().ShowDialog();
             GDBtn_MouseDown(null, null);
+        }
+
+        private async void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
+        {
+            if (m_Name.Visibility == Visibility.Visible)
+            {
+                m_Singer.Visibility = Visibility.Collapsed;
+                m_Name.Visibility = Visibility.Collapsed;
+                ly.Visibility = Visibility.Collapsed;
+                pl.Visibility = Visibility.Visible;
+                var data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
+                pldata.Children.Clear();
+                foreach (var dt in data)
+                {
+                    pldata.Children.Add(new PlControl(dt.img, dt.name, dt.text) { Width = pldata.ActualWidth });
+                }
+            }
+            else {
+                m_Singer.Visibility = Visibility.Visible;
+                m_Name.Visibility = Visibility.Visible;
+                ly.Visibility = Visibility.Visible;
+                pl.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

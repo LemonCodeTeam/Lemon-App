@@ -18,8 +18,8 @@ namespace Lemon_App
     public partial class App : Application
     {
         public App() {
-        //    Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-           // AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

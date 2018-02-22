@@ -1412,7 +1412,7 @@
             </RectangleGeometry>
         </Grid.Clip>
         <Grid x:Name="ContentPage" Margin="236,0,0,75">
-            <Grid x:Name="TopIndexPage" Visibility="Collapsed">
+            <Grid x:Name="TopIndexPage">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="#FF898989" FontSize="24"/>
                 <ScrollViewer  Margin="30,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="topIndexList"/>
@@ -1544,7 +1544,7 @@
                 </Grid>
 
             </Grid>
-            <Grid x:Name="MyGDIndexPage">
+            <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
                 <ScrollViewer  Margin="10,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="GDItemsList"/>
@@ -1625,10 +1625,17 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Border BorderBrush="#FFE7E8EC" Width="300" Height="300" Margin="0,0,25,70" HorizontalAlignment="Right" Background="{Binding Background, ElementName=MusicImage}" CornerRadius="500" BorderThickness="3"/>
-            <TextBlock Grid.Column="1" Margin="25,127.5,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFACACAC" FontSize="24" Height="30"/>
-            <TextBlock Grid.Column="1" Margin="25,157.98,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFC7C7C7" FontSize="20" Height="25"/>
-            <Grid x:Name="ly" Grid.Column="1" Margin="25,188,10,202"/>
+            <Border BorderBrush="#FFE7E8EC" Width="300" Height="300" Margin="0,0,25,70" HorizontalAlignment="Right" Background="{Binding Background, ElementName=MusicImage}" CornerRadius="500" BorderThickness="3">
+                <Border HorizontalAlignment="Right" Width="30" Height="30" Background="#00000000" Margin="0" VerticalAlignment="Bottom" MouseDown="Border_MouseDown_3">
+                    <Path x:Name="path2" Data="M850.879104,96.41591L174.576037,96.41591C113.895003,96.41591,64.5266189999999,145.783271,64.5266189999999,206.465328L64.5266189999999,652.665716C64.5266189999999,713.34675,113.89398,762.715134,174.576037,762.715134L264.883832,762.715134 396.936381,931.129846C400.729777,935.968038 406.534993,938.793386 412.683017,938.793386 418.831041,938.793386 424.635233,935.968038 428.429653,931.129846L560.482201,762.715135 850.879104,762.715135C911.560138,762.715135,960.928522,713.347774,960.928522,652.665717L960.928522,206.465329C960.928522,145.784294,911.561162,96.41591,850.879104,96.41591z M920.91111,652.665717C920.91111,691.280176,889.494586,722.6967,850.880127,722.6967L550.744419,722.6967C544.597419,722.6967,538.792203,725.522048,534.998807,730.36024L412.683017,886.356107 290.367227,730.36024C286.574854,725.522048,280.769638,722.6967,274.621615,722.6967L174.576038,722.6967C135.961579,722.6967,104.545055,691.280176,104.545055,652.665717L104.545054,206.465329C104.545054,167.85087,135.961578,136.434346,174.576037,136.434346L850.879104,136.434346C889.493563,136.434346,920.910087,167.85087,920.910087,206.465329L920.910087,652.665717z M272.621051,344.526731C228.488925,344.526731 192.585203,380.430452 192.585203,424.562579 192.585203,468.694705 228.488924,504.59945 272.621051,504.59945 316.753178,504.59945 352.656899,468.694705 352.656899,424.562579 352.655875,380.430452 316.752154,344.526731 272.621051,344.526731z M272.621051,464.582037C250.555499,464.582037 232.603639,446.630176 232.603639,424.563601 232.603639,402.498049 250.556523,384.546189 272.621051,384.546189 294.686603,384.546189 312.638463,402.49805 312.638463,424.563601 312.638463,446.629153 294.686602,464.582037 272.621051,464.582037z M512.727571,344.526731C468.595445,344.526731 432.691723,380.430452 432.691723,424.562579 432.691723,468.694705 468.595444,504.59945 512.727571,504.59945 556.859697,504.59945 592.763419,468.694705 592.763419,424.562579 592.763418,380.430452 556.859697,344.526731 512.727571,344.526731z M512.727571,464.582037C490.662019,464.582037 472.710159,446.630176 472.710159,424.563601 472.710159,402.498049 490.66202,384.546189 512.727571,384.546189 534.793123,384.546189 552.744983,402.49805 552.744983,424.563601 552.746006,446.629153 534.793122,464.582037 512.727571,464.582037z M752.836137,344.526731C708.705034,344.526731 672.800289,380.430452 672.800289,424.562579 672.800289,468.694705 708.705034,504.59945 752.836137,504.59945 796.96724,504.59945 832.871985,468.694705 832.871985,424.562579 832.871985,380.430452 796.96724,344.526731 752.836137,344.526731z M752.836137,464.582037C730.769562,464.582037 712.818725,446.630176 712.818725,424.563601 712.818725,402.498049 730.770586,384.546189 752.836137,384.546189 774.901688,384.546189 792.853549,402.49805 792.853549,424.563601 792.853549,446.629153 774.902712,464.582037 752.836137,464.582037z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                </Border>
+            </Border>
+            <TextBlock x:Name="m_Name" Grid.Column="1" Margin="25,127.5,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFACACAC" FontSize="24" Height="30"/>
+            <TextBlock x:Name="m_Singer" Grid.Column="1" Margin="25,157.98,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFC7C7C7" FontSize="20" Height="25"/>
+            <Border x:Name="ly" Grid.Column="1" Margin="25,188,10,170"/>
+            <ScrollViewer x:Name="pl" Grid.Column="1" Margin="25,50,10,120" Visibility="Collapsed" Template="{DynamicResource ScrollViewerControlTemplate}">
+                <WrapPanel x:Name="pldata"/>
+            </ScrollViewer>
         </Grid>
         <Border x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#FFFDFDFD" BorderThickness="0,1,0,0" BorderBrush="#FFE7E8EC">
             <Grid>

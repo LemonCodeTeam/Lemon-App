@@ -452,6 +452,18 @@ namespace LemonLibrary
             }
             catch { return ""; }
         }
+        public static string PostWeb(string url, string data)
+        {
+            try
+            {
+                byte[] postData = Encoding.UTF8.GetBytes(data);
+                WebClient webClient = new WebClient();
+                webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                byte[] responseData = webClient.UploadData(url, "POST", postData);
+                return Encoding.UTF8.GetString(responseData);
+            }
+            catch { return ""; }
+        }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
@@ -641,6 +653,12 @@ namespace LemonLibrary
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
+        }
+        public class MusicPL {
+            public string name { get; set; }
+            public string img { get; set; }
+            public string like { get; set; }
+            public string text { get; set; }
         }
         public class MusicRadioList {
             public List<MusicRadioListItem> Hot { set; get; } = new List<MusicRadioListItem>();

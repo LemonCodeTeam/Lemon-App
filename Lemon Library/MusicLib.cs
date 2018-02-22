@@ -20,7 +20,7 @@ Please retain the copyright information, rights reserved.
      */
 namespace LemonLibrary
 {
-    public class MusicLib{
+    public class MusicLib {
         public MusicLib(LyricView LV) {
             if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Download") == false)
                 Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Download");
@@ -35,7 +35,7 @@ namespace LemonLibrary
         public Dictionary<string, string> mldata = new Dictionary<string, string>();// mid,name
         public MediaPlayer m = new MediaPlayer();
         public LyricView lv;
-        public async Task<List<Music>> SearchMusicAsync(string Content,int osx=1)
+        public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
             if (HttpHelper.IsNetworkTrue())
             {
@@ -56,17 +56,17 @@ namespace LemonLibrary
                     dt.Add(m);
                     try
                     {
-                        if(!mldata.ContainsKey(m.MusicID))
+                        if (!mldata.ContainsKey(m.MusicID))
                             mldata.Add(m.MusicID, m.MusicName);
                     }
                     catch { }
                     i++;
                 }
-                return  dt;
+                return dt;
             }
             else return null;
         }
-        public async Task<MusicGData> GetGDAsync(string id= "2591355982") {
+        public async Task<MusicGData> GetGDAsync(string id = "2591355982") {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk=1157737156&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
             JObject o = JObject.Parse(s);
             var dt = new MusicGData();
@@ -102,7 +102,7 @@ namespace LemonLibrary
             string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
             return $"http://182.247.250.19/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
         }
-        public async void GetAndPlayMusicUrlAsync(string mid,Boolean openlyric,TextBlock x,Window s,bool doesplay=true)
+        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s, bool doesplay = true)
         {
             string name = mldata[mid];
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3"))
@@ -115,26 +115,26 @@ namespace LemonLibrary
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate {
                     m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
-                    if(doesplay)
-                       m.Play();
+                    if (doesplay)
+                        m.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
-                        x.Text = TextHelper.XtoYGetTo("["+name,"["," -",0);
+                        x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0);
                     }));
                 };
                 dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
-                        x.Text = "加载中..."+e.ProgressPercentage+"%";
+                        x.Text = "加载中..." + e.ProgressPercentage + "%";
                     }));
                 };
             }
             else
             {
                 m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
-                if(doesplay)
-                   m.Play();
+                if (doesplay)
+                    m.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                 {
                     x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0);
@@ -148,7 +148,7 @@ namespace LemonLibrary
         }
         public string GetLyric(string McMind)
         {
-            string name =mldata[McMind];
+            string name = mldata[McMind];
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc"))
             {
                 WebClient c = new WebClient();
@@ -196,14 +196,14 @@ namespace LemonLibrary
                         catch { }
                     }
                     //sdm("d3");
-            //        foreach (var dt in dataatimes)
-        //            {
-             //           if (!KEY.Contains(dt))
-               //         {
-                       //     KEY.Add(dt);//q
-                  //          gcfydata.Add(dt, "");
-           //             }
-    //                }
+                    //        foreach (var dt in dataatimes)
+                    //            {
+                    //           if (!KEY.Contains(dt))
+                    //         {
+                    //     KEY.Add(dt);//q
+                    //          gcfydata.Add(dt, "");
+                    //             }
+                    //                }
                     //sdm("d4");
                     for (int i = 0; i != gcfydata.Count; i++)
                     {
@@ -244,7 +244,7 @@ namespace LemonLibrary
                 data.Add(new MusicTop {
                     Name = o["data"][0]["List"][i]["ListName"].ToString(),
                     Photo = o["data"][0]["List"][i]["pic_v12"].ToString(),
-                    ID=o["data"][0]["List"][i]["topID"].ToString()
+                    ID = o["data"][0]["List"][i]["topID"].ToString()
                 });
                 i++;
             }
@@ -277,13 +277,13 @@ namespace LemonLibrary
                 m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["songlist"][i]["data"]["albummid"]}.jpg";
                 m.GC = o["songlist"][i]["data"]["songmid"].ToString();
                 dt.Add(m);
-                if(!mldata.ContainsKey(m.MusicID))
-                mldata.Add(m.MusicID, m.MusicName);
+                if (!mldata.ContainsKey(m.MusicID))
+                    mldata.Add(m.MusicID, m.MusicName);
                 i++;
             }
             return dt;
         }
-        public async Task<List<MusicSinger>> GetSingerAsync(string key,int page=1) {
+        public async Task<List<MusicSinger>> GetSingerAsync(string key, int page = 1) {
             var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/v8.fcg?channel=singer&page=list&key={key}&pagesize=100&pagenum={page}&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             var data = new List<MusicSinger>();
             int i = 0;
@@ -300,12 +300,12 @@ namespace LemonLibrary
         public async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync() {
             var o = JObject.Parse(await HttpHelper.GetWebAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             var data = new MusicFLGDIndexItemsList();
-            data.Hot.Add(new MusicFLGDIndexItems {id= "10000000",name="全部" });
+            data.Hot.Add(new MusicFLGDIndexItems { id = "10000000", name = "全部" });
             int i = 0;
             while (i < o["data"]["categories"][1]["items"].Count()) {
                 data.Lauch.Add(new MusicFLGDIndexItems {
                     id = o["data"]["categories"][1]["items"][i]["categoryId"].ToString(),
-                    name= o["data"]["categories"][1]["items"][i]["categoryName"].ToString()
+                    name = o["data"]["categories"][1]["items"][i]["categoryName"].ToString()
                 });
                 i++;
             }
@@ -352,7 +352,7 @@ namespace LemonLibrary
             return data;
         }
         public async Task<List<MusicGD>> GetFLGDAsync(int id) {
-            var o = JObject.Parse(await HttpHelper.GetWebDatadAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId=5&sin=0&ein=29",Encoding.UTF8));
+            var o = JObject.Parse(await HttpHelper.GetWebDatadAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId=5&sin=0&ein=29", Encoding.UTF8));
             var data = new List<MusicGD>();
             int i = 0;
             while (i < o["data"]["list"].Count())
@@ -374,9 +374,9 @@ namespace LemonLibrary
             while (i < o["data"]["data"]["groupList"][0]["radioList"].Count())
             {
                 data.Hot.Add(new MusicRadioListItem {
-                   Name= o["data"]["data"]["groupList"][0]["radioList"][i]["radioName"].ToString(),
-                   Photo = o["data"]["data"]["groupList"][0]["radioList"][i]["radioImg"].ToString(),
-                   ID= o["data"]["data"]["groupList"][0]["radioList"][i]["radioId"].ToString()
+                    Name = o["data"]["data"]["groupList"][0]["radioList"][i]["radioName"].ToString(),
+                    Photo = o["data"]["data"]["groupList"][0]["radioList"][i]["radioImg"].ToString(),
+                    ID = o["data"]["data"]["groupList"][0]["radioList"][i]["radioId"].ToString()
                 });
                 i++;
             }
@@ -481,7 +481,6 @@ namespace LemonLibrary
             }
             return data;
         }
-
         public async Task<Music> GetRadioMusicAsync(string id) {
             if (id == "99")
             {
@@ -514,6 +513,42 @@ namespace LemonLibrary
                 };
                 return data;
             }
+        }
+        public async Task<MusicGData> GetGDbyWYAsync(string id) {
+            string data = HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=playlist&id="+id);
+            JObject o = JObject.Parse(data);
+            var dt = new MusicGData();
+            dt.name = o["playlist"]["name"].ToString();
+            dt.id = o["playlist"]["id"].ToString();
+            dt.pic = o["playlist"]["coverImgUrl"].ToString();
+            for (int i = 0; i != o["playlist"]["tracks"].Count(); i++) {
+                var dtname = o["playlist"]["tracks"][i]["name"].ToString();
+                var dtsinger = "";
+                for (int dx = 0; dx != o["playlist"]["tracks"][i]["ar"].Count(); dx++)
+                    dtsinger += o["playlist"]["tracks"][i]["ar"][dx]["name"] + "&";
+                dtsinger = dtsinger.Substring(0, dtsinger.LastIndexOf("&"));
+                var dtf = await SearchMusicAsync(dtname + "-" + dtsinger);
+                if(dtf.Count>0)
+                   dt.Data.Add(dtf[0]);
+            }
+            return dt;
+        }
+        public async Task<List<MusicPL>> GetPLAsync(string name) {
+            var ds = "{\"data\":"+HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name))+"}";
+            var s = JObject.Parse(ds);
+            string id = s["data"][0]["id"].ToString();
+            var data =await HttpHelper.GetWebAsync("http://musicapi.leanapp.cn/comment/music?id=" + id);
+            JObject o = JObject.Parse(data);
+            var d = new List<MusicPL>();
+            for (int i = 0; i != o["hotComments"].Count(); i++) {
+                d.Add(new MusicPL() {
+                    text = o["hotComments"][i]["content"].ToString(),
+                    name = o["hotComments"][i]["user"]["nickname"].ToString(),
+                    img = o["hotComments"][i]["user"]["avatarUrl"].ToString(),
+                    like = o["hotComments"][i]["likedCount"].ToString()
+                });
+            }
+            return d;
         }
     }
 }

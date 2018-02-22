@@ -127,6 +127,9 @@
     <Compile Include="Msg.xaml.cs">
       <DependentUpon>Msg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PlControl.xaml.cs">
+      <DependentUpon>PlControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioItem.xaml.cs">
       <DependentUpon>RadioItem.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Msg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
