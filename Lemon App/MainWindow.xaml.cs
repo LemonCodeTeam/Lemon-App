@@ -39,6 +39,7 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
+            FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
         }
         LemonLibrary.MusicLib ml = new MusicLib();
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -56,7 +57,6 @@ namespace Lemon_App
                 var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
                 ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
                 ds.Start();
-                FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
                 if (System.IO.File.Exists(Settings.USettings.UserImage))
                 {
                     var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
@@ -774,7 +774,7 @@ namespace Lemon_App
                 pldata.Children.Clear();
                 foreach (var dt in data)
                 {
-                    pldata.Children.Add(new PlControl(dt.img, dt.name, dt.text) { Width = pldata.ActualWidth });
+                    pldata.Children.Add(new PlControl(dt.img, dt.name, dt.text) { Width = pldata.ActualWidth-100 });
                 }
             }
             else {
@@ -783,6 +783,12 @@ namespace Lemon_App
                 ly.Visibility = Visibility.Visible;
                 pl.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void ly_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(ml.lv!=null)
+            ml.lv.RestWidth(e.NewSize.Width);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace LemonLibrary
                     try
                     {
                         if (!mldata.ContainsKey(m.MusicID))
-                            mldata.Add(m.MusicID, m.MusicName);
+                            mldata.Add(m.MusicID, m.MusicName+" -"+m.Singer);
                     }
                     catch { }
                     i++;
@@ -514,23 +514,32 @@ namespace LemonLibrary
                 return data;
             }
         }
-        public async Task<MusicGData> GetGDbyWYAsync(string id) {
+        public async Task<MusicGData> GetGDbyWYAsync(string id,Window x,TextBlock tb,ProgressBar pb) {
             string data = HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=playlist&id="+id);
             JObject o = JObject.Parse(data);
             var dt = new MusicGData();
             dt.name = o["playlist"]["name"].ToString();
             dt.id = o["playlist"]["id"].ToString();
             dt.pic = o["playlist"]["coverImgUrl"].ToString();
+            x.Dispatcher.Invoke(() => { pb.Maximum = o["playlist"]["tracks"].Count(); });
             for (int i = 0; i != o["playlist"]["tracks"].Count(); i++) {
-                var dtname = o["playlist"]["tracks"][i]["name"].ToString();
-                var dtsinger = "";
-                for (int dx = 0; dx != o["playlist"]["tracks"][i]["ar"].Count(); dx++)
-                    dtsinger += o["playlist"]["tracks"][i]["ar"][dx]["name"] + "&";
-                dtsinger = dtsinger.Substring(0, dtsinger.LastIndexOf("&"));
-                var dtf = await SearchMusicAsync(dtname + "-" + dtsinger);
-                if(dtf.Count>0)
-                   dt.Data.Add(dtf[0]);
-            }
+                try
+                {
+                    var dtname = o["playlist"]["tracks"][i]["name"].ToString();
+                    var dtsinger = "";
+                    for (int dx = 0; dx != o["playlist"]["tracks"][i]["ar"].Count(); dx++)
+                        dtsinger += o["playlist"]["tracks"][i]["ar"][dx]["name"] + "&";
+                    dtsinger = dtsinger.Substring(0, dtsinger.LastIndexOf("&"));
+                    var dtf = await SearchMusicAsync(dtname + "-" + dtsinger);
+                    if (dtf.Count > 0)
+                    {
+                        dt.Data.Add(dtf[0]);
+                        x.Dispatcher.Invoke(() => { pb.Value = i; tb.Text = dtf[0].MusicName + " - " + dtf[0].Singer; });
+                    }
+                    else x.Dispatcher.Invoke(() => { pb.Value--; });
+                }
+                catch { }
+                }
             return dt;
         }
         public async Task<List<MusicPL>> GetPLAsync(string name) {

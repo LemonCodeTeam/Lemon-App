@@ -45,6 +45,10 @@ namespace LemonLibrary
         }
 
         #region 
+        public void RestWidth(double width) {
+            foreach (TextBlock tb in c_lrc_items.Children)
+                tb.Width = width;
+        }
         public void LoadLrc(string lrcstr)
         {
             Lrcs.Clear();

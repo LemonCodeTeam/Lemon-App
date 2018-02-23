@@ -1632,7 +1632,7 @@
             </Border>
             <TextBlock x:Name="m_Name" Grid.Column="1" Margin="25,127.5,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFACACAC" FontSize="24" Height="30"/>
             <TextBlock x:Name="m_Singer" Grid.Column="1" Margin="25,157.98,10,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFC7C7C7" FontSize="20" Height="25"/>
-            <Border x:Name="ly" Grid.Column="1" Margin="25,188,10,170"/>
+            <Border x:Name="ly" Grid.Column="1" Margin="25,188,10,170" SizeChanged="ly_SizeChanged"/>
             <ScrollViewer x:Name="pl" Grid.Column="1" Margin="25,50,10,120" Visibility="Collapsed" Template="{DynamicResource ScrollViewerControlTemplate}">
                 <WrapPanel x:Name="pldata"/>
             </ScrollViewer>

@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -24,6 +25,7 @@ namespace Lemon_App
         public AddGDWindow()
         {
             InitializeComponent();
+            (Resources["Close"] as Storyboard).Completed += delegate{ Close(); };
             this.MouseLeftButtonDown += delegate (object sender, MouseButtonEventArgs e) {
                 if (e.LeftButton == MouseButtonState.Pressed)
                     this.DragMove();
@@ -59,9 +61,9 @@ namespace Lemon_App
             else
             {
                 if (!Settings.USettings.MusicGD.ContainsKey(id.Text))
-                    Settings.USettings.MusicGD.Add(id.Text, await ml.GetGDbyWYAsync(id.Text));
+                    Settings.USettings.MusicGD.Add(id.Text, await ml.GetGDbyWYAsync(id.Text,this,ps_name,ps_jd));
             }
-            Close();
+             (Resources["Close"] as Storyboard).Begin();
         }
     }
 }
