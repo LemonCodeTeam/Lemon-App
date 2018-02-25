@@ -57,7 +57,7 @@ namespace LemonLibrary
                     try
                     {
                         if (!mldata.ContainsKey(m.MusicID))
-                            mldata.Add(m.MusicID, m.MusicName+" -"+m.Singer);
+                            mldata.Add(m.MusicID, (m.MusicName+" - "+m.Singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
                     }
                     catch { }
                     i++;
@@ -88,7 +88,7 @@ namespace LemonLibrary
                     };
                     dt.Data.Add(m);
                     if (!mldata.ContainsKey(m.MusicID))
-                        mldata.Add(m.MusicID, m.MusicName + " - " + m.Singer);
+                        mldata.Add(m.MusicID, (m.MusicName + " - " + m.Singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
                     i++;
                 }
                 catch { i++; }
@@ -278,7 +278,7 @@ namespace LemonLibrary
                 m.GC = o["songlist"][i]["data"]["songmid"].ToString();
                 dt.Add(m);
                 if (!mldata.ContainsKey(m.MusicID))
-                    mldata.Add(m.MusicID, m.MusicName);
+                    mldata.Add(m.MusicID, (m.MusicName+" - "+m.Singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
                 i++;
             }
             return dt;
@@ -542,11 +542,12 @@ namespace LemonLibrary
                 }
             return dt;
         }
-        public async Task<List<MusicPL>> GetPLAsync(string name) {
+        public async Task<List<MusicPL>> GetPLAsync(string name,int page=1) {
+            string Page = ((page - 1) * 20).ToString();
             var ds = "{\"data\":"+HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name))+"}";
             var s = JObject.Parse(ds);
             string id = s["data"][0]["id"].ToString();
-            var data =await HttpHelper.GetWebAsync("http://musicapi.leanapp.cn/comment/music?id=" + id);
+            var data =await HttpHelper.GetWebAsync($"https://music.163.com/api/v1/resource/comments/R_SO_4_{id}?offset={Page}");
             JObject o = JObject.Parse(data);
             var d = new List<MusicPL>();
             for (int i = 0; i != o["hotComments"].Count(); i++) {
@@ -558,6 +559,20 @@ namespace LemonLibrary
                 });
             }
             return d;
+        }
+        public async Task<List<MusicPL>> GetPLByQQAsync(string mid) {
+            var id = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&tpl=yqq_song_detail&format=json&g_tk=268405378&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"))["data"][0]["id"].ToString();
+            var ds = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=268405378&hostUin=0&format=json&inCharset=utf8&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010"));
+            var data = new List<MusicPL>();
+            for (int i = 0; i > ds["hot_comment"]["commentlist"].Count(); i++) {
+                data.Add(new MusicPL() {
+                    img = ds["hot_comment"]["commentlist"][i]["avatarurl"].ToString(),
+                    like = ds["hot_comment"]["commentlist"][i]["praisenum"].ToString(),
+                    name= ds["hot_comment"]["commentlist"][i]["nick"].ToString(),
+                    text= ds["hot_comment"]["commentlist"][i]["rootcommentcontent"].ToString()
+                });
+            }
+            return data;
         }
     }
 }

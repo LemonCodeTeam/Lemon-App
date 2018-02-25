@@ -13,7 +13,7 @@
         <Border Width="Auto" Height="Auto" Margin="55,35,0,0" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Background="#FFF0F0F0">
             <TextBlock x:Name="Te" Height="Auto" TextWrapping="Wrap" Width="Auto" Cursor="" Margin="6" Foreground="#FF3E3E40" FontSize="14" Text="Control"/>
         </Border>
-        <TextBlock x:Name="name" Margin="50,15,40,35.78" TextWrapping="Wrap" Text="name" Foreground="#FF2D2D30"/>
+        <TextBlock x:Name="name" Margin="50,15,40,35.78" TextWrapping="Wrap" Text="name" Foreground="WhiteSmoke"/>
         <Border HorizontalAlignment="Left" Height="16" Margin="46,38,0,0" VerticalAlignment="Top" Width="10" RenderTransformOrigin="0.5,0.5">
             <Border.RenderTransform>
                 <TransformGroup>

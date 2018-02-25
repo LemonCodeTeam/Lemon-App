@@ -32,9 +32,9 @@ namespace Lemon_App
         }
         public void CloseLoading()
         {
-                var s = Resources["CloseLoadingFx"] as Storyboard;
-                s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Stop(); };
-                s.Begin();
+            var s = Resources["CloseLoadingFx"] as Storyboard;
+            s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Stop(); };
+            s.Begin();
         }
         public MainWindow()
         {
@@ -64,8 +64,8 @@ namespace Lemon_App
                 }
                 ////////////
                 LyricView lv = new LyricView();
-                lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(48, 195, 124));
-                lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(199, 199, 199));
+                lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(78, 183, 251));
+                lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(254, 254, 254));
                 lv.TextAlignment = TextAlignment.Left;
                 lv.tbWidth = 470;
                 ly.Child = lv;
@@ -110,8 +110,8 @@ namespace Lemon_App
                 var de = new Task(new Action(async delegate
                 {
                     var dt = await ml.GetTopIndexAsync();
-                  
-                        foreach (var d in dt)
+
+                    foreach (var d in dt)
                     {
                         Dispatcher.Invoke(() =>
                         {
@@ -226,8 +226,8 @@ namespace Lemon_App
                  {
                      var sin = await ml.GetSingerAsync(sk);
                      Dispatcher.Invoke(() => { singerItemsList.Children.Clear(); });
-                         foreach (var d in sin)
-                         {
+                     foreach (var d in sin)
+                     {
                          Dispatcher.Invoke(() =>
                          {
                              var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
@@ -252,21 +252,21 @@ namespace Lemon_App
                 if (SingerKey1 == "")
                     SingerKey1 = "all_all_";
                 SingerKey2 = (sender as RadioButton).Content.ToString().Replace("热门", "all").Replace("#", "9");
-                var s=new Task(new Action(async delegate
-                {
-                    var mx = await ml.GetSingerAsync(SingerKey1 + SingerKey2);
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        singerItemsList.Children.Clear();
-                        foreach (var d in mx)
-                        {
-                            var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
-                            sinx.MouseDown += GetSinger;
-                            singerItemsList.Children.Add(sinx);
-                        }
-                        CloseLoading();
-                    });
-                }));
+                var s = new Task(new Action(async delegate
+                  {
+                      var mx = await ml.GetSingerAsync(SingerKey1 + SingerKey2);
+                      this.Dispatcher.Invoke(() =>
+                      {
+                          singerItemsList.Children.Clear();
+                          foreach (var d in mx)
+                          {
+                              var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                              sinx.MouseDown += GetSinger;
+                              singerItemsList.Children.Add(sinx);
+                          }
+                          CloseLoading();
+                      });
+                  }));
                 s.Start();
             }
         }
@@ -302,9 +302,9 @@ namespace Lemon_App
         public void GetGD(string id)
         {
             OpenLoading();
-            var sx = new Task(new Action(async delegate { 
-            var dt = await ml.GetGDAsync(id);
-            var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\GD" + id + ".jpg";
+            var sx = new Task(new Action(async delegate {
+                var dt = await ml.GetGDAsync(id);
+                var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\GD" + id + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();
@@ -324,7 +324,7 @@ namespace Lemon_App
                     }
                (Resources["OpenDataPage"] as Storyboard).Begin();
                 });
-                Dispatcher.Invoke(()=> { CloseLoading(); });
+                Dispatcher.Invoke(() => { CloseLoading(); });
             }));
             sx.Start();
         }
@@ -435,7 +435,7 @@ namespace Lemon_App
                 (Resources["LikeBtnDown"] as Storyboard).Begin();
             else (Resources["LikeBtnUp"] as Storyboard).Begin();
             if (!ml.mldata.ContainsKey(id))
-                ml.mldata.Add(id, name + " - " + singer);
+                ml.mldata.Add(id, (name + " - " + singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
             ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, doesplay);
             MusicImage.Background = new ImageBrush(new BitmapImage(new Uri(x)));
             Singer.Text = singer;
@@ -466,15 +466,15 @@ namespace Lemon_App
                     s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); }); };
                 }
                 else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); });
-                Dispatcher.Invoke(() => { 
-                TB.Text = key;
-                DataItemsList.Children.Clear();
-                foreach (var j in dt)
-                {
-                    var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
-                    k.MouseDown += PlayMusic;
-                    DataItemsList.Children.Add(k);
-                }
+                Dispatcher.Invoke(() => {
+                    TB.Text = key;
+                    DataItemsList.Children.Clear();
+                    foreach (var j in dt)
+                    {
+                        var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
+                        k.MouseDown += PlayMusic;
+                        DataItemsList.Children.Add(k);
+                    }
                (Resources["OpenDataPage"] as Storyboard).Begin();
                 });
                 Dispatcher.Invoke(() => { CloseLoading(); });
@@ -493,7 +493,7 @@ namespace Lemon_App
                 RadioData = data;
                 Dispatcher.Invoke(() =>
                 {
-                    ml.mldata.Add(data.MusicID, data.MusicName + " - " + data.Singer);
+                    ml.mldata.Add(data.MusicID, (data.MusicName + " - " + data.Singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
                     PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.Singer, true);
                 });
                 Dispatcher.Invoke(() => { CloseLoading(); });
@@ -761,7 +761,6 @@ namespace Lemon_App
             new AddGDWindow().ShowDialog();
             GDBtn_MouseDown(null, null);
         }
-
         private async void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
             if (m_Name.Visibility == Visibility.Visible)
@@ -770,14 +769,15 @@ namespace Lemon_App
                 m_Name.Visibility = Visibility.Collapsed;
                 ly.Visibility = Visibility.Collapsed;
                 pl.Visibility = Visibility.Visible;
-                var data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
-                pldata.Children.Clear();
-                foreach (var dt in data)
-                {
-                    pldata.Children.Add(new PlControl(dt.img, dt.name, dt.text) { Width = pldata.ActualWidth-100 });
-                }
+                    var data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
+                    pldata.Children.Clear();
+                    foreach (var dt in data)
+                    {
+                        pldata.Children.Add(new PlControl(dt.img, dt.name, dt.text) { Width = pldata.ActualWidth - 100 });
+                    }
             }
-            else {
+            else
+            {
                 m_Singer.Visibility = Visibility.Visible;
                 m_Name.Visibility = Visibility.Visible;
                 ly.Visibility = Visibility.Visible;
@@ -789,6 +789,18 @@ namespace Lemon_App
         {
             if(ml.lv!=null)
             ml.lv.RestWidth(e.NewSize.Width);
+        }
+        //TODO 选择歌词评论的来源 网易云和QQ
+        //TODO 夜间模式/主题
+        bool isPos = true;//true:Wy false:QQ
+        private void qq_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            isPos = false;
+        }
+
+        private void wy_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            isPos = true;
         }
     }
 }

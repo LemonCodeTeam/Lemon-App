@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,9 +12,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace LemonLibrary
 {
@@ -126,7 +129,9 @@ namespace LemonLibrary
             GeneralTransform gf = foucslrc.c_LrcTb.TransformToVisual(c_lrc_items);
             Point p = gf.Transform(new Point(0, 0));
             double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 10;
-            c_scrollviewer.ScrollToVerticalOffset(os);
+            //c_scrollviewer.ScrollToVerticalOffset(os);
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(200));
+            c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
         public static String parserLine(String str, List<String> times, List<String> texs, Dictionary<String, String> data)
         {
