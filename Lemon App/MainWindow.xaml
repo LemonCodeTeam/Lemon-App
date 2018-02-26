@@ -1479,7 +1479,13 @@
             <BeginStoryboard x:Name="OpenDataPage_BeginStoryboard" Storyboard="{StaticResource OpenDataPage}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource IsQQSource}"/>
+            <BeginStoryboard x:Name="IsQQSource_BeginStoryboard" Storyboard="{StaticResource IsQQSource}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="qq">
+            <BeginStoryboard x:Name="IsQQSource_BeginStoryboard1" Storyboard="{StaticResource IsQQSource}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="wy">
+            <BeginStoryboard x:Name="IsWYSource_BeginStoryboard" Storyboard="{StaticResource IsWYSource}"/>
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
@@ -1705,7 +1711,7 @@
                 <TextBox x:Name="SearchBox" Height="25" TextWrapping="Wrap" Text="搜索" VerticalAlignment="Top" Margin="20,45,20,0" Style="{DynamicResource SearchBox}" Foreground="#FFA4A4A4" KeyDown="SearchBox_KeyDown"/>
             </Grid>
         </Border>
-        <Grid x:Name="LyricPage" Background="#FFFDFDFD">
+        <Grid x:Name="LyricPage" Background="#FFFDFDFD" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>

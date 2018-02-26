@@ -102,7 +102,7 @@ namespace LemonLibrary
             string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
             return $"http://182.247.250.19/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
         }
-        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s, bool doesplay = true)
+        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s,bool ispos, bool doesplay = true)
         {
             string name = mldata[mid];
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3"))
@@ -142,8 +142,15 @@ namespace LemonLibrary
             }
             if (openlyric)
             {
-                var dt = GetLyric(mid);
-                lv.LoadLrc(dt);
+                if (ispos) {
+                    var dt =await GetLyricByWYAsync(name);
+                    lv.LoadLrc(dt);
+                }
+                else
+                {
+                    var dt = GetLyric(mid);
+                    lv.LoadLrc(dt);
+                }
             }
         }
         public string GetLyric(string McMind)
@@ -544,9 +551,7 @@ namespace LemonLibrary
         }
         public async Task<List<MusicPL>> GetPLAsync(string name,int page=1) {
             string Page = ((page - 1) * 20).ToString();
-            var ds = "{\"data\":"+HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name))+"}";
-            var s = JObject.Parse(ds);
-            string id = s["data"][0]["id"].ToString();
+            string id = GetWYIdByName(name);
             var data =await HttpHelper.GetWebAsync($"https://music.163.com/api/v1/resource/comments/R_SO_4_{id}?offset={Page}");
             JObject o = JObject.Parse(data);
             var d = new List<MusicPL>();
@@ -573,6 +578,92 @@ namespace LemonLibrary
                 });
             }
             return data;
+        }
+        public string GetWYIdByName(string name) {
+            var ds = "{\"data\":" + HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name)) + "}";
+            var s = JObject.Parse(ds);
+            return s["data"][0]["id"].ToString();
+        }
+        public async Task<string> GetLyricByWYAsync(string name)
+        {
+            string id = GetWYIdByName(name);
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc"))
+            {
+                string s = await HttpHelper.GetWebAsync($"http://music.163.com/api/song/lyric?os=pc&id={id}&lv=-1&kv=-1&tv=-1");
+                Console.WriteLine(s);
+                JObject o = JObject.Parse(s);
+                string t = o["lrc"]["lyric"].ToString();
+                if (o["tlyric"]["lyric"].ToString() == "") return t;
+                else
+                {
+                    string x = o["tlyric"]["lyric"].ToString();
+                    Console.WriteLine(t + "\r\n" + x);
+                    List<string> datatime = new List<string>();
+                    List<string> datatext = new List<string>();
+                    Dictionary<string, string> gcdata = new Dictionary<string, string>();
+                    string[] dta = t.Split('\n');
+                    foreach (var dt in dta)
+                    {
+                        try { LyricView.parserLine(dt, datatime, datatext, gcdata); } catch { }
+                    }
+                    List<String> dataatimes = new List<String>();
+                    List<String> dataatexs = new List<String>();
+                    Dictionary<String, String> fydata = new Dictionary<String, String>();
+                    String[] dtaa = x.Split('\n');
+                    foreach (var dt in dtaa)
+                    {
+                        try { LyricView.parserLine(dt, dataatimes, dataatexs, fydata); } catch { }
+                    }
+                    List<String> KEY = new List<String>();
+                    Dictionary<String, String> gcfydata = new Dictionary<String, String>();
+                    Dictionary<String, String> list = new Dictionary<String, String>();
+                    foreach (var dt in datatime)
+                    {
+                        try
+                        {
+                            KEY.Add(dt);
+                            gcfydata.Add(dt, "");
+                        }
+                        catch { }
+                    }
+                    //sdm("d3");
+                    //        foreach (var dt in dataatimes)
+                    //            {
+                    //           if (!KEY.Contains(dt))
+                    //         {
+                    //     KEY.Add(dt);//q
+                    //          gcfydata.Add(dt, "");
+                    //             }
+                    //                }
+                    //sdm("d4");
+                    for (int i = 0; i != gcfydata.Count; i++)
+                    {
+                        try
+                        {
+                            gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                        }
+                        catch { }
+                    }
+                    string LyricData = "";
+                    //sdm("d5   "+dataatexs.size()+"   "+dataatimes.size()+"   "+datatexs.size()+"   "+datatimes.size()+"   "+KEY.size());
+                    for (int i = 0; i != KEY.Count; i++)
+                    {
+                        try
+                        {
+                            String value = gcfydata[KEY[i]].Replace("[", "").Replace("]", "");
+                            String key = KEY[i];
+                            LyricData += $"[{key}]{value}\r\n";
+                        }
+                        catch { }
+                    }
+                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc", LyricData);
+                    return LyricData;
+                }
+            }
+            else
+            {
+                return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc");
+            }
         }
     }
 }

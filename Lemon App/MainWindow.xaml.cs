@@ -1,5 +1,6 @@
 ﻿using LemonLibrary;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -436,7 +437,7 @@ namespace Lemon_App
             else (Resources["LikeBtnUp"] as Storyboard).Begin();
             if (!ml.mldata.ContainsKey(id))
                 ml.mldata.Add(id, (name + " - " + singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
-            ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, doesplay);
+            ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this,isPos, doesplay);
             MusicImage.Background = new ImageBrush(new BitmapImage(new Uri(x)));
             Singer.Text = singer;
             if (doesplay)
@@ -769,7 +770,11 @@ namespace Lemon_App
                 m_Name.Visibility = Visibility.Collapsed;
                 ly.Visibility = Visibility.Collapsed;
                 pl.Visibility = Visibility.Visible;
-                    var data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
+                List<MusicPL> data;
+                if (isPos)
+                    data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+                else
+                    data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
                     pldata.Children.Clear();
                     foreach (var dt in data)
                     {
@@ -796,11 +801,15 @@ namespace Lemon_App
         private void qq_MouseDown(object sender, MouseButtonEventArgs e)
         {
             isPos = false;
+            var dt = ml.GetLyric(Settings.USettings.Playing.MusicID);
+            ml.lv.LoadLrc(dt);
         }
 
-        private void wy_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void wy_MouseDown(object sender, MouseButtonEventArgs e)
         {
             isPos = true;
+            var dt =await  ml.GetLyricByWYAsync(m_Name.Text + "-" + m_Singer.Text);
+            ml.lv.LoadLrc(dt);
         }
     }
 }
