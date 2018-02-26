@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Lemon_App
         public string id { get; set; }
         public string Nam { get; set; }
         public string img { get; set; }
-        public RadioItem(string ID,string name,string pic)
+        public RadioItem(string ID, string name, string pic)
         {
             InitializeComponent();
             id = ID;
@@ -36,9 +37,21 @@ namespace Lemon_App
             {
                 WebClient v = new WebClient();
                 v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg");
-                v.DownloadFileCompleted += delegate { im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg", UriKind.Relative))); };
+                v.DownloadFileCompleted += delegate
+                {
+                    im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg", UriKind.Relative)));
+                    var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg").GetMajorColor();
+                    var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                    back.Background = new SolidColorBrush(color);
+                };
             }
-            else im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg", UriKind.Relative)));
+            else
+            {
+                im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg", UriKind.Relative)));
+                var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Radio" + id + ".jpg").GetMajorColor();
+                var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                back.Background = new SolidColorBrush(color);
+            }
         }
         public RadioItem(string ID) {
             id = ID;

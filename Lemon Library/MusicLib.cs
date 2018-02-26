@@ -102,16 +102,20 @@ namespace LemonLibrary
             string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
             return $"http://182.247.250.19/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
         }
+        public string GetWyUrlAsync(string mid)
+        {
+            return JObject.Parse(HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", $"types=url&id={mid}&source=netease"))["url"].ToString();
+        }
         public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s,bool ispos, bool doesplay = true)
         {
             string name = mldata[mid];
+            if (ispos) name = "Wy" + name;
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3"))
             {
-                //GOTO if(ex download)
-                string guid = "20D919A4D7700FBC424740E8CED80C5F";
-                string ioo = await HttpHelper.GetWebAsync($"http://59.37.96.220/base/fcgi-bin/fcg_musicexpress2.fcg?version=12&miniversion=92&key=19914AA57A96A9135541562F16DAD6B885AC8B8B5420AC567A0561D04540172E&guid={guid}");
-                string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
-                string musicurl = $"http://182.247.250.19/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
+                string musicurl = "";
+                if (ispos)
+                    musicurl=GetWyUrlAsync(GetWYIdByName(name));
+                else musicurl=await GetUrlAsync(mid);
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate {
                     m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
@@ -119,7 +123,7 @@ namespace LemonLibrary
                         m.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
-                        x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0);
+                        x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy","");
                     }));
                 };
                 dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
@@ -137,7 +141,7 @@ namespace LemonLibrary
                     m.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                 {
-                    x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0);
+                    x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy","");
                 }));
             }
             if (openlyric)
@@ -216,7 +220,9 @@ namespace LemonLibrary
                     {
                         try
                         {
-                            gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                            if (fydata.ContainsKey(KEY[i]))
+                                gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                            else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
                         }
                         catch { }
                     }
@@ -587,7 +593,7 @@ namespace LemonLibrary
         public async Task<string> GetLyricByWYAsync(string name)
         {
             string id = GetWYIdByName(name);
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc"))
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/Wy{name}.lrc"))
             {
                 string s = await HttpHelper.GetWebAsync($"http://music.163.com/api/song/lyric?os=pc&id={id}&lv=-1&kv=-1&tv=-1");
                 Console.WriteLine(s);
@@ -640,7 +646,9 @@ namespace LemonLibrary
                     {
                         try
                         {
-                            gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                            if (fydata.ContainsKey(KEY[i]))
+                                gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
+                            else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
                         }
                         catch { }
                     }
@@ -656,13 +664,13 @@ namespace LemonLibrary
                         }
                         catch { }
                     }
-                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc", LyricData);
+                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/Wy{name}.lrc", LyricData);
                     return LyricData;
                 }
             }
             else
             {
-                return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc");
+                return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/Wy{name}.lrc");
             }
         }
     }

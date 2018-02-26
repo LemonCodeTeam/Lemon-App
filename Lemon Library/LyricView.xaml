@@ -24,7 +24,7 @@
             </Grid>
         </ControlTemplate>
     </UserControl.Resources>
-    <Grid>
+    <Grid x:Name="p">
         <ScrollViewer Name="c_scrollviewer" Template="{DynamicResource ScrollViewerControlTemplate1}">
             <StackPanel Name="c_lrc_items">
             </StackPanel>

@@ -45,6 +45,7 @@ namespace LemonLibrary
         public LyricView()
         {
             InitializeComponent();
+            UIHelper.G(p);
         }
 
         #region 
@@ -133,20 +134,23 @@ namespace LemonLibrary
             var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(200));
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
-        public static String parserLine(String str, List<String> times, List<String> texs, Dictionary<String, String> data)
+        public static String[] parserLine(String str, List<String> times, List<String> texs, Dictionary<String, String> data,bool doesAdd=true)
         {
             if (!str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:"))
             {
-                String TimeData =TextHelper.XtoYGetTo(str, "[", "]", 0) + "0";
-                times.Add(TimeData);
+                String TimeData = TextHelper.XtoYGetTo(str, "[", "]", 0);
                 String INFO = TextHelper.XtoYGetTo(str, "[", "]", 0);
                 String io = "[" + INFO + "]";
                 String TexsData = str.Replace(io, "");
-                texs.Add(TexsData);
-                data.Add(TimeData, TexsData);
-                return TimeData + "     " + TexsData;
+                if (doesAdd)
+                {
+                    times.Add(TimeData);
+                    texs.Add(TexsData);
+                    data.Add(TimeData, TexsData);
+                }
+                return new string[2] {TimeData,TexsData};
             }
-            else return "";
+            else return null;
         }
         #endregion
     }

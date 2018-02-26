@@ -16,6 +16,7 @@ using static LemonLibrary.InfoHelper;
 /*
  TODO: 
     no Image.
+    歌词解析(我的天哪，怎么总是出错。我。。。) 错误mid:002xZCKB4H5m5G 千本樱
      */
 namespace Lemon_App
 {
@@ -797,19 +798,17 @@ namespace Lemon_App
         }
         //TODO 选择歌词评论的来源 网易云和QQ
         //TODO 夜间模式/主题
-        bool isPos = true;//true:Wy false:QQ
+        bool isPos = false;//true:Wy false:QQ
         private void qq_MouseDown(object sender, MouseButtonEventArgs e)
         {
             isPos = false;
-            var dt = ml.GetLyric(Settings.USettings.Playing.MusicID);
-            ml.lv.LoadLrc(dt);
+            ml.GetAndPlayMusicUrlAsync(Settings.USettings.Playing.MusicID, true, MusicName, this, isPos);
         }
 
-        private async void wy_MouseDown(object sender, MouseButtonEventArgs e)
+        private void wy_MouseDown(object sender, MouseButtonEventArgs e)
         {
             isPos = true;
-            var dt =await  ml.GetLyricByWYAsync(m_Name.Text + "-" + m_Singer.Text);
-            ml.lv.LoadLrc(dt);
+            ml.GetAndPlayMusicUrlAsync(Settings.USettings.Playing.MusicID, true, MusicName, this, isPos);
         }
     }
 }

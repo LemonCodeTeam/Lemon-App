@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Lemon_App
     {
         public string img { get; set; }
         public string singer { get; set; }
-        public SingerItem(string ig,string sing)
+        public SingerItem(string ig, string sing)
         {
             InitializeComponent();
             img = ig;
@@ -36,11 +37,23 @@ namespace Lemon_App
                 {
                     WebClient v = new WebClient();
                     v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg");
-                    v.DownloadFileCompleted += delegate { im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative))); };
+                    v.DownloadFileCompleted += delegate
+                    {
+                        im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
+                        var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg").GetMajorColor();
+                        var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                        back.Background = new SolidColorBrush(color);
+                    };
                 }
                 catch { }
             }
-            else im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
+            else
+            {
+                im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
+                var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg").GetMajorColor();
+                var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                back.Background = new SolidColorBrush(color);
+            }
         }
     }
 }
