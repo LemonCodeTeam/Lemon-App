@@ -106,14 +106,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddGDWindow.xaml.cs">
-      <DependentUpon>AddGDWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DataItem.xaml.cs">
       <DependentUpon>DataItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DownloadMarger.xaml.cs">
-      <DependentUpon>DownloadMarger.xaml</DependentUpon>
     </Compile>
     <Compile Include="FC.xaml.cs">
       <DependentUpon>FC.xaml</DependentUpon>
@@ -139,15 +133,7 @@
     <Compile Include="TopControl.xaml.cs">
       <DependentUpon>TopControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="AddGDWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="DataItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DownloadMarger.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

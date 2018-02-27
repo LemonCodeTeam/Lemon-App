@@ -71,12 +71,16 @@ namespace LemonLibrary
                     }
                 }
             }
+            int.TryParse(o["skin"].ToString(), out int skin);
+            USettings.skin = skin;
         }
         public static void LoadLSettings(string data) {
             JObject o = JObject.Parse(data);
             LSettings.NAME = o["NAME"].ToString();
             LSettings.RNBM = Boolean.Parse(o["RNBM"].ToString());
             LSettings.TX = o["TX"].ToString();
+            int.TryParse(o["skin"].ToString(), out int skin);
+            LSettings.skin = skin;
         }
         public static void SaveLoadSettings()
         {
@@ -94,12 +98,14 @@ namespace LemonLibrary
             public Music Playing { get; set; } = new Music();
             public double jd { get; set; } = 0;
             public double alljd { get; set; } = 0;
+            public int skin { get; set; } = 0;
         }
         public class LoadSettingsData
         {
             public string TX { get; set; } = "";
             public string NAME { get; set; } = "QQ账号";
             public bool RNBM { get; set; } = false;
+            public int skin { get; set; } = 0;
         }
     }
 }

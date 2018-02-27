@@ -62,7 +62,28 @@
                 <DiscreteStringKeyFrame KeyTime="0:0:1.2" Value="已完成"/>
             </StringAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="Skin">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="grid">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF2D2D30"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="textBlock1">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FFAAAAAA"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="unSkin">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="grid">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="textBlock1">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FF5F5F5F"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Skin}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Window.Effect>
         <DropShadowEffect BlurRadius="30" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>

@@ -33,6 +33,11 @@ namespace Lemon_App
         public LoginWindow()
         {
             InitializeComponent();
+            if (Settings.LSettings.skin == 0)
+                (Resources["Skin"] as Storyboard).Begin();
+            else
+                Settings.LSettings.skin = 0;
+            (Resources["unSkin"] as Storyboard).Begin();
         }
         private void NaAsync(object sender, WebBrowserNavigatedEventArgs e)
         {
@@ -278,6 +283,20 @@ namespace Lemon_App
                 RM.IsChecked = Settings.LSettings.RNBM;
             };
             d.Begin();
+        }
+
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.LSettings.skin == 0)
+            {
+                Settings.LSettings.skin = 1;
+                (Resources["Skin"] as Storyboard).Begin();
+            }
+            else
+            {
+                Settings.LSettings.skin = 0;
+                (Resources["unSkin"] as Storyboard).Begin();
+            }
         }
     }
 }

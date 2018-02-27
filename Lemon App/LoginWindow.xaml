@@ -8,7 +8,7 @@
         xmlns:Forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
        xmlns:Controls="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit" x:Class="Lemon_App.LoginWindow"
         mc:Ignorable="d"
-        Title="登录到小萌" Height="340" MouseLeftButtonDown="Window_MouseLeftButtonDown" Width="460" Background="{x:Null}" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" KeyDown="Window_KeyDown" BorderThickness="30" FontFamily=".PingFang SC,Microsoft YaHei UI" Loaded="Window_Loaded">
+        Title="登录到小萌" Height="340" MouseLeftButtonDown="Window_MouseLeftButtonDown" Width="460" Background="{x:Null}" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" KeyDown="Window_KeyDown" BorderThickness="30" FontFamily=".PingFang SC,Microsoft YaHei UI" Loaded="Window_Loaded" MouseDoubleClick="Window_MouseDoubleClick">
     <Window.Resources>
         <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
         <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
@@ -375,6 +375,40 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="Skin">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="grid">
+                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FF2D2D30"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
+                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FF3E3E42"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
+                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FF1B1B1C"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="rk">
+                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FFE2E2E2"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="TX">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF1B1B1C"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="unSkin">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="grid">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFECECEC"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="rk">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFB1B1B1"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="TX">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFECECEC"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="qr">
@@ -407,7 +441,7 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Border Height="1.5"  VerticalAlignment="Bottom" Background="#FFECECEC"/>
+                <Border Height="1.5"  VerticalAlignment="Bottom" Background="{Binding BorderBrush, ElementName=OS}"/>
                 <TextBox x:Name="Email"  Height="19" Margin="5,5,5,0" TextWrapping="Wrap" Text="QQ账号" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF31C27C" BorderThickness="0" Foreground="#FF979797" TextChanged="Email_TextChanged"/>
                 <PasswordBox x:Name="PSW"  Margin="5,0,5,7" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF31C27C" BorderThickness="0" Height="15" VerticalAlignment="Bottom"  Foreground="#FF979797" KeyDown="Email_KeyDown"/>
             </Grid>

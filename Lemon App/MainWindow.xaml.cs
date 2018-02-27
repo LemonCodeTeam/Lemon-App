@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static LemonLibrary.InfoHelper;
@@ -42,6 +43,11 @@ namespace Lemon_App
         {
             InitializeComponent();
             FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
+            if (Settings.USettings.skin == 0)
+                (Resources["Skin"] as Storyboard).Begin();
+            else
+                Settings.USettings.skin = 0;
+                (Resources["unSkin"] as Storyboard).Begin();
         }
         LemonLibrary.MusicLib ml = new MusicLib();
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -651,7 +657,9 @@ namespace Lemon_App
 
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            new DownloadMarger(DataItemsList.Children).Show();
+            filepath.Text = AppDomain.CurrentDomain.BaseDirectory + "Download";
+            foreach (DataItem x in DataItemsList.Children)
+                DownloadList.Children.Add(new CheckBox() { Width = 370, Content = x.SongName + " - " + x.Singer, Uid = x.ID, FocusVisualStyle = null,Foreground=cb_color.Foreground,Style=cb_color.Style });
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -757,12 +765,6 @@ namespace Lemon_App
                 s.Start();
             }
         }
-
-        private void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
-        {
-            new AddGDWindow().ShowDialog();
-            GDBtn_MouseDown(null, null);
-        }
         private async void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
             if (m_Name.Visibility == Visibility.Visible)
@@ -809,6 +811,122 @@ namespace Lemon_App
         {
             isPos = true;
             ml.GetAndPlayMusicUrlAsync(Settings.USettings.Playing.MusicID, true, MusicName, this, isPos);
+        }
+        bool mod = true;//true : qq false : wy
+        private void AddGDPage_qqmod_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!mod)
+            {
+                AddGDPage_qqmod.Effect = new DropShadowEffect() { BlurRadius = 10, Opacity = 0.4, ShadowDepth = 0 };
+                AddGDPage_wymod.Effect = null;
+                mod = true;
+            }
+        }
+
+        private void AddGDPage_wymod_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (mod)
+            {
+                AddGDPage_qqmod.Effect = null;
+                AddGDPage_wymod.Effect = new DropShadowEffect() { BlurRadius = 10, Opacity = 0.4, ShadowDepth = 0 };
+                mod = false;
+            }
+        }
+
+        private async void AddGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (mod)
+            {
+                if (!Settings.USettings.MusicGD.ContainsKey(AddGDPage_id.Text))
+                    Settings.USettings.MusicGD.Add(AddGDPage_id.Text, await ml.GetGDAsync(AddGDPage_id.Text));
+            }
+            else
+            {
+                if (!Settings.USettings.MusicGD.ContainsKey(AddGDPage_id.Text))
+                    Settings.USettings.MusicGD.Add(AddGDPage_id.Text, await ml.GetGDbyWYAsync(AddGDPage_id.Text, this, AddGDPage_ps_name, AddGDPage_ps_jd));
+            }
+             (Resources["CloseAddGDPage"] as Storyboard).Begin();
+            GDBtn_MouseDown(null, null);
+        }
+
+        private void ckFile_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var g = new System.Windows.Forms.FolderBrowserDialog();
+            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                filepath.Text = g.SelectedPath;
+        }
+
+        private void cb_color_Click(object sender, RoutedEventArgs e)
+        {
+            var d = sender as CheckBox;
+            if (d.IsChecked == true)
+            {
+                d.Content = "全不选";
+                foreach (CheckBox x in DownloadList.Children)
+                    x.IsChecked = true;
+            }
+            else
+            {
+                d.Content = "全选";
+                foreach (CheckBox x in DownloadList.Children)
+                    x.IsChecked = false;
+            }
+        }
+
+        private async void Dmp_DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var data = new List<CheckBox>();
+            foreach (var x in DownloadList.Children)
+            {
+                var f = x as CheckBox;
+                if (f.IsChecked == true)
+                    data.Add(f);
+            }
+            int index = 0;
+            (Resources["CloseDmp"] as Storyboard).Begin();
+            Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")");
+            msg.Show();
+            for (index = 0; index < data.Count; index++)
+            {
+                if (msg.IsClose)
+                    break;
+                var cl = new WebClient();
+                string mid = data[index].Uid;
+                string url = await new LemonLibrary.MusicLib().GetUrlAsync(mid);
+                string name = data[index].Content.ToString();
+                msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n已完成:" + (index + 1) + "  " + name;
+                string file = filepath.Text + $"\\{name}.mp3";
+                cl.DownloadFileAsync(new Uri(url), file);
+                cl.DownloadFileCompleted += delegate { cl.Dispose(); };
+            }
+            if (!msg.IsClose)
+            {
+                msg.tb.Text = "已完成.";
+                await Task.Delay(5000);
+                msg.tbclose();
+            }
+            else
+            {
+                await Task.Delay(2000);
+                Msg msxg = new Msg("已取消下载");
+                msxg.Show();
+                await Task.Delay(5000);
+                msxg.tbclose();
+            }
+        }
+
+        private void ControlPage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+                if (Settings.USettings.skin == 0)
+                {
+                    Settings.USettings.skin = 1;
+                    (Resources["Skin"] as Storyboard).Begin();
+                }
+                else
+                {
+                    Settings.USettings.skin = 0;
+                    (Resources["unSkin"] as Storyboard).Begin();
+                }
         }
     }
 }
