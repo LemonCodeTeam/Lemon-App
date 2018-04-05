@@ -100,7 +100,7 @@ namespace LemonLibrary
             string guid = "20D919A4D7700FBC424740E8CED80C5F";
             string ioo = await HttpHelper.GetWebAsync($"http://59.37.96.220/base/fcgi-bin/fcg_musicexpress2.fcg?version=12&miniversion=92&key=19914AA57A96A9135541562F16DAD6B885AC8B8B5420AC567A0561D04540172E&guid={guid}");
             string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
-            return $"http://182.247.250.19/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
+            return $"http://dl.stream.qqmusic.qq.com/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
         }
         public string GetWyUrlAsync(string mid)
         {
@@ -573,9 +573,10 @@ namespace LemonLibrary
         }
         public async Task<List<MusicPL>> GetPLByQQAsync(string mid) {
             var id = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&tpl=yqq_song_detail&format=json&g_tk=268405378&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"))["data"][0]["id"].ToString();
-            var ds = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=268405378&hostUin=0&format=json&inCharset=utf8&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010"));
+            var dt = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=642290724&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010");
+            var ds = JObject.Parse(dt.Replace("\n",""));
             var data = new List<MusicPL>();
-            for (int i = 0; i > ds["hot_comment"]["commentlist"].Count(); i++) {
+            for (int i = 0; i != ds["hot_comment"]["commentlist"].Count(); i++) {
                 data.Add(new MusicPL() {
                     img = ds["hot_comment"]["commentlist"][i]["avatarurl"].ToString(),
                     like = ds["hot_comment"]["commentlist"][i]["praisenum"].ToString(),

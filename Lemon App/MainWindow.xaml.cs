@@ -657,6 +657,7 @@ namespace Lemon_App
 
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            DownloadList.Children.Clear();
             filepath.Text = AppDomain.CurrentDomain.BaseDirectory + "Download";
             foreach (DataItem x in DataItemsList.Children)
                 DownloadList.Children.Add(new CheckBox() { Width = 370, Content = x.SongName + " - " + x.Singer, Uid = x.ID, FocusVisualStyle = null,Foreground=cb_color.Foreground,Style=cb_color.Style });
@@ -774,7 +775,7 @@ namespace Lemon_App
                 ly.Visibility = Visibility.Collapsed;
                 pl.Visibility = Visibility.Visible;
                 List<MusicPL> data;
-                if (isPos)
+                if (!isPos)
                     data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
                 else
                     data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
