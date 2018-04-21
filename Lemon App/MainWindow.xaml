@@ -1027,7 +1027,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-        <Storyboard x:Key="ControlBtnChanGD">
+        <Storyboard x:Key="ControlBtnChanGD" Completed="GDBtn_MouseDown">
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="TopBtn">
                 <EasingColorKeyFrame KeyTime="0" Value="#FF93A1AE"/>
             </ColorAnimationUsingKeyFrames>
@@ -2090,7 +2090,7 @@
                 <Border HorizontalAlignment="Left" Height="15" Margin="71.5,457,0,0" VerticalAlignment="Top" Width="15">
                     <Path Data="M819.2 459.776l-215.04-28.4672L512 225.28l-92.16 206.2336L204.8 459.776l158.1056 155.8528-40.96 224.0512L512 729.7024 701.6448 839.68l-40.96-223.8464zM512 677.0688L372.5312 757.76l29.9008-163.84L286.72 479.232l157.696-20.48L512 307.2l67.584 151.3472 157.696 20.48L621.1584 593.92l29.9008 163.84z M512 61.44A471.04 471.04 0 0 0 144.7936 827.392L174.08 798.72a430.08 430.08 0 1 1 92.16 87.04l-29.4912 29.4912A471.04 471.04 0 1 0 512 61.44z M200.9088 829.0304L171.8272 858.112q15.9744 16.5888 33.3824 31.5392L234.496 860.16a436.0192 436.0192 0 0 1-33.5872-31.1296z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=GDBtn}" StrokeThickness="5"/>
                 </Border>
-                <Label x:Name="GDBtn" Content="我的歌单" Margin="96.5,452,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="GDBtn_MouseDown"/>
+                <Label x:Name="GDBtn" Content="我的歌单" Margin="96.5,452,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
                 <Border x:Name="UserTX" Height="75" Margin="79,80,81,0" VerticalAlignment="Top" Width="75" CornerRadius="75" Background="#FFECECEC"/>
                 <TextBlock x:Name="UserName" Margin="9,160,11,0" TextWrapping="Wrap" Text="Twilight./Lemon" VerticalAlignment="Top" Foreground="#FF979797" TextAlignment="Center"/>
                 <TextBox x:Name="SearchBox" Height="25" TextWrapping="Wrap" Text="搜索" VerticalAlignment="Top" Margin="20,45,20,0" Style="{DynamicResource SearchBox}" Foreground="#FFA4A4A4" KeyDown="SearchBox_KeyDown"/>

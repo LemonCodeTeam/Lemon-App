@@ -27,13 +27,13 @@ namespace Lemon_App
         public string singer { get; set; }
         public SingerItem(string ig, string sing)
         {
-            InitializeComponent();
-            img = ig;
-            singer = sing;
-            name.Text = singer;
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg"))
+            try
             {
-                try
+                InitializeComponent();
+                img = ig;
+                singer = sing;
+                name.Text = singer;
+                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg"))
                 {
                     WebClient v = new WebClient();
                     v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg");
@@ -45,14 +45,35 @@ namespace Lemon_App
                         back.Background = new SolidColorBrush(color);
                     };
                 }
-                catch { }
+                else
+                {
+                    im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
+                    var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg").GetMajorColor();
+                    var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                    back.Background = new SolidColorBrush(color);
+                }
             }
-            else
+            catch
             {
-                im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
-                var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg").GetMajorColor();
-                var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                back.Background = new SolidColorBrush(color);
+                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg"))
+                {
+                    WebClient v = new WebClient();
+                    v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"), AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg");
+                    v.DownloadFileCompleted += delegate
+                    {
+                        im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg", UriKind.Relative)));
+                        var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg").GetMajorColor();
+                        var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                        back.Background = new SolidColorBrush(color);
+                    };
+                }
+                else
+                {
+                    im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg", UriKind.Relative)));
+                    var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg").GetMajorColor();
+                    var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
+                    back.Background = new SolidColorBrush(color);
+                }
             }
         }
     }

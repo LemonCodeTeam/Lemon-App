@@ -79,11 +79,6 @@
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource Skin}"/>
-        </EventTrigger>
-    </Window.Triggers>
     <Window.Effect>
         <DropShadowEffect BlurRadius="30" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>

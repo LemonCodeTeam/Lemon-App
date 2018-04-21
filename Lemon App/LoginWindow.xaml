@@ -8,7 +8,7 @@
         xmlns:Forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
        xmlns:Controls="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit" x:Class="Lemon_App.LoginWindow"
         mc:Ignorable="d"
-        Title="登录到小萌" Height="340" MouseLeftButtonDown="Window_MouseLeftButtonDown" Width="460" Background="{x:Null}" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" KeyDown="Window_KeyDown" BorderThickness="30" FontFamily=".PingFang SC,Microsoft YaHei UI" Loaded="Window_Loaded" MouseDoubleClick="Window_MouseDoubleClick">
+        Title="登录到小萌" Height="340" MouseLeftButtonDown="Window_MouseLeftButtonDown" Width="460" Background="{x:Null}" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" KeyDown="Window_KeyDown" BorderThickness="30" FontFamily=".PingFang SC,Microsoft YaHei UI" Loaded="Window_Loaded">
     <Window.Resources>
         <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
         <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
@@ -44,9 +44,9 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Border x:Name="checkBoxBorder" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="14" Height="14" BorderBrush="#FFC5C5C5" CornerRadius="3">
+                            <Border x:Name="checkBoxBorder" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="14" Height="14" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="3">
                                 <Grid x:Name="markGrid">
-                                    <Path x:Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Stretch="None"/>
+                                    <Path x:Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{DynamicResource OptionMark.MouseOver.Border}" Margin="1" Opacity="0" Stretch="UniformToFill"/>
                                     <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="2" Opacity="0"/>
                                 </Grid>
                             </Border>
@@ -263,6 +263,74 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="FXC">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="OS">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RM">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TX">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rk">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="OS">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RM">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TX">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="rk">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="border">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qrcode">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="textBlock2">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="qrcode">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="textBlock1">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="textBlock2">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="qr">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="qr">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="face">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="face">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="fac">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="fac">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
         <Storyboard x:Key="FACESTAR">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="OS">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
@@ -307,44 +375,31 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
-        <Storyboard x:Key="Skin">
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="grid">
-                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FF2D2D30"/>
+        <Storyboard x:Key="Animation" RepeatBehavior="Forever">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="grid">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF4F9CAC"/>
+                <EasingColorKeyFrame KeyTime="0:0:5" Value="#FFF1807A"/>
+                <EasingColorKeyFrame KeyTime="0:0:9" Value="sc#1, 0.07818742, 0.658374846, 0.3712377"/>
+                <EasingColorKeyFrame KeyTime="0:0:10" Value="#FF4F9CAC"/>
             </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
-                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FF3E3E42"/>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="grid">
+                <EasingColorKeyFrame KeyTime="0" Value="#FF2A404E"/>
+                <EasingColorKeyFrame KeyTime="0:0:5" Value="#FF2593F2"/>
+                <EasingColorKeyFrame KeyTime="0:0:10" Value="#FF2A404E"/>
             </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
-                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FF1B1B1C"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="rk">
-                <EasingColorKeyFrame KeyTime="0:00:0.3" Value="#FFE2E2E2"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="TX">
-                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF1B1B1C"/>
-            </ColorAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="unSkin">
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="grid">
-                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
-                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="OS">
-                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFECECEC"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="rk">
-                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFB1B1B1"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="TX">
-                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFECECEC"/>
-            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(Brush.RelativeTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="45"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:6.0" Value="360"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:12" Value="405"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="qr">
             <BeginStoryboard x:Name="START_BeginStoryboard" Storyboard="{StaticResource START}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Animation}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="textBlock2">
             <StopStoryboard BeginStoryboardName="START_BeginStoryboard"/>
@@ -353,7 +408,21 @@
     <Window.Effect>
         <DropShadowEffect BlurRadius="30" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>
-    <Grid x:Name="grid" Background="White" Width="400" Height="280">
+    <Grid x:Name="grid" Width="400" Height="280">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <LinearGradientBrush.RelativeTransform>
+                    <TransformGroup>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                        <RotateTransform CenterY="0.5" CenterX="0.5" Angle="45"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </LinearGradientBrush.RelativeTransform>
+                <GradientStop Color="#FF4AE883" Offset="0"/>
+                <GradientStop Color="#FF007ACC" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.Clip>
             <RectangleGeometry RadiusX="3" RadiusY="3">
                 <RectangleGeometry.Rect>
@@ -367,7 +436,7 @@
                 </WindowsFormsHost>
             </Border>
         </Popup>
-        <Border x:Name="OS" BorderBrush="#FFECECEC" Width="260" CornerRadius="5" Background="White" Height="60" Margin="0,103,25,0" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1.5">
+        <Border x:Name="OS" BorderBrush="#4CFFFFFF" Width="260" CornerRadius="5" Background="White" Height="60" Margin="0,103,25,0" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
@@ -378,8 +447,8 @@
                 <PasswordBox x:Name="PSW"  Margin="5,0,5,7" Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF31C27C" BorderThickness="0" Height="15" VerticalAlignment="Bottom"  Foreground="#FF979797" KeyDown="Email_KeyDown"/>
             </Grid>
         </Border>
-        <CheckBox x:Name="RM" Content="记住我" HorizontalAlignment="Left" Height="18" Margin="115,167,0,0" VerticalAlignment="Top" Width="111" Style="{DynamicResource CheckBoxStyle}" Foreground="#FFB1B1B1"/>
-        <Border x:Name="TX" Margin="25,95,0,0" Height="75" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" BorderThickness="2" BorderBrush="#FFECECEC" RenderTransformOrigin="0.5,0.5" MouseDown="TX_MouseDown">
+        <CheckBox x:Name="RM" Content="记住我" HorizontalAlignment="Left" Height="18" Margin="115,167,0,0" VerticalAlignment="Top" Width="111" Style="{DynamicResource CheckBoxStyle}" Foreground="White" BorderBrush="#4CFFFFFF" BorderThickness="3"/>
+        <Border x:Name="TX" Margin="25,95,0,0" Height="78" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="78" BorderThickness="5" BorderBrush="#4CFFFFFF" RenderTransformOrigin="0.5,0.5" MouseDown="TX_MouseDown">
             <Border.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -391,10 +460,8 @@
             <Border.Background>
                 <ImageBrush ImageSource="http://q2.qlogo.cn/headimg_dl?bs=qq&amp;dst_uin={qq}&amp;spec=100"/>
             </Border.Background>
-
-            <Border Height="10" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="10" HorizontalAlignment="Right" Background="#FF70ED3A" CornerRadius="10"/>
         </Border>
-        <TextBlock x:Name="rk" Height="24" Margin="10,220,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Foreground="#FFB1B1B1" RenderTransformOrigin="0.5,0.5">
+        <TextBlock x:Name="rk" Height="24" Margin="10,220,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Foreground="White" RenderTransformOrigin="0.5,0.5">
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -405,28 +472,21 @@
             </TextBlock.RenderTransform>
         </TextBlock>
         <Border x:Name="border"  Height="30" VerticalAlignment="Bottom" Width="80" Margin="0,0,10,10" Background="#00000000"  MouseDown="border_MouseDown_2" HorizontalAlignment="Right" Visibility="Collapsed" Opacity="0">
-            <TextBlock Text="取消登录" Foreground="#FFB1B1B1" Margin="0,7,0,0" TextAlignment="Center"/>
+            <TextBlock Text="取消登录" Foreground="White" Margin="0,7,0,0" TextAlignment="Center"/>
         </Border>
-        <Border x:Name="CLOSE" ToolTip="关闭" HorizontalAlignment="Left" Margin="10,10,0,0" Width="13" Height="13" Background="#FFB8B8B8" CornerRadius="13" MouseDown="TextBlock_MouseDown" VerticalAlignment="Top"/>
-        <TextBlock x:Name="textBlock" Height="18" Margin="28,7,28,0" TextWrapping="Wrap" Text="登陆到小萌" VerticalAlignment="Top" Foreground="#FFCFCFCF" TextAlignment="Center"/>
-        <Border x:Name="qrcode" BorderBrush="#FFB8B8B8" BorderThickness="1" Width="123" Height="123" Margin="0,50,0,0" Visibility="Collapsed" Opacity="0" MouseDown="qrcode_MouseDown"/>
-        <TextBlock x:Name="textBlock1" Height="25" Margin="10,73,10,0" TextWrapping="Wrap" Text="请拿起最新版手机企鹅扫码登陆" VerticalAlignment="Top" Foreground="#FFB8B8B8" FontSize="16" TextAlignment="Center" Visibility="Collapsed" Opacity="0"/>
-        <TextBlock x:Name="textBlock2" Height="21" Margin="10,235,10,0" TextWrapping="Wrap" Text="返回" VerticalAlignment="Top" Foreground="#FFB8B8B8" TextAlignment="Center" Background="#00000000" Visibility="Collapsed" Opacity="0"/>
-        <Grid x:Name="qr" HorizontalAlignment="Right" Height="15" Margin="0,167,28,0" VerticalAlignment="Top" Width="15" Background="#00000000" MouseDown="qrcode_MouseDown">
-            <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="6" VerticalAlignment="Top" Width="6"/>
-            <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Right" Height="6" VerticalAlignment="Top" Width="6"/>
-            <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Left" Height="6" VerticalAlignment="Bottom" Width="6"/>
-            <Border BorderBrush="LightGray" BorderThickness="1,0,0,1" HorizontalAlignment="Right" Height="6" VerticalAlignment="Bottom" Width="6"/>
-            <Border BorderBrush="LightGray" BorderThickness="1" HorizontalAlignment="Right" Height="3" VerticalAlignment="Bottom" Width="3" Margin="0,0,0,3" Background="LightGray"/>
-            <Border BorderBrush="LightGray" BorderThickness="1" Height="6" VerticalAlignment="Top" Width="1"/>
-            <Border BorderBrush="LightGray" BorderThickness="1" Height="6" VerticalAlignment="Bottom" Width="1" />
-            <Border BorderBrush="LightGray" BorderThickness="1" Height="1"/>
-        </Grid>
-        <Grid x:Name="face" HorizontalAlignment="Right" Height="15" Margin="0,167,58,0" VerticalAlignment="Top" Width="15" Background="#00000000" MouseDown="face_MouseDown">
-            <Path Data="M21.759,19.639c2.557-2.014,4.205-5.131,4.205-8.639    c0-6.075-4.925-11-11-11s-11,4.925-11,11c0,3.508,1.648,6.625,4.205,8.639C3.584,21.976,0.357,26.592,0,32h2.003    c0.386-5.064,3.678-9.308,8.209-11.091C11.652,21.601,13.26,22,14.964,22c1.705,0,3.312-0.399,4.752-1.091    c4.531,1.783,7.823,6.027,8.209,11.091h2.003C29.572,26.592,26.344,21.976,21.759,19.639z M14.964,20c-4.971,0-9-4.029-9-9    c0-4.971,4.029-9,9-9c4.971,0,9,4.029,9,9C23.964,15.971,19.935,20,14.964,20z" Fill="LightGray" Stretch="Uniform"/>
-        </Grid>
+        <Border x:Name="CLOSE" ToolTip="关闭" HorizontalAlignment="Left" Margin="10,10,0,0" Width="13" Height="13" Background="White" CornerRadius="13" MouseDown="TextBlock_MouseDown" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock" Height="18" Margin="28,7,28,0" TextWrapping="Wrap" Text="登陆到小萌" VerticalAlignment="Top" Foreground="#FFFDFDFD" TextAlignment="Center"/>
+        <Border x:Name="qrcode" BorderBrush="#4CFFFFFF" BorderThickness="5" Width="123" Height="123" Margin="0,50,0,0" MouseDown="qrcode_MouseDown" CornerRadius="5" Background="White" Opacity="0" Visibility="Collapsed"/>
+        <TextBlock x:Name="textBlock1" Height="25" Margin="10,73,10,0" TextWrapping="Wrap" Text="请拿起最新版手机企鹅扫码登陆" VerticalAlignment="Top" Foreground="White" FontSize="16" TextAlignment="Center" Opacity="0" Visibility="Collapsed"/>
+        <TextBlock x:Name="textBlock2" Height="21" Margin="10,235,10,0" TextWrapping="Wrap" Text="返回" VerticalAlignment="Top" Foreground="#FFF3F3F3" TextAlignment="Center" Background="#00000000" Opacity="0" Visibility="Collapsed"/>
+        <Border x:Name="qr" HorizontalAlignment="Right" Height="15" Margin="0,167,28,0" VerticalAlignment="Top" Width="15" Background="#00000000">
+            <Path Data="M1008.921299 1024 978.804857 1024C970.492719 1024 963.746636 1017.253917 963.746636 1008.941778L963.746636 617.428028C963.746636 609.115889 970.492719 602.369806 978.804857 602.369806L1008.921299 602.369806C1017.233438 602.369806 1023.979521 609.115889 1023.979521 617.428028L1023.979521 1008.941778C1023.979521 1017.253917 1017.233438 1024 1008.921299 1024ZM1008.921299 542.106805 15.078701 542.106805C6.766562 542.106805 0.020479 535.390838 0.020479 527.078701L0.020479 496.932142C0.020479 488.620003 6.766562 481.87392 15.078701 481.87392L1008.921299 481.87392C1017.233438 481.87392 1023.979521 488.620003 1023.979521 496.932142L1023.979521 527.078701C1023.979521 535.390838 1017.233438 542.106805 1008.921299 542.106805ZM963.746636 421.641035 662.582212 421.641035C629.303543 421.641035 602.349327 394.68682 602.349327 361.408151L602.349327 60.243726C602.349327 26.995174 629.303543 0.010842 662.582212 0.010842L963.746636 0.010842C996.995188 0.010842 1023.979521 26.995174 1023.979521 60.243726L1023.979521 361.408151C1023.979521 394.68682 996.995188 421.641035 963.746636 421.641035ZM963.746636 60.243726 662.582212 60.243726 662.582212 361.408151 963.746636 361.408151 963.746636 60.243726ZM527.058222 421.641035 496.941778 421.641035C488.629641 421.641035 481.883558 414.894952 481.883558 406.582815L481.883558 15.069063C481.883558 6.756925 488.629641 0.010842 496.941778 0.010842L527.058222 0.010842C535.370359 0.010842 542.116442 6.756925 542.116442 15.069063L542.116442 406.582815C542.116442 414.894952 535.370359 421.641035 527.058222 421.641035ZM361.417788 421.641035 60.253364 421.641035C26.974695 421.641035 0.020479 394.68682 0.020479 361.408151L0.020479 60.243726C0.020479 26.995174 26.974695 0.010842 60.253364 0.010842L361.417788 0.010842C394.66634 0.010842 421.650673 26.995174 421.650673 60.243726L421.650673 361.408151C421.650673 394.68682 394.66634 421.641035 361.417788 421.641035ZM361.417788 60.243726 60.253364 60.243726 60.253364 361.408151 361.417788 361.408151 361.417788 60.243726ZM60.253364 602.369806 361.417788 602.369806C394.66634 602.369806 421.650673 629.324022 421.650673 662.602691L421.650673 963.767115C421.650673 997.015667 394.66634 1024 361.417788 1024L60.253364 1024C26.974695 1024 0.020479 997.015667 0.020479 963.767115L0.020479 662.602691C0.020479 629.324022 26.974695 602.369806 60.253364 602.369806ZM60.253364 963.736999 361.417788 963.736999 361.417788 662.572575 60.253364 662.572575 60.253364 963.736999ZM496.941778 602.369806 527.058222 602.369806C535.370359 602.369806 542.116442 609.115889 542.116442 617.428028L542.116442 918.562336C542.116442 926.90459 535.370359 933.620556 527.058222 933.620556L496.941778 933.620556C488.629641 933.620556 481.883558 926.90459 481.883558 918.562336L481.883558 617.428028C481.883558 609.115889 488.629641 602.369806 496.941778 602.369806ZM677.640433 722.835576 707.756876 722.835576C716.069013 722.835576 722.815096 729.581659 722.815096 737.893797L722.815096 1008.941778C722.815096 1017.253917 716.069013 1024 707.756876 1024L677.640433 1024C669.328295 1024 662.582212 1017.253917 662.582212 1008.941778L662.582212 737.893797C662.582212 729.581659 669.328295 722.835576 677.640433 722.835576ZM828.222645 662.572575 858.339087 662.572575C866.651226 662.572575 873.397309 669.318658 873.397309 677.630796L873.397309 1008.941778C873.397309 1017.253917 866.651226 1024 858.339087 1024L828.222645 1024C819.910508 1024 813.164424 1017.253917 813.164424 1008.941778L813.164424 677.630796C813.164424 669.318658 819.910508 662.572575 828.222645 662.572575Z" Fill="#FFFDFDFD" Stretch="Uniform"/>
+        </Border>
+        <Border x:Name="face" HorizontalAlignment="Right" Height="15" Margin="0,167,58,0" VerticalAlignment="Top" Width="15" Background="#00000000" MouseDown="face_MouseDown">
+            <Path Data="M21.759,19.639c2.557-2.014,4.205-5.131,4.205-8.639    c0-6.075-4.925-11-11-11s-11,4.925-11,11c0,3.508,1.648,6.625,4.205,8.639C3.584,21.976,0.357,26.592,0,32h2.003    c0.386-5.064,3.678-9.308,8.209-11.091C11.652,21.601,13.26,22,14.964,22c1.705,0,3.312-0.399,4.752-1.091    c4.531,1.783,7.823,6.027,8.209,11.091h2.003C29.572,26.592,26.344,21.976,21.759,19.639z M14.964,20c-4.971,0-9-4.029-9-9    c0-4.971,4.029-9,9-9c4.971,0,9,4.029,9,9C23.964,15.971,19.935,20,14.964,20z" Fill="#FFFDFDFD" Stretch="Uniform"/>
+        </Border>
         <Grid x:Name="fac" Margin="10,40,10,10" Visibility="Collapsed">
-            <Border x:Name="b" BorderBrush="#FF3399FF" BorderThickness="1" Width="240" Height="175" Margin="80,4.5,60,50.5">
+            <Border x:Name="b" BorderBrush="#4CFFFFFF" BorderThickness="5" Width="240" Height="175" Margin="80,4.5,60,50.5" CornerRadius="5">
                 <Controls:VideoCaptureElement  x:Name="vce"/>
             </Border>
             <Border Height="30" VerticalAlignment="Bottom" Width="75" Margin="162.5,0,142.5,10" Background="#FF3399FF" CornerRadius="5" MouseDown="Border_MouseDown">

@@ -33,11 +33,6 @@ namespace Lemon_App
         public LoginWindow()
         {
             InitializeComponent();
-            if (Settings.LSettings.skin == 0)
-                (Resources["Skin"] as Storyboard).Begin();
-            else
-                Settings.LSettings.skin = 0;
-            (Resources["unSkin"] as Storyboard).Begin();
         }
         private void NaAsync(object sender, WebBrowserNavigatedEventArgs e)
         {
@@ -165,16 +160,17 @@ namespace Lemon_App
             var wb = new System.Windows.Forms.WebBrowser();
             wb.ScriptErrorsSuppressed = true;
             wb.Navigate("http://ui.ptlogin2.qq.com/cgi-bin/login?appid=1006102&s_url=http://id.qq.com/index.html&hide_close_icon=1");
-            wb.Navigated += X;
+            wb.Navigated += XAsync;
             wfh.Child = wb;
         }
-        public void X(object sender, WebBrowserNavigatedEventArgs e) {
+        public async void XAsync(object sender, WebBrowserNavigatedEventArgs e) {
+            await Task.Delay(2000);
             var wb = sender as System.Windows.Forms.WebBrowser;
             string str = wb.Document.Body.OuterHtml;
             Task task = new Task(() => { T(str); });
             task.Start();
             wb.Navigated += NaAsync;
-            wb.Navigated -= X;
+            wb.Navigated -= XAsync;
         }
         public void T(string str)
         {
@@ -189,8 +185,6 @@ namespace Lemon_App
         }
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            new Task(new Action(delegate
-            {
                 vce.Play();
                 RenderTargetBitmap bmp = new RenderTargetBitmap(
                     (int)vce.ActualWidth,
@@ -221,7 +215,6 @@ namespace Lemon_App
                     }
                     else txb.Text = "识别失败";
                 }
-            })).Start();
         }
 
         private void face_MouseDown(object sender, MouseButtonEventArgs e)
@@ -281,22 +274,9 @@ namespace Lemon_App
                     TX.Background = new ImageBrush(image.ToImageSource());
                 }
                 RM.IsChecked = Settings.LSettings.RNBM;
+                (Resources["START"] as Storyboard).Completed += delegate { qrcode_MouseDown(null, null); };
             };
             d.Begin();
-        }
-
-        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (Settings.LSettings.skin == 0)
-            {
-                Settings.LSettings.skin = 1;
-                (Resources["Skin"] as Storyboard).Begin();
-            }
-            else
-            {
-                Settings.LSettings.skin = 0;
-                (Resources["unSkin"] as Storyboard).Begin();
-            }
         }
     }
 }
