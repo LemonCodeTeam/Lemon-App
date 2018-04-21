@@ -74,6 +74,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\AipSdk.dll</HintPath>
     </Reference>
+    <Reference Include="Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Lierda.WPFHelper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Newtonsoft.Json.dll</HintPath>
@@ -205,6 +210,9 @@
   <ItemGroup>
     <Content Include="AipSdk.dll" />
     <Resource Include="icon.ico" />
+    <Content Include="Lierda.WPFHelper.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Newtonsoft.Json.dll" />
     <Content Include="WPFMediaKit.dll" />
   </ItemGroup>

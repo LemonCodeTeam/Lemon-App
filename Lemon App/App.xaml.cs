@@ -1,12 +1,7 @@
 ﻿using LemonLibrary;
+using Lierda.WPFHelper;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -17,6 +12,12 @@ namespace Lemon_App
     /// </summary>
     public partial class App : Application
     {
+        LierdaCracker cracker = new LierdaCracker();
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            cracker.Cracker();
+            base.OnStartup(e);
+        }
         public App() {
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

@@ -479,6 +479,7 @@ namespace LemonLibrary
                 webClient.Headers.Add("Referer", "http://lab.mkblog.cn/music/");
                 webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
                 byte[] responseData = webClient.UploadData(url, "POST", postData);
+                webClient.Dispose();
                 return Encoding.UTF8.GetString(responseData);
             }
             catch { return ""; }

@@ -16,8 +16,10 @@ using System.Windows.Shapes;
 using static LemonLibrary.InfoHelper;
 /*
  TODO: 
-    no Image.
-    歌词解析(我的天哪，怎么总是出错。我。。。) 错误mid:002xZCKB4H5m5G 千本樱
+    ?no Image.
+    .changer the download file :
+            user cache: D:/Lemon App/Cache/User/username/music'pro'gd....
+            music /download   changerst.
      */
 namespace Lemon_App
 {
@@ -63,7 +65,7 @@ namespace Lemon_App
             {
                 OpenLoading();
                 var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
-                ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
+                ds.Tick += delegate { Triggers.Clear(); GC.Collect(); UIHelper.G(Page); };
                 ds.Start();
                 if (System.IO.File.Exists(Settings.USettings.UserImage))
                 {
@@ -207,6 +209,15 @@ namespace Lemon_App
                             var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
                             kss.MouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(kss);
+                        });
+                    }
+                    foreach (var d in (await ml.GetRadioList()).Hot)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            var a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
+                            a.MouseDown += GetRadio;
+                            RadioItemsList.Children.Add(a);
                         });
                     }
                     Dispatcher.Invoke(() => { CloseLoading(); });
