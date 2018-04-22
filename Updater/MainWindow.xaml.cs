@@ -44,12 +44,36 @@ namespace Updata
             Process.Start("https://www.visualstudio.com/zh-hans/downloads/");
         }
 
-        private void Storyboard_Completed(object sender, EventArgs e)
+        private async void Storyboard_Completed(object sender, EventArgs e)
         {
             tb.Text = "正在连接至服务器...";
-            var c = new WebClient();
-            c.DownloadFileAsync(new Uri("https://github.com/TwilightLemon/Lemon-App/archive/master.zip"), "./api.zip");
-            c.DownloadProgressChanged += ProgressChangedAsync;
+            float percent = 0;
+                HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create("https://codeload.github.com/TwilightLemon/Lemon-App/zip/master");
+                Myrq.Host = "codeload.github.com";
+                Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
+                Myrq.Headers.Add("Upgrade-Insecure-Requests: 1");
+                Myrq.Referer = "https://github.com/TwilightLemon/Lemon-App";
+                Myrq.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+                Myrq.Headers.Add("Accept-Language: zh-CN,zh;q=0.9");
+                Myrq.Headers.Add("Cookie: _octo=GH1.1.1248683057.1517749075; _ga=GA1.2.90314030.1517749075; logged_in=no; _gat=1");
+                HttpWebResponse myrp = (HttpWebResponse)await Myrq.GetResponseAsync();
+                long totalBytes = myrp.ContentLength;
+                Stream st = myrp.GetResponseStream();
+                Stream so = new FileStream("./api.zip", FileMode.Create);
+                long totalDownloadedByte = 0;
+                byte[] by = new byte[1024];
+                int osize = await st.ReadAsync(by, 0, by.Length);
+                while (osize > 0)
+                {
+                    totalDownloadedByte = osize + totalDownloadedByte;
+                    await so.WriteAsync(by, 0, osize);
+                    osize = await st.ReadAsync(by, 0, by.Length);
+                    percent = (float)totalDownloadedByte / totalBytes * 100;
+                    tb.Text = "正在接收数据..." + percent.ToString() + "%";
+                }
+                so.Close();
+                st.Close();
+                await RunAsync();
         }
         public async Task RunAsync() {
             tb.Text = "正在处理数据...";
@@ -81,13 +105,6 @@ namespace Updata
             Process.Start(AppDomain.CurrentDomain.BaseDirectory+"Lemon App.exe");
             (Resources["Close"] as Storyboard).Begin();
         }
-        private async void ProgressChangedAsync(object sender, DownloadProgressChangedEventArgs e)
-        {
-                tb.Text = "正在接收数据..." + e.ProgressPercentage + "%";
-            if (e.ProgressPercentage == 100)
-            { await RunAsync(); (sender as WebClient).Dispose(); }
-        }
-
         private void Storyboard_Completed_1(object sender, EventArgs e)
         {
             Environment.Exit(0);
