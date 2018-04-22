@@ -80,20 +80,13 @@ namespace Updata
             try { System.IO.Compression.ZipFile.ExtractToDirectory("./api.zip", "./api/"); } catch { }
             await Task.Delay(2000);
             tb.Text = "正在编译数据...";
-            string strInput = "MSBuild.exe " + AppDomain.CurrentDomain.BaseDirectory + @"api\Lemon-App-master";
             Process p = new Process();
-            p.StartInfo.FileName = "cmd.exe";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardInput = true;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.FileName = mkFilePath.Text;
+            p.StartInfo.Arguments = AppDomain.CurrentDomain.BaseDirectory + @"api\Lemon-App-master";
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            p.StandardInput.WriteLine("cd "+ System.IO.Path.GetDirectoryName(mkFilePath.Text));
-            p.StandardInput.WriteLine(strInput + "&exit");
-            p.StandardInput.AutoFlush = true;
+            p.WaitForExit(); 
             p.Close();
-            await Task.Delay(5000);
             tb.Text = "处理完成，请稍等...";
             DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory+@"api\Lemon-App-master\Lemon App\bin\Debug\");
             FileInfo[] fil = dir.GetFiles();
