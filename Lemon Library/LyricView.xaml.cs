@@ -36,7 +36,6 @@ namespace LemonLibrary
         #region 
         public Dictionary<double, LrcModel> Lrcs = new Dictionary<double, LrcModel>();
         public LrcModel foucslrc { get; set; }
-        public double tbWidth { get; set; }
 
         public SolidColorBrush NoramlLrcColor = new SolidColorBrush(Colors.Black);
         public SolidColorBrush FoucsLrcColor = new SolidColorBrush(Colors.OrangeRed);
@@ -66,7 +65,6 @@ namespace LemonLibrary
                     string lrc = str.Split(']')[1];
                     TextBlock c_lrcbk = new TextBlock();
                     c_lrcbk.Foreground = NoramlLrcColor;
-                    c_lrcbk.Width = tbWidth;
                     c_lrcbk.TextWrapping = TextWrapping.Wrap;
                     c_lrcbk.TextAlignment = TextAlignment;
                     c_lrcbk.Text = lrc.Replace("^","\n").Replace("//","").Replace("null","");

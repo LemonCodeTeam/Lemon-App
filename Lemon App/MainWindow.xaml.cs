@@ -77,7 +77,6 @@ namespace Lemon_App
                 lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(78, 183, 251));
                 lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(254, 254, 254));
                 lv.TextAlignment = TextAlignment.Left;
-                lv.tbWidth = 470;
                 ly.Child = lv;
                 ml = new MusicLib(lv);
                 if (Settings.USettings.Playing.MusicName != "")
