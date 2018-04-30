@@ -17,6 +17,7 @@ using static LemonLibrary.InfoHelper;
 /*
  TODO: 
     ?no Image.
+    GD AutoResurt:
     .changer the download file :
             user cache: D:/Lemon App/Cache/User/username/music'pro'gd....
             music /download   changerst.
@@ -168,6 +169,8 @@ namespace Lemon_App
                 CloseLoading();
             };
             ani.Begin();
+
+
         }
         string SingerKey1 = "all_all_";
         string SingerKey2 = "all";
