@@ -98,9 +98,9 @@ namespace LemonLibrary
         public async Task<string> GetUrlAsync(string mid)
         {
             string guid = "20D919A4D7700FBC424740E8CED80C5F";
-            string ioo = await HttpHelper.GetWebAsync($"http://59.37.96.220/base/fcgi-bin/fcg_musicexpress2.fcg?version=12&miniversion=92&key=19914AA57A96A9135541562F16DAD6B885AC8B8B5420AC567A0561D04540172E&guid={guid}");
-            string vkey = TextHelper.XtoYGetTo(ioo, "key=\"", "\" speedrpttype", 0);
-            return $"http://dl.stream.qqmusic.qq.com/streamoc.music.tc.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}";
+            string ioo = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=5381&loginUin=2728578956&hostUin=2728578956&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=2728578956&songmid={mid}&filename=M500{mid}.mp3&guid={guid}");
+            string vkey = JObject.Parse(ioo)["data"]["items"][0]["vkey"].ToString();
+            return $"http://dl.stream.qqmusic.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}&uin=2728578956&fromtag=66";
         }
         public string GetWyUrlAsync(string mid)
         {
