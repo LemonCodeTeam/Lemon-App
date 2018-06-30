@@ -53,21 +53,21 @@ namespace Lemon_App
         public async Task LoginAsync(string Cookie)
         {
             var qq = LemonLibrary.TextHelper.XtoYGetTo(Cookie, "uin=o", ";", 0);
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
-                Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
+            if (File.Exists(InfoHelper.GetPath() + qq + ".st"))
+                Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
             else LemonLibrary.Settings.SaveSettings(qq);
             var sl = TextHelper.XtoYGetTo(await HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
             JObject o = JObject.Parse(sl);
-            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
-            var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg");
+            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", InfoHelper.GetPath() + qq + ".jpg");
+            var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + qq + ".jpg");
             this.Dispatcher.Invoke(new Action(() => { TX.Background = new ImageBrush(image.ToImageSource()); }));
             Settings.USettings.UserName = o[qq][6].ToString();
-            Settings.USettings.UserImage = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
+            Settings.USettings.UserImage = InfoHelper.GetPath() + qq + ".jpg";
             Settings.USettings.LemonAreeunIts = qq;
             Settings.SaveSettings();
             Settings.LSettings.NAME = qq;
             Settings.LSettings.RNBM = (Boolean)RM.IsChecked;
-            Settings.LSettings.TX = AppDomain.CurrentDomain.BaseDirectory + qq + ".jpg";
+            Settings.LSettings.TX = InfoHelper.GetPath() + qq + ".jpg";
             Settings.SaveLoadSettings();
             Dispatcher.Invoke(new Action(() => { (Resources["OnLoaded1"] as Storyboard).Begin(); }));
             tr.Start();
@@ -139,9 +139,9 @@ namespace Lemon_App
         {
             if (Email.Text.Count() >= 5)
             {
-                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + Email.Text + ".jpg"))
+                if (System.IO.File.Exists(InfoHelper.GetPath() + Email.Text + ".jpg"))
                 {
-                    var image = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + Email.Text + ".jpg");
+                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + Email.Text + ".jpg");
                     TX.Background = new ImageBrush(image.ToImageSource());
                     TX.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2)));
                 }
@@ -204,8 +204,8 @@ namespace Lemon_App
                     var result = double.Parse(client.FaceMatch(images).First.First.Last.Last.First.ToString());
                     if (result >= 90)
                     {
-                        if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
-                            Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
+                        if (File.Exists(InfoHelper.GetPath() + Settings.LSettings.NAME + ".st"))
+                            Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
                         else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME + ".st");
                         Dispatcher.Invoke(new Action(() =>
                         {
@@ -250,8 +250,8 @@ namespace Lemon_App
                 else { if (oldtext != "已开启大写锁定") rk.Text = oldtext; else { rk.Text = ""; oldtext = ""; } }
                 var c = new Task(new Action(delegate
                  {
-                     if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"))
-                         Settings.LoadLSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings.st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string("Settings.st")))));
+                     if (File.Exists(InfoHelper.GetPath() + "Settings.st"))
+                         Settings.LoadLSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + "Settings.st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string("Settings.st")))));
                      else LemonLibrary.Settings.SaveLoadSettings();
                  }));
                 c.Start();
@@ -260,8 +260,8 @@ namespace Lemon_App
                 {
                     new Task(new Action(delegate
                     {
-                        if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"))
-                            Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
+                        if (File.Exists(InfoHelper.GetPath() + Settings.LSettings.NAME + ".st"))
+                            Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + Settings.LSettings.NAME + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(Settings.LSettings.NAME + ".st")))));
                         else LemonLibrary.Settings.SaveSettings(Settings.LSettings.NAME);
                     })).Start();
                     (Resources["OnLoaded1"] as Storyboard).Begin();

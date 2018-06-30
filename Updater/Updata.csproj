@@ -96,5 +96,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lemon Library\LemonLibrary.csproj">
+      <Project>{9DC3DCAC-C7B4-41BA-BE54-6EAB5FE74FD1}</Project>
+      <Name>LemonLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

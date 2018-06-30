@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLibrary;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -72,20 +73,20 @@ namespace Updata
             tb.Text = "正在编译数据...";
             Process p = new Process();
             p.StartInfo.FileName = mkFilePath.Text;
-            p.StartInfo.Arguments = AppDomain.CurrentDomain.BaseDirectory + @"api\Lemon-App-master";
+            p.StartInfo.Arguments = InfoHelper.GetPath() + @"api\Lemon-App-master";
             p.StartInfo.CreateNoWindow = true;
             p.Start();
             p.WaitForExit(); 
             p.Close();
             tb.Text = "处理完成，请稍等...";
-            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory+@"api\Lemon-App-master\Lemon App\bin\Debug\");
+            DirectoryInfo dir = new DirectoryInfo(InfoHelper.GetPath()+@"api\Lemon-App-master\Lemon App\bin\Debug\");
             FileInfo[] fil = dir.GetFiles();
             DirectoryInfo[] dii = dir.GetDirectories();
             foreach (FileInfo f in fil)
-                File.Copy(f.FullName, AppDomain.CurrentDomain.BaseDirectory+ System.IO.Path.GetFileName(f.FullName),true);
+                File.Copy(f.FullName, InfoHelper.GetPath()+ System.IO.Path.GetFileName(f.FullName),true);
             tb.Text = "完成！";
             await Task.Delay(2000);
-            Process.Start(AppDomain.CurrentDomain.BaseDirectory+"Lemon App.exe");
+            Process.Start(InfoHelper.GetPath()+"Lemon App.exe");
             (Resources["Close"] as Storyboard).Begin();
         }
         private void Storyboard_Completed_1(object sender, EventArgs e)

@@ -16,7 +16,7 @@ namespace LemonLibrary
         public static void SaveSettings(string id = "id")
         {
             if (id == "id") id = Settings.USettings.LemonAreeunIts;
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+            File.WriteAllText(InfoHelper.GetPath() + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
         }
         public static void LoadUSettings(string data)
         {
@@ -84,7 +84,7 @@ namespace LemonLibrary
         }
         public static void SaveLoadSettings()
         {
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "Settings.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.LSettings))), TextHelper.MD5.EncryptToMD5string("Settings.st")));
+            File.WriteAllText(InfoHelper.GetPath() + "Settings.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.LSettings))), TextHelper.MD5.EncryptToMD5string("Settings.st")));
         }
         public class UserSettings {
             public UserSettings() {

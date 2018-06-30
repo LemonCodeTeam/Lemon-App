@@ -26,23 +26,23 @@ namespace Lemon_App
                 SongName = songname;
                 Singer = singer;
                 Image = img;
-                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg"))
+                if (!File.Exists(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg"))
                 {
                     WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg");
+                    v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/Data" + id + ".jpg");
                     v.DownloadFileCompleted += delegate
                     {
                         v.Dispose();
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg", UriKind.Relative)));
-                        var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg").GetMajorColor();
+                        im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg", UriKind.Relative)));
+                        var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg").GetMajorColor();
                         var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
                         back.Background = new SolidColorBrush(color);
                     };
                 }
                 else
                 {
-                    im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg", UriKind.Relative)));
-                    var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Data" + id + ".jpg").GetMajorColor();
+                    im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg", UriKind.Relative)));
+                    var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg").GetMajorColor();
                     var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
                     back.Background = new SolidColorBrush(color);
                 }

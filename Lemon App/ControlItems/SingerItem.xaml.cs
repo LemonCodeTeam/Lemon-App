@@ -33,45 +33,45 @@ namespace Lemon_App
                 img = ig;
                 singer = sing;
                 name.Text = singer;
-                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg"))
+                if (!File.Exists(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg"))
                 {
                     WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri(img), AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg");
+                    v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg");
                     v.DownloadFileCompleted += delegate
                     {
                         v.Dispose();
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
-                        var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg").GetMajorColor();
+                        im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
+                        var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg").GetMajorColor();
                         var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
                         back.Background = new SolidColorBrush(color);
                     };
                 }
                 else
                 {
-                    im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
-                    var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/Singer" + sing + ".jpg").GetMajorColor();
+                    im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
+                    var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg").GetMajorColor();
                     var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
                     back.Background = new SolidColorBrush(color);
                 }
             }
             catch
             {
-                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg"))
+                if (!File.Exists(InfoHelper.GetPath() + "Cache/SingerNo.jpg"))
                 {
                     WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"), AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg");
+                    v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"), InfoHelper.GetPath() + "Cache/SingerNo.jpg");
                     v.DownloadFileCompleted += delegate
                     {
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg", UriKind.Relative)));
-                        var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg").GetMajorColor();
+                        im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/SingerNo.jpg", UriKind.Relative)));
+                        var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg").GetMajorColor();
                         var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
                         back.Background = new SolidColorBrush(color);
                     };
                 }
                 else
                 {
-                    im.Background = new ImageBrush(new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg", UriKind.Relative)));
-                    var dt = new System.Drawing.Bitmap(AppDomain.CurrentDomain.BaseDirectory + "Cache/SingerNo.jpg").GetMajorColor();
+                    im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/SingerNo.jpg", UriKind.Relative)));
+                    var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg").GetMajorColor();
                     var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
                     back.Background = new SolidColorBrush(color);
                 }

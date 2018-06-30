@@ -646,6 +646,10 @@ namespace LemonLibrary
         }
     }
     public class InfoHelper {
+        public static string GetPath()
+        {
+            return Directory.GetLogicalDrives()[1]+"\\LemonAppData\\";
+        }
         ////////Music Helper////////
         public class Music
         {
@@ -981,7 +985,6 @@ namespace LemonLibrary
 
         #endregion
     }
-
     public class PopopHelper
     {
         public static DependencyObject GetPopupPlacementTarget(DependencyObject obj)

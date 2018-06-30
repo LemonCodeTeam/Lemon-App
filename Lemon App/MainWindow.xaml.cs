@@ -145,7 +145,7 @@ namespace Lemon_App
                                 OpenLoading();
                                 var g = seb as TopControl;
                                 (Resources["ClickTop"] as Storyboard).Begin();
-                                var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\Top" + g.topID + ".jpg";
+                                var file = InfoHelper.GetPath() + "Cache\\Top" + g.topID + ".jpg";
                                 if (!System.IO.File.Exists(file))
                                 {
                                     var s = new WebClient();
@@ -427,7 +427,7 @@ namespace Lemon_App
             OpenLoading();
             var sx = new Task(new Action(async delegate {
                 var dt = await ml.GetGDAsync(id);
-                var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\GD" + id + ".jpg";
+                var file = InfoHelper.GetPath() + "Cache\\GD" + id + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();
@@ -599,7 +599,7 @@ namespace Lemon_App
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DownloadList.Children.Clear();
-            filepath.Text = AppDomain.CurrentDomain.BaseDirectory + "Download";
+            filepath.Text = InfoHelper.GetPath() + "Download";
             foreach (DataItem x in DataItemsList.Children)
                 DownloadList.Children.Add(new CheckBox() { Width = 370, Content = x.SongName + " - " + x.Singer, Uid = x.ID, FocusVisualStyle = null, Foreground = cb_color.Foreground, Style = cb_color.Style });
         }
@@ -617,7 +617,7 @@ namespace Lemon_App
             var xs = new Task(new Action(async delegate
             {
                 var dt = await ml.SearchMusicAsync(key);
-                var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\Search" + key + ".jpg";
+                var file = InfoHelper.GetPath() + "Cache\\Search" + key + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();
@@ -923,7 +923,7 @@ namespace Lemon_App
                     DataItemsList.Children.Clear();
                 });
                 await Task.Delay(500);
-                var file = AppDomain.CurrentDomain.BaseDirectory + "Cache\\GD" + dt.id + ".jpg";
+                var file = InfoHelper.GetPath() + "Cache\\GD" + dt.id + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();

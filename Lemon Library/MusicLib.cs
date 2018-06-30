@@ -22,15 +22,15 @@ namespace LemonLibrary
 {
     public class MusicLib {
         public MusicLib(LyricView LV) {
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Download") == false)
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Download");
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Cache") == false)
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Cache");
+            if (Directory.Exists(GetPath() + "Download") == false)
+                Directory.CreateDirectory(GetPath() + "Download");
+            if (Directory.Exists(GetPath() + "Cache") == false)
+                Directory.CreateDirectory(GetPath() + "Cache");
             lv = LV;
         }
         public MusicLib() {
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download") == false)
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + $@"Download");
+            if (Directory.Exists(GetPath() + $@"Download") == false)
+                Directory.CreateDirectory(GetPath() + $@"Download");
         }
         public Dictionary<string, string> mldata = new Dictionary<string, string>();// mid,name
         public MediaPlayer m = new MediaPlayer();
@@ -111,7 +111,7 @@ namespace LemonLibrary
             string name = mldata[mid];
             if (ispos) name = "Wy" + name + ".mp3";
             else name = name + ".m4a";
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}"))
+            if (!File.Exists(GetPath() + $@"Download/{name}"))
             {
                 string musicurl = "";
                 if (ispos)
@@ -119,7 +119,7 @@ namespace LemonLibrary
                 else musicurl=GetUrlAsync(mid);
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate {
-                    m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}", UriKind.Absolute));
+                    m.Open(new Uri(GetPath() + $@"Download/{name}", UriKind.Absolute));
                     if (doesplay)
                         m.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -127,7 +127,7 @@ namespace LemonLibrary
                         x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy","");
                     }));
                 };
-                dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}");
+                dc.DownloadFileAsync(new Uri(musicurl), GetPath() + $@"Download/{name}");
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
@@ -137,7 +137,7 @@ namespace LemonLibrary
             }
             else
             {
-                m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}", UriKind.Absolute));
+                m.Open(new Uri(GetPath() + $@"Download/{name}", UriKind.Absolute));
                 if (doesplay)
                     m.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -162,7 +162,7 @@ namespace LemonLibrary
         public string GetLyric(string McMind)
         {
             string name = mldata[McMind];
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc"))
+            if (!File.Exists(GetPath() + $@"Download/{name}.lrc"))
             {
                 WebClient c = new WebClient();
                 c.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36");
@@ -240,13 +240,13 @@ namespace LemonLibrary
                         }
                         catch { }
                     }
-                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc", LyricData);
+                    File.WriteAllText(GetPath() + $@"Download/{name}.lrc", LyricData);
                     return LyricData;
                 }
             }
             else
             {
-                return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.lrc");
+                return File.ReadAllText(GetPath() + $@"Download/{name}.lrc");
             }
         }
         public async Task<List<MusicTop>> GetTopIndexAsync() {
@@ -596,7 +596,7 @@ namespace LemonLibrary
         public async Task<string> GetLyricByWYAsync(string name)
         {
             string id = GetWYIdByName(name);
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/Wy{name}.lrc"))
+            if (!File.Exists(GetPath() + $@"Download/Wy{name}.lrc"))
             {
                 string s = await HttpHelper.GetWebAsync($"http://music.163.com/api/song/lyric?os=pc&id={id}&lv=-1&kv=-1&tv=-1");
                 Console.WriteLine(s);
@@ -667,13 +667,13 @@ namespace LemonLibrary
                         }
                         catch { }
                     }
-                    File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/Wy{name}.lrc", LyricData);
+                    File.WriteAllText(GetPath() + $@"Download/Wy{name}.lrc", LyricData);
                     return LyricData;
                 }
             }
             else
             {
-                return File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + $@"Download/Wy{name}.lrc");
+                return File.ReadAllText(GetPath() + $@"Download/Wy{name}.lrc");
             }
         }
     }
