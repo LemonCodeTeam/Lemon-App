@@ -95,12 +95,12 @@ namespace LemonLibrary
             }
             return dt;
         }
-        public async Task<string> GetUrlAsync(string mid)
+        public string GetUrlAsync(string mid)
         {
-            string guid = "20D919A4D7700FBC424740E8CED80C5F";
-            string ioo = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=5381&loginUin=2728578956&hostUin=2728578956&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=2728578956&songmid={mid}&filename=M500{mid}.mp3&guid={guid}");
-            string vkey = JObject.Parse(ioo)["data"]["items"][0]["vkey"].ToString();
-            return $"http://dl.stream.qqmusic.qq.com/M500{mid}.mp3?vkey={vkey}&guid={guid}&uin=2728578956&fromtag=66";
+          //  string guid = "20D919A4D7700FBC424740E8CED80C5F";
+            //string ioo = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=5381&loginUin=2728578956&hostUin=2728578956&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=2728578956&songmid={mid}&filename=M500{mid}.mp3&guid={guid}");
+        //    string vkey = JObject.Parse(ioo)["data"]["items"][0]["vkey"].ToString();
+            return $"http://ws.stream.qqmusic.qq.com/C100{mid}.m4a?fromtag=0&guid=126548448";
         }
         public string GetWyUrlAsync(string mid)
         {
@@ -109,16 +109,17 @@ namespace LemonLibrary
         public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s,bool ispos, bool doesplay = true)
         {
             string name = mldata[mid];
-            if (ispos) name = "Wy" + name;
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3"))
+            if (ispos) name = "Wy" + name + ".mp3";
+            else name = name + ".m4a";
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}"))
             {
                 string musicurl = "";
                 if (ispos)
                     musicurl=GetWyUrlAsync(GetWYIdByName(name));
-                else musicurl=await GetUrlAsync(mid);
+                else musicurl=GetUrlAsync(mid);
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate {
-                    m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
+                    m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}", UriKind.Absolute));
                     if (doesplay)
                         m.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -126,7 +127,7 @@ namespace LemonLibrary
                         x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy","");
                     }));
                 };
-                dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3");
+                dc.DownloadFileAsync(new Uri(musicurl), AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}");
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e) {
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
@@ -136,7 +137,7 @@ namespace LemonLibrary
             }
             else
             {
-                m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}.mp3", UriKind.Absolute));
+                m.Open(new Uri(AppDomain.CurrentDomain.BaseDirectory + $@"Download/{name}", UriKind.Absolute));
                 if (doesplay)
                     m.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -147,6 +148,7 @@ namespace LemonLibrary
             if (openlyric)
             {
                 if (ispos) {
+                    name = TextHelper.XtoYGetTo("[" + name, "[", ".mp3", 0);
                     var dt =await GetLyricByWYAsync(name);
                     lv.LoadLrc(dt);
                 }
@@ -311,7 +313,7 @@ namespace LemonLibrary
             return data;
         }
         public async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync() {
-            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0",Encoding.UTF8));
             var data = new MusicFLGDIndexItemsList();
             data.Hot.Add(new MusicFLGDIndexItems { id = "10000000", name = "全部" });
             int i = 0;

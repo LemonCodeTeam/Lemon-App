@@ -660,14 +660,12 @@ namespace LemonLibrary
             public string Name { set; get; }
             public string Photo { set; get; }
         }
-
         public class MusicGD
         {
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
         }
-
         public class MusicTop
         {
             public string Name { set; get; }
@@ -710,7 +708,6 @@ namespace LemonLibrary
             public string name { get; set; }
             public string id { get; set; }
         }
-
         public class MusicGData {
             public List<Music> Data { get; set; } = new List<Music>();
             public string name { get; set; }

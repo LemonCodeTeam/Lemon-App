@@ -1917,7 +1917,7 @@
             <Grid x:Name="RadioIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="在线电台" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
                 <WrapPanel x:Name="RadioIndexList" Margin="30,90,30,0" VerticalAlignment="Top">
-                    <RadioButton Content="热门" Uid="0" IsChecked="True" Margin="20,0,0,0" Checked="RadioPageChecked"/>
+                    <RadioButton x:Name="RadioMe" Content="热门" Uid="0" Margin="20,0,0,0" Checked="RadioPageChecked"/>
                     <RadioButton Content="下午" Uid="1" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
                     <RadioButton Content="情感" Uid="2" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
                     <RadioButton Content="主题" Uid="3" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
@@ -1931,7 +1931,7 @@
                     <WrapPanel x:Name="RadioItemsList"/>
                 </ScrollViewer>
             </Grid>
-            <Grid x:Name="MineIndexPage" Loaded="UserControl_Loaded" Visibility="Collapsed">
+            <Grid x:Name="MineIndexPage" Visibility="Collapsed">
                 <Grid Width="10" Height="10">
                     <Popup x:Name="popup" lemonlib:PopopHelper.PopupPlacementTarget="{Binding ElementName=border}" Width="280" Height="120" AllowsTransparency="True" PopupAnimation="Fade" Placement="Top" HorizontalOffset="-125" VerticalOffset="50">
                         <Border x:Name="border" Background="White" CornerRadius="5" BorderBrush="#FFC9C9C9" BorderThickness="1" Margin="10">
@@ -1949,8 +1949,8 @@
                     <Path x:Name="patc" StrokeThickness="0" Margin="0,5,5,0" Fill="Gray" Data="M22,11c0-6.075-4.925-11-11-11C4.925,0,0,4.925,0,11c0,6.075,4.925,11,11,11  C17.075,22,22,17.075,22,11z M11.25,5c0.69,0,1.25,0.56,1.25,1.25c0,0.69-0.56,1.25-1.25,1.25C10.56,7.5,10,6.94,10,6.25  C10,5.56,10.56,5,11.25,5z M8.5,16.5H10v-7H8.5v-1h4v8H14v1H8.5V16.5z" Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="Fill" />
                 </Grid>
                 <Grid Height="150" Margin="0,0,0,100">
-                    <Border x:Name="TX" Height="100" Margin="0,10,0,0" VerticalAlignment="Top" CornerRadius="125" MouseDown="TX_MouseDown" BorderThickness="10" Width="100" BorderBrush="#99FFFFFF"/>
-                    <TextBlock x:Name="NM" Height="28.313" Margin="10,115,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF494949" FontSize="20" TextAlignment="Center"><Run Text="Lemon User"/></TextBlock>
+                    <Border x:Name="TX" Height="100" Margin="0,10,0,0" VerticalAlignment="Top" CornerRadius="125" MouseDown="TX_MouseDown" BorderThickness="10" Width="100" BorderBrush="#99FFFFFF" Background="{Binding Background, ElementName=UserTX}"/>
+                    <TextBlock x:Name="NM" Height="28.313" Margin="10,115,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF494949" FontSize="20" TextAlignment="Center" Text="{Binding Text, ElementName=UserName}"/>
                 </Grid>
                 <Grid HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top" Margin="0,0,30,0" Background="#00000000" MouseDown="Grid_MouseDown">
                     <Path StrokeThickness="0" Margin="0,5,5,0" Fill="Gray" Data="M32.001,3.56C16.317,3.56,3.56,16.317,3.56,32c0,15.683,12.757,28.44,28.442,28.44   C47.683,60.44,60.44,47.683,60.44,32C60.44,16.317,47.683,3.56,32.001,3.56z M24.227,26.593l0.057-0.063   c0.232-0.168,0.345-0.432,0.303-0.708c-0.573-3.446-0.197-4.883-0.07-5.244c1.001-3.072,4.143-4.493,4.76-4.745   c0.131-0.052,0.374-0.125,0.62-0.163l0.073-0.017l0.505-0.027l0.004,0.031l0.117-0.011c0.104-0.011,0.204-0.025,0.329-0.051   l0.111-0.024c0.099,0.001,1.322,0.156,3.139,0.713l1.263,0.435c2.31,0.682,3.372,1.951,3.569,2.207   c1.85,2.095,1.354,5.259,0.896,6.958c-0.052,0.2-0.021,0.406,0.092,0.577l0.105,0.129c0.134,0.182,0.254,0.884-0.148,2.376   c-0.076,0.453-0.243,0.821-0.492,1.069c-0.092,0.101-0.156,0.229-0.179,0.374c-0.625,3.665-3.909,7.764-7.37,7.764   c-2.937,0-6.289-3.771-6.892-7.761c-0.023-0.149-0.085-0.28-0.188-0.393c-0.251-0.26-0.411-0.635-0.508-1.19   C24.029,27.785,24,26.944,24.227,26.593z M17.634,42.485c0.127-0.161,0.837-0.993,2.273-1.541c1.263-0.388,4.384-1.425,6.09-2.661   c0.08-0.044,0.159-0.127,0.224-0.194c0.158-0.17,0.399-0.429,0.685-0.694l0.159-0.151l0.162,0.152   c1.503,1.417,3.166,2.194,4.683,2.194c1.594,0,3.237-0.69,4.756-1.996l0.119-0.103l0.322,0.157   c0.288,0.264,0.786,0.626,1.018,0.736l0.296,0.145l-0.031,0.032l0.132,0.08c0.28,0.169,0.585,0.333,0.943,0.51   c0.361,0.159,0.663,0.277,0.976,0.379c0.264,0.086,1.668,0.558,3.265,1.296l0.305,0.092c1.562,0.598,2.256,1.429,2.325,1.516   c1.854,2.748,2.565,7.876,2.829,10.733c-4.843,3.933-10.935,6.098-17.162,6.098c-6.23,0-12.323-2.165-17.164-6.099   C15.098,50.316,15.803,45.204,17.634,42.485z" Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="Fill" />
@@ -2082,7 +2082,7 @@
                 <Label x:Name="TopBtn" Content="排行" Margin="96.5,247,33.5,0" VerticalAlignment="Top" Foreground="#FF4EB7FB"/>
                 <Label x:Name="SingerBtn" Content="歌手" Margin="96.5,287,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="SingerBtn_MouseDown"/>
                 <Label x:Name="ZJBtn" Content="专辑" Margin="96.5,327,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="ZJBtn_MouseDown"/>
-                <Label x:Name="RadioBtn" Content="电台" Margin="96.5,367,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE"/>
+                <Label x:Name="RadioBtn" Content="电台" Margin="96.5,367,33.5,0" VerticalAlignment="Top" Foreground="#FF93A1AE" MouseDown="RadioBtn_MouseDown"/>
                 <Border HorizontalAlignment="Left" Height="15" Margin="71.5,415,0,0" VerticalAlignment="Top" Width="15">
                     <Path Data="M461.1,887.1C461.1,887.1 210.6,784 98.3,552.5 46.6,446 46.3,303.3 147,202.1 247.6,101 410.8,100.9 511.4,202.1 612,101 775.2,101 875.8,202.1 976.5,303.3 979.1,458 924.5,552.5 789,787.1 570.3,885.1 570.3,885.1 540.5,901.4 491.4,901.9 461.1,887.1z M481.2,845.7C498.5,854.2,531.9,853.6,548,844.7L551.6,843C554.3,841.8 560.1,839 568.6,834.5 583.2,826.7 599.6,817.2 617.4,805.9 668.4,773.3 719.5,732.8 767.1,684 812.3,637.7 852.1,586.3 884.9,529.5 934.9,442.9 921.8,313.3 843.4,234.6 760.7,151.5 626.8,151.5 544.2,234.6L511.6,267.4 479,234.6C396.3,151.5 262.4,151.5 179.7,234.6 101.7,313 90.1999999999998,430.3 139.7,532.4 173.3,601.5 222.5,663.2 283.6,717.4 326.6,755.6 372.8,787.8 419,814.1 435.2,823.3 450,831 463.3,837.4 471.1,841.1 476.3,843.5 478.8,844.5L481.2,845.7z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=LikeBtn}" StrokeThickness="0"/>
                 </Border>

@@ -1,7 +1,10 @@
 ﻿using LemonLibrary;
 using Lierda.WPFHelper;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -44,6 +47,22 @@ namespace Lemon_App
             sw.Flush();
             sw.Close();
             fs.Close();
+        }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if (e.Args.Length == 0)
+                Shutdown();
+            else {
+                var qq = e.Args[0];
+                new Task(new Action(delegate
+                {
+                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"))
+                        Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
+                    else Settings.SaveSettings(qq);
+                    Dispatcher.Invoke(new Action(delegate { new MainWindow().Show(); }));
+                })).Start();
+            }
         }
     }
 }

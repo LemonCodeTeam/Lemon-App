@@ -58,7 +58,8 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -76,8 +77,7 @@
     </Reference>
     <Reference Include="Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Lierda.WPFHelper.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Lib\Lierda.WPFHelper.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -111,13 +111,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataItem.xaml.cs">
+    <Compile Include="ControlItems\DataItem.xaml.cs">
       <DependentUpon>DataItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="FC.xaml.cs">
       <DependentUpon>FC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FLGDIndexItem.xaml.cs">
+    <Compile Include="ControlItems\FLGDIndexItem.xaml.cs">
       <DependentUpon>FLGDIndexItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginWindow.xaml.cs">
@@ -126,19 +126,19 @@
     <Compile Include="Msg.xaml.cs">
       <DependentUpon>Msg.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlControl.xaml.cs">
+    <Compile Include="ControlItems\PlControl.xaml.cs">
       <DependentUpon>PlControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioItem.xaml.cs">
+    <Compile Include="ControlItems\RadioItem.xaml.cs">
       <DependentUpon>RadioItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SingerItem.xaml.cs">
+    <Compile Include="ControlItems\SingerItem.xaml.cs">
       <DependentUpon>SingerItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TopControl.xaml.cs">
+    <Compile Include="ControlItems\TopControl.xaml.cs">
       <DependentUpon>TopControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="DataItem.xaml">
+    <Page Include="ControlItems\DataItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -146,7 +146,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FLGDIndexItem.xaml">
+    <Page Include="ControlItems\FLGDIndexItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -170,19 +170,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlControl.xaml">
+    <Page Include="ControlItems\PlControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadioItem.xaml">
+    <Page Include="ControlItems\RadioItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SingerItem.xaml">
+    <Page Include="ControlItems\SingerItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TopControl.xaml">
+    <Page Include="ControlItems\TopControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -208,13 +208,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AipSdk.dll" />
-    <Resource Include="icon.ico" />
-    <Content Include="Lierda.WPFHelper.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Newtonsoft.Json.dll" />
-    <Content Include="WPFMediaKit.dll" />
+    <Content Include="Lib\AipSdk.dll" />
+    <Content Include="Lib\Lierda.WPFHelper.dll" />
+    <Content Include="Lib\Newtonsoft.Json.dll" />
+    <Content Include="Lib\WPFMediaKit.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lemon Library\LemonLibrary.csproj">
