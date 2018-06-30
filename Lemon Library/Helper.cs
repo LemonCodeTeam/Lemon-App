@@ -489,7 +489,7 @@ namespace LemonLibrary
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
             Stream responseStream = response.GetResponseStream();
-            Stream stream = new FileStream(path, FileMode.Create);
+            Stream stream = new FileStream(path, FileMode.Create,FileAccess.ReadWrite);
             byte[] bArr = new byte[1024];
             int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
             while (size > 0)
