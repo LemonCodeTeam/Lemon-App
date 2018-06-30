@@ -3,6 +3,7 @@ using Lierda.WPFHelper;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -53,23 +54,14 @@ namespace Lemon_App
         {
             if (e.Args.Length == 0)
                 Shutdown();
-            else {
+            else
+            {
                 var qq = e.Args[0];
-                new Task(new Action(async delegate
-                {
-                    if (File.Exists(InfoHelper.GetPath() + qq + ".st"))
-                        Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
-                    else Settings.SaveSettings(qq);
-                    var sl = TextHelper.XtoYGetTo(await HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
-                    JObject o = JObject.Parse(sl);
-                    await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", InfoHelper.GetPath() + qq + ".jpg");
-                    Settings.USettings.UserName = o[qq][6].ToString();
-                    Settings.USettings.UserImage = InfoHelper.GetPath() + qq + ".jpg";
-                    Settings.USettings.LemonAreeunIts = qq;
-                    Settings.SaveSettings();
-                    Dispatcher.Invoke(new Action(delegate { new MainWindow().Show(); }));
-                })).Start();
+                if (File.Exists(InfoHelper.GetPath() + qq + ".st"))
+                    Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
+                else Settings.SaveSettings(qq);
+                new MainWindow().Show();
             }
         }
+        }
     }
-}
