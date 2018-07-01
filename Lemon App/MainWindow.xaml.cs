@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -32,6 +33,7 @@ namespace Lemon_App
         #region 一些字段
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         MusicLib ml = new MusicLib();
+        private System.Windows.Forms.NotifyIcon notifyIcon;
         DataItem MusicData;
         bool isplay = false;
         bool IsRadio = false;
@@ -66,6 +68,7 @@ namespace Lemon_App
             else
                 Settings.USettings.skin = 0;
                 (Resources["unSkin"] as Storyboard).Begin();
+            Closed += delegate { notifyIcon.Visible = false; };
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -75,115 +78,156 @@ namespace Lemon_App
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
             var ani = Resources["Loading"] as Storyboard;
-            ani.Completed += delegate
-            {
-                OpenLoading();
-                var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
-                ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
-                ds.Start();
-                if (System.IO.File.Exists(Settings.USettings.UserImage))
-                {
-                    var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
-                    UserTX.Background = new ImageBrush(image.ToImageSource());
-                }
-                ////////////load
-                LyricView lv = new LyricView();
-                lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(78, 183, 251));
-                lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(254, 254, 254));
-                lv.TextAlignment = TextAlignment.Left;
-                ly.Child = lv;
-                ml = new MusicLib(lv);
-                if (Settings.USettings.Playing.MusicName != "")
-                {
-                    PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
-                    jd.Maximum = Settings.USettings.alljd;
-                    jd.Value = Settings.USettings.jd;
-                    ml.m.Position = TimeSpan.FromMilliseconds(Settings.USettings.jd);
-                }
-                t.Interval = 500;
-                t.Tick += delegate
-                {
-                    try
-                    {
-                        jd.Maximum = ml.m.NaturalDuration.TimeSpan.TotalMilliseconds;
-                        jd.Value = ml.m.Position.TotalMilliseconds;
-                        ml.lv.LrcRoll(ml.m.Position.TotalMilliseconds);
-                        Settings.USettings.alljd = jd.Maximum;
-                        Settings.USettings.jd = jd.Value;
-                    }
-                    catch { }
-                };
-                ml.m.MediaEnded += delegate
-                {
-                    t.Stop();
-                    jd.Value = 0;
-                    if (xh)
-                        if (IsRadio)
-                            PlayMusic(RadioData.MusicID, RadioData.ImageUrl, RadioData.MusicName, RadioData.Singer, true);
-                        else PlayMusic(MusicData, null);
-                    else
-                    {
-                        if (IsRadio)
-                            GetRadio(new RadioItem(RadioID), null);
-                        else
-                            PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
-                    }
-                };
-                (Resources["Closing"] as Storyboard).Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
-                /////top////
-                var de = new Task(new Action(async delegate
-                {
-                    var dt = await ml.GetTopIndexAsync();
-
-                    foreach (var d in dt)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            var top = new TopControl(d.ID, d.Photo, d.Name);
-                            top.MouseDown += delegate (object seb, MouseButtonEventArgs ed)
-                            {
-                                OpenLoading();
-                                var g = seb as TopControl;
-                                (Resources["ClickTop"] as Storyboard).Begin();
-                                var file = InfoHelper.GetPath() + "Cache\\Top" + g.topID + ".jpg";
-                                if (!System.IO.File.Exists(file))
-                                {
-                                    var s = new WebClient();
-                                    s.DownloadFileAsync(new Uri(g.pic), file);
-                                    s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
-                                }
-                                else TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
-                                TB.Text = g.name;
-                                var ss = new Task(new Action(async delegate
-                                  {
-                                      var dta = await ml.GetToplistAsync(int.Parse(g.topID));
-                                      Dispatcher.Invoke(() => { DataItemsList.Children.Clear(); });
-                                      foreach (var j in dta)
-                                      {
-                                          Dispatcher.Invoke(() =>
-                                          {
-                                              var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
-                                              k.MouseDown += PlayMusic;
-                                              DataItemsList.Children.Add(k);
-                                          });
-                                          await Task.Delay(1);
-                                      }
-                                      Dispatcher.Invoke(() => { CloseLoading(); });
-                                  }));
-                                ss.Start();
-                            };
-                            top.Margin = new Thickness(0, 0, 20, 20);
-                            topIndexList.Children.Add(top);
-                        });
-                    }
-                    Dispatcher.Invoke(()=> { CloseLoading(); });
-                }));
-                de.Start();
-                CloseLoading();
-            };
+            ani.Completed += Ani_Completed;
             ani.Begin();
+        }
 
+        private void Ani_Completed(object sender, EventArgs e)
+        {
+            OpenLoading();
+            IntPtr handle = new WindowInteropHelper(this).Handle;
+            RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.L);
+            RegisterHotKey(handle, 125, 4, (uint)System.Windows.Forms.Keys.S);
+            InstallHotKeyHook(this);
+            //notifyIcon
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Text = "小萌";
+            notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
+            notifyIcon.Visible = true;
+            //打开菜单项
+            System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("打开");
+            open.Click += delegate { exShow(); };
+            //退出菜单项
+            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
+            exit.Click += delegate {
+                var dt = Resources["Closing"] as Storyboard;
+                dt.Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
+                dt.Begin();
+            };
+            //关联托盘控件
+            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
 
+            notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
+            {
+                if (m.Button == System.Windows.Forms.MouseButtons.Left) exShow();
+            });
+            /////Timer user
+            var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
+            ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
+            ds.Start();
+            if (System.IO.File.Exists(Settings.USettings.UserImage))
+            {
+                var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
+                UserTX.Background = new ImageBrush(image.ToImageSource());
+            }
+                (Resources["Closing"] as Storyboard).Completed += delegate { ShowInTaskbar = false; };
+            ////////////load
+            LyricView lv = new LyricView();
+            lv.FoucsLrcColor = new SolidColorBrush(Color.FromRgb(78, 183, 251));
+            lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(254, 254, 254));
+            lv.TextAlignment = TextAlignment.Left;
+            ly.Child = lv;
+            ml = new MusicLib(lv);
+            if (Settings.USettings.Playing.MusicName != "")
+            {
+                PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
+                jd.Maximum = Settings.USettings.alljd;
+                jd.Value = Settings.USettings.jd;
+                ml.m.Position = TimeSpan.FromMilliseconds(Settings.USettings.jd);
+            }
+            t.Interval = 500;
+            t.Tick += delegate
+            {
+                try
+                {
+                    jd.Maximum = ml.m.NaturalDuration.TimeSpan.TotalMilliseconds;
+                    jd.Value = ml.m.Position.TotalMilliseconds;
+                    if (ind == 1)
+                        ml.lv.LrcRoll(ml.m.Position.TotalMilliseconds);
+                    Settings.USettings.alljd = jd.Maximum;
+                    Settings.USettings.jd = jd.Value;
+                }
+                catch { }
+            };
+            ml.m.MediaEnded += delegate
+            {
+                t.Stop();
+                jd.Value = 0;
+                if (xh)
+                    if (IsRadio)
+                        PlayMusic(RadioData.MusicID, RadioData.ImageUrl, RadioData.MusicName, RadioData.Singer, true);
+                    else PlayMusic(MusicData, null);
+                else
+                {
+                    if (IsRadio)
+                        GetRadio(new RadioItem(RadioID), null);
+                    else
+                        PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
+                }
+            };
+            /////top////
+            var de = new Task(new Action(async delegate
+            {
+                var dt = await ml.GetTopIndexAsync();
+
+                foreach (var d in dt)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var top = new TopControl(d.ID, d.Photo, d.Name);
+                        top.MouseDown += delegate (object seb, MouseButtonEventArgs ed)
+                        {
+                            OpenLoading();
+                            var g = seb as TopControl;
+                            (Resources["ClickTop"] as Storyboard).Begin();
+                            var file = InfoHelper.GetPath() + "Cache\\Top" + g.topID + ".jpg";
+                            if (!System.IO.File.Exists(file))
+                            {
+                                var s = new WebClient();
+                                s.DownloadFileAsync(new Uri(g.pic), file);
+                                s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
+                            }
+                            else TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
+                            TB.Text = g.name;
+                            var ss = new Task(new Action(async delegate
+                            {
+                                var dta = await ml.GetToplistAsync(int.Parse(g.topID));
+                                Dispatcher.Invoke(() => { DataItemsList.Children.Clear(); });
+                                foreach (var j in dta)
+                                {
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        var k = new DataItem(j.MusicID, j.MusicName, j.Singer, j.ImageUrl) { Margin = new Thickness(20, 0, 0, 20) };
+                                        k.MouseDown += PlayMusic;
+                                        DataItemsList.Children.Add(k);
+                                    });
+                                    await Task.Delay(1);
+                                }
+                                Dispatcher.Invoke(() => { CloseLoading(); });
+                            }));
+                            ss.Start();
+                        };
+                        top.Margin = new Thickness(0, 0, 20, 20);
+                        topIndexList.Children.Add(top);
+                    });
+                }
+                Dispatcher.Invoke(() => { CloseLoading(); });
+            }));
+            de.Start();
+            CloseLoading();
+        }
+
+        private void exShow() {
+            try
+            {
+                this.WindowState = WindowState.Normal;
+                var ani = Resources["Loading"] as Storyboard;
+                ani.Completed -= Ani_Completed;
+                ani.Begin();
+                this.Activate();
+            }
+            catch { }
         }
         private void BigBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -202,6 +246,7 @@ namespace Lemon_App
                 Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
         }
+        private void SmallBtn_MouseDown(object sender, MouseButtonEventArgs e) { ShowInTaskbar = true; WindowState = WindowState.Minimized; }
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
@@ -954,6 +999,38 @@ namespace Lemon_App
 
         #endregion
 
+        #endregion
+        #region 快捷键
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint controlKey, uint virtualKey);
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        public bool InstallHotKeyHook(Window window)
+        {
+            if (window == null)
+                return false;
+            System.Windows.Interop.WindowInteropHelper helper = new System.Windows.Interop.WindowInteropHelper(window);
+            if (IntPtr.Zero == helper.Handle)
+                return false;
+            System.Windows.Interop.HwndSource source = System.Windows.Interop.HwndSource.FromHwnd(helper.Handle);
+            if (source == null)
+                return false;
+            source.AddHook(this.HotKeyHook);
+            return true;
+        }
+        private IntPtr HotKeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WM_HOTKEY)
+            {
+                if (wParam.ToInt32() == 124)
+                    exShow();
+                else if (wParam.ToInt32() == 125)
+                    new SearchWindow().Show();
+            }
+            return IntPtr.Zero;
+        }
+        private const int WM_HOTKEY = 0x0312;
         #endregion
     }
 }
