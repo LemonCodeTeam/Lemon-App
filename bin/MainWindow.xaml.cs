@@ -70,14 +70,13 @@ namespace bin
         {
             string qq = id.Text;
             if (File.Exists(InfoHelper.GetPath() + qq + ".st"))
-                Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(LemonLibrary.TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
-            else LemonLibrary.Settings.SaveSettings(qq);
-            var sl = TextHelper.XtoYGetTo(await HttpHelper.GetWebAsync("http://r.pengyou.com/fcg-bin/cgi_get_portrait.fcg?uins=" + qq, Encoding.Default), "portraitCallBack(", ")", 0);
-            JObject o = JObject.Parse(sl);
+                Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
+            else Settings.SaveSettings(qq);
+            var sl = await HttpHelper.GetWebAsync("https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
             await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", InfoHelper.GetPath() + qq + ".jpg");
             var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + qq + ".jpg");
             TX.Background = new ImageBrush(image.ToImageSource());
-            Settings.USettings.UserName = o[qq][6].ToString();
+            Settings.USettings.UserName = TextHelper.XtoYGetTo(sl, "\"nick\":\"", "\", \"", 0);
             Settings.USettings.UserImage = InfoHelper.GetPath() + qq + ".jpg";
             Settings.USettings.LemonAreeunIts = qq;
             Settings.SaveSettings();

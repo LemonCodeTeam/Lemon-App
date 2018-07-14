@@ -929,7 +929,6 @@ namespace Lemon_App
         }
         #endregion
         #region User
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e) => new FC().Show();
         private void TX_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog o = new Microsoft.Win32.OpenFileDialog();

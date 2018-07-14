@@ -58,7 +58,8 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -70,10 +71,6 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AipSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\AipSdk.dll</HintPath>
-    </Reference>
     <Reference Include="Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\Lierda.WPFHelper.dll</HintPath>
@@ -113,14 +110,8 @@
     <Compile Include="ControlItems\DataItem.xaml.cs">
       <DependentUpon>DataItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FC.xaml.cs">
-      <DependentUpon>FC.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ControlItems\FLGDIndexItem.xaml.cs">
       <DependentUpon>FLGDIndexItem.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Msg.xaml.cs">
       <DependentUpon>Msg.xaml</DependentUpon>
@@ -144,15 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ControlItems\FLGDIndexItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -214,8 +197,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
-    <Content Include="Lib\AipSdk.dll" />
     <Content Include="Lib\Lierda.WPFHelper.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\WPFMediaKit.dll" />

@@ -97,10 +97,7 @@ namespace LemonLibrary
         }
         public string GetUrlAsync(string mid)
         {
-          //  string guid = "20D919A4D7700FBC424740E8CED80C5F";
-            //string ioo = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=5381&loginUin=2728578956&hostUin=2728578956&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=2728578956&songmid={mid}&filename=M500{mid}.mp3&guid={guid}");
-        //    string vkey = JObject.Parse(ioo)["data"]["items"][0]["vkey"].ToString();
-            return $"http://ws.stream.qqmusic.qq.com/C100{mid}.m4a?fromtag=0&guid=126548448";
+           return  JObject.Parse(HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", $"types=url&id={mid}&source=tencent"))["url"].ToString();
         }
         public string GetWyUrlAsync(string mid)
         {
@@ -110,7 +107,7 @@ namespace LemonLibrary
         {
             string name = mldata[mid];
             if (ispos) name = "Wy" + name + ".mp3";
-            else name = name + ".m4a";
+            else name = name + ".mp3";
             if (!File.Exists(GetPath() + $@"Download/{name}"))
             {
                 string musicurl = "";
@@ -208,16 +205,6 @@ namespace LemonLibrary
                         }
                         catch { }
                     }
-                    //sdm("d3");
-                    //        foreach (var dt in dataatimes)
-                    //            {
-                    //           if (!KEY.Contains(dt))
-                    //         {
-                    //     KEY.Add(dt);//q
-                    //          gcfydata.Add(dt, "");
-                    //             }
-                    //                }
-                    //sdm("d4");
                     for (int i = 0; i != gcfydata.Count; i++)
                     {
                         try
@@ -229,7 +216,6 @@ namespace LemonLibrary
                         catch { }
                     }
                     string LyricData = "";
-                    //sdm("d5   "+dataatexs.size()+"   "+dataatimes.size()+"   "+datatexs.size()+"   "+datatimes.size()+"   "+KEY.size());
                     for (int i = 0; i != KEY.Count; i++)
                     {
                         try

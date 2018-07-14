@@ -1451,6 +1451,171 @@
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
                 <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF1B1B1C"/>
             </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton1">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton2">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton3">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton4">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton5">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton6">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton7">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton8">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton9">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton10">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton11">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton12">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton13">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton14">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton15">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton16">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton17">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton18">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton19">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton20">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton21">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton22">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton23">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton24">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton25">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton26">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton27">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton28">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton29">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton30">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton31">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton32">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton33">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton34">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton35">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton36">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton37">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton38">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton39">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton40">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton41">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton42">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton43">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton44">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton45">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="RadioMe">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton46">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton47">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton48">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton49">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton50">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton51">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton52">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton53">
+                <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FF787878"/>
+            </ColorAnimationUsingKeyFrames>
         </Storyboard>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
@@ -1756,6 +1921,171 @@
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Storyboard.TargetName="border">
                 <SplineColorKeyFrame KeyTime="0:0:0.3" Value="#FFC9C9C9"/>
             </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton1">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton2">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton3">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton4">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton5">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton6">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton7">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton8">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton9">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton10">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton11">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton12">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton13">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton14">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton15">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton16">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton17">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton18">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton19">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton20">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton21">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton22">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton23">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton24">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton25">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton26">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton27">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton28">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton29">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton30">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton31">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton32">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton33">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton34">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton35">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton36">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton37">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton38">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton39">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton40">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton41">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton42">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton43">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton44">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton45">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="RadioMe">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton46">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton47">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton48">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton49">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton50">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton51">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton52">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="radioButton53">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
     <Window.Triggers>
@@ -1852,54 +2182,54 @@
                 <ScrollViewer  Margin="30,80,30,0" Template="{DynamicResource ScrollViewerControlTemplate}" VerticalAlignment="Top">
                     <WrapPanel>
                         <WrapPanel x:Name="Singerws">
-                            <RadioButton Content="全部" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True"   Uid="all_all_"/>
-                            <RadioButton Content="华语男"   Uid="cn_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="华语女"   Uid="cn_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="华语组合"   Uid="cn_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="韩国男"   Uid="k_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="韩国女"   Uid="k_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="韩国组合"   Uid="k_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="日本男"   Uid="j_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="日本女"   Uid="j_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="日本组合"   Uid="j_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="欧美男"   Uid="eu_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="欧美女"   Uid="eu_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="欧美组合"   Uid="eu_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="乐团"   Uid="c_orchestra_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="演奏家"   Uid="c_performer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="作曲家"   Uid="c_composer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="指挥家"   Uid="c_cantor_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
-                            <RadioButton Content="其他"   Uid="other_other_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton28" Content="全部" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True"   Uid="all_all_"/>
+                            <RadioButton x:Name="radioButton29" Content="华语男"   Uid="cn_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton30" Content="华语女"   Uid="cn_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton31" Content="华语组合"   Uid="cn_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton32" Content="韩国男"   Uid="k_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton33" Content="韩国女"   Uid="k_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton34" Content="韩国组合"   Uid="k_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton35" Content="日本男"   Uid="j_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton36" Content="日本女"   Uid="j_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton37" Content="日本组合"   Uid="j_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton38" Content="欧美男"   Uid="eu_man_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton39" Content="欧美女"   Uid="eu_woman_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton40" Content="欧美组合"   Uid="eu_team_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton41" Content="乐团"   Uid="c_orchestra_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton42" Content="演奏家"   Uid="c_performer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton43" Content="作曲家"   Uid="c_composer_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton44" Content="指挥家"   Uid="c_cantor_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
+                            <RadioButton x:Name="radioButton45" Content="其他"   Uid="other_other_" Margin="0,0,10,10"   Foreground="#FFA0A0A0"/>
                         </WrapPanel>
                         <WrapPanel x:Name="Singersx" Margin="0,20,0,0">
-                            <RadioButton Content="热门" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True"  />
-                            <RadioButton Content="A" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="B" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="C" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="D" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="E" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="F" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="G" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="H" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="I" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="J" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="K" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="L" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="M" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="N" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="O" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="P" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="Q" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="R" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="S" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="T" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="U" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="V" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="W" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="X" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="Y" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="Z" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
-                            <RadioButton Content="#" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton" Content="热门" Margin="0,0,30,10"   Foreground="#FFA0A0A0" IsChecked="True"  />
+                            <RadioButton x:Name="radioButton1" Content="A" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton2" Content="B" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton3" Content="C" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton4" Content="D" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton5" Content="E" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton6" Content="F" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton7" Content="G" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton8" Content="H" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton9" Content="I" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton10" Content="J" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton11" Content="K" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton12" Content="L" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton13" Content="M" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton14" Content="N" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton15" Content="O" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton16" Content="P" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton17" Content="Q" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton18" Content="R" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton19" Content="S" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton20" Content="T" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton21" Content="U" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton22" Content="V" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton23" Content="W" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton24" Content="X" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton25" Content="Y" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton26" Content="Z" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
+                            <RadioButton x:Name="radioButton27" Content="#" Margin="0,0,10,10"   Foreground="#FFA0A0A0"  />
                         </WrapPanel>
                     </WrapPanel>
                 </ScrollViewer>
@@ -1917,15 +2247,15 @@
             <Grid x:Name="RadioIndexPage" Visibility="Collapsed">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="30,30,0,0" TextWrapping="Wrap" Text="在线电台" VerticalAlignment="Top" Width="101" Foreground="#FF898989" FontSize="24"/>
                 <WrapPanel x:Name="RadioIndexList" Margin="30,90,30,0" VerticalAlignment="Top">
-                    <RadioButton x:Name="RadioMe" Content="热门" Uid="0" Margin="20,0,0,0" Checked="RadioPageChecked"/>
-                    <RadioButton Content="下午" Uid="1" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="情感" Uid="2" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="主题" Uid="3" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="场景" Uid="4"  Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="曲风" Uid="5" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="语言" Uid="6" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="人群" Uid="7" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
-                    <RadioButton Content="乐器" Uid="8" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                    <RadioButton x:Name="RadioMe" Content="热门" Uid="0" Margin="20,0,0,0" Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton46" Content="下午" Uid="1" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton47" Content="情感" Uid="2" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton48" Content="主题" Uid="3" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton49" Content="场景" Uid="4"  Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton50" Content="曲风" Uid="5" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton51" Content="语言" Uid="6" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton52" Content="人群" Uid="7" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
+                    <RadioButton x:Name="radioButton53" Content="乐器" Uid="8" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="#FFA0A0A0"/>
                 </WrapPanel>
                 <ScrollViewer  Margin="30,125,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                     <WrapPanel x:Name="RadioItemsList"/>
@@ -1951,9 +2281,6 @@
                 <Grid Height="150" Margin="0,0,0,100">
                     <Border x:Name="TX" Height="100" Margin="0,10,0,0" VerticalAlignment="Top" CornerRadius="125" MouseDown="TX_MouseDown" BorderThickness="10" Width="100" BorderBrush="#99FFFFFF" Background="{Binding Background, ElementName=UserTX}"/>
                     <TextBlock x:Name="NM" Height="28.313" Margin="10,115,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF494949" FontSize="20" TextAlignment="Center" Text="{Binding Text, ElementName=UserName}"/>
-                </Grid>
-                <Grid HorizontalAlignment="Right" Width="25" Height="25" VerticalAlignment="Top" Margin="0,0,30,0" Background="#00000000" MouseDown="Grid_MouseDown">
-                    <Path StrokeThickness="0" Margin="0,5,5,0" Fill="Gray" Data="M32.001,3.56C16.317,3.56,3.56,16.317,3.56,32c0,15.683,12.757,28.44,28.442,28.44   C47.683,60.44,60.44,47.683,60.44,32C60.44,16.317,47.683,3.56,32.001,3.56z M24.227,26.593l0.057-0.063   c0.232-0.168,0.345-0.432,0.303-0.708c-0.573-3.446-0.197-4.883-0.07-5.244c1.001-3.072,4.143-4.493,4.76-4.745   c0.131-0.052,0.374-0.125,0.62-0.163l0.073-0.017l0.505-0.027l0.004,0.031l0.117-0.011c0.104-0.011,0.204-0.025,0.329-0.051   l0.111-0.024c0.099,0.001,1.322,0.156,3.139,0.713l1.263,0.435c2.31,0.682,3.372,1.951,3.569,2.207   c1.85,2.095,1.354,5.259,0.896,6.958c-0.052,0.2-0.021,0.406,0.092,0.577l0.105,0.129c0.134,0.182,0.254,0.884-0.148,2.376   c-0.076,0.453-0.243,0.821-0.492,1.069c-0.092,0.101-0.156,0.229-0.179,0.374c-0.625,3.665-3.909,7.764-7.37,7.764   c-2.937,0-6.289-3.771-6.892-7.761c-0.023-0.149-0.085-0.28-0.188-0.393c-0.251-0.26-0.411-0.635-0.508-1.19   C24.029,27.785,24,26.944,24.227,26.593z M17.634,42.485c0.127-0.161,0.837-0.993,2.273-1.541c1.263-0.388,4.384-1.425,6.09-2.661   c0.08-0.044,0.159-0.127,0.224-0.194c0.158-0.17,0.399-0.429,0.685-0.694l0.159-0.151l0.162,0.152   c1.503,1.417,3.166,2.194,4.683,2.194c1.594,0,3.237-0.69,4.756-1.996l0.119-0.103l0.322,0.157   c0.288,0.264,0.786,0.626,1.018,0.736l0.296,0.145l-0.031,0.032l0.132,0.08c0.28,0.169,0.585,0.333,0.943,0.51   c0.361,0.159,0.663,0.277,0.976,0.379c0.264,0.086,1.668,0.558,3.265,1.296l0.305,0.092c1.562,0.598,2.256,1.429,2.325,1.516   c1.854,2.748,2.565,7.876,2.829,10.733c-4.843,3.933-10.935,6.098-17.162,6.098c-6.23,0-12.323-2.165-17.164-6.099   C15.098,50.316,15.803,45.204,17.634,42.485z" Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="Fill" />
                 </Grid>
 
             </Grid>
