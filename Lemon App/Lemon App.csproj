@@ -197,6 +197,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icon.ico" />
     <Content Include="Lib\Lierda.WPFHelper.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\WPFMediaKit.dll" />
