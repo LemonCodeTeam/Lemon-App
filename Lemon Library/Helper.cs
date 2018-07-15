@@ -451,8 +451,6 @@ namespace LemonLibrary
     public class HttpHelper {
         public static async Task<string> GetWebAsync(string url,Encoding e=null)
         {
-            try
-            {
                 if (e == null)
                     e = Encoding.UTF8;
                 HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
@@ -462,8 +460,6 @@ namespace LemonLibrary
                 var st = await sr.ReadToEndAsync();
                 sr.Dispose();
                 return st;
-            }
-            catch { return ""; }
         }
         public static string PostWeb(string url, string data)
         {
@@ -510,7 +506,7 @@ namespace LemonLibrary
                 collection[name] = value;
             }
         }
-        public static async System.Threading.Tasks.Task<string> GetWebDatacAsync(string url, Encoding c)
+        public static async Task<string> GetWebDatacAsync(string url, Encoding c,string cookie="")
         {
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
             hwr.Timeout = 20000;
@@ -522,7 +518,9 @@ namespace LemonLibrary
             hwr.Referer = "https://y.qq.com/portal/player.html";
             hwr.Host = "c.y.qq.com";
             hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
-            hwr.Headers.Add(HttpRequestHeader.Cookie, "pgv_pvi=1693112320; RK=DKOGai2+wu; pgv_pvid=1804673584; ptcz=3a23e0a915ddf05c5addbede97812033b60be2a192f7c3ecb41aa0d60912ff26; pgv_si=s4366031872; _qpsvr_localtk=0.3782697029073365; ptisp=ctc; luin=o2728578956; lskey=00010000863c7a430b79e2cf0263ff24a1e97b0694ad14fcee720a1dc16ccba0717d728d32fcadda6c1109ff; pt2gguin=o2728578956; uin=o2728578956; skey=@PjlklcXgw; p_uin=o2728578956; p_skey=ROnI4JEkWgKYtgppi3CnVTETY3aHAIes-2eDPfGQcVg_; pt4_token=wC-2b7WFwI*8aKZBjbBb7f4Am4rskj11MmN7bvuacJQ_; p_luin=o2728578956; p_lskey=00040000e56d131f47948fb5a2bec49de6174d7938c2eb45cb224af316b053543412fd9393f83ee26a451e15; ts_refer=ui.ptlogin2.qq.com/cgi-bin/login; ts_last=y.qq.com/n/yqq/playlist/2591355982.html; ts_uid=1420532256; yqq_stat=0");
+            if(cookie=="")
+                 hwr.Headers.Add(HttpRequestHeader.Cookie, "pgv_pvi=1693112320; RK=DKOGai2+wu; pgv_pvid=1804673584; ptcz=3a23e0a915ddf05c5addbede97812033b60be2a192f7c3ecb41aa0d60912ff26; pgv_si=s4366031872; _qpsvr_localtk=0.3782697029073365; ptisp=ctc; luin=o2728578956; lskey=00010000863c7a430b79e2cf0263ff24a1e97b0694ad14fcee720a1dc16ccba0717d728d32fcadda6c1109ff; pt2gguin=o2728578956; uin=o2728578956; skey=@PjlklcXgw; p_uin=o2728578956; p_skey=ROnI4JEkWgKYtgppi3CnVTETY3aHAIes-2eDPfGQcVg_; pt4_token=wC-2b7WFwI*8aKZBjbBb7f4Am4rskj11MmN7bvuacJQ_; p_luin=o2728578956; p_lskey=00040000e56d131f47948fb5a2bec49de6174d7938c2eb45cb224af316b053543412fd9393f83ee26a451e15; ts_refer=ui.ptlogin2.qq.com/cgi-bin/login; ts_last=y.qq.com/n/yqq/playlist/2591355982.html; ts_uid=1420532256; yqq_stat=0");
+            else hwr.Headers.Add(HttpRequestHeader.Cookie, cookie);
             var o = await hwr.GetResponseAsync();
             StreamReader sr = new StreamReader(o.GetResponseStream(), c);
             var st = await sr.ReadToEndAsync();
@@ -717,6 +715,11 @@ namespace LemonLibrary
             public string name { get; set; }
             public string pic { get; set; }
             public string id { get; set; }
+
+            public static implicit operator List<object>(MusicGData v)
+            {
+                throw new NotImplementedException();
+            }
         }
         ////////Weather Helper/////
         public class Weather {

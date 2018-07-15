@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lemonlib="clr-namespace:LemonLibrary;assembly=LemonLibrary"
         mc:Ignorable="d"
-        Title="LemonApp" Height="690" Width="1070" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MouseDoubleClick="ControlPage_MouseDown" Icon="icon.ico">
+        Title="LemonApp" Height="690" Width="1070" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MouseDoubleClick="ControlPage_MouseDown" Icon="icon.ico" MinWidth="925" MinHeight="630">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>

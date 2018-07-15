@@ -21,12 +21,13 @@ Please retain the copyright information, rights reserved.
 namespace LemonLibrary
 {
     public class MusicLib {
-        public MusicLib(LyricView LV) {
+        public MusicLib(LyricView LV,string id) {
             if (Directory.Exists(GetPath() + "Download") == false)
                 Directory.CreateDirectory(GetPath() + "Download");
             if (Directory.Exists(GetPath() + "Cache") == false)
                 Directory.CreateDirectory(GetPath() + "Cache");
             lv = LV;
+            qq = id;
         }
         public MusicLib() {
             if (Directory.Exists(GetPath() + $@"Download") == false)
@@ -35,6 +36,7 @@ namespace LemonLibrary
         public Dictionary<string, string> mldata = new Dictionary<string, string>();// mid,name
         public MediaPlayer m = new MediaPlayer();
         public LyricView lv;
+        public string qq = "";
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
             if (HttpHelper.IsNetworkTrue())
@@ -67,7 +69,7 @@ namespace LemonLibrary
             else return null;
         }
         public async Task<MusicGData> GetGDAsync(string id = "2591355982") {
-            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk=1157737156&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk=1157737156&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
             JObject o = JObject.Parse(s);
             var dt = new MusicGData();
             dt.name = o["cdlist"][0]["dissname"].ToString();
@@ -94,6 +96,26 @@ namespace LemonLibrary
                 catch { i++; }
             }
             return dt;
+        }
+        public async Task UpdateGdAsync() {
+            var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0",Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
+            var o = JObject.Parse(dt);
+            var data = Settings.USettings.MusicGD;
+            var dx = o["data"]["mydiss"]["list"];
+            foreach (var ex in dx) {
+                if (!data.ContainsKey(ex["dissid"].ToString()))
+                {
+                    var df = new MusicGData();
+                    df.id = ex["dissid"].ToString();
+                    df.Data = (await GetGDAsync(df.id)).Data;
+                    df.name = ex["title"].ToString();
+                    if (ex["picurl"].ToString() != "")
+                        df.pic = ex["picurl"].ToString();
+                    else df.pic = df.Data[0].ImageUrl;
+                    data.Add(df.id, df);
+                }
+            }
+            Settings.USettings.MusicGD = data;
         }
         public string GetUrlAsync(string mid)
         {
@@ -166,7 +188,7 @@ namespace LemonLibrary
                 c.Headers.Add("Accept", "*/*");
                 c.Headers.Add("Referer", "https://y.qq.com/portal/player.html");
                 c.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
-                c.Headers.Add("Cookie", "tvfe_boss_uuid=c3db0dcc4d677c60; pac_uid=1_2728578956; qq_slist_autoplay=on; ts_refer=ADTAGh5_playsong; RK=pKOOKi2f1O; pgv_pvi=8927113216; o_cookie=2728578956; pgv_pvid=5107924810; ptui_loginuin=2728578956; ptcz=897c17d7e17ae9009e018ebf3f818355147a3a26c6c67a63ae949e24758baa2d; pt2gguin=o2728578956; pgv_si=s5715204096; qqmusic_fromtag=66; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=996779984; yq_index=0");
+                c.Headers.Add("Cookie", $"tvfe_boss_uuid=c3db0dcc4d677c60; pac_uid=1_{qq}; qq_slist_autoplay=on; ts_refer=ADTAGh5_playsong; RK=pKOOKi2f1O; pgv_pvi=8927113216; o_cookie={qq}; pgv_pvid=5107924810; ptui_loginuin={qq}; ptcz=897c17d7e17ae9009e018ebf3f818355147a3a26c6c67a63ae949e24758baa2d; pt2gguin=o{qq}; pgv_si=s5715204096; qqmusic_fromtag=66; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=996779984; yq_index=0");
                 c.Headers.Add("Host", "c.y.qq.com");
                 string s = TextHelper.XtoYGetTo(c.DownloadString($"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?callback=MusicJsonCallback_lrc&pcachetime=1494070301711&songmid={McMind}&g_tk=5381&jsonpCallback=MusicJsonCallback_lrc&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"), "MusicJsonCallback_lrc(", ")", 0);
                 Console.WriteLine(s);
@@ -263,7 +285,7 @@ namespace LemonLibrary
             return data;
         }
         public async Task<List<Music>> GetToplistAsync(int TopID) {
-            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin=0&song_num=30&g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
+            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin=0&song_num=30&g_tk=1206122277&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             List<Music> dt = new List<Music>();
             int i = 0;
             while (i < o["songlist"].Count())
@@ -299,7 +321,7 @@ namespace LemonLibrary
             return data;
         }
         public async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync() {
-            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0",Encoding.UTF8));
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=1206122277&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0",Encoding.UTF8));
             var data = new MusicFLGDIndexItemsList();
             data.Hot.Add(new MusicFLGDIndexItems { id = "10000000", name = "全部" });
             int i = 0;
@@ -485,7 +507,7 @@ namespace LemonLibrary
         public async Task<Music> GetRadioMusicAsync(string id) {
             if (id == "99")
             {
-                var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/rcmusic2/fcgi-bin/fcg_guess_youlike_pc.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=703&uin=2728578956"));
+                var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/rcmusic2/fcgi-bin/fcg_guess_youlike_pc.fcg?g_tk=1206122277&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=703&uin={qq}"));
                 string Singer = "";
                 for (int osxc = 0; osxc != o["songlist"][0]["singer"].Count(); osxc++)
                 { Singer += o["songlist"][0]["singer"][osxc]["name"] + "&"; }
@@ -500,7 +522,7 @@ namespace LemonLibrary
                 return data;
             }
             else {
-                var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=1206122277&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&data=%7B\"songlist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiosonglist\"%2C\"param\"%3A%7B\"id\"%3A{id}%2C\"firstplay\"%3A1%2C\"num\"%3A10%7D%7D%2C\"radiolist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiolist\"%2C\"param\"%3A%7B\"ct\"%3A\"24\"%7D%7D%2C\"comm\"%3A%7B\"ct\"%3A\"24\"%7D%7D"));
+                var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=1206122277&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&data=%7B\"songlist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiosonglist\"%2C\"param\"%3A%7B\"id\"%3A{id}%2C\"firstplay\"%3A1%2C\"num\"%3A10%7D%7D%2C\"radiolist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiolist\"%2C\"param\"%3A%7B\"ct\"%3A\"24\"%7D%7D%2C\"comm\"%3A%7B\"ct\"%3A\"24\"%7D%7D"));
                 string Singer = "";
                 for (int osxc = 0; osxc != o["songlist"]["data"]["track_list"][0]["singer"].Count(); osxc++)
                 { Singer += o["songlist"]["data"]["track_list"][0]["singer"][osxc]["name"] + "&"; }
@@ -560,8 +582,8 @@ namespace LemonLibrary
             return d;
         }
         public async Task<List<MusicPL>> GetPLByQQAsync(string mid) {
-            var id = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&tpl=yqq_song_detail&format=json&g_tk=268405378&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"))["data"][0]["id"].ToString();
-            var dt = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=642290724&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010");
+            var id = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&tpl=yqq_song_detail&format=json&g_tk=268405378&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"))["data"][0]["id"].ToString();
+            var dt = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=642290724&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010");
             var ds = JObject.Parse(dt.Replace("\n",""));
             var data = new List<MusicPL>();
             for (int i = 0; i != ds["hot_comment"]["commentlist"].Count(); i++) {

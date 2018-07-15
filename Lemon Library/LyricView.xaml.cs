@@ -134,7 +134,7 @@ namespace LemonLibrary
         }
         public static String[] parserLine(String str, List<String> times, List<String> texs, Dictionary<String, String> data,bool doesAdd=true)
         {
-            if (!str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:"))
+            if (!str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:")&&!str.StartsWith("[kana"))
             {
                 String TimeData = TextHelper.XtoYGetTo(str, "[", "]", 0);
                 String INFO = TextHelper.XtoYGetTo(str, "[", "]", 0);

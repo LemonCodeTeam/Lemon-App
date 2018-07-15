@@ -52,16 +52,20 @@ namespace Lemon_App
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 0)
-                Shutdown();
-            else
+            try
             {
-                var qq = e.Args[0];
-                if (File.Exists(InfoHelper.GetPath() + qq + ".st"))
-                    Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
-                else Settings.SaveSettings(qq);
-                new MainWindow().Show();
+                if (e.Args.Length == 0)
+                    Shutdown();
+                else
+                {
+                    var qq = e.Args[0];
+                    if (File.Exists(InfoHelper.GetPath() + qq + ".st"))
+                        Settings.LoadUSettings(Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), LemonLibrary.TextHelper.MD5.EncryptToMD5string(qq + ".st")))));
+                    else Settings.SaveSettings(qq);
+                    new MainWindow().Show();
+                }
             }
+            catch { Shutdown(); }
         }
         }
     }

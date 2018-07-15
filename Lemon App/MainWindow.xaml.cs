@@ -62,7 +62,7 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
-            FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
+           // FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
             if (Settings.USettings.skin == 0)
                 (Resources["Skin"] as Storyboard).Begin();
             else
@@ -86,7 +86,7 @@ namespace Lemon_App
         {
             OpenLoading();
             IntPtr handle = new WindowInteropHelper(this).Handle;
-            RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.L);
+            RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.Z);
             RegisterHotKey(handle, 125, 4, (uint)System.Windows.Forms.Keys.S);
             InstallHotKeyHook(this);
             //notifyIcon
@@ -128,7 +128,7 @@ namespace Lemon_App
             lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(254, 254, 254));
             lv.TextAlignment = TextAlignment.Left;
             ly.Child = lv;
-            ml = new MusicLib(lv);
+            ml = new MusicLib(lv,Settings.USettings.LemonAreeunIts);
             if (Settings.USettings.Playing.MusicName != "")
             {
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
@@ -153,6 +153,7 @@ namespace Lemon_App
             ml.m.MediaEnded += delegate
             {
                 t.Stop();
+                ml.m.Stop();
                 jd.Value = 0;
                 if (xh)
                     if (IsRadio)
@@ -215,6 +216,11 @@ namespace Lemon_App
                 Dispatcher.Invoke(() => { CloseLoading(); });
             }));
             de.Start();
+            ////TB GDlist////
+            var gd = new Task(new Action(async delegate {
+                await ml.UpdateGdAsync();
+            }));
+            gd.Start();
             CloseLoading();
         }
 
@@ -905,11 +911,12 @@ namespace Lemon_App
                     break;
                 var cl = new WebClient();
                 string mid = data[index].Uid;
-                string url = new LemonLibrary.MusicLib().GetUrlAsync(mid);
+                string url = new MusicLib().GetUrlAsync(mid);
                 string name = data[index].Content.ToString();
                 msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n已完成:" + (index + 1) + "  " + name;
+                await Task.Delay(50);
                 string file = filepath.Text + $"\\{name}.mp3";
-                cl.DownloadFile(new Uri(url), file);
+                cl.DownloadFileAsync(new Uri(url), file);
                 cl.DownloadFileCompleted += delegate { cl.Dispose(); };
             }
             if (!msg.IsClose)
