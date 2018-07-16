@@ -96,10 +96,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="WPFMediaKit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\WPFMediaKit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -199,7 +195,6 @@
     <Resource Include="icon.ico" />
     <Content Include="Lib\Lierda.WPFHelper.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
-    <Content Include="Lib\WPFMediaKit.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lemon Library\LemonLibrary.csproj">
