@@ -911,7 +911,7 @@ namespace Lemon_App
                     break;
                 var cl = new WebClient();
                 string mid = data[index].Uid;
-                string url = new MusicLib().GetUrlAsync(mid);
+                string url =await new MusicLib().GetUrlAsync(mid);
                 string name = data[index].Content.ToString();
                 msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n已完成:" + (index + 1) + "  " + name;
                 await Task.Delay(50);

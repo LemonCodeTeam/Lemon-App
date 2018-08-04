@@ -137,16 +137,16 @@ namespace LemonLibrary
             if (!str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:")&&!str.StartsWith("[kana"))
             {
                 String TimeData = TextHelper.XtoYGetTo(str, "[", "]", 0);
-                String INFO = TextHelper.XtoYGetTo(str, "[", "]", 0);
-                String io = "[" + INFO + "]";
+                String io = "[" +TimeData + "]";
                 String TexsData = str.Replace(io, "");
+                String unTimeData = TimeData.Substring(0, TimeData.Length - 1);
                 if (doesAdd)
                 {
-                    times.Add(TimeData);
+                    times.Add(unTimeData);
                     texs.Add(TexsData);
-                    data.Add(TimeData, TexsData);
+                    data.Add(unTimeData, TexsData);
                 }
-                return new string[2] {TimeData,TexsData};
+                return new string[2] {unTimeData,TexsData};
             }
             else return null;
         }

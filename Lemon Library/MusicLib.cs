@@ -18,6 +18,19 @@ using static LemonLibrary.InfoHelper;
      Author:Twilight./Lemon QQ:2728578956
 Please retain the copyright information, rights reserved.
      */
+
+/*
+ TODO:music kb/s list:
+
+$type = array(
+        'size_320mp3' => array(320, 'M800', 'mp3'),
+        'size_192aac' => array(192, 'C600', 'm4a'),
+        'size_128mp3' => array(128, 'M500', 'mp3'),
+        'size_96aac'  => array(96, 'C400', 'm4a'),
+        'size_48aac'  => array(48, 'C200', 'm4a'),
+        'size_24aac'  => array(24, 'C100', 'm4a'),
+    );
+ */
 namespace LemonLibrary
 {
     public class MusicLib {
@@ -117,12 +130,18 @@ namespace LemonLibrary
             }
             Settings.USettings.MusicGD = data;
         }
-        public string GetUrlAsync(string mid)
+        public async Task<string> GetUrlAsync(string Musicid)
         {
-           return  JObject.Parse(HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", $"types=url&id={mid}&source=tencent"))["url"].ToString();
+            //固定GUID(随机)
+            var guid = "365305415";
+            //通过Musicid获取mid
+            var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
+            //获取key
+            var key = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid={guid}&format=json"))["key"].ToString();
+            return $"https://dl.stream.qqmusic.qq.com/M800{mid}.mp3?vkey={key}&guid={guid}&uid=0&fromtag=30";
         }
         public string GetWyUrlAsync(string mid)
-        {
+        {//TODO: 原生api
             return JObject.Parse(HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", $"types=url&id={mid}&source=netease"))["url"].ToString();
         }
         public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s,bool ispos, bool doesplay = true)
@@ -135,7 +154,7 @@ namespace LemonLibrary
                 string musicurl = "";
                 if (ispos)
                     musicurl=GetWyUrlAsync(GetWYIdByName(name));
-                else musicurl=GetUrlAsync(mid);
+                else musicurl=await GetUrlAsync(mid);
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate {
                     m.Open(new Uri(GetPath() + $@"Download/{name}", UriKind.Absolute));
