@@ -19,18 +19,6 @@ using static LemonLibrary.InfoHelper;
 Please retain the copyright information, rights reserved.
      */
 
-/*
- TODO:music kb/s list:
-
-$type = array(
-        'size_320mp3' => array(320, 'M800', 'mp3'),
-        'size_192aac' => array(192, 'C600', 'm4a'),
-        'size_128mp3' => array(128, 'M500', 'mp3'),
-        'size_96aac'  => array(96, 'C400', 'm4a'),
-        'size_48aac'  => array(48, 'C200', 'm4a'),
-        'size_24aac'  => array(24, 'C100', 'm4a'),
-    );
- */
 namespace LemonLibrary
 {
     public class MusicLib {
@@ -132,13 +120,25 @@ namespace LemonLibrary
         }
         public async Task<string> GetUrlAsync(string Musicid)
         {
-            //固定GUID(随机)
+            List<String[]> MData = new List<String[]>();
+            MData.Add(new String[] { "M800", "mp3" });
+            MData.Add(new String[] { "C600", "m4a" });
+            MData.Add(new String[] { "M500", "mp3" });
+            MData.Add(new String[] { "C400", "m4a" });
+            MData.Add(new String[] { "M200", "m4a" });
+            MData.Add(new String[] { "M100", "m4a" });
+            
             var guid = "365305415";
-            //通过Musicid获取mid
             var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
-            //获取key
-            var key = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid={guid}&format=json"))["key"].ToString();
-            return $"https://dl.stream.qqmusic.qq.com/M800{mid}.mp3?vkey={key}&guid={guid}&uid=0&fromtag=30";
+            for (int i = 0; i < MData.Count; i++)
+            {
+                String[] datakey = MData[i];
+                var key = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid={guid}&format=json"))["key"].ToString();
+                string uri= $"https://dl.stream.qqmusic.qq.com/{datakey[0]}{mid}.{datakey[1]}?vkey={key}&guid={guid}&uid=0&fromtag=30";
+                if (await HttpHelper.GetWebCode(uri) == 200)
+                    return uri;
+            }
+            return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid="+guid;
         }
         public string GetWyUrlAsync(string mid)
         {//TODO: 原生api
