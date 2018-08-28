@@ -15,7 +15,22 @@ namespace LemonLibrary
             var o = (await hwr.GetResponseAsync()) as HttpWebResponse;
             return (int)o.StatusCode;
         }
-
+        public static async Task<string> GetWebForCodingAsync(string url) {
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
+            SetHeaderValue(hwr.Headers, "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+            hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            hwr.Headers.Add("Cache-Control", "max-age=0");
+            SetHeaderValue(hwr.Headers, "Connection", "keep-alive");
+            hwr.Host="coding.net";
+            hwr.Referer=url;
+            hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
+            hwr.UserAgent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
+            hwr.Timeout = 20000;
+            StreamReader sr = new StreamReader((await hwr.GetResponseAsync()).GetResponseStream(), Encoding.UTF8);
+            var st = await sr.ReadToEndAsync();
+            sr.Dispose();
+            return st;
+        }
         public static async Task<string> GetWebAsync(string url,Encoding e=null)
         {
                 if (e == null)
@@ -49,8 +64,17 @@ namespace LemonLibrary
         }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
-            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-            HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
+            HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
+            SetHeaderValue(hwr.Headers, "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+            hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            hwr.Headers.Add("Cache-Control", "max-age=0");
+            SetHeaderValue(hwr.Headers, "Connection", "keep-alive");
+            hwr.Host = "coding.net";
+            hwr.Referer = url;
+            hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
+            hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
+            hwr.Timeout = 20000;
+            HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
             Stream responseStream = response.GetResponseStream();
             Stream stream = new FileStream(path, FileMode.Create,FileAccess.ReadWrite);
             byte[] bArr = new byte[1024];

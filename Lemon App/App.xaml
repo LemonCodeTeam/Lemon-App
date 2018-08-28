@@ -1,3 +1,24 @@
 ﻿<Application x:Class="Lemon_App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Startup="Application_Startup"/>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Startup="Application_Startup">
+    <Application.Resources>
+        <!--主题颜色 默认值:#FF4EB7FB-->
+        <SolidColorBrush x:Key="ThemeColor" Color="#FF4EB7FB"/>
+        <!--按钮前景色 默认值:#FF93A1AE-->
+        <SolidColorBrush x:Key="ResuColorBrush" Color="#FF93A1AE"/>
+        <!--按钮A1前景色 默认值:#FF787878-->
+        <SolidColorBrush x:Key="ButtonColorBrush" Color="#FF787878"/>
+        <!--UI边框色 默认值:#FFE7E8EC-->
+        <SolidColorBrush x:Key="BorderColorBrush" Color="#FFE7E8EC"/>
+        <!--菜单栏背景色 默认值:#FFFAFAFA-->
+        <SolidColorBrush x:Key="ControlPageBrush" Color="#FFFAFAFA"/>
+        <!--标题栏背景色 默认值:White-->
+        <SolidColorBrush x:Key="TitlePageBrush" Color="White"/>
+        <!--主页面背景色 默认值:White-->
+        <SolidColorBrush x:Key="ContentPageBursh" Color="White"/>
+        <!--Data标题栏背景色 默认值:#FFFDFDFD-->
+        <SolidColorBrush x:Key="DataTopBrush" Color="#FFFDFDFD"/>
+        <!--文本X1 默认值:#FFA0A0A0-->
+        <SolidColorBrush x:Key="TextX1ColorBrush" Color="#FFA0A0A0"/>
+    </Application.Resources>
+</Application>

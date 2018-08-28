@@ -15,11 +15,6 @@ namespace Lemon_App
             tb.Text = tx;
             Left = SystemParameters.WorkArea.Width - Width;
             Top = SystemParameters.WorkArea.Height - Height + 10;
-            if (Settings.USettings.skin == 0)
-                (Resources["Skin"] as Storyboard).Begin();
-            else
-                Settings.USettings.skin = 0;
-            (Resources["unSkin"] as Storyboard).Begin();
         }
         public void tbclose()
         {

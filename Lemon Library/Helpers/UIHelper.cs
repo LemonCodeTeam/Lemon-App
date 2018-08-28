@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace LemonLibrary
 {
-    public class UIHelper {
+    public static class UIHelper {
         public static class ScrollViewerBehavior
         {
             public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.RegisterAttached("HorizontalOffset", typeof(double), typeof(ScrollViewerBehavior), new UIPropertyMetadata(0.0, OnHorizontalOffsetChanged));
@@ -32,6 +32,24 @@ namespace LemonLibrary
             {
                 G((d as ScrollViewer).Content as FrameworkElement);
             }
+        }
+        public static bool IsVerticalScrollBarAtButtom(this ScrollViewer ex)
+        {
+            bool isAtButtom = false;
+            double dVer = ex.VerticalOffset;
+            double dViewport = ex.ViewportHeight;
+            double dExtent = ex.ExtentHeight;
+            if (dVer != 0){
+                if (dVer + dViewport == dExtent)
+                    isAtButtom = true;
+                else
+                    isAtButtom = false;
+            }
+            else
+                isAtButtom = false;
+            if (ex.VerticalScrollBarVisibility == ScrollBarVisibility.Disabled || ex.VerticalScrollBarVisibility == ScrollBarVisibility.Hidden)
+                isAtButtom = true;
+            return isAtButtom;
         }
     }
 }

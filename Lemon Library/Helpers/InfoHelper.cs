@@ -14,6 +14,7 @@ namespace LemonLibrary
         {
             public Music() { }
             public string MusicName { set; get; } = "";
+            public string MusicName_Lyric { get; set; } = "";
             public string Singer { set; get; } = "";
             public string MusicID { set; get; } = "";
             public string ImageUrl { set; get; } = "";

@@ -108,6 +108,15 @@
     <Compile Include="ControlItems\FLGDIndexItem.xaml.cs">
       <DependentUpon>FLGDIndexItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControlItems\SkinControl.xaml.cs">
+      <DependentUpon>SkinControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControlItems\TitlePageBtn.xaml.cs">
+      <DependentUpon>TitlePageBtn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControlItems\UserTxControl.xaml.cs">
+      <DependentUpon>UserTxControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Msg.xaml.cs">
       <DependentUpon>Msg.xaml</DependentUpon>
     </Compile>
@@ -131,6 +140,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\FLGDIndexItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\SkinControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\TitlePageBtn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\UserTxControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

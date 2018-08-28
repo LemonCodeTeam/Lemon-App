@@ -6,10 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lemon App", "Lemon App\Lemo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonLibrary", "Lemon Library\LemonLibrary.csproj", "{9DC3DCAC-C7B4-41BA-BE54-6EAB5FE74FD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updata", "Updater\Updata.csproj", "{BA11F3ED-27C7-45D2-8156-FF1689E53E10}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bin", "bin\bin.csproj", "{FC664D44-F6BF-418B-B3D7-4D2737633C98}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,14 +20,6 @@ Global
 		{9DC3DCAC-C7B4-41BA-BE54-6EAB5FE74FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DC3DCAC-C7B4-41BA-BE54-6EAB5FE74FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DC3DCAC-C7B4-41BA-BE54-6EAB5FE74FD1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA11F3ED-27C7-45D2-8156-FF1689E53E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA11F3ED-27C7-45D2-8156-FF1689E53E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA11F3ED-27C7-45D2-8156-FF1689E53E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA11F3ED-27C7-45D2-8156-FF1689E53E10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC664D44-F6BF-418B-B3D7-4D2737633C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC664D44-F6BF-418B-B3D7-4D2737633C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC664D44-F6BF-418B-B3D7-4D2737633C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC664D44-F6BF-418B-B3D7-4D2737633C98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

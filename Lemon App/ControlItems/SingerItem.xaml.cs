@@ -40,18 +40,13 @@ namespace Lemon_App
                     v.DownloadFileCompleted += delegate
                     {
                         v.Dispose();
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
-                        var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg").GetMajorColor();
-                        var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                        back.Background = new SolidColorBrush(color);
+                        var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg");
+                        im.Background = new ImageBrush(image.ToImageSource());
                     };
                 }
-                else
-                {
-                    im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg", UriKind.Relative)));
-                    var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg").GetMajorColor();
-                    var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                    back.Background = new SolidColorBrush(color);
+                else{
+                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg");
+                    im.Background = new ImageBrush(image.ToImageSource());
                 }
             }
             catch
@@ -63,17 +58,13 @@ namespace Lemon_App
                     v.DownloadFileCompleted += delegate
                     {
                         im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/SingerNo.jpg", UriKind.Relative)));
-                        var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg").GetMajorColor();
-                        var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                        back.Background = new SolidColorBrush(color);
+                        var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg");
+                        im.Background = new ImageBrush(image.ToImageSource());
                     };
                 }
-                else
-                {
-                    im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/SingerNo.jpg", UriKind.Relative)));
-                    var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg").GetMajorColor();
-                    var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                    back.Background = new SolidColorBrush(color);
+                else {
+                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg");
+                    im.Background = new ImageBrush(image.ToImageSource());
                 }
             }
         }

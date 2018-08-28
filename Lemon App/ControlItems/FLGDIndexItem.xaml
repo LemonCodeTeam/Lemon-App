@@ -4,16 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lemon_App"
-             mc:Ignorable="d" Width="100" Height="150">
-    <Grid x:Name="back" Background="#FF007ACC">
-        <Grid.Clip>
-            <RectangleGeometry RadiusX="5" RadiusY="5">
-                <RectangleGeometry.Rect>
-                    <Rect Width="100" Height="150"/>
-                </RectangleGeometry.Rect>
-            </RectangleGeometry>
-        </Grid.Clip>
+             mc:Ignorable="d" Width="150" Height="200">
+    <Grid Background="#00000000">
         <Border x:Name="im" Margin="0,0,0,50" Background="#FF007ACC"/>
-        <TextBlock x:Name="name" Margin="5,115,5,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="14" TextAlignment="Center" Height="18"/>
+        <TextBlock x:Name="name" Margin="10,155,10,10" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Justify"/>
     </Grid>
 </UserControl>

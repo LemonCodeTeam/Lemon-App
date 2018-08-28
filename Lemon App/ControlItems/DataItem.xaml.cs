@@ -1,10 +1,6 @@
-﻿using LemonLibrary;
-using System;
-using System.IO;
-using System.Net;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
 {
@@ -17,39 +13,45 @@ namespace Lemon_App
         public string SongName { set; get; }
         public string Singer { set; get; }
         public string Image { set; get; }
-        public DataItem(string id, string songname, string singer, string img)
+        public DataItem(Music dat)
         {
             try
             {
                 InitializeComponent();
-                ID = id;
-                SongName = songname;
-                Singer = singer;
-                Image = img;
-                if (!File.Exists(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg"))
-                {
-                    WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/Data" + id + ".jpg");
-                    v.DownloadFileCompleted += delegate
-                    {
-                        v.Dispose();
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg", UriKind.Relative)));
-                        var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg").GetMajorColor();
-                        var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                        back.Background = new SolidColorBrush(color);
-                    };
-                }
-                else
-                {
-                    im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg", UriKind.Relative)));
-                    var dt = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Data" + id + ".jpg").GetMajorColor();
-                    var color = Color.FromArgb(dt.A, dt.R, dt.G, dt.B);
-                    back.Background = new SolidColorBrush(color);
-                }
+                ID = dat.MusicID;
+                SongName = dat.MusicName;
+                Singer = dat.Singer;
+                Image = dat.ImageUrl;
                 name.Text = SongName;
                 ser.Text = Singer;
+                mss.Text = dat.MusicName_Lyric;
             }
             catch { }
         }
+
+        private void userControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (He.LastItem != null) {
+                mss.Opacity = 0.6;
+                ser.Opacity = 0.8;
+                He.LastItem.namss.Foreground = App.BaseApp.GetResuColorBrush();
+                He.LastItem.ser.Foreground = App.BaseApp.GetResuColorBrush();
+                He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0,0,0,0));
+            }
+            var col= App.BaseApp.GetThemeColorBrush();
+            ser.Foreground = col;
+            namss.Foreground = col;
+            color.Background = col;
+            mss.Opacity = 1;
+            ser.Opacity = 1;
+
+            He.LastItem = this;
+        }
+    }
+
+
+    public class He
+    {
+        public static DataItem LastItem = null;
     }
 }
