@@ -28,17 +28,16 @@ namespace Lemon_App
             }
             catch { }
         }
-
-        private void userControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (He.LastItem != null) {
+        public void ShowDx() {
+            if (He.LastItem != null)
+            {
                 mss.Opacity = 0.6;
                 ser.Opacity = 0.8;
                 He.LastItem.namss.Foreground = App.BaseApp.GetResuColorBrush();
                 He.LastItem.ser.Foreground = App.BaseApp.GetResuColorBrush();
-                He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0,0,0,0));
+                He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             }
-            var col= App.BaseApp.GetThemeColorBrush();
+            var col = App.BaseApp.GetThemeColorBrush();
             ser.Foreground = col;
             namss.Foreground = col;
             color.Background = col;
@@ -46,6 +45,15 @@ namespace Lemon_App
             ser.Opacity = 1;
 
             He.LastItem = this;
+        }
+        public bool isPlay(string name) {
+            if (this.name.Text == name)
+                return true;
+            else return false;
+        }
+        private void userControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ShowDx();
         }
     }
 

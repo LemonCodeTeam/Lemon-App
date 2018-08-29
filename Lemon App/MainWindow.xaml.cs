@@ -59,8 +59,6 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
-           // FullScreenManager.RepairWpfWindowFullScreenBehavior(this);
-          
             Closed += delegate { notifyIcon.Visible = false; };
         }
 
@@ -71,7 +69,8 @@ namespace Lemon_App
         }
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.USettings.Skin_Path != ""){
+            if (Settings.USettings.Skin_Path != "")
+            {
                 App.BaseApp.Skin();
                 Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
                 App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
@@ -85,6 +84,7 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
             }
+            else App.BaseApp.unSkin();
 
             var ani = Resources["Loading"] as Storyboard;
             ani.Completed += Ani_Completed;
@@ -130,6 +130,7 @@ namespace Lemon_App
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
+            UserName.Text = Settings.USettings.UserName;
             if (System.IO.File.Exists(Settings.USettings.UserImage))
             {
                 var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
@@ -216,6 +217,11 @@ namespace Lemon_App
                                     {
                                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
                                         k.MouseDown += PlayMusic;
+                                        if (k.isPlay(MusicName.Text))
+                                        {
+                                            k.ShowDx();
+                                            MusicData = k;
+                                        }
                                         DataItemsList.Children.Add(k);
                                     });
                                     await Task.Delay(1);
@@ -651,6 +657,11 @@ namespace Lemon_App
                     foreach (var j in dt.Data)
                     {
                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                        if (k.isPlay(MusicName.Text))
+                        {
+                            k.ShowDx();
+                            MusicData = k;
+                        }
                         k.MouseDown += PlayMusic;
                         DataItemsList.Children.Add(k);
                     }
@@ -753,17 +764,11 @@ namespace Lemon_App
         #endregion
         #region ILike
         private void LikeBtnUp() {
-            var color = new SolidColorBrush() { Color = ((SolidColorBrush)likeBtn_path.Fill).Color };
-            ColorAnimation ca = new ColorAnimation(App.BaseApp.GetResuColorBrush().Color, TimeSpan.FromSeconds(0.3));
-            color.BeginAnimation(SolidColorBrush.ColorProperty, ca);
-            likeBtn_path.Fill = color;
+            likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
         }
 
         private void LikeBtnDown() {
-            var color = new SolidColorBrush() { Color = ((SolidColorBrush)likeBtn_path.Fill).Color };
-            ColorAnimation ca = new ColorAnimation(Color.FromRgb(216, 30, 30), TimeSpan.FromSeconds(0.3));
-            color.BeginAnimation(SolidColorBrush.ColorProperty, ca);
-            likeBtn_path.Fill = color;
+            likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
         }
         private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -814,6 +819,11 @@ namespace Lemon_App
             foreach (var dt in Settings.USettings.MusicLike.Values)
             {
                 var jm = new DataItem(dt) { Width = DataItemsList.ActualWidth };
+                if (jm.isPlay(MusicName.Text))
+                {
+                    jm.ShowDx();
+                    MusicData = jm;
+                }
                 jm.MouseDown += PlayMusic;
                 DataItemsList.Children.Add(jm);
             }
@@ -874,7 +884,12 @@ namespace Lemon_App
                 });
             Dispatcher.Invoke(() => {
                 foreach (var j in dt) {
-                        var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                    var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                    if (k.isPlay(MusicName.Text))
+                    {
+                        k.ShowDx();
+                        MusicData = k;
+                    }
                     k.MouseDown += PlayMusic;
                     DataItemsList.Children.Add(k);
                 }
@@ -889,6 +904,7 @@ namespace Lemon_App
         public void PlayMusic(object sender, MouseEventArgs e)
         {
             var dt = sender as DataItem;
+            dt.ShowDx();
             MusicData = dt;
             PlayMusic(dt.ID, dt.Image, dt.SongName, dt.Singer);
         }
@@ -1151,6 +1167,8 @@ namespace Lemon_App
                 var image = new System.Drawing.Bitmap(GetPath() + qqx + ".jpg");
                 UserTxControl utc = new UserTxControl(new ImageBrush(image.ToImageSource()), name, qqx);
                 utc.MouseDown += (s, ex) => {
+                    Settings.SaveSettings();
+                    Settings.USettings.MusicGD.Clear();
                     string qq = utc.qq;
                     Settings.LoadUSettings(qq);
                     Settings.USettings.UserName = utc.UserName.Text;
@@ -1159,11 +1177,11 @@ namespace Lemon_App
                     Settings.SaveSettings();
                     Settings.LSettings.qq = qq;
                     Settings.SaveLocaSettings();
-                    LoginPage.Visibility = Visibility.Collapsed;
-                    Settings.USettings.MusicGD.Clear();
-                    var ani = Resources["Loading"] as Storyboard;
-                    ani.Completed += Ani_Completed;
-                    ani.Begin();
+                    ml.m.Stop();
+                    ml = null;
+                    var a = new MainWindow();
+                    a.Show();
+                    this.Close();
                 };
                 Login_wp.Children.Add(utc);
             }
@@ -1218,6 +1236,10 @@ namespace Lemon_App
                     {
                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
                         k.MouseDown += PlayMusic;
+                        if (k.isPlay(MusicName.Text)) {
+                            k.ShowDx();
+                            MusicData = k;
+                        }
                         DataItemsList.Children.Add(k);
                     });
                     await Task.Delay(1);

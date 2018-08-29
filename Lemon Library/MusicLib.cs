@@ -38,6 +38,7 @@ namespace LemonLibrary
         public MediaPlayer m = new MediaPlayer();
         public LyricView lv;
         public string qq = "";
+
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
             if (HttpHelper.IsNetworkTrue())

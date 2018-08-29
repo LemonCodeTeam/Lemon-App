@@ -1,5 +1,6 @@
 ﻿using LemonLibrary;
 using Lierda.WPFHelper;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Text;
@@ -114,9 +115,9 @@ namespace Lemon_App
                 }
             }
             Settings.LoadUSettings(qq);
-            var sl = await HttpHelper.GetWebAsync("https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+            var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
             await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", InfoHelper.GetPath() + qq + ".jpg");
-            Settings.USettings.UserName = TextHelper.XtoYGetTo(sl, "\"nick\":\"", "\", \"", 0);
+            Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
             Settings.USettings.UserImage = InfoHelper.GetPath() + qq + ".jpg";
             Settings.USettings.LemonAreeunIts = qq;
             Settings.SaveSettings();

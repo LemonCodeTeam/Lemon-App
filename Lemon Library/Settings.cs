@@ -20,6 +20,7 @@ namespace LemonLibrary
         }
         public static void LoadUSettings(string qq)
         {
+            USettings = new UserSettings();
             if (File.Exists(GetPath() + qq + ".st")) {
                 string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
                 JObject o = JObject.Parse(data);
