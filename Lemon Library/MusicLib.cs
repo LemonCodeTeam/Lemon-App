@@ -255,7 +255,13 @@ namespace LemonLibrary
                         {
                             if (fydata.ContainsKey(KEY[i]))
                                 gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
-                            else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
+                            else {
+                                string dt = LyricView.YwY(KEY[i], 1);
+                                if (fydata.ContainsKey(dt)) {
+                                    gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^"+fydata[dt]).Replace("\n", "").Replace("\r", "");
+                                }
+                                else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
+                            }
                         }
                         catch { }
                     }

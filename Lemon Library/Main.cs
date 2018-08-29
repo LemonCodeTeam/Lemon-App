@@ -6,8 +6,9 @@ namespace LemonLibrary
     {
         static void Main() {
             var ml = new MusicLib();
-            var s = ml.GetGDAsync("2623830636");
-            Console.ReadLine();
+            ml.mldata.Add("003PEHXL1JkgM3", "TEST");
+            var s = ml.GetLyric("003PEHXL1JkgM3");
+            Console.WriteLine(s);
             Console.ReadLine();
         }
     }
