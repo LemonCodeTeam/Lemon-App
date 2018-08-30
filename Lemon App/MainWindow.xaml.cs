@@ -69,7 +69,7 @@ namespace Lemon_App
         }
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.USettings.Skin_Path != "")
+            if (Settings.USettings.Skin_Path != ""&& System.IO.File.Exists(Settings.USettings.Skin_Path))
             {
                 App.BaseApp.Skin();
                 Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
@@ -247,15 +247,11 @@ namespace Lemon_App
         }
 
         private void exShow() {
-            try
-            {
                 this.WindowState = WindowState.Normal;
                 var ani = Resources["Loading"] as Storyboard;
                 ani.Completed -= Ani_Completed;
                 ani.Begin();
                 this.Activate();
-            }
-            catch { }
         }
         private void MaxBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -392,9 +388,7 @@ namespace Lemon_App
         }
         private void SIngerPageChecked(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (sender != null)
+             if (sender != null)
                 {
                     OpenLoading();
                     if (SingerKey1 == "")
@@ -418,8 +412,6 @@ namespace Lemon_App
                     }));
                     s.Start();
                 }
-            }
-            catch { }
         }
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -609,8 +601,6 @@ namespace Lemon_App
         }
         private void FLGDPageChecked(object sender, RoutedEventArgs e)
         {
-            try
-            {
                 if (sender != null)
                 {
                     OpenLoading();
@@ -633,8 +623,6 @@ namespace Lemon_App
                     }));
                     s.Start();
                 }
-            }
-            catch { }
         }
         public void GetGD(string id)
         {
@@ -700,8 +688,6 @@ namespace Lemon_App
         }
         private void RadioPageChecked(object sender, RoutedEventArgs e)
         {
-            try
-            {
                 if (sender != null)
                 {
                     OpenLoading();
@@ -757,8 +743,6 @@ namespace Lemon_App
                     }));
                     s.Start();
                 }
-            }
-            catch { }
         }
         Music RadioData;
         #endregion
@@ -829,8 +813,8 @@ namespace Lemon_App
             }
             isSearch = false;
         }
-        #region LikePage(Data)
-
+        #endregion
+        #region DataPageBtn
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             PlayMusic(DataItemsList.Children[0] as DataItem, null);
@@ -838,12 +822,33 @@ namespace Lemon_App
 
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            DownloadList.Children.Clear();
-            filepath.Text = InfoHelper.GetPath() + "Download";
-            foreach (DataItem x in DataItemsList.Children)
-                DownloadList.Children.Add(new CheckBox() { Width = 370, Content = x.SongName + " - " + x.Singer, Uid = x.ID, FocusVisualStyle = null, Foreground = cb_color.Foreground, Style = cb_color.Style });
+            border5.Visibility = Visibility.Collapsed;
+            DataDownloadPage.Visibility = Visibility.Visible;
+            Download_Path.Text = GetPath() + "Download";
+            DownloadQx.IsChecked = true;
+            DownloadQx.Content = "全不选";
+            foreach (DataItem x in DataItemsList.Children) {
+                x.MouseDown -= PlayMusic;
+                x.NSDownload(true);
+                x.Check();
+            }
         }
-        #endregion
+
+        public void CloseDownloadPage() {
+            border5.Visibility = Visibility.Visible;
+            DataDownloadPage.Visibility = Visibility.Collapsed;
+            foreach (DataItem x in DataItemsList.Children)
+            {
+                x.MouseDown += PlayMusic;
+                x.NSDownload(false);
+                x.Check();
+            }
+        }
+
+        private void DataDownloadBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CloseDownloadPage();
+        }
         #endregion
         #region SearchMusic
         private int ixPlay = 1;
@@ -851,7 +856,7 @@ namespace Lemon_App
         {
             if (Datasv.IsVerticalScrollBarAtButtom()&&isSearch) {
                 ixPlay++;
-                SearchMusic(SearchBox.Text,ixPlay);
+                SearchMusic(SearchKey,ixPlay);
             }
         }
 
@@ -860,9 +865,11 @@ namespace Lemon_App
             if (e.Key == Key.Enter)
             { SearchMusic(SearchBox.Text); ixPlay = 1; }
         }
+        private string SearchKey = "";
         public void SearchMusic(string key,int osx=0)
         {
             isSearch = true;
+            SearchKey = key;
             OpenLoading();
             var xs = new Task(new Action(async delegate
             {
@@ -1083,7 +1090,7 @@ namespace Lemon_App
         {
             var g = new System.Windows.Forms.FolderBrowserDialog();
             if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                filepath.Text = g.SelectedPath;
+                Download_Path.Text = g.SelectedPath;
         }
 
         private void cb_color_Click(object sender, RoutedEventArgs e)
@@ -1092,59 +1099,93 @@ namespace Lemon_App
             if (d.IsChecked == true)
             {
                 d.Content = "全不选";
-                foreach (CheckBox x in DownloadList.Children)
-                    x.IsChecked = true;
+                foreach (DataItem x in DataItemsList.Children)
+                    x.Check();
             }
             else
             {
                 d.Content = "全选";
-                foreach (CheckBox x in DownloadList.Children)
-                    x.IsChecked = false;
+                foreach (DataItem x in DataItemsList.Children)
+                    x.Check();
             }
         }
 
-        private async void Dmp_DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var data = new List<CheckBox>();
-            foreach (var x in DownloadList.Children)
+            var data = new List<DataItem>();
+            foreach (var x in DataItemsList.Children)
             {
-                var f = x as CheckBox;
-                if (f.IsChecked == true)
+                var f = x as DataItem;
+                if (f.isChecked == true)
                     data.Add(f);
             }
-            int index = 0;
-            (Resources["CloseDmp"] as Storyboard).Begin();
+            CloseDownloadPage();
             Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")");
             msg.Show();
-            for (index = 0; index < data.Count; index++)
+            var DTimer = new System.Windows.Forms.Timer();
+            await DownloadTaskAsync(msg, data,DTimer);
+            DTimer.Interval = 2000;
+            DTimer.Tick +=async delegate {
+                if (DownloadIndex != data.Count){
+                    string name = data[DownloadIndex].SongName + " - " + data[DownloadIndex].Singer;
+                    string file = Download_Path.Text + $"\\{name}.mp3";
+                    System.IO.File.Delete(file);
+                    await DownloadTaskAsync(msg, data, DTimer);
+                }
+            };
+        }
+        private int DownloadIndex=0;
+        public async Task DownloadTaskAsync(Msg msg, List<DataItem> data, System.Windows.Forms.Timer dt) {
+            dt.Start();
+            string name = data[DownloadIndex].SongName + " - " + data[DownloadIndex].Singer;
+            string file = Download_Path.Text + $"\\{name}.mp3";
+            if (!System.IO.File.Exists(file))
             {
-                if (msg.IsClose)
-                    break;
                 var cl = new WebClient();
-                string mid = data[index].Uid;
-                string url =await new MusicLib().GetUrlAsync(mid);
-                string name = data[index].Content.ToString();
-                msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n已完成:" + (index + 1) + "  " + name;
-                await Task.Delay(50);
-                string file = filepath.Text + $"\\{name}.mp3";
+                string mid = data[DownloadIndex].ID;
+                string url = await ml.GetUrlAsync(mid);
+                msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n正在下载:" + (DownloadIndex + 1) + "  " + name;
                 cl.DownloadFileAsync(new Uri(url), file);
-                cl.DownloadFileCompleted += delegate { cl.Dispose(); };
+                cl.DownloadProgressChanged += (s, e) =>
+                {
+                    dt.Stop();
+                    msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n正在下载：(" + e.ProgressPercentage + "%)" + (DownloadIndex + 1) + "  " + name;
+                };
+                cl.DownloadFileCompleted += async delegate
+                {
+                    if (!msg.IsClose)
+                    {
+                        if (DownloadIndex != data.Count)
+                        {
+                            DownloadIndex++;
+                            await DownloadTaskAsync(msg, data,dt);
+                        }
+                        if (DownloadIndex + 1 == data.Count) {
+                            if (!msg.IsClose)
+                            {
+                                msg.tb.Text = "已完成.";
+                                await Task.Delay(5000);
+                                msg.tbclose();
+                            }
+                            else
+                            {
+                                await Task.Delay(2000);
+                                Msg msxg = new Msg("已取消下载");
+                                msxg.Show();
+                                await Task.Delay(5000);
+                                msxg.tbclose();
+                            }
+                        }
+                    }
+                    cl.Dispose();
+                };
             }
-            if (!msg.IsClose)
-            {
-                msg.tb.Text = "已完成.";
-                await Task.Delay(5000);
-                msg.tbclose();
-            }
-            else
-            {
-                await Task.Delay(2000);
-                Msg msxg = new Msg("已取消下载");
-                msxg.Show();
-                await Task.Delay(5000);
-                msxg.tbclose();
+            else {
+                DownloadIndex++;
+                await DownloadTaskAsync(msg, data,dt);
             }
         }
+
         #endregion
         #region User
         #region Login

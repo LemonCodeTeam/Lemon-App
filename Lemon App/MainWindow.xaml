@@ -958,40 +958,35 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Border x:Name="checkBoxBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="13" Height="13" CornerRadius="2">
+                            <Border x:Name="checkBoxBorder" BorderBrush="#FFA0A0A0" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="14" Height="14">
                                 <Grid x:Name="markGrid">
-                                    <Path x:Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Stretch="None"/>
-                                    <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="2" Opacity="0"/>
+                                    <Border x:Name="optionMark" Margin="1" Opacity="0">
+                                        <Border.Background>
+                                            <VisualBrush Stretch="Uniform">
+                                                <VisualBrush.Visual>
+                                                    <Grid>
+                                                        <Path Data="M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909L64.698182,554.821818A59.578182,59.578182,0,0,1,64.698182,469.178182A61.905455,61.905455,0,0,1,151.738182,469.178182L418.909091,734.021818A60.043636,60.043636,0,0,1,418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z" Fill="{DynamicResource ThemeColor}"/>
+                                                        <Path Data="M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909A60.043636,60.043636,0,0,1,333.730909,734.021818L872.261818,203.869091A61.905455,61.905455,0,0,1,959.301818,203.869091A60.043636,60.043636,0,0,1,959.301818,289.978182L418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z" Fill="{DynamicResource ThemeColor}"/>
+                                                    </Grid>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <Rectangle x:Name="indeterminateMark" Fill="{DynamicResource ThemeColor}" Margin="2" Opacity="0"/>
                                 </Grid>
                             </Border>
+                            <Border x:Name="border" Width="14" Height="14" Margin="1" BorderThickness="1" BorderBrush="{DynamicResource ThemeColor}" CornerRadius="0" Opacity="0"/>
                             <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasContent" Value="true">
                                 <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
-                                <Setter Property="Padding" Value="4,-1,0,0"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Border}"/>
-                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
-                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Border}"/>
-                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
-                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Border}"/>
-                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
-                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                                <Setter Property="Padding" Value="4,0,0,0"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="true">
                                 <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
                                 <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
+                                <Setter Property="Opacity" TargetName="border" Value="1"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="{x:Null}">
                                 <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
@@ -1002,30 +997,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Storyboard x:Key="OpenDmp">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="DownloadMargerPage">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="DownloadMargerPage">
-                <EasingThicknessKeyFrame KeyTime="0" Value="0,100,0,0"/>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DownloadMargerPage">
-                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="CloseDmp">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="DownloadMargerPage">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,100,0,0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="DownloadMargerPage">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DownloadMargerPage">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-        </Storyboard>
         <Storyboard x:Key="CloseLyricPage">
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
@@ -1137,12 +1108,6 @@
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="AddGDPage_DrBtn">
             <BeginStoryboard x:Name="DrAddGDPage_BeginStoryboard" Storyboard="{StaticResource DrAddGDPage}"/>
-        </EventTrigger>
-        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="Dmp_CloseBtn">
-            <BeginStoryboard x:Name="CloseDmp_BeginStoryboard1" Storyboard="{StaticResource CloseDmp}"/>
-        </EventTrigger>
-        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="DataDownloadBtn">
-            <BeginStoryboard x:Name="OpenDmp_BeginStoryboard1" Storyboard="{StaticResource OpenDmp}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="AddGDPage_OpenBtn">
             <BeginStoryboard x:Name="OpenAddGDPage_BeginStoryboard1" Storyboard="{StaticResource OpenAddGDPage}"/>
@@ -1283,7 +1248,7 @@
                         <Grid.Effect>
                             <DropShadowEffect BlurRadius="30" Opacity="0.4" ShadowDepth="0"/>
                         </Grid.Effect>
-                        <Grid Background="{Binding Background, ElementName=ContentPage}" Width="320" Height="210" Margin="20">
+                        <Grid Width="320" Height="210" Margin="20" Background="White">
                             <Grid.Clip>
                                 <RectangleGeometry RadiusX="5" RadiusY="5">
                                     <RectangleGeometry.Rect>
@@ -1291,19 +1256,19 @@
                                     </RectangleGeometry.Rect>
                                 </RectangleGeometry>
                             </Grid.Clip>
-                            <Border x:Name="AddGDPage_qqmod"  HorizontalAlignment="Left" Width="85" Height="85" Margin="40,40,0,0" Background="#00000000" CornerRadius="10" VerticalAlignment="Top" MouseDown="AddGDPage_qqmod_MouseDown">
+                            <Border x:Name="AddGDPage_qqmod"  HorizontalAlignment="Left" Width="55" Height="55" Margin="60,60,0,0" Background="#00000000" CornerRadius="10" VerticalAlignment="Top" MouseDown="AddGDPage_qqmod_MouseDown">
                                 <Border.Effect>
                                     <DropShadowEffect BlurRadius="10" Opacity="0.4" ShadowDepth="0"/>
                                 </Border.Effect>
                                 <Grid>
                                     <Path Data="M35.84,529.92C35.84,793.6 250.88,1008.64 514.56,1008.64 778.24,1008.64 993.28,793.6 993.28,529.92 993.28,266.24 780.8,51.2 514.56,51.2 250.88,51.2 35.84,266.24 35.84,529.92z " Stretch="Uniform" Fill="#FFF8C913"/>
-                                    <Path Data="M660.48 10.24c-17.92 20.48-56.32 38.4-107.52 51.2-87.04 20.48-104.96 25.6-130.56 40.96-15.36 7.68-33.28 20.48-43.52 30.72-20.48 17.92-35.84 51.2-30.72 61.44 2.56 5.12 51.2 74.24 110.08 158.72 58.88 81.92 115.2 163.84 128 181.76 12.8 17.92 20.48 33.28 20.48 33.28 0 2.56-10.24 0-20.48-2.56-40.96-12.8-112.64 0-163.84 25.6-38.4 20.48-81.92 64-99.84 99.84-20.48 40.96-23.04 97.28-7.68 135.68 15.36 40.96 48.64 74.24 92.16 97.28 33.28 17.92 40.96 17.92 84.48 20.48 35.84 2.56 56.32 0 76.8-5.12 94.72-28.16 163.84-102.4 168.96-189.44 2.56-48.64-2.56-64-66.56-176.64-99.84-174.08-189.44-332.8-189.44-335.36 0 0 17.92-2.56 40.96-5.12 66.56-2.56 120.32-35.84 148.48-89.6 12.8-23.04 12.8-30.72 12.8-79.36 0-30.72-2.56-58.88-5.12-61.44-2.56-7.68-5.12-5.12-17.92 7.68z" Fill="#FF02B053" Stretch="Uniform" Margin="0,-5,0,5"/>
+                                    <Path Data="M660.48 10.24c-17.92 20.48-56.32 38.4-107.52 51.2-87.04 20.48-104.96 25.6-130.56 40.96-15.36 7.68-33.28 20.48-43.52 30.72-20.48 17.92-35.84 51.2-30.72 61.44 2.56 5.12 51.2 74.24 110.08 158.72 58.88 81.92 115.2 163.84 128 181.76 12.8 17.92 20.48 33.28 20.48 33.28 0 2.56-10.24 0-20.48-2.56-40.96-12.8-112.64 0-163.84 25.6-38.4 20.48-81.92 64-99.84 99.84-20.48 40.96-23.04 97.28-7.68 135.68 15.36 40.96 48.64 74.24 92.16 97.28 33.28 17.92 40.96 17.92 84.48 20.48 35.84 2.56 56.32 0 76.8-5.12 94.72-28.16 163.84-102.4 168.96-189.44 2.56-48.64-2.56-64-66.56-176.64-99.84-174.08-189.44-332.8-189.44-335.36 0 0 17.92-2.56 40.96-5.12 66.56-2.56 120.32-35.84 148.48-89.6 12.8-23.04 12.8-30.72 12.8-79.36 0-30.72-2.56-58.88-5.12-61.44-2.56-7.68-5.12-5.12-17.92 7.68z" Fill="#FF02B053" Stretch="Uniform" Margin="0,-2,0,2"/>
                                 </Grid>
                             </Border>
-                            <Border x:Name="AddGDPage_wymod"  HorizontalAlignment="Right" Width="85" Height="85" Margin="0,40,40,0" Background="#FFE72D2C" CornerRadius="10" VerticalAlignment="Top" MouseDown="AddGDPage_wymod_MouseDown">
+                            <Border x:Name="AddGDPage_wymod"  HorizontalAlignment="Right" Width="55" Height="55" Margin="0,60,60,0" Background="#FFE72D2C" CornerRadius="10" VerticalAlignment="Top" MouseDown="AddGDPage_wymod_MouseDown">
                                 <Path Data="M627.086668,5.114963C655.218965,-2.557482 685.908743,-2.557482 714.04104,5.114963 747.2883,12.787408 777.978078,28.132297 803.552893,48.592149 813.782819,56.264594 821.455264,63.937038 826.570227,76.724446 834.242672,94.626817 831.68519,115.086669 821.455264,130.431558 813.782819,143.218966 798.43793,153.448892 780.53556,156.006373 767.748152,158.563855 754.960745,156.006373 742.173337,148.333928 737.058374,145.776446 731.943411,138.104002 724.270966,135.546521 706.368595,125.316595 688.466225,115.086669 668.006373,117.64415 652.661484,117.64415 639.874076,125.316595 632.201631,135.546521 621.971705,145.776447 619.414223,158.563855 621.971705,171.351262 629.64415,196.926077 634.759113,225.058374 642.431558,250.633189 693.581188,253.190671 742.173337,265.978078 785.650523,291.552893 826.570227,317.127708 864.93245,350.374968 895.622228,388.737191 921.197043,421.984451 941.656895,460.346674 951.886821,501.266378 964.674229,544.743564 969.789192,590.778231 964.674229,634.255417 962.116747,672.61764 954.444303,708.422381 941.656895,744.227122 908.409635,828.624012 849.58756,905.348458 770.305634,953.940607 714.041041,989.745348 647.546521,1012.762682 581.052001,1020.435127 535.017334,1025.55009 488.982666,1025.55009 442.947999,1017.877645 348.321183,1002.532756 261.366811,956.498089 192.31481,887.446087 125.82029,820.951567 79.785623,733.997196 59.325771,641.927862 51.653326,572.875861 51.653326,503.82386 66.998216,434.771858 84.900587,352.932449 128.377772,273.650522 184.642365,212.270966 233.234514,161.121336 292.056589,122.759113 355.993627,94.6268159999999 363.666072,92.0693339999999 368.781035,89.5118529999999 376.453479,86.9543719999999 391.798368,84.3968899999999 407.143257,86.9543719999999 419.930665,97.1842979999999 437.833036,109.971706 445.50548,130.431558 442.947999,150.89141 440.390517,171.351262 425.045628,189.253633 407.143258,196.926077 343.20622,222.500892 284.384145,265.978078 243.46444,319.68519 205.102218,373.392302 179.527402,432.214377 171.854958,493.593933 164.182513,554.973489 171.854958,616.353046 192.31481,675.175121 223.004588,759.572011 286.941626,831.181494 366.223553,872.101198 414.815702,897.676013 468.522814,910.463421 522.229926,910.463421 565.707112,910.463421 611.741779,902.790976 652.661484,887.446087 688.466225,874.658679 724.270967,854.198827 752.403263,828.624013 780.53556,805.606679 803.552893,774.916901 818.897782,744.227122 826.570227,728.882233 836.800153,710.979862 839.357635,693.077492 854.702524,641.927862 857.260006,585.663268 841.915116,534.513638 829.127708,491.036452 803.552893,452.674229 770.305634,424.541932 754.960745,411.754524 739.615856,398.967117 721.713485,388.737191 706.368596,381.064746 691.023707,373.392302 673.121336,370.83482 685.908744,416.869487 696.13867,462.904155 708.926077,506.381341 711.483559,516.611267 714.04104,529.398675 714.04104,539.628601 716.598522,585.663268 698.696151,634.255417 668.006373,670.060158 639.874076,703.307418 598.954372,728.882233 555.477186,736.554678 509.442519,746.784604 458.292888,736.554678 417.373184,710.979863 379.010961,685.405048 350.878664,647.042825 335.533775,606.12312 327.86133,583.105786 322.746367,557.530971 322.746368,531.956156 320.188886,475.691563 335.533776,421.984451 366.223553,375.949783 402.028294,322.242671 460.850369,283.880448 524.787408,265.978078 519.672445,248.075707 514.557482,230.173337 512,212.270966 499.212592,173.908743 501.770074,130.431557 519.672445,97.1842979999998 529.902371,76.7244459999998 542.689779,58.8220749999998 560.592149,46.0346669999998 583.609483,25.574815 604.069335,12.787408 627.086668,5.114963 M478.75274,419.426969C460.850369,437.32934 450.620443,460.346673 445.50548,483.364007 440.390517,503.823859 440.390517,526.841193 445.50548,549.858527 450.620443,572.875861 463.407851,595.893194 483.867703,611.238083 499.212592,621.468009 519.672444,626.582972 540.132297,621.468009 575.937038,616.353046 604.069335,583.105786 604.069335,547.301045 601.511853,539.6286 601.511853,529.398674 598.954372,521.72623 586.166964,473.134081 573.379557,421.984451 560.592149,373.392302 529.902371,381.064747 501.770074,396.409636 478.75274,419.426969z" Stretch="Uniform" Fill="White" Margin="10"/>
                             </Border>
-                            <TextBox x:Name="AddGDPage_id" Height="23" Margin="40,135,40,0" TextWrapping="Wrap" Text="歌单ID   例如:2591355982" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" Foreground="{Binding Foreground, ElementName=SearchBox}" BorderBrush="{Binding BorderBrush, ElementName=SearchBox}"/>
+                            <TextBox x:Name="AddGDPage_id" Height="23" Margin="60,130,60,0" TextWrapping="Wrap" Text="歌单ID   例如:2591355982" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" Foreground="#FF93A1AE"/>
                             <Border x:Name="AddGDPage_DrBtn"  Height="35" VerticalAlignment="Top" Width="120" Margin="0,165,0,0" CornerRadius="20" Background="#FF4EB7FB" MouseDown="AddGDPage_DrBtn_MouseDown">
                                 <TextBlock TextWrapping="Wrap" Text="导入" Margin="0,5,0,0" Foreground="#FFFDFDFD" FontSize="20" TextAlignment="Center"/>
                             </Border>
@@ -1316,7 +1281,23 @@
                     </Grid>
                 </Grid>
                 <Grid x:Name="Data" Visibility="Collapsed">
-                    <Border x:Name="border5" BorderBrush="{DynamicResource BorderColorBrush}" Height="90" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="{DynamicResource DataTopBrush}">
+                    <Border x:Name="DataDownloadPage" BorderBrush="{DynamicResource BorderColorBrush}" Height="90" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="{DynamicResource DataTopBrush}" Visibility="Collapsed">
+                        <Grid>
+                            <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" Margin="185,30,10,0" Foreground="{DynamicResource TextX1ColorBrush}">
+                                <Run Text="将下载到："/>
+                                <Run x:Name="Download_Path"/>
+                                <Run Foreground="{DynamicResource ThemeColor}" Text="更改目录" MouseDown="ckFile_MouseDown"/>
+                            </TextBlock>
+                            <Border x:Name="DataDownloadBtn_Back" BorderThickness="1" HorizontalAlignment="Left" Height="25" Margin="20,0,0,38.88" VerticalAlignment="Bottom" Width="70" BorderBrush="{DynamicResource BorderColorBrush}" Background="{DynamicResource TitlePageBrush}" CornerRadius="5" MouseDown="DataDownloadBtn_Copy_MouseDown">
+                                <TextBlock x:Name="textBlock2" TextWrapping="Wrap" Text="返回" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border x:Name="DownloadBtn" BorderThickness="1" HorizontalAlignment="Left" Height="25" Margin="95,25.12,0,0" VerticalAlignment="Top" Width="70" BorderBrush="{DynamicResource BorderColorBrush}" Background="{DynamicResource TitlePageBrush}" CornerRadius="5" MouseDown="DownloadBtn_MouseDown">
+                                <TextBlock x:Name="textBlock3" TextWrapping="Wrap" Text="下载" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <CheckBox x:Name="DownloadQx" Content="全选" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="24,0,0,10" Style="{DynamicResource CheckBoxStyle}" Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="#00000000" Click="cb_color_Click"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="border5" BorderBrush="{DynamicResource BorderColorBrush}" Height="90" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="{DynamicResource DataTopBrush}" Visibility="Visible">
                         <Grid>
                             <Border x:Name="TXx" HorizontalAlignment="Left" Margin="20,0,0,0" Background="#FFF3F3F3" CornerRadius="5" Width="60" Height="60"/>
                             <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" VerticalAlignment="Top" Margin="85,14.5,105,0" Foreground="{DynamicResource ResuColorBrush}" FontSize="18"/>
@@ -1331,34 +1312,6 @@
                     <ScrollViewer x:Name="Datasv"  Margin="0,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged">
                         <WrapPanel x:Name="DataItemsList"/>
                     </ScrollViewer>
-                    <Grid x:Name="DownloadMargerPage" Width="460" Height="340" Visibility="Collapsed">
-                        <Grid.Effect>
-                            <DropShadowEffect BlurRadius="30" Opacity="0.4" ShadowDepth="0"/>
-                        </Grid.Effect>
-                        <Grid Background="{Binding Background, ElementName=ControlPage}" Width="400" Height="280" FocusVisualStyle="{x:Null}">
-                            <Grid.Clip>
-                                <RectangleGeometry RadiusX="3" RadiusY="3">
-                                    <RectangleGeometry.Rect>
-                                        <Rect Width="400" Height="280"/>
-                                    </RectangleGeometry.Rect>
-                                </RectangleGeometry>
-                            </Grid.Clip>
-                            <TextBlock Height="18" Margin="28,7,28,0" TextWrapping="Wrap" Text="批量下载" VerticalAlignment="Top" Foreground="#FFCFCFCF" TextAlignment="Center" FocusVisualStyle="{x:Null}"/>
-                            <Border Margin="10,30,10,45" BorderBrush="{Binding BorderBrush, ElementName=ControlPage}" BorderThickness="1" CornerRadius="2" FocusVisualStyle="{x:Null}" Background="{Binding Background, ElementName=ContentPage}">
-                                <Grid FocusVisualStyle="{x:Null}" Margin="5">
-                                    <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}" Margin="0,15,0,0" FocusVisualStyle="{x:Null}">
-                                        <WrapPanel x:Name="DownloadList" FocusVisualStyle="{x:Null}"/>
-                                    </ScrollViewer>
-                                    <CheckBox x:Name="cb_color" Content="全选" HorizontalAlignment="Left" VerticalAlignment="Top" Click="cb_color_Click" FocusVisualStyle="{x:Null}" Style="{DynamicResource CheckBoxStyle}" Foreground="#FF979797"/>
-                                </Grid>
-                            </Border>
-                            <TextBox x:Name="filepath" Height="25" Margin="10,0,70,10" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{Binding BorderBrush, ElementName=SearchBox}" Foreground="{Binding Foreground, ElementName=SearchBox}" FocusVisualStyle="{x:Null}"/>
-                            <Border x:Name="Dmp_DownloadBtn" Margin="0,0,10,10" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="55" Background="#FF69BCF3" CornerRadius="2" FocusVisualStyle="{x:Null}" MouseDown="Dmp_DownloadBtn_MouseDown">
-                                <TextBlock TextWrapping="Wrap" Text="下载" Margin="0,5,0,0" Foreground="#FFF9F9F9" TextAlignment="Center" FocusVisualStyle="{x:Null}"/>
-                            </Border>
-                            <lemon_app:TitlePageBtn x:Name="Dmp_CloseBtn" MinOp="0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" Margin="5"/>
-                        </Grid>
-                    </Grid>
                 </Grid>
                 <Grid x:Name="LoadingPage" Width="180" Height="180" Margin="0,300,0,0" Opacity="0" Visibility="Collapsed">
                     <Border x:Name="border2" Background="#CC3698DB" CornerRadius="100" RenderTransformOrigin="0.5,0.5" Width="100" Height="100">

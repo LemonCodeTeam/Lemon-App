@@ -28,6 +28,8 @@ namespace Lemon_App
             }
             catch { }
         }
+        bool ns = false;
+        public bool isChecked = false;
         public void ShowDx() {
             if (He.LastItem != null)
             {
@@ -51,9 +53,43 @@ namespace Lemon_App
                 return true;
             else return false;
         }
+        public void NSDownload(bool ns) {
+            this.ns = ns;
+            if (ns)
+            {
+                namss.Margin = new System.Windows.Thickness(60, 0, 10, 0);
+                CheckView.Visibility = System.Windows.Visibility.Visible;
+                MouseDown += CheckView_MouseDown;
+            }
+            else {
+                namss.Margin = new System.Windows.Thickness(10, 0, 10, 0);
+                CheckView.Visibility = System.Windows.Visibility.Collapsed;
+                MouseDown -= CheckView_MouseDown;
+            }
+        }
+
+        private void CheckView_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Check();
+        }
+
+        public void Check() {
+            if (!isChecked)
+            {
+                GO.Visibility = System.Windows.Visibility.Visible;
+                CheckView.SetResourceReference(BorderBrushProperty, "ThemeColor");
+                isChecked = true;
+            }
+            else {
+                GO.Visibility = System.Windows.Visibility.Collapsed;
+                CheckView.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
+                isChecked = false;
+            }
+        }
         private void userControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ShowDx();
+            if(!ns)
+              ShowDx();
         }
     }
 

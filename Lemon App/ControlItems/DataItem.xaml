@@ -14,5 +14,19 @@
         <TextBlock x:Name="namss" TextWrapping="NoWrap" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center" Margin="10,14" Height="15"><Run  x:Name="name" Text="Tb000000000000"/><Run Text="  "/><TextBlock  x:Name="mss"  Text="mss" Opacity="0.6"/></TextBlock>
         <TextBlock x:Name="ser" Margin="10,14" TextWrapping="NoWrap" Text="TextBlock" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Grid.Column="1" Height="15" Opacity="0.8"/>
         <Border x:Name="color" HorizontalAlignment="Left" Width="5" Background="#00000000" Margin="0,5"/>
+        <Border x:Name="CheckView" HorizontalAlignment="Left" Width="14" Height="14" Margin="25,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource TextX1ColorBrush}" Visibility="Collapsed">
+            <Border x:Name="GO" Margin="1" Visibility="Collapsed">
+                <Border.Background>
+                    <VisualBrush Stretch="Uniform">
+                        <VisualBrush.Visual>
+                            <Grid>
+                                <Path Data="M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909L64.698182,554.821818A59.578182,59.578182,0,0,1,64.698182,469.178182A61.905455,61.905455,0,0,1,151.738182,469.178182L418.909091,734.021818A60.043636,60.043636,0,0,1,418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z" Fill="{DynamicResource ThemeColor}"/>
+                                <Path Data="M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909A60.043636,60.043636,0,0,1,333.730909,734.021818L872.261818,203.869091A61.905455,61.905455,0,0,1,959.301818,203.869091A60.043636,60.043636,0,0,1,959.301818,289.978182L418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z" Fill="{DynamicResource ThemeColor}"/>
+                            </Grid>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Border.Background>
+            </Border>
+        </Border>
     </Grid>
 </UserControl>

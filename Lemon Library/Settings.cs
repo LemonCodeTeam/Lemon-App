@@ -77,15 +77,13 @@ namespace LemonLibrary
                         }
                     }
                 }
-                try
-                {
+                if (data.Contains("Skin_Path")){
                     USettings.Skin_Path = o["Skin_Path"].ToString();
                     USettings.Skin_txt = o["Skin_txt"].ToString();
                     USettings.Skin_Theme_R = o["Skin_Theme_R"].ToString();
                     USettings.Skin_Theme_G = o["Skin_Theme_G"].ToString();
                     USettings.Skin_Theme_B = o["Skin_Theme_B"].ToString();
                 }
-                catch { }
             }
             else SaveSettings(qq);
         }

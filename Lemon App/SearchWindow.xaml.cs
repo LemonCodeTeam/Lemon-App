@@ -31,34 +31,30 @@ namespace Lemon_App
         string uri = "https://www.baidu.com/s?wd=%2a";
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
+            if (textBox1.Text != "")
             {
-                if (textBox1.Text != "")
+                if (textBox1.Text != "搜索")
                 {
-                    if (textBox1.Text != "搜索")
+                    var d = new DoubleAnimation(380, TimeSpan.FromSeconds(0.3));
+                    d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(tp - 160, TimeSpan.FromSeconds(0.3))); };
+                    BeginAnimation(HeightProperty, d);
+                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text) + "&action=opensearch");
+                    string html6 = "";
+                    Stream sr = hwr.GetResponse().GetResponseStream();
+                    byte[] b = new byte[1024];
+                    sr.Read(b, 0, 1024);
+                    html6 = Encoding.Default.GetString(b);
+                    html6 = html6.Replace("\0", "");
+                    string Htp = html6.Substring(html6.LastIndexOf(",[")).Replace("]]", "").Replace(",[", "").Replace(",", "");
+                    string[] aa = Htp.Split(new char[] { '\"' }, StringSplitOptions.RemoveEmptyEntries);
+                    listBox.Items.Clear();
+                    foreach (var item in aa)
                     {
-                        var d = new DoubleAnimation(380, TimeSpan.FromSeconds(0.3));
-                        d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(tp - 160, TimeSpan.FromSeconds(0.3))); };
-                        BeginAnimation(HeightProperty, d);
-                        HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text) + "&action=opensearch");
-                        string html6 = "";
-                        Stream sr = hwr.GetResponse().GetResponseStream();
-                        byte[] b = new byte[1024];
-                        sr.Read(b, 0, 1024);
-                        html6 = Encoding.Default.GetString(b);
-                        html6 = html6.Replace("\0", "");
-                        string Htp = html6.Substring(html6.LastIndexOf(",[")).Replace("]]", "").Replace(",[", "").Replace(",", "");
-                        string[] aa = Htp.Split(new char[] { '\"' }, StringSplitOptions.RemoveEmptyEntries);
-                        listBox.Items.Clear();
-                        foreach (var item in aa)
-                        {
-                            listBox.Items.Add(new ListBoxItem() { Content = item, Height = 35 });
-                        }
+                        listBox.Items.Add(new ListBoxItem() { Content = item, Height = 35 });
                     }
                 }
-                else { var d = new DoubleAnimation(50, TimeSpan.FromSeconds(0.3)); d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(tp, TimeSpan.FromSeconds(0.3))); }; BeginAnimation(HeightProperty, d); listBox.Items.Clear(); }
             }
-            catch { }
+            else { var d = new DoubleAnimation(50, TimeSpan.FromSeconds(0.3)); d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(tp, TimeSpan.FromSeconds(0.3))); }; BeginAnimation(HeightProperty, d); listBox.Items.Clear(); }
         }
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -86,11 +82,6 @@ namespace Lemon_App
             textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
             Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
             this.Close();
-        }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //  Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

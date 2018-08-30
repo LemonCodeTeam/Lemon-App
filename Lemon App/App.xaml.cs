@@ -69,8 +69,10 @@ namespace Lemon_App
             base.OnStartup(e);
         }
         public App() {
+//#if !DEBUG
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+//#endif
             BaseApp = this;
         }
 

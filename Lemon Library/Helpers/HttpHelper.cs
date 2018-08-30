@@ -45,8 +45,6 @@ namespace LemonLibrary
         }
         public static string PostWeb(string url, string data)
         {
-            try
-            {
                 byte[] postData = Encoding.UTF8.GetBytes(data);
                 WebClient webClient = new WebClient();
                 webClient.Headers.Add("Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01");
@@ -59,8 +57,6 @@ namespace LemonLibrary
                 byte[] responseData = webClient.UploadData(url, "POST", postData);
                 webClient.Dispose();
                 return Encoding.UTF8.GetString(responseData);
-            }
-            catch { return ""; }
         }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {

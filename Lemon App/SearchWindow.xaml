@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lemon_App"
         mc:Ignorable="d"
-        Title="小萌快捷搜索" Height="50" Width="320" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Topmost="True" Background="{x:Null}" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStartupLocation="CenterScreen" BorderThickness="10" KeyDown="Window_KeyDown">
+        Title="小萌快捷搜索" Height="50" Width="320" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Topmost="True" Background="{x:Null}" Loaded="Window_Loaded" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStartupLocation="CenterScreen" BorderThickness="10" KeyDown="Window_KeyDown">
     <Window.Effect>
         <DropShadowEffect Color="#FF2D2D30" BlurRadius="10" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>

@@ -12,7 +12,6 @@ namespace LemonLibrary
         ////////Music Helper////////
         public class Music
         {
-            public Music() { }
             public string MusicName { set; get; } = "";
             public string MusicName_Lyric { get; set; } = "";
             public string Singer { set; get; } = "";
