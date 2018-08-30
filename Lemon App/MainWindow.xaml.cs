@@ -3,8 +3,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -86,6 +88,9 @@ namespace Lemon_App
             }
             else App.BaseApp.unSkin();
 
+            Settings.SaveWINDOW_HANDLE(new WindowInteropHelper(this).Handle.ToInt32());
+            LoadSEND_SHOW();
+
             var ani = Resources["Loading"] as Storyboard;
             ani.Completed += Ani_Completed;
             ani.Begin();
@@ -94,6 +99,7 @@ namespace Lemon_App
         private void Ani_Completed(object sender, EventArgs e)
         {
             OpenLoading();
+            Updata();
             IntPtr handle = new WindowInteropHelper(this).Handle;
             RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.Z);
             RegisterHotKey(handle, 125, 4, (uint)System.Windows.Forms.Keys.S);
@@ -332,6 +338,20 @@ namespace Lemon_App
         }
         #endregion
         #region 功能区
+        #region Updata
+        private async void Updata() {
+            var o = JObject.Parse(await HttpHelper.GetWebForCodingAsync("https://coding.net/u/twilightlemon/p/Updata/git/raw/master/WindowsUpdata.json"));
+            string v = o["version"].ToString();
+            string dt = o["description"].ToString().Replace("@32","\n");
+            if (int.Parse(v) > int.Parse(App.EM)) {
+                if (MyMessageBox.Show("小萌有更新啦", dt, "立即更新")) {
+                    var xpath = GetPath() + "win-release.exe";
+                    await HttpHelper.HttpDownloadFileAsync("https://coding.net/u/twilightlemon/p/Updata/git/raw/master/win-release.exe", xpath);
+                    Process.Start(xpath);
+                }
+            }
+        }
+        #endregion
         #region N/S Page
         private Label LastClickLabel = null;
         private Grid LastPage = null;
@@ -1325,6 +1345,26 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         private const int WM_HOTKEY = 0x0312;
+        #endregion
+        #region 进程通信
+        private void LoadSEND_SHOW() {
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            HwndSource source = HwndSource.FromHwnd(hwnd);
+            if (source != null) source.AddHook(WndProc);
+        }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg ==MsgHelper.WM_COPYDATA)
+            {
+                MsgHelper.COPYDATASTRUCT cdata = new MsgHelper.COPYDATASTRUCT();
+                Type mytype = cdata.GetType();
+                cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, mytype);
+                if (cdata.lpData == MsgHelper.SEND_SHOW)
+                    exShow();
+            }
+            return IntPtr.Zero;
+        }
         #endregion
     }
 }

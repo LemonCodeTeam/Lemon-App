@@ -60,6 +60,7 @@
     <Compile Include="Helpers\HttpHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\InfoHelper.cs" />
+    <Compile Include="Helpers\MsgHelper.cs" />
     <Compile Include="LyricView.xaml.cs">
       <DependentUpon>LyricView.xaml</DependentUpon>
     </Compile>

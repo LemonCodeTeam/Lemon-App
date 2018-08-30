@@ -124,5 +124,14 @@ namespace LemonLibrary
             public string qq { get; set; } = "EX";
         }
         #endregion
+
+        #region WINDOW_HANDLE
+        public static void SaveWINDOW_HANDLE(int WINDOW_HANDLE) {
+            File.WriteAllText(GetPath() + "WINDOW_HANDLE.INT", WINDOW_HANDLE.ToString());
+        }
+        public static int ReadWINDOW_HANDLE(){
+          return int.Parse(File.ReadAllText(GetPath() + "WINDOW_HANDLE.INT"));
+        }
+        #endregion
     }
 }
