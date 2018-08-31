@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="Lemon_App.MDButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Lemon_App"
+             mc:Ignorable="d" Height="25" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" >
+    <Border x:Name="bd" BorderThickness="1" CornerRadius="10" Background="#07000000" BorderBrush="{DynamicResource BorderColorBrush}">
+        <TextBlock x:Name="tb" TextWrapping="NoWrap" Text="TextBlock" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center" Margin="5,0" TextAlignment="Center"/>
+    </Border>
+</UserControl>

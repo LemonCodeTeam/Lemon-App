@@ -33,37 +33,39 @@ namespace Lemon_App
                 img = ig;
                 singer = sing;
                 name.Text = singer;
-                if (!File.Exists(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg"))
+                string file = Settings.USettings.CachePath + "Image\\Singer" + sing + ".jpg";
+                if (!File.Exists(file))
                 {
                     WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg");
+                    v.DownloadFileAsync(new Uri(img), file);
                     v.DownloadFileCompleted += delegate
                     {
                         v.Dispose();
-                        var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg");
+                        var image = new System.Drawing.Bitmap(file);
                         im.Background = new ImageBrush(image.ToImageSource());
                     };
                 }
                 else{
-                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Singer" + sing + ".jpg");
+                    var image = new System.Drawing.Bitmap(file);
                     im.Background = new ImageBrush(image.ToImageSource());
                 }
             }
             catch
             {
-                if (!File.Exists(InfoHelper.GetPath() + "Cache/SingerNo.jpg"))
+                string cache = Settings.USettings.CachePath + "Image\\SingerNo.jpg";
+                if (!File.Exists(cache))
                 {
                     WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"), InfoHelper.GetPath() + "Cache/SingerNo.jpg");
+                    v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"),cache);
                     v.DownloadFileCompleted += delegate
                     {
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/SingerNo.jpg", UriKind.Relative)));
-                        var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg");
+                        im.Background = new ImageBrush(new BitmapImage(new Uri(cache, UriKind.Relative)));
+                        var image = new System.Drawing.Bitmap(cache);
                         im.Background = new ImageBrush(image.ToImageSource());
                     };
                 }
                 else {
-                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/SingerNo.jpg");
+                    var image = new System.Drawing.Bitmap(cache);
                     im.Background = new ImageBrush(image.ToImageSource());
                 }
             }

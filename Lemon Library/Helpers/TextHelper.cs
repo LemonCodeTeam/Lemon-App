@@ -9,6 +9,12 @@ namespace LemonLibrary
 {
     public class TextHelper
     {
+        public static string TimeSpanToms(TimeSpan ts) {
+            string str = ts.ToString();
+            string s = XtoYGetTo(str, ":", ".", 0);
+            string m = XtoYGetTo(str, ":", ":"+s, 0);
+            return (m + ":" + s).TrimStart(':');
+        }
         public static string XtoYGetTo(string all, string r, string l, int t)
         {
 

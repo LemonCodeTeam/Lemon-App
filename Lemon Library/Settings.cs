@@ -16,13 +16,13 @@ namespace LemonLibrary
         public static void SaveSettings(string id = "id")
         {
             if (id == "id") id = USettings.LemonAreeunIts;
-            File.WriteAllText(GetPath() + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+            File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
         }
         public static void LoadUSettings(string qq)
         {
             USettings = new UserSettings();
-            if (File.Exists(GetPath() + qq + ".st")) {
-                string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
+            if (File.Exists(USettings.CachePath + qq + ".st")) {
+                string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
                 JObject o = JObject.Parse(data);
                 USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
                 USettings.UserImage = o["UserImage"].ToString();
@@ -84,41 +84,63 @@ namespace LemonLibrary
                     USettings.Skin_Theme_G = o["Skin_Theme_G"].ToString();
                     USettings.Skin_Theme_B = o["Skin_Theme_B"].ToString();
                 }
+                if (data.Contains("CachePath"))
+                {
+                    USettings.CachePath = o["CachePath"].ToString();
+                    USettings.DownloadPath = o["DownloadPath"].ToString();
+                }
+                else {
+                    USettings.CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
+                    USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
+                }
             }
             else SaveSettings(qq);
         }
         public class UserSettings {
             public UserSettings() {
-
+                CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
+                DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
+            #region 歌单
             public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
             public SortedDictionary<string, MusicGData> MusicGD { get; set; } = new SortedDictionary<string, MusicGData>();
+            #endregion
+            #region 用户配置
             public string LemonAreeunIts { get; set; } = "你的QQ";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";
+            #endregion
+            #region 上一次播放
             public Music Playing { get; set; } = new Music();
             public double jd { get; set; } = 0;
             public double alljd { get; set; } = 0;
+            #endregion
+            #region 主题配置
             public string Skin_Path { get; set; } = "";
             public string Skin_txt { get; set; } = "";
             public string Skin_Theme_R { get; set; } = "";
             public string Skin_Theme_G { get; set; } = "";
             public string Skin_Theme_B { get; set; } = "";
+            #endregion
+            #region 缓存/下载路径
+            public string CachePath = "";
+            public string DownloadPath = "";
+            #endregion
         }
         #endregion
 
         #region LSettings
         public static LocaSettings LSettings = new LocaSettings();
         public static void LoadLocaSettings() {
-            if (File.Exists(GetPath() + "Data.st")){
-                string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(InfoHelper.GetPath() + "Data.st"), TextHelper.MD5.EncryptToMD5string("Data.st"))));
+            if (File.Exists(USettings.CachePath + "Data.st")){
+                string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + "Data.st"), TextHelper.MD5.EncryptToMD5string("Data.st"))));
                 JObject o = JObject.Parse(data);
                 LSettings.qq = o["qq"].ToString();
             }
             else SaveLocaSettings();
         }
         public static void SaveLocaSettings(){
-            File.WriteAllText(GetPath() + "Data.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(LSettings))), TextHelper.MD5.EncryptToMD5string("Data.st")));
+            File.WriteAllText(USettings.CachePath + "Data.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(LSettings))), TextHelper.MD5.EncryptToMD5string("Data.st")));
         }
         public class LocaSettings {
             public string qq { get; set; } = "EX";
@@ -127,10 +149,10 @@ namespace LemonLibrary
 
         #region WINDOW_HANDLE
         public static void SaveWINDOW_HANDLE(int WINDOW_HANDLE) {
-            File.WriteAllText(GetPath() + "WINDOW_HANDLE.INT", WINDOW_HANDLE.ToString());
+            File.WriteAllText(USettings.CachePath + "WINDOW_HANDLE.INT", WINDOW_HANDLE.ToString());
         }
         public static int ReadWINDOW_HANDLE(){
-          return int.Parse(File.ReadAllText(GetPath() + "WINDOW_HANDLE.INT"));
+          return int.Parse(File.ReadAllText(USettings.CachePath + "WINDOW_HANDLE.INT"));
         }
         #endregion
     }

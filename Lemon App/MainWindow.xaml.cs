@@ -61,7 +61,7 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
-            Closed += delegate { notifyIcon.Visible = false; };
+            Closed += delegate { notifyIcon.Visible = false;};
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -100,38 +100,8 @@ namespace Lemon_App
         {
             OpenLoading();
             Updata();
-            IntPtr handle = new WindowInteropHelper(this).Handle;
-            RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.Z);
-            RegisterHotKey(handle, 125, 4, (uint)System.Windows.Forms.Keys.S);
-            InstallHotKeyHook(this);
-            //notifyIcon
-            notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.Text = "小萌";
-            notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
-            notifyIcon.Visible = true;
-            //打开菜单项
-            System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("打开");
-            open.Click += delegate { exShow(); };
-            //退出菜单项
-            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
-            exit.Click += delegate {
-                var dt = Resources["Closing"] as Storyboard;
-                dt.Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
-                dt.Begin();
-            };
-            //关联托盘控件
-            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
-
-            notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
-            {
-                if (m.Button == System.Windows.Forms.MouseButtons.Left) exShow();
-            });
-
-            App.BaseApp.Exit += (s, ex) => {
-                notifyIcon.Visible = false;
-                notifyIcon.Icon = null;
-            };
+            LoadSettings();
+            LoadHotDog();
             /////Timer user
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
@@ -156,12 +126,16 @@ namespace Lemon_App
                 jd.Maximum = Settings.USettings.alljd;
                 jd.Value = Settings.USettings.jd;
                 ml.m.Position = TimeSpan.FromMilliseconds(Settings.USettings.jd);
+                Play_All.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(Settings.USettings.alljd));
+                Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(Settings.USettings.jd));
             }
             t.Interval = 500;
             t.Tick += delegate
             {
                 try
                 {
+                    Play_All.Text =TextHelper.TimeSpanToms(ml.m.NaturalDuration.TimeSpan);
+                    Play_Now.Text = TextHelper.TimeSpanToms(ml.m.Position);
                     jd.Maximum = ml.m.NaturalDuration.TimeSpan.TotalMilliseconds;
                     jd.Value = ml.m.Position.TotalMilliseconds;
                     if (ind == 1)
@@ -204,7 +178,7 @@ namespace Lemon_App
                             OpenLoading();
                             var g = seb as TopControl;
                             NSPage(null, Data);
-                            var file = InfoHelper.GetPath() + "Cache\\Top" + g.topID + ".jpg";
+                            string file = Settings.USettings.CachePath + "Image\\Top" + g.topID + ".jpg";
                             if (!System.IO.File.Exists(file))
                             {
                                 var s = new WebClient();
@@ -285,6 +259,55 @@ namespace Lemon_App
                 dx.Width = DataItemsList.ActualWidth;
         }
         #endregion
+        #region 设置
+        public void LoadSettings() {
+            CachePathTb.Text = Settings.USettings.CachePath;
+            DownloadPathTb.Text = Settings.USettings.DownloadPath;
+        }
+        private void SettingsBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            LoadSettings();
+            NSPage(null, SettingsPage);
+        }
+        private void SettingsPage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 3)
+            {
+                if (hhh.Visibility == Visibility.Collapsed)
+                    hhh.Visibility = Visibility.Visible;
+                else hhh.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void CP_ChooseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var g = new System.Windows.Forms.FolderBrowserDialog();
+            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                DownloadPathTb.Text = g.SelectedPath;
+                Settings.USettings.DownloadPath = g.SelectedPath;
+            }
+        }
+
+        private void DP_ChooseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var g = new System.Windows.Forms.FolderBrowserDialog();
+            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                CachePathTb.Text = g.SelectedPath;
+                Settings.USettings.DownloadPath = g.SelectedPath;
+            }
+        }
+
+        private void CP_OpenBt_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("explorer", CachePathTb.Text);
+        }
+
+        private void DP_OpenBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("explorer", DownloadPathTb.Text);
+        }
+        #endregion
         #region 主题切换
         private async void SkinBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -298,14 +321,14 @@ namespace Lemon_App
                 Color color = Color.FromRgb(byte.Parse(dx["ThemeColor"]["R"].ToString()),
                     byte.Parse(dx["ThemeColor"]["G"].ToString()),
                     byte.Parse(dx["ThemeColor"]["B"].ToString()));
-                if(!System.IO.File.Exists(GetPath() + "Skin\\" + i + ".jpg"))
-                     await HttpHelper.HttpDownloadFileAsync($"https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/w{i}.jpg", GetPath() + "Skin\\" + i + ".jpg");
+                if(!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + i + ".jpg"))
+                     await HttpHelper.HttpDownloadFileAsync($"https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/w{i}.jpg", Settings.USettings.CachePath + "Skin\\" + i + ".jpg");
                 SkinControl sc = new SkinControl(i, name, color);
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) => {
-                    if (!System.IO.File.Exists(GetPath() + "Skin\\" + sc.imgurl + ".png"))
-                        await HttpHelper.HttpDownloadFileAsync($"https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/{sc.imgurl}.png", GetPath() + "Skin\\" + sc.imgurl + ".png");
-                    Page.Background = new ImageBrush(new BitmapImage(new Uri(GetPath() + "Skin\\" + sc.imgurl + ".png", UriKind.Absolute)));
+                    if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
+                        await HttpHelper.HttpDownloadFileAsync($"https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
+                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png", UriKind.Absolute)));
                     App.BaseApp.Skin();
                     App.BaseApp.SetColor("ThemeColor", sc.theme);
                     Color co;
@@ -315,7 +338,7 @@ namespace Lemon_App
                     App.BaseApp.SetColor("ResuColorBrush", co);
                     App.BaseApp.SetColor("ButtonColorBrush", co);
                     App.BaseApp.SetColor("TextX1ColorBrush", co);
-                    Settings.USettings.Skin_Path = GetPath() + "Skin\\" + +sc.imgurl + ".png";
+                    Settings.USettings.Skin_Path = Settings.USettings.CachePath + "Skin\\" + +sc.imgurl + ".png";
                     Settings.USettings.Skin_txt = sc.txtColor;
                     Settings.USettings.Skin_Theme_R = sc.theme.R.ToString();
                     Settings.USettings.Skin_Theme_G = sc.theme.G.ToString();
@@ -345,7 +368,7 @@ namespace Lemon_App
             string dt = o["description"].ToString().Replace("@32","\n");
             if (int.Parse(v) > int.Parse(App.EM)) {
                 if (MyMessageBox.Show("小萌有更新啦", dt, "立即更新")) {
-                    var xpath = GetPath() + "win-release.exe";
+                    var xpath = Settings.USettings.CachePath + "win-release.exe";
                     await HttpHelper.HttpDownloadFileAsync("https://coding.net/u/twilightlemon/p/Updata/git/raw/master/win-release.exe", xpath);
                     Process.Start(xpath);
                 }
@@ -650,7 +673,7 @@ namespace Lemon_App
             OpenLoading();
             var sx = new Task(new Action(async delegate {
                 var dt = await ml.GetGDAsync(id);
-                var file = InfoHelper.GetPath() + "Cache\\GD" + id + ".jpg";
+                string file = Settings.USettings.CachePath + "Image\\GD" + id + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();
@@ -844,7 +867,7 @@ namespace Lemon_App
         {
             border5.Visibility = Visibility.Collapsed;
             DataDownloadPage.Visibility = Visibility.Visible;
-            Download_Path.Text = GetPath() + "Download";
+            Download_Path.Text = Settings.USettings.DownloadPath;
             DownloadQx.IsChecked = true;
             DownloadQx.Content = "全不选";
             foreach (DataItem x in DataItemsList.Children) {
@@ -896,7 +919,7 @@ namespace Lemon_App
                 List<Music> dt = null;
                 if(osx==0)dt = await ml.SearchMusicAsync(key);
                 else dt = await ml.SearchMusicAsync(key,osx);
-                var file = GetPath() + "Cache\\Search" + key + ".jpg";
+                var file = Settings.USettings.CachePath + "Image\\Search" + key + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();
@@ -1109,8 +1132,11 @@ namespace Lemon_App
         private void ckFile_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var g = new System.Windows.Forms.FolderBrowserDialog();
-            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK){
                 Download_Path.Text = g.SelectedPath;
+                Settings.USettings.DownloadPath= g.SelectedPath;
+            }
+            
         }
 
         private void cb_color_Click(object sender, RoutedEventArgs e)
@@ -1224,8 +1250,8 @@ namespace Lemon_App
                 string qqx = new System.IO.DirectoryInfo(dt).Name;
                 string dl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qqx}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qqx}&reqfrom=1&reqtype=0", Encoding.UTF8);
                 string name = JObject.Parse(dl)["data"]["creator"]["nick"].ToString();
-                await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qqx}&spec=100", GetPath() + qqx + ".jpg");
-                var image = new System.Drawing.Bitmap(GetPath() + qqx + ".jpg");
+                await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qqx}&spec=100", Settings.USettings.CachePath + qqx + ".jpg");
+                var image = new System.Drawing.Bitmap(Settings.USettings.CachePath + qqx + ".jpg");
                 UserTxControl utc = new UserTxControl(new ImageBrush(image.ToImageSource()), name, qqx);
                 utc.MouseDown += (s, ex) => {
                     Settings.SaveSettings();
@@ -1233,7 +1259,7 @@ namespace Lemon_App
                     string qq = utc.qq;
                     Settings.LoadUSettings(qq);
                     Settings.USettings.UserName = utc.UserName.Text;
-                    Settings.USettings.UserImage = GetPath() + qq + ".jpg";
+                    Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
                     Settings.USettings.LemonAreeunIts = qq;
                     Settings.SaveSettings();
                     Settings.LSettings.qq = qq;
@@ -1278,7 +1304,7 @@ namespace Lemon_App
                     DataItemsList.Children.Clear();
                 });
                 await Task.Delay(500);
-                var file = InfoHelper.GetPath() + "Cache\\GD" + dt.id + ".jpg";
+                var file = Settings.USettings.CachePath + "Image\\GD" + dt.id + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
                     var s = new WebClient();
@@ -1315,6 +1341,36 @@ namespace Lemon_App
 
         #endregion
         #region 快捷键
+        private void LoadHotDog() {
+            IntPtr handle = new WindowInteropHelper(this).Handle;
+            RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.Z);
+            RegisterHotKey(handle, 125, 4, (uint)System.Windows.Forms.Keys.S);
+            InstallHotKeyHook(this);
+            //notifyIcon
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Text = "小萌";
+            notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
+            notifyIcon.Visible = true;
+            //打开菜单项
+            System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("打开");
+            open.Click += delegate { exShow(); };
+            //退出菜单项
+            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
+            exit.Click += delegate {
+                var dt = Resources["Closing"] as Storyboard;
+                dt.Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
+                dt.Begin();
+            };
+            //关联托盘控件
+            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
+
+            notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
+            {
+                if (m.Button == System.Windows.Forms.MouseButtons.Left) exShow();
+            });
+        }
+
         [System.Runtime.InteropServices.DllImport("user32")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint controlKey, uint virtualKey);
 

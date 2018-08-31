@@ -108,6 +108,9 @@
     <Compile Include="ControlItems\FLGDIndexItem.xaml.cs">
       <DependentUpon>FLGDIndexItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControlItems\MDButton.xaml.cs">
+      <DependentUpon>MDButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ControlItems\MyMessageBox.xaml.cs">
       <DependentUpon>MyMessageBox.xaml</DependentUpon>
     </Compile>
@@ -143,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\FLGDIndexItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\MDButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

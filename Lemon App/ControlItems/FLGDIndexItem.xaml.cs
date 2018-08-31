@@ -34,19 +34,20 @@ namespace Lemon_App
             sname = nae;
             img = pic;
             name.Text = nae;
-            if (!File.Exists(InfoHelper.GetPath() + "Cache/FLGD" + id + ".jpg"))
+            string file = Settings.USettings.CachePath + "Image\\FLGD" + id + ".jpg";
+            if (!File.Exists(file))
             {
                 WebClient v = new WebClient();
-                v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/FLGD" + id + ".jpg");
+                v.DownloadFileAsync(new Uri(img), file);
                 v.DownloadFileCompleted += delegate
                 {
                     v.Dispose();
-                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/FLGD" + id + ".jpg");
+                    var image = new System.Drawing.Bitmap(file);
                     im.Background = new ImageBrush(image.ToImageSource());
                 };
             }
             else {
-                var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/FLGD" + id + ".jpg");
+                var image = new System.Drawing.Bitmap(file);
                 im.Background = new ImageBrush(image.ToImageSource());
             }
         }

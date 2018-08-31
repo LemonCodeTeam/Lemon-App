@@ -29,12 +29,13 @@ namespace Lemon_App
         public TopControl(string id, string img, string n)
         {
             InitializeComponent();
-            if (!File.Exists(InfoHelper.GetPath() + "Cache/Top" + id + ".jpg"))
+            string file = Settings.USettings.CachePath + "Image\\Top" + id + ".jpg";
+            if (!File.Exists(file))
             {
                 WebClient v = new WebClient();
-                v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/Top" + id + ".jpg");
-                v.DownloadFileCompleted += delegate { v.Dispose(); im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Top" + id + ".jpg", UriKind.Relative))); };
-            }else im.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Cache/Top" + id + ".jpg", UriKind.Relative)));
+                v.DownloadFileAsync(new Uri(img), file);
+                v.DownloadFileCompleted += delegate { v.Dispose(); im.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
+            }else im.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
             topID = id;
             pic = img;
             name = n;

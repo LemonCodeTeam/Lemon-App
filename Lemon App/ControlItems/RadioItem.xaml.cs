@@ -22,19 +22,20 @@ namespace Lemon_App
             Nam = name;
             img = pic;
             this.name.Text = Nam;
-            if (!File.Exists(InfoHelper.GetPath() + "Cache/Radio" + id + ".jpg"))
+            string file = Settings.USettings.CachePath + "Image\\Radio" + id + ".jpg";
+            if (!File.Exists(file))
             {
                 WebClient v = new WebClient();
-                v.DownloadFileAsync(new Uri(img), InfoHelper.GetPath() + "Cache/Radio" + id + ".jpg");
+                v.DownloadFileAsync(new Uri(img), file);
                 v.DownloadFileCompleted += delegate
                 {
                     v.Dispose();
-                    var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Radio" + id + ".jpg");
+                    var image = new System.Drawing.Bitmap(file);
                     im.Background = new ImageBrush(image.ToImageSource());
                 };
             }
             else {
-                var image = new System.Drawing.Bitmap(InfoHelper.GetPath() + "Cache/Radio" + id + ".jpg");
+                var image = new System.Drawing.Bitmap(file);
                 im.Background = new ImageBrush(image.ToImageSource());
             }
         }

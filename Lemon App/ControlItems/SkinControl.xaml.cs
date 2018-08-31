@@ -20,7 +20,7 @@ namespace Lemon_App
             this.imgurl = imgurl;
             theme = themecolor;
             if(imgurl!=-1)
-               img.Background = new ImageBrush(new BitmapImage(new Uri(InfoHelper.GetPath() + "Skin\\" + + imgurl + ".jpg",UriKind.Absolute)));
+               img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + + imgurl + ".jpg",UriKind.Absolute)));
             this.name.Text = name;
         }
     }

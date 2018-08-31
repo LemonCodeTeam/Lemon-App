@@ -25,17 +25,29 @@ namespace LemonLibrary
     {
         public MusicLib(LyricView LV, string id)
         {
-            if (Directory.Exists(GetPath() + "Download") == false)
-                Directory.CreateDirectory(GetPath() + "Download");
-            if (Directory.Exists(GetPath() + "Cache") == false)
-                Directory.CreateDirectory(GetPath() + "Cache");
+            if (!Directory.Exists(Settings.USettings.DownloadPath))
+                Directory.CreateDirectory(Settings.USettings.DownloadPath);
+            if (!Directory.Exists(Settings.USettings.CachePath))
+                Directory.CreateDirectory(Settings.USettings.CachePath);
+            if (!Directory.Exists(Settings.USettings.CachePath+"Music\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath+"Music\\");
+            if (!Directory.Exists(Settings.USettings.CachePath + "Lyric\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
+            if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
             lv = LV;
             qq = id;
         }
         public MusicLib()
         {
-            if (Directory.Exists(GetPath() + $@"Download") == false)
-                Directory.CreateDirectory(GetPath() + $@"Download");
+            if (!Directory.Exists(Settings.USettings.DownloadPath))
+                Directory.CreateDirectory(Settings.USettings.DownloadPath);
+            if (!Directory.Exists(Settings.USettings.CachePath))
+                Directory.CreateDirectory(Settings.USettings.CachePath);
+            if (!Directory.Exists(Settings.USettings.CachePath + "Music\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath + "Music\\");
+            if (!Directory.Exists(Settings.USettings.CachePath + "Lyric\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
         }
         public Dictionary<string, string> mldata = new Dictionary<string, string>();// mid,name
         public MediaPlayer m = new MediaPlayer();
@@ -152,16 +164,21 @@ namespace LemonLibrary
             string name = mldata[mid];
             if (ispos) name = "Wy" + name + ".mp3";
             else name = name + ".mp3";
-            if (!File.Exists(GetPath() + $@"Download/{name}"))
+            string downloadpath = Settings.USettings.CachePath+"Music\\" + name;
+            if (!File.Exists(downloadpath))
             {
                 string musicurl = "";
                 if (ispos)
                     musicurl = GetWyUrlAsync(GetWYIdByName(name));
                 else musicurl = await GetUrlAsync(mid);
+                s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                {
+                    x.Text = "连接资源中...";
+                }));
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate
                 {
-                    m.Open(new Uri(GetPath() + $@"Download/{name}", UriKind.Absolute));
+                    m.Open(new Uri(downloadpath, UriKind.Absolute));
                     if (doesplay)
                         m.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -169,7 +186,7 @@ namespace LemonLibrary
                         x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
                     }));
                 };
-                dc.DownloadFileAsync(new Uri(musicurl), GetPath() + $@"Download/{name}");
+                dc.DownloadFileAsync(new Uri(musicurl), downloadpath);
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e)
                 {
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -180,7 +197,7 @@ namespace LemonLibrary
             }
             else
             {
-                m.Open(new Uri(GetPath() + $@"Download/{name}", UriKind.Absolute));
+                m.Open(new Uri(downloadpath, UriKind.Absolute));
                 if (doesplay)
                     m.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -206,7 +223,8 @@ namespace LemonLibrary
         public string GetLyric(string McMind)
         {
             string name = mldata[McMind];
-            if (!File.Exists(GetPath() + $@"Download/{name}.lrc"))
+            string file = Settings.USettings.CachePath+"Lyric\\" + name + ".lrc";
+            if (!File.Exists(file))
             {
                 WebClient c = new WebClient();
                 c.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36");
@@ -263,12 +281,12 @@ namespace LemonLibrary
                         String key = KEY[i];
                         LyricData += $"[{key}]{value}\r\n";
                     }
-                    File.WriteAllText(GetPath() + $@"Download/{name}.lrc", LyricData);
+                    File.WriteAllText(file, LyricData);
                     return LyricData;
                 }
             }
             else
-                return File.ReadAllText(GetPath() + $@"Download/{name}.lrc");
+                return File.ReadAllText(file);
         }
         public async Task<List<MusicTop>> GetTopIndexAsync()
         {
@@ -637,7 +655,8 @@ namespace LemonLibrary
         public async Task<string> GetLyricByWYAsync(string name)
         {
             string id = GetWYIdByName(name);
-            if (!File.Exists(GetPath() + $@"Download/Wy{name}.lrc"))
+            string file = Settings.USettings.CachePath +"Wy"+ name + ".lrc";
+            if (!File.Exists(file))
             {
                 string s = await HttpHelper.GetWebAsync($"http://music.163.com/api/song/lyric?os=pc&id={id}&lv=-1&kv=-1&tv=-1");
                 Console.WriteLine(s);
@@ -682,12 +701,12 @@ namespace LemonLibrary
                         String key = KEY[i];
                         LyricData += $"[{key}]{value}\r\n";
                     }
-                    File.WriteAllText(GetPath() + $@"Download/Wy{name}.lrc", LyricData);
+                    File.WriteAllText(file, LyricData);
                     return LyricData;
                 }
             }
             else
-                return File.ReadAllText(GetPath() + $@"Download/Wy{name}.lrc");
+                return File.ReadAllText(file);
         }
     }
 }
