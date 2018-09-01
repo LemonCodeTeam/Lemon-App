@@ -224,6 +224,7 @@ namespace Lemon_App
             }));
             gd.Start();
             CloseLoading();
+            SearchMusic("test", 2);
         }
 
         private void exShow() {
@@ -902,11 +903,34 @@ namespace Lemon_App
                 SearchMusic(SearchKey,ixPlay);
             }
         }
-
+        private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SearchBox.Text.Trim() != string.Empty)
+            {
+                if (Search_SmartBox.Opacity != 100)
+                    Search_SmartBox.Opacity = 100;
+                var data = await ml.Search_SmartBoxAsync(SearchBox.Text);
+                Search_SmartBoxList.Items.Clear();
+                if (data.Count == 0)
+                    Search_SmartBox.Opacity = 0;
+                else foreach (var dt in data)
+                    Search_SmartBoxList.Items.Add(dt);
+            }
+            else Search_SmartBox.Opacity = 0;
+        }
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter&&SearchBox.Text.Trim() != string.Empty)
             { SearchMusic(SearchBox.Text); ixPlay = 1; }
+        }
+        private void Search_SmartBoxList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Search_SmartBoxList.SelectedIndex != -1)
+            {
+                Search_SmartBox.Opacity = 0;
+                SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
+                SearchMusic(SearchBox.Text); ixPlay = 1;
+            }
         }
         private string SearchKey = "";
         public void SearchMusic(string key,int osx=0)

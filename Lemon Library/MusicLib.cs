@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -58,7 +59,7 @@ namespace LemonLibrary
         {
             if (HttpHelper.IsNetworkTrue())
             {
-                JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"http://59.37.96.220/soso/fcgi-bin/client_search_cp?format=json&t=0&inCharset=GB2312&outCharset=utf-8&qqmusic_ver=1302&catZhida=0&p={osx}&n=20&w={Content}&flag_qc=0&remoteplace=sizer.newclient.song&new_json=1&lossless=0&aggr=1&cr=1&sem=0&force_zonghe=0"));
+                JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"http://59.37.96.220/soso/fcgi-bin/client_search_cp?format=json&t=0&inCharset=GB2312&outCharset=utf-8&qqmusic_ver=1302&catZhida=0&p={osx}&n=20&w={HttpUtility.UrlDecode(Content)}&flag_qc=0&remoteplace=sizer.newclient.song&new_json=1&lossless=0&aggr=1&cr=1&sem=0&force_zonghe=0"));
                 List<Music> dt = new List<Music>();
                 int i = 0;
                 while (i < o["data"]["song"]["list"].Count())
@@ -81,6 +82,29 @@ namespace LemonLibrary
                 return dt;
             }
             else return null;
+        }
+        public async Task<List<string>> Search_SmartBoxAsync(string key) {
+            var data = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?key={HttpUtility.UrlDecode(key)}&utf8=1&is_xml=0&loginUin=2728578956&qqmusic_ver=1592&searchid=3DA3E73D151F48308932D9680A3A5A1722872&pcachetime=1535710304"))["data"];
+            List<String> list = new List<String>();
+            var song = data["song"]["itemlist"];
+            for (int i = 0; i < song.Count(); i++)
+            {
+                var o = song[i];
+                list.Add("歌曲:" + o["name"] + " - " + o["singer"]);
+            }
+            var album = data["album"]["itemlist"];
+            for (int i = 0; i < album.Count(); i++)
+            {
+                var o = album[i];
+                list.Add("专辑:" + o["singer"] + " - 《" + o["name"] + "》");
+            }
+            var singer = data["singer"]["itemlist"];
+            for (int i = 0; i < singer.Count(); i++)
+            {
+                var o = singer[i];
+                list.Add("歌手:" + o["singer"]);
+            }
+            return list;
         }
         public async Task<MusicGData> GetGDAsync(string id = "2591355982")
         {

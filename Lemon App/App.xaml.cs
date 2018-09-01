@@ -17,7 +17,7 @@ namespace Lemon_App
     public partial class App : Application
     {
         public static App BaseApp = null;
-        public static string EM = "1024";
+        public static string EM = "1026";
         public void SetColor(string id,Color c)
         {
             var color = new SolidColorBrush() { Color = c };
