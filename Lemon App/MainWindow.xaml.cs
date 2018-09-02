@@ -61,7 +61,6 @@ namespace Lemon_App
         public MainWindow()
         {
             InitializeComponent();
-            Closed += delegate { notifyIcon.Visible = false;};
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -224,7 +223,6 @@ namespace Lemon_App
             }));
             gd.Start();
             CloseLoading();
-            SearchMusic("test", 2);
         }
 
         private void exShow() {
@@ -927,8 +925,8 @@ namespace Lemon_App
         {
             if (Search_SmartBoxList.SelectedIndex != -1)
             {
-                Search_SmartBox.Opacity = 0;
                 SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
+                Search_SmartBox.Opacity = 0;
                 SearchMusic(SearchBox.Text); ixPlay = 1;
             }
         }
@@ -941,7 +939,8 @@ namespace Lemon_App
             var xs = new Task(new Action(async delegate
             {
                 List<Music> dt = null;
-                if(osx==0)dt = await ml.SearchMusicAsync(key);
+                if (osx == 0) Dispatcher.Invoke(() => { NSPage(null, Data); });
+                if (osx==0)dt = await ml.SearchMusicAsync(key);
                 else dt = await ml.SearchMusicAsync(key,osx);
                 var file = Settings.USettings.CachePath + "Image\\Search" + key + ".jpg";
                 if (!System.IO.File.Exists(file))
@@ -968,13 +967,13 @@ namespace Lemon_App
                     DataItemsList.Children.Add(k);
                 }
             });
-                if (osx == 0) Dispatcher.Invoke(() => { NSPage(null, Data); });
-                Dispatcher.Invoke(() => { CloseLoading(); });
+                Dispatcher.Invoke(() => {CloseLoading(); });
             }));
             xs.Start();
         }
         #endregion
         #region PlayMusic
+
         public void PlayMusic(object sender, MouseEventArgs e)
         {
             var dt = sender as DataItem;
@@ -1367,9 +1366,15 @@ namespace Lemon_App
         #region 快捷键
         private void LoadHotDog() {
             IntPtr handle = new WindowInteropHelper(this).Handle;
-            RegisterHotKey(handle, 124, 4, (uint)System.Windows.Forms.Keys.Z);
-            RegisterHotKey(handle, 125, 4, (uint)System.Windows.Forms.Keys.S);
+            RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
+            RegisterHotKey(handle, 125, 1, (uint)System.Windows.Forms.Keys.S);
             InstallHotKeyHook(this);
+            Closed += (s, e) => {
+                IntPtr hd = new WindowInteropHelper(this).Handle;
+                UnregisterHotKey(hd, 124);
+                UnregisterHotKey(hd, 125);
+            };
+
             //notifyIcon
             notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.Text = "小萌";
@@ -1381,6 +1386,8 @@ namespace Lemon_App
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
             exit.Click += delegate {
+                notifyIcon.Visible = false;
+                notifyIcon.Dispose();
                 var dt = Resources["Closing"] as Storyboard;
                 dt.Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
                 dt.Begin();
@@ -1395,22 +1402,22 @@ namespace Lemon_App
             });
         }
 
-        [System.Runtime.InteropServices.DllImport("user32")]
+        [DllImport("user32")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint controlKey, uint virtualKey);
 
-        [System.Runtime.InteropServices.DllImport("user32")]
+        [DllImport("user32")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
         public bool InstallHotKeyHook(Window window)
         {
             if (window == null)
                 return false;
-            System.Windows.Interop.WindowInteropHelper helper = new System.Windows.Interop.WindowInteropHelper(window);
+            WindowInteropHelper helper = new WindowInteropHelper(window);
             if (IntPtr.Zero == helper.Handle)
                 return false;
-            System.Windows.Interop.HwndSource source = System.Windows.Interop.HwndSource.FromHwnd(helper.Handle);
+            HwndSource source = HwndSource.FromHwnd(helper.Handle);
             if (source == null)
                 return false;
-            source.AddHook(this.HotKeyHook);
+            source.AddHook(HotKeyHook);
             return true;
         }
         private IntPtr HotKeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
