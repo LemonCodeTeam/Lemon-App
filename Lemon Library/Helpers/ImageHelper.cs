@@ -20,7 +20,7 @@ namespace LemonLibrary
         public static ImageSource ToImageSource(this Bitmap bitmap)
         {
             IntPtr hBitmap = bitmap.GetHbitmap();
-            ImageSource wpfBitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+            ImageSource wpfBitmap = Imaging.CreateBitmapSourceFromHBitmap(
                 hBitmap,
                 IntPtr.Zero,
                 Int32Rect.Empty,

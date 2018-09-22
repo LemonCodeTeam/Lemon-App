@@ -21,6 +21,7 @@ namespace LemonLibrary
             hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
             hwr.Headers.Add("Cache-Control", "max-age=0");
             SetHeaderValue(hwr.Headers, "Connection", "keep-alive");
+            hwr.Headers.Add("Cookie", "sid=5129400e-3ae5-4d8f-b4c6-55a2d8dcf866; c=access-token%3Dtrue%2Ccoding-cli%3Dfalse%2Ccoding-ocd-pages%3Dtrue%2Ccoding-ocd%3Dtrue%2Ccoding-owas%3Dtrue%2Cdepot-sharing%3Dtrue%2Cmarkdown-graph%3Dtrue%2Cnew-home%3Dtrue%2Cqc-v2%3Dtrue%2Ctask-comment%3Dfalse%2Ctask-history%3Dtrue%2Cvip%3Dtrue%2Czip-download%3Dtrue%2C5d095651; exp=89cd78c2; frontlog_sample_rate=1");
             hwr.Host="coding.net";
             hwr.Referer=url;
             hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
@@ -65,7 +66,6 @@ namespace LemonLibrary
             hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
             hwr.Headers.Add("Cache-Control", "max-age=0");
             SetHeaderValue(hwr.Headers, "Connection", "keep-alive");
-            hwr.Host = "coding.net";
             hwr.Referer = url;
             hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
             hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";

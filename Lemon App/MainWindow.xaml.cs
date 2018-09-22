@@ -182,9 +182,9 @@ namespace Lemon_App
                             {
                                 var s = new WebClient();
                                 s.DownloadFileAsync(new Uri(g.pic), file);
-                                s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
+                                s.DownloadFileCompleted += delegate {TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); };
                             }
-                            else TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
+                            else TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
                             TB.Text = g.name;
                             var ss = new Task(new Action(async delegate
                             {
@@ -312,7 +312,7 @@ namespace Lemon_App
         {
             NSPage(null, SkinPage);
             SkinIndexList.Children.Clear();
-            var json = JObject.Parse(await HttpHelper.GetWebForCodingAsync("https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/SkinList.json"))["data"];
+            var json = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/SkinList.json"))["data"];
             int i = 1;
             foreach (var dx in json)
             {
@@ -321,13 +321,13 @@ namespace Lemon_App
                     byte.Parse(dx["ThemeColor"]["G"].ToString()),
                     byte.Parse(dx["ThemeColor"]["B"].ToString()));
                 if(!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + i + ".jpg"))
-                     await HttpHelper.HttpDownloadFileAsync($"https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/w{i}.jpg", Settings.USettings.CachePath + "Skin\\" + i + ".jpg");
+                     await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{i}.jpg", Settings.USettings.CachePath + "Skin\\" + i + ".jpg");
                 SkinControl sc = new SkinControl(i, name, color);
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) => {
                     if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
-                        await HttpHelper.HttpDownloadFileAsync($"https://coding.net/u/twilightlemon/p/SkinData/git/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
-                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png", UriKind.Absolute)));
+                        await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
+                    Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
                     App.BaseApp.Skin();
                     App.BaseApp.SetColor("ThemeColor", sc.theme);
                     Color co;
@@ -362,7 +362,7 @@ namespace Lemon_App
         #region 功能区
         #region Updata
         private async void Updata() {
-            var o = JObject.Parse(await HttpHelper.GetWebForCodingAsync("https://coding.net/u/twilightlemon/p/Updata/git/raw/master/WindowsUpdata.json"));
+            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/WindowsUpdata.json"));
             string v = o["version"].ToString();
             string dt = o["description"].ToString().Replace("@32","\n");
             if (int.Parse(v) > int.Parse(App.EM)) {
@@ -677,9 +677,9 @@ namespace Lemon_App
                 {
                     var s = new WebClient();
                     s.DownloadFileAsync(new Uri(dt.pic), file);
-                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); }); };
+                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); }); };
                 }
-                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); });
+                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());});
                 Dispatcher.Invoke(() =>
                 {
                     TB.Text = dt.name;
@@ -947,9 +947,9 @@ namespace Lemon_App
                 {
                     var s = new WebClient();
                     s.DownloadFileAsync(new Uri(dt.First().ImageUrl), file);
-                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); }); };
+                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); }); };
                 }
-                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); });
+                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); });
                 if(osx==0)
                    Dispatcher.Invoke(() => {
                     TB.Text = key;
@@ -1332,9 +1332,9 @@ namespace Lemon_App
                 {
                     var s = new WebClient();
                     s.DownloadFileAsync(new Uri(dt.img), file);
-                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); }); };
+                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); }); };
                 }
-                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); });
+                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); });
                 Dispatcher.Invoke(() =>
                 {
                     TB.Text = dt.name.Text;

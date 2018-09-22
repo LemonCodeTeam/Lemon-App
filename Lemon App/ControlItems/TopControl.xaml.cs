@@ -34,8 +34,8 @@ namespace Lemon_App
             {
                 WebClient v = new WebClient();
                 v.DownloadFileAsync(new Uri(img), file);
-                v.DownloadFileCompleted += delegate { v.Dispose(); im.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative))); };
-            }else im.Background = new ImageBrush(new BitmapImage(new Uri(file, UriKind.Relative)));
+                v.DownloadFileCompleted += delegate { v.Dispose(); im.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); };
+            }else im.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
             topID = id;
             pic = img;
             name = n;

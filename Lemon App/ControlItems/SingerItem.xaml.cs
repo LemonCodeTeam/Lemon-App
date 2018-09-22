@@ -59,7 +59,6 @@ namespace Lemon_App
                     v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"),cache);
                     v.DownloadFileCompleted += delegate
                     {
-                        im.Background = new ImageBrush(new BitmapImage(new Uri(cache, UriKind.Relative)));
                         var image = new System.Drawing.Bitmap(cache);
                         im.Background = new ImageBrush(image.ToImageSource());
                     };
