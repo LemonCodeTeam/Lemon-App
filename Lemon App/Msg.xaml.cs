@@ -9,10 +9,11 @@ namespace Lemon_App
     /// </summary>
     public partial class Msg : Window
     {
-        public Msg(string tx)
+        public Msg(string tbx,string tx)
         {
             InitializeComponent();
             tb.Text = tx;
+            textBlock.Text = tbx;
             Left = SystemParameters.WorkArea.Width - Width;
             Top = SystemParameters.WorkArea.Height - Height + 10;
         }

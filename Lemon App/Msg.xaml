@@ -22,11 +22,11 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             <DropShadowEffect BlurRadius="20" Opacity="0.3" ShadowDepth="0"/>
         </Border.Effect>
         <Grid>
-            <TextBlock x:Name="textBlock" Height="22" Margin="10,10,21,0" TextWrapping="Wrap" Text="Lemon App" VerticalAlignment="Top" FontSize="16" Foreground="#FF555555"/>
+            <TextBlock x:Name="textBlock" Height="22" Margin="10,10,21,0" TextWrapping="Wrap" Text="小萌音乐" VerticalAlignment="Top" FontSize="16" Foreground="#FF555555"/>
             <Border x:Name="border"  Width="15" Height="15" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#00000000" Margin="0,3,3,0" MouseDown="border_MouseDown">
                 <Path x:Name="path3" Stretch="Uniform" Data="M967.81435,106.836237L917.16274,56.18565 512,461.34839 106.836237,56.18565 56.184627,106.836237 461.34839,512 56.184627,917.163763 106.836237,967.815373 512,562.65161 917.16274,967.815373 967.81435,917.163763 562.650587,512z" Width="10" Height="10" Fill="#FFCCCEDB"/>
             </Border>
-            <TextBlock x:Name="tb" Margin="10,35,10,7" TextWrapping="Wrap" Foreground="#FFB0B0B0" Text="Test"/>
+            <TextBlock x:Name="tb" Margin="10,35,10,7" TextWrapping="Wrap" Foreground="#FF8F8F8F" Text="Test"/>
         </Grid>
     </Border>
 </Window>

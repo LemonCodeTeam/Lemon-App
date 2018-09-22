@@ -38,7 +38,6 @@ namespace Lemon_App
         int ind = 0;//歌词页面是否打开
         bool xh = false;//false: lb true:dq  循环/单曲 播放控制
         bool issingerloaded = false;
-        bool isPos = false;//true:Wy false:QQ 播放控制
         bool mod = true;//true : qq false : wy
 
         bool isSearch = false;
@@ -905,16 +904,16 @@ namespace Lemon_App
         {
             if (SearchBox.Text.Trim() != string.Empty)
             {
-                if (Search_SmartBox.Opacity != 100)
-                    Search_SmartBox.Opacity = 100;
+                if (Search_SmartBox.Visibility != Visibility.Visible)
+                    Search_SmartBox.Visibility = Visibility.Visible;
                 var data = await ml.Search_SmartBoxAsync(SearchBox.Text);
                 Search_SmartBoxList.Items.Clear();
                 if (data.Count == 0)
-                    Search_SmartBox.Opacity = 0;
+                    Search_SmartBox.Visibility = Visibility.Collapsed;
                 else foreach (var dt in data)
-                    Search_SmartBoxList.Items.Add(dt);
+                        Search_SmartBoxList.Items.Add(dt);
             }
-            else Search_SmartBox.Opacity = 0;
+            else Search_SmartBox.Visibility = Visibility.Collapsed;
         }
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -926,7 +925,7 @@ namespace Lemon_App
             if (Search_SmartBoxList.SelectedIndex != -1)
             {
                 SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
-                Search_SmartBox.Opacity = 0;
+                Search_SmartBox.Visibility = Visibility.Collapsed;
                 SearchMusic(SearchBox.Text); ixPlay = 1;
             }
         }
@@ -996,7 +995,7 @@ namespace Lemon_App
             else LikeBtnUp();
             if (!ml.mldata.ContainsKey(id))
                 ml.mldata.Add(id, (name + " - " + singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
-            ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, isPos, doesplay);
+            ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, doesplay);
             MusicImage.Background = new ImageBrush(new BitmapImage(new Uri(x)));
             Singer.Text = singer;
             if (doesplay)
@@ -1077,11 +1076,11 @@ namespace Lemon_App
                 m_Name.Visibility = Visibility.Collapsed;
                 ly.Visibility = Visibility.Collapsed;
                 pl.Visibility = Visibility.Visible;
-                List<MusicPL> data;
-                if (!isPos)
-                    data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
-                else
-                    data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
+                List<MusicPL> data= await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+                //if (!isPos)
+                //    data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+                //else
+                //    data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
                 pldata.Children.Clear();
                 foreach (var dt in data)
                 {
@@ -1100,17 +1099,6 @@ namespace Lemon_App
         {
             if (ml.lv != null)
                 ml.lv.RestWidth(e.NewSize.Width);
-        }
-        private void qq_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            isPos = false;
-            ml.GetAndPlayMusicUrlAsync(Settings.USettings.Playing.MusicID, true, MusicName, this, isPos);
-        }
-
-        private void wy_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            isPos = true;
-            ml.GetAndPlayMusicUrlAsync(Settings.USettings.Playing.MusicID, true, MusicName, this, isPos);
         }
         #endregion
         #region AddGD
@@ -1189,11 +1177,11 @@ namespace Lemon_App
                     data.Add(f);
             }
             CloseDownloadPage();
-            Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")");
+            Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")","连接资源中.....");
             msg.Show();
             var DTimer = new System.Windows.Forms.Timer();
             await DownloadTaskAsync(msg, data,DTimer);
-            DTimer.Interval = 2000;
+            DTimer.Interval = 3000;
             DTimer.Tick +=async delegate {
                 if (DownloadIndex != data.Count){
                     string name = data[DownloadIndex].SongName + " - " + data[DownloadIndex].Singer;
@@ -1213,12 +1201,12 @@ namespace Lemon_App
                 var cl = new WebClient();
                 string mid = data[DownloadIndex].ID;
                 string url = await ml.GetUrlAsync(mid);
-                msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n正在下载:" + (DownloadIndex + 1) + "  " + name;
+                msg.tb.Text = "正在下载:" + (DownloadIndex + 1) + "  " + name;
                 cl.DownloadFileAsync(new Uri(url), file);
                 cl.DownloadProgressChanged += (s, e) =>
                 {
                     dt.Stop();
-                    msg.tb.Text = "正在下载全部歌曲(" + data.Count + ")\n正在下载：(" + e.ProgressPercentage + "%)" + (DownloadIndex + 1) + "  " + name;
+                    msg.tb.Text = "正在下载：" + (DownloadIndex + 1) +"  ("+ e.ProgressPercentage + "%)"  + "  " + name;
                 };
                 cl.DownloadFileCompleted += async delegate
                 {
@@ -1239,7 +1227,7 @@ namespace Lemon_App
                             else
                             {
                                 await Task.Delay(2000);
-                                Msg msxg = new Msg("已取消下载");
+                                Msg msxg = new Msg("已取消下载","");
                                 msxg.Show();
                                 await Task.Delay(5000);
                                 msxg.tbclose();

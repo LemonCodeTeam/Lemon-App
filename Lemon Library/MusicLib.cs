@@ -179,22 +179,14 @@ namespace LemonLibrary
             }
             return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid=" + guid;
         }
-        public string GetWyUrlAsync(string mid)
-        {//TODO: 原生api
-            return JObject.Parse(HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", $"types=url&id={mid}&source=netease"))["url"].ToString();
-        }
-        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s, bool ispos, bool doesplay = true)
+        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s, bool doesplay = true)
         {
-            string name = mldata[mid];
-            if (ispos) name = "Wy" + name + ".mp3";
-            else name = name + ".mp3";
+            string name = mldata[mid] + ".mp3";
             string downloadpath = Settings.USettings.CachePath+"Music\\" + name;
             if (!File.Exists(downloadpath))
             {
                 string musicurl = "";
-                if (ispos)
-                    musicurl = GetWyUrlAsync(GetWYIdByName(name));
-                else musicurl = await GetUrlAsync(mid);
+                musicurl = await GetUrlAsync(mid);
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                 {
                     x.Text = "连接资源中...";
@@ -231,18 +223,53 @@ namespace LemonLibrary
             }
             if (openlyric)
             {
-                if (ispos)
-                {
-                    name = TextHelper.XtoYGetTo("[" + name, "[", ".mp3", 0);
-                    var dt = await GetLyricByWYAsync(name);
-                    lv.LoadLrc(dt);
-                }
+                name = TextHelper.XtoYGetTo("[" + name, "[", ".mp3", 0);
+                string dt = GetLyric(mid);
+                lv.LoadLrc(dt);
+            }
+        }
+        public string PushLyric(string t,string x,string file) {
+            List<string> datatime = new List<string>();
+            List<string> datatext = new List<string>();
+            Dictionary<string, string> gcdata = new Dictionary<string, string>();
+            string[] dta = t.Split('\n');
+            foreach (var dt in dta)
+                LyricView.parserLine(dt, datatime, datatext, gcdata);
+            List<String> dataatimes = new List<String>();
+            List<String> dataatexs = new List<String>();
+            Dictionary<String, String> fydata = new Dictionary<String, String>();
+            String[] dtaa = x.Split('\n');
+            foreach (var dt in dtaa)
+                LyricView.parserLine(dt, dataatimes, dataatexs, fydata);
+            List<String> KEY = new List<String>();
+            Dictionary<String, String> gcfydata = new Dictionary<String, String>();
+            Dictionary<String, String> list = new Dictionary<String, String>();
+            foreach (var dt in datatime)
+            {
+                KEY.Add(dt);
+                gcfydata.Add(dt, "");
+            }
+            for (int i = 0; i != gcfydata.Count; i++)
+            {
+                if (fydata.ContainsKey(KEY[i]))
+                    gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
                 else
                 {
-                    var dt = GetLyric(mid);
-                    lv.LoadLrc(dt);
+                    string dt = LyricView.YwY(KEY[i], 1);
+                    if (fydata.ContainsKey(dt))
+                        gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[dt]).Replace("\n", "").Replace("\r", "");
+                    else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
                 }
             }
+            string LyricData = "";
+            for (int i = 0; i != KEY.Count; i++)
+            {
+                String value = gcfydata[KEY[i]].Replace("[", "").Replace("]", "");
+                String key = KEY[i];
+                LyricData += $"[{key}]{value}\r\n";
+            }
+            File.WriteAllText(file, LyricData);
+            return LyricData;
         }
         public string GetLyric(string McMind)
         {
@@ -265,48 +292,7 @@ namespace LemonLibrary
                 else
                 {
                     string x = Encoding.UTF8.GetString(Convert.FromBase64String(o["trans"].ToString())).Replace("&apos;", "\'");
-                    Console.WriteLine(t + "\r\n" + x);
-                    List<string> datatime = new List<string>();
-                    List<string> datatext = new List<string>();
-                    Dictionary<string, string> gcdata = new Dictionary<string, string>();
-                    string[] dta = t.Split('\n');
-                    foreach (var dt in dta)
-                        LyricView.parserLine(dt, datatime, datatext, gcdata);
-                    List<String> dataatimes = new List<String>();
-                    List<String> dataatexs = new List<String>();
-                    Dictionary<String, String> fydata = new Dictionary<String, String>();
-                    String[] dtaa = x.Split('\n');
-                    foreach (var dt in dtaa)
-                        LyricView.parserLine(dt, dataatimes, dataatexs, fydata);
-                    List<String> KEY = new List<String>();
-                    Dictionary<String, String> gcfydata = new Dictionary<String, String>();
-                    Dictionary<String, String> list = new Dictionary<String, String>();
-                    foreach (var dt in datatime)
-                    {
-                        KEY.Add(dt);
-                        gcfydata.Add(dt, "");
-                    }
-                    for (int i = 0; i != gcfydata.Count; i++)
-                    {
-                        if (fydata.ContainsKey(KEY[i]))
-                            gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
-                        else
-                        {
-                            string dt = LyricView.YwY(KEY[i], 1);
-                            if (fydata.ContainsKey(dt))
-                                gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[dt]).Replace("\n", "").Replace("\r", "");
-                            else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
-                        }
-                    }
-                    string LyricData = "";
-                    for (int i = 0; i != KEY.Count; i++)
-                    {
-                        String value = gcfydata[KEY[i]].Replace("[", "").Replace("]", "");
-                        String key = KEY[i];
-                        LyricData += $"[{key}]{value}\r\n";
-                    }
-                    File.WriteAllText(file, LyricData);
-                    return LyricData;
+                    return PushLyric(t, x, file);
                 }
             }
             else
@@ -675,62 +661,6 @@ namespace LemonLibrary
             var ds = "{\"data\":" + HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name)) + "}";
             var s = JObject.Parse(ds);
             return s["data"][0]["id"].ToString();
-        }
-        public async Task<string> GetLyricByWYAsync(string name)
-        {
-            string id = GetWYIdByName(name);
-            string file = Settings.USettings.CachePath +"Wy"+ name + ".lrc";
-            if (!File.Exists(file))
-            {
-                string s = await HttpHelper.GetWebAsync($"http://music.163.com/api/song/lyric?os=pc&id={id}&lv=-1&kv=-1&tv=-1");
-                Console.WriteLine(s);
-                JObject o = JObject.Parse(s);
-                string t = o["lrc"]["lyric"].ToString();
-                if (o["tlyric"]["lyric"].ToString() == "") return t;
-                else
-                {
-                    string x = o["tlyric"]["lyric"].ToString();
-                    Console.WriteLine(t + "\r\n" + x);
-                    List<string> datatime = new List<string>();
-                    List<string> datatext = new List<string>();
-                    Dictionary<string, string> gcdata = new Dictionary<string, string>();
-                    string[] dta = t.Split('\n');
-                    foreach (var dt in dta)
-                        LyricView.parserLine(dt, datatime, datatext, gcdata);
-                    List<String> dataatimes = new List<String>();
-                    List<String> dataatexs = new List<String>();
-                    Dictionary<String, String> fydata = new Dictionary<String, String>();
-                    String[] dtaa = x.Split('\n');
-                    foreach (var dt in dtaa)
-                        LyricView.parserLine(dt, dataatimes, dataatexs, fydata);
-                    List<String> KEY = new List<String>();
-                    Dictionary<String, String> gcfydata = new Dictionary<String, String>();
-                    Dictionary<String, String> list = new Dictionary<String, String>();
-                    foreach (var dt in datatime)
-                    {
-                        KEY.Add(dt);
-                        gcfydata.Add(dt, "");
-                    }
-                    for (int i = 0; i != gcfydata.Count; i++)
-                    {
-                        if (fydata.ContainsKey(KEY[i]))
-                            gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
-                        else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
-                    }
-                    string LyricData = "";
-                    //sdm("d5   "+dataatexs.size()+"   "+dataatimes.size()+"   "+datatexs.size()+"   "+datatimes.size()+"   "+KEY.size());
-                    for (int i = 0; i != KEY.Count; i++)
-                    {
-                        String value = gcfydata[KEY[i]].Replace("[", "").Replace("]", "");
-                        String key = KEY[i];
-                        LyricData += $"[{key}]{value}\r\n";
-                    }
-                    File.WriteAllText(file, LyricData);
-                    return LyricData;
-                }
-            }
-            else
-                return File.ReadAllText(file);
         }
     }
 }

@@ -123,7 +123,7 @@ namespace LemonLibrary
             public string Skin_Theme_B { get; set; } = "";
             #endregion
             #region 缓存/下载路径
-            public string CachePath = "";
+            public string CachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\Cache\Lyric";
             public string DownloadPath = "";
             #endregion
         }
