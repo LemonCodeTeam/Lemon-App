@@ -1503,8 +1503,8 @@
                 </Border>
                 <Grid Margin="335,0,95,0">
                     <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" ValueChanged="jd_ValueChanged" Margin="46,31"/>
-                    <TextBlock x:Name="Play_Now" TextWrapping="Wrap" Text="00:00" Foreground="{DynamicResource ResuColorBrush}" Height="15" TextAlignment="Right" HorizontalAlignment="Right" Margin="0,30"/>
-                    <TextBlock x:Name="Play_All" TextWrapping="Wrap" Text="00:00" Foreground="{DynamicResource ResuColorBrush}" Height="15" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="Play_All" TextWrapping="Wrap" Text="00:00" Foreground="{DynamicResource ResuColorBrush}" Height="15" TextAlignment="Right" HorizontalAlignment="Right" Margin="0,30"/>
+                    <TextBlock x:Name="Play_Now" TextWrapping="Wrap" Text="00:00" Foreground="{DynamicResource ResuColorBrush}" Height="15" HorizontalAlignment="Left"/>
                 </Grid>
             </Grid>
         </Border>

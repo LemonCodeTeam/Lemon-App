@@ -11,9 +11,13 @@ namespace LemonLibrary
 {
     public class HttpHelper {
         public static async Task<int> GetWebCode(String url) {
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-            var o = (await hwr.GetResponseAsync()) as HttpWebResponse;
-            return (int)o.StatusCode;
+            try
+            {
+                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
+                var o = (await hwr.GetResponseAsync()) as HttpWebResponse;
+                return (int)o.StatusCode;
+            }
+            catch { return 404; }
         }
         public static async Task<string> GetWebForCodingAsync(string url) {
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);

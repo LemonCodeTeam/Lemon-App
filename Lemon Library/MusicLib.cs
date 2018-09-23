@@ -164,8 +164,8 @@ namespace LemonLibrary
             MData.Add(new String[] { "C600", "m4a" });
             MData.Add(new String[] { "M500", "mp3" });
             MData.Add(new String[] { "C400", "m4a" });
-            MData.Add(new String[] { "M200", "m4a" });
-            MData.Add(new String[] { "M100", "m4a" });
+            MData.Add(new String[] { "M200", "mp3" });
+            MData.Add(new String[] { "M100", "mp3" });
 
             var guid = "365305415";
             var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
@@ -187,10 +187,6 @@ namespace LemonLibrary
             {
                 string musicurl = "";
                 musicurl = await GetUrlAsync(mid);
-                s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
-                {
-                    x.Text = "连接资源中...";
-                }));
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate
                 {

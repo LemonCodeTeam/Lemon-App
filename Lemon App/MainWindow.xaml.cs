@@ -982,7 +982,7 @@ namespace Lemon_App
         }
         public void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
         {
-            MusicName.Text = "";
+            MusicName.Text = "连接资源中...";
             IsRadio = isRadio;
             Settings.USettings.Playing.GC = id;
             Settings.USettings.Playing.ImageUrl = x;
@@ -1044,11 +1044,31 @@ namespace Lemon_App
             {
                 ind = 1;
                 ControlDownPage.BorderThickness = new Thickness(0);
+                MusicName.Foreground = new SolidColorBrush(Colors.White);
+                Singer.Foreground = new SolidColorBrush(Colors.White);
+                Play_All.Foreground = new SolidColorBrush(Colors.White);
+                Play_Now.Foreground = new SolidColorBrush(Colors.White);
+                path2.Fill = new SolidColorBrush(Colors.White);
+                path3.Fill = new SolidColorBrush(Colors.White);
+                path4.Fill = new SolidColorBrush(Colors.White);
+                path5.Fill = new SolidColorBrush(Colors.White);
+                path6.Fill = new SolidColorBrush(Colors.White);
+                likeBtn_path.Fill = new SolidColorBrush(Colors.White);
                 (Resources["OpenLyricPage"] as Storyboard).Begin();
             }
             else
             {
                 ind = 0;
+                MusicName.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                Singer.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                Play_All.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                Play_Now.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                path2.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                path3.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                path4.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                path5.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
                 ControlDownPage.BorderThickness = new Thickness(0,1,0,0);
                 (Resources["CloseLyricPage"] as Storyboard).Begin();
             }
