@@ -361,13 +361,13 @@ namespace Lemon_App
         #region 功能区
         #region Updata
         private async void Updata() {
-            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/WindowsUpdata.json"));
+            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
             string v = o["version"].ToString();
             string dt = o["description"].ToString().Replace("@32","\n");
             if (int.Parse(v) > int.Parse(App.EM)) {
                 if (MyMessageBox.Show("小萌有更新啦", dt, "立即更新")) {
                     var xpath = Settings.USettings.CachePath + "win-release.exe";
-                    await HttpHelper.HttpDownloadFileAsync("https://coding.net/u/twilightlemon/p/Updata/git/raw/master/win-release.exe", xpath);
+                    await HttpHelper.HttpDownloadFileAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/win-release.exe", xpath);
                     Process.Start(xpath);
                 }
             }
