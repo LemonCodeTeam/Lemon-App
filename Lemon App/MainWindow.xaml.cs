@@ -1397,7 +1397,7 @@ namespace Lemon_App
                 notifyIcon.Visible = false;
                 notifyIcon.Dispose();
                 var dt = Resources["Closing"] as Storyboard;
-                dt.Completed += delegate { Settings.SaveSettings(); Environment.Exit(0); };
+                dt.Completed += delegate { notifyIcon.Visible = false; Settings.SaveSettings(); Environment.Exit(0); };
                 dt.Begin();
             };
             //关联托盘控件

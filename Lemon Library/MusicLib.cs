@@ -153,7 +153,7 @@ namespace LemonLibrary
                 df.name = ex["title"].ToString();
                 if (ex["picurl"].ToString() != "")
                     df.pic = ex["picurl"].ToString();
-                else df.pic = df.Data[0].ImageUrl;
+                else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
                 Settings.USettings.MusicGD.Add(df.id, df);
             }
         }
