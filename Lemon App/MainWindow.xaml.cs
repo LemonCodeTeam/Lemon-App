@@ -918,9 +918,15 @@ namespace Lemon_App
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter&&SearchBox.Text.Trim() != string.Empty)
-            { SearchMusic(SearchBox.Text); ixPlay = 1; }
+            { SearchMusic(SearchBox.Text); ixPlay = 1; Search_SmartBox.Visibility = Visibility.Collapsed; }
         }
-        private void Search_SmartBoxList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up || e.Key == Key.Down)
+                Search_SmartBoxList.Focus();
+        }
+
+        private void Search_SmartBoxList_KeyDown(object sender, KeyEventArgs e)
         {
             if (Search_SmartBoxList.SelectedIndex != -1)
             {
@@ -928,6 +934,21 @@ namespace Lemon_App
                 Search_SmartBox.Visibility = Visibility.Collapsed;
                 SearchMusic(SearchBox.Text); ixPlay = 1;
             }
+        }
+
+        private void Bd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Search_SmartBoxList.SelectedIndex != -1)
+            {
+                SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
+                Search_SmartBox.Visibility = Visibility.Collapsed;
+                SearchMusic(SearchBox.Text); ixPlay = 1;
+            }
+        }
+
+        private void Search_SmartBox_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Search_SmartBox.Visibility = Visibility.Collapsed;
         }
         private string SearchKey = "";
         public void SearchMusic(string key,int osx=0)
