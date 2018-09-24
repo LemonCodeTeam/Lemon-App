@@ -972,8 +972,9 @@ namespace Lemon_App
                 else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); });
                 if(osx==0)
                    Dispatcher.Invoke(() => {
-                    TB.Text = key;
-                    DataItemsList.Children.Clear();
+                       TB.Text = key;
+                       DataItemsList.Children.Clear();
+                       Datasv.ScrollToTop();
                 });
             Dispatcher.Invoke(() => {
                 foreach (var j in dt) {
