@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLibrary;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -27,34 +28,31 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
-        double tp = 0;
+        double Tp = 0;
         string uri = "https://www.baidu.com/s?wd=%2a";
-        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        private async void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (textBox1.Text != "")
             {
                 if (textBox1.Text != "搜索")
                 {
-                    var d = new DoubleAnimation(380, TimeSpan.FromSeconds(0.3));
-                    d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(tp - 160, TimeSpan.FromSeconds(0.3))); };
-                    BeginAnimation(HeightProperty, d);
-                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text) + "&action=opensearch");
-                    string html6 = "";
-                    Stream sr = hwr.GetResponse().GetResponseStream();
-                    byte[] b = new byte[1024];
-                    sr.Read(b, 0, 1024);
-                    html6 = Encoding.Default.GetString(b);
-                    html6 = html6.Replace("\0", "");
-                    string Htp = html6.Substring(html6.LastIndexOf(",[")).Replace("]]", "").Replace(",[", "").Replace(",", "");
+                    var data = await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text) + "&action=opensearch",Encoding.Default);
+                    data = data.Replace("\0", "");
+                    string Htp = data.Substring(data.LastIndexOf(",[")).Replace("]]", "").Replace(",[", "").Replace(",", "");
                     string[] aa = Htp.Split(new char[] { '\"' }, StringSplitOptions.RemoveEmptyEntries);
                     listBox.Items.Clear();
                     foreach (var item in aa)
-                    {
                         listBox.Items.Add(new ListBoxItem() { Content = item, Height = 35 });
+                    if (aa.Count() != 0)
+                    {
+                        var d = new DoubleAnimation(70+listBox.Items.Count*35, TimeSpan.FromSeconds(0.3));
+                        d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(Tp - listBox.Items.Count * 25, TimeSpan.FromSeconds(0.3))); };
+                        BeginAnimation(HeightProperty, d);
                     }
+                    else { var d = new DoubleAnimation(70, TimeSpan.FromSeconds(0.3)); d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(Tp, TimeSpan.FromSeconds(0.3))); }; BeginAnimation(HeightProperty, d); listBox.Items.Clear(); }
                 }
             }
-            else { var d = new DoubleAnimation(50, TimeSpan.FromSeconds(0.3)); d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(tp, TimeSpan.FromSeconds(0.3))); }; BeginAnimation(HeightProperty, d); listBox.Items.Clear(); }
+            else { var d = new DoubleAnimation(70, TimeSpan.FromSeconds(0.3)); d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(Tp, TimeSpan.FromSeconds(0.3))); }; BeginAnimation(HeightProperty, d); listBox.Items.Clear(); }
         }
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -64,7 +62,7 @@ namespace Lemon_App
                 if (textBox1.Text != "")
                 {
                     Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
-                    this.Close();
+                    Close();
                 }
         }
 
@@ -73,32 +71,25 @@ namespace Lemon_App
             if (textBox1.Text != "")
             {
                 Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
-                this.Close();
+                Close();
             }
         }
-
-        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
-            Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
-            this.Close();
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Focus();
             textBox1.Focus();
-            tp = Top;
+            Tp = Top;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
-                this.DragMove();
+            { DragMove(); Tp = Top; }
         }
 
         private void CLOSE_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void textBox1_MouseDown(object sender, MouseButtonEventArgs e)
@@ -111,6 +102,33 @@ namespace Lemon_App
         {
             if (e.Key == Key.Escape)
                 Close();
+        }
+
+        private void textBox1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up || e.Key == Key.Down)
+                listBox.Focus();
+        }
+
+        private void listBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key==Key.Enter)
+                if (listBox.SelectedIndex != -1)
+                {
+                    textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
+                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
+                    Close();
+                }
+        }
+
+        private void Bd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (listBox.SelectedIndex != -1)
+            {
+                textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
+                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
+                Close();
+            }
         }
     }
 }

@@ -5,20 +5,76 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lemon_App"
         mc:Ignorable="d"
-        Title="小萌快捷搜索" Height="50" Width="320" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Topmost="True" Background="{x:Null}" Loaded="Window_Loaded" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStartupLocation="CenterScreen" BorderThickness="10" KeyDown="Window_KeyDown">
+        Title="小萌快捷搜索" Height="70" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Topmost="True" Background="{x:Null}" Loaded="Window_Loaded" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStartupLocation="CenterScreen" BorderThickness="10" KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+        <Style x:Key="TextBoxStyle1" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                <TextBlock x:Name="textBlock" Margin="0" Text="搜索" Opacity="0.7" Visibility="Collapsed"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Visibility" TargetName="textBlock" Value="Visible"/>
+                                <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Collapsed"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Window.Effect>
         <DropShadowEffect Color="#FF2D2D30" BlurRadius="10" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>
-    <Border x:Name="S"  MinWidth="200" MaxWidth="400" CornerRadius="5" Background="#FFFBFBFB">
-        <Grid Width="Auto" Height="Auto">
-            <TextBox x:Name="textBox1" Margin="28,6,10,0" TextWrapping="Wrap" Text="搜索" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="#FF31C27C" Foreground="#FF9C9C9C" KeyDown="textBox1_KeyDown" BorderThickness=" 0,0,0,0" TextChanged="textBox1_TextChanged" MouseDown="textBox1_MouseDown" Height="20" VerticalAlignment="Top" FontSize="14"/>
-            <ListBox x:Name="listBox" Margin="10,31,10,10" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFC5C5C5" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" BorderThickness="0" SelectionChanged="listBox_SelectionChanged">
+    <Border x:Name="S" MinWidth="320" CornerRadius="25" Background="#FFFBFBFB" HorizontalAlignment="Center">
+        <Grid>
+            <TextBox x:Name="textBox1" TextWrapping="NoWrap" PreviewKeyDown="textBox1_PreviewKeyDown" Margin="37,15,10,0" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{DynamicResource ThemeColor}" Foreground="#FF464646" KeyDown="textBox1_KeyDown" BorderThickness=" 0,0,0,0" TextChanged="textBox1_TextChanged" MouseDown="textBox1_MouseDown" Height="20" FontSize="14" Style="{DynamicResource TextBoxStyle1}" VerticalAlignment="Top"/>
+            <ListBox x:Name="listBox" Margin="10,40,10,1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF5D5D5D" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" BorderThickness="0" KeyDown="listBox_KeyDown">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="2" MouseDown="Bd_MouseDown">
                                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                 TextBlock.Foreground="{TemplateBinding Foreground}"/>
@@ -37,11 +93,11 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-            <Border HorizontalAlignment="Left" Margin="3,2.5,0,0" Width="25" Height="25" Background="#00000000" VerticalAlignment="Top">
+            <Border HorizontalAlignment="Left" Margin="10,12,0,0" Width="25" Height="25" Background="#00000000" VerticalAlignment="Top">
                 <Path Data="M31.689,30.252l-8.26-8.128c2.163-2.35,3.492-5.458,3.492-8.878
 			C26.92,5.93,20.894,0,13.46,0C6.026,0,0,5.93,0,13.246s6.026,13.246,13.46,13.246c3.212,0,6.158-1.111,8.472-2.958l8.292,8.16
 			c0.404,0.398,1.06,0.398,1.464,0C32.093,31.296,32.093,30.65,31.689,30.252z M13.46,24.454c-6.29,0-11.389-5.018-11.389-11.208
-			S7.17,2.038,13.46,2.038c6.29,0,11.389,5.018,11.389,11.208S19.75,24.454,13.46,24.454z" Stretch="Uniform" Fill="#FF9C9C9C" Margin="5"/>
+			S7.17,2.038,13.46,2.038c6.29,0,11.389,5.018,11.389,11.208S19.75,24.454,13.46,24.454z" Stretch="Uniform" Fill="#FF8B8B8B" Margin="5"/>
             </Border>
         </Grid>
     </Border>

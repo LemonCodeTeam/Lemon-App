@@ -928,12 +928,12 @@ namespace Lemon_App
 
         private void Search_SmartBoxList_KeyDown(object sender, KeyEventArgs e)
         {
-            if (Search_SmartBoxList.SelectedIndex != -1)
-            {
-                SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
-                Search_SmartBox.Visibility = Visibility.Collapsed;
-                SearchMusic(SearchBox.Text); ixPlay = 1;
-            }
+            if (e.Key == Key.Enter)
+                if (Search_SmartBoxList.SelectedIndex != -1){
+                    SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
+                    Search_SmartBox.Visibility = Visibility.Collapsed;
+                    SearchMusic(SearchBox.Text); ixPlay = 1;
+                }
         }
 
         private void Bd_MouseDown(object sender, MouseButtonEventArgs e)
