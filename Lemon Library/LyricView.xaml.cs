@@ -142,9 +142,17 @@ namespace LemonLibrary
                 //String unTimeData = TimeData.Substring(0, TimeData.Length - 1);
                 if (doesAdd)
                 {
-                    times.Add(TimeData);
-                    texs.Add(TexsData);
-                    data.Add(TimeData, TexsData);
+                    if (data.ContainsKey(TimeData))
+                    {
+                        texs.Add(TexsData);
+                        data[TimeData] += "^" + TexsData;
+                    }
+                    else
+                    {
+                        times.Add(TimeData);
+                        texs.Add(TexsData);
+                        data.Add(TimeData, TexsData);
+                    }
                 }
                 return new string[2] {TimeData,TexsData};
             }

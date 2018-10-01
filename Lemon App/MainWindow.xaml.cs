@@ -789,7 +789,10 @@ namespace Lemon_App
         #endregion
         #region ILike
         private void LikeBtnUp() {
-            likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            if (ind == 1)
+                likeBtn_path.Fill = new SolidColorBrush(Colors.White);
+            else
+                likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
         }
 
         private void LikeBtnDown() {
