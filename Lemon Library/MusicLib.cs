@@ -647,7 +647,7 @@ namespace LemonLibrary
                     img = ds["hot_comment"]["commentlist"][i]["avatarurl"].ToString(),
                     like = ds["hot_comment"]["commentlist"][i]["praisenum"].ToString(),
                     name = ds["hot_comment"]["commentlist"][i]["nick"].ToString(),
-                    text = ds["hot_comment"]["commentlist"][i]["rootcommentcontent"].ToString()
+                    text = ds["hot_comment"]["commentlist"][i]["rootcommentcontent"].ToString().Replace(@"\n","\n")
                 });
             }
             return data;
