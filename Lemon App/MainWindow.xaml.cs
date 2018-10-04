@@ -39,21 +39,31 @@ namespace Lemon_App
         bool xh = false;//false: lb true:dq  循环/单曲 播放控制
         bool issingerloaded = false;
         bool mod = true;//true : qq false : wy
+        bool isLoading = false;
 
         bool isSearch = false;
+        int ApiHandle = 0;
         #endregion
         #region 等待动画
         public void OpenLoading()
         {
-            var s = Resources["OpenLoadingFx"] as Storyboard;
-            s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Begin(); };
-            s.Begin();
+            if (!isLoading)
+            {
+                isLoading = true;
+                var s = Resources["OpenLoadingFx"] as Storyboard;
+                s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Begin(); };
+                s.Begin();
+            }
         }
         public void CloseLoading()
         {
-            var s = Resources["CloseLoadingFx"] as Storyboard;
-            s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Stop(); };
-            s.Begin();
+            if (isLoading)
+            {
+                isLoading = false;
+                var s = Resources["CloseLoadingFx"] as Storyboard;
+                s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Stop(); };
+                s.Begin();
+            }
         }
         #endregion
         #region 窗口加载辅助
@@ -61,7 +71,6 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
-
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -69,7 +78,14 @@ namespace Lemon_App
         }
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.USettings.Skin_Path != ""&& System.IO.File.Exists(Settings.USettings.Skin_Path))
+            var ani = Resources["Loading"] as Storyboard;
+            ani.Begin();
+            LoadSEND_SHOW();
+            App.BaseApp.Apip.Start();
+            OpenLoading();
+        }
+        private void LoadAfterLogin() {
+            if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
             {
                 App.BaseApp.Skin();
                 Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
@@ -87,14 +103,10 @@ namespace Lemon_App
             else App.BaseApp.unSkin();
 
             Settings.SaveWINDOW_HANDLE(new WindowInteropHelper(this).Handle.ToInt32());
-            LoadSEND_SHOW();
 
-            var ani = Resources["Loading"] as Storyboard;
-            ani.Completed += Ani_Completed;
-            ani.Begin();
+            LoadMusicData();
         }
-
-        private void Ani_Completed(object sender, EventArgs e)
+        private void LoadMusicData()
         {
             OpenLoading();
             Updata();
@@ -213,7 +225,6 @@ namespace Lemon_App
                         topIndexList.Children.Add(top);
                     });
                 }
-                Dispatcher.Invoke(() => { CloseLoading(); });
             }));
             de.Start();
             ////TB GDlist////
@@ -227,7 +238,6 @@ namespace Lemon_App
         private void exShow() {
                 this.WindowState = WindowState.Normal;
                 var ani = Resources["Loading"] as Storyboard;
-                ani.Completed -= Ani_Completed;
                 ani.Begin();
                 this.Activate();
         }
@@ -1297,39 +1307,9 @@ namespace Lemon_App
             da.Completed += delegate { LoginPage.Visibility = Visibility.Collapsed; };
             LoginPage.BeginAnimation(OpacityProperty, da);
         }
-        private async void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
+        private void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var data = System.IO.Directory.GetDirectories(Environment.ExpandEnvironmentVariables(@"%AppData%\Tencent\Users"));
-            Login_wp.Children.Clear();
-            foreach (var dt in data)
-            {
-                string qqx = new System.IO.DirectoryInfo(dt).Name;
-                string dl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qqx}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qqx}&reqfrom=1&reqtype=0", Encoding.UTF8);
-                string name = JObject.Parse(dl)["data"]["creator"]["nick"].ToString();
-                await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qqx}&spec=100", Settings.USettings.CachePath + qqx + ".jpg");
-                var image = new System.Drawing.Bitmap(Settings.USettings.CachePath + qqx + ".jpg");
-                UserTxControl utc = new UserTxControl(new ImageBrush(image.ToImageSource()), name, qqx);
-                utc.MouseDown += (s, ex) => {
-                    Settings.SaveSettings();
-                    Settings.USettings.MusicGD.Clear();
-                    string qq = utc.qq;
-                    Settings.LoadUSettings(qq);
-                    Settings.USettings.UserName = utc.UserName.Text;
-                    Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
-                    Settings.USettings.LemonAreeunIts = qq;
-                    Settings.SaveSettings();
-                    Settings.LSettings.qq = qq;
-                    Settings.SaveLocaSettings();
-                    ml.m.Stop();
-                    ml = null;
-                    var a = new MainWindow();
-                    a.Show();
-                    this.Close();
-                };
-                Login_wp.Children.Add(utc);
-            }
-            LoginPage.Visibility = Visibility.Visible;
-            LoginPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
+            MsgHelper.SendMsg("Login", ApiHandle);
         }
         #endregion
         #region MyGD
@@ -1419,6 +1399,7 @@ namespace Lemon_App
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
             exit.Click += delegate {
+                App.BaseApp.Apip.Kill();
                 notifyIcon.Visible = false;
                 notifyIcon.Dispose();
                 var dt = Resources["Closing"] as Storyboard;
@@ -1482,6 +1463,30 @@ namespace Lemon_App
                 cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, mytype);
                 if (cdata.lpData == MsgHelper.SEND_SHOW)
                     exShow();
+                else if (cdata.lpData.Contains("Api#")){
+                    ApiHandle = int.Parse(TextHelper.XtoYGetTo(cdata.lpData, "#", "*", 0));
+                    MsgHelper.SendMsg("IsLogin", ApiHandle);
+                }
+                else if (cdata.lpData.Contains("Login")){
+                    OpenLoading();
+                    string qq = "2465759834";
+                    if (cdata.lpData != "No Login")
+                        qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
+                    Action a = new Action(async () =>
+                    {
+                        var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                        await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
+                        Settings.LoadUSettings(qq);
+                        Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
+                        Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
+                        Settings.USettings.LemonAreeunIts = qq;
+                        Settings.SaveSettings();
+                        Settings.LSettings.qq = qq;
+                        Settings.SaveLocaSettings();
+                        LoadAfterLogin();
+                    });
+                    a();
+                }
             }
             return IntPtr.Zero;
         }

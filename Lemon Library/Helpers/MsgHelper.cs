@@ -20,11 +20,16 @@ namespace LemonLibrary
             public string lpData;
         }
 
+        [DllImport("User32.dll", EntryPoint = "FindWindow")]
+        public extern static IntPtr FindWindow(string lpClassName, string lpWindowName);
+
         [DllImport("User32.dll")]
         public static extern int SendMessage(int hwnd, int msg, int wParam, ref COPYDATASTRUCT IParam);
 
-        public static void SendMsg(String strSent) {
-            int WINDOW_HANDLE = Settings.ReadWINDOW_HANDLE();
+        public static void SendMsg(String strSent,int WindowHandle=0) {
+            int WINDOW_HANDLE = WindowHandle;
+            if (WindowHandle == 0)
+                WINDOW_HANDLE = Settings.ReadWINDOW_HANDLE();
             if (WINDOW_HANDLE != 0)
             {
                 byte[] arr = Encoding.Default.GetBytes(strSent);

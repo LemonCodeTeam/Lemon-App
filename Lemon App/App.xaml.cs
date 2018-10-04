@@ -2,6 +2,7 @@
 using Lierda.WPFHelper;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -18,6 +19,7 @@ namespace Lemon_App
     {
         public static App BaseApp = null;
         public static string EM = "1028";
+        public Process Apip = new Process();
         public void SetColor(string id,Color c)
         {
             var color = new SolidColorBrush() { Color = c };
@@ -52,16 +54,13 @@ namespace Lemon_App
         public SolidColorBrush GetThemeColorBrush() {
             return (SolidColorBrush)Resources["ThemeColor"];
         }
-
         public SolidColorBrush GetResuColorBrush() {
             return (SolidColorBrush)Resources["ResuColorBrush"];
         }
-
         public SolidColorBrush GetButtonColorBrush()
         {
             return (SolidColorBrush)Resources["ButtonColorBrush"];
         }
-
         LierdaCracker cracker = new LierdaCracker();
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -99,7 +98,7 @@ namespace Lemon_App
             fs.Close();
         }
         System.Threading.Mutex mut;
-        private async void Application_Startup(object sender, StartupEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
             bool requestInitialOwnership = true;
             mut = new System.Threading.Mutex(requestInitialOwnership, "Lemon App", out bool mutexWasCreated);
@@ -114,32 +113,9 @@ namespace Lemon_App
                     Directory.CreateDirectory(Settings.USettings.CachePath);
                 if (!Directory.Exists(Settings.USettings.CachePath + "Skin"))
                     Directory.CreateDirectory(Settings.USettings.CachePath + "Skin");
-                var qq = "";
-                Settings.LoadLocaSettings();
-                if (Settings.LSettings.qq != "EX")
-                    qq = Settings.LSettings.qq;
-                else
-                {
-                    try
-                    {
-                        qq = new DirectoryInfo(Directory.GetDirectories(Environment.ExpandEnvironmentVariables(@"%AppData%\Tencent\Users"))[0]).Name;
-                    }
-                    catch
-                    {
-                        qq = "2465759834";
-                    }
-                }
-                Settings.LoadUSettings(qq);
-                var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
-                await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
-                Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
-                Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
-                Settings.USettings.LemonAreeunIts = qq;
-                Settings.SaveSettings();
-                Settings.LSettings.qq = qq;
-                Settings.SaveLocaSettings();
+                Apip.StartInfo.FileName = "CoconutApi.exe";
                 new MainWindow().Show();
             }
         }
-     }
+    }
  }
