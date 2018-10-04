@@ -40,6 +40,7 @@ namespace Lemon_App
         bool issingerloaded = false;
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
+        bool IsFirstStart = true;
 
         bool isSearch = false;
         int ApiHandle = 0;
@@ -71,6 +72,7 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
+        Loading ld;
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -78,11 +80,17 @@ namespace Lemon_App
         }
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
-            var ani = Resources["Loading"] as Storyboard;
-            ani.Begin();
+            this.Visibility = Visibility.Collapsed;
+            ld = new Loading();
+            ld.Show();
+            Settings.SaveWINDOW_HANDLE(new WindowInteropHelper(this).Handle.ToInt32());
             LoadSEND_SHOW();
+            LoadHotDog();
+            /////Timer user
+            var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
+            ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
+            ds.Start();
             App.BaseApp.Apip.Start();
-            OpenLoading();
         }
         private void LoadAfterLogin() {
             if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
@@ -102,27 +110,76 @@ namespace Lemon_App
             }
             else App.BaseApp.unSkin();
 
-            Settings.SaveWINDOW_HANDLE(new WindowInteropHelper(this).Handle.ToInt32());
+            /////top////
+            var de = new Task(new Action(async delegate
+            {
+                var dt = await ml.GetTopIndexAsync();
+                Dispatcher.Invoke(() => { topIndexList.Children.Clear(); });
+                foreach (var d in dt)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var top = new TopControl(d.ID, d.Photo, d.Name);
+                        top.MouseDown += delegate (object seb, MouseButtonEventArgs ed)
+                        {
+                            isSearch = false;
+                            OpenLoading();
+                            var g = seb as TopControl;
+                            NSPage(null, Data);
+                            string file = Settings.USettings.CachePath + "Image\\Top" + g.topID + ".jpg";
+                            if (!System.IO.File.Exists(file))
+                            {
+                                var s = new WebClient();
+                                s.DownloadFileAsync(new Uri(g.pic), file);
+                                s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); };
+                            }
+                            else TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
+                            TB.Text = g.name;
+                            var ss = new Task(new Action(async delegate
+                            {
+                                var dta = await ml.GetToplistAsync(int.Parse(g.topID));
+                                Dispatcher.Invoke(() => { DataItemsList.Children.Clear(); });
+                                foreach (var j in dta)
+                                {
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                                        k.MouseDown += PlayMusic;
+                                        if (k.isPlay(MusicName.Text))
+                                        {
+                                            k.ShowDx();
+                                            MusicData = k;
+                                        }
+                                        DataItemsList.Children.Add(k);
+                                    });
+                                    await Task.Delay(1);
+                                }
+                                isSearch = false;
+                                Dispatcher.Invoke(() => { CloseLoading(); });
+                            }));
+                            ss.Start();
+                        };
+                        top.Margin = new Thickness(0, 0, 20, 20);
+                        topIndexList.Children.Add(top);
+                    });
+                }
+            }));
+            de.Start();
 
             LoadMusicData();
         }
         private void LoadMusicData()
         {
-            OpenLoading();
             Updata();
             LoadSettings();
-            LoadHotDog();
-            /////Timer user
-            var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
-            ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
-            ds.Start();
+
             UserName.Text = Settings.USettings.UserName;
             if (System.IO.File.Exists(Settings.USettings.UserImage))
             {
                 var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
                 UserTX.Background = new ImageBrush(image.ToImageSource());
             }
-                (Resources["Closing"] as Storyboard).Completed += delegate { ShowInTaskbar = false; };
+            (Resources["Closing"] as Storyboard).Completed += delegate { ShowInTaskbar = false; };
             ////////////load
             LyricView lv = new LyricView();
             lv.FoucsLrcColor = new SolidColorBrush(Color.FromArgb(255,255,255,255));
@@ -172,67 +229,16 @@ namespace Lemon_App
                         PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
                 }
             };
-            /////top////
-            var de = new Task(new Action(async delegate
-            {
-                var dt = await ml.GetTopIndexAsync();
-                Dispatcher.Invoke(() => { topIndexList.Children.Clear(); });
-                foreach (var d in dt)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        var top = new TopControl(d.ID, d.Photo, d.Name);
-                        top.MouseDown += delegate (object seb, MouseButtonEventArgs ed)
-                        {
-                            isSearch = false;
-                            OpenLoading();
-                            var g = seb as TopControl;
-                            NSPage(null, Data);
-                            string file = Settings.USettings.CachePath + "Image\\Top" + g.topID + ".jpg";
-                            if (!System.IO.File.Exists(file))
-                            {
-                                var s = new WebClient();
-                                s.DownloadFileAsync(new Uri(g.pic), file);
-                                s.DownloadFileCompleted += delegate {TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); };
-                            }
-                            else TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
-                            TB.Text = g.name;
-                            var ss = new Task(new Action(async delegate
-                            {
-                                var dta = await ml.GetToplistAsync(int.Parse(g.topID));
-                                Dispatcher.Invoke(() => { DataItemsList.Children.Clear(); });
-                                foreach (var j in dta)
-                                {
-                                    Dispatcher.Invoke(() =>
-                                    {
-                                        var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
-                                        k.MouseDown += PlayMusic;
-                                        if (k.isPlay(MusicName.Text))
-                                        {
-                                            k.ShowDx();
-                                            MusicData = k;
-                                        }
-                                        DataItemsList.Children.Add(k);
-                                    });
-                                    await Task.Delay(1);
-                                }
-                                isSearch = false;
-                                Dispatcher.Invoke(() => { CloseLoading(); });
-                            }));
-                            ss.Start();
-                        };
-                        top.Margin = new Thickness(0, 0, 20, 20);
-                        topIndexList.Children.Add(top);
-                    });
-                }
-            }));
-            de.Start();
+           
             ////TB GDlist////
             var gd = new Task(new Action(async delegate {
                 await ml.UpdateGdAsync();
             }));
             gd.Start();
-            CloseLoading();
+            ld.Close();
+            Visibility = Visibility.Visible;
+            var ani = Resources["Loading"] as Storyboard;
+            ani.Begin();
         }
 
         private void exShow() {
@@ -1301,14 +1307,10 @@ namespace Lemon_App
         #endregion
         #region User
         #region Login
-        private void LoginPage_Close_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.3));
-            da.Completed += delegate { LoginPage.Visibility = Visibility.Collapsed; };
-            LoginPage.BeginAnimation(OpacityProperty, da);
-        }
-        private void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
-        {
+            App.BaseApp.Apip.Start();
+            await Task.Delay(1000);
             MsgHelper.SendMsg("Login", ApiHandle);
         }
         #endregion
@@ -1399,11 +1401,12 @@ namespace Lemon_App
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
             exit.Click += delegate {
-                App.BaseApp.Apip.Kill();
+                if(!App.BaseApp.Apip.HasExited)
+                    App.BaseApp.Apip.Kill();
                 notifyIcon.Visible = false;
                 notifyIcon.Dispose();
                 var dt = Resources["Closing"] as Storyboard;
-                dt.Completed += delegate { notifyIcon.Visible = false; Settings.SaveSettings(); Environment.Exit(0); };
+                dt.Completed += async delegate { await Task.Delay(500); notifyIcon.Visible = false; Settings.SaveSettings(); Environment.Exit(0); };
                 dt.Begin();
             };
             //关联托盘控件
@@ -1453,7 +1456,6 @@ namespace Lemon_App
             HwndSource source = HwndSource.FromHwnd(hwnd);
             if (source != null) source.AddHook(WndProc);
         }
-
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg ==MsgHelper.WM_COPYDATA)
@@ -1465,10 +1467,10 @@ namespace Lemon_App
                     exShow();
                 else if (cdata.lpData.Contains("Api#")){
                     ApiHandle = int.Parse(TextHelper.XtoYGetTo(cdata.lpData, "#", "*", 0));
-                    MsgHelper.SendMsg("IsLogin", ApiHandle);
+                    if (IsFirstStart)
+                    { IsFirstStart = false; MsgHelper.SendMsg("IsLogin", ApiHandle); }
                 }
                 else if (cdata.lpData.Contains("Login")){
-                    OpenLoading();
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
@@ -1484,6 +1486,7 @@ namespace Lemon_App
                         Settings.LSettings.qq = qq;
                         Settings.SaveLocaSettings();
                         LoadAfterLogin();
+                        App.BaseApp.Apip.Kill();
                     });
                     a();
                 }

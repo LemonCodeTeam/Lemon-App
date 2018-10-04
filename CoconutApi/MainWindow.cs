@@ -60,13 +60,8 @@ namespace CoconutApi
             wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=40&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2F%23stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=");
             Opacity = 1;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Focus();
             wb.DocumentCompleted += Wb_Dc_Login;
-        }
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            Opacity = 0;
-            FormBorderStyle = FormBorderStyle.None;
-            e.Cancel = true;
         }
 
         private async void Wb_Dc_Login(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -76,7 +71,8 @@ namespace CoconutApi
                 FormBorderStyle = FormBorderStyle.None;
                 Opacity = 0;
                 await Task.Delay(1000);
-                Api_IsLogin();
+                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", "; sajssdk", 0);
+                MsgHelper.SendMsg("Login:" + qq + "###", wind);
                 wb.DocumentCompleted -= Wb_Dc_Login;
             }
         }
@@ -102,8 +98,9 @@ namespace CoconutApi
             this.Controls.Add(this.wb);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainWindow";
-            this.Opacity = 0;
+            this.Opacity = 0D;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
 
