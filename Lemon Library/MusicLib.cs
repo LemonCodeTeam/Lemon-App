@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LemonLibrary.Helpers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,7 +52,7 @@ namespace LemonLibrary
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
         }
         public Dictionary<string, string> mldata = new Dictionary<string, string>();// mid,name
-        public MediaPlayer m = new MediaPlayer();
+        public static PlayerControl pc = new PlayerControl();
         public LyricView lv;
         public string qq = "";
 
@@ -190,9 +191,9 @@ namespace LemonLibrary
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate
                 {
-                    m.Open(new Uri(downloadpath, UriKind.Absolute));
+                    pc.Open(downloadpath);
                     if (doesplay)
-                        m.Play();
+                        pc.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
                         x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
@@ -209,9 +210,9 @@ namespace LemonLibrary
             }
             else
             {
-                m.Open(new Uri(downloadpath, UriKind.Absolute));
+                pc.Open(downloadpath);
                 if (doesplay)
-                    m.Play();
+                    pc.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                 {
                     x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
