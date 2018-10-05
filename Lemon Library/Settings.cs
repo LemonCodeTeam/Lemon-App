@@ -16,13 +16,13 @@ namespace LemonLibrary
         public static void SaveSettings(string id = "id")
         {
             if (id == "id") id = USettings.LemonAreeunIts;
-            File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+            File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.UTF8.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
         }
         public static void LoadUSettings(string qq)
         {
             USettings = new UserSettings();
             if (File.Exists(USettings.CachePath + qq + ".st")) {
-                string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
+                string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
                 JObject o = JObject.Parse(data);
                 USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
                 USettings.UserImage = o["UserImage"].ToString();

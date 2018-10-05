@@ -36,7 +36,7 @@ namespace CoconutApi
         int wind = 0;
         private async void Wb_Dc_Api_IsLogin(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            await Task.Delay(1000);
+            await Task.Delay(100);
             bool isfind = false;
             foreach (HtmlElement ele in wb.Document.All)
             {
@@ -49,7 +49,7 @@ namespace CoconutApi
             }
             if (!isfind)
             {
-                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", "; sajssdk", 0);
+                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
             }
             wb.DocumentCompleted -= Wb_Dc_Api_IsLogin;
@@ -60,7 +60,8 @@ namespace CoconutApi
             wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=40&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2F%23stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=");
             Opacity = 1;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Focus();
+            TopMost = true;
+            Activate();
             wb.DocumentCompleted += Wb_Dc_Login;
         }
 
@@ -70,8 +71,9 @@ namespace CoconutApi
             {
                 FormBorderStyle = FormBorderStyle.None;
                 Opacity = 0;
-                await Task.Delay(1000);
-                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", "; sajssdk", 0);
+                TopMost = false;
+                await Task.Delay(100);
+                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
                 wb.DocumentCompleted -= Wb_Dc_Login;
             }

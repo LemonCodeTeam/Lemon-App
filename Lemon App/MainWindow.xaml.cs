@@ -78,7 +78,7 @@ namespace Lemon_App
             if (e.LeftButton == MouseButtonState.Pressed)
                 this.DragMove();
         }
-        private void window_Loaded(object sender, RoutedEventArgs e)
+        private async void window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
             ld = new Loading();
@@ -91,27 +91,17 @@ namespace Lemon_App
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
             App.BaseApp.Apip.Start();
-        }
-        private void LoadAfterLogin() {
-            if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
-            {
-                App.BaseApp.Skin();
-                Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
-                App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
-                    byte.Parse(Settings.USettings.Skin_Theme_G),
-                    byte.Parse(Settings.USettings.Skin_Theme_B)));
-                Color co;
-                if (Settings.USettings.Skin_txt == "Black")
-                    co = Color.FromRgb(64, 64, 64);
-                else co = Color.FromRgb(255, 255, 255);
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                App.BaseApp.SetColor("ButtonColorBrush", co);
-                App.BaseApp.SetColor("TextX1ColorBrush", co);
-            }
-            else App.BaseApp.unSkin();
+
+            await Task.Run(() => {
+                Settings.LoadLocaSettings();
+                string qq = Settings.LSettings.qq;
+                Settings.LoadUSettings(qq);
+            });
+
+            LoadAfterLogin();
 
             /////top////
-            var de = new Task(new Action(async delegate
+            await Task.Run(new Action(async delegate
             {
                 var dt = await ml.GetTopIndexAsync();
                 Dispatcher.Invoke(() => { topIndexList.Children.Clear(); });
@@ -164,11 +154,28 @@ namespace Lemon_App
                     });
                 }
             }));
-            de.Start();
-
-            LoadMusicData();
         }
-        private void LoadMusicData()
+        private void LoadAfterLogin(bool hasAnimation=true) {
+            if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
+            {
+                App.BaseApp.Skin();
+                Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
+                App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
+                    byte.Parse(Settings.USettings.Skin_Theme_G),
+                    byte.Parse(Settings.USettings.Skin_Theme_B)));
+                Color co;
+                if (Settings.USettings.Skin_txt == "Black")
+                    co = Color.FromRgb(64, 64, 64);
+                else co = Color.FromRgb(255, 255, 255);
+                App.BaseApp.SetColor("ResuColorBrush", co);
+                App.BaseApp.SetColor("ButtonColorBrush", co);
+                App.BaseApp.SetColor("TextX1ColorBrush", co);
+            }
+            else { App.BaseApp.unSkin(); Page.Background = new SolidColorBrush(Colors.White); }
+
+            LoadMusicData(hasAnimation);
+        }
+        private async void LoadMusicData(bool hasAnimation = true)
         {
             Updata();
             LoadSettings();
@@ -229,23 +236,24 @@ namespace Lemon_App
                         PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
                 }
             };
-           
+
             ////TB GDlist////
-            var gd = new Task(new Action(async delegate {
-                await ml.UpdateGdAsync();
-            }));
-            gd.Start();
+            await Task.Run(async ()=> { await ml.UpdateGdAsync(); });
             ld.Close();
             Visibility = Visibility.Visible;
-            var ani = Resources["Loading"] as Storyboard;
-            ani.Begin();
+            Activate();
+            if (hasAnimation)
+            {
+                var ani = Resources["Loading"] as Storyboard;
+                ani.Begin();
+            }
         }
 
         private void exShow() {
-                this.WindowState = WindowState.Normal;
+                WindowState = WindowState.Normal;
                 var ani = Resources["Loading"] as Storyboard;
                 ani.Begin();
-                this.Activate();
+                Activate();
         }
         private void MaxBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1471,24 +1479,29 @@ namespace Lemon_App
                     { IsFirstStart = false; MsgHelper.SendMsg("IsLogin", ApiHandle); }
                 }
                 else if (cdata.lpData.Contains("Login")){
+                    App.BaseApp.Apip.Kill();
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
-                    Action a = new Action(async () =>
+                    if (Settings.USettings.LemonAreeunIts != qq)
                     {
-                        var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
-                        await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
-                        Settings.LoadUSettings(qq);
-                        Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
-                        Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
-                        Settings.USettings.LemonAreeunIts = qq;
-                        Settings.SaveSettings();
-                        Settings.LSettings.qq = qq;
-                        Settings.SaveLocaSettings();
-                        LoadAfterLogin();
-                        App.BaseApp.Apip.Kill();
-                    });
-                    a();
+                        Action a = new Action(async () =>
+                        {
+                            var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
+                            await Task.Run(() => {
+                                Settings.LoadUSettings(qq);
+                                Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
+                                Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
+                                Settings.USettings.LemonAreeunIts = qq;
+                                Settings.SaveSettings();
+                                Settings.LSettings.qq = qq;
+                                Settings.SaveLocaSettings();
+                            });
+                            LoadAfterLogin(false);
+                        });
+                        a();
+                    }
                 }
             }
             return IntPtr.Zero;
