@@ -175,6 +175,7 @@ namespace Lemon_App
 
             LoadMusicData(hasAnimation);
         }
+        private double now = 0;
         private async void LoadMusicData(bool hasAnimation = true)
         {
             Updata();
@@ -197,7 +198,7 @@ namespace Lemon_App
             if (Settings.USettings.Playing.MusicName != "")
             {
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
-                string downloadpath = Settings.USettings.CachePath + "Music\\" + (Settings.USettings.Playing.MusicName + " - " + Settings.USettings.Playing.Singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", "")+".mp3";
+                string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
                 MusicLib.pc.Open(downloadpath);
                 jd.Maximum = Settings.USettings.alljd;
                 jd.Value = Settings.USettings.jd;
@@ -210,7 +211,7 @@ namespace Lemon_App
             {
                 try
                 {
-                    double now = await MusicLib.pc.Get();
+                    now = await MusicLib.pc.Get();
                     if (isPlayasRun)
                     {
                         double all = await MusicLib.pc.GetAll();
@@ -221,7 +222,7 @@ namespace Lemon_App
                         Settings.USettings.alljd = jd.Maximum;
                     }
                     Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
-                    jd.Value = now;
+                    if(canjd)jd.Value = now;
                     if (ind == 1)
                         ml.lv.LrcRoll(now);
                     Settings.USettings.jd = jd.Value;
@@ -1095,11 +1096,6 @@ namespace Lemon_App
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
             }
         }
-        private void jd_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                MusicLib.pc.To(jd.Value);
-        }
         private void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (ind == 0)
@@ -1521,5 +1517,25 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
+
+        bool canjd = true;
+        private void jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (Math.Abs((jd.Value + 50) - now) > 500)
+            {
+                if (canjd) {
+                    canjd = false;
+                    MusicLib.pc.ToAway += Pc_ToAway;
+                }
+                MusicLib.pc.To(jd.Value);
+            }
+        }
+
+        private async void Pc_ToAway()
+        {
+            await Task.Delay(500);
+            canjd = true;
+            MusicLib.pc.ToAway -= Pc_ToAway;
+        }
     }
 }

@@ -19,6 +19,8 @@ namespace MatchaPlayer
             };
         }
         private MediaPlayer mp = new MediaPlayer();
+        private bool IsToed = false;
+        private double LastToValue = 0;
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == MsgHelper.WM_COPYDATA)
@@ -42,12 +44,17 @@ namespace MatchaPlayer
                 }
                 else if (dt.Contains("To"))
                 {
-                    double point = double.Parse(TextHelper.XtoYGetTo(dt, "To[", "]", 0));
-                    mp.Position = TimeSpan.FromMilliseconds(point);
+                    IsToed = true;
+                    LastToValue = double.Parse(TextHelper.XtoYGetTo(dt, "To[", "]", 0));
                 }
                 else if (dt=="Get")
                 {
                     MsgHelper.SendMsg("Ps[" + mp.Position.TotalMilliseconds + "]", wind);
+                    if (IsToed) {
+                        mp.Position = TimeSpan.FromMilliseconds(LastToValue);
+                        IsToed = false;
+                        MsgHelper.SendMsg("ToAway", wind);
+                    }
                 }
                 else if (dt=="GetAll")
                 {

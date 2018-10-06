@@ -183,7 +183,7 @@ namespace LemonLibrary
         public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s, bool doesplay = true)
         {
             string name = mldata[mid] + ".mp3";
-            string downloadpath = Settings.USettings.CachePath+"Music\\" + name;
+            string downloadpath = Settings.USettings.CachePath+"Music\\" + mid+".mp3";
             if (!File.Exists(downloadpath))
             {
                 string musicurl = "";

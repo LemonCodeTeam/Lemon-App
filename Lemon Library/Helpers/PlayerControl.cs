@@ -22,8 +22,9 @@ namespace LemonLibrary.Helpers
         private double Ps = 0;
         private double PsAll = 0;
 
-        public delegate void MediaEndedHandle();
-        public event MediaEndedHandle MediaEnded;
+        public delegate void FoxHandle();
+        public event FoxHandle MediaEnded;
+        public event FoxHandle ToAway;
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == MsgHelper.WM_COPYDATA)
@@ -39,6 +40,8 @@ namespace LemonLibrary.Helpers
                     PsAll = double.Parse(TextHelper.XtoYGetTo(dt, "PsAll[", "]", 0));
                 else if (dt == "MediaEnded")
                     MediaEnded.Invoke();
+                else if (dt == "ToAway")
+                    ToAway.Invoke();
             }
             else base.DefWndProc(ref m);
         }
