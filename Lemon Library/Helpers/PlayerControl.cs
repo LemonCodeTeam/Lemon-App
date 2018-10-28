@@ -25,6 +25,7 @@ namespace LemonLibrary.Helpers
         public delegate void FoxHandle();
         public event FoxHandle MediaEnded;
         public event FoxHandle ToAway;
+        public System.Windows.Forms.NotifyIcon notifyIcon;
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == MsgHelper.WM_COPYDATA)
@@ -55,16 +56,26 @@ namespace LemonLibrary.Helpers
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainWindow";
             this.Opacity = 0D;
+            this.Text = "ヾ(≧▽≦*)o LemonApp Player Service";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.FormClosed += PlayerControl_FormClosed;
             this.ResumeLayout(false);
 
-        }        
+        }
+
+        private void PlayerControl_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            p.Kill();
+            notifyIcon.Dispose();
+        }
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
             p =Process.Start("MatchaPlayer", Handle.ToInt32().ToString());
         }
+        
 
         public void Open(string url) {
             MsgHelper.SendMsg("Open[" + url + "]", pHandle);

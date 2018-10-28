@@ -30,7 +30,6 @@ namespace Lemon_App
         #region 一些字段
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         MusicLib ml = new MusicLib();
-        private System.Windows.Forms.NotifyIcon notifyIcon;
         DataItem MusicData;
         bool isplay = false;
         bool IsRadio = false;
@@ -1408,30 +1407,29 @@ namespace Lemon_App
             };
 
             //notifyIcon
-            notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.Text = "小萌";
-            notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
-            notifyIcon.Visible = true;
+            MusicLib.pc.notifyIcon = new System.Windows.Forms.NotifyIcon();
+            MusicLib.pc.notifyIcon.Text = "小萌";
+            MusicLib.pc.notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
+            MusicLib.pc.notifyIcon.Visible = true;
             //打开菜单项
             System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("打开");
             open.Click += delegate { exShow(); };
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
             exit.Click += delegate {
+                MusicLib.pc.notifyIcon.Dispose();
                 MusicLib.pc.Exit();
                 if(!App.BaseApp.Apip.HasExited)
                     App.BaseApp.Apip.Kill();
-                notifyIcon.Visible = false;
-                notifyIcon.Dispose();
                 var dt = Resources["Closing"] as Storyboard;
-                dt.Completed += async delegate { await Task.Delay(500); notifyIcon.Visible = false; Settings.SaveSettings(); Environment.Exit(0); };
+                dt.Completed += async delegate { await Task.Delay(500); Settings.SaveSettings(); Environment.Exit(0); };
                 dt.Begin();
             };
             //关联托盘控件
             System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
+            MusicLib.pc.notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
 
-            notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
+            MusicLib.pc.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
             {
                 if (m.Button == System.Windows.Forms.MouseButtons.Left) exShow();
             });

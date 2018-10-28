@@ -80,6 +80,7 @@ namespace MatchaPlayer
             this.ClientSize = new System.Drawing.Size(530, 345);
             this.FormBorderStyle = FormBorderStyle.None;
             this.Name = "MainWindow";
+            this.Text = "(*/ω＼*) LemonApp Music Player";
             this.Opacity = 0D;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
