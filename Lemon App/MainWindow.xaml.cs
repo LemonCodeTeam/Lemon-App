@@ -1067,6 +1067,26 @@ namespace Lemon_App
         }
         #endregion
         #region PlayControl
+        bool canjd = true;
+        private void jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (Math.Abs((jd.Value + 50) - now) > 500)
+            {
+                if (canjd)
+                {
+                    canjd = false;
+                    MusicLib.pc.ToAway += Pc_ToAway;
+                }
+                MusicLib.pc.To(jd.Value);
+            }
+        }
+
+        private async void Pc_ToAway()
+        {
+            await Task.Delay(500);
+            canjd = true;
+            MusicLib.pc.ToAway -= Pc_ToAway;
+        }
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!IsRadio)
@@ -1405,7 +1425,6 @@ namespace Lemon_App
                 UnregisterHotKey(hd, 124);
                 UnregisterHotKey(hd, 125);
             };
-
             //notifyIcon
             MusicLib.pc.notifyIcon = new System.Windows.Forms.NotifyIcon();
             MusicLib.pc.notifyIcon.Text = "小萌";
@@ -1515,25 +1534,5 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
-
-        bool canjd = true;
-        private void jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (Math.Abs((jd.Value + 50) - now) > 500)
-            {
-                if (canjd) {
-                    canjd = false;
-                    MusicLib.pc.ToAway += Pc_ToAway;
-                }
-                MusicLib.pc.To(jd.Value);
-            }
-        }
-
-        private async void Pc_ToAway()
-        {
-            await Task.Delay(500);
-            canjd = true;
-            MusicLib.pc.ToAway -= Pc_ToAway;
-        }
     }
 }

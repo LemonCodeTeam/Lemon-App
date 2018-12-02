@@ -443,116 +443,120 @@ namespace LemonLibrary
         {
             var o = JObject.Parse(await HttpHelper.GetWebAsync("https://c.y.qq.com/v8/fcg-bin/fcg_v8_radiolist.fcg?channel=radio&format=json&page=index&tpl=wk&new=1&p=0.8663229811059507&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             var data = new MusicRadioList();
-            int i = 0;
-            while (i < o["data"]["data"]["groupList"][0]["radioList"].Count())
+            try
             {
-                data.Hot.Add(new MusicRadioListItem
+                int i = 0;
+                while (i < o["data"]["data"]["groupList"][0]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][0]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][0]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][0]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][1]["radioList"].Count())
-            {
-                data.Evening.Add(new MusicRadioListItem
+                    data.Hot.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][0]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][0]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][0]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][1]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][1]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][1]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][1]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][2]["radioList"].Count())
-            {
-                data.Love.Add(new MusicRadioListItem
+                    data.Evening.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][1]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][1]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][1]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][2]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][2]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][2]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][2]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][3]["radioList"].Count())
-            {
-                data.Theme.Add(new MusicRadioListItem
+                    data.Love.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][2]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][2]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][2]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][3]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][3]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][3]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][3]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][4]["radioList"].Count())
-            {
-                data.Changjing.Add(new MusicRadioListItem
+                    data.Theme.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][3]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][3]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][3]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][4]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][4]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][4]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][4]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][5]["radioList"].Count())
-            {
-                data.Style.Add(new MusicRadioListItem
+                    data.Changjing.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][4]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][4]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][4]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][5]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][5]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][5]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][5]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][6]["radioList"].Count())
-            {
-                data.Lauch.Add(new MusicRadioListItem
+                    data.Style.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][5]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][5]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][5]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][6]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][6]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][6]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][6]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][7]["radioList"].Count())
-            {
-                data.People.Add(new MusicRadioListItem
+                    data.Lauch.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][6]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][6]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][6]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][7]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][7]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][7]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][7]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][8]["radioList"].Count())
-            {
-                data.MusicTools.Add(new MusicRadioListItem
+                    data.People.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][7]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][7]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][7]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][8]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][8]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][8]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][8]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
-            }
-            i = 0;
-            while (i < o["data"]["data"]["groupList"][9]["radioList"].Count())
-            {
-                data.Diqu.Add(new MusicRadioListItem
+                    data.MusicTools.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][8]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][8]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][8]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
+                i = 0;
+                while (i < o["data"]["data"]["groupList"][9]["radioList"].Count())
                 {
-                    Name = o["data"]["data"]["groupList"][9]["radioList"][i]["radioName"].ToString(),
-                    Photo = o["data"]["data"]["groupList"][9]["radioList"][i]["radioImg"].ToString(),
-                    ID = o["data"]["data"]["groupList"][9]["radioList"][i]["radioId"].ToString()
-                });
-                i++;
+                    data.Diqu.Add(new MusicRadioListItem
+                    {
+                        Name = o["data"]["data"]["groupList"][9]["radioList"][i]["radioName"].ToString(),
+                        Photo = o["data"]["data"]["groupList"][9]["radioList"][i]["radioImg"].ToString(),
+                        ID = o["data"]["data"]["groupList"][9]["radioList"][i]["radioId"].ToString()
+                    });
+                    i++;
+                }
             }
+            catch { }
             return data;
         }
         public async Task<Music> GetRadioMusicAsync(string id)

@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -68,10 +69,28 @@ namespace Lemon_App
             base.OnStartup(e);
         }
         public App() {
-//#if !DEBUG
+            //#if !DEBUG
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-//#endif
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                args.SetObserved();
+                var e = args.Exception;
+                string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts 
+                +"\r\n小萌版本:" + EM 
+                + "\r\n" + e.Message 
+                + "\r\n 导致错误的对象名称:" + e.Source 
+                + "\r\n 引发异常的方法:" + e.TargetSite 
+                + "\r\n  帮助链接:" +e.HelpLink 
+                + "\r\n 调用堆:" + e.StackTrace;
+                FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
+                StreamWriter sw = new StreamWriter(fs);
+                sw.Write(i);
+                sw.Flush();
+                sw.Close();
+                fs.Close();
+            };
+            //#endif
             BaseApp = this;
         }
 
@@ -89,7 +108,7 @@ namespace Lemon_App
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:"+EM+ "\r\n" + e.Exception.Message + "\r\n 导致错误的对象名称:" + e.Exception.Source + "\r\n 引发异常的方法:" + e.Exception.TargetSite + "\r\n  帮助链接:" + e.Exception.HelpLink + "\r\n 调用堆:" + e.Exception.StackTrace;
+            string i = "\n(Dispatcher)小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:"+EM+ "\r\n" + e.Exception.Message + "\r\n 导致错误的对象名称:" + e.Exception.Source + "\r\n 引发异常的方法:" + e.Exception.TargetSite + "\r\n  帮助链接:" + e.Exception.HelpLink + "\r\n 调用堆:" + e.Exception.StackTrace;
             FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(i);

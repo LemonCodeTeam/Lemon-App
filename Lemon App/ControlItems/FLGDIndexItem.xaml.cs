@@ -47,8 +47,12 @@ namespace Lemon_App
                 };
             }
             else {
-                var image = new System.Drawing.Bitmap(file);
-                im.Background = new ImageBrush(image.ToImageSource());
+                try
+                {
+                    var image = new System.Drawing.Bitmap(file);
+                    im.Background = new ImageBrush(image.ToImageSource());
+                }
+                catch { }
             }
         }
     }
