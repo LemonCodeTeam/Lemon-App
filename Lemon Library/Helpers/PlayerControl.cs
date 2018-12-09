@@ -17,7 +17,6 @@ namespace LemonLibrary.Helpers
             InitializeComponent();
             Show();
         }
-        private Process p;
         private int pHandle;
         private double Ps = 0;
         private double PsAll = 0;
@@ -25,7 +24,8 @@ namespace LemonLibrary.Helpers
         public delegate void FoxHandle();
         public event FoxHandle MediaEnded;
         public event FoxHandle ToAway;
-        public System.Windows.Forms.NotifyIcon notifyIcon;
+        public NotifyIcon notifyIcon;
+        public Process p = new Process();
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == MsgHelper.WM_COPYDATA)
@@ -73,7 +73,9 @@ namespace LemonLibrary.Helpers
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            p =Process.Start("MatchaPlayer", Handle.ToInt32().ToString());
+            p.StartInfo.FileName = "MatchaPlayer";
+            p.StartInfo.Arguments = Handle.ToInt32().ToString();
+            p.Start();
         }
         
 

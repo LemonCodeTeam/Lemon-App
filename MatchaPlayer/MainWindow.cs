@@ -1,5 +1,6 @@
 ﻿using LemonLibrary;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -8,6 +9,7 @@ namespace MatchaPlayer
 {
     public class MainWindow : Form
     {
+        Timer t = new Timer();
         public MainWindow(int handle)
         {
             InitializeComponent();
@@ -17,6 +19,15 @@ namespace MatchaPlayer
             mp.MediaEnded += (s, e) => {
                 MsgHelper.SendMsg("MediaEnded", wind);
             };
+            t.Interval = 1000;
+            t.Tick += delegate {
+                if(Process.GetProcessesByName("Lemon App").Length==0) {
+                    mp.Stop();
+                    mp.Close();
+                    Environment.Exit(0);
+                }
+            };
+            t.Start();
         }
         private MediaPlayer mp = new MediaPlayer();
         private bool IsToed = false;

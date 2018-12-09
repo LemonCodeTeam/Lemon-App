@@ -55,7 +55,16 @@ namespace LemonLibrary
         public static PlayerControl pc = new PlayerControl();
         public LyricView lv;
         public string qq = "";
-
+        public async Task<string> GetImageUrlByIDAsync(string mid) {
+            var op = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&platform=yqq&format=json"))["data"][0];
+            var op_abid = op["album"]["mid"].ToString();
+            var url = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{op_abid}.jpg?max_age=2592000";
+            if (op_abid == "001ZaCQY2OxVMg") {
+                op_abid = op["singer"][0]["mid"].ToString();
+                url = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{op_abid}.jpg?max_age=2592000";
+            }
+            return url;
+        }
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
             if (HttpHelper.IsNetworkTrue())
@@ -73,7 +82,7 @@ namespace LemonLibrary
                     { Singer += o["data"]["song"]["list"][i]["singer"][osxc]["name"] + "&"; }
                     m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                     m.MusicID = o["data"]["song"]["list"][i]["mid"].ToString();
-                    m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["data"]["song"]["list"][i]["album"]["mid"]}.jpg";
+                    m.ImageUrl =await GetImageUrlByIDAsync(m.MusicID);
                     m.GC = o["data"]["song"]["list"][i]["id"].ToString();
                     dt.Add(m);
                     if (!mldata.ContainsKey(m.MusicID))
@@ -129,7 +138,7 @@ namespace LemonLibrary
                     m.Singer = singer.Substring(0, singer.Length - 1);
                     m.GC = o["cdlist"][0]["songlist"][i]["songid"].ToString();
                     m.MusicID = o["cdlist"][0]["songlist"][i]["songmid"].ToString();
-                    m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["cdlist"][0]["songlist"][i]["albummid"]}.jpg";
+                    m.ImageUrl = await GetImageUrlByIDAsync(m.MusicID);
                 }//莫名其妙的System.NullReferenceException:“未将对象引用设置到对象的实例。”
                 catch { }
                 dt.Data.Add(m);
@@ -340,7 +349,7 @@ namespace LemonLibrary
                 { Singer += o["songlist"][i]["data"]["singer"][osxc]["name"] + "&"; }
                 m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                 m.MusicID = o["songlist"][i]["data"]["songmid"].ToString();
-                m.ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{o["songlist"][i]["data"]["albummid"]}.jpg";
+                m.ImageUrl = await GetImageUrlByIDAsync(m.MusicID);
                 m.GC = o["songlist"][i]["data"]["songmid"].ToString();
                 dt.Add(m);
                 if (!mldata.ContainsKey(m.MusicID))
