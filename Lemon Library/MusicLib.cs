@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
 using static LemonLibrary.InfoHelper;
@@ -189,7 +190,7 @@ namespace LemonLibrary
             }
             return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid=" + guid;
         }
-        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, TextBlock x, Window s, bool doesplay = true)
+        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, Run x, Window s, bool doesplay = true)
         {
             string name = mldata[mid] + ".mp3";
             string downloadpath = Settings.USettings.CachePath+"Music\\" + mid+".mp3";

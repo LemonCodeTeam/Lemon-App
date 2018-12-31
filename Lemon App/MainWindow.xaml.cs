@@ -240,8 +240,11 @@ namespace Lemon_App
                 {
                     if (IsRadio)
                         GetRadio(new RadioItem(RadioID), null);
-                    else
-                        PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
+                    else{
+                        if (DataItemsList.Children.IndexOf(MusicData) == DataItemsList.Children.Count - 1)
+                            PlayMusic(DataItemsList.Children[0] as DataItem, null);
+                        else PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
+                    }
                 }
             };
 
@@ -1106,40 +1109,38 @@ namespace Lemon_App
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
             }
         }
+        private void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
+        {
+            ind = 0;
+            MusicName.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            Singer.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            Play_All.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            Play_Now.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            path2.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            path3.SetResourceReference(Path.FillProperty, "ThemeColor");
+            path4.SetResourceReference(Path.FillProperty, "ThemeColor");
+            path5.SetResourceReference(Path.FillProperty, "ThemeColor");
+            path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
+            (Resources["CloseLyricPage"] as Storyboard).Begin();
+        }
+
         private void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (ind == 0)
-            {
-                ind = 1;
-                ControlDownPage.BorderThickness = new Thickness(0);
-                MusicName.Foreground = new SolidColorBrush(Colors.White);
-                Singer.Foreground = new SolidColorBrush(Colors.White);
-                Play_All.Foreground = new SolidColorBrush(Colors.White);
-                Play_Now.Foreground = new SolidColorBrush(Colors.White);
-                path2.Fill = new SolidColorBrush(Colors.White);
-                path3.Fill = new SolidColorBrush(Colors.White);
-                path4.Fill = new SolidColorBrush(Colors.White);
-                path5.Fill = new SolidColorBrush(Colors.White);
-                path6.Fill = new SolidColorBrush(Colors.White);
-                likeBtn_path.Fill = new SolidColorBrush(Colors.White);
-                (Resources["OpenLyricPage"] as Storyboard).Begin();
-            }
-            else
-            {
-                ind = 0;
-                MusicName.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                Singer.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                Play_All.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                Play_Now.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                path2.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-                path3.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-                path4.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-                path5.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-                path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-                likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-                ControlDownPage.BorderThickness = new Thickness(0,1,0,0);
-                (Resources["CloseLyricPage"] as Storyboard).Begin();
-            }
+            ind = 1;
+            ControlDownPage.BorderThickness = new Thickness(0);
+            MusicName.Foreground = new SolidColorBrush(Colors.White);
+            Singer.Foreground = new SolidColorBrush(Colors.White);
+            Play_All.Foreground = new SolidColorBrush(Colors.White);
+            Play_Now.Foreground = new SolidColorBrush(Colors.White);
+            path2.Fill = new SolidColorBrush(Colors.White);
+            path3.Fill = new SolidColorBrush(Colors.White);
+            path4.Fill = new SolidColorBrush(Colors.White);
+            path5.Fill = new SolidColorBrush(Colors.White);
+            path6.Fill = new SolidColorBrush(Colors.White);
+            likeBtn_path.Fill = new SolidColorBrush(Colors.White);
+            (Resources["OpenLyricPage"] as Storyboard).Begin();
         }
         private void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
