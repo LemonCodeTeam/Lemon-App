@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media;
 using static LemonLibrary.InfoHelper;
 
@@ -13,10 +15,12 @@ namespace LemonLibrary
     {
         #region USettings
         public static UserSettings USettings = new UserSettings();
-        public static void SaveSettings(string id = "id")
+        public static async void SaveSettings(string id = "id")
         {
-            if (id == "id") id = USettings.LemonAreeunIts;
-            File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.UTF8.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+            await Task.Run(() => {
+                if (id == "id") id = USettings.LemonAreeunIts;
+                File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.UTF8.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+            });
         }
         public static void LoadUSettings(string qq)
         {

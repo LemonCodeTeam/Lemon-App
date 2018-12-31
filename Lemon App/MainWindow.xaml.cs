@@ -71,7 +71,6 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
-        Loading ld;
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -79,9 +78,9 @@ namespace Lemon_App
         }
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Visibility = Visibility.Collapsed;
-            ld = new Loading();
-            ld.Show();
+            var ani = Resources["Loading"] as Storyboard;
+            ani.Begin();
+
             Settings.SaveWINDOW_HANDLE(new WindowInteropHelper(this).Handle.ToInt32());
             LoadSEND_SHOW();
             LoadHotDog();
@@ -248,14 +247,6 @@ namespace Lemon_App
 
             ////TB GDlist////
             await Task.Run(async ()=> { await ml.UpdateGdAsync(); });
-            ld.Close();
-            Visibility = Visibility.Visible;
-            Activate();
-            if (hasAnimation)
-            {
-                var ani = Resources["Loading"] as Storyboard;
-                ani.Begin();
-            }
         }
 
         private void exShow() {
