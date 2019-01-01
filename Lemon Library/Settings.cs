@@ -18,8 +18,12 @@ namespace LemonLibrary
         public static async void SaveSettings(string id = "id")
         {
             await Task.Run(() => {
-                if (id == "id") id = USettings.LemonAreeunIts;
-                File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.UTF8.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+                try
+                {
+                    if (id == "id") id = USettings.LemonAreeunIts;
+                    File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.UTF8.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+                }
+                catch { }
             });
         }
         public static void LoadUSettings(string qq)

@@ -178,12 +178,14 @@ namespace Lemon_App
         {
             Updata();
             LoadSettings();
-
-            UserName.Text = Settings.USettings.UserName;
-            if (System.IO.File.Exists(Settings.USettings.UserImage))
+            if (Settings.USettings.UserName != string.Empty)
             {
-                var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
-                UserTX.Background = new ImageBrush(image.ToImageSource());
+                UserName.Text = Settings.USettings.UserName;
+                if (System.IO.File.Exists(Settings.USettings.UserImage))
+                {
+                    var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
+                    UserTX.Background = new ImageBrush(image.ToImageSource());
+                }
             }
             (Resources["Closing"] as Storyboard).Completed += delegate { ShowInTaskbar = false; };
             ////////////load

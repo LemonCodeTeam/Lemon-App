@@ -201,13 +201,25 @@ namespace LemonLibrary
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate
                 {
-                    pc.Open(downloadpath);
-                    if (doesplay)
-                        pc.Play();
-                    s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                    var fm = File.Open(downloadpath, FileMode.Open);
+                    if (fm.Length != 0)
                     {
-                        x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
-                    }));
+                        fm.Close();
+                        fm.Dispose();
+                        pc.Open(downloadpath);
+                        if (doesplay)
+                            pc.Play();
+                        s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                        {
+                            x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
+                        }));
+                    }
+                    else {
+                        fm.Close();
+                        fm.Dispose();
+                        File.Delete(downloadpath);
+                        GetAndPlayMusicUrlAsync(mid, openlyric, x, s, doesplay);
+                    }
                 };
                 dc.DownloadFileAsync(new Uri(musicurl), downloadpath);
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e)
@@ -220,18 +232,31 @@ namespace LemonLibrary
             }
             else
             {
-                pc.Open(downloadpath);
-                if (doesplay)
-                    pc.Play();
-                s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                var fm = File.Open(downloadpath, FileMode.Open);
+                if (fm.Length != 0)
                 {
-                    x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
-                }));
+                    fm.Close();
+                    fm.Dispose();
+                    pc.Open(downloadpath);
+                    if (doesplay)
+                        pc.Play();
+                    s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
+                    {
+                        x.Text = TextHelper.XtoYGetTo("[" + name, "[", " -", 0).Replace("Wy", "");
+                    }));
+                }
+                else
+                {
+                    fm.Close();
+                    fm.Dispose();
+                    File.Delete(downloadpath);
+                    GetAndPlayMusicUrlAsync(mid, openlyric, x, s, doesplay);
+                }
             }
             if (openlyric)
             {
                 name = TextHelper.XtoYGetTo("[" + name, "[", ".mp3", 0);
-                string dt = GetLyric(mid);
+                string dt =await GetLyric(mid);
                 lv.LoadLrc(dt);
             }
         }
@@ -278,7 +303,7 @@ namespace LemonLibrary
             File.WriteAllText(file, LyricData);
             return LyricData;
         }
-        public string GetLyric(string McMind)
+        public async Task<string> GetLyric(string McMind)
         {
             string name = mldata[McMind];
             string file = Settings.USettings.CachePath+"Lyric\\" + name + ".lrc";
@@ -295,7 +320,7 @@ namespace LemonLibrary
                 Console.WriteLine(s);
                 JObject o = JObject.Parse(s);
                 string t = Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())).Replace("&apos;", "\'");
-                if (o["trans"].ToString() == "") return t;
+                if (o["trans"].ToString() == "") { await Task.Run(()=> {File.WriteAllText(file, t); }); return t; }
                 else
                 {
                     string x = Encoding.UTF8.GetString(Convert.FromBase64String(o["trans"].ToString())).Replace("&apos;", "\'");
