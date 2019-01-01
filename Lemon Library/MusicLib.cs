@@ -167,9 +167,10 @@ namespace LemonLibrary
                 data.Add(df.id, df);
             }
             foreach (var ex in data)
-            {
+            {//TODO 在我的歌单里添加等待动画...
                 if (Settings.USettings.MusicGD.ContainsKey(ex.Key))
                     Settings.USettings.MusicGD[ex.Key] = ex.Value;
+                else Settings.USettings.MusicGD.Add(ex.Key, ex.Value);
             }
         }
         public async Task<string> GetUrlAsync(string Musicid)
