@@ -72,11 +72,7 @@ namespace LemonLibrary
             public string name { get; set; }
             public string pic { get; set; }
             public string id { get; set; }
-
-            public static implicit operator List<object>(MusicGData v)
-            {
-                throw new NotImplementedException();
-            }
+            public string updatatime { get; set; }
         }
         ////////Weather Helper/////
         public class Weather {

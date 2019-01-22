@@ -251,7 +251,7 @@ namespace Lemon_App
             };
 
             ////TB GDlist////
-            await Task.Run(async ()=> { await ml.UpdateGdAsync(); });
+            await Task.Run(async ()=> { await ml.UpdateGdAsync();});
         }
 
         private void exShow() {
@@ -1345,7 +1345,7 @@ namespace Lemon_App
         }
         #endregion
         #region MyGD
-        private void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(GDBtn, MyGDIndexPage);
             GDItemsList.Children.Clear();
@@ -1356,6 +1356,7 @@ namespace Lemon_App
                 GDItemsList.Children.Add(ks);
             }
             UIHelper.G(Page);
+            await ml.UpdateGdAsync();
         }
 
         private void FxGDMouseDown(object sender, MouseButtonEventArgs e)
@@ -1371,7 +1372,6 @@ namespace Lemon_App
                     TB.Text = dt.name.Text;
                     DataItemsList.Children.Clear();
                 });
-                await Task.Delay(500);
                 var file = Settings.USettings.CachePath + "Image\\GD" + dt.id + ".jpg";
                 if (!System.IO.File.Exists(file))
                 {
@@ -1385,6 +1385,7 @@ namespace Lemon_App
                     TB.Text = dt.name.Text;
                     DataItemsList.Children.Clear();
                 });
+                int i = 0;
                 foreach (var j in Settings.USettings.MusicGD[dt.id].Data)
                 {
                     Dispatcher.Invoke(() =>
@@ -1397,10 +1398,12 @@ namespace Lemon_App
                         }
                         DataItemsList.Children.Add(k);
                     });
-                    await Task.Delay(1);
+                    i++;//Add累了，给CPU休息一下...
+                    if (i == 10) { i = 0;await Task.Delay(1); }
                 }
                 isSearch = false;
                 Dispatcher.Invoke(() => { CloseLoading(); });
+                await ml.UpdateGdAsync();
             }));
             sx.Start();
         }
