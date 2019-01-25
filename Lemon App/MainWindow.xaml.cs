@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,24 +46,47 @@ namespace Lemon_App
         int ApiHandle = 0;
         #endregion
         #region 等待动画
+        Thread tOL = null;
+        LoadingWindow aw = null;
+        public void RunThread(object dx) {
+            double[] d = dx as double[];
+            aw = new LoadingWindow();
+            aw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            aw.Topmost = true;
+            aw.Top = d[0];
+            aw.Left = d[1];
+            aw.Show();
+            aw.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2)));
+            System.Windows.Threading.Dispatcher.Run();
+        }
+
         public void OpenLoading()
         {
             if (!isLoading)
             {
+                var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0));
+                ContentPage.BeginAnimation(OpacityProperty, da);
                 isLoading = true;
-                var s = Resources["OpenLoadingFx"] as Storyboard;
-                s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Begin(); };
-                s.Begin();
+                tOL = new Thread(RunThread);
+                tOL.SetApartmentState(ApartmentState.STA);
+                double[] d = new double[2];
+                d[0] = Top + Height / 2 - 90;
+                d[1] = Left + Width / 2 - 50;
+                tOL.Start(d);
             }
         }
-        public void CloseLoading()
+        public async void CloseLoading()
         {
             if (isLoading)
             {
+                await Task.Delay(100);
                 isLoading = false;
-                var s = Resources["CloseLoadingFx"] as Storyboard;
-                s.Completed += delegate { (Resources["FxLoading"] as Storyboard).Stop(); };
-                s.Begin();
+                aw.Dispatcher.Invoke(() => {
+                    var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+                    da.Completed +=async delegate { await Task.Delay(500); aw.Close(); };
+                    aw.BeginAnimation(OpacityProperty, da);});
+                tOL.DisableComObjectEagerCleanup();
+                ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
             }
         }
         #endregion
@@ -140,7 +164,6 @@ namespace Lemon_App
                                         }
                                         DataItemsList.Children.Add(k);
                                     });
-                                    await Task.Delay(1);
                                 }
                                 isSearch = false;
                                 Dispatcher.Invoke(() => { CloseLoading(); });
@@ -445,7 +468,6 @@ namespace Lemon_App
                             sinx.MouseDown += GetSinger;
                             singerItemsList.Children.Add(sinx);
                         });
-                        await Task.Delay(1);
                     }
                     Dispatcher.Invoke(() => { CloseLoading(); });
                 }));
@@ -476,7 +498,6 @@ namespace Lemon_App
                                 sinx.MouseDown += GetSinger;
                                 singerItemsList.Children.Add(sinx);
                             });
-                            await Task.Delay(1);
                         }
                         Dispatcher.Invoke(() => { CloseLoading(); });
                     }));
@@ -507,7 +528,6 @@ namespace Lemon_App
                             sinx.MouseDown += GetSinger;
                             singerItemsList.Children.Add(sinx);
                         });
-                        await Task.Delay(1);
                     }
                     Dispatcher.Invoke(() => { CloseLoading(); });
                 }));
@@ -649,7 +669,6 @@ namespace Lemon_App
                             kss.MouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(kss);
                         });
-                        await Task.Delay(1);
                     }
                     foreach (var d in (await ml.GetRadioList()).Hot)
                     {
@@ -658,7 +677,7 @@ namespace Lemon_App
                             var a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
                             a.MouseDown += GetRadio;
                             RadioItemsList.Children.Add(a);
-                        }); await Task.Delay(1);
+                        });
                     }
                     Dispatcher.Invoke(() => { CloseLoading(); });
                 }));
@@ -803,7 +822,6 @@ namespace Lemon_App
                         foreach (var d in dat)
                         {
                             Dispatcher.Invoke(() => { RadioItemsList.Children.Add(new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) }); });
-                            await Task.Delay(1);
                         }
                         Dispatcher.Invoke(() => {
                             foreach (var i in RadioItemsList.Children)
@@ -1361,6 +1379,8 @@ namespace Lemon_App
 
         private void FxGDMouseDown(object sender, MouseButtonEventArgs e)
         {
+            var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.3));
+            ContentPage.BeginAnimation(OpacityProperty, da);
             OpenLoading();
             var sx = new Task(new Action(async delegate
             {
@@ -1385,7 +1405,6 @@ namespace Lemon_App
                     TB.Text = dt.name.Text;
                     DataItemsList.Children.Clear();
                 });
-                int i = 0;
                 foreach (var j in Settings.USettings.MusicGD[dt.id].Data)
                 {
                     Dispatcher.Invoke(() =>
@@ -1398,8 +1417,6 @@ namespace Lemon_App
                         }
                         DataItemsList.Children.Add(k);
                     });
-                    i++;//Add累了，给CPU休息一下...
-                    if (i == 10) { i = 0;await Task.Delay(1); }
                 }
                 isSearch = false;
                 Dispatcher.Invoke(() => { CloseLoading(); });

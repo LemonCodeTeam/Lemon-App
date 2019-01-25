@@ -26,8 +26,8 @@
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                             <Grid>
-                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
-                                <TextBlock x:Name="textBlock" Margin="0" Text="搜索" Opacity="0.7" Visibility="Collapsed"/>
+                                <ScrollViewer x:Name="PART_ContentHost" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                <TextBlock x:Name="textBlock" Margin="0" Text="搜索" Foreground="#B2464646" Opacity="0" />
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -44,8 +44,8 @@
                                 <MultiTrigger.Conditions>
                                     <Condition Property="Text" Value=""/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Visibility" TargetName="textBlock" Value="Visible"/>
-                                <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Collapsed"/>
+                                <Setter Property="Opacity" TargetName="textBlock" Value="1"/>
+                                <Setter Property="Opacity" TargetName="PART_ContentHost" Value="0"/>
                             </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
