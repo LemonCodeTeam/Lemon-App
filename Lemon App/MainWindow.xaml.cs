@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -313,6 +314,27 @@ namespace Lemon_App
         public void LoadSettings() {
             CachePathTb.Text = Settings.USettings.CachePath;
             DownloadPathTb.Text = Settings.USettings.DownloadPath;
+        }
+        private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //KEY: xfttsuxaeivzdefd
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("lemon.app@qq.com");
+            mailMessage.To.Add(new MailAddress("2728578956@qq.com"));
+            mailMessage.Subject = "Lemon App用户反馈";
+            mailMessage.Body = "UserID:" + Settings.USettings.LemonAreeunIts + "\r\n  \r\n"
+                + UserSendText.Text;
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.qq.com";
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("lemon.app@qq.com", "xfttsuxaeivzdefd");
+            client.Send(mailMessage);
+        }
+
+        private void Run_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/TwilightLemon/Lemon-App");
         }
         private void SettingsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
