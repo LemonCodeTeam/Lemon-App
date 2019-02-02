@@ -59,9 +59,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\HttpHelper.cs" />
+    <Compile Include="Helpers\ImageCacheHelp.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\InfoHelper.cs" />
     <Compile Include="Helpers\MsgHelper.cs" />
+    <Compile Include="Helpers\MyDictionary.cs" />
     <Compile Include="Helpers\PlayerControl.cs">
       <SubType>Form</SubType>
     </Compile>

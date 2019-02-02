@@ -27,47 +27,20 @@ namespace Lemon_App
         public string singer { get; set; }
         public SingerItem(string ig, string sing)
         {
-            try
-            {
-                InitializeComponent();
-                img = ig;
-                singer = sing;
-                name.Text = singer;
-                string file = Settings.USettings.CachePath + "Image\\Singer" + sing + ".jpg";
-                if (!File.Exists(file))
+            InitializeComponent();
+            img = ig;
+            singer = sing;
+            name.Text = singer;
+            Loaded += async delegate {
+                try
                 {
-                    WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri(img), file);
-                    v.DownloadFileCompleted += delegate
-                    {
-                        v.Dispose();
-                        var image = new System.Drawing.Bitmap(file);
-                        im.Background = new ImageBrush(image.ToImageSource());
-                    };
+                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
                 }
-                else{
-                    var image = new System.Drawing.Bitmap(file);
-                    im.Background = new ImageBrush(image.ToImageSource());
-                }
-            }
-            catch
-            {
-                string cache = Settings.USettings.CachePath + "Image\\SingerNo.jpg";
-                if (!File.Exists(cache))
+                catch
                 {
-                    WebClient v = new WebClient();
-                    v.DownloadFileAsync(new Uri("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"),cache);
-                    v.DownloadFileCompleted += delegate
-                    {
-                        var image = new System.Drawing.Bitmap(cache);
-                        im.Background = new ImageBrush(image.ToImageSource());
-                    };
+                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"));
                 }
-                else {
-                    var image = new System.Drawing.Bitmap(cache);
-                    im.Background = new ImageBrush(image.ToImageSource());
-                }
-            }
+            };
         }
     }
 }

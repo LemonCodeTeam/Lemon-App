@@ -159,8 +159,8 @@ namespace LemonLibrary
             {
                 var df = new MusicGData();
                 df.id = ex["dissid"].ToString();
-                df.Data = (await GetGDAsync(df.id)).Data;
                 df.name = ex["title"].ToString();
+                df.Data = (await GetGDAsync(df.id)).Data;
                 if (ex["picurl"].ToString() != "")
                     df.pic = ex["picurl"].ToString();
                 else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
@@ -172,6 +172,7 @@ namespace LemonLibrary
                     Settings.USettings.MusicGD[ex.Key] = ex.Value;
                 else Settings.USettings.MusicGD.Add(ex.Key, ex.Value);
             }
+
             //Finished
             //await Task.Delay(TimeSpan.FromMinutes(1));
             //await UpdateGdAsync();

@@ -31,5 +31,47 @@ namespace LemonLibrary
             return wpfBitmap;
 
         }
+        public static Bitmap ToBitmap(this ImageSource imageSource)
+        {
+            BitmapSource m = (BitmapSource)imageSource;
+
+            Bitmap bmp = new Bitmap(m.PixelWidth, m.PixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb); // 坑点：选Format32bppRgb将不带透明度
+
+            BitmapData data = bmp.LockBits(
+            new Rectangle(System.Drawing.Point.Empty, bmp.Size), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+
+            m.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height * data.Stride, data.Stride);
+            bmp.UnlockBits(data);
+
+            return bmp;
+        }
+        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Jpeg);
+                stream.Position = 0;
+                BitmapImage result = new BitmapImage();
+                result.BeginInit();
+                result.CacheOption = BitmapCacheOption.OnLoad;
+                result.StreamSource = stream;
+                result.EndInit();
+                result.Freeze();
+                return result;
+            }
+        }
+        public static BitmapImage ToBitmapImage(this byte[] array)
+        {
+            using (var ms = new MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                image.Freeze();
+                return image;
+            }
+        }
     }
 }

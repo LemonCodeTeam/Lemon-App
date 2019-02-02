@@ -49,7 +49,8 @@ namespace CoconutApi
             }
             if (!isfind)
             {
-                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", ";", 0);
+                MessageBox.Show(wb.Document.Cookie);
+                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "; uin_cookie=", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
             }
             wb.DocumentCompleted -= Wb_Dc_Api_IsLogin;
@@ -73,7 +74,8 @@ namespace CoconutApi
                 Opacity = 0;
                 TopMost = false;
                 await Task.Delay(100);
-                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "pt2gguin=o", ";", 0);
+                MessageBox.Show(wb.Document.Cookie);
+                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "; uin_cookie=", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
                 wb.DocumentCompleted -= Wb_Dc_Login;
             }

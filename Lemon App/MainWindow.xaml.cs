@@ -84,9 +84,9 @@ namespace Lemon_App
                 isLoading = false;
                 aw.Dispatcher.Invoke(() => {
                     var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                    da.Completed +=async delegate { await Task.Delay(500); aw.Close(); };
+                    da.Completed +=delegate { aw.Close(); };
                     aw.BeginAnimation(OpacityProperty, da);});
-                tOL.DisableComObjectEagerCleanup();
+              
                 ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
             }
         }
@@ -133,20 +133,13 @@ namespace Lemon_App
                     Dispatcher.Invoke(() =>
                     {
                         var top = new TopControl(d.ID, d.Photo, d.Name);
-                        top.MouseDown += delegate (object seb, MouseButtonEventArgs ed)
+                        top.MouseDown += async delegate (object seb, MouseButtonEventArgs ed)
                         {
                             isSearch = false;
                             OpenLoading();
                             var g = seb as TopControl;
                             NSPage(null, Data);
-                            string file = Settings.USettings.CachePath + "Image\\Top" + g.topID + ".jpg";
-                            if (!System.IO.File.Exists(file))
-                            {
-                                var s = new WebClient();
-                                s.DownloadFileAsync(new Uri(g.pic), file);
-                                s.DownloadFileCompleted += delegate { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); };
-                            }
-                            else TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
+                            TXx.Background= new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.pic));
                             TB.Text = g.name;
                             var ss = new Task(new Action(async delegate
                             {
@@ -741,14 +734,7 @@ namespace Lemon_App
             OpenLoading();
             var sx = new Task(new Action(async delegate {
                 var dt = await ml.GetGDAsync(id);
-                string file = Settings.USettings.CachePath + "Image\\GD" + id + ".jpg";
-                if (!System.IO.File.Exists(file))
-                {
-                    var s = new WebClient();
-                    s.DownloadFileAsync(new Uri(dt.pic), file);
-                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); }); };
-                }
-                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());});
+                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.pic));
                 Dispatcher.Invoke(() =>
                 {
                     TB.Text = dt.name;
@@ -1034,14 +1020,7 @@ namespace Lemon_App
                 if (osx == 0) Dispatcher.Invoke(() => { NSPage(null, Data); });
                 if (osx==0)dt = await ml.SearchMusicAsync(key);
                 else dt = await ml.SearchMusicAsync(key,osx);
-                var file = Settings.USettings.CachePath + "Image\\Search" + key + ".jpg";
-                if (!System.IO.File.Exists(file))
-                {
-                    var s = new WebClient();
-                    s.DownloadFileAsync(new Uri(dt.First().ImageUrl), file);
-                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); }); };
-                }
-                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); });
+                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                 if(osx==0)
                    Dispatcher.Invoke(() => {
                        TB.Text = key;
@@ -1389,6 +1368,11 @@ namespace Lemon_App
         {
             NSPage(GDBtn, MyGDIndexPage);
             GDItemsList.Children.Clear();
+            if (Settings.USettings.MusicGD.Count == 0) {
+                OpenLoading();
+                await ml.UpdateGdAsync();
+                CloseLoading();
+            }
             foreach (var jm in Settings.USettings.MusicGD)
             {
                 var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic) { Margin = new Thickness(20, 0, 0, 20) };
@@ -1396,7 +1380,8 @@ namespace Lemon_App
                 GDItemsList.Children.Add(ks);
             }
             UIHelper.G(Page);
-            await ml.UpdateGdAsync();
+            if (Settings.USettings.MusicGD.Count != 0)
+                await ml.UpdateGdAsync();
         }
 
         private void FxGDMouseDown(object sender, MouseButtonEventArgs e)
@@ -1414,19 +1399,12 @@ namespace Lemon_App
                     TB.Text = dt.name.Text;
                     DataItemsList.Children.Clear();
                 });
-                var file = Settings.USettings.CachePath + "Image\\GD" + dt.id + ".jpg";
-                if (!System.IO.File.Exists(file))
-                {
-                    var s = new WebClient();
-                    s.DownloadFileAsync(new Uri(dt.img), file);
-                    s.DownloadFileCompleted += delegate { Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); }); };
-                }
-                else Dispatcher.Invoke(() => { TXx.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource()); });
-                Dispatcher.Invoke(() =>
-                {
-                    TB.Text = dt.name.Text;
-                    DataItemsList.Children.Clear();
-                });
+                await Dispatcher.Invoke(async () =>
+                 {
+                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
+                     TB.Text = dt.name.Text;
+                     DataItemsList.Children.Clear();
+                 });
                 foreach (var j in Settings.USettings.MusicGD[dt.id].Data)
                 {
                     Dispatcher.Invoke(() =>
@@ -1442,7 +1420,7 @@ namespace Lemon_App
                 }
                 isSearch = false;
                 Dispatcher.Invoke(() => { CloseLoading(); });
-                await ml.UpdateGdAsync();
+                await ml.GetGDAsync(dt.id);
             }));
             sx.Start();
         }
@@ -1543,9 +1521,11 @@ namespace Lemon_App
                 }
                 else if (cdata.lpData.Contains("Login")){
                     App.BaseApp.Apip.Kill();
+                    MessageBox.Show(cdata.lpData);
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
+                    MessageBox.Show(qq);
                     if (Settings.USettings.LemonAreeunIts != qq)
                     {
                         Action a = new Action(async () =>
