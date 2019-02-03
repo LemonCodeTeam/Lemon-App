@@ -49,7 +49,7 @@ namespace CoconutApi
             }
             if (!isfind)
             {
-                MessageBox.Show(wb.Document.Cookie);
+               // MessageBox.Show(wb.Document.Cookie);
                 string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "; uin_cookie=", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
             }
@@ -74,7 +74,7 @@ namespace CoconutApi
                 Opacity = 0;
                 TopMost = false;
                 await Task.Delay(100);
-                MessageBox.Show(wb.Document.Cookie);
+                //MessageBox.Show(wb.Document.Cookie);
                 string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "; uin_cookie=", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
                 wb.DocumentCompleted -= Wb_Dc_Login;

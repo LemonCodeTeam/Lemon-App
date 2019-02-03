@@ -1020,25 +1020,27 @@ namespace Lemon_App
                 if (osx == 0) Dispatcher.Invoke(() => { NSPage(null, Data); });
                 if (osx==0)dt = await ml.SearchMusicAsync(key);
                 else dt = await ml.SearchMusicAsync(key,osx);
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                 if(osx==0)
                    Dispatcher.Invoke(() => {
                        TB.Text = key;
                        DataItemsList.Children.Clear();
                        Datasv.ScrollToTop();
                 });
-            Dispatcher.Invoke(() => {
-                foreach (var j in dt) {
-                    var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
-                    if (k.isPlay(MusicName.Text))
+                await Dispatcher.Invoke(async () =>
+                {
+                    TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
+                    foreach (var j in dt)
                     {
-                        k.ShowDx();
-                        MusicData = k;
+                        var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                        if (k.isPlay(MusicName.Text))
+                        {
+                            k.ShowDx();
+                            MusicData = k;
+                        }
+                        k.MouseDown += PlayMusic;
+                        DataItemsList.Children.Add(k);
                     }
-                    k.MouseDown += PlayMusic;
-                    DataItemsList.Children.Add(k);
-                }
-            });
+                });
                 Dispatcher.Invoke(() => {CloseLoading(); });
             }));
             xs.Start();
@@ -1521,11 +1523,11 @@ namespace Lemon_App
                 }
                 else if (cdata.lpData.Contains("Login")){
                     App.BaseApp.Apip.Kill();
-                    MessageBox.Show(cdata.lpData);
+                 //   MessageBox.Show(cdata.lpData);
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
-                    MessageBox.Show(qq);
+                 //   MessageBox.Show(qq);
                     if (Settings.USettings.LemonAreeunIts != qq)
                     {
                         Action a = new Action(async () =>
