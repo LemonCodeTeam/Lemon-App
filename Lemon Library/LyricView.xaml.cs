@@ -64,6 +64,7 @@ namespace LemonLibrary
                     TimeSpan time = GetTime(str);
                     string lrc = str.Split(']')[1];
                     TextBlock c_lrcbk = new TextBlock();
+                    c_lrcbk.FontSize = 14;
                     c_lrcbk.Foreground = NoramlLrcColor;
                     c_lrcbk.TextWrapping = TextWrapping.Wrap;
                     c_lrcbk.TextAlignment = TextAlignment;

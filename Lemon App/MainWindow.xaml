@@ -73,7 +73,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Border Height="3" CornerRadius="1" Margin="0,0,-1,0" Background="{DynamicResource ThemeColor}">
+                        <Border Height="2" CornerRadius="1" Margin="0,0,-1,0" Background="{DynamicResource ThemeColor}">
                             <Border HorizontalAlignment="Right" Width="5" Background="{DynamicResource ThemeColor}"/>
                         </Border>
                     </ControlTemplate>
@@ -82,9 +82,7 @@
         </Style>
         <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
             <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
-                <Border Width="12" Height="12" CornerRadius="10" Background="White" BorderBrush="#FFCDCDCD" BorderThickness="1">
-                    <Border Width="4" Height="4" CornerRadius="10" Background="{DynamicResource ThemeColor}"/>
-                </Border>
+                <Border Width="12" Height="12" CornerRadius="100" Background="{DynamicResource ThemeColor}" BorderBrush="{x:Null}"/>
                 <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource SliderThumb.Static.Background}" Stretch="Fill" SnapsToDevicePixels="True" Stroke="{StaticResource SliderThumb.Static.Border}" StrokeThickness="1" UseLayoutRounding="True" VerticalAlignment="Center" Visibility="Collapsed"/>
             </Grid>
             <ControlTemplate.Triggers>
@@ -124,7 +122,7 @@
                     </Grid.RowDefinitions>
                     <TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
                     <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
-                    <Border x:Name="TrackBackground" Height="3" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="2" Opacity="0.4">
+                    <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="1" Opacity="0.4">
                         <Canvas>
                             <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
                         </Canvas>
@@ -299,7 +297,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Border Background="Transparent" Height="3" CornerRadius="1" Margin="-1,0,0,0"/>
+                        <Border Background="Transparent" Height="2" CornerRadius="1" Margin="-1,0,0,0"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -607,9 +605,9 @@
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" CornerRadius="10">
                             <Grid>
-                                <Path Data="M936.831196,923.623895L732.420666,719.216435C763.016498,685.258019 787.168571,646.729517 804.328393,604.413759 823.422263,557.329394 833.100693,507.587503 833.10274,456.562386 833.100693,405.536246 823.422263,355.790262 804.328393,308.707943 784.556071,259.951496 755.515664,216.213342 718.010469,178.710193 680.509367,141.208067 636.771213,112.166638 588.012719,92.3932919999999 540.928354,73.3004449999999 491.18544,63.6209919999999 440.161346,63.6209919999999 389.136229,63.6209919999999 339.391268,73.3004449999999 292.307927,92.3932919999999 243.55148,112.164591 199.812303,141.207044 162.308131,178.710193 124.806005,216.213342 95.7655990000001,259.951495 75.9943000000001,308.707943 56.8994060000001,355.791284 47.2199530000001,405.536245 47.2189300000001,456.562386 47.2199530000001,507.587503 56.8994070000001,557.330417 75.9922540000001,604.413759 95.7645760000001,653.170206 124.804983,696.909383 162.308132,734.411509 199.812304,771.913635 243.551481,800.956088 292.307928,820.729433 339.392293,839.820233 389.13623,849.501733 440.161347,849.50378 491.185441,849.501733 540.931425,839.820233 588.01272,820.729433 630.328478,803.570635 668.855956,779.419585 702.815396,748.82273L907.222856,953.231213C915.399073,961.40743 928.653958,961.405383 936.832221,953.229166 945.00332,945.054997 945.00639,931.800112 936.831196,923.623895z M440.160323,806.832935C346.597391,806.830888 258.635013,770.399141 192.480314,704.241372 126.323568,638.084626 89.887728,550.122249 89.885681,456.562386 89.885681,362.999454 126.322545,275.038099 192.480314,208.882377 258.635013,142.724608 346.597391,106.288767 440.160323,106.287744 533.722232,106.288767 621.68154,142.723585 687.840332,208.882377 753.997078,275.038099 790.430872,362.999454 790.430872,456.562386 790.430872,550.122248 753.997078,638.083603 687.840332,704.241372 621.68154,770.399141 533.722232,806.832935 440.160323,806.832935z" Fill="{TemplateBinding Foreground}" Stretch="Fill" Width="12" Height="12" HorizontalAlignment="Left" Margin="5,0,0,0"/>
-                                <TextBlock x:Name="textBlock" Margin="22,4,0,0" Text="搜索" Opacity="0.7" Visibility="Collapsed"/>
-                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="20,4,0,0" Visibility="Visible"/>
+                                <Path Data="M936.831196,923.623895L732.420666,719.216435C763.016498,685.258019 787.168571,646.729517 804.328393,604.413759 823.422263,557.329394 833.100693,507.587503 833.10274,456.562386 833.100693,405.536246 823.422263,355.790262 804.328393,308.707943 784.556071,259.951496 755.515664,216.213342 718.010469,178.710193 680.509367,141.208067 636.771213,112.166638 588.012719,92.3932919999999 540.928354,73.3004449999999 491.18544,63.6209919999999 440.161346,63.6209919999999 389.136229,63.6209919999999 339.391268,73.3004449999999 292.307927,92.3932919999999 243.55148,112.164591 199.812303,141.207044 162.308131,178.710193 124.806005,216.213342 95.7655990000001,259.951495 75.9943000000001,308.707943 56.8994060000001,355.791284 47.2199530000001,405.536245 47.2189300000001,456.562386 47.2199530000001,507.587503 56.8994070000001,557.330417 75.9922540000001,604.413759 95.7645760000001,653.170206 124.804983,696.909383 162.308132,734.411509 199.812304,771.913635 243.551481,800.956088 292.307928,820.729433 339.392293,839.820233 389.13623,849.501733 440.161347,849.50378 491.185441,849.501733 540.931425,839.820233 588.01272,820.729433 630.328478,803.570635 668.855956,779.419585 702.815396,748.82273L907.222856,953.231213C915.399073,961.40743 928.653958,961.405383 936.832221,953.229166 945.00332,945.054997 945.00639,931.800112 936.831196,923.623895z M440.160323,806.832935C346.597391,806.830888 258.635013,770.399141 192.480314,704.241372 126.323568,638.084626 89.887728,550.122249 89.885681,456.562386 89.885681,362.999454 126.322545,275.038099 192.480314,208.882377 258.635013,142.724608 346.597391,106.288767 440.160323,106.287744 533.722232,106.288767 621.68154,142.723585 687.840332,208.882377 753.997078,275.038099 790.430872,362.999454 790.430872,456.562386 790.430872,550.122248 753.997078,638.083603 687.840332,704.241372 621.68154,770.399141 533.722232,806.832935 440.160323,806.832935z" Fill="{TemplateBinding Foreground}" Stretch="Fill" Width="12" Height="12" HorizontalAlignment="Right" Margin="0,0,6.5,0"/>
+                                <TextBlock x:Name="textBlock" Margin="5,4,22,0" Text="搜索" Opacity="0.7" Visibility="Collapsed"/>
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="5,4,20,0" Visibility="Visible"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
