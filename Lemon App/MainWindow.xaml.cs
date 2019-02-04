@@ -150,7 +150,7 @@ namespace Lemon_App
                                     Dispatcher.Invoke(() =>
                                     {
                                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
-                                        k.MouseDown += PlayMusic;
+                                        k.Play += PlayMusic;
                                         if (k.isPlay(MusicName.Text))
                                         {
                                             k.ShowDx();
@@ -217,11 +217,6 @@ namespace Lemon_App
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
                 string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
                 MusicLib.pc.Open(downloadpath);
-                jd.Maximum = Settings.USettings.alljd;
-                jd.Value = Settings.USettings.jd;
-                MusicLib.pc.To(Settings.USettings.jd);
-                Play_All.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(Settings.USettings.alljd));
-                Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(Settings.USettings.jd));
             }
             t.Interval = 500;
             t.Tick += async delegate
@@ -236,13 +231,11 @@ namespace Lemon_App
                         if (Play_All.Text == alls&&Play_All.Text!="00:") isPlayasRun = false;
                         Play_All.Text = alls;
                         jd.Maximum = all;
-                        Settings.USettings.alljd = jd.Maximum;
                     }
                     Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
                     if(canjd)jd.Value = now;
                     if (ind == 1)
                         ml.lv.LrcRoll(now);
-                    Settings.USettings.jd = jd.Value;
                 }
                 catch { }
             };
@@ -747,7 +740,7 @@ namespace Lemon_App
                             k.ShowDx();
                             MusicData = k;
                         }
-                        k.MouseDown += PlayMusic;
+                        k.Play += PlayMusic;
                         DataItemsList.Children.Add(k);
                     }
                     NSPage(null, Data);
@@ -907,7 +900,7 @@ namespace Lemon_App
                     jm.ShowDx();
                     MusicData = jm;
                 }
-                jm.MouseDown += PlayMusic;
+                jm.Play += PlayMusic;
                 DataItemsList.Children.Add(jm);
             }
             isSearch = false;
@@ -1037,7 +1030,7 @@ namespace Lemon_App
                             k.ShowDx();
                             MusicData = k;
                         }
-                        k.MouseDown += PlayMusic;
+                        k.Play += PlayMusic;
                         DataItemsList.Children.Add(k);
                     }
                 });
@@ -1412,7 +1405,7 @@ namespace Lemon_App
                     Dispatcher.Invoke(() =>
                     {
                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
-                        k.MouseDown += PlayMusic;
+                        k.Play += PlayMusic;
                         if (k.isPlay(MusicName.Text)) {
                             k.ShowDx();
                             MusicData = k;

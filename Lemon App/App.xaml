@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Startup="Application_Startup">
     <Application.Resources>
         <!--主题颜色 默认值:#FF4EB7FB-->
-        <SolidColorBrush x:Key="ThemeColor" Color="#FF4EB7FB"/>
+        <SolidColorBrush x:Key="ThemeColor" Color="#FF3ED38B"/>
         <!--按钮前景色 默认值:#FF93A1AE-->
         <SolidColorBrush x:Key="ResuColorBrush" Color="#FF93A1AE"/>
         <!--按钮A1前景色 默认值:#FF787878-->

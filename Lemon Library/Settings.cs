@@ -40,8 +40,6 @@ namespace LemonLibrary
                 USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
                 USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
                 USettings.Playing.Singer = o["Playing"]["Singer"].ToString();
-                USettings.jd = Double.Parse(o["jd"].ToString());
-                USettings.alljd = Double.Parse(o["alljd"].ToString());
                 foreach (var jx in o["MusicLike"].ToArray())
                 {
                     foreach (var jm in jx)
@@ -120,8 +118,6 @@ namespace LemonLibrary
             #endregion
             #region 上一次播放
             public Music Playing { get; set; } = new Music();
-            public double jd { get; set; } = 0;
-            public double alljd { get; set; } = 0;
             #endregion
             #region 主题配置
             public string Skin_Path { get; set; } = "";

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using static LemonLibrary.InfoHelper;
 
@@ -9,6 +10,12 @@ namespace Lemon_App
     /// </summary>
     public partial class DataItem : UserControl
     {
+        public delegate void MouseDownHandle(object sender, MouseButtonEventArgs e);
+        public event MouseDownHandle Play;
+        public event MouseDownHandle Add;
+        public event MouseDownHandle Download;
+
+
         public string ID { set; get; }
         public string SongName { set; get; }
         public string Singer { set; get; }
@@ -35,14 +42,15 @@ namespace Lemon_App
             {
                 mss.Opacity = 0.6;
                 ser.Opacity = 0.8;
-                He.LastItem.namss.Foreground = App.BaseApp.GetResuColorBrush();
-                He.LastItem.ser.Foreground = App.BaseApp.GetResuColorBrush();
+                He.LastItem.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                He.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                He.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             }
-            var col = App.BaseApp.GetThemeColorBrush();
-            ser.Foreground = col;
-            namss.Foreground = col;
-            color.Background = col;
+            Background = new SolidColorBrush(Color.FromArgb(20, 0, 0, 0));
+            ser.SetResourceReference(ForegroundProperty, "ThemeColor");
+            namss.SetResourceReference(ForegroundProperty, "ThemeColor");
+            color.SetResourceReference(BackgroundProperty, "ThemeColor");
             mss.Opacity = 1;
             ser.Opacity = 1;
 
@@ -86,11 +94,17 @@ namespace Lemon_App
                 isChecked = false;
             }
         }
-        private void userControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e) => Play(this, e);
+
+        private void AddBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(!ns)
-              ShowDx();
+            Add(this, e);
+            if (!ns)
+                ShowDx();
         }
+
+        private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e) => Download(this, e);
     }
 
 
