@@ -1171,6 +1171,11 @@ namespace Lemon_App
                 (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Dqxh);
             }
         }
+
+        private void PlayLbBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NSPage(null, Data);
+        }
         #endregion
         #region Lyric
         private async void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
@@ -1516,7 +1521,7 @@ namespace Lemon_App
                 }
                 else if (cdata.lpData.Contains("Login")){
                     App.BaseApp.Apip.Kill();
-                 //   MessageBox.Show(cdata.lpData);
+                   // MessageBox.Show(cdata.lpData);
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
