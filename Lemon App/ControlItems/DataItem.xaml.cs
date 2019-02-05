@@ -122,6 +122,9 @@ namespace Lemon_App
                 mdb.MouseDown += Mdb_MouseDown;
                 Add_Gdlist.Children.Add(mdb);
             }
+            var md = new MDButton() { TName = "取消", Margin = new System.Windows.Thickness(0, 10, 0, 0) };
+            md.MouseDown += delegate { Gdpop.IsOpen = false; };
+            Add_Gdlist.Children.Add(md);
             Gdpop.IsOpen = true;
             Add(this, e);
         }

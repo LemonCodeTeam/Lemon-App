@@ -172,10 +172,6 @@ namespace LemonLibrary
                     Settings.USettings.MusicGD[ex.Key] = ex.Value;
                 else Settings.USettings.MusicGD.Add(ex.Key, ex.Value);
             }
-
-            //Finished
-            //await Task.Delay(TimeSpan.FromMinutes(1));
-            //await UpdateGdAsync();
         }
         public async Task<string> GetUrlAsync(string Musicid)
         {

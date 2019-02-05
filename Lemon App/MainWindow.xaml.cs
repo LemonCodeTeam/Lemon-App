@@ -727,9 +727,9 @@ namespace Lemon_App
             OpenLoading();
             var sx = new Task(new Action(async delegate {
                 var dt = await ml.GetGDAsync(id);
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.pic));
-                Dispatcher.Invoke(() =>
+                await Dispatcher.Invoke(async () =>
                 {
+                    TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.pic));
                     TB.Text = dt.name;
                     DataItemsList.Children.Clear();
                     foreach (var j in dt.Data)
@@ -886,13 +886,18 @@ namespace Lemon_App
                 Settings.SaveSettings();
             }
         }
-        private void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
+        private async void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            NSPage(LikeBtn, Data);
+            NSPage(LikeBtn, Data);         
             TB.Text = "我喜欢";
             TXx.Background = Resources["LoveIcon"] as VisualBrush;
             DataItemsList.Children.Clear();
-            foreach (var dt in Settings.USettings.MusicLike.Values)
+            OpenLoading();
+            var dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={ml.qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={ml.qq}&reqfrom=1&reqtype=0", Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
+            var o = JObject.Parse(dta);
+            string id = o["data"]["mymusic"][0]["id"].ToString();
+            var a = (await ml.GetGDAsync(id)).Data;
+            foreach (var dt in a)
             {
                 var jm = new DataItem(dt) { Width = DataItemsList.ActualWidth };
                 if (jm.isPlay(MusicName.Text))
@@ -903,6 +908,7 @@ namespace Lemon_App
                 jm.Play += PlayMusic;
                 DataItemsList.Children.Add(jm);
             }
+            CloseLoading();
             isSearch = false;
         }
         #endregion
