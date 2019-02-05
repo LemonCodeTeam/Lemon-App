@@ -684,7 +684,7 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,41,95,21"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,41,130,21"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
                 <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,20,0,0"/>
@@ -1089,7 +1089,7 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,41,95,21"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,41,130,21"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
                 <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,20,0,0"/>

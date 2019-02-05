@@ -37,6 +37,7 @@ namespace CoconutApi
         private async void Wb_Dc_Api_IsLogin(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             await Task.Delay(100);
+            wb.DocumentCompleted -= Wb_Dc_Api_IsLogin;
             bool isfind = false;
             foreach (HtmlElement ele in wb.Document.All)
             {
@@ -49,11 +50,10 @@ namespace CoconutApi
             }
             if (!isfind)
             {
-               //MessageBox.Show(wb.Document.Cookie);
+              // MessageBox.Show(wb.Document.Cookie);
                 string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "p_luin=o", ";", 0);
                 MsgHelper.SendMsg("Login:" + qq + "###", wind);
             }
-            wb.DocumentCompleted -= Wb_Dc_Api_IsLogin;
         }
         #endregion
         private void Api_Login()

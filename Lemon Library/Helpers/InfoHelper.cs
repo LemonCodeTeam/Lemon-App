@@ -72,7 +72,7 @@ namespace LemonLibrary
             public string name { get; set; }
             public string pic { get; set; }
             public string id { get; set; }
-            public string updatatime { get; set; }
+            public Dictionary<string, string> ids = new Dictionary<string, string>();//mid,id
         }
         ////////Weather Helper/////
         public class Weather {

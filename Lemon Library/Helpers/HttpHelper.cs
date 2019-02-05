@@ -48,10 +48,12 @@ namespace LemonLibrary
                 sr.Dispose();
                 return st;
         }
-        public static string PostWeb(string url, string data)
+        public static string PostWeb(string url, string data,WebHeaderCollection Header=null)
         {
-                byte[] postData = Encoding.UTF8.GetBytes(data);
-                WebClient webClient = new WebClient();
+            byte[] postData = Encoding.UTF8.GetBytes(data);
+            WebClient webClient = new WebClient();
+            if (Header == null)
+            {
                 webClient.Headers.Add("Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01");
                 webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 webClient.Headers.Add("Cookie", "Hm_lvt_6e8dac14399b608f633394093523542e=1522910113; Hm_lpvt_6e8dac14399b608f633394093523542e=1522910122; Hm_lvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125; Hm_lpvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125");
@@ -59,9 +61,11 @@ namespace LemonLibrary
                 webClient.Headers.Add("Origin", "http://lab.mkblog.cn");
                 webClient.Headers.Add("Referer", "http://lab.mkblog.cn/music/");
                 webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
-                byte[] responseData = webClient.UploadData(url, "POST", postData);
-                webClient.Dispose();
-                return Encoding.UTF8.GetString(responseData);
+            }
+            else webClient.Headers = Header;
+            byte[] responseData = webClient.UploadData(url, "POST", postData);
+            webClient.Dispose();
+            return Encoding.UTF8.GetString(responseData);
         }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
