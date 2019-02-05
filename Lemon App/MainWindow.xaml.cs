@@ -191,6 +191,8 @@ namespace Lemon_App
             LoadMusicData(hasAnimation);
         }
         private double now = 0;
+        private string lastlyric = "";
+        private Toast lyricTa = new Toast("", true);
         private async void LoadMusicData(bool hasAnimation = true)
         {
             Updata();
@@ -211,6 +213,11 @@ namespace Lemon_App
             lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(100,255,255,255));
             lv.TextAlignment = TextAlignment.Left;
             ly.Child = lv;
+            lv.NextLyric += (text) => {
+                if (lastlyric != text)if(text!="")
+                        lyricTa.Updata(text);
+                lastlyric = text;
+            };
             ml = new MusicLib(lv,Settings.USettings.LemonAreeunIts);
             if (Settings.USettings.Playing.MusicName != "")
             {
@@ -235,7 +242,8 @@ namespace Lemon_App
                     Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
                     if(canjd)jd.Value = now;
                     if (ind == 1)
-                        ml.lv.LrcRoll(now);
+                        ml.lv.LrcRoll(now,true);
+                    else ml.lv.LrcRoll(now, false);
                 }
                 catch { }
             };
@@ -1439,11 +1447,17 @@ namespace Lemon_App
             IntPtr handle = new WindowInteropHelper(this).Handle;
             RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
             RegisterHotKey(handle, 125, 1, (uint)System.Windows.Forms.Keys.S);
+            RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
+            RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
+            RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
             InstallHotKeyHook(this);
             Closed += (s, e) => {
                 IntPtr hd = new WindowInteropHelper(this).Handle;
                 UnregisterHotKey(hd, 124);
                 UnregisterHotKey(hd, 125);
+                UnregisterHotKey(hd, 126);
+                UnregisterHotKey(hd, 127);
+                UnregisterHotKey(hd, 128);
             };
             //notifyIcon
             MusicLib.pc.notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -1500,6 +1514,12 @@ namespace Lemon_App
                     exShow();
                 else if (wParam.ToInt32() == 125)
                     new SearchWindow().Show();
+                else if (wParam.ToInt32() == 126)
+                { PlayBtn_MouseDown(null, null); Toast.Send("已暂停/播放"); }
+                else if (wParam.ToInt32() == 127)
+                { Border_MouseDown(null, null); Toast.Send("成功切换到上一曲"); }
+                else if (wParam.ToInt32() == 128)
+                { Border_MouseDown_1(null, null); Toast.Send("成功切换到下一曲"); }
             }
             return IntPtr.Zero;
         }

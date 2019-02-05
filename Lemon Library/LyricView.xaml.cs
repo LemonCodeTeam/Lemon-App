@@ -25,6 +25,8 @@ namespace LemonLibrary
     /// </summary>
     public partial class LyricView : UserControl
     {
+        public delegate void NextData(string text);
+        public event NextData NextLyric;
         #region 
         public class LrcModel
         {
@@ -101,7 +103,7 @@ namespace LemonLibrary
         }
         #endregion
         #region
-        public void LrcRoll(double nowtime)
+        public void LrcRoll(double nowtime,bool needScrol)
         {
             if (foucslrc == null)
             {
@@ -114,11 +116,17 @@ namespace LemonLibrary
                 if (s.Count() > 0)
                 {
                     LrcModel lm = s.Last().Value;
-                    foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
-
                     foucslrc = lm;
-                    foucslrc.c_LrcTb.Foreground = FoucsLrcColor;
-                    ResetLrcviewScroll();
+                    if (needScrol) {
+                        foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
+                        foucslrc.c_LrcTb.Foreground = FoucsLrcColor;
+                        ResetLrcviewScroll();
+                    }
+                    string tx = foucslrc.LrcText.Replace("//","");
+                    if (tx.Substring(tx.Length - 1, 1) == "^")
+                        tx = tx.Substring(0, tx.Length - 1);
+                    tx=tx.Replace("^", "\r\n");
+                    NextLyric(tx);
                 }
             }
         }
