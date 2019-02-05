@@ -116,9 +116,11 @@ namespace LemonLibrary
                 if (s.Count() > 0)
                 {
                     LrcModel lm = s.Last().Value;
+                    if(needScrol)
+                    foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
+
                     foucslrc = lm;
-                    if (needScrol) {
-                        foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
+                    if (needScrol){
                         foucslrc.c_LrcTb.Foreground = FoucsLrcColor;
                         ResetLrcviewScroll();
                     }
