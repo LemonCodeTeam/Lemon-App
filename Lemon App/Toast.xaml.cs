@@ -63,5 +63,18 @@ namespace Lemon_App
             if (Text == "") Opacity = 0;
             else Opacity = 1;
         }
+
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Width = SystemParameters.WorkArea.Width;
+            Left = 0;
+            Top = SystemParameters.WorkArea.Height - Height - 30;
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
     }
 }

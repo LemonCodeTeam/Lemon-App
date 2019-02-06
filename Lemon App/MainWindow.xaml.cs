@@ -193,6 +193,7 @@ namespace Lemon_App
         private double now = 0;
         private string lastlyric = "";
         private Toast lyricTa = new Toast("", true);
+        private bool isOpenGc = true;
         private async void LoadMusicData(bool hasAnimation = true)
         {
             Updata();
@@ -214,9 +215,11 @@ namespace Lemon_App
             lv.TextAlignment = TextAlignment.Left;
             ly.Child = lv;
             lv.NextLyric += (text) => {
-                if (lastlyric != text)if(text!="")
-                        lyricTa.Updata(text);
-                lastlyric = text;
+                if (isOpenGc){
+                    if (lastlyric != text) if (text != "")
+                            lyricTa.Updata(text);
+                    lastlyric = text;
+                }
             };
             ml = new MusicLib(lv,Settings.USettings.LemonAreeunIts);
             if (Settings.USettings.Playing.MusicName != "")
@@ -1576,5 +1579,19 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
+
+        private void GcBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isOpenGc){
+                isOpenGc = false;
+                lyricTa.Close();
+                path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            }
+            else {
+                isOpenGc = true;
+                lyricTa = new Toast("", true);
+                path7.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+        }
     }
 }
