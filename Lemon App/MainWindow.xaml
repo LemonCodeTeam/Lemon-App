@@ -1167,10 +1167,54 @@
                     </ScrollViewer>
                 </Grid>
                 <Grid x:Name="SkinPage" Visibility="Collapsed">
+                    <Border x:Name="ChooseText" Background="White" CornerRadius="5" Margin="20" Width="220" Height="160" Visibility="Collapsed">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="请选择字体颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
+                            <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="30,50,0,0" Background="White" CornerRadius="50" MouseDown="Border_MouseDown_4">
+                                <TextBlock TextWrapping="Wrap" Text="白色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
+                            </Border>
+                            <Border HorizontalAlignment="Right" Height="50" VerticalAlignment="Top" Width="50" Margin="0,50,30,0" Background="#FF2D2D30" CornerRadius="50" MouseDown="Border_MouseDown_5">
+                                <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE" Margin="12,16.38,14,17.62"/>
+                            </Border>
+                            <Border Height="35" VerticalAlignment="Bottom" Width="85" Margin="0,0,0,10"  MouseDown="MDButton_MouseDown" Background="{DynamicResource ThemeColor}" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="完成" VerticalAlignment="Center" Foreground="White" FontSize="16"/>
+                            </Border>
+                        </Grid>
+                    </Border>
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="个性皮肤" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                     <ScrollViewer  Margin="20,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                         <WrapPanel x:Name="SkinIndexList"/>
                     </ScrollViewer>
+                    <Border x:Name="ColorThemeBtn" HorizontalAlignment="Right" Height="45" VerticalAlignment="Bottom" Width="45" Margin="0,0,25,22" CornerRadius="100" Background="{DynamicResource ThemeColor}" MouseDown="ColorThemeBtn_MouseDown">
+                        <Border Width="20" Height="20">
+                            <Border.Background>
+                                <VisualBrush>
+                                    <VisualBrush.Visual>
+                                        <Grid>
+                                            <Path Data="M439.296 1023.921231a97.673846 97.673846 0 0 1-69.238154-28.593231L28.672 654.020923C10.161231 635.431385 0 610.855385 0 584.704s10.161231-50.806154 28.750769-69.238154L515.465846 28.750769c36.942769-37.021538 101.454769-36.942769 138.555077 0l341.307077 341.385846a98.146462 98.146462 0 0 1 0 138.476308l-47.734154 47.655385a39.384615 39.384615 0 0 1-55.689846-55.689846l47.655385-47.655385a19.140923 19.140923 0 0 0 0-27.096615L598.331077 84.361846c-9.688615-9.688615-17.171692-9.846154-27.175385 0l-486.793846 486.793846a19.140923 19.140923 0 0 0 0.078769 27.175385l341.307077 341.307077a19.377231 19.377231 0 0 0 27.175385 0l231.975385-231.975385a39.384615 39.384615 0 0 1 55.689846 55.689846l-231.975385 231.975385a98.146462 98.146462 0 0 1-69.316923 28.593231z" Fill="White" />
+                                            <Path Data="M905.846154 317.518769h-630.153846a39.384615 39.384615 0 0 0 0 78.769231h630.153846a39.384615 39.384615 0 0 0 0-78.769231zM844.406154 557.843692c40.251077 60.731077 78.690462 151.236923 78.690461 197.789539 0 43.401846-35.367385 78.769231-78.76923 78.769231s-78.769231-35.367385-78.769231-78.769231c0-45.686154 38.833231-136.979692 78.848-197.789539m-0.078769-117.208615c-72.152615 51.357538-157.538462 228.115692-157.538462 315.076923s70.498462 157.538462 157.538462 157.538462 157.538462-70.498462 157.538461-157.538462-84.755692-262.774154-157.538461-315.076923z" Fill="White" />
+                                        </Grid>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Border.Background>
+                        </Border>
+                    </Border>
+                    <Border x:Name="ColorThemeBtn_Copy" HorizontalAlignment="Right" Height="45" VerticalAlignment="Bottom" Width="45" Margin="0,0,94,22" CornerRadius="100" Background="{DynamicResource ThemeColor}" MouseDown="ColorThemeBtn_Copy_MouseDown">
+                        <Border Width="20" Height="20">
+                            <Border.Background>
+                                <VisualBrush>
+                                    <VisualBrush.Visual>
+                                        <Grid>
+                                            <Path Data="M887.476828,0.128929L136.623117,0.128929C117.760525,0.128929,0.106441000000018,0.128929,0.106441000000018,136.645605L0.106441000000018,887.45534C0.106441000000018,1024,136.623117,1024,136.623117,1024L887.477827,1024C1023.993503,1024,1023.993503,887.45534,1023.993503,887.45534L1023.993504,136.645605C1023.992504,0.128929,906.352413,0.128929,887.476828,0.128929 M955.733167,887.45534C955.733167,887.45534,955.733167,955.713678,887.476828,955.713678L630.030876,687.567629 489.654329,809.482362 279.010553,614.449973 68.377772,809.482362 68.377772,136.644605C68.377772,68.386267,117.759525,68.386267,136.622118,68.386267L887.476828,68.386267C906.352413,68.386267,955.733167,68.386267,955.733167,136.644605L955.733167,887.45534z M682.699815,272.633572C607.183482,272.633572 545.974254,333.951739 545.974254,409.594003 545.974254,485.180298 607.183481,546.526449 682.699815,546.526449 758.17717,546.526449 819.425376,485.179298 819.425376,409.594003 819.425376,333.952739 758.17717,272.633572 682.699815,272.633572" Fill="White" />
+                                        </Grid>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Border.Background>
+                        </Border>
+                    </Border>
                 </Grid>
                 <Grid x:Name="TopIndexPage">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>

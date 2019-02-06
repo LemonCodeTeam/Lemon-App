@@ -1593,5 +1593,60 @@ namespace Lemon_App
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
         }
+        string TextColor_byChoosing = "Black";
+        private void ColorThemeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ChooseText.Visibility = Visibility.Visible;
+        }
+
+        private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
+        {
+            TextColor_byChoosing = "White";
+        }
+
+        private void Border_MouseDown_5(object sender, MouseButtonEventArgs e)
+        {
+            TextColor_byChoosing = "Black";
+        }
+
+        private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Color co = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+                App.BaseApp.Skin();
+                App.BaseApp.SetColor("ThemeColor", co);
+                if (TextColor_byChoosing == "Black")
+                    co = Color.FromRgb(64, 64, 64);
+                else co = Color.FromRgb(255, 255, 255);
+                App.BaseApp.SetColor("ResuColorBrush", co);
+                App.BaseApp.SetColor("ButtonColorBrush", co);
+                App.BaseApp.SetColor("TextX1ColorBrush", co);
+                Settings.USettings.Skin_txt = TextColor_byChoosing;
+                Settings.USettings.Skin_Theme_R = co.R.ToString();
+                Settings.USettings.Skin_Theme_G = co.G.ToString();
+                Settings.USettings.Skin_Theme_B = co.B.ToString();
+                Settings.SaveSettings();
+            }
+            ChooseText.Visibility = Visibility.Collapsed;
+        }
+
+        private void ColorThemeBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "图像文件(*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp|所有文件|*.*";
+            ofd.ValidateNames = true;
+            ofd.CheckPathExists = true;
+            ofd.CheckFileExists = true;
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string strFileName = ofd.FileName;
+                string file = Settings.USettings.CachePath + "Skin\\" + System.IO.Path.GetFileName(strFileName);
+                System.IO.File.Move(strFileName, file);
+                Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
+                Settings.USettings.Skin_Path = file;
+            }
+        }
     }
 }
