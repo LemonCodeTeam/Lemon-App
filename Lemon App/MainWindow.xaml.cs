@@ -295,7 +295,7 @@ namespace Lemon_App
             }
             else
             {
-                c.ResizeBorderThickness = new Thickness(30);
+                c.ResizeBorderThickness = new Thickness(10);
                 Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(10), TimeSpan.FromSeconds(0)));
                 WindowState = WindowState.Normal;
                 Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };

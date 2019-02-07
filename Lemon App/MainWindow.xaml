@@ -1114,7 +1114,7 @@
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="20" CaptionHeight="0" CornerRadius="0" />
+        <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="10" CaptionHeight="0" CornerRadius="0" />
     </WindowChrome.WindowChrome>
     <Window.Effect>
         <DropShadowEffect BlurRadius="10" Opacity="0.7" ShadowDepth="0"/>
