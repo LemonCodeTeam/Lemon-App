@@ -12,7 +12,8 @@ namespace LemonLibrary
         public void Add(TKey key,TValue data) {
             if (dic.Count == 50)
                 dic.Remove(dic.Last().Key);
-            dic.Add(key,data);
+            if(!dic.ContainsKey(key))
+                dic.Add(key,data);
         }
     }
 }

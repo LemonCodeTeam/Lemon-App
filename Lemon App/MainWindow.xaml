@@ -305,7 +305,7 @@
         <Storyboard x:Key="Loading">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="Page">
                 <EasingThicknessKeyFrame KeyTime="0" Value="315,1010,315,0"/>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="30">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -684,7 +684,7 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,41,130,21"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,41,165,21"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
                 <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,20,0,0"/>
@@ -1089,7 +1089,7 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,41,130,21"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,41,165,21"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
                 <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,20,0,0"/>
@@ -1114,16 +1114,16 @@
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="30" CaptionHeight="10" CornerRadius="0" />
+        <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="20" CaptionHeight="0" CornerRadius="0" />
     </WindowChrome.WindowChrome>
     <Window.Effect>
-        <DropShadowEffect BlurRadius="30" Opacity="0.3" ShadowDepth="0"/>
+        <DropShadowEffect BlurRadius="10" Opacity="0.7" ShadowDepth="0"/>
     </Window.Effect>
-    <Grid x:Name="Page" Margin="30" Background="White">
+    <Grid x:Name="Page" Margin="10" Background="White">
         <Grid.Clip>
             <RectangleGeometry RadiusX="5" RadiusY="5">
                 <RectangleGeometry.Rect>
-                    <Rect Width="1010" Height="630"/>
+                    <Rect Width="1050" Height="670"/>
                 </RectangleGeometry.Rect>
             </RectangleGeometry>
         </Grid.Clip>
@@ -1167,23 +1167,6 @@
                     </ScrollViewer>
                 </Grid>
                 <Grid x:Name="SkinPage" Visibility="Collapsed">
-                    <Border x:Name="ChooseText" Background="White" CornerRadius="5" Margin="20" Width="220" Height="160" Visibility="Collapsed">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
-                        </Border.Effect>
-                        <Grid>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="请选择字体颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
-                            <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="30,50,0,0" Background="White" CornerRadius="50" MouseDown="Border_MouseDown_4">
-                                <TextBlock TextWrapping="Wrap" Text="白色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
-                            </Border>
-                            <Border HorizontalAlignment="Right" Height="50" VerticalAlignment="Top" Width="50" Margin="0,50,30,0" Background="#FF2D2D30" CornerRadius="50" MouseDown="Border_MouseDown_5">
-                                <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE" Margin="12,16.38,14,17.62"/>
-                            </Border>
-                            <Border Height="35" VerticalAlignment="Bottom" Width="85" Margin="0,0,0,10"  MouseDown="MDButton_MouseDown" Background="{DynamicResource ThemeColor}" CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="完成" VerticalAlignment="Center" Foreground="White" FontSize="16"/>
-                            </Border>
-                        </Grid>
-                    </Border>
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="个性皮肤" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                     <ScrollViewer  Margin="20,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                         <WrapPanel x:Name="SkinIndexList"/>
@@ -1214,6 +1197,23 @@
                                 </VisualBrush>
                             </Border.Background>
                         </Border>
+                    </Border>
+                    <Border x:Name="ChooseText" Background="White" CornerRadius="5" Margin="20" Width="220" Height="160" Visibility="Collapsed">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="请选择字体颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
+                            <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="30,50,0,0" Background="White" CornerRadius="50" MouseDown="Border_MouseDown_4">
+                                <TextBlock TextWrapping="Wrap" Text="白色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
+                            </Border>
+                            <Border HorizontalAlignment="Right" Height="50" VerticalAlignment="Top" Width="50" Margin="0,50,30,0" Background="#FF2D2D30" CornerRadius="50" MouseDown="Border_MouseDown_5">
+                                <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE" Margin="12,16.38,14,17.62"/>
+                            </Border>
+                            <Border Height="35" VerticalAlignment="Bottom" Width="85" Margin="0,0,0,10"  MouseDown="MDButton_MouseDown" Background="{DynamicResource ThemeColor}" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="完成" VerticalAlignment="Center" Foreground="White" FontSize="16"/>
+                            </Border>
+                        </Grid>
                     </Border>
                 </Grid>
                 <Grid x:Name="TopIndexPage">

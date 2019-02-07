@@ -171,10 +171,11 @@ namespace Lemon_App
             }));
         }
         private void LoadAfterLogin(bool hasAnimation=true) {
-            if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
+            if (Settings.USettings.Skin_txt != "")
             {
                 App.BaseApp.Skin();
-                Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
+                if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path)) 
+                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
                 App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
                     byte.Parse(Settings.USettings.Skin_Theme_G),
                     byte.Parse(Settings.USettings.Skin_Theme_B)));
@@ -224,6 +225,7 @@ namespace Lemon_App
             ml = new MusicLib(lv,Settings.USettings.LemonAreeunIts);
             if (Settings.USettings.Playing.MusicName != "")
             {
+                MusicData = new DataItem(Settings.USettings.Playing);
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
                 string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
                 MusicLib.pc.Open(downloadpath);
@@ -294,7 +296,7 @@ namespace Lemon_App
             else
             {
                 c.ResizeBorderThickness = new Thickness(30);
-                Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(30), TimeSpan.FromSeconds(0)));
+                Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(10), TimeSpan.FromSeconds(0)));
                 WindowState = WindowState.Normal;
                 Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
@@ -378,6 +380,62 @@ namespace Lemon_App
         }
         #endregion
         #region 主题切换
+        string TextColor_byChoosing = "Black";
+        private void ColorThemeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ChooseText.Visibility = Visibility.Visible;
+        }
+
+        private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
+        {
+            TextColor_byChoosing = "White";
+        }
+
+        private void Border_MouseDown_5(object sender, MouseButtonEventArgs e)
+        {
+            TextColor_byChoosing = "Black";
+        }
+
+        private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Color col = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+                App.BaseApp.Skin();
+                App.BaseApp.SetColor("ThemeColor", col);
+                Color co;
+                if (TextColor_byChoosing == "Black")
+                    co = Color.FromRgb(64, 64, 64);
+                else co = Color.FromRgb(255, 255, 255);
+                App.BaseApp.SetColor("ResuColorBrush", co);
+                App.BaseApp.SetColor("ButtonColorBrush", co);
+                App.BaseApp.SetColor("TextX1ColorBrush", co);
+                Settings.USettings.Skin_txt = TextColor_byChoosing;
+                Settings.USettings.Skin_Theme_R = col.R.ToString();
+                Settings.USettings.Skin_Theme_G = col.G.ToString();
+                Settings.USettings.Skin_Theme_B = col.B.ToString();
+                Settings.SaveSettings();
+            }
+            ChooseText.Visibility = Visibility.Collapsed;
+        }
+
+        private void ColorThemeBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "图像文件(*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp|所有文件|*.*";
+            ofd.ValidateNames = true;
+            ofd.CheckPathExists = true;
+            ofd.CheckFileExists = true;
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string strFileName = ofd.FileName;
+                string file = Settings.USettings.CachePath + "Skin\\" + System.IO.Path.GetFileName(strFileName);
+                System.IO.File.Move(strFileName, file);
+                Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
+                Settings.USettings.Skin_Path = file;
+            }
+        }
         private async void SkinBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(null, SkinPage);
@@ -422,7 +480,7 @@ namespace Lemon_App
             sxc.MouseDown += (s, n) =>{
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 App.BaseApp.unSkin();
-                Settings.USettings.Skin_Path = "";
+                Settings.USettings.Skin_txt = "";
                 Settings.SaveSettings();
             };
             sxc.Margin = new Thickness(10, 0, 0, 0);
@@ -1072,11 +1130,7 @@ namespace Lemon_App
             isPlayasRun = true;
             t.Stop();
             MusicLib.pc.Pause();
-            Settings.USettings.Playing.GC = id;
-            Settings.USettings.Playing.ImageUrl = x;
-            Settings.USettings.Playing.MusicID = id;
-            Settings.USettings.Playing.MusicName = name;
-            Settings.USettings.Playing.Singer = singer;
+            Settings.USettings.Playing = MusicData.music;
             Settings.SaveSettings();
             if (Settings.USettings.MusicLike.ContainsKey(id))
                 LikeBtnDown();
@@ -1090,6 +1144,7 @@ namespace Lemon_App
             {
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                 t.Start();
+                isplay = true;
             }
         }
         #endregion
@@ -1142,6 +1197,26 @@ namespace Lemon_App
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
             }
         }
+
+
+        private void GcBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isOpenGc)
+            {
+                isOpenGc = false;
+                lyricTa.Close();
+                if (ind == 1)
+                    path7.Fill = new SolidColorBrush(Colors.White);
+                else
+                    path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            }
+            else
+            {
+                isOpenGc = true;
+                lyricTa = new Toast("", true);
+                path7.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+        }
         private void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
         {
             ind = 0;
@@ -1149,11 +1224,15 @@ namespace Lemon_App
             Singer.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             Play_All.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             Play_Now.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            timetb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            textBlock4.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            path1.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             path2.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             path3.SetResourceReference(Path.FillProperty, "ThemeColor");
             path4.SetResourceReference(Path.FillProperty, "ThemeColor");
             path5.SetResourceReference(Path.FillProperty, "ThemeColor");
             path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            if (!isOpenGc) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
             (Resources["CloseLyricPage"] as Storyboard).Begin();
@@ -1167,11 +1246,15 @@ namespace Lemon_App
             Singer.Foreground = new SolidColorBrush(Colors.White);
             Play_All.Foreground = new SolidColorBrush(Colors.White);
             Play_Now.Foreground = new SolidColorBrush(Colors.White);
+            timetb.Foreground = new SolidColorBrush(Colors.White);
+            textBlock4.Foreground = new SolidColorBrush(Colors.White);
+            path1.Fill = new SolidColorBrush(Colors.White);
             path2.Fill = new SolidColorBrush(Colors.White);
             path3.Fill = new SolidColorBrush(Colors.White);
             path4.Fill = new SolidColorBrush(Colors.White);
             path5.Fill = new SolidColorBrush(Colors.White);
             path6.Fill = new SolidColorBrush(Colors.White);
+            if(!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
             likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             (Resources["OpenLyricPage"] as Storyboard).Begin();
         }
@@ -1579,74 +1662,5 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
-
-        private void GcBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (isOpenGc){
-                isOpenGc = false;
-                lyricTa.Close();
-                path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            }
-            else {
-                isOpenGc = true;
-                lyricTa = new Toast("", true);
-                path7.SetResourceReference(Path.FillProperty, "ThemeColor");
-            }
-        }
-        string TextColor_byChoosing = "Black";
-        private void ColorThemeBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            ChooseText.Visibility = Visibility.Visible;
-        }
-
-        private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
-        {
-            TextColor_byChoosing = "White";
-        }
-
-        private void Border_MouseDown_5(object sender, MouseButtonEventArgs e)
-        {
-            TextColor_byChoosing = "Black";
-        }
-
-        private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
-            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                Color co = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
-                App.BaseApp.Skin();
-                App.BaseApp.SetColor("ThemeColor", co);
-                if (TextColor_byChoosing == "Black")
-                    co = Color.FromRgb(64, 64, 64);
-                else co = Color.FromRgb(255, 255, 255);
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                App.BaseApp.SetColor("ButtonColorBrush", co);
-                App.BaseApp.SetColor("TextX1ColorBrush", co);
-                Settings.USettings.Skin_txt = TextColor_byChoosing;
-                Settings.USettings.Skin_Theme_R = co.R.ToString();
-                Settings.USettings.Skin_Theme_G = co.G.ToString();
-                Settings.USettings.Skin_Theme_B = co.B.ToString();
-                Settings.SaveSettings();
-            }
-            ChooseText.Visibility = Visibility.Collapsed;
-        }
-
-        private void ColorThemeBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = "图像文件(*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp|所有文件|*.*";
-            ofd.ValidateNames = true;
-            ofd.CheckPathExists = true;
-            ofd.CheckFileExists = true;
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string strFileName = ofd.FileName;
-                string file = Settings.USettings.CachePath + "Skin\\" + System.IO.Path.GetFileName(strFileName);
-                System.IO.File.Move(strFileName, file);
-                Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
-                Settings.USettings.Skin_Path = file;
-            }
-        }
     }
 }
