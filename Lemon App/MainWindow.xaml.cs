@@ -1148,28 +1148,41 @@ namespace Lemon_App
             MusicData = dt;
             PlayMusic(dt.ID, dt.Image, dt.SongName, dt.Singer);
         }
+        private Music LastPlay = new Music();
         public void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
         {
-            MusicName.Text = "连接资源中...";
-            IsRadio = isRadio;
-            isPlayasRun = true;
-            t.Stop();
-            MusicLib.pc.Pause();
-            Settings.USettings.Playing = MusicData.music;
-            Settings.SaveSettings();
-            if (Settings.USettings.MusicLike.ContainsKey(id))
-                LikeBtnDown();
-            else LikeBtnUp();
-            if (!ml.mldata.ContainsKey(id))
-                ml.mldata.Add(id, (name + " - " + singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
-            ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this,doesplay);
-            MusicImage.Background = new ImageBrush(new BitmapImage(new Uri(x)));
-            Singer.Text = singer;
-            if (doesplay)
+            if (LastPlay.MusicID == id)
             {
+                MusicLib.pc.To(0);
+                MusicLib.pc.Play();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                 t.Start();
                 isplay = true;
+            }
+            else
+            {
+                MusicName.Text = "连接资源中...";
+                IsRadio = isRadio;
+                isPlayasRun = true;
+                t.Stop();
+                MusicLib.pc.Pause();
+                Settings.USettings.Playing = MusicData.music;
+                Settings.SaveSettings();
+                if (Settings.USettings.MusicLike.ContainsKey(id))
+                    LikeBtnDown();
+                else LikeBtnUp();
+                if (!ml.mldata.ContainsKey(id))
+                    ml.mldata.Add(id, (name + " - " + singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""));
+                ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, doesplay);
+                MusicImage.Background = new ImageBrush(new BitmapImage(new Uri(x)));
+                Singer.Text = singer;
+                if (doesplay)
+                {
+                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                    t.Start();
+                    isplay = true;
+                }
+                LastPlay = Settings.USettings.Playing;
             }
         }
         #endregion
