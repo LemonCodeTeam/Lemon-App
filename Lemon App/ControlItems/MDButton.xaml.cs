@@ -24,6 +24,16 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
+        public MDButton(bool ab=false)
+        {
+            InitializeComponent();
+            this.ab = ab;
+            if (ab) {
+                bd.BorderBrush = new SolidColorBrush(Color.FromRgb(147,161,174));
+                tb.Foreground= new SolidColorBrush(Color.FromRgb(147, 161, 174));
+            }
+        }
+        private bool ab = false;
         public string TName { get => tb.Text; set => tb.Text = value; }
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -33,8 +43,16 @@ namespace Lemon_App
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
-            bd.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
-            tb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            if (ab)
+            {
+                bd.BorderBrush = new SolidColorBrush(Color.FromRgb(147, 161, 174));
+                tb.Foreground = new SolidColorBrush(Color.FromRgb(147, 161, 174));
+            }
+            else
+            {
+                bd.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
+                tb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+            }
         }
     }
 }

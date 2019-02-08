@@ -9,7 +9,7 @@
         <!--按钮A1前景色 默认值:#FF787878-->
         <SolidColorBrush x:Key="ButtonColorBrush" Color="#FF787878"/>
         <!--UI边框色 默认值:#FFE7E8EC-->
-        <SolidColorBrush x:Key="BorderColorBrush" Color="#FFE7E8EC"/>
+        <SolidColorBrush x:Key="BorderColorBrush" Color="#FFF1F1F1"/>
         <!--菜单栏背景色 默认值:#FFFAFAFA-->
         <SolidColorBrush x:Key="ControlPageBrush" Color="#FFFAFAFA"/>
         <!--标题栏背景色 默认值:White-->

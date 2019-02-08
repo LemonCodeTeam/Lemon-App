@@ -118,11 +118,11 @@ namespace Lemon_App
             foreach (var a in o["list"]) {
                 string name = a["dirname"].ToString();
                 ListData.Add(name, a["dirid"].ToString());
-                var mdb = new MDButton() { TName = name,Margin=new System.Windows.Thickness(0, 10, 0, 0) };
+                var mdb = new MDButton(true) { TName = name,Margin=new System.Windows.Thickness(0, 10, 0, 0) };
                 mdb.MouseDown += Mdb_MouseDown;
                 Add_Gdlist.Children.Add(mdb);
             }
-            var md = new MDButton() { TName = "取消", Margin = new System.Windows.Thickness(0, 10, 0, 0) };
+            var md = new MDButton(true) { TName = "取消", Margin = new System.Windows.Thickness(0, 10, 0, 0) };
             md.MouseDown += delegate { Gdpop.IsOpen = false; };
             Add_Gdlist.Children.Add(md);
             Gdpop.IsOpen = true;

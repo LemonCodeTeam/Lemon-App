@@ -65,8 +65,8 @@ namespace Lemon_App
         {
             if (!isLoading)
             {
-                var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0));
-                ContentPage.BeginAnimation(OpacityProperty, da);
+               // var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0));
+         //       ContentPage.BeginAnimation(OpacityProperty, da);
                 isLoading = true;
                 tOL = new Thread(RunThread);
                 tOL.SetApartmentState(ApartmentState.STA);
@@ -87,7 +87,7 @@ namespace Lemon_App
                     da.Completed +=delegate { aw.Close(); };
                     aw.BeginAnimation(OpacityProperty, da);});
               
-                ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
+             //   ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
             }
         }
         #endregion
@@ -173,19 +173,25 @@ namespace Lemon_App
         private void LoadAfterLogin(bool hasAnimation=true) {
             if (Settings.USettings.Skin_txt != "")
             {
-                App.BaseApp.Skin();
-                if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path)) 
+                if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
                     Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
                 App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
                     byte.Parse(Settings.USettings.Skin_Theme_G),
                     byte.Parse(Settings.USettings.Skin_Theme_B)));
                 Color co;
-                if (Settings.USettings.Skin_txt == "Black")
-                    co = Color.FromRgb(64, 64, 64);
-                else co = Color.FromRgb(255, 255, 255);
+                if (Settings.USettings.Skin_txt == "Black"){
+                    co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
+                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                }
+                else{
+                    co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
+                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
+                }
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
+                ControlDownPage.BorderThickness = new Thickness(0);
+                ControlPage.BorderThickness = new Thickness(0);
             }
             else { App.BaseApp.unSkin(); Page.Background = new SolidColorBrush(Colors.White); }
 
@@ -402,15 +408,23 @@ namespace Lemon_App
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Color col = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
-                App.BaseApp.Skin();
                 App.BaseApp.SetColor("ThemeColor", col);
                 Color co;
                 if (TextColor_byChoosing == "Black")
-                    co = Color.FromRgb(64, 64, 64);
-                else co = Color.FromRgb(255, 255, 255);
+                {
+                    co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
+                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                }
+                else
+                {
+                    co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
+                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
+                }
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
+                ControlDownPage.BorderThickness = new Thickness(0);
+                ControlPage.BorderThickness = new Thickness(0);
                 Settings.USettings.Skin_txt = TextColor_byChoosing;
                 Settings.USettings.Skin_Theme_R = col.R.ToString();
                 Settings.USettings.Skin_Theme_G = col.G.ToString();
@@ -459,12 +473,20 @@ namespace Lemon_App
                     App.BaseApp.Skin();
                     App.BaseApp.SetColor("ThemeColor", sc.theme);
                     Color co;
-                    if (sc.txtColor == "Black")
-                        co = Color.FromRgb(64, 64, 64);
-                    else co = Color.FromRgb(255, 255, 255);
+                    if (sc.txtColor == "Black"){
+                        co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
+                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                    }
+                    else
+                    {
+                        co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
+                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
+                    }
                     App.BaseApp.SetColor("ResuColorBrush", co);
                     App.BaseApp.SetColor("ButtonColorBrush", co);
                     App.BaseApp.SetColor("TextX1ColorBrush", co);
+                    ControlDownPage.BorderThickness = new Thickness(0);
+                    ControlPage.BorderThickness = new Thickness(0);
                     Settings.USettings.Skin_Path = Settings.USettings.CachePath + "Skin\\" + +sc.imgurl + ".png";
                     Settings.USettings.Skin_txt = sc.txtColor;
                     Settings.USettings.Skin_Theme_R = sc.theme.R.ToString();
@@ -478,6 +500,9 @@ namespace Lemon_App
             }
             SkinControl sxc = new SkinControl(-1, "默认主题", Color.FromArgb(0,0,0,0));
             sxc.MouseDown += (s, n) =>{
+                ControlDownPage.BorderThickness = new Thickness(0,1,0,0);
+                ControlPage.BorderThickness = new Thickness(0, 0, 1, 0);
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 App.BaseApp.unSkin();
                 Settings.USettings.Skin_txt = "";
@@ -1519,7 +1544,7 @@ namespace Lemon_App
                     });
                 }
                 isSearch = false;
-                Dispatcher.Invoke(() => { CloseLoading(); });
+                Dispatcher.Invoke(() => { CloseLoading(); ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3))); });
                 await ml.GetGDAsync(dt.id);
             }));
             sx.Start();

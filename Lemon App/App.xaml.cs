@@ -33,6 +33,19 @@ namespace Lemon_App
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF46FFA2"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
+            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#4C000000"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19000000"));
+            SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("#0C000000"));
+            SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#0C000000"));
+            SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0C000000"));
+            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
+        }
+        public void Skin_Black()
+        {
+            skin = true;
+            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF46FFA2"));
+            SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
+            SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#33FFFFFF"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FAFAFA"));
             SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
