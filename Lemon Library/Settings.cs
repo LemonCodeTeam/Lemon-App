@@ -55,11 +55,11 @@ namespace LemonLibrary
                             });
                     }
                 }
-                foreach (var jcm in o["MusicGD"])
+                foreach (var jcm in o["GdCache"])
                 {
                     foreach (var jm in jcm)
                     {
-                        if (!USettings.MusicGD.ContainsKey(jm["id"].ToString()))
+                        if (!USettings.GdCache.ContainsKey(jm["id"].ToString()))
                         {
                             var datae = new List<Music>();
                             foreach (var dt in jm["Data"])
@@ -73,13 +73,7 @@ namespace LemonLibrary
                                     MusicName = dt["MusicName"].ToString()
                                 });
                             }
-                            USettings.MusicGD.Add(jm["id"].ToString(), new MusicGData()
-                            {
-                                id = jm["id"].ToString(),
-                                name = jm["name"].ToString(),
-                                pic = jm["pic"].ToString(),
-                                Data = datae
-                            });
+                            USettings.GdCache.Add(jm["id"].ToString(),datae);
                         }
                     }
                 }
@@ -109,7 +103,7 @@ namespace LemonLibrary
             }
             #region 歌单
             public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
-            public SortedDictionary<string, MusicGData> MusicGD { get; set; } = new SortedDictionary<string, MusicGData>();
+            public SortedDictionary<string, List<Music>> GdCache { get; set; } = new SortedDictionary<string, List<Music>>();
             #endregion
             #region 用户配置
             public string LemonAreeunIts { get; set; } = "你的QQ";
