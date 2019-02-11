@@ -38,7 +38,7 @@
         </Grid.ColumnDefinitions>
         <Border Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom" Margin="10,0" Background="{DynamicResource BorderColorBrush}" Opacity="0.5"/>
         <TextBlock x:Name="namss" TextWrapping="NoWrap" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center" Margin="10,15" Height="15"><Run  x:Name="name" Text="Tb000000000000"/><Run Text="  "/><TextBlock  x:Name="mss"  Text="mss" Opacity="0.6"/></TextBlock>
-        <TextBlock x:Name="ser" Margin="10,14" TextWrapping="NoWrap" Text="TextBlock" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Grid.Column="1" Height="15" Opacity="0.8"/>
+        <TextBlock x:Name="ser" Margin="10,15,35,15" TextWrapping="NoWrap" Text="TextBlock" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Grid.Column="1" Height="15" Opacity="0.8"/>
         <Border x:Name="color" HorizontalAlignment="Left" Width="5" Background="#00000000" Margin="0,5"/>
         <Border x:Name="CheckView" HorizontalAlignment="Left" Width="14" Height="14" Margin="25,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource TextX1ColorBrush}" Visibility="Collapsed">
             <Border x:Name="GO" Margin="1" Visibility="Collapsed">
@@ -74,5 +74,6 @@
                 </Grid>
             </Border>
         </Popup>
+        <local:TitlePageBtn x:Name="DeleteBtn" Pathness="0" Height="15" Width="15" HorizontalAlignment="Right" Margin="0,15,15,15" Grid.Column="1" PathData="M880,240L704,240 704,176C704,123.2,660.8,80,608,80L416,80C363.2,80,320,123.2,320,176L320,240 144,240C126.4,240 112,254.4 112,272 112,289.6 126.4,304 144,304L192,304 192,816C192,886.4,249.6,944,320,944L704,944C774.4,944,832,886.4,832,816L832,304 880,304C897.6,304 912,289.6 912,272 912,254.4 897.6,240 880,240z M384,176C384,158.4,398.4,144,416,144L608,144C625.6,144,640,158.4,640,176L640,240 384,240 384,176z M768,816C768,851.2,739.2,880,704,880L320,880C284.8,880,256,851.2,256,816L256,304 768,304 768,816z M416 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32zM608 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32z" MouseDown="DeleteBtn_MouseDown"/>
     </Grid>
 </UserControl>

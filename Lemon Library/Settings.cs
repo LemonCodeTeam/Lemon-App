@@ -98,7 +98,7 @@ namespace LemonLibrary
         }
         public class UserSettings {
             public UserSettings() {
-                CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
+                CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\");
                 DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
             #region 歌单
@@ -121,7 +121,7 @@ namespace LemonLibrary
             public string Skin_Theme_B { get; set; } = "";
             #endregion
             #region 缓存/下载路径
-            public string CachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\Cache\Lyric";
+            public string CachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\";
             public string DownloadPath = "";
             #endregion
         }

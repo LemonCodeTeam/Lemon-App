@@ -819,8 +819,8 @@ namespace Lemon_App
         {
             isSearch = false;
             OpenLoading();
-            var dt = await MusicLib.GetGDAsync(id, new Action<Music>((j) => {
-                var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+            var dt = await MusicLib.GetGDAsync(id, new Action<Music,bool>((j,b) => {
+                var k = new DataItem(j,b,this) { Width = DataItemsList.ActualWidth };
                 if (k.isPlay(MusicName.Text))
                 {
                     k.ShowDx();
@@ -828,7 +828,8 @@ namespace Lemon_App
                 }
                 k.Play += PlayMusic;
                 DataItemsList.Children.Add(k);
-            }));
+            }),this);
+            He.MGData_Now = dt;
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.pic));
             TB.Text = dt.name;
             DataItemsList.Children.Clear();
@@ -941,30 +942,31 @@ namespace Lemon_App
                     {
                         LikeBtnUp();
                         Settings.USettings.MusicLike.Remove(RadioData.MusicID);
+                        string a = MusicLib.DeleteMusicFromGD(RadioData.MusicID,MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
+                        Toast.Send(a);
                     }
                     else
                     {
+                        string[] a = MusicLib.AddMusicToGD(RadioData, MusicLib.MusicLikeGDdirid);
+                        Toast.Send(a[1]+": "+a[0]);
                         Settings.USettings.MusicLike.Add(RadioData.MusicID, RadioData);
                         LikeBtnDown();
                     }
                 }
                 else
                 {
-                    if (Settings.USettings.MusicLike.ContainsKey(MusicData.ID))
+                    if (Settings.USettings.MusicLike.ContainsKey(MusicData.music.MusicID))
                     {
                         LikeBtnUp();
-                        Settings.USettings.MusicLike.Remove(MusicData.ID);
+                        Settings.USettings.MusicLike.Remove(MusicData.music.MusicID);
+                        string a = MusicLib.DeleteMusicFromGD(MusicData.music.MusicID, MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
+                        Toast.Send(a);
                     }
                     else
                     {
-                        Settings.USettings.MusicLike.Add(MusicData.ID, new InfoHelper.Music()
-                        {
-                            GC = MusicData.ID,
-                            Singer = MusicData.Singer,
-                            ImageUrl = MusicData.Image,
-                            MusicID = MusicData.ID,
-                            MusicName = MusicData.SongName
-                        });
+                        string[] a = MusicLib.AddMusicToGD(MusicData.music, MusicLib.MusicLikeGDdirid);
+                        Toast.Send(a[1]+": "+a[0]);
+                        Settings.USettings.MusicLike.Add(MusicData.music.MusicID, MusicData.music);
                         LikeBtnDown();
                     }
                 }
@@ -978,11 +980,8 @@ namespace Lemon_App
             TXx.Background = Resources["LoveIcon"] as VisualBrush;
             DataItemsList.Children.Clear();
             OpenLoading();
-            var dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={MusicLib.qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={MusicLib.qq}&reqfrom=1&reqtype=0", Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
-            var o = JObject.Parse(dta);
-            string id = o["data"]["mymusic"][0]["id"].ToString();
-            await MusicLib.GetGDAsync(id,new Action<Music>((dt)=> {
-                var jm = new DataItem(dt) { Width = DataItemsList.ActualWidth };
+            var a=await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid,new Action<Music,bool>((dt,b)=> {
+                var jm = new DataItem(dt,b,this) { Width = DataItemsList.ActualWidth };
                 if (jm.isPlay(MusicName.Text))
                 {
                     jm.ShowDx();
@@ -990,8 +989,17 @@ namespace Lemon_App
                 }
                 jm.Play += PlayMusic;
                 DataItemsList.Children.Add(jm);
-            }));
+            }),this);
+            He.MGData_Now = a;
             CloseLoading();
+            var ac = new Action<MusicGData>((m) =>
+            {
+                foreach (var ai in m.Data)
+                {
+                    Settings.USettings.MusicLike.Add(ai.MusicID, ai);
+                }
+            });
+            ac(a);
             isSearch = false;
         }
         #endregion
@@ -1135,7 +1143,7 @@ namespace Lemon_App
             var dt = sender as DataItem;
             dt.ShowDx();
             MusicData = dt;
-            PlayMusic(dt.ID, dt.Image, dt.SongName, dt.Singer);
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.Singer);
         }
         private Music LastPlay = new Music();
         public void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
@@ -1417,7 +1425,7 @@ namespace Lemon_App
             DTimer.Interval = 3000;
             DTimer.Tick +=async delegate {
                 if (DownloadIndex != data.Count){
-                    string name = data[DownloadIndex].SongName + " - " + data[DownloadIndex].Singer;
+                    string name = data[DownloadIndex].music.MusicName + " - " + data[DownloadIndex].music.Singer;
                     string file = Download_Path.Text + $"\\{name}.mp3";
                     System.IO.File.Delete(file);
                     await DownloadTaskAsync(msg, data, DTimer);
@@ -1427,12 +1435,12 @@ namespace Lemon_App
         private int DownloadIndex=0;
         public async Task DownloadTaskAsync(Msg msg, List<DataItem> data, System.Windows.Forms.Timer dt) {
             dt.Start();
-            string name = data[DownloadIndex].SongName + " - " + data[DownloadIndex].Singer;
+            string name = data[DownloadIndex].music.MusicName + " - " + data[DownloadIndex].music.Singer;
             string file = Download_Path.Text + $"\\{name}.mp3";
             if (!System.IO.File.Exists(file))
             {
                 var cl = new WebClient();
-                string mid = data[DownloadIndex].ID;
+                string mid = data[DownloadIndex].music.MusicID;
                 string url = await ml.GetUrlAsync(mid);
                 msg.tb.Text = "正在下载:" + (DownloadIndex + 1) + "  " + name;
                 cl.DownloadFileAsync(new Uri(url), file);
@@ -1525,15 +1533,14 @@ namespace Lemon_App
             ContentPage.BeginAnimation(OpacityProperty, da);
             OpenLoading();
             NSPage(null, Data);
-            OpenLoading();
             var dt = sender as FLGDIndexItem;
             TB.Text = dt.name.Text;
             DataItemsList.Children.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
             TB.Text = dt.name.Text;
             DataItemsList.Children.Clear();
-            await MusicLib.GetGDAsync(dt.id, new Action<Music>((j) => {
-                var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+            He.MGData_Now=await MusicLib.GetGDAsync(dt.id, new Action<Music,bool>((j,b) => {
+                var k = new DataItem(j,b,this) { Width = DataItemsList.ActualWidth };
                 k.Play += PlayMusic;
                 if (k.isPlay(MusicName.Text))
                 {
@@ -1541,7 +1548,7 @@ namespace Lemon_App
                     MusicData = k;
                 }
                 DataItemsList.Children.Add(k);
-            }));
+            }),this);
             isSearch = false;
             CloseLoading();
             ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));

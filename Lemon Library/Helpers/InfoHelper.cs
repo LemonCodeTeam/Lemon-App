@@ -72,7 +72,8 @@ namespace LemonLibrary
             public string name { get; set; }
             public string pic { get; set; }
             public string id { get; set; }
-            public Dictionary<string, string> ids = new Dictionary<string, string>();//mid,id
+            public bool IsOwn = false;
+            public List<string> ids = new List<string>();
         }
         ////////Weather Helper/////
         public class Weather {

@@ -38,8 +38,11 @@ namespace LemonLibrary
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
+            if (!Directory.Exists(Settings.USettings.CachePath + "GData\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath + "GData\\");
             lv = LV;
             qq = id;
+            GetMusicLikeGDid();
         }
         public MusicLib()
         {
@@ -52,10 +55,11 @@ namespace LemonLibrary
             if (!Directory.Exists(Settings.USettings.CachePath + "Lyric\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
         }
-       // public static Dictionary<string, string> mldata = new Dictionary<string, string>();// mid,name
         public static PlayerControl pc = new PlayerControl();
         public LyricView lv;
         public static string qq = "";
+        public static string MusicLikeGDid = "";
+        public static string MusicLikeGDdirid = "";
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
             if (HttpHelper.IsNetworkTrue())
@@ -75,7 +79,7 @@ namespace LemonLibrary
                     { Singer += dsli["singer"][osxc]["name"] + "&"; }
                     m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
                     m.MusicID =dsli["mid"].ToString();
-                    var amid = dsli["albummid"].ToString();
+                    var amid = dsli["album"]["mid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
                         m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
@@ -110,7 +114,14 @@ namespace LemonLibrary
             }
             return list;
         }
-        public static async Task<MusicGData> GetGDAsync(string id = "2591355982",Action<Music> callback=null)
+        public async void GetMusicLikeGDid() {
+            string dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
+            JObject o = JObject.Parse(dta);
+            string id = o["data"]["mymusic"][0]["id"].ToString();
+            MusicLikeGDid = id;
+            MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
+        }
+        public static async Task<MusicGData> GetGDAsync(string id = "2591355982",Action<Music,bool> callback=null,Window wx=null)
         {
             System.Diagnostics.Stopwatch st = new System.Diagnostics.Stopwatch();
             st.Start();
@@ -122,12 +133,14 @@ namespace LemonLibrary
             dt.name = c0["dissname"].ToString();
             dt.pic = c0["logo"].ToString();
             dt.id = id;
+            dt.ids = c0["songids"].ToString().Split(',').ToList();
+            dt.IsOwn = c0["login"].ToString() == c0["uin"].ToString();
             var c0s = c0["songlist"];
             foreach (var c0si in c0s)
             {
                 string singer = "";
-                for (int ix = 0; ix != c0si["singer"].Count(); ix++)
-                { singer += c0si["singer"][ix]["name"].ToString() + "&"; }
+                var c0sis = c0si["singer"];
+                foreach (var cc in c0sis) singer += cc["name"].ToString() + "&"; 
                 Music m = new Music();
                 try
                 {
@@ -142,11 +155,11 @@ namespace LemonLibrary
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
                 }//莫名其妙的System.NullReferenceException:“未将对象引用设置到对象的实例。”
                 catch { }
-                callback(m);
+                await wx.Dispatcher.BeginInvoke(DispatcherPriority.Normal,new Action(()=> { callback(m, dt.IsOwn); }));
                 dt.Data.Add(m);
             }
             st.Stop();
-            Console.WriteLine(st.Elapsed.Seconds);
+            Console.WriteLine(st.Elapsed.TotalMilliseconds+"ms      "+ st.Elapsed.TotalSeconds+"s");
             return dt;
         }
         public async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()
@@ -757,7 +770,7 @@ namespace LemonLibrary
             return s["data"][0]["id"].ToString();
         }
 
-        public static string AddMusicToGD(Music music,string GDname,string Dissid) {
+        public static string[] AddMusicToGD(Music music,string dirid) {
             var header = new WebHeaderCollection();
             header.Add(HttpRequestHeader.Accept, "*/*");
             header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
@@ -767,16 +780,37 @@ namespace LemonLibrary
             header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             header.Add(HttpRequestHeader.Host, "c.y.qq.com");
             string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=1864465719",
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={music.MusicID}&typelist=13&dirid={Dissid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=1864465719", header);
-            //foreach (var a in Settings.USettings.MusicGD)
-            //{
-            //    if (a.Value.name.Contains(GDname))
-            //    {
-            //        Settings.USettings.MusicGD[a.Key].Data.Insert(0, music);
-            //    }
-            //}
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={music.MusicID}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=1864465719", header);
             //添加本地缓存
-            return result;
+            JObject o = JObject.Parse(result);
+            string msg = o["msg"].ToString();
+            string title = o["title"].ToString();
+            return new string[2] { msg, title };
+        }
+        public static string DeleteMusicFromGD(string Musicid, string Dissid,string dirid) {
+            var header = new WebHeaderCollection();
+            header.Add(HttpRequestHeader.Accept, "*/*");
+            header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
+            header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
+            header.Add(HttpRequestHeader.Cookie, $"pgv_pvi=945152000; pgv_pvid=9351159972; ts_uid=3288365910; RK=sKKMfg2M0M; ptcz=b2f44646e3851a1604bb72c87553f6dcd6c7aa5f616cb31968ee6c6022a8b84b; luin=o2728578956; lskey=000100001dfe40e9ec2bc48c58054dbd30e073b4f7ebdc0e1174b9e7939a3ed943faa89a97119232e789d1f7; p_luin=o2728578956; p_lskey=000400008826a0f1345029659530a41fa3095126dfcbc54bf3f1f9ebf0df771c2c21a284b3e597d02be82f84; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; pgv_si=s2796141568; pgv_info=ssid=s4859382222; yqq_stat=0; ts_last=y.qq.com/n/yqq/playlist/{Dissid}.html");
+            header.Add(HttpRequestHeader.Referer, $"https://y.qq.com/n/yqq/playlist/{Dissid}.html");
+            header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
+            header.Add(HttpRequestHeader.Host, "c.y.qq.com");
+            string result = HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=1777314887",
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types=3&formsender=4&flag=2&from=3&utf8=1&g_tk=1777314887", header);
+            string ok = JObject.Parse(result)["msg"].ToString();
+            return ok;
+        }
+
+        public static async Task<string> GetGDdiridByNameAsync(string name) {
+            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk=1803226462&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0", null,
+                "yqq_stat=0; pgv_info=ssid=s9030869079; ts_last=y.qq.com/; pgv_pvid=6655025332; ts_uid=7057611058; pgv_pvi=8567083008; pgv_si=s9362499584; _qpsvr_localtk=0.4296063820147471; uin=o2728578956; skey=@uvgfbeYR4; ptisp=cm; RK=sKKMfg2M0M; ptcz=7b132d6e799e806b8e425c58966902006b53fc86e1ecb0d2678db33d44f7239d; luin=o2728578956; lskey=000100007afb4fb9a74df33c89945350f16ebce7ef0faca9f0da0aa18246d750b53e68077ae6f83ba3901761; p_uin=o2728578956; pt4_token=-HKvK3MM2TlBjBsPDdO*3Iw6shscAWOJEz-pf5eTH2g_; p_skey=rW8tk6zH9QhmEIOjVvvBXdIeyFQbGGi2xnYiT8f2Ioo_; p_luin=o2728578956; p_lskey=000400008417d0c8d018dff398f9512dcee49d8e75aeae7d975e77c39a169d1e17a25b0dfecfb63bebf56cba; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin"));
+            foreach (var a in o["list"])
+            {
+                if (name == a["dirname"].ToString())
+                    return a["dirid"].ToString();
+            }
+            return "null";
         }
         public static string AddGDILike(string dissid)
         {

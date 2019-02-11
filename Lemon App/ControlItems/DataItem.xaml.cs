@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,24 +22,19 @@ namespace Lemon_App
         public event MouseDownHandle Add;
         public event MouseDownHandle Download;
 
-
-        public string ID { set; get; }
-        public string SongName { set; get; }
-        public string Singer { set; get; }
-        public string Image { set; get; }
         public Music music;
-        public DataItem(Music dat)
+        private MainWindow Mainwindow = null;
+        public DataItem(Music dat,bool needDeleteBtn=false,MainWindow mw=null)
         {
             try
             {
                 InitializeComponent();
+                Mainwindow = mw;
+                if (needDeleteBtn) DeleteBtn.Visibility = Visibility.Visible;
+                else { DeleteBtn.Visibility = Visibility.Collapsed; ser.Margin = new Thickness(10, 0, 10, 0); }
                 music = dat;
-                ID = dat.MusicID;
-                SongName = dat.MusicName;
-                Singer = dat.Singer;
-                Image = dat.ImageUrl;
-                name.Text = SongName;
-                ser.Text = Singer;
+                name.Text = dat.MusicName;
+                ser.Text = dat.Singer;
                 mss.Text = dat.MusicName_Lyric;
             }
             catch { }
@@ -134,15 +130,29 @@ namespace Lemon_App
             Gdpop.IsOpen = false;
             string name = (sender as MDButton).TName;
             string id = ListData[name];
-            MusicLib.AddMusicToGD(music, name, id);
+            string[] a = MusicLib.AddMusicToGD(music,id);
+            MessageBox.Show(a[0],a[1]);
         }
 
         private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e) => Download(this, e);
+
+        private async void DeleteBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (System.Windows.Forms.MessageBox.Show("确定要删除此歌曲吗?") == System.Windows.Forms.DialogResult.OK)
+            {
+                int index = He.MGData_Now.Data.IndexOf(music);
+                string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
+                string Musicid = He.MGData_Now.ids[index];
+                Mainwindow.DataItemsList.Children.RemoveAt(index);
+                Toast.Send(MusicLib.DeleteMusicFromGD(Musicid, He.MGData_Now.id, dirid));
+            }
+        }
     }
 
 
     public class He
     {
         public static DataItem LastItem = null;
+        public static MusicGData MGData_Now = null;
     }
 }
