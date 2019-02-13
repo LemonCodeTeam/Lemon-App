@@ -33,7 +33,7 @@ namespace Lemon_App
         #region 一些字段
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         MusicLib ml = new MusicLib();
-        DataItem MusicData;
+        DataItem MusicData = new DataItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
         string RadioID = "";
@@ -156,7 +156,7 @@ namespace Lemon_App
                                     {
                                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
                                         k.Play += PlayMusic;
-                                        if (k.isPlay(MusicName.Text))
+                                        if (k.music.MusicID == MusicData.music.MusicID)
                                         {
                                             k.ShowDx();
                                             MusicData = k;
@@ -843,7 +843,7 @@ namespace Lemon_App
                     {
                         var k = new DataItem(m, dt.IsOwn, this) { Width = DataItemsList.ActualWidth };
                         k.Play += PlayMusic;
-                        if (k.isPlay(MusicName.Text))
+                        if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
                             MusicData = k;
@@ -1015,7 +1015,7 @@ namespace Lemon_App
                     {
                         var k = new DataItem(m, dt.IsOwn, this) { Width = DataItemsList.ActualWidth };
                         k.Play += PlayMusic;
-                        if (k.isPlay(MusicName.Text))
+                        if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
                             MusicData = k;
@@ -1161,7 +1161,7 @@ namespace Lemon_App
                     foreach (var j in dt)
                     {
                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
-                        if (k.isPlay(MusicName.Text))
+                        if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
                             MusicData = k;
@@ -1195,11 +1195,14 @@ namespace Lemon_App
         {
             if (LastPlay == id)
             {
-                MusicLib.pc.To(0);
-                MusicLib.pc.Play();
-                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
-                t.Start();
-                isplay = true;
+                if (doesplay)
+                {
+                    MusicLib.pc.To(0);
+                    MusicLib.pc.Play();
+                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                    t.Start();
+                    isplay = true;
+                }
             }
             else
             {
@@ -1561,7 +1564,7 @@ namespace Lemon_App
             }
             var GdLikeData = await ml.GetGdILikeListAsync();
             if (GdLikeData.Count != GDILikeItemsList.Children.Count)
-            { GDILikeItemsList.Children.Clear(); GData_Now.Clear(); }
+            { GDILikeItemsList.Children.Clear(); GdLikeData.Clear(); }
             foreach (var jm in GdLikeData)
             {
                 if (!GLikeData_Now.Contains(jm.Key))
@@ -1600,7 +1603,7 @@ namespace Lemon_App
                 {
                     var k = new DataItem(m, md.IsOwn, this) { Width = DataItemsList.ActualWidth };
                     k.Play += PlayMusic;
-                    if (k.isPlay(MusicName.Text))
+                    if (m.MusicID==MusicData.music.MusicID)
                     {
                         k.ShowDx();
                         MusicData = k;
@@ -1724,34 +1727,31 @@ namespace Lemon_App
                     { IsFirstStart = false; MsgHelper.SendMsg("IsLogin", ApiHandle); }
                 }
                 else if (cdata.lpData.Contains("Login")){
-                   // App.BaseApp.Apip.Kill();
+                   App.BaseApp.Apip.Kill();
                    Console.WriteLine(cdata.lpData);
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
-                 //   MessageBox.Show(qq);
-                    if (Settings.USettings.LemonAreeunIts != qq)
+                    Action a = new Action(async () =>
                     {
-                        Action a = new Action(async () =>
-                        {
-                            var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
-                            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
-                            await Task.Run(() => {
-                                Settings.LoadUSettings(qq);
-                                if(cdata.lpData.Contains("g_tk"))
-                                    Settings.USettings.g_tk= TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
-                                Settings.USettings.Cookie= TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
-                                Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
-                                Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
-                                Settings.USettings.LemonAreeunIts = qq;
-                                Settings.SaveSettings();
-                                Settings.LSettings.qq = qq;
-                                Settings.SaveLocaSettings();
-                            });
-                            LoadAfterLogin(false);
+                        var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                        await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
+                        await Task.Run(() => {
+                            Settings.LoadUSettings(qq);
+                            if (cdata.lpData.Contains("g_tk"))
+                                Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
+                            Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
+                            Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
+                            Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
+                            Settings.USettings.LemonAreeunIts = qq;
+                            Settings.SaveSettings();
+                            Settings.LSettings.qq = qq;
+                            Settings.SaveLocaSettings();
+                            Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
                         });
-                        a();
-                    }
+                        LoadAfterLogin(false);
+                    });
+                    a();
                 }
             }
             return IntPtr.Zero;

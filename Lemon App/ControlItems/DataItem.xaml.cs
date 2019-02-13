@@ -30,9 +30,9 @@ namespace Lemon_App
             try
             {
                 InitializeComponent();
+                Mainwindow = mw;
+                music = dat;
                 Loaded += delegate {
-                    Mainwindow = mw;
-                    music = dat;
                     needb = needDeleteBtn;
                     name.Text = dat.MusicName;
                     ser.Text = dat.Singer;
@@ -61,9 +61,6 @@ namespace Lemon_App
             ser.Opacity = 1;
 
             He.LastItem = this;
-        }
-        public bool isPlay(string name) {
-            return this.name.Text == name;
         }
         public void NSDownload(bool ns) {
             this.ns = ns;
