@@ -38,8 +38,6 @@ namespace LemonLibrary
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
-            if (!Directory.Exists(Settings.USettings.CachePath + "GData\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "GData\\");
             lv = LV;
             qq = id;
             GetMusicLikeGDid();
@@ -54,6 +52,8 @@ namespace LemonLibrary
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Music\\");
             if (!Directory.Exists(Settings.USettings.CachePath + "Lyric\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
+            if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
+                Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
         }
         public static PlayerControl pc = new PlayerControl();
         public LyricView lv;
@@ -92,7 +92,7 @@ namespace LemonLibrary
             else return null;
         }
         public async Task<List<string>> Search_SmartBoxAsync(string key) {
-            var data = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?key={HttpUtility.UrlDecode(key)}&utf8=1&is_xml=0&loginUin=2728578956&qqmusic_ver=1592&searchid=3DA3E73D151F48308932D9680A3A5A1722872&pcachetime=1535710304"))["data"];
+            var data = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?key={HttpUtility.UrlDecode(key)}&utf8=1&is_xml=0&loginUin={qq}&qqmusic_ver=1592&searchid=3DA3E73D151F48308932D9680A3A5A1722872&pcachetime=1535710304"))["data"];
             List<String> list = new List<String>();
             var song = data["song"]["itemlist"];
             for (int i = 0; i < song.Count(); i++)
@@ -115,18 +115,18 @@ namespace LemonLibrary
             return list;
         }
         public async void GetMusicLikeGDid() {
-            string dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
-            JObject o = JObject.Parse(dta);
-            string id = o["data"]["mymusic"][0]["id"].ToString();
-            MusicLikeGDid = id;
-            MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
+            if (qq != "")
+            {
+                string dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8, $"pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o{qq}; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie={qq}; pac_uid=1_{qq}; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o{qq}; skey=@ZF3GfLQsE; ptisp=ctc; luin=o{qq}; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o{qq}; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o{qq}; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
+                JObject o = JObject.Parse(dta);
+                string id = o["data"]["mymusic"][0]["id"].ToString();
+                MusicLikeGDid = id;
+                MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
+            }
         }
         public static async Task<MusicGData> GetGDAsync(string id = "2591355982",Action<Music,bool> callback=null,Window wx=null)
         {
-            System.Diagnostics.Stopwatch st = new System.Diagnostics.Stopwatch();
-            st.Start();
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk=1157737156&loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
-            Console.WriteLine(s);
             JObject o = JObject.Parse(s);
             var dt = new MusicGData();
             var c0 = o["cdlist"][0];
@@ -158,13 +158,11 @@ namespace LemonLibrary
                 await wx.Dispatcher.BeginInvoke(DispatcherPriority.Normal,new Action(()=> { callback(m, dt.IsOwn); }));
                 dt.Data.Add(m);
             }
-            st.Stop();
-            Console.WriteLine(st.Elapsed.TotalMilliseconds+"ms      "+ st.Elapsed.TotalSeconds+"s");
             return dt;
         }
         public async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()
         {
-            var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
+            var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8, $"pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o{qq}; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie={qq}; pac_uid=1_{qq}; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o{qq}; skey=@ZF3GfLQsE; ptisp=ctc; luin=o{qq}; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o{qq}; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o{qq}; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
             var o = JObject.Parse(dt);
             var data =new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["mydiss"]["list"];
@@ -181,7 +179,7 @@ namespace LemonLibrary
             return data;
         }
         public async Task<SortedDictionary<string, MusicGData>> GetGdILikeListAsync() {
-            var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=1470138129&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&ct=20&cid=205360956&userid={Settings.USettings.LemonAreeunIts}&reqtype=3&sin=0&ein=25", Encoding.UTF8, "pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie=2728578956; pac_uid=1_2728578956; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o2728578956; skey=@ZF3GfLQsE; ptisp=ctc; luin=o2728578956; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o2728578956; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o2728578956; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
+            var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=1470138129&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&ct=20&cid=205360956&userid={Settings.USettings.LemonAreeunIts}&reqtype=3&sin=0&ein=25", Encoding.UTF8, $"pgv_pvi=9798155264; RK=JKKMei2V0M; ptcz=f60f58ab93a9b59848deb2d67b6a7a4302dd1208664e448f939ed122c015d8d1; pgv_pvid=4173718307; ts_uid=5327745136; ts_uid=5327745136; pt2gguin=o{qq}; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; o_cookie={qq}; pac_uid=1_{qq}; pgv_info=ssid=s8910034002; pgv_si=s3134809088; _qpsvr_localtk=0.8145813010716534; uin=o{qq}; skey=@ZF3GfLQsE; ptisp=ctc; luin=o{qq}; lskey=00010000c504a12a536ab915ce52f0ba2a3d24042adcea8e3b78ef55972477fd6d67417e4fc27cdaa8a0bd86; p_uin=o{qq}; pt4_token=YoecK598VtlFoQ7Teus8nC51UayhpD9rfitjZ6BMUkc_; p_skey=SFU7-V*Vwn3XsXtF3MF4T2OAOBbSp96ol-zzMbhcCzM_; p_luin=o{qq}; p_lskey=00040000768e027ce038844edbd57908c83024d365b4a86c9c12cf8b979d473a573567e70c30bd779d5f20cd; yqq_stat=0");
             var o = JObject.Parse(dt);
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["cdlist"];
@@ -775,12 +773,12 @@ namespace LemonLibrary
             header.Add(HttpRequestHeader.Accept, "*/*");
             header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
             header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
-            header.Add(HttpRequestHeader.Cookie, "pgv_pvi=2664902656; RK=5KKMai2UwO; ptcz=bb12287513538861cab0c6bb27b34e8319763d96415cc0ac1bbaaccf627c7e34; pgv_pvid=2128817280; ts_uid=3468067346; tvfe_boss_uuid=e53d7e2db72f04a4; o_cookie=2728578956; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yq_index=0; pgv_si=s8161463296; _qpsvr_localtk=0.5790436313333647; ptisp=cm; pgv_info=ssid=s1625262774; uin=o2728578956; skey=@YkWJWMuMT; luin=o2728578956; lskey=00010000def5b4c5e09cd29ff523925acaa692d2a08eccf27b2a1da71eb02ae7f83da1e8625a8c173dfa9c35; p_uin=o2728578956; pt4_token=B19wvfTueaeuFZjzD2FckuQ-s4SDBPl-T9YdwFvGufg_; p_skey=XZNHdIp*r9EWDz*qseJhcNrOpIEmuhqA*1EMlN6kolk_; p_luin=o2728578956; p_lskey=000400005748931815ffe7d6baa313c5f4961a1f18a5fb9752b6259d2e7901b3ef0756fc66cde4f481d37c11; yqq_stat=0; ts_last=y.qq.com/n/yqq/playlist/2591355982.html");
+            header.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
             header.Add(HttpRequestHeader.Referer, "https://y.qq.com/n/yqq/singer/0020PeOh4ZaCw1.html");
             header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             header.Add(HttpRequestHeader.Host, "c.y.qq.com");
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=1864465719",
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={music.MusicID}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=1864465719", header);
+            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk="+Settings.USettings.g_tk,
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={music.MusicID}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk="+Settings.USettings.g_tk, header);
             //添加本地缓存
             JObject o = JObject.Parse(result);
             string msg = o["msg"].ToString();
@@ -792,19 +790,19 @@ namespace LemonLibrary
             header.Add(HttpRequestHeader.Accept, "*/*");
             header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
             header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
-            header.Add(HttpRequestHeader.Cookie, $"pgv_pvi=945152000; pgv_pvid=9351159972; ts_uid=3288365910; RK=sKKMfg2M0M; ptcz=b2f44646e3851a1604bb72c87553f6dcd6c7aa5f616cb31968ee6c6022a8b84b; luin=o2728578956; lskey=000100001dfe40e9ec2bc48c58054dbd30e073b4f7ebdc0e1174b9e7939a3ed943faa89a97119232e789d1f7; p_luin=o2728578956; p_lskey=000400008826a0f1345029659530a41fa3095126dfcbc54bf3f1f9ebf0df771c2c21a284b3e597d02be82f84; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; pgv_si=s2796141568; pgv_info=ssid=s4859382222; yqq_stat=0; ts_last=y.qq.com/n/yqq/playlist/{Dissid}.html");
+            header.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
             header.Add(HttpRequestHeader.Referer, $"https://y.qq.com/n/yqq/playlist/{Dissid}.html");
             header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             header.Add(HttpRequestHeader.Host, "c.y.qq.com");
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=1777314887",
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types=3&formsender=4&flag=2&from=3&utf8=1&g_tk=1777314887", header);
+            string result = HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk="+Settings.USettings.g_tk,
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types=3&formsender=4&flag=2&from=3&utf8=1&g_tk="+ Settings.USettings.g_tk, header);
             string ok = JObject.Parse(result)["msg"].ToString();
             return ok;
         }
 
         public static async Task<string> GetGDdiridByNameAsync(string name) {
-            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk=1803226462&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0", null,
-                "yqq_stat=0; pgv_info=ssid=s9030869079; ts_last=y.qq.com/; pgv_pvid=6655025332; ts_uid=7057611058; pgv_pvi=8567083008; pgv_si=s9362499584; _qpsvr_localtk=0.4296063820147471; uin=o2728578956; skey=@uvgfbeYR4; ptisp=cm; RK=sKKMfg2M0M; ptcz=7b132d6e799e806b8e425c58966902006b53fc86e1ecb0d2678db33d44f7239d; luin=o2728578956; lskey=000100007afb4fb9a74df33c89945350f16ebce7ef0faca9f0da0aa18246d750b53e68077ae6f83ba3901761; p_uin=o2728578956; pt4_token=-HKvK3MM2TlBjBsPDdO*3Iw6shscAWOJEz-pf5eTH2g_; p_skey=rW8tk6zH9QhmEIOjVvvBXdIeyFQbGGi2xnYiT8f2Ioo_; p_luin=o2728578956; p_lskey=000400008417d0c8d018dff398f9512dcee49d8e75aeae7d975e77c39a169d1e17a25b0dfecfb63bebf56cba; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin"));
+            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0", null,
+                Settings.USettings.Cookie));
             foreach (var a in o["list"])
             {
                 if (name == a["dirname"].ToString())
@@ -818,12 +816,12 @@ namespace LemonLibrary
             header.Add(HttpRequestHeader.Accept, "*/*");
             header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
             header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
-            header.Add(HttpRequestHeader.Cookie, $"pgv_pvi=945152000; pgv_pvid=9351159972; ts_uid=3288365910; RK=sKKMfg2M0M; ptcz=b2f44646e3851a1604bb72c87553f6dcd6c7aa5f616cb31968ee6c6022a8b84b; pgv_info=ssid=s553928416; pgv_si=s2283530240; _qpsvr_localtk=0.720564333337602; uin=o2728578956; skey=@sb5YeVaJs; luin=o2728578956; lskey=000100001dfe40e9ec2bc48c58054dbd30e073b4f7ebdc0e1174b9e7939a3ed943faa89a97119232e789d1f7; p_uin=o2728578956; pt4_token=TxEUshuxBijz6xmJCAUzPLBfh6FuKSwtlbzxUVcVLng_; p_skey=dRVDxsa61R1Wpl-9REdhET*RrRzhEokYq7Ndxo6h1-w_; p_luin=o2728578956; p_lskey=000400008826a0f1345029659530a41fa3095126dfcbc54bf3f1f9ebf0df771c2c21a284b3e597d02be82f84; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; yqq_stat=0; ts_last=y.qq.com/n/yqq/playsquare/{dissid}.html");
+            header.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
             header.Add(HttpRequestHeader.Referer, "https://imgcache.qq.com/music/miniportal_v4/tool/html/fp_utf8.html");
             header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             header.Add(HttpRequestHeader.Host, "c.y.qq.com");
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=1070336909",
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk=1070336909&uin={Settings.USettings.LemonAreeunIts}&dissid={dissid}&from=1&optype=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fplaysquare%2F{dissid}.html%23stat%3Dy_new.playlist.pic_click", header);
+            string result = HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk="+ Settings.USettings.g_tk,
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&dissid={dissid}&from=1&optype=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fplaysquare%2F{dissid}.html%23stat%3Dy_new.playlist.pic_click", header);
             return result;
         }
     }

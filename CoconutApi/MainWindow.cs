@@ -12,6 +12,7 @@ namespace CoconutApi
         public MainWindow()
         {
             InitializeComponent();
+            wb.Navigated += delegate { textBox1.Text = wb.Url.AbsoluteUri; };
         }
         protected override void DefWndProc(ref Message m)
         {
@@ -33,6 +34,9 @@ namespace CoconutApi
             wb.DocumentCompleted += Wb_Dc_Api_IsLogin;
         }
 
+        private Button button1;
+        private TextBox textBox1;
+        private Button button2;
         int wind = 0;
         private async void Wb_Dc_Api_IsLogin(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
@@ -58,7 +62,7 @@ namespace CoconutApi
         #endregion
         private void Api_Login()
         {
-            wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=40&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2F%23stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=");
+            wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=40&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fsong%2F000edOaL1WZOWq.html%23stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=");
             Opacity = 1;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             TopMost = true;
@@ -74,9 +78,20 @@ namespace CoconutApi
                 Opacity = 0;
                 TopMost = false;
                 await Task.Delay(100);
-                //MessageBox.Show(wb.Document.Cookie);
-                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "p_luin=o", ";", 0);
-                MsgHelper.SendMsg("Login:" + qq + "###", wind);
+                string cookie = wb.Document.Cookie;
+                string qq = TextHelper.XtoYGetTo(cookie, "p_luin=o", ";", 0);
+                string send = "Login:" + qq + "### 呱呱呱 Cookie[" + cookie + "]END";
+                if (cookie.Contains("p_skey=")) {
+                    string p_skey = TextHelper.XtoYGetTo(cookie, "p_skey=", ";", 0);
+                    long hash = 5381;
+                    for (int i = 0; i < p_skey.Length; i++)
+                    {
+                        hash += (hash << 5) + p_skey[i];
+                    }
+                    long g_tk = hash & 0x7fffffff;
+                    send = "Login:" + qq + "### 呱呱呱 Cookie[" + cookie + "]END  叽里咕噜 g_tk["+g_tk+"]sk";
+                }
+                MsgHelper.SendMsg(send, wind);
                 wb.DocumentCompleted -= Wb_Dc_Login;
             }
         }
@@ -85,6 +100,9 @@ namespace CoconutApi
         private void InitializeComponent()
         {
             this.wb = new System.Windows.Forms.WebBrowser();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // wb
@@ -95,6 +113,27 @@ namespace CoconutApi
             this.wb.Name = "wb";
             this.wb.Size = new System.Drawing.Size(530, 345);
             this.wb.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 21);
+            this.textBox1.TabIndex = 0;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(0, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 0;
             // 
             // MainWindow
             // 
@@ -114,6 +153,16 @@ namespace CoconutApi
         {
             wind = MsgHelper.FindWindow(null, "LemonApp").ToInt32();
             MsgHelper.SendMsg("Api#" + this.Handle.ToInt32() + "*", wind);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(wb.Document.Cookie);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            wb.Navigate(textBox1.Text);
         }
     }
 }

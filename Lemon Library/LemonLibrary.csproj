@@ -64,6 +64,7 @@
     <Compile Include="Helpers\InfoHelper.cs" />
     <Compile Include="Helpers\MsgHelper.cs" />
     <Compile Include="Helpers\MusicGDCacheHelper.cs" />
+    <Compile Include="Helpers\MusicGDTask.cs" />
     <Compile Include="Helpers\MyDictionary.cs" />
     <Compile Include="Helpers\PlayerControl.cs">
       <SubType>Form</SubType>

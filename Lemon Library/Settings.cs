@@ -28,73 +28,60 @@ namespace LemonLibrary
         }
         public static void LoadUSettings(string qq)
         {
-            USettings = new UserSettings();
-            if (File.Exists(USettings.CachePath + qq + ".st")) {
-                string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
-                JObject o = JObject.Parse(data);
-                USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
-                USettings.UserImage = o["UserImage"].ToString();
-                USettings.UserName = o["UserName"].ToString();
-                USettings.Playing.GC = o["Playing"]["GC"].ToString();
-                USettings.Playing.ImageUrl = o["Playing"]["ImageUrl"].ToString();
-                USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
-                USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
-                USettings.Playing.Singer = o["Playing"]["Singer"].ToString();
-                foreach (var jx in o["MusicLike"].ToArray())
+            try
+            {
+                USettings = new UserSettings();
+                if (File.Exists(USettings.CachePath + qq + ".st"))
                 {
-                    foreach (var jm in jx)
+                    string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
+                    JObject o = JObject.Parse(data);
+                    USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
+                    USettings.UserImage = o["UserImage"].ToString();
+                    USettings.UserName = o["UserName"].ToString();
+                    USettings.Cookie = o["Cookie"].ToString();
+                    USettings.g_tk = o["g_tk"].ToString();
+                    USettings.Playing.GC = o["Playing"]["GC"].ToString();
+                    USettings.Playing.ImageUrl = o["Playing"]["ImageUrl"].ToString();
+                    USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
+                    USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
+                    USettings.Playing.Singer = o["Playing"]["Singer"].ToString();
+                    foreach (var jx in o["MusicLike"].ToArray())
                     {
-                        if (!USettings.MusicLike.ContainsKey(jm["MusicID"].ToString()))
-                            USettings.MusicLike.Add(jm["MusicID"].ToString(), new Music()
-                            {
-                                GC = jm["GC"].ToString(),
-                                MusicID = jm["MusicID"].ToString(),
-                                Singer = jm["Singer"].ToString(),
-                                ImageUrl = jm["ImageUrl"].ToString(),
-                                MusicName = jm["MusicName"].ToString()
-                            });
-                    }
-                }
-                foreach (var jcm in o["GdCache"])
-                {
-                    foreach (var jm in jcm)
-                    {
-                        if (!USettings.GdCache.ContainsKey(jm["id"].ToString()))
+                        foreach (var jm in jx)
                         {
-                            var datae = new List<Music>();
-                            foreach (var dt in jm["Data"])
-                            {
-                                datae.Add(new Music()
+                            if (!USettings.MusicLike.ContainsKey(jm["MusicID"].ToString()))
+                                USettings.MusicLike.Add(jm["MusicID"].ToString(), new Music()
                                 {
-                                    GC = dt["GC"].ToString(),
-                                    Singer = dt["Singer"].ToString(),
-                                    ImageUrl = dt["ImageUrl"].ToString(),
-                                    MusicID = dt["MusicID"].ToString(),
-                                    MusicName = dt["MusicName"].ToString()
+                                    GC = jm["GC"].ToString(),
+                                    MusicID = jm["MusicID"].ToString(),
+                                    Singer = jm["Singer"].ToString(),
+                                    ImageUrl = jm["ImageUrl"].ToString(),
+                                    MusicName = jm["MusicName"].ToString()
                                 });
-                            }
-                            USettings.GdCache.Add(jm["id"].ToString(),datae);
                         }
                     }
+                    if (data.Contains("Skin_Path"))
+                    {
+                        USettings.Skin_Path = o["Skin_Path"].ToString();
+                        USettings.Skin_txt = o["Skin_txt"].ToString();
+                        USettings.Skin_Theme_R = o["Skin_Theme_R"].ToString();
+                        USettings.Skin_Theme_G = o["Skin_Theme_G"].ToString();
+                        USettings.Skin_Theme_B = o["Skin_Theme_B"].ToString();
+                    }
+                    if (data.Contains("CachePath"))
+                    {
+                        USettings.CachePath = o["CachePath"].ToString();
+                        USettings.DownloadPath = o["DownloadPath"].ToString();
+                    }
+                    else
+                    {
+                        USettings.CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
+                        USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
+                    }
                 }
-                if (data.Contains("Skin_Path")){
-                    USettings.Skin_Path = o["Skin_Path"].ToString();
-                    USettings.Skin_txt = o["Skin_txt"].ToString();
-                    USettings.Skin_Theme_R = o["Skin_Theme_R"].ToString();
-                    USettings.Skin_Theme_G = o["Skin_Theme_G"].ToString();
-                    USettings.Skin_Theme_B = o["Skin_Theme_B"].ToString();
-                }
-                if (data.Contains("CachePath"))
-                {
-                    USettings.CachePath = o["CachePath"].ToString();
-                    USettings.DownloadPath = o["DownloadPath"].ToString();
-                }
-                else {
-                    USettings.CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
-                    USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
-                }
+                else SaveSettings(qq);
             }
-            else SaveSettings(qq);
+            catch { SaveSettings(qq);}
         }
         public class UserSettings {
             public UserSettings() {
@@ -103,12 +90,13 @@ namespace LemonLibrary
             }
             #region 歌单
             public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
-            public SortedDictionary<string, List<Music>> GdCache { get; set; } = new SortedDictionary<string, List<Music>>();
-            #endregion
+             #endregion
             #region 用户配置
             public string LemonAreeunIts { get; set; } = "你的QQ";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";
+            public string Cookie { get; set; } = "";
+            public string g_tk { get; set; } = "";
             #endregion
             #region 上一次播放
             public Music Playing { get; set; } = new Music();
