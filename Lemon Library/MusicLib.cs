@@ -769,6 +769,7 @@ namespace LemonLibrary
         }
 
         public static string[] AddMusicToGD(Music music,string dirid) {
+            Console.WriteLine(Settings.USettings.Cookie+"   "+Settings.USettings.g_tk);
             var header = new WebHeaderCollection();
             header.Add(HttpRequestHeader.Accept, "*/*");
             header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");

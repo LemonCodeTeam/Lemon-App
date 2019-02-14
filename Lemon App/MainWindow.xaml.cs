@@ -287,8 +287,8 @@ namespace Lemon_App
                     }
                 }
             };
-            if (Settings.USettings.Cookie == "" && Settings.USettings.g_tk == "")
-                if (MessageBox.Show("未获取到g_tk与Cookie，请重新登录") == MessageBoxResult.OK)
+            if (Settings.USettings.Cookie == "" || Settings.USettings.g_tk == "")
+                if (MessageBox.Show("(￣▽￣)\"登录失效了，请重新登录") == MessageBoxResult.OK)
                     UserTX_MouseDown(null, null);
         }
 
@@ -1743,8 +1743,10 @@ namespace Lemon_App
                         await Task.Run(() => {
                             Settings.LoadUSettings(qq);
                             if (cdata.lpData.Contains("g_tk"))
+                            {
                                 Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
-                            Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
+                                Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
+                            }
                             Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
                             Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
                             Settings.USettings.LemonAreeunIts = qq;
