@@ -1192,7 +1192,7 @@ namespace Lemon_App
             PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.Singer);
         }
         private string LastPlay = "";
-        public void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
+        public async void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
         {
             if (LastPlay == id)
             {
@@ -1218,7 +1218,7 @@ namespace Lemon_App
                     LikeBtnDown();
                 else LikeBtnUp();
                 ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this,name+" - "+singer, doesplay);
-                MusicImage.Background = new ImageBrush(new BitmapImage(new Uri(x)));
+                MusicImage.Background =new ImageBrush(await ImageCacheHelp.GetImageByUrl(x));
                 Singer.Text = singer;
                 if (doesplay)
                 {
