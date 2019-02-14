@@ -58,14 +58,14 @@ namespace Lemon_App
         public void unSkin() {
             skin = false;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF3ED38B"));
-            SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF93A1AE"));
-            SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF787878"));
-            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFE7E8EC"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
-            SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("White"));
+            SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
+            SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
+            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFE1E1E2"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFF5F5F7"));
+            SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
+            SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
-            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FFA0A0A0"));
+            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
         }
         public SolidColorBrush GetThemeColorBrush() {
             return (SolidColorBrush)Resources["ThemeColor"];

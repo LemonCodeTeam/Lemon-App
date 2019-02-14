@@ -129,7 +129,7 @@ namespace Lemon_App
             string name = (sender as MDButton).TName;
             string id = ListData[name];
             string[] a = MusicLib.AddMusicToGD(music,id);
-            MessageBox.Show(a[0],a[1]);
+            Toast.Send(a[1]+": "+a[0]);
         }
 
         private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e) => Download(this);

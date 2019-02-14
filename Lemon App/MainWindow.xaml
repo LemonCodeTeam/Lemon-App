@@ -653,43 +653,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Storyboard x:Key="OpenLyricPage">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LyricPage">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LyricPage">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="0,630,0,0"/>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="grid">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(Brush.Opacity)" Storyboard.TargetName="ControlDownPage">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="ControlDownPage">
-                <EasingThicknessKeyFrame KeyTime="0" Value="0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MusicImage">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MusicImage">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,41,165,21"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="10,20,0,0"/>
-            </ThicknessAnimationUsingKeyFrames>
-        </Storyboard>
         <Storyboard x:Key="IsQQSource"/>
         <Storyboard x:Key="IsWYSource"/>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
@@ -1055,44 +1018,62 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Storyboard x:Key="CloseLyricPage">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="LyricPage">
-                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
-                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LyricPage">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="0,630,0,0"/>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
-                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
-                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="grid">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(Brush.Opacity)" Storyboard.TargetName="ControlDownPage">
-                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
-                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="ControlDownPage">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="0"/>
-            </ThicknessAnimationUsingKeyFrames>
+        <Storyboard x:Key="OpenLyricPage">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MusicImage">
-                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MusicImage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,20,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,41,165,21"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LyricPage">
+                <EasingThicknessKeyFrame KeyTime="0" Value="0,900,0,-900"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="ControlDownPage">
+                <EasingColorKeyFrame KeyTime="0" Value="Transparent"/>
+            </ColorAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="ControlDownPage">
+                <EasingThicknessKeyFrame KeyTime="0" Value="0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseLyricPage">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MusicImage">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MusicImage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,41,165,21"/>
-            </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="85,20,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,20,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="85,20,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
+                <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,41,165,21"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="85,41,165,21"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LyricPage">
+                <SplineThicknessKeyFrame KeyTime="0" Value="0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="0,900,0,-900"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="ControlDownPage">
+                <SplineColorKeyFrame KeyTime="0:0:0.3" Value="Transparent"/>
+            </ColorAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="ControlDownPage">
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
@@ -1424,15 +1405,15 @@
                 <ListBox x:Name="Search_SmartBoxList" KeyDown="Search_SmartBoxList_KeyDown" Background="White" BorderBrush="Gainsboro" Style="{DynamicResource ListBoxStyle}" Foreground="#FF9B9B9B" ItemContainerStyle="{DynamicResource ListBoxItemStyle}"/>
             </Grid>
         </Grid>
-        <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed" Opacity="0">
+        <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Grid x:Name="ThemeColor" Background="Black" Margin="-40,-40,-1050,-40" Grid.ColumnSpan="2">
+            <Grid x:Name="ThemeColor" Background="Black" Margin="-40,-40,-40,-40" Grid.ColumnSpan="2">
                 <Grid>
                     <Grid.Background>
-                        <ImageBrush ImageSource="{Binding Background.ImageSource, ElementName=MusicImage}" Stretch="UniformToFill"/>
+                        <ImageBrush ImageSource="{Binding Background.ImageSource, ElementName=MusicImage}"/>
                     </Grid.Background>
                     <Grid.Effect>
                         <BlurEffect Radius="100"/>
@@ -1440,18 +1421,18 @@
                     <Grid Background="#7F000000"/>
                 </Grid>
             </Grid>
-            <Border x:Name="border4" Margin="0,140,25,190" BorderThickness="10" BorderBrush="#4CFFFFFF" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right">
-                <Border HorizontalAlignment="Right" Width="30" Height="30" Background="#00000000" Margin="0" VerticalAlignment="Bottom" MouseDown="Border_MouseDown_3">
+            <Border x:Name="border4" Margin="0,160,30,210" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right">
+                <Border HorizontalAlignment="Right" Width="30" Height="30" Background="#00000000" Margin="0,0,5,5" VerticalAlignment="Bottom" MouseDown="Border_MouseDown_3">
                     <Path x:Name="path2" Data="M850.879104,96.41591L174.576037,96.41591C113.895003,96.41591,64.5266189999999,145.783271,64.5266189999999,206.465328L64.5266189999999,652.665716C64.5266189999999,713.34675,113.89398,762.715134,174.576037,762.715134L264.883832,762.715134 396.936381,931.129846C400.729777,935.968038 406.534993,938.793386 412.683017,938.793386 418.831041,938.793386 424.635233,935.968038 428.429653,931.129846L560.482201,762.715135 850.879104,762.715135C911.560138,762.715135,960.928522,713.347774,960.928522,652.665717L960.928522,206.465329C960.928522,145.784294,911.561162,96.41591,850.879104,96.41591z M920.91111,652.665717C920.91111,691.280176,889.494586,722.6967,850.880127,722.6967L550.744419,722.6967C544.597419,722.6967,538.792203,725.522048,534.998807,730.36024L412.683017,886.356107 290.367227,730.36024C286.574854,725.522048,280.769638,722.6967,274.621615,722.6967L174.576038,722.6967C135.961579,722.6967,104.545055,691.280176,104.545055,652.665717L104.545054,206.465329C104.545054,167.85087,135.961578,136.434346,174.576037,136.434346L850.879104,136.434346C889.493563,136.434346,920.910087,167.85087,920.910087,206.465329L920.910087,652.665717z M272.621051,344.526731C228.488925,344.526731 192.585203,380.430452 192.585203,424.562579 192.585203,468.694705 228.488924,504.59945 272.621051,504.59945 316.753178,504.59945 352.656899,468.694705 352.656899,424.562579 352.655875,380.430452 316.752154,344.526731 272.621051,344.526731z M272.621051,464.582037C250.555499,464.582037 232.603639,446.630176 232.603639,424.563601 232.603639,402.498049 250.556523,384.546189 272.621051,384.546189 294.686603,384.546189 312.638463,402.49805 312.638463,424.563601 312.638463,446.629153 294.686602,464.582037 272.621051,464.582037z M512.727571,344.526731C468.595445,344.526731 432.691723,380.430452 432.691723,424.562579 432.691723,468.694705 468.595444,504.59945 512.727571,504.59945 556.859697,504.59945 592.763419,468.694705 592.763419,424.562579 592.763418,380.430452 556.859697,344.526731 512.727571,344.526731z M512.727571,464.582037C490.662019,464.582037 472.710159,446.630176 472.710159,424.563601 472.710159,402.498049 490.66202,384.546189 512.727571,384.546189 534.793123,384.546189 552.744983,402.49805 552.744983,424.563601 552.746006,446.629153 534.793122,464.582037 512.727571,464.582037z M752.836137,344.526731C708.705034,344.526731 672.800289,380.430452 672.800289,424.562579 672.800289,468.694705 708.705034,504.59945 752.836137,504.59945 796.96724,504.59945 832.871985,468.694705 832.871985,424.562579 832.871985,380.430452 796.96724,344.526731 752.836137,344.526731z M752.836137,464.582037C730.769562,464.582037 712.818725,446.630176 712.818725,424.563601 712.818725,402.498049 730.770586,384.546189 752.836137,384.546189 774.901688,384.546189 792.853549,402.49805 792.853549,424.563601 792.853549,446.629153 774.902712,464.582037 752.836137,464.582037z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
                 </Border>
             </Border>
             <ScrollViewer x:Name="pl" Grid.Column="1" Margin="25,50,10,120" Visibility="Collapsed" Template="{DynamicResource ScrollViewerControlTemplate}">
                 <WrapPanel x:Name="pldata"/>
             </ScrollViewer>
-            <Grid Margin="25,140,0,190"  MaxWidth="500" MaxHeight="500" Grid.Column="1" HorizontalAlignment="Left" Width="370">
-                <TextBlock x:Name="m_Name" Margin="0,3,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="24" Height="30"/>
-                <TextBlock x:Name="m_Singer" Margin="0,33,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="20" Height="25"/>
-                <Border x:Name="ly" Margin="0,63,0,0" SizeChanged="ly_SizeChanged"/>
+            <Grid Margin="30,120,0,170"  MaxWidth="500" MaxHeight="500" Grid.Column="1" HorizontalAlignment="Left" Width="370">
+                <TextBlock x:Name="m_Name" Margin="0,3,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30"/>
+                <TextBlock x:Name="m_Singer" Margin="0,33,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25"/>
+                <Border x:Name="ly" Margin="0,58,0,0" SizeChanged="ly_SizeChanged"/>
             </Grid>
             <Border HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="Border_MouseDown_2">
                 <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="25" Width="25"/>
@@ -1466,7 +1447,7 @@
                 <Border x:Name="MusicImage" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseDown="MusicImage_MouseDown" Grid.Column="1">
                     <Border.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF19ABFF" Offset="0"/>
+                            <GradientStop Color="#FF50AEEE" Offset="0"/>
                             <GradientStop Color="#FF007ACC" Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
@@ -1493,9 +1474,9 @@
                 <Border x:Name="XHBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,53,0" Height="15" MouseDown="XHBtn_MouseDown" Background="#00000000" Grid.Column="1">
                     <Path x:Name="path6" Data="M694.4,854.4L195.2,854.4 243.2,899.2C252.8,905.6 259.2,915.2 259.2,928 256,947.2 240,960 220.8,960 211.2,960 198.4,953.6 192,947.2L83.2,851.2C70.4,838.4,67.2,816,83.2,803.2L192,704C198.4,697.6 211.2,694.4 220.8,694.4 240,694.4 256,710.4 256,729.6 256,739.2 249.6,748.8 243.2,755.2L201.6,793.6 697.6,793.6C809.6,793.6,896,704,896,595.2L896,508.8C896,489.6 908.8,476.8 928,476.8 947.2,476.8 960,489.6 960,508.8L960,595.2C960,736,841.6,854.4,694.4,854.4z M329.6,169.6L825.6,169.6 777.6,124.8C768,118.4 761.6,108.8 761.6,96 764.8,76.8 780.8,64 800,64 809.6,64 822.4,70.4 828.8,76.8L937.6,172.8C950.4,185.6,953.6,208,937.6,220.8L832,320C825.6,326.4 812.8,329.6 803.2,329.6 784,329.6 768,313.6 768,294.4 768,284.8 774.4,275.2 780.8,268.8L822.4,230.4 326.4,230.4C217.6,233.6,128,323.2,128,435.2L128,524.8C128,544 115.2,556.8 96,556.8 76.8,556.8 64,544 64,524.8L64,438.4C64,288,182.4,169.6,329.6,169.6z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                 </Border>
-                <TextBlock x:Name="textBlock4" Grid.Column="1" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top"><Run x:Name="MusicName"/> - <TextBlock x:Name="Singer" Opacity="0.6" /></TextBlock>
+                <TextBlock x:Name="textBlock4" Grid.Column="1" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" HorizontalAlignment="Left" Margin="85,20,0,0" VerticalAlignment="Top"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/> - <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" /></TextBlock>
                 <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" Margin="85,41,165,21" ValueChanged="jd_ValueChanged" Grid.Column="1"/>
-                <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,20,165,0" Height="18" Opacity="0.7"><Run x:Name="Play_Now"/>/<Run x:Name="Play_All"/></TextBlock>
+                <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,20,165,0" Height="18" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/>/<Run x:Name="Play_All" Text="00:00"/></TextBlock>
                 <Border x:Name="PlayLbBtn" HorizontalAlignment="Right" Width="16" Margin="0,0,20,0" Height="16" Background="#00000000" Grid.Column="1" MouseDown="PlayLbBtn_MouseDown">
                     <Path x:Name="path1" Data="M124.342857,226.742857C124.342857,212.114286,135.314286,197.485714,153.6,197.485714L778.971429,197.485714C793.6,197.485714 808.228572,208.457143 808.228571,226.742857 804.571428,245.028571 793.6,256 775.314286,256L149.942857,256C135.314286,256,124.342857,245.028571,124.342857,226.742857z M149.942857,493.714286L533.942857,493.714286C548.571428,493.714286 563.2,504.685715 563.2,522.971429 563.2,537.6 552.228571,552.228572 533.942857,552.228571L149.942857,552.228571C135.314286,552.228571 120.685714,541.257142 120.685714,522.971429 124.342857,504.685715 135.314285,493.714286 149.942857,493.714286z M149.942857,786.285714L497.371429,786.285714C512,786.285714 526.628572,797.257143 526.628571,815.542857 526.628571,830.171428 515.657142,844.8 497.371429,844.8L149.942857,844.8C135.314286,844.8 120.685714,833.828571 120.685714,815.542857 124.342857,797.257143 135.314285,786.285714 149.942857,786.285714z M947.2,438.857143L837.485714,373.028571C826.514285,365.714285 815.542857,369.371428 804.571429,376.685714 797.257143,380.342857 793.6,391.314285 793.6,398.628571L793.6,661.942857C775.314286,650.971428 757.028571,643.657143 731.428571,643.657143 669.257142,643.657143 618.057142,694.857143 618.057143,757.028571 618.057144,819.199999 669.257143,877.714286 731.428571,877.714286 793.6,877.714286 844.8,826.514286 844.8,764.342857L844.8,446.171429 917.942857,486.4C932.571428,493.714286 947.2,490.057143 954.514286,475.428571 965.485715,464.457142 961.828572,446.171428 947.2,438.857143z M731.428571,822.857143C698.514285,822.857143 672.914285,797.257143 672.914286,764.342857 672.914287,731.428571 698.514286,705.828571 731.428571,705.828571 764.342856,705.828571 789.942857,731.428571 789.942857,764.342857 789.942857,797.257143 764.342857,822.857143 731.428571,822.857143z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                 </Border>

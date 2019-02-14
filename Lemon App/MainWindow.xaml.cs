@@ -179,7 +179,10 @@ namespace Lemon_App
             if (Settings.USettings.Skin_txt != "")
             {
                 if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
-                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
+                { Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
+                    ControlDownPage.BorderThickness = new Thickness(0);
+                    ControlPage.BorderThickness = new Thickness(0);
+                }
                 Color co;
                 if (Settings.USettings.Skin_txt == "Black"){
                     co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
@@ -195,8 +198,6 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
-                ControlDownPage.BorderThickness = new Thickness(0);
-                ControlPage.BorderThickness = new Thickness(0);
             }
             else { App.BaseApp.unSkin(); Page.Background = new SolidColorBrush(Colors.White); }
 
@@ -1313,16 +1314,19 @@ namespace Lemon_App
             path4.SetResourceReference(Path.FillProperty, "ThemeColor");
             path5.SetResourceReference(Path.FillProperty, "ThemeColor");
             path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            App.BaseApp.SetColor("ButtonColorBrush", LastButtonColor);
             if (!isOpenGc) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
             (Resources["CloseLyricPage"] as Storyboard).Begin();
         }
-
+        Color LastButtonColor;
         private void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ind = 1;
             ControlDownPage.BorderThickness = new Thickness(0);
+            LastButtonColor = App.BaseApp.GetButtonColorBrush().Color;
+            App.BaseApp.SetColor("ButtonColorBrush", Colors.White);
             MusicName.Foreground = new SolidColorBrush(Colors.White);
             Singer.Foreground = new SolidColorBrush(Colors.White);
             Play_All.Foreground = new SolidColorBrush(Colors.White);
@@ -1564,7 +1568,7 @@ namespace Lemon_App
             }
             var GdLikeData = await ml.GetGdILikeListAsync();
             if (GdLikeData.Count != GDILikeItemsList.Children.Count)
-            { GDILikeItemsList.Children.Clear(); GdLikeData.Clear(); }
+            { GDILikeItemsList.Children.Clear(); GLikeData_Now.Clear(); }
             foreach (var jm in GdLikeData)
             {
                 if (!GLikeData_Now.Contains(jm.Key))
