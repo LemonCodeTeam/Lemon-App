@@ -21,6 +21,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Shell;
 using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
@@ -123,10 +124,10 @@ namespace Lemon_App
             await Task.Run(() => {
                 Settings.LoadLocaSettings();
                 string qq = Settings.LSettings.qq;
-                Settings.LoadUSettings(qq);
+                if (qq != "") { Settings.LoadUSettings(qq); Dispatcher.Invoke(()=> {
+                    LoadAfterLogin();
+                }); }
             });
-
-            LoadAfterLogin();
 
             /////top////
             await Task.Run(new Action(async delegate
@@ -156,6 +157,7 @@ namespace Lemon_App
                                     {
                                         var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
                                         k.Play += PlayMusic;
+                                        k.Download += K_Download;
                                         if (k.music.MusicID == MusicData.music.MusicID)
                                         {
                                             k.ShowDx();
@@ -175,6 +177,38 @@ namespace Lemon_App
                 }
             }));
         }
+
+        private void K_Download(DataItem sender)
+        {
+            var f = sender;
+            string name = f.music.MusicName + " - " + f.music.Singer;
+            string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
+            DownloadItem di = new DownloadItem(f.music, file, DownloadIndex+1)
+            {
+                Width = DownloadItemsList.ActualWidth
+            };
+            di.Delete += (s) => {
+                s.d.Pause();
+                DownloadItemsList.Children.Remove(s);
+            };
+            di.Loadedd += () =>
+            {
+                di.d.Finished += () =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        foreach (var a in DownloadItemsList.Children)
+                        {
+                            DownloadItem dl = a as DownloadItem;
+                            if (!dl.finished)
+                            { dl.d.Download(); break; }
+                        }
+                    });
+                };
+            };
+            DownloadItemsList.Children.Add(di);
+        }
+
         private void LoadAfterLogin(bool hasAnimation=true) {
             if (Settings.USettings.Skin_txt != "")
             {
@@ -287,9 +321,12 @@ namespace Lemon_App
                     }
                 }
             };
-            if (Settings.USettings.Cookie == "" || Settings.USettings.g_tk == "")
-                if (MessageBox.Show("(￣▽￣)\"登录失效了，请重新登录") == MessageBoxResult.OK)
-                    UserTX_MouseDown(null, null);
+            if (Settings.USettings.LemonAreeunIts != "")
+            {
+                if (Settings.USettings.Cookie == "" || Settings.USettings.g_tk == "")
+                    if (MessageBox.Show("(￣▽￣)\"登录失效了，请重新登录") == MessageBoxResult.OK)
+                        UserTX_MouseDown(null, null);
+            }
         }
 
         private void exShow() {
@@ -317,8 +354,17 @@ namespace Lemon_App
             }
         }
         private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e) { ShowInTaskbar = true; WindowState = WindowState.Minimized; }
+
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            Console.WriteLine("SIZECHANGED");
+            double tp = ActualWidth / 2;
+            Thickness ab;
+            if (ind==0)
+                ab = new Thickness(LeftControl.ActualWidth + 10, ActualHeight - 10 - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 + 10, 10);
+            else ab = new Thickness(ActualWidth-tp-30-border4.ActualWidth,border4.Margin.Top+10,tp+30,border4.Margin.Bottom+10);
+            Tasktb.ThumbnailClipMargin = ab;
+            Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
             Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             foreach (DataItem dx in DataItemsList.Children)
                 dx.Width = DataItemsList.ActualWidth;
@@ -844,6 +890,7 @@ namespace Lemon_App
                     {
                         var k = new DataItem(m, dt.IsOwn, this) { Width = DataItemsList.ActualWidth };
                         k.Play += PlayMusic;
+                        k.Download += K_Download;
                         if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
@@ -1016,6 +1063,7 @@ namespace Lemon_App
                     {
                         var k = new DataItem(m, dt.IsOwn, this) { Width = DataItemsList.ActualWidth };
                         k.Play += PlayMusic;
+                        k.Download += K_Download;
                         if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
@@ -1033,6 +1081,7 @@ namespace Lemon_App
                     {
                         foreach (var ai in m.Data)
                         {
+                            if(!Settings.USettings.MusicLike.ContainsKey(ai.MusicID))
                             Settings.USettings.MusicLike.Add(ai.MusicID, ai);
                         }
                     });
@@ -1168,6 +1217,7 @@ namespace Lemon_App
                             MusicData = k;
                         }
                         k.Play += PlayMusic;
+                        k.Download += K_Download;
                         DataItemsList.Children.Add(k);
                     }
                 });
@@ -1200,6 +1250,7 @@ namespace Lemon_App
                 {
                     MusicLib.pc.To(0);
                     MusicLib.pc.Play();
+                    Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                     t.Start();
                     isplay = true;
@@ -1207,6 +1258,7 @@ namespace Lemon_App
             }
             else
             {
+                Title = name + " - " + singer;
                 MusicName.Text = "连接资源中...";
                 IsRadio = isRadio;
                 isPlayasRun = true;
@@ -1223,6 +1275,7 @@ namespace Lemon_App
                 if (doesplay)
                 {
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                    Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                     t.Start();
                     isplay = true;
                 }
@@ -1231,6 +1284,21 @@ namespace Lemon_App
         }
         #endregion
         #region PlayControl
+        private void Tasktb_playBtn_Click(object sender, EventArgs e)
+        {
+            PlayBtn_MouseDown(null, null);
+        }
+
+        private void ThumbButtonInfo_Click(object sender, EventArgs e)
+        {
+            Border_MouseDown(null, null);
+        }
+
+        private void ThumbButtonInfo_Click_1(object sender, EventArgs e)
+        {
+            Border_MouseDown_1(null, null);
+        }
+
         bool canjd = true;
         private void jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -1268,6 +1336,7 @@ namespace Lemon_App
             {
                 isplay = false;
                 MusicLib.pc.Pause();
+                Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/play.png", UriKind.Absolute));
                 t.Stop();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Play);
             }
@@ -1275,6 +1344,7 @@ namespace Lemon_App
             {
                 isplay = true;
                 MusicLib.pc.Play();
+                Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                 t.Start();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
             }
@@ -1318,7 +1388,13 @@ namespace Lemon_App
             if (!isOpenGc) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
-            (Resources["CloseLyricPage"] as Storyboard).Begin();
+            var ol = Resources["CloseLyricPage"] as Storyboard;
+            ol.Completed += async delegate {
+                await Task.Delay(500);
+                Thickness ab = new Thickness(LeftControl.ActualWidth + 10, ActualHeight - 10 - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 + 10, 10);
+                Tasktb.ThumbnailClipMargin = ab;
+            };
+            ol.Begin();
         }
         Color LastButtonColor;
         private void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1341,7 +1417,14 @@ namespace Lemon_App
             path6.Fill = new SolidColorBrush(Colors.White);
             if(!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
             likeBtn_path.Fill = new SolidColorBrush(Colors.White);
-            (Resources["OpenLyricPage"] as Storyboard).Begin();
+            var ol = Resources["OpenLyricPage"] as Storyboard;
+            ol.Completed += async delegate {
+                await Task.Delay(500);
+                double tp = ActualWidth / 2;
+                Thickness ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top + 10, tp + 30, border4.Margin.Bottom + 10);
+                Tasktb.ThumbnailClipMargin = ab;
+            };
+            ol.Begin();
         }
         private void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1450,89 +1533,166 @@ namespace Lemon_App
             {
                 d.Content = "全不选";
                 foreach (DataItem x in DataItemsList.Children)
-                    x.Check();
+                { x.isChecked = false; x.Check(); }
             }
             else
             {
                 d.Content = "全选";
                 foreach (DataItem x in DataItemsList.Children)
-                    x.Check();
+                { x.isChecked = true; x.Check(); }
+            }
+        }
+        private void Download_Btn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NSPage(Download_Btn, DownloadPage);
+            if (DownloadItemsList.Children.Count == 0)
+                NonePage_Copy.Visibility = Visibility.Visible;
+            else NonePage_Copy.Visibility = Visibility.Collapsed;
+        }
+
+        private void Download_pause_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Download_pause.TName == "暂停")
+            {
+                Download_pause.TName = "开始";
+                foreach (var a in DownloadItemsList.Children)
+                {
+                    DownloadItem dl = a as DownloadItem;
+                    dl.d.Pause();
+                }
+            }
+            else
+            {
+                Download_pause.TName = "暂停";
+                foreach (var a in DownloadItemsList.Children)
+                {
+                    DownloadItem dl = a as DownloadItem;
+                    dl.d.Start();
+                }
             }
         }
 
-        private async void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Download_clear_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var data = new List<DataItem>();
+            foreach (var a in DownloadItemsList.Children)
+            {
+                DownloadItem dl = a as DownloadItem;
+                dl.d.Pause();
+                dl.d.Stop();
+            }
+            DownloadItemsList.Children.Clear();
+            DownloadIndex = 0;
+            NonePage_Copy.Visibility = Visibility.Visible;
+        }
+        private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DownloadIndex = 0;
             foreach (var x in DataItemsList.Children)
             {
                 var f = x as DataItem;
                 if (f.isChecked == true)
-                    data.Add(f);
+                {
+                    string name = f.music.MusicName + " - " + f.music.Singer;
+                    string file = Download_Path.Text + $"\\{name}.mp3";
+                    DownloadItem di = new DownloadItem(f.music, file, DownloadIndex)
+                    {
+                        Width = DownloadItemsList.ActualWidth
+                    };
+                    di.Delete += (s) => {
+                        s.d.Pause();
+                        DownloadItemsList.Children.Remove(s);
+                    };
+                    di.Loadedd += () =>
+                    {
+                        di.d.Finished += () =>
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                foreach (var a in DownloadItemsList.Children)
+                                {
+                                    DownloadItem dl = a as DownloadItem;
+                                    if (!dl.finished)
+                                    { dl.d.Download(); break; }
+                                }
+                            });
+                        };
+                    };
+                    DownloadItemsList.Children.Add(di);
+                    DownloadIndex++;
+                }
             }
             CloseDownloadPage();
-            Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")","连接资源中.....");
-            msg.Show();
-            var DTimer = new System.Windows.Forms.Timer();
-            await DownloadTaskAsync(msg, data,DTimer);
-            DTimer.Interval = 3000;
-            DTimer.Tick +=async delegate {
-                if (DownloadIndex != data.Count){
-                    string name = data[DownloadIndex].music.MusicName + " - " + data[DownloadIndex].music.Singer;
-                    string file = Download_Path.Text + $"\\{name}.mp3";
-                    System.IO.File.Delete(file);
-                    await DownloadTaskAsync(msg, data, DTimer);
-                }
-            };
+            //Msg msg = new Msg("正在下载全部歌曲(" + data.Count + ")","连接资源中.....");
+            //msg.Show();
+            //var DTimer = new System.Windows.Forms.Timer();
+            //DownloadIndex = 0;
+            //await DownloadTaskAsync(msg, data,DTimer);
+            //DTimer.Interval = 2000;//超时重连
+            //DTimer.Tick +=async delegate {
+            //    if (DownloadIndex != data.Count){
+            //        string name = data[DownloadIndex].music.MusicName + " - " + data[DownloadIndex].music.Singer;
+            //        string file = Download_Path.Text + $"\\{name}.mp3";
+            //        System.IO.File.Delete(file);
+            //        await DownloadTaskAsync(msg, data, DTimer);
+            //    }
+            //};
         }
         private int DownloadIndex=0;
         public async Task DownloadTaskAsync(Msg msg, List<DataItem> data, System.Windows.Forms.Timer dt) {
             dt.Start();
-            string name = data[DownloadIndex].music.MusicName + " - " + data[DownloadIndex].music.Singer;
-            string file = Download_Path.Text + $"\\{name}.mp3";
-            if (!System.IO.File.Exists(file))
+            Console.WriteLine("DOWNLOAD ALL"+data.Count+"  INDEX:"+DownloadIndex);
+            if (data.Count == DownloadIndex)
             {
-                var cl = new WebClient();
-                string mid = data[DownloadIndex].music.MusicID;
-                string url = await ml.GetUrlAsync(mid);
-                msg.tb.Text = "正在下载:" + (DownloadIndex + 1) + "  " + name;
-                cl.DownloadFileAsync(new Uri(url), file);
-                cl.DownloadProgressChanged += (s, e) =>
+                msg.tb.Text = "已完成.";
+                await Task.Delay(5000);
+                msg.tbclose();
+            }
+            else
+            {
+                string name = data[DownloadIndex].music.MusicName + " - " + data[DownloadIndex].music.Singer;
+                string file = Download_Path.Text + $"\\{name}.mp3";
+                if (!System.IO.File.Exists(file))
                 {
-                    dt.Stop();
-                    msg.tb.Text = "正在下载：" + (DownloadIndex + 1) +"  ("+ e.ProgressPercentage + "%)"  + "  " + name;
-                };
-                cl.DownloadFileCompleted += async delegate
-                {
-                    if (!msg.IsClose)
+                    var cl = new WebClient();
+                    string mid = data[DownloadIndex].music.MusicID;
+                    string url = await MusicLib.GetUrlAsync(mid);
+                    msg.tb.Text = "正在下载:" + (DownloadIndex + 1) + "  " + name;
+                    cl.DownloadFileAsync(new Uri(url), file);
+                    cl.DownloadProgressChanged += (s, e) =>
                     {
-                        if (DownloadIndex != data.Count)
+                        dt.Stop();
+                        msg.tb.Text = "正在下载：" + (DownloadIndex + 1) + "  (" + e.ProgressPercentage + "%)" + "  " + name;
+                    };
+                    cl.DownloadFileCompleted += async delegate
+                    {
+                        if (!msg.IsClose)
                         {
-                            DownloadIndex++;
-                            await DownloadTaskAsync(msg, data,dt);
-                        }
-                        if (DownloadIndex + 1 == data.Count) {
-                            if (!msg.IsClose)
+                            if (DownloadIndex != data.Count)
+                            {
+                                DownloadIndex++;
+                                await DownloadTaskAsync(msg, data, dt);
+                            }
+                            else if (DownloadIndex + 1 == data.Count)
                             {
                                 msg.tb.Text = "已完成.";
                                 await Task.Delay(5000);
                                 msg.tbclose();
                             }
-                            else
-                            {
-                                await Task.Delay(2000);
-                                Msg msxg = new Msg("已取消下载","");
-                                msxg.Show();
-                                await Task.Delay(5000);
-                                msxg.tbclose();
-                            }
                         }
-                    }
-                    cl.Dispose();
-                };
-            }
-            else {
-                DownloadIndex++;
-                await DownloadTaskAsync(msg, data,dt);
+                        else
+                        {
+                            msg.tb.Text = "已取消下载.";
+                            await Task.Delay(5000);
+                            msg.tbclose();
+                        }
+                        cl.Dispose();
+                    };
+                }
+                else
+                {
+                    DownloadIndex++;
+                    await DownloadTaskAsync(msg, data, dt);
+                }
             }
         }
 
@@ -1607,6 +1767,7 @@ namespace Lemon_App
                 {
                     var k = new DataItem(m, md.IsOwn, this) { Width = DataItemsList.ActualWidth };
                     k.Play += PlayMusic;
+                    k.Download += K_Download;
                     if (m.MusicID==MusicData.music.MusicID)
                     {
                         k.ShowDx();

@@ -85,12 +85,12 @@ namespace Lemon_App
         public void Check() {
             if (!isChecked)
             {
-                GO.Visibility = System.Windows.Visibility.Visible;
+                GO.Visibility = Visibility.Visible;
                 CheckView.SetResourceReference(BorderBrushProperty, "ThemeColor");
                 isChecked = true;
             }
             else {
-                GO.Visibility = System.Windows.Visibility.Collapsed;
+                GO.Visibility = Visibility.Collapsed;
                 CheckView.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
                 isChecked = false;
             }

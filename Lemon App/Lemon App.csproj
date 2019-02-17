@@ -105,6 +105,9 @@
     <Compile Include="ControlItems\DataItem.xaml.cs">
       <DependentUpon>DataItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControlItems\DownloadItem.xaml.cs">
+      <DependentUpon>DownloadItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ControlItems\FLGDIndexItem.xaml.cs">
       <DependentUpon>FLGDIndexItem.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
     <Page Include="ControlItems\DataItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\DownloadItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -242,6 +249,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+    <Resource Include="Image\left.png" />
+    <Resource Include="Image\pause.png" />
+    <Resource Include="Image\play.png" />
+    <Resource Include="Image\right.png" />
     <Content Include="Lib\Lierda.WPFHelper.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
   </ItemGroup>

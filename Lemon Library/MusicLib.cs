@@ -195,7 +195,7 @@ namespace LemonLibrary
             }
             return data;
         }
-        public async Task<string> GetUrlAsync(string Musicid)
+        public static async Task<string> GetUrlAsync(string Musicid)
         {
             List<String[]> MData = new List<String[]>();
             MData.Add(new String[] { "M800", "mp3" });
@@ -802,12 +802,15 @@ namespace LemonLibrary
         }
 
         public static async Task<string> GetGDdiridByNameAsync(string name) {
-            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0", null,
-                Settings.USettings.Cookie));
-            foreach (var a in o["list"])
+            if (qq != "")
             {
-                if (name == a["dirname"].ToString())
-                    return a["dirid"].ToString();
+                JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0", null,
+                    Settings.USettings.Cookie));
+                foreach (var a in o["list"])
+                {
+                    if (name == a["dirname"].ToString())
+                        return a["dirid"].ToString();
+                }
             }
             return "null";
         }

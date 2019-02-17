@@ -92,7 +92,7 @@ namespace LemonLibrary
             public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
             #endregion
             #region 用户配置
-            public string LemonAreeunIts { get; set; } = "你的QQ";
+            public string LemonAreeunIts { get; set; } = "";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";
             public string Cookie { get; set; } = "";
