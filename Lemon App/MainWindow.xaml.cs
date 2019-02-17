@@ -128,7 +128,6 @@ namespace Lemon_App
                     LoadAfterLogin();
                 }); }
             });
-
             /////top////
             await Task.Run(new Action(async delegate
             {
@@ -155,7 +154,7 @@ namespace Lemon_App
                                 {
                                     Dispatcher.Invoke(() =>
                                     {
-                                        var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                                        var k = new DataItem(j) { Width = ContentPage.ActualWidth };
                                         k.Play += PlayMusic;
                                         k.Download += K_Download;
                                         if (k.music.MusicID == MusicData.music.MusicID)
@@ -367,7 +366,7 @@ namespace Lemon_App
             Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
             Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             foreach (DataItem dx in DataItemsList.Children)
-                dx.Width = DataItemsList.ActualWidth;
+                dx.Width = ContentPage.ActualWidth;
         }
         #endregion
         #region 设置
@@ -888,7 +887,7 @@ namespace Lemon_App
                 foreach (var m in dt.Data)
                     Dispatcher.Invoke(new Action(() =>
                     {
-                        var k = new DataItem(m, dt.IsOwn, this) { Width = DataItemsList.ActualWidth };
+                        var k = new DataItem(m, dt.IsOwn, this) { Width = ContentPage.ActualWidth };
                         k.Play += PlayMusic;
                         k.Download += K_Download;
                         if (k.music.MusicID == MusicData.music.MusicID)
@@ -1061,7 +1060,7 @@ namespace Lemon_App
                 foreach (var m in dt.Data)
                     Dispatcher.Invoke(new Action(() =>
                     {
-                        var k = new DataItem(m, dt.IsOwn, this) { Width = DataItemsList.ActualWidth };
+                        var k = new DataItem(m, dt.IsOwn, this) { Width = ContentPage.ActualWidth };
                         k.Play += PlayMusic;
                         k.Download += K_Download;
                         if (k.music.MusicID == MusicData.music.MusicID)
@@ -1210,7 +1209,7 @@ namespace Lemon_App
                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                     foreach (var j in dt)
                     {
-                        var k = new DataItem(j) { Width = DataItemsList.ActualWidth };
+                        var k = new DataItem(j) { Width = ContentPage.ActualWidth };
                         if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
@@ -1596,7 +1595,7 @@ namespace Lemon_App
                     string file = Download_Path.Text + $"\\{name}.mp3";
                     DownloadItem di = new DownloadItem(f.music, file, DownloadIndex)
                     {
-                        Width = DownloadItemsList.ActualWidth
+                        Width = ContentPage.ActualWidth
                     };
                     di.Delete += (s) => {
                         s.d.Pause();
@@ -1765,7 +1764,7 @@ namespace Lemon_App
                 foreach(var m in md.Data)
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    var k = new DataItem(m, md.IsOwn, this) { Width = DataItemsList.ActualWidth };
+                    var k = new DataItem(m, md.IsOwn, this) { Width = ContentPage.ActualWidth };
                     k.Play += PlayMusic;
                     k.Download += K_Download;
                     if (m.MusicID==MusicData.music.MusicID)

@@ -25,6 +25,8 @@ namespace Lemon_App
             index = ind;
             Console.WriteLine(m.MusicName+"   "+ind);
             Loaded += DownloadItem_Loaded;
+            MouseEnter += UserControl_MouseEnter;
+            MouseLeave += UserControl_MouseLeave;
         }
         private void DownloadItem_Loaded(object sender, RoutedEventArgs e)
         {
