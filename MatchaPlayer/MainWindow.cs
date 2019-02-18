@@ -21,7 +21,11 @@ namespace MatchaPlayer
             };
             t.Interval = 1000;
             t.Tick += delegate {
-                if(Process.GetProcessesByName("Lemon App").Length==0) {
+                try
+                {
+                    Process.GetProcessById(Settings.ReadHandle().ProcessId);
+                }
+                catch {
                     mp.Stop();
                     mp.Close();
                     Environment.Exit(0);

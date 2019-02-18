@@ -51,7 +51,8 @@ namespace Lemon_App
         #region 等待动画
         Thread tOL = null;
         LoadingWindow aw = null;
-        public void RunThread(object dx) {
+        public void RunThread(object dx)
+        {
             try
             {
                 double[] d = dx as double[];
@@ -71,8 +72,8 @@ namespace Lemon_App
         {
             if (!isLoading)
             {
-               // var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0));
-         //       ContentPage.BeginAnimation(OpacityProperty, da);
+                // var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0));
+                //       ContentPage.BeginAnimation(OpacityProperty, da);
                 isLoading = true;
                 tOL = new Thread(RunThread);
                 tOL.SetApartmentState(ApartmentState.STA);
@@ -88,12 +89,14 @@ namespace Lemon_App
             {
                 await Task.Delay(100);
                 isLoading = false;
-                aw.Dispatcher.Invoke(() => {
+                aw.Dispatcher.Invoke(() =>
+                {
                     var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                    da.Completed +=delegate { aw.Close(); };
-                    aw.BeginAnimation(OpacityProperty, da);});
-              
-             //   ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
+                    da.Completed += delegate { aw.Close(); };
+                    aw.BeginAnimation(OpacityProperty, da);
+                });
+
+                //   ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
             }
         }
         #endregion
@@ -112,7 +115,9 @@ namespace Lemon_App
             var ani = Resources["Loading"] as Storyboard;
             ani.Begin();
 
-            Settings.SaveWINDOW_HANDLE(new WindowInteropHelper(this).Handle.ToInt32());
+            Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
+            Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
+            Settings.SaveHandle();
             LoadSEND_SHOW();
             LoadHotDog();
             /////Timer user
@@ -121,12 +126,17 @@ namespace Lemon_App
             ds.Start();
             App.BaseApp.Apip.Start();
 
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 Settings.LoadLocaSettings();
                 string qq = Settings.LSettings.qq;
-                if (qq != "") { Settings.LoadUSettings(qq); Dispatcher.Invoke(()=> {
-                    LoadAfterLogin();
-                }); }
+                if (qq != "")
+                {
+                    Settings.LoadUSettings(qq); Dispatcher.Invoke(() =>
+                    {
+                        LoadAfterLogin();
+                    });
+                }
             });
             /////top////
             await Task.Run(new Action(async delegate
@@ -144,7 +154,7 @@ namespace Lemon_App
                             OpenLoading();
                             var g = seb as TopControl;
                             NSPage(null, Data);
-                            TXx.Background= new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.pic));
+                            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.pic));
                             TB.Text = g.name;
                             var ss = new Task(new Action(async delegate
                             {
@@ -182,11 +192,12 @@ namespace Lemon_App
             var f = sender;
             string name = f.music.MusicName + " - " + f.music.Singer;
             string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
-            DownloadItem di = new DownloadItem(f.music, file, DownloadIndex+1)
+            DownloadItem di = new DownloadItem(f.music, file, DownloadIndex + 1)
             {
                 Width = DownloadItemsList.ActualWidth
             };
-            di.Delete += (s) => {
+            di.Delete += (s) =>
+            {
                 s.d.Pause();
                 DownloadItemsList.Children.Remove(s);
             };
@@ -208,20 +219,24 @@ namespace Lemon_App
             DownloadItemsList.Children.Add(di);
         }
 
-        private void LoadAfterLogin(bool hasAnimation=true) {
+        private void LoadAfterLogin(bool hasAnimation = true)
+        {
             if (Settings.USettings.Skin_txt != "")
             {
                 if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
-                { Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
+                {
+                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
                     ControlDownPage.BorderThickness = new Thickness(0);
                     ControlPage.BorderThickness = new Thickness(0);
                 }
                 Color co;
-                if (Settings.USettings.Skin_txt == "Black"){
+                if (Settings.USettings.Skin_txt == "Black")
+                {
                     co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
                     ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 }
-                else{
+                else
+                {
                     co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
                     ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
                 }
@@ -328,11 +343,13 @@ namespace Lemon_App
             }
         }
 
-        private void exShow() {
-                WindowState = WindowState.Normal;
-                var ani = Resources["Loading"] as Storyboard;
-                ani.Begin();
-                Activate();
+        private void exShow()
+        {
+            WindowState = WindowState.Normal;
+            ShowInTaskbar = true;
+            var ani = Resources["Loading"] as Storyboard;
+            ani.Begin();
+            Activate();
         }
         private void MaxBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -359,9 +376,9 @@ namespace Lemon_App
             Console.WriteLine("SIZECHANGED");
             double tp = ActualWidth / 2;
             Thickness ab;
-            if (ind==0)
+            if (ind == 0)
                 ab = new Thickness(LeftControl.ActualWidth + 10, ActualHeight - 10 - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 + 10, 10);
-            else ab = new Thickness(ActualWidth-tp-30-border4.ActualWidth,border4.Margin.Top+10,tp+30,border4.Margin.Bottom+10);
+            else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top + 10, tp + 30, border4.Margin.Bottom + 10);
             Tasktb.ThumbnailClipMargin = ab;
             Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
             Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
@@ -370,7 +387,8 @@ namespace Lemon_App
         }
         #endregion
         #region 设置
-        public void LoadSettings() {
+        public void LoadSettings()
+        {
             CachePathTb.Text = Settings.USettings.CachePath;
             DownloadPathTb.Text = Settings.USettings.DownloadPath;
         }
@@ -516,16 +534,18 @@ namespace Lemon_App
                 Color color = Color.FromRgb(byte.Parse(dx["ThemeColor"]["R"].ToString()),
                     byte.Parse(dx["ThemeColor"]["G"].ToString()),
                     byte.Parse(dx["ThemeColor"]["B"].ToString()));
-                if(!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + i + ".jpg"))
-                     await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{i}.jpg", Settings.USettings.CachePath + "Skin\\" + i + ".jpg");
+                if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + i + ".jpg"))
+                    await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{i}.jpg", Settings.USettings.CachePath + "Skin\\" + i + ".jpg");
                 SkinControl sc = new SkinControl(i, name, color);
                 sc.txtColor = dx["TextColor"].ToString();
-                sc.MouseDown += async (s, n) => {
+                sc.MouseDown += async (s, n) =>
+                {
                     if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
                         await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
                     Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
                     Color co;
-                    if (sc.txtColor == "Black"){
+                    if (sc.txtColor == "Black")
+                    {
                         co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
                         ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                     }
@@ -551,9 +571,10 @@ namespace Lemon_App
                 SkinIndexList.Children.Add(sc);
                 i++;
             }
-            SkinControl sxc = new SkinControl(-1, "默认主题", Color.FromArgb(0,0,0,0));
-            sxc.MouseDown += (s, n) =>{
-                ControlDownPage.BorderThickness = new Thickness(0,1,0,0);
+            SkinControl sxc = new SkinControl(-1, "默认主题", Color.FromArgb(0, 0, 0, 0));
+            sxc.MouseDown += (s, n) =>
+            {
+                ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
                 ControlPage.BorderThickness = new Thickness(0, 0, 1, 0);
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
@@ -568,12 +589,15 @@ namespace Lemon_App
         #endregion
         #region 功能区
         #region Updata
-        private async void Updata() {
+        private async void Updata()
+        {
             var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
             string v = o["version"].ToString();
-            string dt = o["description"].ToString().Replace("@32","\n");
-            if (int.Parse(v) > int.Parse(App.EM)) {
-                if (MyMessageBox.Show("小萌有更新啦", dt, "立即更新")) {
+            string dt = o["description"].ToString().Replace("@32", "\n");
+            if (int.Parse(v) > int.Parse(App.EM))
+            {
+                if (MyMessageBox.Show("小萌有更新啦", dt, "立即更新"))
+                {
                     var xpath = Settings.USettings.CachePath + "win-release.exe";
                     await HttpHelper.HttpDownloadFileAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/win-release.exe", xpath);
                     Process.Start(xpath);
@@ -584,14 +608,15 @@ namespace Lemon_App
         #region N/S Page
         private Label LastClickLabel = null;
         private Grid LastPage = null;
-        public void NSPage(Label ClickLabel,Grid TPage) {
+        public void NSPage(Label ClickLabel, Grid TPage)
+        {
             if (LastClickLabel == null) LastClickLabel = TopBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            if (ClickLabel!=null)ClickLabel.SetResourceReference(ForegroundProperty, "ThemeColor");
+            if (ClickLabel != null) ClickLabel.SetResourceReference(ForegroundProperty, "ThemeColor");
             if (LastPage == null) LastPage = TopIndexPage;
             LastPage.Visibility = Visibility.Collapsed;
             TPage.Visibility = Visibility.Visible;
-            TPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5,1, TimeSpan.FromSeconds(0.2)));
+            TPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.2)));
             if (ClickLabel != null) LastClickLabel = ClickLabel;
             LastPage = TPage;
         }
@@ -636,29 +661,29 @@ namespace Lemon_App
         }
         private void SIngerPageChecked(object sender, RoutedEventArgs e)
         {
-             if (sender != null)
+            if (sender != null)
+            {
+                OpenLoading();
+                if (SingerKey1 == "")
+                    SingerKey1 = "all_all_";
+                SingerKey2 = (sender as RadioButton).Content.ToString().Replace("热门", "all").Replace("#", "9");
+                var s = new Task(new Action(async delegate
                 {
-                    OpenLoading();
-                    if (SingerKey1 == "")
-                        SingerKey1 = "all_all_";
-                    SingerKey2 = (sender as RadioButton).Content.ToString().Replace("热门", "all").Replace("#", "9");
-                    var s = new Task(new Action(async delegate
+                    var mx = await ml.GetSingerAsync(SingerKey1 + SingerKey2);
+                    Dispatcher.Invoke(() => { singerItemsList.Children.Clear(); });
+                    foreach (var d in mx)
                     {
-                        var mx = await ml.GetSingerAsync(SingerKey1 + SingerKey2);
-                        Dispatcher.Invoke(() => { singerItemsList.Children.Clear(); });
-                        foreach (var d in mx)
+                        Dispatcher.Invoke(() =>
                         {
-                            Dispatcher.Invoke(() =>
-                            {
-                                var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
-                                sinx.MouseDown += GetSinger;
-                                singerItemsList.Children.Add(sinx);
-                            });
-                        }
-                        Dispatcher.Invoke(() => { CloseLoading(); });
-                    }));
-                    s.Start();
-                }
+                            var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                            sinx.MouseDown += GetSinger;
+                            singerItemsList.Children.Add(sinx);
+                        });
+                    }
+                    Dispatcher.Invoke(() => { CloseLoading(); });
+                }));
+                s.Start();
+            }
         }
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -701,25 +726,29 @@ namespace Lemon_App
                 {
                     Dispatcher.Invoke(() => { OpenLoading(); });
                     var wk = await ml.GetFLGDIndexAsync();
-                    Dispatcher.Invoke(() => { 
-                    RadioButton rb = new RadioButton()
+                    Dispatcher.Invoke(() =>
                     {
-                        Style = RadioMe.Style,
-                        Background = RadioMe.Background,
-                        Content = wk.Hot[0].name,
-                        Uid = wk.Hot[0].id,
-                        Margin = new Thickness(0, 0, 30, 10)
-                    };
+                        RadioButton rb = new RadioButton()
+                        {
+                            Style = RadioMe.Style,
+                            Background = RadioMe.Background,
+                            Content = wk.Hot[0].name,
+                            Uid = wk.Hot[0].id,
+                            Margin = new Thickness(0, 0, 30, 10)
+                        };
                         rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                         rb.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
-                        FLGDIndexList.Children.Add(rb); });
-                    Dispatcher.Invoke(() => {
+                        FLGDIndexList.Children.Add(rb);
+                    });
+                    Dispatcher.Invoke(() =>
+                    {
                         var rb = new TextBlock() { Text = "语种:" };
                         rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                         FLGDIndexList.Children.Add(rb);
                     });
                     foreach (var d in wk.Lauch)
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             var rb = new RadioButton()
                             {
                                 Style = RadioMe.Style,
@@ -730,14 +759,17 @@ namespace Lemon_App
                             };
                             rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                             rb.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
-                            FLGDIndexList.Children.Add(rb); });
-                    Dispatcher.Invoke(() => {
+                            FLGDIndexList.Children.Add(rb);
+                        });
+                    Dispatcher.Invoke(() =>
+                    {
                         var rb = new TextBlock() { Text = "流派:" };
                         rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                         FLGDIndexList.Children.Add(rb);
                     });
                     foreach (var d in wk.LiuPai)
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             var rb = new RadioButton()
                             {
                                 Style = RadioMe.Style,
@@ -750,13 +782,15 @@ namespace Lemon_App
                             rb.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
                             FLGDIndexList.Children.Add(rb);
                         });
-                    Dispatcher.Invoke(() => {
+                    Dispatcher.Invoke(() =>
+                    {
                         var rb = new TextBlock() { Text = "主题:" };
                         rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                         FLGDIndexList.Children.Add(rb);
                     });
                     foreach (var d in wk.Theme)
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             var rb = new RadioButton()
                             {
                                 Style = RadioMe.Style,
@@ -769,13 +803,15 @@ namespace Lemon_App
                             rb.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
                             FLGDIndexList.Children.Add(rb);
                         });
-                    Dispatcher.Invoke(() => {
+                    Dispatcher.Invoke(() =>
+                    {
                         var rb = new TextBlock() { Text = "心情:" };
                         rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                         FLGDIndexList.Children.Add(rb);
                     });
                     foreach (var d in wk.Heart)
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             var rb = new RadioButton()
                             {
                                 Style = RadioMe.Style,
@@ -788,13 +824,15 @@ namespace Lemon_App
                             rb.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
                             FLGDIndexList.Children.Add(rb);
                         });
-                    Dispatcher.Invoke(() => {
+                    Dispatcher.Invoke(() =>
+                    {
                         var rb = new TextBlock() { Text = "场景:" };
                         rb.SetResourceReference(ForegroundProperty, "TextX1ColorBrush");
                         FLGDIndexList.Children.Add(rb);
                     });
                     foreach (var d in wk.Changjing)
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             var rb = new RadioButton()
                             {
                                 Style = RadioMe.Style,
@@ -846,28 +884,28 @@ namespace Lemon_App
         }
         private void FLGDPageChecked(object sender, RoutedEventArgs e)
         {
-                if (sender != null)
+            if (sender != null)
+            {
+                OpenLoading();
+                var dt = sender as RadioButton;
+                int xs = int.Parse(dt.Uid);
+                var s = new Task(new Action(async delegate
                 {
-                    OpenLoading();
-                    var dt = sender as RadioButton;
-                    int xs = int.Parse(dt.Uid);
-                    var s = new Task(new Action(async delegate
+                    var data = await ml.GetFLGDAsync(xs);
+                    Dispatcher.Invoke(() =>
                     {
-                        var data = await ml.GetFLGDAsync(xs);
-                        Dispatcher.Invoke(() =>
+                        FLGDItemsList.Children.Clear();
+                        foreach (var d in data)
                         {
-                            FLGDItemsList.Children.Clear();
-                            foreach (var d in data)
-                            {
-                                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
-                                k.MouseDown += GDMouseDown;
-                                FLGDItemsList.Children.Add(k);
-                            }
-                            CloseLoading();
-                        });
-                    }));
-                    s.Start();
-                }
+                            var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                            k.MouseDown += GDMouseDown;
+                            FLGDItemsList.Children.Add(k);
+                        }
+                        CloseLoading();
+                    });
+                }));
+                s.Start();
+            }
         }
         public void GetGD(string id)
         {
@@ -883,6 +921,7 @@ namespace Lemon_App
                  {
                      TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.pic));
                      TB.Text = dt.name;
+                     DataItemsList.Children.Clear();
                  });
                 foreach (var m in dt.Data)
                     Dispatcher.Invoke(new Action(() =>
@@ -934,72 +973,75 @@ namespace Lemon_App
         }
         private void RadioPageChecked(object sender, RoutedEventArgs e)
         {
-                if (sender != null)
+            if (sender != null)
+            {
+                OpenLoading();
+                var dt = sender as RadioButton;
+                var s = new Task(new Action(async delegate
                 {
-                    OpenLoading();
-                    var dt = sender as RadioButton;
-                    var s = new Task(new Action(async delegate
+                    var data = await ml.GetRadioList();
+                    Dispatcher.Invoke(() => { RadioItemsList.Children.Clear(); });
+                    List<MusicRadioListItem> dat = null;
+                    Dispatcher.Invoke(() =>
                     {
-                        var data = await ml.GetRadioList();
-                        Dispatcher.Invoke(() => { RadioItemsList.Children.Clear(); });
-                        List<MusicRadioListItem> dat = null;
-                        Dispatcher.Invoke(() =>
+                        switch (dt.Uid)
                         {
-                            switch (dt.Uid)
-                            {
-                                case "0":
-                                    dat = data.Hot;
-                                    break;
-                                case "1":
-                                    dat = data.Evening;
-                                    break;
-                                case "2":
-                                    dat = data.Love;
-                                    break;
-                                case "3":
-                                    dat = data.Theme;
-                                    break;
-                                case "4":
-                                    dat = data.Changjing;
-                                    break;
-                                case "5":
-                                    dat = data.Style;
-                                    break;
-                                case "6":
-                                    dat = data.Lauch;
-                                    break;
-                                case "7":
-                                    dat = data.People;
-                                    break;
-                                case "8":
-                                    dat = data.Diqu;
-                                    break;
-                            }
-                        });
-                        foreach (var d in dat)
-                        {
-                            Dispatcher.Invoke(() => { RadioItemsList.Children.Add(new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) }); });
+                            case "0":
+                                dat = data.Hot;
+                                break;
+                            case "1":
+                                dat = data.Evening;
+                                break;
+                            case "2":
+                                dat = data.Love;
+                                break;
+                            case "3":
+                                dat = data.Theme;
+                                break;
+                            case "4":
+                                dat = data.Changjing;
+                                break;
+                            case "5":
+                                dat = data.Style;
+                                break;
+                            case "6":
+                                dat = data.Lauch;
+                                break;
+                            case "7":
+                                dat = data.People;
+                                break;
+                            case "8":
+                                dat = data.Diqu;
+                                break;
                         }
-                        Dispatcher.Invoke(() => {
-                            foreach (var i in RadioItemsList.Children)
-                                (i as RadioItem).MouseDown += GetRadio;
-                        });
-                        Dispatcher.Invoke(() => { CloseLoading(); });
-                    }));
-                    s.Start();
-                }
+                    });
+                    foreach (var d in dat)
+                    {
+                        Dispatcher.Invoke(() => { RadioItemsList.Children.Add(new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) }); });
+                    }
+                    Dispatcher.Invoke(() =>
+                    {
+                        foreach (var i in RadioItemsList.Children)
+                            (i as RadioItem).MouseDown += GetRadio;
+                    });
+                    Dispatcher.Invoke(() => { CloseLoading(); });
+                }));
+                s.Start();
+            }
         }
         Music RadioData;
         #endregion
         #region ILike
-        private void LikeBtnUp() {
+        private void LikeBtnUp()
+        {
             if (ind == 1)
                 likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             else
                 likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
         }
 
-        private void LikeBtnDown() {
+        private void LikeBtnDown()
+        {
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
         }
         private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1012,13 +1054,13 @@ namespace Lemon_App
                     {
                         LikeBtnUp();
                         Settings.USettings.MusicLike.Remove(RadioData.MusicID);
-                        string a = MusicLib.DeleteMusicFromGD(RadioData.MusicID,MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
+                        string a = MusicLib.DeleteMusicFromGD(RadioData.MusicID, MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
                         Toast.Send(a);
                     }
                     else
                     {
                         string[] a = MusicLib.AddMusicToGD(RadioData, MusicLib.MusicLikeGDdirid);
-                        Toast.Send(a[1]+": "+a[0]);
+                        Toast.Send(a[1] + ": " + a[0]);
                         Settings.USettings.MusicLike.Add(RadioData.MusicID, RadioData);
                         LikeBtnDown();
                     }
@@ -1035,7 +1077,7 @@ namespace Lemon_App
                     else
                     {
                         string[] a = MusicLib.AddMusicToGD(MusicData.music, MusicLib.MusicLikeGDdirid);
-                        Toast.Send(a[1]+": "+a[0]);
+                        Toast.Send(a[1] + ": " + a[0]);
                         Settings.USettings.MusicLike.Add(MusicData.music.MusicID, MusicData.music);
                         LikeBtnDown();
                     }
@@ -1056,7 +1098,7 @@ namespace Lemon_App
             mt.Finished += (dt) =>
             {
                 He.MGData_Now = dt;
-                if (dt.Data.Count == 0) Dispatcher.Invoke(()=> { NSPage(LikeBtn,NonePage); });
+                if (dt.Data.Count == 0) Dispatcher.Invoke(() => { NSPage(LikeBtn, NonePage); });
                 foreach (var m in dt.Data)
                     Dispatcher.Invoke(new Action(() =>
                     {
@@ -1080,8 +1122,8 @@ namespace Lemon_App
                     {
                         foreach (var ai in m.Data)
                         {
-                            if(!Settings.USettings.MusicLike.ContainsKey(ai.MusicID))
-                            Settings.USettings.MusicLike.Add(ai.MusicID, ai);
+                            if (!Settings.USettings.MusicLike.ContainsKey(ai.MusicID))
+                                Settings.USettings.MusicLike.Add(ai.MusicID, ai);
                         }
                     });
                     ac(dt);
@@ -1104,14 +1146,16 @@ namespace Lemon_App
             Download_Path.Text = Settings.USettings.DownloadPath;
             DownloadQx.IsChecked = true;
             DownloadQx.Content = "全不选";
-            foreach (DataItem x in DataItemsList.Children) {
+            foreach (DataItem x in DataItemsList.Children)
+            {
                 x.MouseDown -= PlayMusic;
                 x.NSDownload(true);
                 x.Check();
             }
         }
 
-        public void CloseDownloadPage() {
+        public void CloseDownloadPage()
+        {
             border5.Visibility = Visibility.Visible;
             DataDownloadPage.Visibility = Visibility.Collapsed;
             foreach (DataItem x in DataItemsList.Children)
@@ -1131,9 +1175,10 @@ namespace Lemon_App
         private int ixPlay = 1;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (Datasv.IsVerticalScrollBarAtButtom()&&isSearch) {
+            if (Datasv.IsVerticalScrollBarAtButtom() && isSearch)
+            {
                 ixPlay++;
-                SearchMusic(SearchKey,ixPlay);
+                SearchMusic(SearchKey, ixPlay);
             }
         }
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -1153,7 +1198,7 @@ namespace Lemon_App
         }
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter&&SearchBox.Text.Trim() != string.Empty)
+            if (e.Key == Key.Enter && SearchBox.Text.Trim() != string.Empty)
             { SearchMusic(SearchBox.Text); ixPlay = 1; Search_SmartBox.Visibility = Visibility.Collapsed; }
         }
         private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1165,7 +1210,8 @@ namespace Lemon_App
         private void Search_SmartBoxList_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                if (Search_SmartBoxList.SelectedIndex != -1){
+                if (Search_SmartBoxList.SelectedIndex != -1)
+                {
                     SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
                     Search_SmartBox.Visibility = Visibility.Collapsed;
                     SearchMusic(SearchBox.Text); ixPlay = 1;
@@ -1187,7 +1233,7 @@ namespace Lemon_App
             Search_SmartBox.Visibility = Visibility.Collapsed;
         }
         private string SearchKey = "";
-        public void SearchMusic(string key,int osx=0)
+        public void SearchMusic(string key, int osx = 0)
         {
             isSearch = true;
             SearchKey = key;
@@ -1196,14 +1242,15 @@ namespace Lemon_App
             {
                 List<Music> dt = null;
                 if (osx == 0) Dispatcher.Invoke(() => { NSPage(null, Data); });
-                if (osx==0)dt = await ml.SearchMusicAsync(key);
-                else dt = await ml.SearchMusicAsync(key,osx);
-                if(osx==0)
-                   Dispatcher.Invoke(() => {
-                       TB.Text = key;
-                       DataItemsList.Children.Clear();
-                       Datasv.ScrollToTop();
-                });
+                if (osx == 0) dt = await ml.SearchMusicAsync(key);
+                else dt = await ml.SearchMusicAsync(key, osx);
+                if (osx == 0)
+                    Dispatcher.Invoke(() =>
+                    {
+                        TB.Text = key;
+                        DataItemsList.Children.Clear();
+                        Datasv.ScrollToTop();
+                    });
                 await Dispatcher.Invoke(async () =>
                 {
                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
@@ -1220,7 +1267,7 @@ namespace Lemon_App
                         DataItemsList.Children.Add(k);
                     }
                 });
-                Dispatcher.Invoke(() => {CloseLoading(); });
+                Dispatcher.Invoke(() => { CloseLoading(); });
             }));
             xs.Start();
         }
@@ -1268,8 +1315,8 @@ namespace Lemon_App
                 if (Settings.USettings.MusicLike.ContainsKey(id))
                     LikeBtnDown();
                 else LikeBtnUp();
-                ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this,name+" - "+singer, doesplay);
-                MusicImage.Background =new ImageBrush(await ImageCacheHelp.GetImageByUrl(x));
+                ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
+                MusicImage.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(x));
                 Singer.Text = singer;
                 if (doesplay)
                 {
@@ -1388,7 +1435,8 @@ namespace Lemon_App
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
             var ol = Resources["CloseLyricPage"] as Storyboard;
-            ol.Completed += async delegate {
+            ol.Completed += async delegate
+            {
                 await Task.Delay(500);
                 Thickness ab = new Thickness(LeftControl.ActualWidth + 10, ActualHeight - 10 - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 + 10, 10);
                 Tasktb.ThumbnailClipMargin = ab;
@@ -1414,10 +1462,11 @@ namespace Lemon_App
             path4.Fill = new SolidColorBrush(Colors.White);
             path5.Fill = new SolidColorBrush(Colors.White);
             path6.Fill = new SolidColorBrush(Colors.White);
-            if(!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
+            if (!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
             likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             var ol = Resources["OpenLyricPage"] as Storyboard;
-            ol.Completed += async delegate {
+            ol.Completed += async delegate
+            {
                 await Task.Delay(500);
                 double tp = ActualWidth / 2;
                 Thickness ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top + 10, tp + 30, border4.Margin.Bottom + 10);
@@ -1453,7 +1502,7 @@ namespace Lemon_App
                 m_Name.Visibility = Visibility.Collapsed;
                 ly.Visibility = Visibility.Collapsed;
                 pl.Visibility = Visibility.Visible;
-                List<MusicPL> data= await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+                List<MusicPL> data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
                 //if (!isPos)
                 //    data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
                 //else
@@ -1518,11 +1567,12 @@ namespace Lemon_App
         private void ckFile_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var g = new System.Windows.Forms.FolderBrowserDialog();
-            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK){
+            if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
                 Download_Path.Text = g.SelectedPath;
-                Settings.USettings.DownloadPath= g.SelectedPath;
+                Settings.USettings.DownloadPath = g.SelectedPath;
             }
-            
+
         }
 
         private void cb_color_Click(object sender, RoutedEventArgs e)
@@ -1597,7 +1647,8 @@ namespace Lemon_App
                     {
                         Width = ContentPage.ActualWidth
                     };
-                    di.Delete += (s) => {
+                    di.Delete += (s) =>
+                    {
                         s.d.Pause();
                         DownloadItemsList.Children.Remove(s);
                     };
@@ -1636,10 +1687,11 @@ namespace Lemon_App
             //    }
             //};
         }
-        private int DownloadIndex=0;
-        public async Task DownloadTaskAsync(Msg msg, List<DataItem> data, System.Windows.Forms.Timer dt) {
+        private int DownloadIndex = 0;
+        public async Task DownloadTaskAsync(Msg msg, List<DataItem> data, System.Windows.Forms.Timer dt)
+        {
             dt.Start();
-            Console.WriteLine("DOWNLOAD ALL"+data.Count+"  INDEX:"+DownloadIndex);
+            Console.WriteLine("DOWNLOAD ALL" + data.Count + "  INDEX:" + DownloadIndex);
             if (data.Count == DownloadIndex)
             {
                 msg.tb.Text = "已完成.";
@@ -1712,7 +1764,7 @@ namespace Lemon_App
         {
             NSPage(GDBtn, MyGDIndexPage);
             OpenLoading();
-            var GdData =await ml.GetGdListAsync();
+            var GdData = await ml.GetGdListAsync();
             if (GdData.Count != GDItemsList.Children.Count)
             { GDItemsList.Children.Clear(); GData_Now.Clear(); }
             foreach (var jm in GdData)
@@ -1759,23 +1811,26 @@ namespace Lemon_App
             TB.Text = dt.name.Text;
             DataItemsList.Children.Clear();
             MusicGDTask mt = new MusicGDTask();
-            mt.Finished += (md) => {
+            mt.Finished += (md) =>
+            {
                 He.MGData_Now = md;
-                foreach(var m in md.Data)
+                foreach (var m in md.Data)
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        var k = new DataItem(m, md.IsOwn, this) { Width = ContentPage.ActualWidth };
+                        k.Play += PlayMusic;
+                        k.Download += K_Download;
+                        if (m.MusicID == MusicData.music.MusicID)
+                        {
+                            k.ShowDx();
+                            MusicData = k;
+                        }
+                        DataItemsList.Children.Add(k);
+                    }));
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    var k = new DataItem(m, md.IsOwn, this) { Width = ContentPage.ActualWidth };
-                    k.Play += PlayMusic;
-                    k.Download += K_Download;
-                    if (m.MusicID==MusicData.music.MusicID)
-                    {
-                        k.ShowDx();
-                        MusicData = k;
-                    }
-                    DataItemsList.Children.Add(k);
-                }));
-                Dispatcher.Invoke(new Action(() => { sw.Stop();
-                    Console.WriteLine("耗时:" + sw.Elapsed.TotalMilliseconds+"ms");
+                    sw.Stop();
+                    Console.WriteLine("耗时:" + sw.Elapsed.TotalMilliseconds + "ms");
                     CloseLoading();
                 }));
             };
@@ -1788,21 +1843,25 @@ namespace Lemon_App
 
         #endregion
         #region 快捷键
-        private void LoadHotDog() {
+        private void LoadHotDog()
+        {
             IntPtr handle = new WindowInteropHelper(this).Handle;
             RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
             RegisterHotKey(handle, 125, 1, (uint)System.Windows.Forms.Keys.S);
             RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
             RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
             RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
+            RegisterHotKey(handle, 129, 1, (uint)System.Windows.Forms.Keys.C);
             InstallHotKeyHook(this);
-            Closed += (s, e) => {
+            Closed += (s, e) =>
+            {
                 IntPtr hd = new WindowInteropHelper(this).Handle;
                 UnregisterHotKey(hd, 124);
                 UnregisterHotKey(hd, 125);
                 UnregisterHotKey(hd, 126);
                 UnregisterHotKey(hd, 127);
                 UnregisterHotKey(hd, 128);
+                UnregisterHotKey(hd, 129);
             };
             //notifyIcon
             MusicLib.pc.notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -1814,10 +1873,11 @@ namespace Lemon_App
             open.Click += delegate { exShow(); };
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
-            exit.Click += delegate {
+            exit.Click += delegate
+            {
                 MusicLib.pc.notifyIcon.Dispose();
                 MusicLib.pc.Exit();
-                if(!App.BaseApp.Apip.HasExited)
+                if (!App.BaseApp.Apip.HasExited)
                     App.BaseApp.Apip.Kill();
                 var dt = Resources["Closing"] as Storyboard;
                 dt.Completed += async delegate { await Task.Delay(500); Settings.SaveSettings(); Environment.Exit(0); };
@@ -1851,6 +1911,7 @@ namespace Lemon_App
             source.AddHook(HotKeyHook);
             return true;
         }
+        bool IsDebug = false;
         private IntPtr HotKeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_HOTKEY)
@@ -1865,34 +1926,51 @@ namespace Lemon_App
                 { Border_MouseDown(null, null); Toast.Send("成功切换到上一曲"); }
                 else if (wParam.ToInt32() == 128)
                 { Border_MouseDown_1(null, null); Toast.Send("成功切换到下一曲"); }
+                else if (wParam.ToInt32() == 129) {
+                    if (!IsDebug)
+                    {
+                        IsDebug = true;
+                        Toast.Send("已进入调试模式🐱‍👤");
+                        ConsoleManager.Toggle();
+                        Console.WriteLine("调试模式");
+                    }
+                    else {
+                        IsDebug = false;
+                        ConsoleManager.Hide();
+                        Toast.Send("已退出调试模式🐱‍👤");
+                    }
+                }
             }
             return IntPtr.Zero;
         }
         private const int WM_HOTKEY = 0x0312;
         #endregion
         #region 进程通信
-        private void LoadSEND_SHOW() {
+        private void LoadSEND_SHOW()
+        {
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
             HwndSource source = HwndSource.FromHwnd(hwnd);
             if (source != null) source.AddHook(WndProc);
         }
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg ==MsgHelper.WM_COPYDATA)
+            if (msg == MsgHelper.WM_COPYDATA)
             {
                 MsgHelper.COPYDATASTRUCT cdata = new MsgHelper.COPYDATASTRUCT();
                 Type mytype = cdata.GetType();
                 cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, mytype);
                 if (cdata.lpData == MsgHelper.SEND_SHOW)
                     exShow();
-                else if (cdata.lpData.Contains("Api#")){
+                else if (cdata.lpData.Contains("Api#"))
+                {
                     ApiHandle = int.Parse(TextHelper.XtoYGetTo(cdata.lpData, "#", "*", 0));
                     if (IsFirstStart)
                     { IsFirstStart = false; MsgHelper.SendMsg("IsLogin", ApiHandle); }
                 }
-                else if (cdata.lpData.Contains("Login")){
-                   App.BaseApp.Apip.Kill();
-                   Console.WriteLine(cdata.lpData);
+                else if (cdata.lpData.Contains("Login"))
+                {
+                    App.BaseApp.Apip.Kill();
+                    Console.WriteLine(cdata.lpData);
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
@@ -1900,7 +1978,8 @@ namespace Lemon_App
                     {
                         var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
                         await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
-                        await Task.Run(() => {
+                        await Task.Run(() =>
+                        {
                             Settings.LoadUSettings(qq);
                             if (cdata.lpData.Contains("g_tk"))
                             {

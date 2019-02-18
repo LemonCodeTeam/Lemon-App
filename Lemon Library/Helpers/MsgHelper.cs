@@ -29,7 +29,7 @@ namespace LemonLibrary
         public static void SendMsg(String strSent,int WindowHandle=0) {
             int WINDOW_HANDLE = WindowHandle;
             if (WindowHandle == 0)
-                WINDOW_HANDLE = Settings.ReadWINDOW_HANDLE();
+                WINDOW_HANDLE = Settings.ReadHandle().WINDOW_HANDLE;
             if (WINDOW_HANDLE != 0)
             {
                 byte[] arr = Encoding.Default.GetBytes(strSent);

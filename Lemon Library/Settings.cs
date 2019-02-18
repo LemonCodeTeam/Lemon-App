@@ -138,13 +138,22 @@ namespace LemonLibrary
         #endregion
 
         #region WINDOW_HANDLE
-        public static void SaveWINDOW_HANDLE(int WINDOW_HANDLE)
+        public static HANDLE Handle = new HANDLE();
+        public static void SaveHandle()
         {
-            File.WriteAllText(USettings.CachePath + "WINDOW_HANDLE.INT", WINDOW_HANDLE.ToString());
+            File.WriteAllText(USettings.CachePath + "HANDLE.st",TextHelper.JSON.ToJSON(Handle));
         }
-        public static int ReadWINDOW_HANDLE()
+        public static HANDLE ReadHandle()
         {
-            return int.Parse(File.ReadAllText(USettings.CachePath + "WINDOW_HANDLE.INT"));
+            JObject o = JObject.Parse(File.ReadAllText(USettings.CachePath + "HANDLE.st"));
+            Handle.ProcessId = int.Parse(o["ProcessId"].ToString());
+            Handle.WINDOW_HANDLE = int.Parse(o["WINDOW_HANDLE"].ToString());
+            return Handle;
+        }
+        public class HANDLE {
+            //公共运行常量处理类..
+            public int WINDOW_HANDLE { get; set; } = 0;
+            public int ProcessId { get; set; } = 0;
         }
         #endregion
     }

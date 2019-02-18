@@ -1455,7 +1455,7 @@
                 <ListBox x:Name="Search_SmartBoxList" KeyDown="Search_SmartBoxList_KeyDown" Background="White" BorderBrush="Gainsboro" Style="{DynamicResource ListBoxStyle}" Foreground="#FF9B9B9B" ItemContainerStyle="{DynamicResource ListBoxItemStyle}"/>
             </Grid>
         </Grid>
-        <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed">
+        <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed" Clip="{Binding Clip, ElementName=Page}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
