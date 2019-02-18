@@ -7,7 +7,7 @@
         xmlns:lemon_app="clr-namespace:Lemon_App"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="955" MinHeight="630">
+        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="955" MinHeight="630">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -302,25 +302,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Storyboard x:Key="Loading">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="Page">
-                <EasingThicknessKeyFrame KeyTime="0" Value="315,1010,315,0"/>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10">
-                    <EasingThicknessKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseOut"/>
-                    </EasingThicknessKeyFrame.EasingFunction>
-                </EasingThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="Closing">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="Page">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="315,1010,315,20">
-                    <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
-                    </EasingThicknessKeyFrame.EasingFunction>
-                </EasingThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
-        </Storyboard>
         <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
             <Grid x:Name="Grid" Background="{TemplateBinding Background}">
                 <Grid.ColumnDefinitions>
@@ -1078,9 +1059,6 @@
         </Storyboard>
     </Window.Resources>
     <Window.Triggers>
-        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="CloseBtn">
-            <BeginStoryboard x:Name="Closing_BeginStoryboard" Storyboard="{StaticResource Closing}"/>
-        </EventTrigger>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard x:Name="IsQQSource_BeginStoryboard" Storyboard="{StaticResource IsQQSource}"/>
         </EventTrigger>
@@ -1095,13 +1073,10 @@
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="c"  GlassFrameThickness="0" ResizeBorderThickness="10" CaptionHeight="0" CornerRadius="0" />
+        <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
     </WindowChrome.WindowChrome>
-    <Window.Effect>
-        <DropShadowEffect BlurRadius="10" Opacity="0.7" ShadowDepth="0"/>
-    </Window.Effect>
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo x:Name="Tasktb" ThumbnailClipMargin="224,606,772,10">
+        <TaskbarItemInfo x:Name="Tasktb">
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfo Description="上一曲" ImageSource="Image/left.png" Click="ThumbButtonInfo_Click"/>
                 <ThumbButtonInfo x:Name="Tasktb_playBtn" Description="播放/暂停" ImageSource="Image/play.png" Click="Tasktb_playBtn_Click"/>
@@ -1109,14 +1084,7 @@
             </TaskbarItemInfo.ThumbButtonInfos>
         </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
-    <Grid x:Name="Page" Margin="10" Background="White">
-        <Grid.Clip>
-            <RectangleGeometry RadiusX="5" RadiusY="5">
-                <RectangleGeometry.Rect>
-                    <Rect Width="1050" Height="670"/>
-                </RectangleGeometry.Rect>
-            </RectangleGeometry>
-        </Grid.Clip>
+    <Grid x:Name="Page" Background="White">
         <Grid x:Name="grid" Margin="0,0,0,75">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="103*" MinWidth="206" MaxWidth="245"/>
@@ -1455,7 +1423,14 @@
                 <ListBox x:Name="Search_SmartBoxList" KeyDown="Search_SmartBoxList_KeyDown" Background="White" BorderBrush="Gainsboro" Style="{DynamicResource ListBoxStyle}" Foreground="#FF9B9B9B" ItemContainerStyle="{DynamicResource ListBoxItemStyle}"/>
             </Grid>
         </Grid>
-        <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed" Clip="{Binding Clip, ElementName=Page}">
+        <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed">
+            <Grid.Clip>
+                <RectangleGeometry>
+                    <RectangleGeometry.Rect>
+                        <Rect Width="1070" Height="690"/>
+                    </RectangleGeometry.Rect>
+                </RectangleGeometry>
+            </Grid.Clip>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -1535,7 +1510,7 @@
                 </Border>
             </Grid>
         </Border>
-        <lemon_app:TitlePageBtn x:Name="CloseBtn" MinOp="0" Margin="0,15,20,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top"/>
+        <lemon_app:TitlePageBtn x:Name="CloseBtn" MinOp="0" Margin="0,15,20,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown"/>
         <lemon_app:TitlePageBtn x:Name="MaxBtn" MinOp="0" Margin="0,15,50,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M0 0h1024v1024H0V0z m84.707556 85.447111v853.333333H937.528889v-853.333333H84.707556z" MouseDown="MaxBtn_MouseDown" VerticalAlignment="Top"/>
         <lemon_app:TitlePageBtn x:Name="MinBtn" MinOp="100" Margin="0,15,80,0" Width="20" Height="20" HorizontalAlignment="Right" MouseDown="MinBtn_MouseDown" VerticalAlignment="Top"/>
     </Grid>

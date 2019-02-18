@@ -112,9 +112,6 @@ namespace Lemon_App
         }
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
-            var ani = Resources["Loading"] as Storyboard;
-            ani.Begin();
-
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
             Settings.SaveHandle();
@@ -125,7 +122,8 @@ namespace Lemon_App
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
             App.BaseApp.Apip.Start();
-
+            Tasktb.ThumbnailClipMargin=new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
+            LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             await Task.Run(() =>
             {
                 Settings.LoadLocaSettings();
@@ -268,7 +266,6 @@ namespace Lemon_App
                     UserTX.Background = new ImageBrush(image.ToImageSource());
                 }
             }
-            (Resources["Closing"] as Storyboard).Completed += delegate { ShowInTaskbar = false; };
             ////////////load
             LyricView lv = new LyricView();
             lv.FoucsLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
@@ -345,31 +342,28 @@ namespace Lemon_App
 
         private void exShow()
         {
-            WindowState = WindowState.Normal;
+            Show();
             ShowInTaskbar = true;
-            var ani = Resources["Loading"] as Storyboard;
-            ani.Begin();
             Activate();
+        }
+        private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ShowInTaskbar = false;
+            Hide();
         }
         private void MaxBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MaxHeight = SystemParameters.WorkArea.Height + 10;
             if (WindowState == WindowState.Normal)
             {
-                c.ResizeBorderThickness = new Thickness(0);
-                Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0), TimeSpan.FromSeconds(0)));
                 WindowState = WindowState.Maximized;
-                Page.Clip = new RectangleGeometry() { RadiusX = 0, RadiusY = 0, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
             else
             {
-                c.ResizeBorderThickness = new Thickness(10);
-                Page.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(10), TimeSpan.FromSeconds(0)));
                 WindowState = WindowState.Normal;
-                Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             }
         }
-        private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e) { ShowInTaskbar = true; WindowState = WindowState.Minimized; }
+        private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e) {
+            WindowState = WindowState.Minimized; }
 
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -377,11 +371,11 @@ namespace Lemon_App
             double tp = ActualWidth / 2;
             Thickness ab;
             if (ind == 0)
-                ab = new Thickness(LeftControl.ActualWidth + 10, ActualHeight - 10 - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 + 10, 10);
-            else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top + 10, tp + 30, border4.Margin.Bottom + 10);
+                ab = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 , 0);
+            else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top , tp + 30, border4.Margin.Bottom);
             Tasktb.ThumbnailClipMargin = ab;
+            LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
-            Page.Clip = new RectangleGeometry() { RadiusX = 5, RadiusY = 5, Rect = new Rect() { Width = Page.ActualWidth, Height = Page.ActualHeight } };
             foreach (DataItem dx in DataItemsList.Children)
                 dx.Width = ContentPage.ActualWidth;
         }
@@ -1879,9 +1873,8 @@ namespace Lemon_App
                 MusicLib.pc.Exit();
                 if (!App.BaseApp.Apip.HasExited)
                     App.BaseApp.Apip.Kill();
-                var dt = Resources["Closing"] as Storyboard;
-                dt.Completed += async delegate { await Task.Delay(500); Settings.SaveSettings(); Environment.Exit(0); };
-                dt.Begin();
+                Settings.SaveSettings();
+                Environment.Exit(0);
             };
             //关联托盘控件
             System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
