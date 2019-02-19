@@ -7,7 +7,7 @@
         xmlns:lemon_app="clr-namespace:Lemon_App"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="955" MinHeight="630">
+        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="955" MinHeight="630" Background="{x:Null}">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>

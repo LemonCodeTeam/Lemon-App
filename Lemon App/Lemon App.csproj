@@ -150,6 +150,7 @@
     <Compile Include="Toast.xaml.cs">
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowBlur.cs" />
     <Page Include="ControlItems\DataItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

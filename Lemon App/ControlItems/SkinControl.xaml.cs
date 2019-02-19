@@ -19,8 +19,10 @@ namespace Lemon_App
             InitializeComponent();
             this.imgurl = imgurl;
             theme = themecolor;
-            if(imgurl!=-1)
-               img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + + imgurl + ".jpg",UriKind.Absolute)));
+            if (imgurl == -2)
+                img.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF2D2D30"));
+            else if (imgurl != -1)
+                img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + +imgurl + ".jpg", UriKind.Absolute)));
             this.name.Text = name;
         }
     }

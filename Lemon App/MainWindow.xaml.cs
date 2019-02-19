@@ -219,34 +219,41 @@ namespace Lemon_App
 
         private void LoadAfterLogin(bool hasAnimation = true)
         {
-            if (Settings.USettings.Skin_txt != "")
-            {
-                if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
-                {
-                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
-                    ControlDownPage.BorderThickness = new Thickness(0);
-                    ControlPage.BorderThickness = new Thickness(0);
-                }
-                Color co;
-                if (Settings.USettings.Skin_txt == "Black")
-                {
-                    co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
-                }
-                else
-                {
-                    co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
-                }
-                App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
-                    byte.Parse(Settings.USettings.Skin_Theme_G),
-                    byte.Parse(Settings.USettings.Skin_Theme_B)));
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                App.BaseApp.SetColor("ButtonColorBrush", co);
-                App.BaseApp.SetColor("TextX1ColorBrush", co);
+            if (Settings.USettings.Skin_Path == "BlurBlackTheme"){
+                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99000000"));
+                App.BaseApp.Skin();
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4C000000"));
+                WindowBlur.SetIsEnabled(this, true);
             }
-            else { App.BaseApp.unSkin(); Page.Background = new SolidColorBrush(Colors.White); }
-
+            else{
+                if (Settings.USettings.Skin_txt != "")
+                {
+                    if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
+                    {
+                        Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
+                        ControlDownPage.BorderThickness = new Thickness(0);
+                        ControlPage.BorderThickness = new Thickness(0);
+                    }
+                    Color co;
+                    if (Settings.USettings.Skin_txt == "Black")
+                    {
+                        co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
+                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                    }
+                    else
+                    {
+                        co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
+                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
+                    }
+                    App.BaseApp.SetColor("ThemeColor", Color.FromRgb(byte.Parse(Settings.USettings.Skin_Theme_R),
+                        byte.Parse(Settings.USettings.Skin_Theme_G),
+                        byte.Parse(Settings.USettings.Skin_Theme_B)));
+                    App.BaseApp.SetColor("ResuColorBrush", co);
+                    App.BaseApp.SetColor("ButtonColorBrush", co);
+                    App.BaseApp.SetColor("TextX1ColorBrush", co);
+                }
+                else { App.BaseApp.unSkin(); Page.Background = new SolidColorBrush(Colors.White); }
+            }
             LoadMusicData(hasAnimation);
         }
         private double now = 0;
@@ -534,6 +541,8 @@ namespace Lemon_App
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) =>
                 {
+                    if (WindowBlur.GetIsEnabled(this))
+                        WindowBlur.SetIsEnabled(this, false);
                     if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
                         await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
                     Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
@@ -568,6 +577,8 @@ namespace Lemon_App
             SkinControl sxc = new SkinControl(-1, "默认主题", Color.FromArgb(0, 0, 0, 0));
             sxc.MouseDown += (s, n) =>
             {
+                if (WindowBlur.GetIsEnabled(this))
+                    WindowBlur.SetIsEnabled(this, false);
                 ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
                 ControlPage.BorderThickness = new Thickness(0, 0, 1, 0);
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
@@ -579,6 +590,22 @@ namespace Lemon_App
             };
             sxc.Margin = new Thickness(10, 0, 0, 0);
             SkinIndexList.Children.Add(sxc);
+
+            SkinControl blur = new SkinControl(-2, "磨砂黑", Color.FromArgb(0, 0, 0, 0));
+            blur.MouseDown += (s, n) =>
+            {
+                ControlDownPage.BorderThickness = new Thickness(0, 0, 0, 0);
+                ControlPage.BorderThickness = new Thickness(0, 0, 0, 0);
+                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99000000"));
+                App.BaseApp.Skin();
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4C000000"));
+                WindowBlur.SetIsEnabled(this, true);
+                Settings.USettings.Skin_txt = "";
+                Settings.USettings.Skin_Path = "BlurBlackTheme";
+                Settings.SaveSettings();
+            };
+            blur.Margin = new Thickness(10, 0, 0, 0);
+            SkinIndexList.Children.Add(blur);
         }
         #endregion
         #region 功能区
