@@ -128,7 +128,7 @@ namespace Lemon_App
             Gdpop.IsOpen = false;
             string name = (sender as MDButton).TName;
             string id = ListData[name];
-            string[] a = MusicLib.AddMusicToGD(music,id);
+            string[] a = MusicLib.AddMusicToGD(music.MusicID,id);
             Toast.Send(a[1]+": "+a[0]);
         }
 

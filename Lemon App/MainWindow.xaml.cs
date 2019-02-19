@@ -1083,7 +1083,7 @@ namespace Lemon_App
                     }
                     else
                     {
-                        string[] a = MusicLib.AddMusicToGD(RadioData, MusicLib.MusicLikeGDdirid);
+                        string[] a = MusicLib.AddMusicToGD(RadioData.MusicID, MusicLib.MusicLikeGDdirid);
                         Toast.Send(a[1] + ": " + a[0]);
                         Settings.USettings.MusicLike.Add(RadioData.MusicID, RadioData);
                         LikeBtnDown();
@@ -1100,7 +1100,7 @@ namespace Lemon_App
                     }
                     else
                     {
-                        string[] a = MusicLib.AddMusicToGD(MusicData.music, MusicLib.MusicLikeGDdirid);
+                        string[] a = MusicLib.AddMusicToGD(MusicData.music.MusicID, MusicLib.MusicLikeGDdirid);
                         Toast.Send(a[1] + ": " + a[0]);
                         Settings.USettings.MusicLike.Add(MusicData.music.MusicID, MusicData.music);
                         LikeBtnDown();
@@ -1580,7 +1580,7 @@ namespace Lemon_App
             }
             else
             {
-                //添加网易云音乐歌单
+                ml.GetGDbyWYAsync(AddGDPage_id.Text, this, AddGDPage_ps_name, AddGDPage_ps_jd);
             }
              (Resources["CloseAddGDPage"] as Storyboard).Begin();
             GDBtn_MouseDown(null, null);
