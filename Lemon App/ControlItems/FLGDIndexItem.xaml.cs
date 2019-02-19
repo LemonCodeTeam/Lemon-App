@@ -35,8 +35,14 @@ namespace Lemon_App
             img = pic;
             name.Text = nae;
             Loaded += async delegate {
+                Height = Height = ActualWidth + 45;
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
             };
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Height = Height = ActualWidth + 45;
         }
     }
 }

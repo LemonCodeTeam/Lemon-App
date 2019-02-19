@@ -324,20 +324,8 @@ namespace Lemon_App
                 MusicLib.pc.Pause();
                 jd.Value = 0;
                 if (xh)
-                    if (IsRadio)
-                        PlayMusic(RadioData.MusicID, RadioData.ImageUrl, RadioData.MusicName, RadioData.Singer, true);
-                    else PlayMusic(MusicData, null);
-                else
-                {
-                    if (IsRadio)
-                        GetRadio(new RadioItem(RadioID), null);
-                    else
-                    {
-                        if (DataItemsList.Children.IndexOf(MusicData) == DataItemsList.Children.Count - 1)
-                            PlayMusic(DataItemsList.Children[0] as DataItem, null);
-                        else PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
-                    }
-                }
+                    MusicLib.pc.Play();
+                else Border_MouseDown_1(null, null);
             };
             if (Settings.USettings.LemonAreeunIts != "")
             {
@@ -383,8 +371,20 @@ namespace Lemon_App
             Tasktb.ThumbnailClipMargin = ab;
             LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
-            foreach (DataItem dx in DataItemsList.Children)
-                dx.Width = ContentPage.ActualWidth;
+            WidthUI(singerItemsList);
+            WidthUI(RadioItemsList);
+            WidthUI(GDItemsList);
+            WidthUI(FLGDItemsList);
+            WidthUI(GDILikeItemsList);
+            if(Data.Visibility==Visibility.Visible)
+                foreach (DataItem dx in DataItemsList.Children)
+                    dx.Width = ContentPage.ActualWidth;
+        }
+        public void WidthUI(WrapPanel wp) {
+            if (wp.Visibility == Visibility.Visible) {
+                foreach (UserControl dx in wp.Children)
+                    dx.Width = ContentPage.ActualWidth / 5;
+            }
         }
         #endregion
         #region 设置
@@ -881,6 +881,7 @@ namespace Lemon_App
                         Dispatcher.Invoke(() =>
                         {
                             var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                            kss.Width = ContentPage.ActualWidth / 5;
                             kss.MouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(kss);
                         });
@@ -890,6 +891,7 @@ namespace Lemon_App
                         Dispatcher.Invoke(() =>
                         {
                             var a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
+                            a.Width = RadioItemsList.ActualWidth / 5;
                             a.MouseDown += GetRadio;
                             RadioItemsList.Children.Add(a);
                         });
@@ -919,6 +921,7 @@ namespace Lemon_App
                         foreach (var d in data)
                         {
                             var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                            k.Width = ContentPage.ActualWidth / 5;
                             k.MouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(k);
                         }
@@ -1038,13 +1041,13 @@ namespace Lemon_App
                     });
                     foreach (var d in dat)
                     {
-                        Dispatcher.Invoke(() => { RadioItemsList.Children.Add(new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) }); });
+                        Dispatcher.Invoke(() => {
+                            RadioItem a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
+                            a.MouseDown += GetRadio;
+                            a.Width = RadioItemsList.ActualWidth / 5;
+                            RadioItemsList.Children.Add(a);
+                        });
                     }
-                    Dispatcher.Invoke(() =>
-                    {
-                        foreach (var i in RadioItemsList.Children)
-                            (i as RadioItem).MouseDown += GetRadio;
-                    });
                     Dispatcher.Invoke(() => { CloseLoading(); });
                 }));
                 s.Start();
@@ -1793,6 +1796,7 @@ namespace Lemon_App
                 if (!GData_Now.Contains(jm.Key))
                 {
                     var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic) { Margin = new Thickness(20, 0, 0, 20) };
+                    ks.Width = ContentPage.ActualWidth / 5;
                     ks.MouseDown += FxGDMouseDown;
                     GDItemsList.Children.Add(ks);
                     GData_Now.Add(jm.Key);
@@ -1806,6 +1810,7 @@ namespace Lemon_App
                 if (!GLikeData_Now.Contains(jm.Key))
                 {
                     var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic) { Margin = new Thickness(20, 0, 0, 20) };
+                    ks.Width = ContentPage.ActualWidth / 5;
                     ks.MouseDown += FxGDMouseDown;
                     GDILikeItemsList.Children.Add(ks);
                     GLikeData_Now.Add(jm.Key);

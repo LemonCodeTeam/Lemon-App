@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lemon_App"
-             mc:Ignorable="d" Width="120" Height="160">
+             mc:Ignorable="d" SizeChanged="UserControl_SizeChanged" MinWidth="120" MaxWidth="200">
     <Grid Background="#00000000">
-        <Border x:Name="im" Background="#FF007ACC" Height="120" VerticalAlignment="Top"/>
-        <TextBlock x:Name="name" Margin="10,0,10,10" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Height="18" VerticalAlignment="Bottom"/>
+        <Border x:Name="im" Background="#FF007ACC" Height="{Binding ActualWidth, ElementName=im, Mode=OneWay}" VerticalAlignment="Top"/>
+        <Border Height="40" VerticalAlignment="Bottom">
+            <TextBlock x:Name="name" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
     </Grid>
 </UserControl>

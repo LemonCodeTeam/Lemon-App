@@ -7,7 +7,7 @@
         xmlns:lemon_app="clr-namespace:Lemon_App"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="955" MinHeight="630" Background="{x:Null}">
+        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -1101,8 +1101,8 @@
                     <ScrollViewer x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                         <WrapPanel x:Name="DownloadItemsList" Orientation="Vertical"/>
                     </ScrollViewer>
-                    <lemon_app:MDButton x:Name="Download_pause" HorizontalAlignment="Left" Height="25" Margin="140,14,0,506" Width="70" TName="暂停" MouseDown="Download_pause_MouseDown"/>
-                    <lemon_app:MDButton x:Name="Download_clear" HorizontalAlignment="Left" Height="25" Margin="225,14,0,506" Width="70" TName="取消全部" MouseDown="Download_clear_MouseDown"/>
+                    <lemon_app:MDButton x:Name="Download_pause" HorizontalAlignment="Left" Height="25" Margin="140,14,0,0" Width="70" TName="暂停" MouseDown="Download_pause_MouseDown" VerticalAlignment="Top"/>
+                    <lemon_app:MDButton x:Name="Download_clear" HorizontalAlignment="Left" Height="25" Margin="225,14,0,0" Width="70" TName="取消全部" MouseDown="Download_clear_MouseDown" VerticalAlignment="Top"/>
                     <Grid x:Name="NonePage_Copy">
                         <Border Width="300" Height="300" Margin="0,0,0,100" >
                             <Border.Background>

@@ -23,11 +23,17 @@ namespace Lemon_App
             img = pic;
             this.name.Text = Nam;
             Loaded += async delegate {
+                Height = ActualWidth + 40;
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
             };
         }
         public RadioItem(string ID) {
             id = ID;
+        }
+
+        private void UserControl_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            Height = Height = ActualWidth + 40;
         }
     }
 }
