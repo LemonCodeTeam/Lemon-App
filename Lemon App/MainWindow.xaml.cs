@@ -1577,13 +1577,17 @@ namespace Lemon_App
             if (mod)
             {
                 MessageBox.Show(MusicLib.AddGDILike(AddGDPage_id.Text));
+                (Resources["CloseAddGDPage"] as Storyboard).Begin();
+                GDBtn_MouseDown(null, null);
             }
             else
             {
-                ml.GetGDbyWYAsync(AddGDPage_id.Text, this, AddGDPage_ps_name, AddGDPage_ps_jd);
+                ml.GetGDbyWYAsync(AddGDPage_id.Text, this, AddGDPage_ps_name, AddGDPage_ps_jd,
+                    ()=> {
+                        (Resources["CloseAddGDPage"] as Storyboard).Begin();
+                        GDBtn_MouseDown(null, null);
+                    });
             }
-             (Resources["CloseAddGDPage"] as Storyboard).Begin();
-            GDBtn_MouseDown(null, null);
         }
         #endregion
         #region Download
