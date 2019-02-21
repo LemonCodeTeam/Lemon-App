@@ -254,6 +254,7 @@
     <Resource Include="Image\pause.png" />
     <Resource Include="Image\play.png" />
     <Resource Include="Image\right.png" />
+    <Resource Include="Image1.png" />
     <Content Include="Lib\Lierda.WPFHelper.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
   </ItemGroup>

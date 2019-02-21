@@ -29,6 +29,7 @@ namespace Lemon_App
 
         public delegate void Del(FLGDIndexItem fl);
         public event Del DeleteEvent;
+        public event Del StarEvent;
         public delegate void Delv(object sender, MouseButtonEventArgs e);
         public event Delv ImMouseDown;
         public FLGDIndexItem(string Id,string nae,string pic,bool hasDeleteBtn=false)
@@ -38,8 +39,12 @@ namespace Lemon_App
             sname = nae;
             img = pic;
             name.Text = nae;
-            if (!hasDeleteBtn) DeleteBtn.Visibility = Visibility.Collapsed;
-            else {
+            if (!hasDeleteBtn) {
+                MouseEnter += delegate { StarBtn.Visibility = Visibility.Visible; };
+                MouseLeave += delegate { StarBtn.Visibility = Visibility.Collapsed; };
+            }
+            else
+            {
                 MouseEnter += delegate { DeleteBtn.Visibility = Visibility.Visible; };
                 MouseLeave += delegate { DeleteBtn.Visibility = Visibility.Collapsed; };
             }
@@ -62,6 +67,11 @@ namespace Lemon_App
         private void Im_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ImMouseDown(this,null);
+        }
+
+        private void StarBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            StarEvent(this);
         }
     }
 }

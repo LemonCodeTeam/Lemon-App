@@ -884,6 +884,10 @@ namespace Lemon_App
                         Dispatcher.Invoke(() =>
                         {
                             var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                            kss.StarEvent += (sx) => {
+                                MusicLib.AddGDILike(sx.id);
+                                Toast.Send("收藏成功");
+                            };
                             kss.Width = ContentPage.ActualWidth / 5;
                             kss.ImMouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(kss);
@@ -924,6 +928,10 @@ namespace Lemon_App
                         foreach (var d in data)
                         {
                             var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                            k.StarEvent += (sx) => {
+                                MusicLib.AddGDILike(sx.id);
+                                Toast.Send("收藏成功");
+                            };
                             k.Width = ContentPage.ActualWidth / 5;
                             k.ImMouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(k);
