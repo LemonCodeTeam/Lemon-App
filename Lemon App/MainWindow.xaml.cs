@@ -294,37 +294,40 @@ namespace Lemon_App
                 MusicData = new DataItem(Settings.USettings.Playing);
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
                 string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
-                MusicLib.pc.Open(downloadpath);
+                MusicLib.mp.Open(new Uri(downloadpath));
             }
             t.Interval = 500;
-            t.Tick += async delegate
+            t.Tick += delegate
             {
                 try
                 {
-                    now = await MusicLib.pc.Get();
+                    now = MusicLib.mp.Position.TotalMilliseconds;
                     if (isPlayasRun)
                     {
-                        double all = await MusicLib.pc.GetAll();
+                        double all = MusicLib.mp.NaturalDuration.TimeSpan.TotalMilliseconds;
                         string alls = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(all));
                         if (Play_All.Text == alls && Play_All.Text != "00:") isPlayasRun = false;
                         Play_All.Text = alls;
                         jd.Maximum = all;
                     }
                     Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
-                    if (canjd) jd.Value = now;
+                    jd.Value = now;
                     if (ind == 1)
                         ml.lv.LrcRoll(now, true);
                     else ml.lv.LrcRoll(now, false);
                 }
                 catch { }
             };
-            MusicLib.pc.MediaEnded += delegate
+            MusicLib.mp.MediaEnded += delegate
             {
-                t.Stop();
-                MusicLib.pc.Pause();
+                Console.WriteLine("end");
                 jd.Value = 0;
                 if (xh)
-                    MusicLib.pc.Play();
+                {
+                    t.Start();
+                    MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
+                    MusicLib.mp.Play();
+                }
                 else Border_MouseDown_1(null, null);
             };
             if (Settings.USettings.LemonAreeunIts != "")
@@ -882,7 +885,7 @@ namespace Lemon_App
                         {
                             var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
                             kss.Width = ContentPage.ActualWidth / 5;
-                            kss.MouseDown += GDMouseDown;
+                            kss.ImMouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(kss);
                         });
                     }
@@ -922,7 +925,7 @@ namespace Lemon_App
                         {
                             var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
                             k.Width = ContentPage.ActualWidth / 5;
-                            k.MouseDown += GDMouseDown;
+                            k.ImMouseDown += GDMouseDown;
                             FLGDItemsList.Children.Add(k);
                         }
                         CloseLoading();
@@ -1318,8 +1321,8 @@ namespace Lemon_App
             {
                 if (doesplay)
                 {
-                    MusicLib.pc.To(0);
-                    MusicLib.pc.Play();
+                    MusicLib.mp.Position=TimeSpan.FromMilliseconds(0);
+                    MusicLib.mp.Play();
                     Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                     t.Start();
@@ -1333,7 +1336,7 @@ namespace Lemon_App
                 IsRadio = isRadio;
                 isPlayasRun = true;
                 t.Stop();
-                MusicLib.pc.Pause();
+                MusicLib.mp.Pause();
                 Settings.USettings.Playing = MusicData.music;
                 Settings.SaveSettings();
                 if (Settings.USettings.MusicLike.ContainsKey(id))
@@ -1358,7 +1361,10 @@ namespace Lemon_App
         {
             PlayBtn_MouseDown(null, null);
         }
-
+        private void Jd_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {//若使用ValueChanged事件，在value改变时也会触发，而不单是拖动jd.
+            MusicLib.mp.Position = TimeSpan.FromMilliseconds(jd.Value);
+        }
         private void ThumbButtonInfo_Click(object sender, EventArgs e)
         {
             Border_MouseDown(null, null);
@@ -1369,26 +1375,6 @@ namespace Lemon_App
             Border_MouseDown_1(null, null);
         }
 
-        bool canjd = true;
-        private void jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (Math.Abs((jd.Value + 50) - now) > 500)
-            {
-                if (canjd)
-                {
-                    canjd = false;
-                    MusicLib.pc.ToAway += Pc_ToAway;
-                }
-                MusicLib.pc.To(jd.Value);
-            }
-        }
-
-        private async void Pc_ToAway()
-        {
-            await Task.Delay(500);
-            canjd = true;
-            MusicLib.pc.ToAway -= Pc_ToAway;
-        }
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!IsRadio)
@@ -1405,7 +1391,7 @@ namespace Lemon_App
             if (isplay)
             {
                 isplay = false;
-                MusicLib.pc.Pause();
+                MusicLib.mp.Pause();
                 Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/play.png", UriKind.Absolute));
                 t.Stop();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Play);
@@ -1413,7 +1399,7 @@ namespace Lemon_App
             else
             {
                 isplay = true;
-                MusicLib.pc.Play();
+                MusicLib.mp.Play();
                 Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                 t.Start();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
@@ -1799,9 +1785,14 @@ namespace Lemon_App
             {
                 if (!GData_Now.Contains(jm.Key))
                 {
-                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic) { Margin = new Thickness(20, 0, 0, 20) };
+                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,true) { Margin = new Thickness(20, 0, 0, 20) };
+                    ks.DeleteEvent += async (fl) => {
+                        string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
+                        string a = MusicLib.DeleteGdById(dirid);
+                        GDBtn_MouseDown(null, null);
+                    };
                     ks.Width = ContentPage.ActualWidth / 5;
-                    ks.MouseDown += FxGDMouseDown;
+                    ks.ImMouseDown += FxGDMouseDown;
                     GDItemsList.Children.Add(ks);
                     GData_Now.Add(jm.Key);
                 }
@@ -1813,9 +1804,13 @@ namespace Lemon_App
             {
                 if (!GLikeData_Now.Contains(jm.Key))
                 {
-                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic) { Margin = new Thickness(20, 0, 0, 20) };
+                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,true) { Margin = new Thickness(20, 0, 0, 20) };
+                    ks.DeleteEvent += (fl) => {
+                        string a = MusicLib.DelGDILike(fl.id);
+                        GDBtn_MouseDown(null,null);
+                    };
                     ks.Width = ContentPage.ActualWidth / 5;
-                    ks.MouseDown += FxGDMouseDown;
+                    ks.ImMouseDown += FxGDMouseDown;
                     GDILikeItemsList.Children.Add(ks);
                     GLikeData_Now.Add(jm.Key);
                 }
@@ -1873,6 +1868,7 @@ namespace Lemon_App
 
         #endregion
         #region 快捷键
+        private System.Windows.Forms.NotifyIcon notifyIcon;
         private void LoadHotDog()
         {
             IntPtr handle = new WindowInteropHelper(this).Handle;
@@ -1894,10 +1890,10 @@ namespace Lemon_App
                 UnregisterHotKey(hd, 129);
             };
             //notifyIcon
-            MusicLib.pc.notifyIcon = new System.Windows.Forms.NotifyIcon();
-            MusicLib.pc.notifyIcon.Text = "小萌";
-            MusicLib.pc.notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
-            MusicLib.pc.notifyIcon.Visible = true;
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Text = "小萌";
+            notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
+            notifyIcon.Visible = true;
             //打开菜单项
             System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("打开");
             open.Click += delegate { exShow(); };
@@ -1905,8 +1901,7 @@ namespace Lemon_App
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
             exit.Click += delegate
             {
-                MusicLib.pc.notifyIcon.Dispose();
-                MusicLib.pc.Exit();
+                notifyIcon.Dispose();
                 if (!App.BaseApp.Apip.HasExited)
                     App.BaseApp.Apip.Kill();
                 Settings.SaveSettings();
@@ -1914,9 +1909,9 @@ namespace Lemon_App
             };
             //关联托盘控件
             System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
-            MusicLib.pc.notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
 
-            MusicLib.pc.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
+            notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
             {
                 if (m.Button == System.Windows.Forms.MouseButtons.Left) exShow();
             });

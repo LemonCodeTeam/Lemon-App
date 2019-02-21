@@ -64,12 +64,8 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\InfoHelper.cs" />
     <Compile Include="Helpers\MsgHelper.cs" />
-    <Compile Include="Helpers\MusicGDCacheHelper.cs" />
     <Compile Include="Helpers\MusicGDTask.cs" />
     <Compile Include="Helpers\MyDictionary.cs" />
-    <Compile Include="Helpers\PlayerControl.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="LyricView.xaml.cs">
       <DependentUpon>LyricView.xaml</DependentUpon>
     </Compile>
@@ -91,11 +87,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Helpers\PlayerControl.resx">
-      <DependentUpon>PlayerControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

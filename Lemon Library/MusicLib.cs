@@ -56,7 +56,7 @@ namespace LemonLibrary
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
         }
-        public static PlayerControl pc = new PlayerControl();
+        public static MediaPlayer mp = new MediaPlayer();
         public LyricView lv;
         public static string qq = "";
         public static string MusicLikeGDid = "";
@@ -236,9 +236,9 @@ namespace LemonLibrary
                     {
                         fm.Close();
                         fm.Dispose();
-                        pc.Open(downloadpath);
+                        mp.Open(new Uri(downloadpath));
                         if (doesplay)
-                            pc.Play();
+                            mp.Play();
                         s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                         {
                             x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
@@ -268,9 +268,9 @@ namespace LemonLibrary
                 {
                     fm.Close();
                     fm.Dispose();
-                    pc.Open(downloadpath);
+                    mp.Open(new Uri(downloadpath));
                     if (doesplay)
-                        pc.Play();
+                        mp.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
                         x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
@@ -872,6 +872,19 @@ namespace LemonLibrary
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&dissid={dissid}&from=1&optype=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fplaysquare%2F{dissid}.html%23stat%3Dy_new.playlist.pic_click", header);
             return result;
         }
+        public static string DelGDILike(string dissid) {
+            var header = new WebHeaderCollection();
+            header.Add(HttpRequestHeader.Accept, "*/*");
+            header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
+            header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
+            header.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+            header.Add(HttpRequestHeader.Referer, "https://imgcache.qq.com/music/miniportal_v4/tool/html/fp_utf8.html");
+            header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
+            header.Add(HttpRequestHeader.Host, "c.y.qq.com");
+            string result = HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&ordertype=0&optype=2&dissid={dissid}&from=1", header);
+            return result;
+        }
         public static string AddNewGd(string name)
         {
             var header = new WebHeaderCollection();
@@ -884,6 +897,19 @@ namespace LemonLibrary
             header.Add(HttpRequestHeader.Host, "c.y.qq.com");
             string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url=&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", header);
+            return result;
+        }
+        public static string DeleteGdById(string dirid) {
+            var header = new WebHeaderCollection();
+            header.Add(HttpRequestHeader.Accept, "*/*");
+            header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
+            header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
+            header.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+            header.Add(HttpRequestHeader.Referer, "https://imgcache.qq.com/music/miniportal_v4/tool/html/fp_utf8.html");
+            header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
+            header.Add(HttpRequestHeader.Host, "c.y.qq.com");
+            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&delnum=1&deldirids={dirid}&forcedel=1&formsender=1&source=103", header);
             return result;
         }
     }

@@ -27,14 +27,23 @@ namespace Lemon_App
         public string sname { get; set; }
         public string img { get; set; }
 
-        public FLGDIndexItem(string Id,string nae,string pic)
+        public delegate void Del(FLGDIndexItem fl);
+        public event Del DeleteEvent;
+        public delegate void Delv(object sender, MouseButtonEventArgs e);
+        public event Delv ImMouseDown;
+        public FLGDIndexItem(string Id,string nae,string pic,bool hasDeleteBtn=false)
         {
             InitializeComponent();
             id = Id;
             sname = nae;
             img = pic;
             name.Text = nae;
-            Loaded += async delegate {
+            if (!hasDeleteBtn) DeleteBtn.Visibility = Visibility.Collapsed;
+            else {
+                MouseEnter += delegate { DeleteBtn.Visibility = Visibility.Visible; };
+                MouseLeave += delegate { DeleteBtn.Visibility = Visibility.Collapsed; };
+            }
+             Loaded += async delegate {
                 Height = Height = ActualWidth + 45;
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
             };
@@ -43,6 +52,16 @@ namespace Lemon_App
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Height = Height = ActualWidth + 45;
+        }
+
+        private void DeleteBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DeleteEvent(this);
+        }
+
+        private void Im_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ImMouseDown(this,null);
         }
     }
 }
