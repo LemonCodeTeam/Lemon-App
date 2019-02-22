@@ -120,7 +120,7 @@ namespace Lemon_App
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
             App.BaseApp.Apip.Start();
-            Tasktb.ThumbnailClipMargin=new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
+            Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
             LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             await Task.Run(() =>
             {
@@ -161,6 +161,7 @@ namespace Lemon_App
                                     Dispatcher.Invoke(() =>
                                     {
                                         var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                                        k.GetToSingerPage += K_GetToSingerPage;
                                         k.Play += PlayMusic;
                                         k.Download += K_Download;
                                         if (k.music.MusicID == MusicData.music.MusicID)
@@ -181,6 +182,14 @@ namespace Lemon_App
                     });
                 }
             }));
+        }
+
+        private void K_GetToSingerPage(MusicSinger ms)
+        {
+            var msx = ms;
+            Console.WriteLine(ms.Mid);
+            msx.Photo = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{msx.Mid}.jpg?max_age=2592000";
+            GetSinger(new SingerItem(msx), null);
         }
 
         private void K_Download(DataItem sender)
@@ -217,13 +226,15 @@ namespace Lemon_App
 
         private void LoadAfterLogin(bool hasAnimation = true)
         {
-            if (Settings.USettings.Skin_Path == "BlurBlackTheme"){
+            if (Settings.USettings.Skin_Path == "BlurBlackTheme")
+            {
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99000000"));
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4C000000"));
                 WindowBlur.SetIsEnabled(this, true);
             }
-            else{
+            else
+            {
                 if (Settings.USettings.Skin_txt != "")
                 {
                     if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
@@ -290,7 +301,7 @@ namespace Lemon_App
             if (Settings.USettings.Playing.MusicName != "")
             {
                 MusicData = new DataItem(Settings.USettings.Playing);
-                PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.Singer, false, false);
+                PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.SingerText, false, false);
                 string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
                 MusicLib.mp.Open(new Uri(downloadpath));
             }
@@ -358,8 +369,10 @@ namespace Lemon_App
                 WindowState = WindowState.Normal;
             }
         }
-        private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e) {
-            WindowState = WindowState.Minimized; }
+        private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
 
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -367,8 +380,8 @@ namespace Lemon_App
             double tp = ActualWidth / 2;
             Thickness ab;
             if (ind == 0)
-                ab = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 , 0);
-            else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top , tp + 30, border4.Margin.Bottom);
+                ab = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
+            else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top, tp + 30, border4.Margin.Bottom);
             Tasktb.ThumbnailClipMargin = ab;
             LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
@@ -377,12 +390,14 @@ namespace Lemon_App
             WidthUI(GDItemsList);
             WidthUI(FLGDItemsList);
             WidthUI(GDILikeItemsList);
-            if(Data.Visibility==Visibility.Visible)
+            if (Data.Visibility == Visibility.Visible)
                 foreach (DataItem dx in DataItemsList.Children)
                     dx.Width = ContentPage.ActualWidth;
         }
-        public void WidthUI(WrapPanel wp) {
-            if (wp.Visibility == Visibility.Visible) {
+        public void WidthUI(WrapPanel wp)
+        {
+            if (wp.Visibility == Visibility.Visible)
+            {
                 foreach (UserControl dx in wp.Children)
                     dx.Width = ContentPage.ActualWidth / 5;
             }
@@ -682,13 +697,14 @@ namespace Lemon_App
             SingerItem si = sender as SingerItem;
             OpenLoading();
             NSPage(null, Data);
-            List<Music> dt =await ml.GetSingerMusicByIdAsync(si.data.Mid);
+            List<Music> dt = await ml.GetSingerMusicByIdAsync(si.data.Mid);
             TB.Text = si.data.Name;
             DataItemsList.Children.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(si.data.Photo));
             foreach (var j in dt)
             {
                 var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                k.GetToSingerPage += K_GetToSingerPage;
                 if (k.music.MusicID == MusicData.music.MusicID)
                 {
                     k.ShowDx();
@@ -902,7 +918,8 @@ namespace Lemon_App
                         Dispatcher.Invoke(() =>
                         {
                             var kss = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
-                            kss.StarEvent += (sx) => {
+                            kss.StarEvent += (sx) =>
+                            {
                                 MusicLib.AddGDILike(sx.id);
                                 Toast.Send("收藏成功");
                             };
@@ -946,7 +963,8 @@ namespace Lemon_App
                         foreach (var d in data)
                         {
                             var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
-                            k.StarEvent += (sx) => {
+                            k.StarEvent += (sx) =>
+                            {
                                 MusicLib.AddGDILike(sx.id);
                                 Toast.Send("收藏成功");
                             };
@@ -982,6 +1000,7 @@ namespace Lemon_App
                         var k = new DataItem(m, dt.IsOwn, this) { Width = ContentPage.ActualWidth };
                         k.Play += PlayMusic;
                         k.Download += K_Download;
+                        k.GetToSingerPage += K_GetToSingerPage;
                         if (k.music.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
@@ -1018,7 +1037,7 @@ namespace Lemon_App
                 RadioData = data;
                 Dispatcher.Invoke(() =>
                 {
-                    PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.Singer, true);
+                    PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.SingerText, true);
                 });
                 Dispatcher.Invoke(() => { CloseLoading(); });
             }));
@@ -1070,7 +1089,8 @@ namespace Lemon_App
                     });
                     foreach (var d in dat)
                     {
-                        Dispatcher.Invoke(() => {
+                        Dispatcher.Invoke(() =>
+                        {
                             RadioItem a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
                             a.MouseDown += GetRadio;
                             a.Width = RadioItemsList.ActualWidth / 5;
@@ -1157,6 +1177,7 @@ namespace Lemon_App
                     {
                         var k = new DataItem(m, dt.IsOwn, this) { Width = ContentPage.ActualWidth };
                         k.Play += PlayMusic;
+                        k.GetToSingerPage += K_GetToSingerPage;
                         k.Download += K_Download;
                         if (k.music.MusicID == MusicData.music.MusicID)
                         {
@@ -1315,6 +1336,7 @@ namespace Lemon_App
                             k.ShowDx();
                             MusicData = k;
                         }
+                        k.GetToSingerPage += K_GetToSingerPage;
                         k.Play += PlayMusic;
                         k.Download += K_Download;
                         DataItemsList.Children.Add(k);
@@ -1332,13 +1354,13 @@ namespace Lemon_App
             var dt = sender as DataItem;
             dt.ShowDx();
             MusicData = dt;
-            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.Singer);
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
         }
         public void PlayMusic(DataItem dt)
         {
             dt.ShowDx();
             MusicData = dt;
-            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.Singer);
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
         }
         private string LastPlay = "";
         public async void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
@@ -1347,7 +1369,7 @@ namespace Lemon_App
             {
                 if (doesplay)
                 {
-                    MusicLib.mp.Position=TimeSpan.FromMilliseconds(0);
+                    MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
                     MusicLib.mp.Play();
                     Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
@@ -1532,29 +1554,14 @@ namespace Lemon_App
         #region Lyric
         private async void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
-            if (m_Name.Visibility == Visibility.Visible)
+            Border_MouseDown_2(null,null);
+            NSPage(null, MusicPLPage);
+            MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
+            List<MusicPL> data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+            MusicPlList.Children.Clear();
+            foreach (var dt in data)
             {
-                m_Singer.Visibility = Visibility.Collapsed;
-                m_Name.Visibility = Visibility.Collapsed;
-                ly.Visibility = Visibility.Collapsed;
-                pl.Visibility = Visibility.Visible;
-                List<MusicPL> data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
-                //if (!isPos)
-                //    data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
-                //else
-                //    data = await ml.GetPLAsync(m_Name.Text + "-" + m_Singer.Text);
-                pldata.Children.Clear();
-                foreach (var dt in data)
-                {
-                    pldata.Children.Add(new PlControl(dt.img, dt.name, dt.text) { Width = pldata.ActualWidth - 100 });
-                }
-            }
-            else
-            {
-                m_Singer.Visibility = Visibility.Visible;
-                m_Name.Visibility = Visibility.Visible;
-                ly.Visibility = Visibility.Visible;
-                pl.Visibility = Visibility.Collapsed;
+                MusicPlList.Children.Add(new PlControl(dt) { Width =MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
             }
         }
         private void ly_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -1595,7 +1602,8 @@ namespace Lemon_App
             else
             {
                 ml.GetGDbyWYAsync(AddGDPage_id.Text, this, AddGDPage_ps_name, AddGDPage_ps_jd,
-                    ()=> {
+                    () =>
+                    {
                         (Resources["CloseAddGDPage"] as Storyboard).Begin();
                         GDBtn_MouseDown(null, null);
                     });
@@ -1681,7 +1689,7 @@ namespace Lemon_App
                 var f = x as DataItem;
                 if (f.isChecked == true)
                 {
-                    string name = f.music.MusicName + " - " + f.music.Singer;
+                    string name = (f.music.MusicName + " - " + f.music.Singer).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""); ;
                     string file = Download_Path.Text + $"\\{name}.mp3";
                     DownloadItem di = new DownloadItem(f.music, file, DownloadIndex)
                     {
@@ -1811,8 +1819,9 @@ namespace Lemon_App
             {
                 if (!GData_Now.Contains(jm.Key))
                 {
-                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,true) { Margin = new Thickness(20, 0, 0, 20) };
-                    ks.DeleteEvent += async (fl) => {
+                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
+                    ks.DeleteEvent += async (fl) =>
+                    {
                         string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
                         string a = MusicLib.DeleteGdById(dirid);
                         GDBtn_MouseDown(null, null);
@@ -1830,10 +1839,11 @@ namespace Lemon_App
             {
                 if (!GLikeData_Now.Contains(jm.Key))
                 {
-                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,true) { Margin = new Thickness(20, 0, 0, 20) };
-                    ks.DeleteEvent += (fl) => {
+                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
+                    ks.DeleteEvent += (fl) =>
+                    {
                         string a = MusicLib.DelGDILike(fl.id);
-                        GDBtn_MouseDown(null,null);
+                        GDBtn_MouseDown(null, null);
                     };
                     ks.Width = ContentPage.ActualWidth / 5;
                     ks.ImMouseDown += FxGDMouseDown;
@@ -1871,6 +1881,7 @@ namespace Lemon_App
                         var k = new DataItem(m, md.IsOwn, this) { Width = ContentPage.ActualWidth };
                         k.Play += PlayMusic;
                         k.Download += K_Download;
+                        k.GetToSingerPage += K_GetToSingerPage;
                         if (m.MusicID == MusicData.music.MusicID)
                         {
                             k.ShowDx();
@@ -1976,7 +1987,8 @@ namespace Lemon_App
                 { Border_MouseDown(null, null); Toast.Send("成功切换到上一曲"); }
                 else if (wParam.ToInt32() == 128)
                 { Border_MouseDown_1(null, null); Toast.Send("成功切换到下一曲"); }
-                else if (wParam.ToInt32() == 129) {
+                else if (wParam.ToInt32() == 129)
+                {
                     if (!IsDebug)
                     {
                         IsDebug = true;
@@ -1984,7 +1996,8 @@ namespace Lemon_App
                         ConsoleManager.Toggle();
                         Console.WriteLine("调试模式");
                     }
-                    else {
+                    else
+                    {
                         IsDebug = false;
                         ConsoleManager.Hide();
                         Toast.Send("已退出调试模式🐱‍👤");
@@ -2024,29 +2037,41 @@ namespace Lemon_App
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
-                    Action a = new Action(async () =>
+                    if (Settings.USettings.LemonAreeunIts == qq)
                     {
-                        var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
-                        await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
-                        await Task.Run(() =>
+                        if (cdata.lpData.Contains("g_tk"))
                         {
-                            Settings.LoadUSettings(qq);
-                            if (cdata.lpData.Contains("g_tk"))
-                            {
-                                Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
-                                Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
-                            }
-                            Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
-                            Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
-                            Settings.USettings.LemonAreeunIts = qq;
+                            Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
+                            Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
                             Settings.SaveSettings();
-                            Settings.LSettings.qq = qq;
-                            Settings.SaveLocaSettings();
-                            Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
+                        }
+                    }
+                    else
+                    {
+                        Action a = new Action(async () =>
+                        {
+                            var sl = await HttpHelper.GetWebAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
+                            await Task.Run(() =>
+                            {
+                                Settings.LoadUSettings(qq);
+                                if (cdata.lpData.Contains("g_tk"))
+                                {
+                                    Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
+                                    Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
+                                }
+                                Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
+                                Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
+                                Settings.USettings.LemonAreeunIts = qq;
+                                Settings.SaveSettings();
+                                Settings.LSettings.qq = qq;
+                                Settings.SaveLocaSettings();
+                                Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
+                            });
+                            LoadAfterLogin(false);
                         });
-                        LoadAfterLogin(false);
-                    });
-                    a();
+                        a();
+                    }
                 }
             }
             return IntPtr.Zero;

@@ -10,7 +10,8 @@ namespace LemonLibrary
         {
             public string MusicName { set; get; } = "";
             public string MusicName_Lyric { get; set; } = "";
-            public string Singer { set; get; } = "";
+            public List<MusicSinger> Singer { set; get; } = new List<MusicSinger>();
+            public string SingerText { get; set; } = "";
             public string MusicID { set; get; } = "";
             public string ImageUrl { set; get; } = "";
         }
@@ -36,6 +37,9 @@ namespace LemonLibrary
             public string img { get; set; }
             public string like { get; set; }
             public string text { get; set; }
+            public string commentid { get; set; }
+            public string time { get; set; }
+            public bool ispraise { get; set; }
         }
         public class MusicRadioList {
             public List<MusicRadioListItem> Hot { set; get; } = new List<MusicRadioListItem>();

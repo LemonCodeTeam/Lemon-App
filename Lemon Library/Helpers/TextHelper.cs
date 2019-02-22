@@ -10,6 +10,14 @@ namespace LemonLibrary
 {
     public class TextHelper
     {
+        public static string Exem(string str) {
+            string s = str;
+            while (s.Contains("[em]")) {
+                string em = "[em]"+XtoYGetTo(s, "[em]", "[/em]", 0)+"[/em]";
+                s = s.Replace(em, "");
+            }
+            return s;
+        }
         public static string TimeSpanToms(TimeSpan ts) {
             string str = ts.ToString();
             string s = XtoYGetTo(str, ":", ".", 0);

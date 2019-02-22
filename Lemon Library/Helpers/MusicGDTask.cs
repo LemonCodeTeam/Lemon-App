@@ -24,7 +24,8 @@ namespace LemonLibrary.Helpers
         public int ThreadCount = 20;
         public async void GetGDAsync(string id = "2591355982")
         {
-            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk=1157737156&loginUin={MusicLib.qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={MusicLib.qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+            Console.WriteLine(s);
             JObject o = JObject.Parse(s);
             var c0 = o["cdlist"][0];
             dt.name = c0["dissname"].ToString();
@@ -68,12 +69,20 @@ namespace LemonLibrary.Helpers
                 {
                     var c0si = a.o[i];
                     string singer = "";
+                    List<MusicSinger> lm = new List<MusicSinger>();
                     var c0sis = c0si["singer"];
-                    foreach (var cc in c0sis) singer += cc["name"].ToString() + "&";
+                    foreach (var cc in c0sis)
+                    {
+                        lm.Add(new MusicSinger() {
+                            Name= cc["name"].ToString(),Mid= cc["mid"].ToString()
+                        });
+                        singer += cc["name"].ToString() + "&";
+                    }
                     Music m = new Music();
                     m.MusicName = c0si["songname"].ToString();
                     m.MusicName_Lyric = c0si["albumdesc"].ToString();
-                    m.Singer = singer.Substring(0, singer.Length - 1);
+                    m.Singer = lm;
+                    m.SingerText = singer.Substring(0, singer.Length - 1);
                     m.MusicID = c0si["songmid"].ToString();
                     var amid = c0si["albummid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")

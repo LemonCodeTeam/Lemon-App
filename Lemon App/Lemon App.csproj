@@ -117,6 +117,7 @@
     <Compile Include="ControlItems\MyMessageBox.xaml.cs">
       <DependentUpon>MyMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControlItems\Ran.cs" />
     <Compile Include="ControlItems\SkinControl.xaml.cs">
       <DependentUpon>SkinControl.xaml</DependentUpon>
     </Compile>

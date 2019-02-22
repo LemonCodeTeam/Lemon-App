@@ -43,19 +43,35 @@ namespace LemonLibrary
                 USettings.Playing.ImageUrl = o["Playing"]["ImageUrl"].ToString();
                 USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
                 USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
-                USettings.Playing.Singer = o["Playing"]["Singer"].ToString();
+                USettings.Playing.SingerText = o["Playing"]["SingerText"].ToString();
+                foreach (var xs in o["Playing"]["Singer"]) {
+                    USettings.Playing.Singer.Add(new MusicSinger() {Name=xs["Name"].ToString(),
+                        Mid=xs["Mid"].ToString()
+                    });
+                }
                 foreach (var jx in o["MusicLike"].ToArray())
                 {
                     foreach (var jm in jx)
                     {
                         if (!USettings.MusicLike.ContainsKey(jm["MusicID"].ToString()))
+                        {
+                            List<MusicSinger> lm = new List<MusicSinger>();
+                            foreach (var xs in jm["Singer"])
+                            {
+                                lm.Add(new MusicSinger(){
+                                    Name = xs["Name"].ToString(),
+                                    Mid = xs["Mid"].ToString()
+                                });
+                            }
                             USettings.MusicLike.Add(jm["MusicID"].ToString(), new Music()
                             {
                                 MusicID = jm["MusicID"].ToString(),
-                                Singer = jm["Singer"].ToString(),
+                                SingerText = jm["SingerText"].ToString(),
+                                Singer=lm,
                                 ImageUrl = jm["ImageUrl"].ToString(),
                                 MusicName = jm["MusicName"].ToString()
                             });
+                        }
                     }
                 }
                 if (data.Contains("Skin_Path"))

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using static LemonLibrary.InfoHelper;
@@ -21,6 +22,8 @@ namespace Lemon_App
         public event MouseDownHandle Play;
         public event MouseDownHandle Add;
         public event MouseDownHandle Download;
+        public delegate void MouseDownHandle_sm(MusicSinger ms);
+        public event MouseDownHandle_sm GetToSingerPage;
 
         public Music music;
         private MainWindow Mainwindow = null;
@@ -35,12 +38,26 @@ namespace Lemon_App
                 Loaded += delegate {
                     needb = needDeleteBtn;
                     name.Text = dat.MusicName;
-                    ser.Text = dat.Singer;
+                    foreach (MusicSinger a in dat.Singer) {
+                        Ran r = new Ran() { Text=a.Name,data=a};
+                        r.MouseDown += R_MouseDown;
+                        ser.Inlines.Add(r);
+                        ser.Inlines.Add(new Run(" / "));
+                    }
+                    ser.Inlines.Remove(ser.Inlines.LastInline);
                     mss.Text = dat.MusicName_Lyric;
                 };
             }
             catch { }
         }
+
+        private void R_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Ran r = sender as Ran;
+            MusicSinger ms = r.data as MusicSinger;
+            GetToSingerPage(ms);
+        }
+
         bool ns = false;
         public bool isChecked = false;
         public void ShowDx() {
@@ -107,8 +124,7 @@ namespace Lemon_App
         {
             Add_Gdlist.Children.Clear();
             ListData.Clear();
-            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk=1803226462&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0", null,
-                "yqq_stat=0; pgv_info=ssid=s9030869079; ts_last=y.qq.com/; pgv_pvid=6655025332; ts_uid=7057611058; pgv_pvi=8567083008; pgv_si=s9362499584; _qpsvr_localtk=0.4296063820147471; uin=o2728578956; skey=@uvgfbeYR4; ptisp=cm; RK=sKKMfg2M0M; ptcz=7b132d6e799e806b8e425c58966902006b53fc86e1ecb0d2678db33d44f7239d; luin=o2728578956; lskey=000100007afb4fb9a74df33c89945350f16ebce7ef0faca9f0da0aa18246d750b53e68077ae6f83ba3901761; p_uin=o2728578956; pt4_token=-HKvK3MM2TlBjBsPDdO*3Iw6shscAWOJEz-pf5eTH2g_; p_skey=rW8tk6zH9QhmEIOjVvvBXdIeyFQbGGi2xnYiT8f2Ioo_; p_luin=o2728578956; p_lskey=000400008417d0c8d018dff398f9512dcee49d8e75aeae7d975e77c39a169d1e17a25b0dfecfb63bebf56cba; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin"));
+            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
             foreach (var a in o["list"]) {
                 string name = a["dirname"].ToString();
                 ListData.Add(name, a["dirid"].ToString());
