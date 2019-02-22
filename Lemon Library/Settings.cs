@@ -40,7 +40,6 @@ namespace LemonLibrary
                 USettings.UserName = o["UserName"].ToString();
                 USettings.Cookie = o["Cookie"].ToString();
                 USettings.g_tk = o["g_tk"].ToString();
-                USettings.Playing.GC = o["Playing"]["GC"].ToString();
                 USettings.Playing.ImageUrl = o["Playing"]["ImageUrl"].ToString();
                 USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
                 USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
@@ -52,7 +51,6 @@ namespace LemonLibrary
                         if (!USettings.MusicLike.ContainsKey(jm["MusicID"].ToString()))
                             USettings.MusicLike.Add(jm["MusicID"].ToString(), new Music()
                             {
-                                GC = jm["GC"].ToString(),
                                 MusicID = jm["MusicID"].ToString(),
                                 Singer = jm["Singer"].ToString(),
                                 ImageUrl = jm["ImageUrl"].ToString(),

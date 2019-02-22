@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
 {
@@ -23,18 +24,16 @@ namespace Lemon_App
     /// </summary>
     public partial class SingerItem : UserControl
     {
-        public string img { get; set; }
-        public string singer { get; set; }
-        public SingerItem(string ig, string sing)
+        public MusicSinger data { get; set; }
+        public SingerItem(MusicSinger dt)
         {
             InitializeComponent();
-            img = ig;
-            singer = sing;
-            name.Text = singer;
+            data = dt;
+            name.Text = dt.Name;
             Loaded += async delegate {
                 try
                 {
-                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
+                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Photo));
                 }
                 catch
                 {

@@ -3,7 +3,6 @@ using LemonLibrary.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -21,7 +20,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Windows.Shell;
 using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
@@ -669,7 +667,7 @@ namespace Lemon_App
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                            var sinx = new SingerItem(d) { Margin = new Thickness(20, 0, 0, 20) };
                             sinx.MouseDown += GetSinger;
                             singerItemsList.Children.Add(sinx);
                         });
@@ -679,9 +677,29 @@ namespace Lemon_App
                 s.Start();
             }
         }
-        public void GetSinger(object sender, MouseEventArgs e)
+        public async void GetSinger(object sender, MouseEventArgs e)
         {
-            SearchMusic((sender as SingerItem).singer);
+            SingerItem si = sender as SingerItem;
+            OpenLoading();
+            NSPage(null, Data);
+            List<Music> dt =await ml.GetSingerMusicByIdAsync(si.data.Mid);
+            TB.Text = si.data.Name;
+            DataItemsList.Children.Clear();
+            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(si.data.Photo));
+            foreach (var j in dt)
+            {
+                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                if (k.music.MusicID == MusicData.music.MusicID)
+                {
+                    k.ShowDx();
+                    MusicData = k;
+                }
+                k.Play += PlayMusic;
+                k.Download += K_Download;
+                DataItemsList.Children.Add(k);
+            }
+            Datasv.ScrollToTop();
+            CloseLoading();
         }
         private void SIngerPageChecked(object sender, RoutedEventArgs e)
         {
@@ -699,7 +717,7 @@ namespace Lemon_App
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                            var sinx = new SingerItem(d) { Margin = new Thickness(20, 0, 0, 20) };
                             sinx.MouseDown += GetSinger;
                             singerItemsList.Children.Add(sinx);
                         });
@@ -729,7 +747,7 @@ namespace Lemon_App
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            var sinx = new SingerItem(d.Photo, d.Name) { Margin = new Thickness(20, 0, 0, 20) };
+                            var sinx = new SingerItem(d) { Margin = new Thickness(20, 0, 0, 20) };
                             sinx.MouseDown += GetSinger;
                             singerItemsList.Children.Add(sinx);
                         });

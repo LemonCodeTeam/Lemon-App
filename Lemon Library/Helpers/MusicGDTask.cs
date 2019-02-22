@@ -60,7 +60,9 @@ namespace LemonLibrary.Helpers
             sw.Start();
             ExData a = exdata as ExData;
             int i = a.index;
+#pragma warning disable CS0219 // 变量已被赋值，但从未使用过它的值
             for (int az = 0; i - a.index <= ThreadCount - 1 && a.index <= a.o.Count(); i++)
+#pragma warning restore CS0219 // 变量已被赋值，但从未使用过它的值
             {
                 try
                 {
@@ -72,7 +74,6 @@ namespace LemonLibrary.Helpers
                     m.MusicName = c0si["songname"].ToString();
                     m.MusicName_Lyric = c0si["albumdesc"].ToString();
                     m.Singer = singer.Substring(0, singer.Length - 1);
-                    m.GC = c0si["songid"].ToString();
                     m.MusicID = c0si["songmid"].ToString();
                     var amid = c0si["albummid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")

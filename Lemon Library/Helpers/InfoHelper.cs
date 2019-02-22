@@ -13,11 +13,11 @@ namespace LemonLibrary
             public string Singer { set; get; } = "";
             public string MusicID { set; get; } = "";
             public string ImageUrl { set; get; } = "";
-            public string GC { set; get; } = "";
         }
         public class MusicSinger {
             public string Name { set; get; }
             public string Photo { set; get; }
+            public string Mid { set; get; }
         }
         public class MusicGD
         {

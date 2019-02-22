@@ -61,6 +61,29 @@ namespace LemonLibrary
         public static string qq = "";
         public static string MusicLikeGDid = "";
         public static string MusicLikeGDdirid = "";
+        public async Task<List<Music>> GetSingerMusicByIdAsync(string mid,int osx=1) {
+            int begin = (osx - 1) * 30;
+            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=24&singermid={mid}&order=listen&begin={begin}&num=30&songstatus=1"));
+            List<Music> dt = new List<Music>();
+            JToken dtl = o["data"]["list"];
+            foreach (JToken dtli in dtl) {
+                var dsli = dtli["musicData"];
+                Music m = new Music();
+                m.MusicName = dsli["songname"].ToString();
+                m.MusicName_Lyric = dsli["albumdesc"].ToString();
+                string Singer = "";
+                for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
+                { Singer += dsli["singer"][osxc]["name"] + "&"; }
+                m.Singer = Singer.Substring(0, Singer.LastIndexOf("&"));
+                m.MusicID = dsli["songmid"].ToString();
+                var amid = dsli["albummid"].ToString();
+                if (amid == "001ZaCQY2OxVMg")
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                dt.Add(m);
+            }
+            return dt;
+        }
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
             if (HttpHelper.IsNetworkTrue())
@@ -84,7 +107,6 @@ namespace LemonLibrary
                     if (amid == "001ZaCQY2OxVMg")
                         m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
-                    m.GC = dsli["id"].ToString();
                     dt.Add(m);
                     i++;
                 }
@@ -150,7 +172,6 @@ namespace LemonLibrary
                     m.MusicName = c0si["songname"].ToString();
                     m.MusicName_Lyric = c0si["albumdesc"].ToString();
                     m.Singer = singer.Substring(0, singer.Length - 1);
-                    m.GC = c0si["songid"].ToString();
                     m.MusicID = c0si["songmid"].ToString();
                     var amid = c0si["albummid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
@@ -413,7 +434,6 @@ namespace LemonLibrary
                 if (amid == "001ZaCQY2OxVMg")
                     m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{sid["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
-                m.GC = sid["songmid"].ToString();
                 dt.Add(m);
                 i++;
             }
@@ -431,6 +451,7 @@ namespace LemonLibrary
                 data.Add(new MusicSinger
                 {
                     Name = dli["Fsinger_name"].ToString(),
+                    Mid=dli["Fsinger_mid"].ToString(),
                     Photo = $"https://y.gtimg.cn/music/photo_new/T001R150x150M000{dli["Fsinger_mid"]}.jpg?max_age=2592000"
                 });
                 i++;
@@ -670,7 +691,6 @@ namespace LemonLibrary
                 {
                     MusicName = s_0["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
                     Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
-                    GC = s_0["mid"].ToString(),
                     MusicID = s_0["mid"].ToString(),
                     ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{s_0["album"]["mid"]}.jpg"
                 };
@@ -688,7 +708,6 @@ namespace LemonLibrary
                 {
                     MusicName = sdt0["name"].ToString().Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""),
                     Singer = Singer.Substring(0, Singer.LastIndexOf("&")),
-                    GC = sdt0["mid"].ToString(),
                     MusicID = sdt0["mid"].ToString(),
                     ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{sdt0["album"]["mid"]}.jpg"
                 };
