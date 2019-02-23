@@ -433,9 +433,10 @@ namespace LemonLibrary
             }
             return data;
         }
-        public async Task<List<Music>> GetToplistAsync(int TopID)
+        public async Task<List<Music>> GetToplistAsync(string TopID, int osx = 1)
         {
-            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin=0&song_num=30&g_tk=1206122277&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
+            int index = (osx - 1) * 30;
+            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             List<Music> dt = new List<Music>();
             int i = 0;
             var s = o["songlist"];
@@ -548,9 +549,11 @@ namespace LemonLibrary
             }
             return data;
         }
-        public async Task<List<MusicGD>> GetFLGDAsync(int id)
+        public async Task<List<MusicGD>> GetFLGDAsync(string id,int osx=1)
         {
-            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId=5&sin=0&ein=29", Encoding.UTF8));
+            int start = (osx - 1) * 30;
+            int end = start + 29;
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId=5&sin={start}&ein={end}", Encoding.UTF8));
             var data = new List<MusicGD>();
             int i = 0;
             var dl = o["data"]["list"];

@@ -5,6 +5,9 @@ using System.IO;
 namespace LemonLibrary
 {
     public class InfoHelper {
+        public enum NowPage {
+            Search,Top,SingerItem,GDItem
+        }
         ////////Music Helper////////
         public class Music
         {
