@@ -1363,6 +1363,33 @@ namespace Lemon_App
         }
         #endregion
         #region PlayControl
+        private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                if (MusicPlay_tb.Text == "1.25x")
+                {
+                    MusicLib.mp.SpeedRatio = 1d;
+                    MusicPlay_tb.Text = "1x";
+                }
+                else
+                {
+                    MusicLib.mp.SpeedRatio = 1.25d;
+                    MusicPlay_tb.Text = "1.25x";
+                }
+            }
+            else Pop_sp.IsOpen = !Pop_sp.IsOpen;
+        }
+
+        private void MusicPlay_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                MusicLib.mp.SpeedRatio = MusicPlay_sp.Value;
+                MusicPlay_tb.Text = MusicPlay_sp.Value.ToString("0.00") + "x";
+            }
+            catch { }
+        }
         private void Tasktb_playBtn_Click(object sender, EventArgs e)
         {
             PlayBtn_MouseDown(null, null);
