@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LemonLibrary
 {
@@ -8,8 +9,13 @@ namespace LemonLibrary
         /// <summary>
         /// API调试台
         /// </summary>
-        static void Main() {
-            Console.WriteLine(TextHelper.Exem(Console.ReadLine()));
+        static async System.Threading.Tasks.Task Main() {
+            Settings.LoadUSettings("2728578956");
+            string mid = "001SCzwZ4MdpL6";
+            string url =await MusicLib.GetUrlAsync(mid);
+            Console.WriteLine(url);
+            Process.Start(url);
+
             Console.ReadLine();
         }
 

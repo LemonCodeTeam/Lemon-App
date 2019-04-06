@@ -106,7 +106,7 @@ namespace LemonLibrary
                 size /= mod;
                 i++;
             }
-            return Math.Round(size) + units[i];
+            return size.ToString("0.00") + units[i];
         }
     }
 }

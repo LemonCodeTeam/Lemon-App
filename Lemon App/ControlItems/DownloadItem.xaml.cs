@@ -24,13 +24,13 @@ namespace Lemon_App
             path = downloadpath;
             index = ind;
             Console.WriteLine(m.MusicName+"   "+ind);
-            Loaded += DownloadItem_Loaded;
+            Loaded += DownloadItem_LoadedAsync;
             MouseEnter += UserControl_MouseEnter;
             MouseLeave += UserControl_MouseLeave;
         }
-        private void DownloadItem_Loaded(object sender, RoutedEventArgs e)
+        private async void DownloadItem_LoadedAsync(object sender, RoutedEventArgs e)
         {
-            tb.Text = MData.MusicName + " - " + MData.Singer;
+            tb.Text = MData.MusicName + " - " + MData.SingerText;
             d = new HttpDownloadHelper(MData.MusicID, path);
             Loadedd();
             d.ProgressChanged += (pro) =>
@@ -59,6 +59,7 @@ namespace Lemon_App
             };
             if (index == 0||index==1||index==2)
                 d.Download();
+            await MusicLib.GetLyric(MData.MusicID,path.Replace(".mp3",".lrc"));
         }
         public HttpDownloadHelper d;
         public Music MData;

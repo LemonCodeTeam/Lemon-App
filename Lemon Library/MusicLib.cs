@@ -331,7 +331,7 @@ namespace LemonLibrary
                 lv.LoadLrc(dt);
             }
         }
-        public string PushLyric(string t, string x, string file)
+        public static string PushLyric(string t, string x, string file)
         {
             List<string> datatime = new List<string>();
             List<string> datatext = new List<string>();
@@ -375,9 +375,9 @@ namespace LemonLibrary
             File.WriteAllText(file, LyricData);
             return LyricData;
         }
-        public async Task<string> GetLyric(string McMind)
+        public static async Task<string> GetLyric(string McMind,string file="")
         {
-            string file = Settings.USettings.CachePath + "Lyric\\" + McMind + ".lrc";
+            if(file=="") file=Settings.USettings.CachePath + "Lyric\\" + McMind + ".lrc";
             if (!File.Exists(file))
             {
                 WebClient c = new WebClient();
