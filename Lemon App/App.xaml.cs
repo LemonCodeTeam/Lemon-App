@@ -21,7 +21,7 @@ namespace Lemon_App
     public partial class App : Application
     {
         public static App BaseApp = null;
-        public static string EM = "1036";
+        public static string EM = "1038";
         public Process Apip = new Process();
         public void SetColor(string id,Color c)
         {

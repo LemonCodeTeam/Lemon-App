@@ -109,6 +109,7 @@ namespace Lemon_App
         }
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
+            Updata();
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
             Settings.SaveHandle();
@@ -184,7 +185,6 @@ namespace Lemon_App
         private bool isOpenGc = true;
         private void LoadMusicData(bool hasAnimation = true)
         {
-            Updata();
             LoadSettings();
             if (Settings.USettings.UserName != string.Empty)
             {
