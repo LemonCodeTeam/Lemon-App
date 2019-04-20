@@ -157,7 +157,7 @@ namespace Lemon_App
                 int index = He.MGData_Now.Data.IndexOf(music);
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
                 string Musicid = He.MGData_Now.ids[index];
-                Mainwindow.DataItemsList.Children.RemoveAt(index);
+                Mainwindow.DataItemsList.Items.RemoveAt(index);
                 Toast.Send(MusicLib.DeleteMusicFromGD(Musicid, He.MGData_Now.id, dirid));
             }
         }

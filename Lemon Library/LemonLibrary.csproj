@@ -63,7 +63,6 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\InfoHelper.cs" />
     <Compile Include="Helpers\MsgHelper.cs" />
-    <Compile Include="Helpers\MusicGDTask.cs" />
     <Compile Include="Helpers\MyDictionary.cs" />
     <Compile Include="LyricView.xaml.cs">
       <DependentUpon>LyricView.xaml</DependentUpon>

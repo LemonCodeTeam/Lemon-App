@@ -1,7 +1,7 @@
-﻿using LemonLibrary.Helpers;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -162,7 +162,7 @@ namespace LemonLibrary
             Console.WriteLine("kkkkkkkkkkkkkkk" + MusicLikeGDid);
             MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
         }
-        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<Music, bool> callback = null, Window wx = null)
+        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<Music, bool> callback = null, Window wx = null,Action<int> getAll=null)
         {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
             JObject o = JObject.Parse(s);
@@ -174,20 +174,24 @@ namespace LemonLibrary
             dt.ids = c0["songids"].ToString().Split(',').ToList();
             dt.IsOwn = c0["login"].ToString() == c0["uin"].ToString();
             var c0s = c0["songlist"];
-            foreach (var c0si in c0s)
+            await wx.Dispatcher.BeginInvoke(new Action(() => getAll(c0s.Count())));
+            try
             {
-                string singer = "";
-                var c0sis = c0si["singer"];
-                List<MusicSinger> lm = new List<MusicSinger>();
-                foreach (var cc in c0sis) {
-                    singer += cc["name"].ToString() + "&";
-                    lm.Add(new MusicSinger() { Name = cc["name"].ToString(),
-                        Mid = cc["mid"].ToString()
-                    });
-                }
-                Music m = new Music();
-                try
+                foreach (var c0si in c0s)
                 {
+                    string singer = "";
+                    var c0sis = c0si["singer"];
+                    List<MusicSinger> lm = new List<MusicSinger>();
+                    foreach (var cc in c0sis)
+                    {
+                        singer += cc["name"].ToString() + "&";
+                        lm.Add(new MusicSinger()
+                        {
+                            Name = cc["name"].ToString(),
+                            Mid = cc["mid"].ToString()
+                        });
+                    }
+                    Music m = new Music();
                     m.MusicName = c0si["songname"].ToString();
                     m.MusicName_Lyric = c0si["albumdesc"].ToString();
                     m.Singer = lm;
@@ -197,11 +201,12 @@ namespace LemonLibrary
                     if (amid == "001ZaCQY2OxVMg")
                         m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
-                }//莫名其妙的System.NullReferenceException:“未将对象引用设置到对象的实例。”
-                catch { }
-                await wx.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => { callback(m, dt.IsOwn); }));
-                dt.Data.Add(m);
+                    dt.Data.Add(m);
+                    await wx.Dispatcher.BeginInvoke(new Action(() => { callback(m, dt.IsOwn); }));
+                    await Task.Delay(1);
+                }
             }
+            catch { }
             return dt;
         }
         public async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()

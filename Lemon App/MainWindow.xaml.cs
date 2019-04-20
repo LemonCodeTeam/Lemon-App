@@ -1,5 +1,4 @@
 ﻿using LemonLibrary;
-using LemonLibrary.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -304,7 +303,7 @@ namespace Lemon_App
             WidthUI(FLGDItemsList);
             WidthUI(GDILikeItemsList);
             if (Data.Visibility == Visibility.Visible)
-                foreach (DataItem dx in DataItemsList.Children)
+                foreach (DataItem dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
         }
         public void WidthUI(WrapPanel wp)
@@ -571,7 +570,7 @@ namespace Lemon_App
                 NSPage(null, Data);
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.pic));
                 TB.Text = g.name;
-                DataItemsList.Children.Clear();
+                DataItemsList.Items.Clear();
             }
             var dta = await ml.GetToplistAsync(g.topID, osx);
             foreach (var j in dta)
@@ -585,7 +584,7 @@ namespace Lemon_App
                     k.ShowDx();
                     MusicData = k;
                 }
-                DataItemsList.Children.Add(k);
+                DataItemsList.Items.Add(k);
             }
             CloseLoading();
         }
@@ -660,7 +659,7 @@ namespace Lemon_App
             OpenLoading();
             List<Music> dt = await ml.GetSingerMusicByIdAsync(si.data.Mid,osx);
             if (osx == 1) {
-                DataItemsList.Children.Clear();
+                DataItemsList.Items.Clear();
                 NSPage(null, Data);
                 TB.Text = si.data.Name;
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(si.data.Photo));
@@ -676,7 +675,7 @@ namespace Lemon_App
                 }
                 k.Play += PlayMusic;
                 k.Download += K_Download;
-                DataItemsList.Children.Add(k);
+                DataItemsList.Items.Add(k);
             }
             if(osx==1)Datasv.ScrollToTop();
             CloseLoading();
@@ -874,10 +873,6 @@ namespace Lemon_App
                 sinx.Start();
             }
         }
-        public void GDMouseDown(object s, MouseButtonEventArgs se)
-        {
-            GetGD((s as FLGDIndexItem).id);
-        }
         private void FLGDPageChecked(object sender, RoutedEventArgs e)
         {
             if (sender != null)
@@ -912,51 +907,11 @@ namespace Lemon_App
                     Toast.Send("收藏成功");
                 };
                 k.Width = ContentPage.ActualWidth / 5;
-                k.ImMouseDown += GDMouseDown;
+                k.ImMouseDown += FxGDMouseDown;
                 FLGDItemsList.Children.Add(k);
             }
             if (osx == 1) FLGDPage_sv.ScrollToTop();
             CloseLoading();
-        }
-        private void GetGD(string id)
-        {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            np = NowPage.GDItem;
-            OpenLoading();
-            MusicGDTask mt = new MusicGDTask();
-            mt.Finished += async (dt) =>
-            {
-                He.MGData_Now = dt;
-                await Dispatcher.Invoke(async () =>
-                 {
-                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.pic));
-                     TB.Text = dt.name;
-                     DataItemsList.Children.Clear();
-                 });
-                foreach (var m in dt.Data)
-                    Dispatcher.Invoke(new Action(() =>
-                    {
-                        var k = new DataItem(m, dt.IsOwn, this) { Width = ContentPage.ActualWidth };
-                        k.Play += PlayMusic;
-                        k.Download += K_Download;
-                        k.GetToSingerPage += K_GetToSingerPage;
-                        if (k.music.MusicID == MusicData.music.MusicID)
-                        {
-                            k.ShowDx();
-                            MusicData = k;
-                        }
-                        DataItemsList.Children.Add(k);
-                    }));
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    sw.Stop();
-                    Console.WriteLine("耗时:" + sw.Elapsed.TotalMilliseconds + "ms");
-                    CloseLoading();
-                }));
-            };
-            mt.GetGDAsync(id);
-            NSPage(null, Data);
         }
         #endregion
         #region Radio
@@ -1098,59 +1053,36 @@ namespace Lemon_App
                 Settings.SaveSettings();
             }
         }
-        private void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
+        private async void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             NSPage(LikeBtn, Data);
+            loadin.Value = 0;
+            loadin.Opacity = 1;
             TB.Text = "我喜欢";
             TXx.Background = Resources["LoveIcon"] as VisualBrush;
-            DataItemsList.Children.Clear();
-            OpenLoading();
-            MusicGDTask mt = new MusicGDTask();
-            mt.Finished += (dt) =>
-            {
-                He.MGData_Now = dt;
-                if (dt.Data.Count == 0) Dispatcher.Invoke(() => { NSPage(LikeBtn, NonePage); });
-                foreach (var m in dt.Data)
-                    Dispatcher.Invoke(new Action(() =>
-                    {
-                        var k = new DataItem(m, dt.IsOwn, this) { Width = ContentPage.ActualWidth };
-                        k.Play += PlayMusic;
-                        k.GetToSingerPage += K_GetToSingerPage;
-                        k.Download += K_Download;
-                        if (k.music.MusicID == MusicData.music.MusicID)
-                        {
-                            k.ShowDx();
-                            MusicData = k;
-                        }
-                        DataItemsList.Children.Add(k);
-                    }));
-                Dispatcher.Invoke(new Action(() =>
+            DataItemsList.Items.Clear();
+            He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<Music, bool>((j, b) => {
+                var k = new DataItem(j, b, this);
+                DataItemsList.Items.Add(k);
+                k.Play += PlayMusic;
+                k.Width = DataItemsList.ActualWidth;
+                if (j.MusicID == MusicData.music.MusicID)
                 {
-                    sw.Stop();
-                    Console.WriteLine("耗时:" + sw.Elapsed.TotalMilliseconds + "ms");
-                    CloseLoading();
-
-                    var ac = new Action<MusicGData>((m) =>
-                    {
-                        foreach (var ai in m.Data)
-                        {
-                            if (!Settings.USettings.MusicLike.ContainsKey(ai.MusicID))
-                                Settings.USettings.MusicLike.Add(ai.MusicID, ai);
-                        }
-                    });
-                    ac(dt);
-                }));
-            };
-            mt.GetGDAsync(MusicLib.MusicLikeGDid);
+                    k.ShowDx();
+                    MusicData = k;
+                }
+                loadin.Value = DataItemsList.Items.Count;
+            }), this,
+            new Action<int>(i => loadin.Maximum = i));
+            loadin.Opacity = 0;
+            ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
             np = NowPage.GDItem;
         }
         #endregion
         #region DataPageBtn
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PlayMusic(DataItemsList.Children[0] as DataItem, null);
+            PlayMusic(DataItemsList.Items[0] as DataItem, null);
         }
 
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1160,7 +1092,7 @@ namespace Lemon_App
             Download_Path.Text = Settings.USettings.DownloadPath;
             DownloadQx.IsChecked = true;
             DownloadQx.Content = "全不选";
-            foreach (DataItem x in DataItemsList.Children)
+            foreach (DataItem x in DataItemsList.Items)
             {
                 x.MouseDown -= PlayMusic;
                 x.NSDownload(true);
@@ -1172,7 +1104,7 @@ namespace Lemon_App
         {
             border5.Visibility = Visibility.Visible;
             DataDownloadPage.Visibility = Visibility.Collapsed;
-            foreach (DataItem x in DataItemsList.Children)
+            foreach (DataItem x in DataItemsList.Items)
             {
                 x.MouseDown += PlayMusic;
                 x.NSDownload(false);
@@ -1194,8 +1126,10 @@ namespace Lemon_App
 
         private TopControl tc_now;
         private int ixTop = 1;
+        private ScrollViewer Datasv = null;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            if (Datasv == null) Datasv = sender as ScrollViewer;
             if (Datasv.IsVerticalScrollBarAtButtom())
             {
                 if (np == NowPage.Search)
@@ -1280,7 +1214,7 @@ namespace Lemon_App
                     Dispatcher.Invoke(() =>
                     {
                         TB.Text = key;
-                        DataItemsList.Children.Clear();
+                        DataItemsList.Items.Clear();
                         Datasv.ScrollToTop();
                     });
                 await Dispatcher.Invoke(async () =>
@@ -1297,7 +1231,7 @@ namespace Lemon_App
                         k.GetToSingerPage += K_GetToSingerPage;
                         k.Play += PlayMusic;
                         k.Download += K_Download;
-                        DataItemsList.Children.Add(k);
+                        DataItemsList.Items.Add(k);
                     }
                 });
                 Dispatcher.Invoke(() => { CloseLoading(); });
@@ -1411,12 +1345,12 @@ namespace Lemon_App
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!IsRadio)
-                PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) - 1] as DataItem, null);
+                PlayMusic(DataItemsList.Items[DataItemsList.Items.IndexOf(MusicData) - 1] as DataItem, null);
         }
         private void Border_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
             if (!IsRadio)
-                PlayMusic(DataItemsList.Children[DataItemsList.Children.IndexOf(MusicData) + 1] as DataItem, null);
+                PlayMusic(DataItemsList.Items[DataItemsList.Items.IndexOf(MusicData) + 1] as DataItem, null);
             else GetRadio(new RadioItem(RadioID), null);
         }
         private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1651,13 +1585,13 @@ namespace Lemon_App
             if (d.IsChecked == true)
             {
                 d.Content = "全不选";
-                foreach (DataItem x in DataItemsList.Children)
+                foreach (DataItem x in DataItemsList.Items)
                 { x.isChecked = false; x.Check(); }
             }
             else
             {
                 d.Content = "全选";
-                foreach (DataItem x in DataItemsList.Children)
+                foreach (DataItem x in DataItemsList.Items)
                 { x.isChecked = true; x.Check(); }
             }
         }
@@ -1708,7 +1642,7 @@ namespace Lemon_App
             var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)
                 cc.Begin();
-            foreach (var x in DataItemsList.Children)
+            foreach (var x in DataItemsList.Items)
             {
                 var f = x as DataItem;
                 if (f.isChecked == true)
@@ -1812,44 +1746,31 @@ namespace Lemon_App
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.3));
-            ContentPage.BeginAnimation(OpacityProperty, da);
-            OpenLoading();
+            loadin.Value = 0;
+            loadin.Opacity = 1;
             NSPage(null, Data);
             var dt = sender as FLGDIndexItem;
             TB.Text = dt.name.Text;
-            DataItemsList.Children.Clear();
+            DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
-            TB.Text = dt.name.Text;
-            DataItemsList.Children.Clear();
-            MusicGDTask mt = new MusicGDTask();
-            mt.Finished += (md) =>
-            {
-                He.MGData_Now = md;
-                foreach (var m in md.Data)
-                    Dispatcher.Invoke(new Action(() =>
-                    {
-                        var k = new DataItem(m, md.IsOwn, this) { Width = ContentPage.ActualWidth };
-                        k.Play += PlayMusic;
-                        k.Download += K_Download;
-                        k.GetToSingerPage += K_GetToSingerPage;
-                        if (m.MusicID == MusicData.music.MusicID)
-                        {
-                            k.ShowDx();
-                            MusicData = k;
-                        }
-                        DataItemsList.Children.Add(k);
-                    }));
-                Dispatcher.Invoke(new Action(() =>
+            He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<Music, bool>((j, b) => {
+                var k = new DataItem(j, b, this);
+                DataItemsList.Items.Add(k);
+                k.Play += PlayMusic;
+                k.Width = DataItemsList.ActualWidth;
+                if (j.MusicID == MusicData.music.MusicID)
                 {
-                    sw.Stop();
-                    Console.WriteLine("耗时:" + sw.Elapsed.TotalMilliseconds + "ms");
-                    CloseLoading();
-                }));
-            };
-            mt.GetGDAsync(dt.id);
+                    k.ShowDx();
+                    MusicData = k;
+                }
+                loadin.Value = DataItemsList.Items.Count;
+            }), this,
+            new Action<int>(i=>loadin.Maximum=i));
+            loadin.Opacity = 0;
+            CloseLoading();
             np = NowPage.GDItem;
-            ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
+            sw.Stop();
+            Console.WriteLine("ms:"+sw.ElapsedMilliseconds);
         }
         #endregion
         #endregion

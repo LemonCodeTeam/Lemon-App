@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lemonlib="clr-namespace:LemonLibrary;assembly=LemonLibrary"
         xmlns:lemon_app="clr-namespace:Lemon_App"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="window" x:Class="Lemon_App.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
         Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}">
     <Window.Resources>
@@ -1151,6 +1151,94 @@
                 <EasingThicknessKeyFrame KeyTime="0:0:0.6" Value="0,15,0,-15"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
+        <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="#00000000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Themes:ClassicBorderDecorator x:Name="TemplateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <DockPanel x:Name="PART_Track" LastChildFill="False" >
+                                <Rectangle x:Name="PART_Indicator" Fill="{TemplateBinding Foreground}"/>
+                            </DockPanel>
+                        </Themes:ClassicBorderDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="#00000000"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Themes:ClassicBorderDecorator x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderStyle="Sunken" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="Datasv"  Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged"  Focusable="False" Padding="{TemplateBinding Padding}" >
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Themes:ClassicBorderDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="True"/>
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Padding" Value="4,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Bd" Value="#07000000"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="AddGDPage_CloseBtn">
@@ -1292,7 +1380,7 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="TopIndexPage" d:IsHidden="True">
+                <Grid x:Name="TopIndexPage">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                     <ScrollViewer  Margin="20,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                         <WrapPanel x:Name="topIndexList"/>
@@ -1452,9 +1540,9 @@
                             </WrapPanel>
                         </Grid>
                     </Border>
-                    <ScrollViewer x:Name="Datasv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged">
-                        <WrapPanel x:Name="DataItemsList"/>
-                    </ScrollViewer>
+                    <ListBox x:Name="DataItemsList" Margin="0,51,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
+                                  VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
+                    <ProgressBar x:Name="loadin" Height="2" VerticalAlignment="Top" Margin="0,51,0,0" Background="#00000000" Foreground="{DynamicResource ThemeColor}" Maximum="300" BorderThickness="0" Value="10" Style="{DynamicResource ProgressBarStyle1}"/>
                 </Grid>
                 <Grid x:Name="MusicPLPage" Visibility="Collapsed">
                     <Grid Height="51" VerticalAlignment="Top">
@@ -1622,7 +1710,7 @@
                     </Grid>
                 </Border>
                 <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" Margin="85,41,165,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp"/>
-                <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,20,165,0" Height="18" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/>/<Run x:Name="Play_All" Text="00:00"/></TextBlock>
+                <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,20,165,0" Height="18" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
                 <Border x:Name="PlayLbBtn" HorizontalAlignment="Right" Width="16" Margin="0,0,20,0" Height="16" Background="#00000000" Grid.Column="1" MouseDown="PlayLbBtn_MouseDown">
                     <Path x:Name="path1" Data="M124.342857,226.742857C124.342857,212.114286,135.314286,197.485714,153.6,197.485714L778.971429,197.485714C793.6,197.485714 808.228572,208.457143 808.228571,226.742857 804.571428,245.028571 793.6,256 775.314286,256L149.942857,256C135.314286,256,124.342857,245.028571,124.342857,226.742857z M149.942857,493.714286L533.942857,493.714286C548.571428,493.714286 563.2,504.685715 563.2,522.971429 563.2,537.6 552.228571,552.228572 533.942857,552.228571L149.942857,552.228571C135.314286,552.228571 120.685714,541.257142 120.685714,522.971429 124.342857,504.685715 135.314285,493.714286 149.942857,493.714286z M149.942857,786.285714L497.371429,786.285714C512,786.285714 526.628572,797.257143 526.628571,815.542857 526.628571,830.171428 515.657142,844.8 497.371429,844.8L149.942857,844.8C135.314286,844.8 120.685714,833.828571 120.685714,815.542857 124.342857,797.257143 135.314285,786.285714 149.942857,786.285714z M947.2,438.857143L837.485714,373.028571C826.514285,365.714285 815.542857,369.371428 804.571429,376.685714 797.257143,380.342857 793.6,391.314285 793.6,398.628571L793.6,661.942857C775.314286,650.971428 757.028571,643.657143 731.428571,643.657143 669.257142,643.657143 618.057142,694.857143 618.057143,757.028571 618.057144,819.199999 669.257143,877.714286 731.428571,877.714286 793.6,877.714286 844.8,826.514286 844.8,764.342857L844.8,446.171429 917.942857,486.4C932.571428,493.714286 947.2,490.057143 954.514286,475.428571 965.485715,464.457142 961.828572,446.171428 947.2,438.857143z M731.428571,822.857143C698.514285,822.857143 672.914285,797.257143 672.914286,764.342857 672.914287,731.428571 698.514286,705.828571 731.428571,705.828571 764.342856,705.828571 789.942857,731.428571 789.942857,764.342857 789.942857,797.257143 764.342857,822.857143 731.428571,822.857143z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                 </Border>
