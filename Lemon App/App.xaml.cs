@@ -84,6 +84,9 @@ namespace Lemon_App
             base.OnStartup(e);
         }
         public App() {
+#if DEBUG
+            ConsoleManager.Toggle();
+#endif
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += (sender, args) =>

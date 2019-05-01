@@ -20,6 +20,7 @@ namespace CoconutApi
             t.Tick += delegate {
                 try { Process.GetProcessById(id); } catch { Environment.Exit(0); }
             };
+            t.Start();
         }
         int id = 0;
         Timer t = new Timer();

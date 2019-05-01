@@ -122,18 +122,6 @@ namespace Lemon_App
             App.BaseApp.Apip.Start();
             Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
             LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
-            await Task.Run(() =>
-            {
-                Settings.LoadLocaSettings();
-                string qq = Settings.LSettings.qq;
-                if (qq != "")
-                {
-                    Settings.LoadUSettings(qq); Dispatcher.Invoke(() =>
-                    {
-                        LoadAfterLogin();
-                    });
-                }
-            });
             /////top////
             await Task.Run(TopLoadac());
         }

@@ -109,8 +109,8 @@ namespace LemonLibrary
             public string LemonAreeunIts { get; set; } = "";
             public string UserName { get; set; } = "";
             public string UserImage { get; set; } = "";
-            public string Cookie { get; set; } = "";
-            public string g_tk { get; set; } = "";
+            public string Cookie { get; set; } = "pgv_pvid=3531479395; euin_cookie=41BD1C4435DC375FBEDB49054DB76D6A7E144504ED74E35D; ptcz=b6a78a1389245b1d160bd02b1bd65a22d62fe28d6c0914e7264b6c74f1216b1f; pgv_pvi=4809115648; uin_cookie=2728578956; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%22168c5952d117ea-0a44be39a4fa52-4f7b614a-1049088-168c5952d1218a%22%2C%22%24device_id%22%3A%22168c5952d117ea-0a44be39a4fa52-4f7b614a-1049088-168c5952d1218a%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22%22%2C%22%24latest_referrer_host%22%3A%22%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC_%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%22%7D%7D; luin=o2728578956; RK=sKKMfg2M0M; ptui_loginuin=3545039435; lskey=00010000d1e86791d11afac56238fb6c21b4cd18569d8cfcb9408efb9e6655484611b1b5866e11b41a54c33c; pgv_si=s2290829312; _qpsvr_localtk=0.2537786283402402; ptisp=cm; uin=o2728578956; skey=@ZkYewUA2E; ts_last=y.qq.com/portal/profile.html; p_lskey=0004000037d15eb69d9dd01f3d1e0a3944c9698d5273a3ec8195a08e74454a505dc4420591f6b65f7514105e; ts_refer=xui.ptlogin2.qq.com/cgi-bin/xlogin; ts_uid=3700488506; p_luin=o2728578956; p_uin=o2728578956; pt4_token=4r1g3HfBwvrtAtxNBu0HdtWblkUbd4bNzJza-bU3LPo_; p_skey=sf61L*8fbh52eBNoq47ywuHrS*5VwShQ5K9svtDkONU_; yqq_stat=0";
+            public string g_tk { get; set; } = "778593258";
             #endregion
             #region 上一次播放
             public Music Playing { get; set; } = new Music();
