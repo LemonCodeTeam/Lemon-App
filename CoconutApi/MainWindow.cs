@@ -1,6 +1,7 @@
 ﻿using LemonLibrary;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,7 +14,15 @@ namespace CoconutApi
         {
             InitializeComponent();
             wb.Navigated += delegate { textBox1.Text = wb.Url.AbsoluteUri; };
+            Settings.ReadHandle();
+            id = Settings.Handle.ProcessId;
+            t.Interval = 5000;
+            t.Tick += delegate {
+                try { Process.GetProcessById(id); } catch { Environment.Exit(0); }
+            };
         }
+        int id = 0;
+        Timer t = new Timer();
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == MsgHelper.WM_COPYDATA)

@@ -1757,6 +1757,8 @@ namespace Lemon_App
                 var k = new DataItem(j, b, this);
                 DataItemsList.Items.Add(k);
                 k.Play += PlayMusic;
+                k.GetToSingerPage += K_GetToSingerPage;
+                k.Download += K_Download;
                 k.Width = DataItemsList.ActualWidth;
                 if (j.MusicID == MusicData.music.MusicID)
                 {

@@ -83,6 +83,7 @@ namespace LemonLibrary
                 var amid = dsli["albummid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
                     m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
                 dt.Add(m);
             }
@@ -115,6 +116,7 @@ namespace LemonLibrary
                     var amid = dsli["album"]["mid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
                         m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    else if(amid=="") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
                     dt.Add(m);
                     i++;
@@ -200,6 +202,7 @@ namespace LemonLibrary
                     var amid = c0si["albummid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
                         m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
                     dt.Data.Add(m);
                     await wx.Dispatcher.BeginInvoke(new Action(() => { callback(m, dt.IsOwn); }));
@@ -466,6 +469,7 @@ namespace LemonLibrary
                 var amid = sid["albummid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
                     m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{sid["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
                 dt.Add(m);
                 i++;

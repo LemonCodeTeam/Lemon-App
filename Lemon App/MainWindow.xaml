@@ -1380,7 +1380,7 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <Grid x:Name="TopIndexPage">
+                <Grid x:Name="TopIndexPage" d:IsHidden="True">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                     <ScrollViewer  Margin="20,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                         <WrapPanel x:Name="topIndexList"/>
@@ -1522,7 +1522,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid x:Name="Data" Visibility="Collapsed">
+                <Grid x:Name="Data">
                     <Border x:Name="DataDownloadPage" BorderBrush="{DynamicResource BorderColorBrush}" Height="51" VerticalAlignment="Top" BorderThickness="0" Background="{DynamicResource DataTopBrush}" Visibility="Collapsed">
                         <Grid>
                             <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Margin="255,0,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="将下载到："/><Run Text=" "/><Run x:Name="Download_Path"/><Run Text=" "/><Run Foreground="{DynamicResource ThemeColor}" Text="更改目录" MouseDown="ckFile_MouseDown"/></TextBlock>
@@ -1535,7 +1535,7 @@
                         <Grid>
                             <Border x:Name="TXx" HorizontalAlignment="Left" Margin="15,10,0,10" Background="#FFF3F3F3" CornerRadius="100" Width="30" Height="30"/>
                             <WrapPanel Margin="55,0,5,0" Orientation="Horizontal" Height="23">
-                                <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" Foreground="{DynamicResource ResuColorBrush}" FontSize="16" Height="18"/>
+                                <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" Foreground="{DynamicResource ResuColorBrush}" FontSize="16"/>
                                 <lemon_app:MDButton x:Name="DataDownloadBtn" HorizontalAlignment="Left" Height="23" VerticalAlignment="Bottom" Width="60" MouseDown="DataDownloadBtn_MouseDown" Margin="10,0,0,0" TName="下载"/>
                             </WrapPanel>
                         </Grid>
