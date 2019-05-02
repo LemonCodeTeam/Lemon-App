@@ -21,7 +21,7 @@ namespace Lemon_App
     public partial class App : Application
     {
         public static App BaseApp = null;
-        public static string EM = "1038";
+        public static string EM = "1041";
         public Process Apip = new Process();
         public void SetColor(string id,Color c)
         {
@@ -84,9 +84,6 @@ namespace Lemon_App
             base.OnStartup(e);
         }
         public App() {
-#if DEBUG
-            ConsoleManager.Toggle();
-#endif
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += (sender, args) =>

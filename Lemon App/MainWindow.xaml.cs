@@ -1001,7 +1001,7 @@ namespace Lemon_App
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
         }
         private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {//TODO:等待添加/删除功能完善..
+        {
             if (MusicName.Text != "MusicName")
             {
                 if (IsRadio)
@@ -1063,7 +1063,6 @@ namespace Lemon_App
             }), this,
             new Action<int>(i => loadin.Maximum = i));
             loadin.Opacity = 0;
-            ContentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.3)));
             np = NowPage.GDItem;
         }
         #endregion

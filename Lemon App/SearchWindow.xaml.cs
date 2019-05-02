@@ -36,7 +36,7 @@ namespace Lemon_App
             {
                 if (textBox1.Text != "搜索")
                 {
-                    var data = await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text) + "&action=opensearch",Encoding.Default);
+                    var data = await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text).Replace("#","%23") + "&action=opensearch",Encoding.Default);
                     data = data.Replace("\0", "");
                     string Htp = data.Substring(data.LastIndexOf(",[")).Replace("]]", "").Replace(",[", "").Replace(",", "");
                     string[] aa = Htp.Split(new char[] { '\"' }, StringSplitOptions.RemoveEmptyEntries);
@@ -61,7 +61,7 @@ namespace Lemon_App
             if (e.Key == Key.Enter)
                 if (textBox1.Text != "")
                 {
-                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
+                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
                     Close();
                 }
         }
@@ -70,7 +70,7 @@ namespace Lemon_App
         {
             if (textBox1.Text != "")
             {
-                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
+                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
                 Close();
             }
         }
@@ -116,7 +116,7 @@ namespace Lemon_App
                 if (listBox.SelectedIndex != -1)
                 {
                     textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
-                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
+                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
                     Close();
                 }
         }
@@ -126,7 +126,7 @@ namespace Lemon_App
             if (listBox.SelectedIndex != -1)
             {
                 textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
-                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)));
+                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
                 Close();
             }
         }

@@ -260,6 +260,10 @@
     <Content Include="Lib\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoconutApi\CoconutApi.csproj">
+      <Project>{59e9668d-a6a3-4ab5-9cb5-b036fec317e6}</Project>
+      <Name>CoconutApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lemon Library\LemonLibrary.csproj">
       <Project>{9dc3dcac-c7b4-41ba-be54-6eab5fe74fd1}</Project>
       <Name>LemonLibrary</Name>
