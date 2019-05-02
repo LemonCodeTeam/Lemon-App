@@ -22,7 +22,6 @@ namespace Lemon_App
     {
         public static App BaseApp = null;
         public static string EM = "1041";
-        public Process Apip = new Process();
         public void SetColor(string id,Color c)
         {
             var color = new SolidColorBrush() { Color = c };
@@ -148,7 +147,6 @@ namespace Lemon_App
                     Directory.CreateDirectory(Settings.USettings.CachePath);
                 if (!Directory.Exists(Settings.USettings.CachePath + "Skin"))
                     Directory.CreateDirectory(Settings.USettings.CachePath + "Skin");
-                Apip.StartInfo.FileName = "CoconutApi.exe";
                 new MainWindow().Show();
             }
         }

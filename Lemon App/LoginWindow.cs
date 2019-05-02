@@ -6,24 +6,15 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CoconutApi
+namespace Lemon_App
 {
-    public class MainWindow : Form
+    public class LoginWindow : Form
     {
-        public MainWindow()
+        public LoginWindow()
         {
             InitializeComponent();
             wb.Navigated += delegate { textBox1.Text = wb.Url.AbsoluteUri; };
-            Settings.ReadHandle();
-            id = Settings.Handle.ProcessId;
-            t.Interval = 5000;
-            t.Tick += delegate {
-                try { Process.GetProcessById(id); } catch { Environment.Exit(0); }
-            };
-            t.Start();
         }
-        int id = 0;
-        Timer t = new Timer();
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == MsgHelper.WM_COPYDATA)
@@ -162,7 +153,6 @@ namespace CoconutApi
         private void MainWindow_Load(object sender, EventArgs e)
         {
             wind = MsgHelper.FindWindow(null, "LemonApp").ToInt32();
-            MsgHelper.SendMsg("Api#" + this.Handle.ToInt32() + "*", wind);
         }
 
         private void button1_Click(object sender, EventArgs e)

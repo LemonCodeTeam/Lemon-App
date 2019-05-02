@@ -214,6 +214,8 @@ namespace LemonLibrary
         }
         public async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()
         {
+            if(Settings.USettings.LemonAreeunIts=="")
+                return new SortedDictionary<string, MusicGData>();
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
             var o = JObject.Parse(dt);
             var data = new SortedDictionary<string, MusicGData>();

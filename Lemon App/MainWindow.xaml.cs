@@ -30,6 +30,7 @@ namespace Lemon_App
     {
         #region 一些字段
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
+        LoginWindow lw;
         MusicLib ml = new MusicLib();
         DataItem MusicData = new DataItem(new Music());
         bool isplay = false;
@@ -40,10 +41,8 @@ namespace Lemon_App
         bool issingerloaded = false;
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
-        bool IsFirstStart = true;
         bool isPlayasRun = false;
         NowPage np;
-        int ApiHandle = 0;
         #endregion
         #region 等待动画
         Thread tOL = null;
@@ -115,11 +114,14 @@ namespace Lemon_App
             Settings.SaveHandle();
             LoadSEND_SHOW();
             LoadHotDog();
+            lw = new LoginWindow();
+            lw.Show();
+            await Task.Delay(500);
+            MsgHelper.SendMsg("IsLogin", lw.Handle.ToInt32());
             /////Timer user
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
-            App.BaseApp.Apip.Start();
             Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
             LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             /////top////
@@ -1672,9 +1674,10 @@ namespace Lemon_App
         #region Login
         private async void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            App.BaseApp.Apip.Start();
-            await Task.Delay(1000);
-            MsgHelper.SendMsg("Login", ApiHandle);
+            lw = new LoginWindow();
+            lw.Show();
+            await Task.Delay(500);
+            MsgHelper.SendMsg("Login", lw.Handle.ToInt32());
         }
         #endregion
         #region MyGD
@@ -1800,8 +1803,6 @@ namespace Lemon_App
             exit.Click += delegate
             {
                 notifyIcon.Dispose();
-                if (!App.BaseApp.Apip.HasExited)
-                    App.BaseApp.Apip.Kill();
                 Settings.SaveSettings();
                 Environment.Exit(0);
             };
@@ -1885,15 +1886,9 @@ namespace Lemon_App
                 cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, mytype);
                 if (cdata.lpData == MsgHelper.SEND_SHOW)
                     exShow();
-                else if (cdata.lpData.Contains("Api#"))
-                {
-                    ApiHandle = int.Parse(TextHelper.XtoYGetTo(cdata.lpData, "#", "*", 0));
-                    if (IsFirstStart)
-                    { IsFirstStart = false; MsgHelper.SendMsg("IsLogin", ApiHandle); }
-                }
                 else if (cdata.lpData.Contains("Login"))
                 {
-                    App.BaseApp.Apip.Kill();
+                    lw.Close();
                     Console.WriteLine(cdata.lpData);
                     string qq = "2465759834";
                     if (cdata.lpData != "No Login")
