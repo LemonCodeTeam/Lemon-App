@@ -21,13 +21,41 @@ namespace Lemon_App
     public partial class App : Application
     {
         public static App BaseApp = null;
+        /// <summary>
+        /// 程序版本号 （用于检测更新）
+        /// </summary>
         public static string EM = "1041";
+        #region 启动时 进程检测 配置 登录
+        System.Threading.Mutex mut;
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            bool requestInitialOwnership = true;
+            mut = new System.Threading.Mutex(requestInitialOwnership, "Lemon App", out bool mutexWasCreated);
+            if (!(requestInitialOwnership && mutexWasCreated))
+            {
+                MsgHelper.SendMsg(MsgHelper.SEND_SHOW);
+                Current.Shutdown();
+            }
+            else
+            {
+                if (!Directory.Exists(Settings.USettings.CachePath))
+                    Directory.CreateDirectory(Settings.USettings.CachePath);
+                if (!Directory.Exists(Settings.USettings.CachePath + "Skin"))
+                    Directory.CreateDirectory(Settings.USettings.CachePath + "Skin");
+                new MainWindow().Show();
+            }
+        }
+        #endregion
+        #region 主题颜色配置
         public void SetColor(string id,Color c)
         {
             var color = new SolidColorBrush() { Color = c };
             Resources[id] = color;
         }
         public bool skin = false;
+        /// <summary>
+        /// 适配白色字体的主题配置（默认）
+        /// </summary>
         public void Skin()
         {
             skin = true;
@@ -41,6 +69,9 @@ namespace Lemon_App
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0C000000"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
         }
+        /// <summary>
+        /// 适配黑色字体的主题配置
+        /// </summary>
         public void Skin_Black()
         {
             skin = true;
@@ -54,6 +85,9 @@ namespace Lemon_App
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
         }
+        /// <summary>
+        /// 恢复 默认主题  /卸载主题
+        /// </summary>
         public void unSkin() {
             skin = false;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF3ED38B"));
@@ -66,22 +100,20 @@ namespace Lemon_App
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
         }
-        public SolidColorBrush GetThemeColorBrush() {
-            return (SolidColorBrush)Resources["ThemeColor"];
-        }
-        public SolidColorBrush GetResuColorBrush() {
-            return (SolidColorBrush)Resources["ResuColorBrush"];
-        }
         public SolidColorBrush GetButtonColorBrush()
         {
             return (SolidColorBrush)Resources["ButtonColorBrush"];
         }
+        #endregion
+        #region lierda.WPFHelper 内存管控
         LierdaCracker cracker = new LierdaCracker();
         protected override void OnStartup(StartupEventArgs e)
         {
             cracker.Cracker();
             base.OnStartup(e);
         }
+        #endregion
+        #region 全局异常捕获/处理
         public App() {
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -106,7 +138,6 @@ namespace Lemon_App
             };
             BaseApp = this;
         }
-
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:"+EM + "\r\n" + ((Exception)e.ExceptionObject).Message + "\r\n 导致错误的对象名称:" + ((Exception)e.ExceptionObject).Source + "\r\n 引发异常的方法:" + ((Exception)e.ExceptionObject).TargetSite + "\r\n  帮助链接:" + ((Exception)e.ExceptionObject).HelpLink + "\r\n 调用堆:" + ((Exception)e.ExceptionObject).StackTrace;
@@ -118,7 +149,6 @@ namespace Lemon_App
             sw.Close();
             fs.Close();
         }
-
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
@@ -131,27 +161,9 @@ namespace Lemon_App
             sw.Close();
             fs.Close();
         }
-        System.Threading.Mutex mut;
-        private void Application_Startup(object sender, StartupEventArgs e)
-        {
-            bool requestInitialOwnership = true;
-            mut = new System.Threading.Mutex(requestInitialOwnership, "Lemon App", out bool mutexWasCreated);
-            if (!(requestInitialOwnership && mutexWasCreated))
-            {
-                MsgHelper.SendMsg(MsgHelper.SEND_SHOW);
-                Current.Shutdown();
-            }
-            else
-            {
-                if (!Directory.Exists(Settings.USettings.CachePath))
-                    Directory.CreateDirectory(Settings.USettings.CachePath);
-                if (!Directory.Exists(Settings.USettings.CachePath + "Skin"))
-                    Directory.CreateDirectory(Settings.USettings.CachePath + "Skin");
-                new MainWindow().Show();
-            }
-        }
+        #endregion
     }
-
+    #region Console 调试模式
     public class WindowWrapper
     {
         private App app;
@@ -258,4 +270,5 @@ namespace Lemon_App
 
         }
     }
+    #endregion
 }

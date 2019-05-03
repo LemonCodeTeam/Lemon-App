@@ -101,37 +101,42 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                this.DragMove();
-        }
+        #region 加载窗口时的基础配置 登录/播放组件
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
+            //--------检测更新-------
             Updata();
+            //--------应用程序配置 热键和消息回调--------
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
             Settings.SaveHandle();
             LoadSEND_SHOW();
             LoadHotDog();
+            //--------登录------
             lw = new LoginWindow();
             lw.Show();
-            await Task.Delay(500);
+            await Task.Delay(500);//等待他加载好吧
             MsgHelper.SendMsg("IsLogin", lw.Handle.ToInt32());
-            /////Timer user
+            //-----Timer user
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
+            //---------切割机-----------
+            //任务栏 => 正在播放的专辑图片
             Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
-            LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
-            /////top////
+            //---------加载TOP页面-----
             await Task.Run(TopLoadac());
         }
 
-        private void LoadAfterLogin(bool hasAnimation = true)
+        /// <summary>
+        /// 登录之后的主题配置 不同的账号可能使用不同的主题
+        /// </summary>
+        /// <param name="hasAnimation"></param>
+        private void Load_Theme(bool hasAnimation = true)
         {
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
+                //----新的[磨砂黑]主题---
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99000000"));
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4C000000"));
@@ -140,13 +145,15 @@ namespace Lemon_App
             else
             {
                 if (Settings.USettings.Skin_txt != "")
-                {
+                {//有主题配置 （非默认）
+                    //    主题背景图片
                     if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
                     {
                         Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_Path, UriKind.Absolute)));
                         ControlDownPage.BorderThickness = new Thickness(0);
                         ControlPage.BorderThickness = new Thickness(0);
                     }
+                    //字体颜色
                     Color co;
                     if (Settings.USettings.Skin_txt == "Black")
                     {
@@ -165,7 +172,12 @@ namespace Lemon_App
                     App.BaseApp.SetColor("ButtonColorBrush", co);
                     App.BaseApp.SetColor("TextX1ColorBrush", co);
                 }
-                else { App.BaseApp.unSkin(); Page.Background = new SolidColorBrush(Colors.White); }
+                else
+                {
+                    //没有主题配置  （主要考虑到切换登录）
+                    App.BaseApp.unSkin();
+                    Page.Background = new SolidColorBrush(Colors.White);
+                }
             }
             LoadMusicData(hasAnimation);
         }
@@ -176,6 +188,7 @@ namespace Lemon_App
         private void LoadMusicData(bool hasAnimation = true)
         {
             LoadSettings();
+            //-------用户的头像、名称等配置加载
             if (Settings.USettings.UserName != string.Empty)
             {
                 UserName.Text = Settings.USettings.UserName;
@@ -185,7 +198,7 @@ namespace Lemon_App
                     UserTX.Background = new ImageBrush(image.ToImageSource());
                 }
             }
-            ////////////load
+            //-----歌词显示 歌曲播放 等组件的加载
             LyricView lv = new LyricView();
             lv.FoucsLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
@@ -193,6 +206,7 @@ namespace Lemon_App
             ly.Child = lv;
             lv.NextLyric += (text) =>
             {
+                //主要用于桌面歌词的显示
                 if (isOpenGc)
                 {
                     if (lastlyric != text) if (text != "")
@@ -201,6 +215,7 @@ namespace Lemon_App
                 }
             };
             ml = new MusicLib(lv, Settings.USettings.LemonAreeunIts);
+            //---------加载上一次播放
             if (Settings.USettings.Playing.MusicName != "")
             {
                 MusicData = new DataItem(Settings.USettings.Playing);
@@ -208,6 +223,7 @@ namespace Lemon_App
                 string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
                 MusicLib.mp.Open(new Uri(downloadpath));
             }
+            //--------播放时的Timer 进度/歌词
             t.Interval = 500;
             t.Tick += delegate
             {
@@ -230,18 +246,20 @@ namespace Lemon_App
                 }
                 catch { }
             };
+            //-----------播放完成时的回调
             MusicLib.mp.MediaEnded += delegate
             {
                 Console.WriteLine("end");
                 jd.Value = 0;
-                if (xh)
+                if (xh)//单曲循环
                 {
                     t.Start();
                     MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
                     MusicLib.mp.Play();
                 }
-                else Border_MouseDown_1(null, null);
+                else Border_MouseDown_1(null, null);//下一曲
             };
+            //------检测key是否有效-----------
             if (Settings.USettings.LemonAreeunIts != "")
             {
                 if (Settings.USettings.Cookie == "" || Settings.USettings.g_tk == "")
@@ -249,18 +267,37 @@ namespace Lemon_App
                         UserTX_MouseDown(null, null);
             }
         }
-
+        #endregion
+        #region 窗口控制 最大化/最小化/显示/拖动
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();//窗口移动
+        }
+        /// <summary>
+        /// 显示窗口
+        /// </summary>
         private void exShow()
         {
             Show();
             ShowInTaskbar = true;
             Activate();
         }
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ShowInTaskbar = false;
             Hide();
         }
+        /// <summary>
+        /// 窗口最大化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MaxBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (WindowState == WindowState.Normal)
@@ -272,21 +309,28 @@ namespace Lemon_App
                 WindowState = WindowState.Normal;
             }
         }
+        /// <summary>
+        /// 窗口最小化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            //-------任务栏的专辑图片切割机----
             Console.WriteLine("SIZECHANGED");
             double tp = ActualWidth / 2;
             Thickness ab;
-            if (ind == 0)
+            if (ind == 0)//在主界面的
                 ab = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
+            //在歌词界面的
             else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top, tp + 30, border4.Margin.Bottom);
             Tasktb.ThumbnailClipMargin = ab;
-            LyricPage.Clip = new RectangleGeometry(new Rect() { Height = Page.ActualHeight, Width = Page.ActualWidth });
             Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
+            //------------调整大小时对控件进行伸缩---------------
             WidthUI(SingerItemsList);
             WidthUI(RadioItemsList);
             WidthUI(GDItemsList);
@@ -296,6 +340,10 @@ namespace Lemon_App
                 foreach (DataItem dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
         }
+        /// <summary>
+        /// 遍历调整宽度
+        /// </summary>
+        /// <param name="wp"></param>
         public void WidthUI(WrapPanel wp)
         {
             if (wp.Visibility == Visibility.Visible)
@@ -304,6 +352,7 @@ namespace Lemon_App
                     dx.Width = ContentPage.ActualWidth / 5;
             }
         }
+        #endregion
         #endregion
         #region 设置
         public void LoadSettings()
@@ -382,17 +431,14 @@ namespace Lemon_App
         {
             ChooseText.Visibility = Visibility.Visible;
         }
-
         private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
         {
             TextColor_byChoosing = "White";
         }
-
         private void Border_MouseDown_5(object sender, MouseButtonEventArgs e)
         {
             TextColor_byChoosing = "Black";
         }
-
         private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
@@ -424,7 +470,6 @@ namespace Lemon_App
             }
             ChooseText.Visibility = Visibility.Collapsed;
         }
-
         private void ColorThemeBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var ofd = new System.Windows.Forms.OpenFileDialog();
@@ -527,7 +572,11 @@ namespace Lemon_App
         }
         #endregion
         #region 功能区
-        #region Top
+        #region Top 排行榜
+        /// <summary>
+        /// 加载TOP列表
+        /// </summary>
+        /// <returns></returns>
         private Action TopLoadac() {
             return new Action(async delegate
             {
@@ -545,10 +594,20 @@ namespace Lemon_App
                 }
             });
         }
+        /// <summary>
+        /// 选择了TOP项
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Top_MouseDown(object sender, MouseButtonEventArgs e)
         {
             GetTopItems(sender as TopControl);
         }
+        /// <summary>
+        /// 加载TOP项
+        /// </summary>
+        /// <param name="g">Top ID</param>
+        /// <param name="osx">页数</param>
         private async void GetTopItems(TopControl g, int osx = 1)
         {
             np = NowPage.Top;
@@ -579,7 +638,7 @@ namespace Lemon_App
             CloseLoading();
         }
         #endregion
-        #region Updata
+        #region Updata 检测更新
         private async void Updata()
         {
             var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
@@ -596,7 +655,7 @@ namespace Lemon_App
             }
         }
         #endregion
-        #region N/S Page
+        #region N/S Page 切换页面
         private Label LastClickLabel = null;
         private Grid LastPage = null;
         public void NSPage(Label ClickLabel, Grid TPage)
@@ -616,7 +675,7 @@ namespace Lemon_App
             NSPage(TopBtn, TopIndexPage);
         }
         #endregion
-        #region Singer
+        #region Singer 歌手界面
         string SingerKey1 = "all_all_";
         string SingerKey2 = "all";
         private void SingerPageChecked(object sender, RoutedEventArgs e)
@@ -721,7 +780,7 @@ namespace Lemon_App
             }
         }
         #endregion
-        #region FLGD
+        #region FLGD 分类歌单
         private void ZJBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(ZJBtn, ZJIndexPage);
@@ -904,7 +963,7 @@ namespace Lemon_App
             CloseLoading();
         }
         #endregion
-        #region Radio
+        #region Radio 电台
         private void RadioBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(RadioBtn, RadioIndexPage);
@@ -989,19 +1048,29 @@ namespace Lemon_App
         }
         Music RadioData;
         #endregion
-        #region ILike
+        #region ILike 我喜欢 列表加载/数据处理
+        /// <summary>
+        /// 取消喜欢 变白色
+        /// </summary>
         private void LikeBtnUp()
         {
             if (ind == 1)
                 likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             else
-                likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
         }
-
+        /// <summary>
+        /// 添加喜欢 变红色
+        /// </summary>
         private void LikeBtnDown()
         {
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
         }
+        /// <summary>
+        /// 添加/删除 我喜欢的歌曲
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (MusicName.Text != "MusicName")
@@ -1043,6 +1112,11 @@ namespace Lemon_App
                 Settings.SaveSettings();
             }
         }
+        /// <summary>
+        /// 加载我喜欢的列表
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
             NSPage(LikeBtn, Data);
@@ -1068,7 +1142,7 @@ namespace Lemon_App
             np = NowPage.GDItem;
         }
         #endregion
-        #region DataPageBtn
+        #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             PlayMusic(DataItemsList.Items[0] as DataItem, null);
@@ -1106,7 +1180,7 @@ namespace Lemon_App
             CloseDownloadPage();
         }
         #endregion
-        #region SearchMusic
+        #region SearchMusic  搜索音乐
         private int ixPlay = 1;
         private string SearchKey = "";
 
@@ -1228,7 +1302,7 @@ namespace Lemon_App
             xs.Start();
         }
         #endregion
-        #region PlayMusic
+        #region PlayMusic 播放时的逻辑处理
 
         public void PlayMusic(object sender, MouseEventArgs e)
         {
@@ -1930,7 +2004,7 @@ namespace Lemon_App
                                 Settings.SaveLocaSettings();
                                 Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
                             });
-                            LoadAfterLogin(false);
+                            Load_Theme(false);
                         });
                         a();
                     }
