@@ -152,7 +152,7 @@ namespace Lemon_App
 
         private async void DeleteBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (System.Windows.Forms.MessageBox.Show("确定要删除此歌曲吗?") == System.Windows.Forms.DialogResult.OK)
+            if (System.Windows.Forms.MessageBox.Show("确定要删除此歌曲吗?","",System.Windows.Forms.MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
             {
                 int index = He.MGData_Now.Data.IndexOf(music);
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);

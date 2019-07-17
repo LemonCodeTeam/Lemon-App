@@ -11,7 +11,7 @@ namespace LemonLibrary
         /// </summary>
         static async System.Threading.Tasks.Task Main() {
             Settings.LoadUSettings("2728578956");
-            string mid = "001SCzwZ4MdpL6";
+            string mid = "00246B2z2iDkeV";
             string url =await MusicLib.GetUrlAsync(mid);
             Console.WriteLine(url);
             Process.Start(url);

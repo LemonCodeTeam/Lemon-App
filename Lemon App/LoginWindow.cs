@@ -83,7 +83,7 @@ namespace Lemon_App
                 string qq = TextHelper.XtoYGetTo(cookie, "p_luin=o", ";", 0);
                 string send = "Login:" + qq + "### 呱呱呱 Cookie[" + cookie + "]END";
                 if (cookie.Contains("p_skey=")) {
-                    string p_skey = TextHelper.XtoYGetTo(cookie, "p_skey=", ";", 0);
+                    string p_skey = TextHelper.XtoYGetTo(cookie+";", "p_skey=", ";", 0);
                     long hash = 5381;
                     for (int i = 0; i < p_skey.Length; i++)
                     {

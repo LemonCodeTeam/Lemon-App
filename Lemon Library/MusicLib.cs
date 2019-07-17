@@ -252,6 +252,13 @@ namespace LemonLibrary
         }
         public static async Task<string> GetUrlAsync(string Musicid)
         {
+            var guid = "82800236CAC506A09113040688E3F47F";
+            var vkey = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin={Settings.USettings.LemonAreeunIts}&songmid={Musicid}&filename=M500{Musicid}.mp3&guid={guid}"))["data"]["items"][0]["vkey"].ToString();
+            if (vkey != "")
+                return $"https://dl.stream.qqmusic.qq.com/M500{Musicid}.mp3?vkey={vkey}&guid={guid}&uin={Settings.USettings.LemonAreeunIts}&fromtag=66";
+            else return null;
+
+            /*   已失效 CODE403
             List<String[]> MData = new List<String[]>();
             MData.Add(new String[] { "M800", "mp3" });
             MData.Add(new String[] { "C600", "m4a" });
@@ -260,7 +267,7 @@ namespace LemonLibrary
             MData.Add(new String[] { "M200", "mp3" });
             MData.Add(new String[] { "M100", "mp3" });
 
-            var guid = "365305415";
+            var guid = "82800236CAC506A09113040688E3F47F";
             var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
             for (int i = 0; i < MData.Count; i++)
             {
@@ -271,7 +278,8 @@ namespace LemonLibrary
                     return uri;
             }
             return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid=" + guid;
-        }
+        */
+         }
         public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, Run x, Window s, string songname, bool doesplay = true)
         {
             string downloadpath = Settings.USettings.CachePath + "Music\\" + mid + ".mp3";
@@ -397,7 +405,7 @@ namespace LemonLibrary
                 c.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
                 c.Headers.Add("Cookie", $"tvfe_boss_uuid=c3db0dcc4d677c60; pac_uid=1_{Settings.USettings.LemonAreeunIts}; qq_slist_autoplay=on; ts_refer=ADTAGh5_playsong; RK=pKOOKi2f1O; pgv_pvi=8927113216; o_cookie={Settings.USettings.LemonAreeunIts}; pgv_pvid=5107924810; ptui_loginuin={Settings.USettings.LemonAreeunIts}; ptcz=897c17d7e17ae9009e018ebf3f818355147a3a26c6c67a63ae949e24758baa2d; pt2gguin=o{Settings.USettings.LemonAreeunIts}; pgv_si=s5715204096; qqmusic_fromtag=66; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=996779984; yq_index=0");
                 c.Headers.Add("Host", "c.y.qq.com");
-                string s = TextHelper.XtoYGetTo(c.DownloadString($"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?callback=MusicJsonCallback_lrc&pcachetime=1494070301711&songmid={McMind}&g_tk=5381&jsonpCallback=MusicJsonCallback_lrc&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"), "MusicJsonCallback_lrc(", ")", 0);
+                string s = TextHelper.XtoYGetTo(c.DownloadString($"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?callback=MusicJsonCallback_lrc&pcachetime=1494070301711&songmid={McMind}&g_tk={Settings.USettings.g_tk}&jsonpCallback=MusicJsonCallback_lrc&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"), "MusicJsonCallback_lrc(", ")", 0);
                 Console.WriteLine(s);
                 JObject o = JObject.Parse(s);
                 string t = Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())).Replace("&apos;", "\'");

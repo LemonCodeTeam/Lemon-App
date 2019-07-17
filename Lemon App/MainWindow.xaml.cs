@@ -113,10 +113,11 @@ namespace Lemon_App
             LoadSEND_SHOW();
             LoadHotDog();
             //--------登录------
-            lw = new LoginWindow();
-            lw.Show();
-            await Task.Delay(500);//等待他加载好吧
-            MsgHelper.SendMsg("IsLogin", lw.Handle.ToInt32());
+            Settings.LoadLocaSettings();
+            if (Settings.LSettings.qq != "")
+                Settings.LoadUSettings(Settings.LSettings.qq);
+            else Settings.LoadUSettings("Public");
+            Load_Theme(false);
             //-----Timer user
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
@@ -227,6 +228,7 @@ namespace Lemon_App
             t.Interval = 500;
             t.Tick += delegate
             {
+                Console.Write("- ");
                 try
                 {
                     now = MusicLib.mp.Position.TotalMilliseconds;
@@ -245,15 +247,15 @@ namespace Lemon_App
                     else ml.lv.LrcRoll(now, false);
                 }
                 catch { }
+                Console.Write("- "+now);
             };
-            //-----------播放完成时的回调
+            //-----------播放完成时，判断单曲还是下一首
             MusicLib.mp.MediaEnded += delegate
             {
                 Console.WriteLine("end");
                 jd.Value = 0;
                 if (xh)//单曲循环
                 {
-                    t.Start();
                     MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
                     MusicLib.mp.Play();
                 }
@@ -1346,7 +1348,12 @@ namespace Lemon_App
                     LikeBtnDown();
                 else LikeBtnUp();
                 ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
-                MusicImage.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(x));
+                var im = await ImageCacheHelp.GetImageByUrl(x);
+                MusicImage.Background = new ImageBrush(im);
+                var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
+                var imb = im.ToBitmap();
+                imb.GaussianBlur(ref rect, 80);
+                LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch=Stretch.UniformToFill};
                 Singer.Text = singer;
                 if (doesplay)
                 {
@@ -1771,9 +1778,12 @@ namespace Lemon_App
                     var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
                     ks.DeleteEvent += async (fl) =>
                     {
-                        string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
-                        string a = MusicLib.DeleteGdById(dirid);
-                        GDBtn_MouseDown(null, null);
+                        if (System.Windows.Forms.MessageBox.Show("确定要删除吗?", "", System.Windows.Forms.MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+                        {
+                            string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
+                            string a = MusicLib.DeleteGdById(dirid);
+                            GDBtn_MouseDown(null, null);
+                        }
                     };
                     ks.Width = ContentPage.ActualWidth / 5;
                     ks.ImMouseDown += FxGDMouseDown;
@@ -1791,8 +1801,11 @@ namespace Lemon_App
                     var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
                     ks.DeleteEvent += (fl) =>
                     {
-                        string a = MusicLib.DelGDILike(fl.id);
-                        GDBtn_MouseDown(null, null);
+                        if (System.Windows.Forms.MessageBox.Show("确定要删除吗?", "", System.Windows.Forms.MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+                        {
+                            string a = MusicLib.DelGDILike(fl.id);
+                            GDBtn_MouseDown(null, null);
+                        }
                     };
                     ks.Width = ContentPage.ActualWidth / 5;
                     ks.ImMouseDown += FxGDMouseDown;
@@ -1964,7 +1977,7 @@ namespace Lemon_App
                 {
                     lw.Close();
                     Console.WriteLine(cdata.lpData);
-                    string qq = "2465759834";
+                    string qq = "";
                     if (cdata.lpData != "No Login")
                         qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
                     if (Settings.USettings.LemonAreeunIts == qq)
@@ -1978,6 +1991,7 @@ namespace Lemon_App
                     }
                     else
                     {
+                        //此方法中不能使用Async异步，故使用Action
                         Action a = new Action(async () =>
                         {
                             if (cdata.lpData.Contains("g_tk"))
@@ -1987,7 +2001,8 @@ namespace Lemon_App
                             }
                             var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
                             Console.WriteLine(sl);
-                            await HttpHelper.HttpDownloadFileAsync($"http://q2.qlogo.cn/headimg_dl?bs=qq&dst_uin={qq}&spec=100", Settings.USettings.CachePath + qq + ".jpg");
+                            var sdc = JObject.Parse(sl)["data"]["creator"];
+                            await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString(), Settings.USettings.CachePath + qq + ".jpg");
                             await Task.Run(() =>
                             {
                                 Settings.LoadUSettings(qq);
@@ -1996,7 +2011,7 @@ namespace Lemon_App
                                     Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
                                     Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
                                 }
-                                Settings.USettings.UserName = JObject.Parse(sl)["data"]["creator"]["nick"].ToString();
+                                Settings.USettings.UserName = sdc["nick"].ToString();
                                 Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
                                 Settings.USettings.LemonAreeunIts = qq;
                                 Settings.SaveSettings();

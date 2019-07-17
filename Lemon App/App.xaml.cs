@@ -121,12 +121,12 @@ namespace Lemon_App
             {
                 args.SetObserved();
                 var e = args.Exception;
-                string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts 
-                +"\r\n小萌版本:" + EM 
-                + "\r\n" + e.Message 
-                + "\r\n 导致错误的对象名称:" + e.Source 
-                + "\r\n 引发异常的方法:" + e.TargetSite 
-                + "\r\n  帮助链接:" +e.HelpLink 
+                string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts
+                + "\r\n小萌版本:" + EM
+                + "\r\n" + e.Message
+                + "\r\n 导致错误的对象名称:" + e.Source
+                + "\r\n 引发异常的方法:" + e.TargetSite
+                + "\r\n  帮助链接:" + e.HelpLink
                 + "\r\n 调用堆:" + e.StackTrace;
                 Console.WriteLine(i);
                 FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
