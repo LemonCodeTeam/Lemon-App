@@ -36,6 +36,7 @@ namespace Lemon_App
                 Mainwindow = mw;
                 music = dat;
                 Loaded += delegate {
+                    ser.Inlines.Clear();
                     needb = needDeleteBtn;
                     name.Text = dat.MusicName;
                     foreach (MusicSinger a in dat.Singer) {
@@ -116,8 +117,6 @@ namespace Lemon_App
         private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Play(this);
-            if (!ns)
-                ShowDx();
         }
         private Dictionary<string, string> ListData = new Dictionary<string, string>();//name,id
         private async void AddBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -152,7 +151,7 @@ namespace Lemon_App
 
         private async void DeleteBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (System.Windows.Forms.MessageBox.Show("确定要删除此歌曲吗?","",System.Windows.Forms.MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
+            if (TwMessageBox.Show("确定要删除此歌曲吗?"))
             {
                 int index = He.MGData_Now.Data.IndexOf(music);
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);

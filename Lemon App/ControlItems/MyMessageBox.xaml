@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Lemon_App"
         xmlns:Lemon_App="clr-namespace:Lemon_App" x:Class="Lemon_App.MyMessageBox"
         mc:Ignorable="d"
-        Title="MyMessageBox" Width="320" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="MyMessageBox" Width="320" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Effect>
         <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>

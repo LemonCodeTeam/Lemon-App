@@ -403,11 +403,13 @@ namespace LemonLibrary
                 c.Headers.Add("Accept", "*/*");
                 c.Headers.Add("Referer", "https://y.qq.com/portal/player.html");
                 c.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
-                c.Headers.Add("Cookie", $"tvfe_boss_uuid=c3db0dcc4d677c60; pac_uid=1_{Settings.USettings.LemonAreeunIts}; qq_slist_autoplay=on; ts_refer=ADTAGh5_playsong; RK=pKOOKi2f1O; pgv_pvi=8927113216; o_cookie={Settings.USettings.LemonAreeunIts}; pgv_pvid=5107924810; ptui_loginuin={Settings.USettings.LemonAreeunIts}; ptcz=897c17d7e17ae9009e018ebf3f818355147a3a26c6c67a63ae949e24758baa2d; pt2gguin=o{Settings.USettings.LemonAreeunIts}; pgv_si=s5715204096; qqmusic_fromtag=66; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=996779984; yq_index=0");
+                c.Headers.Add("Cookie",Settings.USettings.Cookie);
                 c.Headers.Add("Host", "c.y.qq.com");
-                string s = TextHelper.XtoYGetTo(c.DownloadString($"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?callback=MusicJsonCallback_lrc&pcachetime=1494070301711&songmid={McMind}&g_tk={Settings.USettings.g_tk}&jsonpCallback=MusicJsonCallback_lrc&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"), "MusicJsonCallback_lrc(", ")", 0);
-                Console.WriteLine(s);
-                JObject o = JObject.Parse(s);
+                string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&pcachetime=1563410858607&songmid={McMind}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
+                Console.WriteLine(url);
+                string td = c.DownloadString(url);
+                Console.WriteLine(td);
+                JObject o = JObject.Parse(td);
                 string t = Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())).Replace("&apos;", "\'");
                 if (o["trans"].ToString() == "") { await Task.Run(() => { File.WriteAllText(file, t); }); return t; }
                 else

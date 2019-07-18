@@ -103,6 +103,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ControlItems\CannotPlay.xaml.cs">
+      <DependentUpon>CannotPlay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ControlItems\DataItem.xaml.cs">
       <DependentUpon>DataItem.xaml</DependentUpon>
     </Compile>
@@ -124,6 +127,9 @@
     </Compile>
     <Compile Include="ControlItems\TitlePageBtn.xaml.cs">
       <DependentUpon>TitlePageBtn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControlItems\TwMessageBox.xaml.cs">
+      <DependentUpon>TwMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlItems\UserTxControl.xaml.cs">
       <DependentUpon>UserTxControl.xaml</DependentUpon>
@@ -156,6 +162,10 @@
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowBlur.cs" />
+    <Page Include="ControlItems\CannotPlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ControlItems\DataItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -181,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\TitlePageBtn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\TwMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
