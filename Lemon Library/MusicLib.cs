@@ -252,10 +252,10 @@ namespace LemonLibrary
         }
         public static async Task<string> GetUrlAsync(string Musicid)
         {
-            var guid = "82800236CAC506A09113040688E3F47F";
-            var vkey = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin={Settings.USettings.LemonAreeunIts}&songmid={Musicid}&filename=M500{Musicid}.mp3&guid={guid}"))["data"]["items"][0]["vkey"].ToString();
+            var guid = 1234567890;
+            var vkey = JObject.Parse(await HttpHelper.GetWebDatacAsync($"http://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=0&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin={Settings.USettings.LemonAreeunIts}&songmid=003a1tne1nSz1Y&filename=C400003a1tne1nSz1Y.m4a&guid={guid}"))["data"]["items"][0]["vkey"].ToString();
             if (vkey != "")
-                return $"https://dl.stream.qqmusic.qq.com/M500{Musicid}.mp3?vkey={vkey}&guid={guid}&uin={Settings.USettings.LemonAreeunIts}&fromtag=66";
+                return $"http://39.130.194.35/cache/183.131.60.16/amobile.music.tc.qq.com/M500{Musicid}.mp3?vkey={vkey}&guid={guid}&uin={Settings.USettings.LemonAreeunIts}&fromtag=8&ich_args2=63-18192710012657_cd8d7806ae035d570ecd073cb029af56_10004306_9c89622fd3c7f8d39432518939a83798_dabd18a74f2b4274f34240cc3023b5a7";
             else return null;
 
             /*   已失效 CODE403

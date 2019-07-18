@@ -186,7 +186,6 @@ namespace Lemon_App
         private string lastlyric = "";
         private Toast lyricTa = new Toast("", true);
         private bool isOpenGc = true;
-        private bool CanPlaysw = false;
         private void LoadMusicData(bool hasAnimation = true)
         {
             LoadSettings();
@@ -231,10 +230,7 @@ namespace Lemon_App
             {
                 try
                 {
-                    Console.Write("- ");
                     now = MusicLib.mp.Position.TotalMilliseconds;
-                    if (now == 0) { now = Play_sw.Elapsed.TotalMilliseconds; CanPlaysw = true; }
-                    else { Play_sw.Reset(); CanPlaysw = false; }
                     Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
                     if (isPlayasRun && MusicLib.mp.NaturalDuration.HasTimeSpan)
                     {
@@ -248,7 +244,6 @@ namespace Lemon_App
                     if (ind == 1)
                         ml.lv.LrcRoll(now, true);
                     else ml.lv.LrcRoll(now, false);
-                    Console.Write("- " + now);
                 }
                 catch { }
             };
@@ -1345,7 +1340,6 @@ namespace Lemon_App
             }
         }
         private string LastPlay = "";
-        private Stopwatch Play_sw = new Stopwatch();
         public async void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
         {
             if (await MusicLib.GetUrlAsync(id) == null)
@@ -1361,7 +1355,6 @@ namespace Lemon_App
                         Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                         (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                         t.Start();
-                        Play_sw.Restart();
                         isplay = true;
                     }
                 }
@@ -1379,7 +1372,6 @@ namespace Lemon_App
                         LikeBtnDown();
                     else LikeBtnUp();
                     ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
-                    if (doesplay) Play_sw.Restart();
                     var im = await ImageCacheHelp.GetImageByUrl(x);
                     MusicImage.Background = new ImageBrush(im);
                     var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
@@ -1460,7 +1452,6 @@ namespace Lemon_App
         {
             if (isplay)
             {
-                if (CanPlaysw) Play_sw.Stop();
                 isplay = false;
                 MusicLib.mp.Pause();
                 Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/play.png", UriKind.Absolute));
@@ -1470,7 +1461,6 @@ namespace Lemon_App
             else
             {
                 isplay = true;
-                if (CanPlaysw) Play_sw.Start();
                 MusicLib.mp.Play();
                 Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
                 t.Start();
