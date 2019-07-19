@@ -252,11 +252,37 @@ namespace LemonLibrary
         }
         public static async Task<string> GetUrlAsync(string Musicid)
         {
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://i.y.qq.com/v8/playsong.html?songmid=0013KcQ72u8FY7,0011jIhY1wP6wB");
+            hwr.Timeout = 20000;
+            hwr.KeepAlive = true;
+            hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
+            hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
+            hwr.UserAgent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3854.3 Mobile Safari/537.36";
+            hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+            hwr.Referer = "https://i.y.qq.com/n2/m/share/details/album.html?albummid=003bBofB3UzHxS&ADTAG=myqq&from=myqq&channel=10007100";
+            hwr.Host = "i.y.qq.com";
+            hwr.Headers.Add("sec-fetch-mode", "navigate");
+            hwr.Headers.Add("sec-fetch-site", "same - origin");
+            hwr.Headers.Add("sec-fetch-user", "?1");
+            hwr.Headers.Add("upgrade-insecure-requests", "1");
+            hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
+            hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+            var o = await hwr.GetResponseAsync();
+            StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
+            var st = await sr.ReadToEndAsync();
+            sr.Dispose();
+            Console.WriteLine(st);
+            string vk = TextHelper.XtoYGetTo(st, "http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C4000013KcQ72u8FY7.m4a", "&fromtag=38", 0);
+            Console.WriteLine(vk);
+            return $"http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400{Musicid}.m4a" + vk + "&fromtag=38";
+
+            /*  能用 但无法播放受限的歌曲
             var guid = "82800236CAC506A09113040688E3F47F";
             var vkey = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin={Settings.USettings.LemonAreeunIts}&songmid={Musicid}&filename=M500{Musicid}.mp3&guid={guid}"))["data"]["items"][0]["vkey"].ToString();
             if (vkey != "")
                 return $"https://dl.stream.qqmusic.qq.com/M500{Musicid}.mp3?vkey={vkey}&guid={guid}&uin={Settings.USettings.LemonAreeunIts}&fromtag=66";
             else return null;
+            */
 
             /*   已失效 CODE403
             List<String[]> MData = new List<String[]>();
@@ -279,7 +305,7 @@ namespace LemonLibrary
             }
             return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid=" + guid;
         */
-         }
+        }
         public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, Run x, Window s, string songname, bool doesplay = true)
         {
             string downloadpath = Settings.USettings.CachePath + "Music\\" + mid + ".mp3";
