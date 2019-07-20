@@ -13,6 +13,7 @@ namespace LemonLibrary
     public class ImageCacheHelp
     {
         public static async Task<BitmapImage> GetImageByUrl(string url) {
+            Console.WriteLine(url);
             BitmapImage bi = GetImageFormMemory(url);
             if (bi != null) { Console.WriteLine("从内存读取图片啦..."); return bi; }
             bi = GetImageFromFile(url);

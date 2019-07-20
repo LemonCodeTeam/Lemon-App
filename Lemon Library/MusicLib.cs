@@ -171,7 +171,7 @@ namespace LemonLibrary
             var dt = new MusicGData();
             var c0 = o["cdlist"][0];
             dt.name = c0["dissname"].ToString();
-            dt.pic = c0["logo"].ToString();
+            dt.pic = c0["logo"].ToString().Replace("http://", "https://");
             dt.id = id;
             dt.ids = c0["songids"].ToString().Split(',').ToList();
             dt.IsOwn = c0["login"].ToString() == c0["uin"].ToString();
@@ -226,7 +226,7 @@ namespace LemonLibrary
                 df.id = ex["dissid"].ToString();
                 df.name = ex["title"].ToString();
                 if (ex["picurl"].ToString() != "")
-                    df.pic = ex["picurl"].ToString();
+                    df.pic = ex["picurl"].ToString().Replace("http://", "https://");
                 else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
                 data.Add(df.id, df);
             }
@@ -244,7 +244,7 @@ namespace LemonLibrary
                 df.id = ex["dissid"].ToString();
                 df.name = ex["dissname"].ToString();
                 if (ex["logo"].ToString() != "")
-                    df.pic = ex["logo"].ToString();
+                    df.pic = ex["logo"].ToString().Replace("http://","https://");
                 else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
                 data.Add(df.id, df);
             }
@@ -316,26 +316,14 @@ namespace LemonLibrary
                 WebClient dc = new WebClient();
                 dc.DownloadFileCompleted += delegate
                 {
-                    var fm = File.Open(downloadpath, FileMode.Open);
-                    if (fm.Length != 0)
+                    dc.Dispose();
+                    mp.Open(new Uri(downloadpath));
+                    if (doesplay)
+                        mp.Play();
+                    s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                     {
-                        fm.Close();
-                        fm.Dispose();
-                        mp.Open(new Uri(downloadpath));
-                        if (doesplay)
-                            mp.Play();
-                        s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
-                        {
-                            x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
-                        }));
-                    }
-                    else
-                    {
-                        fm.Close();
-                        fm.Dispose();
-                        File.Delete(downloadpath);
-                        GetAndPlayMusicUrlAsync(mid, openlyric, x, s, songname, doesplay);
-                    }
+                        x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
+                    }));
                 };
                 dc.DownloadFileAsync(new Uri(musicurl), downloadpath);
                 dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e)
@@ -348,26 +336,13 @@ namespace LemonLibrary
             }
             else
             {
-                var fm = File.Open(downloadpath, FileMode.Open);
-                if (fm.Length != 0)
+                mp.Open(new Uri(downloadpath));
+                if (doesplay)
+                    mp.Play();
+                s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
                 {
-                    fm.Close();
-                    fm.Dispose();
-                    mp.Open(new Uri(downloadpath));
-                    if (doesplay)
-                        mp.Play();
-                    s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
-                    {
-                        x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
-                    }));
-                }
-                else
-                {
-                    fm.Close();
-                    fm.Dispose();
-                    File.Delete(downloadpath);
-                    GetAndPlayMusicUrlAsync(mid, openlyric, x, s, songname, doesplay);
-                }
+                    x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
+                }));
             }
             if (openlyric)
             {
@@ -610,7 +585,7 @@ namespace LemonLibrary
                 data.Add(new MusicGD
                 {
                     Name = dli["dissname"].ToString(),
-                    Photo = dli["imgurl"].ToString(),
+                    Photo = dli["imgurl"].ToString().Replace("http://", "https://"),//不知为何，不用https就会报404错误,
                     ID = dli["dissid"].ToString()
                 });
                 i++;
