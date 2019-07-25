@@ -674,6 +674,10 @@ namespace Lemon_App
         {
             NSPage(TopBtn, TopIndexPage);
         }
+        private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NSPage(MusicKuBtn, HomePage);
+        }
         #endregion
         #region Singer 歌手界面
         string SingerKey1 = "all_all_";
@@ -1377,7 +1381,7 @@ namespace Lemon_App
                     var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
                     var imb = im.ToBitmap();
                     imb.GaussianBlur(ref rect, 80);
-                    LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
+                    LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.Fill };
                     Singer.Text = singer;
                     if (doesplay)
                     {

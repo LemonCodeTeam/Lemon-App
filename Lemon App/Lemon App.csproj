@@ -134,14 +134,14 @@
     <Compile Include="ControlItems\UserTxControl.xaml.cs">
       <DependentUpon>UserTxControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImageForceView.xaml.cs">
+      <DependentUpon>ImageForceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginWindow.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Msg.xaml.cs">
-      <DependentUpon>Msg.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlItems\PlControl.xaml.cs">
       <DependentUpon>PlControl.xaml</DependentUpon>
@@ -202,6 +202,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ImageForceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -218,10 +222,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Msg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ControlItems\PlControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
