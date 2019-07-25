@@ -125,8 +125,10 @@ namespace Lemon_App
             //---------切割机-----------
             //任务栏 => 正在播放的专辑图片
             Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
-            //---------加载TOP页面-----
+            //---------加载TOP页面----- 等待移植
             await Task.Run(TopLoadac());
+            //--------加载主页---------
+            LoadHomePage();
         }
 
         /// <summary>
@@ -572,6 +574,57 @@ namespace Lemon_App
         }
         #endregion
         #region 功能区
+        #region HomePage 主页
+        private async void LoadHomePage() {
+            //---------加载主页HomePage
+            var data = await MusicLib.GetHomePageData();
+            HomePage_IFV.Updata(data.focus,this);
+            foreach (var a in data.Gdata)
+            {
+                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 100, Height = 100, Margin = new Thickness(0, 0, 20, 0) };
+                k.StarEvent += (sx) =>
+                {
+                    MusicLib.AddGDILike(sx.id);
+                    Toast.Send("收藏成功");
+                };
+                k.ImMouseDown += FxGDMouseDown;
+                HomePage_Gdtj.Children.Add(k);
+            }
+            foreach (var a in data.NewMusic)
+            {
+                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl) { Width = 100, Height = 100, Margin = new Thickness(0, 0, 20, 0) };
+                k.Tag = a;
+                k.ImMouseDown += (object s, MouseButtonEventArgs es) => {
+                    var sx = s as FLGDIndexItem;
+                    Music dt = sx.Tag as Music;
+                    MusicData = new DataItem(dt);
+                    PlayMusic(dt.MusicID, dt.ImageUrl, dt.MusicName, dt.SingerText);
+                };
+                HomePage_Nm.Children.Add(k);
+            }
+        }
+        //IFV的回调函数
+        public async void IFVCALLBACK_LoadAlbum(string id) {
+            var dta = await MusicLib.GetAlbumSongListByIDAsync(id);
+            NSPage(null, Data);
+            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dta.pic));
+            TB.Text = dta.name;
+            DataItemsList.Items.Clear();
+            foreach (var j in dta.Data)
+            {
+                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                k.GetToSingerPage += K_GetToSingerPage;
+                k.Play += PlayMusic;
+                k.Download += K_Download;
+                if (k.music.MusicID == MusicData.music.MusicID)
+                {
+                    k.ShowDx();
+                    MusicData = k;
+                }
+                DataItemsList.Items.Add(k);
+            }
+        }
+        #endregion
         #region Top 排行榜
         /// <summary>
         /// 加载TOP列表
@@ -660,10 +713,10 @@ namespace Lemon_App
         private Grid LastPage = null;
         public void NSPage(Label ClickLabel, Grid TPage)
         {
-            if (LastClickLabel == null) LastClickLabel = TopBtn;
+            if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (ClickLabel != null) ClickLabel.SetResourceReference(ForegroundProperty, "ThemeColor");
-            if (LastPage == null) LastPage = TopIndexPage;
+            if (LastPage == null) LastPage = HomePage;
             LastPage.Visibility = Visibility.Collapsed;
             TPage.Visibility = Visibility.Visible;
             TPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.2)));
@@ -733,11 +786,11 @@ namespace Lemon_App
             if(osx==1)Datasv.ScrollToTop();
             CloseLoading();
         }
-        private async void GetSingerList(string key,int osx=1) {
+        private void GetSingerList(string key,int osx=1) {
             OpenLoading();
             SingerPg_now = key;
             ixSingerList = osx;
-            var sin = await ml.GetSingerAsync(key,osx);
+            var sin =new List<MusicSinger>();
             if (osx == 1){
                 SingerItemsList.Children.Clear();
             }

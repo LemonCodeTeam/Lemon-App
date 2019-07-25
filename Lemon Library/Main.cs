@@ -9,13 +9,10 @@ namespace LemonLibrary
         /// <summary>
         /// API调试台
         /// </summary>
-        static async System.Threading.Tasks.Task Main() {
+        static void Main() {
             Settings.LoadUSettings("2728578956");
-            string mid = "00246B2z2iDkeV";
-            string url =await MusicLib.GetUrlAsync(mid);
-            Console.WriteLine(url);
-            Process.Start(url);
-
+            var d=TextHelper.JSON.ToJSON(MusicLib.GetAlbumSongListByIDAsync("000d4ZXm4JElgo").GetAwaiter().GetResult());
+            Console.WriteLine(d);
             Console.ReadLine();
         }
 

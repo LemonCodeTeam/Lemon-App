@@ -91,7 +91,7 @@ namespace Lemon_App
         public void unSkin() {
             skin = false;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF3ED38B"));
-            SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
+            SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFE1E1E2"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFF5F5F7"));

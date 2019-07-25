@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lemon_App"
-             mc:Ignorable="d" Height="350" Width="890" Loaded="UserControl_Loaded" >
+             mc:Ignorable="d" Loaded="UserControl_Loaded" d:DesignWidth="890" d:DesignHeight="350" >
     <UserControl.Resources>
         <Storyboard x:Key="TurnRight">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="M">
@@ -106,21 +106,9 @@
         </Storyboard>
     </UserControl.Resources>
     <Grid x:Name="mj">
-        <Border x:Name="R" Margin="350,0,0,0" Panel.ZIndex="1">
-            <Border.Background>
-                <ImageBrush ImageSource="https://y.gtimg.cn/music/common//upload/t_musicmall_focus/1591105.jpg?max_age=2592000" Stretch="Uniform"/>
-            </Border.Background>
-        </Border>
-        <Border x:Name="L" Margin="0,0,350,0" Panel.ZIndex="2">
-            <Border.Background>
-                <ImageBrush ImageSource="https://y.gtimg.cn/music/common//upload/t_musicmall_focus/1579367.jpg?max_age=2592000" Stretch="Uniform"/>
-            </Border.Background>
-        </Border>
-        <Border x:Name="M" Margin="125,0" Panel.ZIndex="3">
-            <Border.Background>
-                <ImageBrush ImageSource="https://y.gtimg.cn/music/common//upload/t_musicmall_focus/1593475.jpg?max_age=2592000" Stretch="Uniform"/>
-            </Border.Background>
-        </Border>
+        <Border x:Name="R" Margin="350,0,0,0" Panel.ZIndex="1"/>
+        <Border x:Name="L" Margin="0,0,350,0" Panel.ZIndex="2"/>
+        <Border x:Name="M" Margin="125,0" Panel.ZIndex="3"/>
         <Border x:Name="left" HorizontalAlignment="Left" Width="60" Margin="0" Height="115" Background="#33FFFFFF" MouseDown="Left_MouseDown" Panel.ZIndex="4">
             <Path Data="M616.896 939.52C629.472 952.544 646.752 959.904 664.832 960 705.632 958.304 737.408 924 735.968 883.2 736.064 862.08 727.712 841.824 712.8 826.88L400.096 512 712.8 197.12C727.712 182.176 736.064 161.92 735.968 140.8 737.408 100 705.632 65.696 664.832 64 646.752 64.096 629.472 71.456 616.896 84.48L247.04 455.68C216.32 486.944 216.32 537.056 247.04 568.32L616.896 939.52Z" Fill="White" Stretch="Uniform" Margin="5,0,10,0" Width="35" Height="35"/>
         </Border>

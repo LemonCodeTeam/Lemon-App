@@ -9,6 +9,23 @@ namespace LemonLibrary
             Search,Top,SingerItem,GDItem
         }
         ////////Music Helper////////
+        public class IFVData
+        {
+            public IFVData(string image, string uri,string ty)
+            {
+                pic = image;
+                url = uri;
+                type = ty;
+            }
+            public string pic;
+            public string url;
+            public string type;
+        }
+        public class HomePageData {
+            public List<IFVData> focus = new List<IFVData>();
+            public List<MusicGD> Gdata = new List<MusicGD>();
+            public List<Music> NewMusic = new List<Music>();
+        }
         public class Music
         {
             public string MusicName { set; get; } = "";

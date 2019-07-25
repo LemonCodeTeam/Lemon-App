@@ -32,7 +32,11 @@ namespace Lemon_App
         public event Del StarEvent;
         public delegate void Delv(object sender, MouseButtonEventArgs e);
         public event Delv ImMouseDown;
-        public FLGDIndexItem(string Id,string nae,string pic,bool hasDeleteBtn=false)
+        public FLGDIndexItem()
+        {
+            InitializeComponent();
+        }
+            public FLGDIndexItem(string Id,string nae,string pic,bool hasDeleteBtn=false)
         {
             InitializeComponent();
             id = Id;

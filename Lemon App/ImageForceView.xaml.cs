@@ -1,6 +1,7 @@
 ﻿using LemonLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
 {
@@ -26,27 +28,25 @@ namespace Lemon_App
         private int index = 0;
         private int lastindex = 0;
         private int lastcheck = -1;//0:Left 1:Right
-        public ImageForceView(List<IFVData> iFVData)
-        {
-            InitializeComponent();
-            iv = iFVData;
-        }
+        private MainWindow mw;
         public ImageForceView()
         {
             InitializeComponent();
-            iv.Add(new IFVData("http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1593418.jpg", ""));//哇
-            iv.Add(new IFVData("http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1585546.jpg", ""));//直播
-            iv.Add(new IFVData("http://y.gtimg.cn/music/common/upload/t_mv_focus/1587025.jpg", ""));//GEM
-            iv.Add(new IFVData("http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1589996.jpg", ""));//EXO
-            iv.Add(new IFVData("http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1596362.jpg", ""));//胡夏
-            iv.Add(new IFVData("http://y.gtimg.cn/music/common/upload/MUSIC_FOCUS/1594052.jpg", ""));//明月
-            lastindex = iv.Count - 1;
+            M.MouseDown += PartMouseDown;
+            R.MouseDown += PartMouseDown;
+            L.MouseDown += PartMouseDown;
         }
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
+        public async void Updata(List<IFVData> iFVData,MainWindow m) {
+            iv = iFVData;
+            index = 0;
+            lastindex = iv.Count - 1;
+            mw = m;
             M.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
             R.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[1].pic)) { Stretch = Stretch.Uniform };
             L.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv.Last().pic)) { Stretch = Stretch.Uniform };
+        }
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
             while (true) {
                 if (lastcheck != -1)
                 {
@@ -58,6 +58,37 @@ namespace Lemon_App
                 await Task.Delay(5000);
             }
         }
+
+        private void PartMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string url= iv[index].url;
+            string type = iv[index].type;
+            Toast.Send(url+"- - - - -"+type);
+            // type:3002 活动 ？？？？
+            if (type == "3002")
+            {
+                if (url.Contains("y.qq.com/m/digitalbum/gold/index.html"))
+                {
+                    //专辑售卖
+                    string mid = TextHelper.XtoYGetTo(url, "&mid=", "&g_f=yqqjiaodian", 0);
+                    mw.IFVCALLBACK_LoadAlbum(mid);
+                }
+                else if (url.Contains("y.qq.com/topic/piaowu")) {
+                    Process.Start(url);
+                }
+            }
+            else if (type == "10002")
+            {
+                // type:10002 专辑  我也表示很无奈╮(╯▽╰)╭
+                mw.IFVCALLBACK_LoadAlbum(url);
+            }
+            else if (type == "10012")
+            {//type:10012 MV 直接跳转 or.  抓个MV的播放连接？ 🤔
+                Process.Start("https://y.qq.com/n/yqq/mv/v/" + url + ".html");
+            }
+            else Process.Start(url);
+        }
+
         private async void TurnLeft() {
             if (index == 0)
                 index = lastindex;
@@ -125,14 +156,5 @@ namespace Lemon_App
             lastcheck = 1;
             (Resources["TurnRight"] as Storyboard).Begin();
         }
-    }
-
-    public class IFVData {
-        public IFVData(string image,string uri) {
-            pic = image;
-            url = uri;
-        }
-        public string pic;
-        public string url;
     }
 }

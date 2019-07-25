@@ -304,7 +304,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Rectangle x:Name="Corner" Grid.Column="1" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Row="1"/>
-                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="0" Margin="{TemplateBinding Padding}" Grid.Row="0"/>
+                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="0" Margin="{TemplateBinding Padding}" Grid.Row="0" Grid.ColumnSpan="2"/>
                 <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyle}" Width="10" MinWidth="0" Margin="0,0,2,0"/>
                 <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
             </Grid>
@@ -1386,59 +1386,40 @@
                         <WrapPanel x:Name="topIndexList"/>
                     </ScrollViewer>
                 </Grid>
-                <Grid x:Name="SingerIndexPage" Visibility="Collapsed">
+                <Grid x:Name="SingerIndexPage">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                     <ScrollViewer  Margin="20,50,20,0" Template="{DynamicResource ScrollViewerControlTemplate}" VerticalAlignment="Top">
                         <WrapPanel>
-                            <WrapPanel x:Name="Singerws">
-                                <RadioButton Content="全部" Margin="0,0,30,10"   Foreground="{DynamicResource ResuColorBrush}" IsChecked="True"   Uid="all_all_" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="华语男"   Uid="cn_man_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="华语女"   Uid="cn_woman_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent" Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="华语组合"   Uid="cn_team_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent" Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="韩国男"   Uid="k_man_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent" Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="韩国女"   Uid="k_woman_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="韩国组合"   Uid="k_team_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="日本男"   Uid="j_man_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="日本女"   Uid="j_woman_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="日本组合"   Uid="j_team_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="欧美男"   Uid="eu_man_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="欧美女"   Uid="eu_woman_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="欧美组合"   Uid="eu_team_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="乐团"   Uid="c_orchestra_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="演奏家"   Uid="c_performer_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="作曲家"   Uid="c_composer_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton  Content="指挥家"   Uid="c_cantor_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                                <RadioButton Content="其他"   Uid="other_other_" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="Transparent"  Style="{DynamicResource RadioButtonStyle}"/>
-                            </WrapPanel>
+                            <WrapPanel x:Name="Singerws"/>
                             <WrapPanel x:Name="Singersx" Margin="0,20,0,0">
-                                <RadioButton Content="热门" Margin="0,0,30,10"   Foreground="{DynamicResource ResuColorBrush}" IsChecked="True" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="A" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="B" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton  Content="C" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="D" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="E" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="F" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="G" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="H" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="I" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="J" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="K" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="L" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="M" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="N" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="O" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="P" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="Q" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="R" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="S" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="T" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="U" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="V" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="W" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="X" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="Y" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="Z" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
-                                <RadioButton Content="#" Margin="0,0,10,10"   Foreground="{DynamicResource ResuColorBrush}" Background="Transparent" BorderBrush="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}"  />
+                                <lemon_app:RbBox ContentText="全部" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="A" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="B" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="C" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="D" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="E" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="F" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="G" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="H" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="I" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="J" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="K" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="L" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="M" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="N" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="O" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="P" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="Q" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="R" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="S" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="T" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="U" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="V" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="W" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="X" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="Y" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="Z" Margin="0,0,10,10"/>
+                                <lemon_app:RbBox ContentText="#" Margin="0,0,10,10"/>
                             </WrapPanel>
                         </WrapPanel>
                     </ScrollViewer>
@@ -1575,8 +1556,20 @@
                     </Border>
                     <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
                 </Grid>
-                <Grid x:Name="HomePage">
-                    <lemon_app:ImageForceView Height="250" VerticalAlignment="Top" Width="Auto"/>
+                <Grid x:Name="HomePage" d:IsHidden="True">
+                    <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
+                        <Grid x:Name="HomePage_Grid" Height="715">
+                            <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top"/>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Margin="10,250,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
+                            <ScrollViewer Margin="0,290,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
+                                <WrapPanel x:Name="HomePage_Gdtj"/>
+                            </ScrollViewer>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Margin="10,480.48,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
+                            <ScrollViewer Margin="0,530,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
+                                <WrapPanel x:Name="HomePage_Nm"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </ScrollViewer>
                 </Grid>
             </Grid>
             <Border x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" BorderThickness="0,0,1,0" BorderBrush="{DynamicResource BorderColorBrush}">
