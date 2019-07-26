@@ -1386,52 +1386,111 @@
                         <WrapPanel x:Name="topIndexList"/>
                     </ScrollViewer>
                 </Grid>
-                <Grid x:Name="SingerIndexPage">
+                <Grid x:Name="SingerIndexPage" Visibility="Collapsed">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                    <ScrollViewer  Margin="20,50,20,0" Template="{DynamicResource ScrollViewerControlTemplate}" VerticalAlignment="Top">
-                        <WrapPanel>
-                            <WrapPanel x:Name="Singerws"/>
-                            <WrapPanel x:Name="Singersx" Margin="0,20,0,0">
-                                <lemon_app:RbBox ContentText="全部" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="A" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="B" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="C" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="D" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="E" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="F" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="G" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="H" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="I" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="J" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="K" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="L" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="M" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="N" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="O" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="P" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="Q" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="R" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="S" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="T" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="U" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="V" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="W" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="X" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="Y" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="Z" Margin="0,0,10,10"/>
-                                <lemon_app:RbBox ContentText="#" Margin="0,0,10,10"/>
+                    <ScrollViewer x:Name="SingerPage_sv"  Margin="0,45,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="SingerPage_sv_ScrollChanged">
+                        <WrapPanel Orientation="Vertical">
+                            <WrapPanel Orientation="Vertical" Margin="15,5,0,0">
+                                <WrapPanel x:Name="SingerABC">
+                                    <lemon_app:RbBox ContentText="热门"  Uid="-100" Margin="0,0,20,5"/>
+                                    <lemon_app:RbBox ContentText="A" Uid="1" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="B" Uid="2" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="C" Uid="3" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="D" Uid="4" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="E" Uid="5" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="F" Uid="6" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="G" Uid="7" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="H" Uid="8" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="I" Uid="9" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="J" Uid="10" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="K" Uid="11" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="L" Uid="12" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="M" Uid="13" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="N" Uid="14" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="O" Uid="15" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="P" Uid="16" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="Q" Uid="17" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="R" Uid="18" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="S" Uid="19" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="T" Uid="20" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="U" Uid="21" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="V" Uid="22" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="W" Uid="23" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="X" Uid="24" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="Y" Uid="25" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="Z" Uid="26" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="#" Uid="27" Margin="0,0,5,5"/>
+                                </WrapPanel>
+                                <WrapPanel x:Name="SingerArea" Margin="0">
+                                    <lemon_app:RbBox ContentText="全部" Uid="-100" Margin="0,0,20,5"/>
+                                    <lemon_app:RbBox ContentText="内地" Uid="200" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="港台" Uid="2" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="欧美" Uid="5" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="日本" Uid="4" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="韩国" Uid="3" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="其他" Uid="6" Margin="0,0,5,5"/>
+                                </WrapPanel>
+                                <WrapPanel x:Name="SingerSex" Margin="0">
+                                    <lemon_app:RbBox ContentText="全部" Uid="-100" Margin="0,0,20,5"/>
+                                    <lemon_app:RbBox ContentText="男" Uid="0" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="女" Uid="1" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="组合" Uid="2" Margin="0,0,5,5"/>
+                                </WrapPanel>
+                                <WrapPanel x:Name="SingerGenre" Margin="0">
+                                    <lemon_app:RbBox ContentText="全部" Uid="-100" Margin="0,0,20,5"/>
+                                    <lemon_app:RbBox ContentText="流行" Uid="1" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="嘻哈" Uid="6" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="摇滚" Uid="2" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="电子" Uid="4" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="民谣" Uid="3" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="R&amp;B" Uid="8" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="民歌" Uid="10" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="轻音乐" Uid="9" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="爵士" Uid="5" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="古典" Uid="14" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="乡村" Uid="25" Margin="0,0,5,5"/>
+                                    <lemon_app:RbBox ContentText="蓝调" Uid="20" Margin="0,0,5,5"/>
+                                </WrapPanel>
                             </WrapPanel>
+                            <WrapPanel x:Name="SingerItemsList"/>
                         </WrapPanel>
                     </ScrollViewer>
-                    <ScrollViewer x:Name="SingerPage_sv"  Margin="0,171.96,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="SingerPage_sv_ScrollChanged">
-                        <WrapPanel x:Name="SingerItemsList"/>
-                    </ScrollViewer>
                 </Grid>
-                <Grid x:Name="ZJIndexPage" Visibility="Collapsed">
+                <Grid x:Name="ZJIndexPage" Visibility="Collapsed" >
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="专辑&amp;分类歌单" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                    <WrapPanel x:Name="FLGDIndexList" Margin="20,50,20,0" VerticalAlignment="Top" Height="145"/>
-                    <ScrollViewer x:Name="FLGDPage_sv"  Margin="0,200,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="FLGDPage_sv_ScrollChanged">
-                        <WrapPanel x:Name="FLGDItemsList"/>
+                    <ScrollViewer x:Name="FLGDPage_sv"  Margin="0,45,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="FLGDPage_sv_ScrollChanged">
+                        <WrapPanel Orientation="Vertical">
+                            <Grid x:Name="FLGDIndexList" VerticalAlignment="Top" Margin="0,5,0,0" Width="{Binding ActualWidth, ElementName=ZJIndexPage, Mode=OneWay}" Height="130">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid x:Name="FLGDPage_Tag_Turn" Grid.ColumnSpan="5" Height="20" VerticalAlignment="Bottom" Background="#00000000" MouseDown="FLGDPage_Tag_Turn_MouseDown">
+                                    <Path x:Name="path9" Data="M803.534 403.174c12.79-13.712 12.074-35.304-1.74-48.095-13.098-12.177-33.36-12.177-46.355 0L512.82 597.598 270.3 355.079c-12.79-13.712-34.28-14.53-48.094-1.74-13.712 12.792-14.53 34.28-1.74 48.095 0.512 0.614 1.126 1.126 1.74 1.74l266.565 266.668c13.303 13.302 34.792 13.302 48.095 0l266.668-266.668z" Fill="{DynamicResource ResuColorBrush}" Stretch="Uniform" Height="10" HorizontalAlignment="Center" Margin="0,0,60,0" RenderTransformOrigin="0.5,0.5"/>
+                                    <TextBlock x:Name="FLGDPage_Tag_Open" HorizontalAlignment="Center" TextWrapping="Wrap" Text="展开" VerticalAlignment="Center" Margin="0" FontSize="14" Foreground="{DynamicResource ResuColorBrush}"/>
+                                </Grid>
+                                <TextBlock TextWrapping="Wrap" Text="语种" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center"/>
+                                <WrapPanel x:Name="FLGDPage_Tag_Lau" Margin="10,20,0,15" >
+                                </WrapPanel>
+                                <TextBlock TextWrapping="Wrap" Text="流派" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="1"/>
+                                <WrapPanel x:Name="FLGDPage_Tag_LiuPai" Margin="10,20,0,15" Grid.Column="1" />
+                                <TextBlock TextWrapping="Wrap" Text="主题" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="2"/>
+                                <WrapPanel x:Name="FLGDPage_Tag_Theme" Margin="10,20,0,15" Grid.Column="2" />
+                                <TextBlock TextWrapping="Wrap" Text="心情" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="3"/>
+                                <WrapPanel x:Name="FLGDPage_Tag_Heart" Margin="10,20,0,15" Grid.Column="3" />
+                                <TextBlock TextWrapping="Wrap" Text="场景" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="4"/>
+                                <WrapPanel x:Name="FLGDPage_Tag_Changjing" Margin="10,20,0,15" Grid.Column="4" />
+                            </Grid>
+                            <Grid Height="40">
+                                <lemon_app:RbBox x:Name="FLGDPage_Tag_All" Uid="10000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" ContentText="全部"/>
+                                <lemon_app:RbBox x:Name="FLGDPage_SortId_Newest" Uid="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" ContentText="最新"/>
+                                <lemon_app:RbBox x:Name="FLGDPage_SortId_Tj" Uid="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,50,0" ContentText="推荐"/>
+                            </Grid>
+                            <WrapPanel x:Name="FLGDItemsList" Margin="0,5,0,0"/>
+                        </WrapPanel>
                     </ScrollViewer>
                 </Grid>
                 <Grid x:Name="RadioIndexPage" Visibility="Collapsed">
@@ -1556,7 +1615,7 @@
                     </Border>
                     <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
                 </Grid>
-                <Grid x:Name="HomePage" d:IsHidden="True">
+                <Grid x:Name="HomePage">
                     <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
                         <Grid x:Name="HomePage_Grid" Height="715">
                             <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top"/>
@@ -1656,13 +1715,13 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Border Height="30" MouseDown="Border_MouseDown" Background="#00000000" Width="30" Margin="20,0,0,0">
+                    <Border Height="30" MouseDown="PlayControl_PlayLast" Background="#00000000" Width="30" Margin="20,0,0,0">
                         <Path x:Name="path3" Data="M64.2887 526.511505l0-28.009937c0.255827-1.961678 0.521886-3.924379 0.760317-5.886057 2.851954-23.620977 4.167926-47.549969 8.832156-70.811766 14.083763-70.287833 43.99705-133.49848 88.957031-189.413977 48.498574-60.322877 108.580974-105.307418 180.201152-134.699842 42.823318-17.572214 87.363743-28.181853 133.580345-31.546483 7.624654-0.554632 15.242146-1.221828 22.864754-1.837858l25.00858 0c2.300392 0.265036 4.594645 0.680499 6.903224 0.769526 40.860617 1.629103 80.751139 8.746198 119.567189 21.526269 82.522482 27.164686 151.679561 74.249051 206.785623 141.312446 58.518788 71.213925 91.907223 153.003719 100.166327 244.948805 3.841491 42.792619 1.497097 85.23936-6.865361 127.334083-9.788947 49.266054-27.447119 95.578846-53.03796 138.808416-42.437531 71.684646-100.252285 127.659495-173.500543 167.203116-75.265194 40.634466-155.896606 57.843406-241.327324 52.55496-43.023886-2.663666-84.96102-10.900258-125.158535-26.301016-124.022665-47.52848-211.67191-132.775003-262.123976-255.745708-16.795525-40.937364-26.38288-83.73817-29.724998-127.897925C65.613882 541.375028 64.921103 533.944801 64.2887 526.511505L64.2887 526.511505zM512.174474 904.395972c217.750349-0.727571 392.276245-176.013783 392.001999-392.370389-0.274246-217.231533-175.272909-391.646911-391.82599-391.890458-216.513172-0.242524-392.081817 175.197184-392.257825 391.964136C119.921765 728.489636 295.690978 904.360156 512.174474 904.395972L512.174474 904.395972zM512.174474 904.395972 M652.651902 351.169011c-58.137095 35.762505-133.38387 79.465866-191.880145 116.77868-28.442796 18.143219-35.953863 59.141982-8.577353 79.662341 54.223972 40.638559 136.970558 87.270623 200.281489 124.577297 29.359678 17.306154 48.41364 5.39794 48.41364-30.91715L700.889533 380.636137C700.889533 350.777085 681.598164 333.360414 652.651902 351.169011zM644.779607 580.931952c0 13.363356-6.005784 18.499329-15.691377 13.007245-29.413913-16.660448-84.810594-49.480948-114.985848-68.886927-11.531638-7.41897-12.793374-18.090007 0-25.850761 32.368198-19.614733 85.200474-52.017724 114.580618-68.658729 9.923-5.621021 16.096607-0.914836 16.096607 12.013615C644.779607 477.210659 644.779607 545.778314 644.779607 580.931952z M365.086487 679.827333l-27.984355 0c-7.726985 0-13.993712-6.265704-13.993712-13.992689L323.10842 358.01493c0-7.725962 6.266727-13.991666 13.993712-13.991666l27.984355 0c7.730055 0 13.995759 6.265704 13.995759 13.991666l0 307.819714C379.082246 673.561629 372.816542 679.827333 365.086487 679.827333L365.086487 679.827333z M365.086487 679.827333" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
                     </Border>
                     <Border x:Name="PlayBtn" Height="45" MouseDown="PlayBtn_MouseDown" Background="#00000000" Width="45" Grid.Column="1">
                         <Path x:Name="path4" Data="M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 981.333333C253.866667 981.333333 42.666667 770.133333 42.666667 512S253.866667 42.666667 512 42.666667s469.333333 211.2 469.333333 469.333333-211.2 469.333333-469.333333 469.333333z M672 441.6l-170.666667-113.066667c-57.6-38.4-106.666667-12.8-106.666666 57.6v256c0 70.4 46.933333 96 106.666666 57.6l170.666667-113.066666c57.6-42.666667 57.6-106.666667 0-145.066667z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
                     </Border>
-                    <Border Width="30" Height="30" MouseDown="Border_MouseDown_1" Background="#00000000" Grid.Column="2" Margin="0,0,20,0">
+                    <Border Width="30" Height="30" MouseDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="2" Margin="0,0,20,0">
                         <Path x:Name="path5" Data="M64.2887 526.511505l0-28.009937c0.255827-1.961678 0.521886-3.924379 0.760317-5.886057 2.851954-23.620977 4.167926-47.549969 8.832156-70.811766 14.083763-70.287833 43.99705-133.49848 88.957031-189.413977 48.498574-60.322877 108.580974-105.307418 180.201152-134.699842 42.823318-17.572214 87.363743-28.181853 133.580345-31.546483 7.624654-0.554632 15.242146-1.221828 22.864754-1.837858l25.00858 0c2.300392 0.265036 4.594645 0.680499 6.903224 0.769526 40.860617 1.629103 80.751139 8.746198 119.567189 21.526269 82.522482 27.164686 151.679561 74.249051 206.785623 141.312446 58.518788 71.213925 91.907223 153.003719 100.166327 244.948805 3.841491 42.792619 1.497097 85.23936-6.865361 127.334083-9.788947 49.266054-27.447119 95.578846-53.03796 138.808416-42.437531 71.684646-100.252285 127.659495-173.500543 167.203116-75.265194 40.634466-155.896606 57.843406-241.327324 52.55496-43.023886-2.663666-84.96102-10.900258-125.158535-26.301016-124.022665-47.52848-211.67191-132.775003-262.123976-255.745708-16.795525-40.937364-26.38288-83.73817-29.724998-127.897925C65.613882 541.375028 64.921103 533.944801 64.2887 526.511505L64.2887 526.511505zM512.174474 904.395972c217.750349-0.727571 392.276245-176.013783 392.001999-392.370389-0.274246-217.231533-175.272909-391.646911-391.82599-391.890458-216.513172-0.242524-392.081817 175.197184-392.257825 391.964136C119.921765 728.489636 295.690978 904.360156 512.174474 904.395972L512.174474 904.395972zM512.174474 904.395972 M686.870238 679.803797l-27.979238 0c-7.724938 0-13.990642-6.261611-13.990642-13.988596L644.900358 358.037443c0-7.722892 6.265704-13.990642 13.990642-13.990642l27.979238 0c7.729032 0 13.990642 6.26775 13.990642 13.990642l0 307.777759C700.859857 673.541163 694.598246 679.803797 686.870238 679.803797L686.870238 679.803797z M563.220057 467.950761c-58.490136-37.305651-133.724631-81.001849-191.854563-116.76333-28.942169-17.801435-48.226375-0.38988-48.226375 29.466102l0 260.597203c0 36.308951 19.049868 48.217165 48.402383 30.91715 63.307861-37.300534 146.037051-83.932598 200.252837-124.563994C599.17085 527.083533 591.658759 486.091934 563.220057 467.950761zM509.895571 525.050224c-30.166043 19.407002-85.557608 52.220339-114.964358 68.882833-9.683547 5.483898-15.690354 0.352017-15.690354-13.011338L379.240859 442.562535c0-12.919241 6.167466-17.626449 16.090467-12.010545 29.379121 16.644075 82.205257 49.037856 114.565269 68.653613C522.693038 506.95817 521.426185 517.635347 509.895571 525.050224z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
                     </Border>
                 </Grid>

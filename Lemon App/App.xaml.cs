@@ -59,7 +59,7 @@ namespace Lemon_App
         public void Skin()
         {
             skin = true;
-            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF46FFA2"));
+            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#4C000000"));
@@ -75,7 +75,7 @@ namespace Lemon_App
         public void Skin_Black()
         {
             skin = true;
-            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF46FFA2"));
+            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#33FFFFFF"));
@@ -90,7 +90,7 @@ namespace Lemon_App
         /// </summary>
         public void unSkin() {
             skin = false;
-            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF3ED38B"));
+            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFE1E1E2"));

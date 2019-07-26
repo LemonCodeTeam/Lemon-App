@@ -381,16 +381,17 @@ namespace LemonLibrary
         #endregion
         #region 分类歌单
         /// <summary>
-        /// 通过歌单ID 获取分类歌单里的音乐
+        /// 通过分类Tag 获取歌单列表
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">分类Tag</param>
+        /// <param name="sortId">最新:2  推荐:5 </param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<MusicGD>> GetFLGDAsync(string id,int osx=1)
+        public async Task<List<MusicGD>> GetFLGDAsync(string id,string sortId="5",int osx=1)
         {
             int start = (osx - 1) * 30;
             int end = start + 29;
-            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId=5&sin={start}&ein={end}", Encoding.UTF8));
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId={sortId}&sin={start}&ein={end}", Encoding.UTF8));
             var data = new List<MusicGD>();
             int i = 0;
             var dl = o["data"]["list"];
@@ -408,7 +409,7 @@ namespace LemonLibrary
             return data;
         }
         /// <summary>
-        /// 获取分类歌单列表
+        /// 获取分类歌单的分类Tag
         /// </summary>
         /// <returns></returns>
         public async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync()
@@ -828,7 +829,7 @@ namespace LemonLibrary
         /// <param name="sin">80*(页数-1)</param>
         /// <param name="cur_page">页数</param>
         /// <returns></returns>
-        public async Task<List<MusicSinger>> GetSingerAsync(string index,string area,string sex,string genre,string sin,string cur_page)
+        public static async Task<List<MusicSinger>> GetSingerListAsync(string index,string area,string sex,string genre,string sin,int cur_page)
         {
             var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?-=getUCGI6639758764435573&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data="+
                 $"%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22Music.SingerListServer%22%2C%22method%22%3A%22get_singer_list%22%2C%22param%22%3A%7B%22area%22%3A{area}%2C%22sex%22%3A{sex}%2C%22genre%22%3A{genre}%2C%22index%22%3A{index}%2C%22sin%22%3A{sin}%2C%22cur_page%22%3A{cur_page}%7D%7D%7D"));
