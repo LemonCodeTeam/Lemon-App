@@ -1134,7 +1134,7 @@ namespace LemonLibrary
                 MusicGD md = new MusicGD();
                 md.ID = rp["content_id"].ToString();
                 md.Name = rp["title"].ToString();
-                md.Photo = rp["cover"].ToString();
+                md.Photo = rp["cover"].ToString().Replace("http://","https://");
                 Gdata.Add(md);
             }
             //----新歌首发---
