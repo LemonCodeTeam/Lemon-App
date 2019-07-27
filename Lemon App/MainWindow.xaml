@@ -1736,7 +1736,7 @@
                         </InlineUIContainer></TextBlock>
                 <Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" Margin="0,20,240,0" Grid.Column="1" Height="16" VerticalAlignment="Top" MouseDown="Border_MouseDown_6">
                     <Grid>
-                        <Popup x:Name="Pop_sp" Placement="Top" AllowsTransparency="True" HorizontalOffset="-25" PopupAnimation="Fade">
+                        <Popup x:Name="Pop_sp" Placement="Top" AllowsTransparency="True" HorizontalOffset="-27" PopupAnimation="Fade" VerticalOffset="7" LostFocus="Pop_sp_LostFocus">
                             <Grid Height="200" Width="90">
                                 <Border Background="White" CornerRadius="10" Margin="20">
                                     <Border.Effect>

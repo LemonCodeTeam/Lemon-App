@@ -122,6 +122,19 @@ namespace Lemon_App
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
+            //---------"倍速"Popup的移动事件
+            LocationChanged += delegate
+            {
+                var offset = Pop_sp.HorizontalOffset;
+                Pop_sp.HorizontalOffset = offset + 1;
+                Pop_sp.HorizontalOffset = offset;
+            };
+            SizeChanged += delegate
+            {
+                var offset = Pop_sp.HorizontalOffset;
+                Pop_sp.HorizontalOffset = offset + 1;
+                Pop_sp.HorizontalOffset = offset;
+            };
             //---------切割机-----------
             //任务栏 => 正在播放的专辑图片
             Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
@@ -2088,5 +2101,10 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
+
+        private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Pop_sp.IsOpen = false;
+        }
     }
 }
