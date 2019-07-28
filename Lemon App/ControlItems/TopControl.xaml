@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Lemon_App.TopControl"
              Height="170" Width="170">
     <Grid>
-        <Border x:Name="im" CornerRadius="5">
+        <Border x:Name="im">
             <Border.Background>
                 <ImageBrush ImageSource="http://y.gtimg.cn/music/common/upload/iphone_order_channel/toplist_4_300_213023435.jpg"/>
             </Border.Background>

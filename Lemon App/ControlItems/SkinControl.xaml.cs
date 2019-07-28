@@ -21,6 +21,8 @@ namespace Lemon_App
             theme = themecolor;
             if (imgurl == -2)
                 img.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF2D2D30"));
+            else if (imgurl == -3)
+                img.Background = new SolidColorBrush(Color.FromArgb(255, 240, 240, 240));
             else if (imgurl != -1)
                 img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + +imgurl + ".jpg", UriKind.Absolute)));
             this.name.Text = name;

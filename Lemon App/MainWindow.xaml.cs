@@ -158,6 +158,18 @@ namespace Lemon_App
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4C000000"));
                 WindowBlur.SetIsEnabled(this, true);
             }
+            else if (Settings.USettings.Skin_Path == "BlurWhiteTheme") {
+                ControlDownPage.BorderThickness = new Thickness(0, 0, 0, 0);
+                ControlPage.BorderThickness = new Thickness(0, 0, 0, 0);
+                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99FFFFFF"));
+                App.BaseApp.Skin_Black();
+                Color co = Color.FromRgb(64, 64, 64);
+                App.BaseApp.SetColor("ResuColorBrush", co);
+                App.BaseApp.SetColor("ButtonColorBrush", co);
+                App.BaseApp.SetColor("TextX1ColorBrush", co);
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                WindowBlur.SetIsEnabled(this, true);
+            }
             else
             {
                 if (Settings.USettings.Skin_txt != "")
@@ -584,6 +596,25 @@ namespace Lemon_App
             };
             blur.Margin = new Thickness(10, 0, 0, 0);
             SkinIndexList.Children.Add(blur);
+            SkinControl blurWhite = new SkinControl(-3, "亚克力白", Color.FromArgb(255,240,240,240));
+            blurWhite.MouseDown += (s, n) =>
+            {
+                ControlDownPage.BorderThickness = new Thickness(0, 0, 0, 0);
+                ControlPage.BorderThickness = new Thickness(0, 0, 0, 0);
+                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99FFFFFF"));
+                App.BaseApp.Skin_Black();
+                Color co = Color.FromRgb(64, 64, 64);
+                App.BaseApp.SetColor("ResuColorBrush", co);
+                App.BaseApp.SetColor("ButtonColorBrush", co);
+                App.BaseApp.SetColor("TextX1ColorBrush", co);
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                WindowBlur.SetIsEnabled(this, true);
+                Settings.USettings.Skin_txt = "";
+                Settings.USettings.Skin_Path = "BlurWhiteTheme";
+                Settings.SaveSettings();
+            };
+            blurWhite.Margin = new Thickness(10, 0, 0, 0);
+            SkinIndexList.Children.Add(blurWhite);
         }
         #endregion
         #region 功能区
@@ -1181,6 +1212,7 @@ namespace Lemon_App
                 DataItemsList.Items.Add(k);
                 k.Play += PlayMusic;
                 k.Width = DataItemsList.ActualWidth;
+                k.GetToSingerPage += K_GetToSingerPage;
                 if (j.MusicID == MusicData.music.MusicID)
                 {
                     k.ShowDx();
@@ -1443,6 +1475,10 @@ namespace Lemon_App
         }
         #endregion
         #region PlayControl
+        private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Pop_sp.IsOpen = false;
+        }
         private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -2101,10 +2137,5 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
-
-        private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Pop_sp.IsOpen = false;
-        }
     }
 }
