@@ -1651,10 +1651,14 @@
             </Grid>
             <Border x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" BorderThickness="0,0,1,0" BorderBrush="{DynamicResource BorderColorBrush}">
                 <Grid>
-                    <Border x:Name="UserTX" VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,40,0,0" MouseDown="UserTX_MouseDown" Background="#FFECECEC"/>
-                    <TextBlock x:Name="UserName" Margin="10,110,10,0" TextWrapping="Wrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center"/>
-                    <WrapPanel x:Name="PageControls" Margin="0,160,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="82">
-                        <Grid x:Name="MusicKu" Height="25" Width="82">
+                    <Border x:Name="UserTX" VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,40,0,0" MouseDown="UserTX_MouseDown">
+                        <Border.Background>
+                            <ImageBrush ImageSource="http://q2.qlogo.cn/headimg_dl?bs=qq&amp;dst_uin=0&amp;spec=100"/>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock x:Name="UserName" Margin="10,110,10,0" TextWrapping="Wrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown"/>
+                    <WrapPanel x:Name="PageControls" Margin="0,160,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Vertical">
+                        <Grid x:Name="MusicKu">
                             <Border HorizontalAlignment="Left" Height="15" Margin="0,5,0,0" VerticalAlignment="Top" Width="14">
                                 <Path x:Name="path" Data="M903.490346,189.772134L261.212211,189.772134C230.409671,189.772134,205.362205,214.826763,205.362205,245.62214L205.362205,887.900275C205.362205,918.695652,230.410694,943.750281,261.212211,943.750281L763.701603,943.750281 959.341375,750.619656 959.341375,245.62214C959.341375,214.826763,934.292885,189.772134,903.490346,189.772134z M903.490346,727.275995L740.767264,887.900276 261.21221,887.900276 261.21221,245.622141 903.490345,245.622141 903.490346,727.275995z M120.018467 136.532583l642.278135 0 0 23.282263 55.850006 0L818.146609 136.532583c0-30.795377-25.048489-55.850006-55.850006-55.850006l-642.278135 0c-30.80254 0-55.850006 25.054629-55.850006 55.850006l0 642.278135c0 30.795377 25.048489 55.850006 55.850006 55.850006l51.201126 0L171.219593 778.810718l-51.201126 0L120.018467 136.532583z M502.917134 735.333508c32.863479 0.981351 66.808592-15.391549 85.724407-45.886073 5.265934-8.487302 10.829649-19.618826 12.626575-29.523407l39.049365-208.832236 0.13917-0.719384c0 0 18.160615-2.472308 40.031738 1.50426 0.858554 0.165776 1.726318 0.300852 2.581802 0.476861 3.465938 0.716314 6.89913 1.723248 10.582009 2.876514 4.815679 1.36509 9.365298 3.071965 13.719466 4.997827 0.148379 0.072655 0.195451 0.105401 0.324388 0.168846 13.146415 6.574742 39.845497 26.323529 42.063001 68.89716 14.207583-31.402197 7.326872-79.960123-20.662599-102.8259-37.758975-30.886451-109.667725-35.509748-109.667725-35.509748l-41.302685 227.263004c-17.179264-16.457834-38.947034-19.87056-66.051345-20.583804-49.92404-1.571798-92.444459 28.081569-94.958722 66.152653C414.563854 701.860139 453.014584 733.855854 502.917134 735.333508z" Stretch="Uniform" Fill="{DynamicResource ThemeColor}" StrokeThickness="0"/>
                             </Border>
@@ -1664,19 +1668,19 @@
                         <Label x:Name="SingerBtn" Content="歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="SingerBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
                         <Label x:Name="ZJBtn" Content="专辑" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="ZJBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
                         <Label x:Name="RadioBtn" Content="电台" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="RadioBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
-                        <Grid x:Name="Download" Height="25" Width="82" Margin="0,15,0,0">
+                        <Grid x:Name="Download" Margin="0,15,0,0">
                             <Border HorizontalAlignment="Left" Height="15" Margin="0,5,0,0" VerticalAlignment="Top" Width="14" ClipToBounds="True">
                                 <Path x:Name="path8" Data="M858.15384615 685.07692308c-15.95164002 0-28.84537861 12.89373858-28.8453786 28.8453786l0 115.38461539L194.69308293 829.30691707l0-115.38461539c0-15.95164002-12.92320131-28.84537861-28.84692908-28.8453786s-28.84692909 12.89373858-28.84692909 28.8453786l0 144.23154447c0 15.95164002 12.92320131 28.84537861 28.84692909 28.84537861l692.3076923 0c15.95164002 0 28.84692909-12.89373858 28.84692909-28.84537861l0-144.23154447C887.00077524 697.97066165 874.10548618 685.07692308 858.15384615 685.07692308zM255.61087741 528.82271635l233.57271634 233.73768029c5.74038462 5.76832932 13.24128606 8.53756009 20.7124399 8.48076923 1.00961538 0.08653846 1.875 0.57692308 2.88461539 0.57692307 4.21243991 0 8.13461538-0.98076923 11.74038461-2.59615384 3.63461538-1.38461538 7.09615385-3.49038462 10.03936299-6.43179086l233.77013221-233.58533655c11.2797476-11.25 11.30769231-29.50871394 0.02974759-40.78846154-5.625-5.65384615-13.00961538-8.47986778-20.42307692-8.48076923-7.38551683 0-14.74038462 2.82692308-20.39423077 8.42307693l-185.91346154 185.84314903 0-508.15474759c0-15.95192308-12.92307692-28.8452524-28.84705528-28.84525241s-28.84705529 12.89332932-28.84705529 28.84525241l0 509.56820913-187.4188702-187.26562499c-5.62590145-5.65384615-13.06730769-8.50961538-20.45192308-8.50961539s-14.71153846 2.79717548-20.33653846 8.39332932c-11.33563702 11.22205529-11.36448317 29.51051683-0.11448317 40.78846154z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=Download_Btn}" StrokeThickness="0"/>
                             </Border>
                             <Label x:Name="Download_Btn" Content="下载管理" Margin="24,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="Download_Btn_MouseDown"/>
                         </Grid>
-                        <Grid Height="25" Width="82" Margin="0,15,0,0">
+                        <Grid Margin="0,15,0,0">
                             <Border HorizontalAlignment="Left" Height="15" Margin="0,5,0,0" VerticalAlignment="Top" Width="14">
                                 <Path Data="M461.1,887.1C461.1,887.1 210.6,784 98.3,552.5 46.6,446 46.3,303.3 147,202.1 247.6,101 410.8,100.9 511.4,202.1 612,101 775.2,101 875.8,202.1 976.5,303.3 979.1,458 924.5,552.5 789,787.1 570.3,885.1 570.3,885.1 540.5,901.4 491.4,901.9 461.1,887.1z M481.2,845.7C498.5,854.2,531.9,853.6,548,844.7L551.6,843C554.3,841.8 560.1,839 568.6,834.5 583.2,826.7 599.6,817.2 617.4,805.9 668.4,773.3 719.5,732.8 767.1,684 812.3,637.7 852.1,586.3 884.9,529.5 934.9,442.9 921.8,313.3 843.4,234.6 760.7,151.5 626.8,151.5 544.2,234.6L511.6,267.4 479,234.6C396.3,151.5 262.4,151.5 179.7,234.6 101.7,313 90.1999999999998,430.3 139.7,532.4 173.3,601.5 222.5,663.2 283.6,717.4 326.6,755.6 372.8,787.8 419,814.1 435.2,823.3 450,831 463.3,837.4 471.1,841.1 476.3,843.5 478.8,844.5L481.2,845.7z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=LikeBtn}" StrokeThickness="0"/>
                             </Border>
                             <Label x:Name="LikeBtn" Content="我喜欢" Margin="24,0,0,0" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="LikeBtn_MouseDown_1"/>
                         </Grid>
-                        <Grid Height="25" Width="82" Margin="0,15,0,0">
+                        <Grid Margin="0,15,0,0">
                             <Border HorizontalAlignment="Left" Height="15" Margin="0,5,0,0" VerticalAlignment="Top" Width="14">
                                 <Path Data="M819.2 459.776l-215.04-28.4672L512 225.28l-92.16 206.2336L204.8 459.776l158.1056 155.8528-40.96 224.0512L512 729.7024 701.6448 839.68l-40.96-223.8464zM512 677.0688L372.5312 757.76l29.9008-163.84L286.72 479.232l157.696-20.48L512 307.2l67.584 151.3472 157.696 20.48L621.1584 593.92l29.9008 163.84z M512 61.44A471.04 471.04 0 0 0 144.7936 827.392L174.08 798.72a430.08 430.08 0 1 1 92.16 87.04l-29.4912 29.4912A471.04 471.04 0 1 0 512 61.44z M200.9088 829.0304L171.8272 858.112q15.9744 16.5888 33.3824 31.5392L234.496 860.16a436.0192 436.0192 0 0 1-33.5872-31.1296z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=GDBtn}" StrokeThickness="5"/>
                             </Border>
@@ -1749,28 +1753,30 @@
                 <Border x:Name="XHBtn" HorizontalAlignment="Right" Width="15" Margin="0,0,53,0" Height="15" MouseDown="XHBtn_MouseDown" Background="#00000000" Grid.Column="1">
                     <Path x:Name="path6" Data="M694.4,854.4L195.2,854.4 243.2,899.2C252.8,905.6 259.2,915.2 259.2,928 256,947.2 240,960 220.8,960 211.2,960 198.4,953.6 192,947.2L83.2,851.2C70.4,838.4,67.2,816,83.2,803.2L192,704C198.4,697.6 211.2,694.4 220.8,694.4 240,694.4 256,710.4 256,729.6 256,739.2 249.6,748.8 243.2,755.2L201.6,793.6 697.6,793.6C809.6,793.6,896,704,896,595.2L896,508.8C896,489.6 908.8,476.8 928,476.8 947.2,476.8 960,489.6 960,508.8L960,595.2C960,736,841.6,854.4,694.4,854.4z M329.6,169.6L825.6,169.6 777.6,124.8C768,118.4 761.6,108.8 761.6,96 764.8,76.8 780.8,64 800,64 809.6,64 822.4,70.4 828.8,76.8L937.6,172.8C950.4,185.6,953.6,208,937.6,220.8L832,320C825.6,326.4 812.8,329.6 803.2,329.6 784,329.6 768,313.6 768,294.4 768,284.8 774.4,275.2 780.8,268.8L822.4,230.4 326.4,230.4C217.6,233.6,128,323.2,128,435.2L128,524.8C128,544 115.2,556.8 96,556.8 76.8,556.8 64,544 64,524.8L64,438.4C64,288,182.4,169.6,329.6,169.6z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                 </Border>
-                <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Top" Grid.Column="1" Margin="60,20,285,0"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
+                <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Bottom" Grid.Column="1" Margin="60,0,285,35"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
                             <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" />
                         </InlineUIContainer></TextBlock>
-                <Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" Margin="0,20,240,0" Grid.Column="1" Height="16" VerticalAlignment="Top" MouseDown="Border_MouseDown_6">
-                    <Grid>
-                        <Popup x:Name="Pop_sp" Placement="Top" AllowsTransparency="True" HorizontalOffset="-27" PopupAnimation="Fade" VerticalOffset="7" LostFocus="Pop_sp_LostFocus">
-                            <Grid Height="200" Width="90">
-                                <Border Background="White" CornerRadius="10" Margin="20">
-                                    <Border.Effect>
-                                        <DropShadowEffect ShadowDepth="0" BlurRadius="20" Opacity="0.4"/>
-                                    </Border.Effect>
-                                    <Grid>
-                                        <Slider x:Name="MusicPlay_sp" Orientation="Vertical" Margin="18,10" HorizontalAlignment="Center" Maximum="2" Minimum="0.5" Value="1" Style="{DynamicResource SliderStyle1}" PreviewMouseUp="MusicPlay_sp_PreviewMouseUp"/>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </Popup>
-                        <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="倍速" Margin="5,0"/>
-                    </Grid>
-                </Border>
-                <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,165,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp"/>
-                <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" Margin="0,20,165,0" Height="18" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
+                <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,165,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged"/>
+                <WrapPanel Grid.Column="1" Margin="0,0,164,35" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
+                        <Grid>
+                            <Popup x:Name="Pop_sp" Placement="Top" AllowsTransparency="True" HorizontalOffset="-27" PopupAnimation="Fade" VerticalOffset="7" LostFocus="Pop_sp_LostFocus">
+                                <Grid Height="200" Width="90">
+                                    <Border Background="White" CornerRadius="10" Margin="20">
+                                        <Border.Effect>
+                                            <DropShadowEffect ShadowDepth="0" BlurRadius="20" Opacity="0.4"/>
+                                        </Border.Effect>
+                                        <Grid>
+                                            <Slider x:Name="MusicPlay_sp" Orientation="Vertical" Margin="18,10" HorizontalAlignment="Center" Maximum="2" Minimum="0.5" Value="1" Style="{DynamicResource SliderStyle1}" PreviewMouseUp="MusicPlay_sp_PreviewMouseUp"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                            <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="倍速" Margin="5,0"/>
+                        </Grid>
+                    </Border>
+                    <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
+                </WrapPanel>
                 <Border x:Name="PlayLbBtn" HorizontalAlignment="Right" Width="16" Margin="0,0,20,0" Height="16" Background="#00000000" Grid.Column="1" MouseDown="PlayLbBtn_MouseDown">
                     <Path x:Name="path1" Data="M124.342857,226.742857C124.342857,212.114286,135.314286,197.485714,153.6,197.485714L778.971429,197.485714C793.6,197.485714 808.228572,208.457143 808.228571,226.742857 804.571428,245.028571 793.6,256 775.314286,256L149.942857,256C135.314286,256,124.342857,245.028571,124.342857,226.742857z M149.942857,493.714286L533.942857,493.714286C548.571428,493.714286 563.2,504.685715 563.2,522.971429 563.2,537.6 552.228571,552.228572 533.942857,552.228571L149.942857,552.228571C135.314286,552.228571 120.685714,541.257142 120.685714,522.971429 124.342857,504.685715 135.314285,493.714286 149.942857,493.714286z M149.942857,786.285714L497.371429,786.285714C512,786.285714 526.628572,797.257143 526.628571,815.542857 526.628571,830.171428 515.657142,844.8 497.371429,844.8L149.942857,844.8C135.314286,844.8 120.685714,833.828571 120.685714,815.542857 124.342857,797.257143 135.314285,786.285714 149.942857,786.285714z M947.2,438.857143L837.485714,373.028571C826.514285,365.714285 815.542857,369.371428 804.571429,376.685714 797.257143,380.342857 793.6,391.314285 793.6,398.628571L793.6,661.942857C775.314286,650.971428 757.028571,643.657143 731.428571,643.657143 669.257142,643.657143 618.057142,694.857143 618.057143,757.028571 618.057144,819.199999 669.257143,877.714286 731.428571,877.714286 793.6,877.714286 844.8,826.514286 844.8,764.342857L844.8,446.171429 917.942857,486.4C932.571428,493.714286 947.2,490.057143 954.514286,475.428571 965.485715,464.457142 961.828572,446.171428 947.2,438.857143z M731.428571,822.857143C698.514285,822.857143 672.914285,797.257143 672.914286,764.342857 672.914287,731.428571 698.514286,705.828571 731.428571,705.828571 764.342856,705.828571 789.942857,731.428571 789.942857,764.342857 789.942857,797.257143 764.342857,822.857143 731.428571,822.857143z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                 </Border>

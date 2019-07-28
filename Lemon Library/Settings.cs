@@ -151,7 +151,7 @@ namespace LemonLibrary
         }
         public class LocaSettings
         {
-            public string qq { get; set; } = "EX";
+            public string qq { get; set; } = "";
         }
         #endregion
 

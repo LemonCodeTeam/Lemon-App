@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lemon_App"
         mc:Ignorable="d"
-        Title="LoadingWindow" Height="100" Width="180" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True">
+        Title="LoadingWindow" Height="100" Width="180" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True" ShowInTaskbar="False">
     <Window.Resources>
         <Storyboard x:Key="Ex" RepeatBehavior="Forever">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(Brush.RelativeTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="border">

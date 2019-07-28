@@ -116,7 +116,14 @@ namespace Lemon_App
             Settings.LoadLocaSettings();
             if (Settings.LSettings.qq != "")
                 Settings.LoadUSettings(Settings.LSettings.qq);
-            else Settings.LoadUSettings("Public");
+            else {
+                string qq = "Public";
+                Settings.LoadUSettings(qq);
+                Settings.USettings.LemonAreeunIts = qq;
+                Settings.SaveSettings();
+                Settings.LSettings.qq = qq;
+                Settings.SaveLocaSettings();
+            }
             Load_Theme(false);
             //-----Timer user
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
@@ -253,8 +260,6 @@ namespace Lemon_App
             {
                 MusicData = new DataItem(Settings.USettings.Playing);
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.SingerText, false, false);
-                string downloadpath = Settings.USettings.CachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
-                MusicLib.mp.Open(new Uri(downloadpath));
             }
             //--------播放时的Timer 进度/歌词
             t.Interval = 500;
@@ -263,7 +268,11 @@ namespace Lemon_App
                 try
                 {
                     now = MusicLib.mp.Position.TotalMilliseconds;
-                    Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
+                    if (CanJd)
+                    {
+                        jd.Value = now;
+                        Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
+                    }
                     if (isPlayasRun && MusicLib.mp.NaturalDuration.HasTimeSpan)
                     {
                         double all = MusicLib.mp.NaturalDuration.TimeSpan.TotalMilliseconds;
@@ -272,7 +281,6 @@ namespace Lemon_App
                         Play_All.Text = alls;
                         jd.Maximum = all;
                     }
-                    jd.Value = now;
                     if (ind == 1)
                         ml.lv.LrcRoll(now, true);
                     else ml.lv.LrcRoll(now, false);
@@ -511,7 +519,7 @@ namespace Lemon_App
             {
                 string strFileName = ofd.FileName;
                 string file = Settings.USettings.CachePath + "Skin\\" + System.IO.Path.GetFileName(strFileName);
-                System.IO.File.Move(strFileName, file);
+                System.IO.File.Copy(strFileName, file);
                 Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
                 Settings.USettings.Skin_Path = file;
             }
@@ -1207,28 +1215,34 @@ namespace Lemon_App
         /// <param name="e"></param>
         private async void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            NSPage(LikeBtn, Data);
-            loadin.Value = 0;
-            loadin.Opacity = 1;
-            TB.Text = "我喜欢";
-            TXx.Background = Resources["LoveIcon"] as VisualBrush;
-            DataItemsList.Items.Clear();
-            He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<Music, bool>((j, b) => {
-                var k = new DataItem(j, b, this);
-                DataItemsList.Items.Add(k);
-                k.Play += PlayMusic;
-                k.Width = DataItemsList.ActualWidth;
-                k.GetToSingerPage += K_GetToSingerPage;
-                if (j.MusicID == MusicData.music.MusicID)
+            if (Settings.USettings.LemonAreeunIts == "Public")
+                NSPage(LikeBtn, NonePage);
+            else
+            {
+                NSPage(LikeBtn, Data);
+                loadin.Value = 0;
+                loadin.Opacity = 1;
+                TB.Text = "我喜欢";
+                TXx.Background = Resources["LoveIcon"] as VisualBrush;
+                DataItemsList.Items.Clear();
+                He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<Music, bool>((j, b) =>
                 {
-                    k.ShowDx();
-                    MusicData = k;
-                }
-                loadin.Value = DataItemsList.Items.Count;
-            }), this,
-            new Action<int>(i => loadin.Maximum = i));
-            loadin.Opacity = 0;
-            np = NowPage.GDItem;
+                    var k = new DataItem(j, b, this);
+                    DataItemsList.Items.Add(k);
+                    k.Play += PlayMusic;
+                    k.Width = DataItemsList.ActualWidth;
+                    k.GetToSingerPage += K_GetToSingerPage;
+                    if (j.MusicID == MusicData.music.MusicID)
+                    {
+                        k.ShowDx();
+                        MusicData = k;
+                    }
+                    loadin.Value = DataItemsList.Items.Count;
+                }), this,
+                new Action<int>(i => loadin.Maximum = i));
+                loadin.Opacity = 0;
+                np = NowPage.GDItem;
+            }
         }
         #endregion
         #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
@@ -1519,6 +1533,21 @@ namespace Lemon_App
         private void Jd_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {//若使用ValueChanged事件，在value改变时也会触发，而不单是拖动jd.
             MusicLib.mp.Position = TimeSpan.FromMilliseconds(jd.Value);
+            CanJd = true;
+        }
+        bool CanJd = true;
+        private void Jd_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CanJd = false;
+        }
+        private void Jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                if (!CanJd)
+                    Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(jd.Value));
+            }
+            catch { }
         }
         private void ThumbButtonInfo_Click(object sender, EventArgs e)
         {
@@ -1898,57 +1927,62 @@ namespace Lemon_App
         private List<string> GLikeData_Now = new List<string>();
         private async void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(GDBtn, MyGDIndexPage);
-            OpenLoading();
-            var GdData = await ml.GetGdListAsync();
-            if (GdData.Count != GDItemsList.Children.Count)
-            { GDItemsList.Children.Clear(); GData_Now.Clear(); }
-            foreach (var jm in GdData)
-            {
-                if (!GData_Now.Contains(jm.Key))
-                {
-                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
-                    ks.DeleteEvent += async (fl) =>
-                    {
-                        if (TwMessageBox.Show("确定要删除吗?"))
-                        {
-                            string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
-                            string a = MusicLib.DeleteGdById(dirid);
-                            GDBtn_MouseDown(null, null);
-                        }
-                    };
-                    ks.Width = ContentPage.ActualWidth / 5;
-                    ks.ImMouseDown += FxGDMouseDown;
-                    GDItemsList.Children.Add(ks);
-                    GData_Now.Add(jm.Key);
-                }
-            }
-            var GdLikeData = await ml.GetGdILikeListAsync();
-            if (GdLikeData.Count != GDILikeItemsList.Children.Count)
-            { GDILikeItemsList.Children.Clear(); GLikeData_Now.Clear(); }
-            foreach (var jm in GdLikeData)
-            {
-                if (!GLikeData_Now.Contains(jm.Key))
-                {
-                    var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
-                    ks.DeleteEvent += (fl) =>
-                    {
-                        if (TwMessageBox.Show("确定要删除吗?"))
-                        {
-                            string a = MusicLib.DelGDILike(fl.id);
-                            GDBtn_MouseDown(null, null);
-                        }
-                    };
-                    ks.Width = ContentPage.ActualWidth / 5;
-                    ks.ImMouseDown += FxGDMouseDown;
-                    GDILikeItemsList.Children.Add(ks);
-                    GLikeData_Now.Add(jm.Key);
-                }
-            }
-            if (GdData.Count == 0 && GdLikeData.Count == 0)
+            if (Settings.USettings.LemonAreeunIts == "Public")
                 NSPage(GDBtn, NonePage);
-            UIHelper.G(Page);
-            CloseLoading();
+            else
+            {
+                NSPage(GDBtn, MyGDIndexPage);
+                OpenLoading();
+                var GdData = await ml.GetGdListAsync();
+                if (GdData.Count != GDItemsList.Children.Count)
+                { GDItemsList.Children.Clear(); GData_Now.Clear(); }
+                foreach (var jm in GdData)
+                {
+                    if (!GData_Now.Contains(jm.Key))
+                    {
+                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
+                        ks.DeleteEvent += async (fl) =>
+                        {
+                            if (TwMessageBox.Show("确定要删除吗?"))
+                            {
+                                string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
+                                string a = MusicLib.DeleteGdById(dirid);
+                                GDBtn_MouseDown(null, null);
+                            }
+                        };
+                        ks.Width = ContentPage.ActualWidth / 5;
+                        ks.ImMouseDown += FxGDMouseDown;
+                        GDItemsList.Children.Add(ks);
+                        GData_Now.Add(jm.Key);
+                    }
+                }
+                var GdLikeData = await ml.GetGdILikeListAsync();
+                if (GdLikeData.Count != GDILikeItemsList.Children.Count)
+                { GDILikeItemsList.Children.Clear(); GLikeData_Now.Clear(); }
+                foreach (var jm in GdLikeData)
+                {
+                    if (!GLikeData_Now.Contains(jm.Key))
+                    {
+                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
+                        ks.DeleteEvent += (fl) =>
+                        {
+                            if (TwMessageBox.Show("确定要删除吗?"))
+                            {
+                                string a = MusicLib.DelGDILike(fl.id);
+                                GDBtn_MouseDown(null, null);
+                            }
+                        };
+                        ks.Width = ContentPage.ActualWidth / 5;
+                        ks.ImMouseDown += FxGDMouseDown;
+                        GDILikeItemsList.Children.Add(ks);
+                        GLikeData_Now.Add(jm.Key);
+                    }
+                }
+                if (GdData.Count == 0 && GdLikeData.Count == 0)
+                    NSPage(GDBtn, NonePage);
+                UIHelper.G(Page);
+                CloseLoading();
+            }
         }
 
         private async void FxGDMouseDown(object sender, MouseButtonEventArgs e)
