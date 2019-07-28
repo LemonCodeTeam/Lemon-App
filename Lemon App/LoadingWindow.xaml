@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lemon_App"
         mc:Ignorable="d"
-        Title="LoadingWindow" Height="180" Width="180" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True" Opacity="0">
+        Title="LoadingWindow" Height="100" Width="180" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True">
     <Window.Resources>
         <Storyboard x:Key="Ex" RepeatBehavior="Forever">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(Brush.RelativeTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="border">
@@ -34,11 +34,10 @@
 
     </Window.Resources>
     <Window.Effect>
-        <DropShadowEffect BlurRadius="20" ShadowDepth="0" Color="#FF9B9B9B"/>
+        <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
     </Window.Effect>
-
-    <Grid x:Name="LoadingPage" Width="180" Height="180" Margin="0">
-        <Border x:Name="border" Width="115" Height="115" CornerRadius="180" BorderThickness="5" BorderBrush="#FFFDFDFD" >
+    <Grid x:Name="LoadingPage">
+        <Border x:Name="border" Width="100" Height="45" CornerRadius="20" BorderBrush="#FFFDFDFD" BorderThickness="3" >
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <LinearGradientBrush.RelativeTransform>
@@ -55,5 +54,6 @@
             </Border.Background>
         </Border>
         <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="加载中" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFFDFDFD"/>
+        <Border x:Name="border_Copy" Width="100" Height="45" CornerRadius="20" BorderBrush="#FFFDFDFD" BorderThickness="4" />
     </Grid>
 </Window>

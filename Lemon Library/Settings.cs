@@ -74,6 +74,8 @@ namespace LemonLibrary
                         }
                     }
                 }
+                if (data.Contains("IsRoundMusicImage"))
+                    USettings.IsRoundMusicImage = int.Parse(o["IsRoundMusicImage"].ToString());
                 if (data.Contains("Skin_Path"))
                 {
                     USettings.Skin_Path = o["Skin_Path"].ToString();
@@ -116,6 +118,8 @@ namespace LemonLibrary
             public Music Playing { get; set; } = new Music();
             #endregion
             #region 主题配置
+            //启用圆的MusicImage?
+            public int IsRoundMusicImage { get; set; } = 5;
             public string Skin_Path { get; set; } = "";
             public string Skin_txt { get; set; } = "";
             public string Skin_Theme_R { get; set; } = "";

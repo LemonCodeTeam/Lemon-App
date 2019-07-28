@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
 {
@@ -23,18 +24,20 @@ namespace Lemon_App
     /// </summary>
     public partial class TopControl : UserControl
     {
-        public string topID { set; get; }
-        public string pic { set; get; }
-        public string name { set; get; }
-        public TopControl(string id, string img, string n)
+        public MusicTop Data;
+        public TopControl(MusicTop mp)
         {
             InitializeComponent();
-            Loaded += async delegate {
-                im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
-            };
-            topID = id;
-            pic = img;
-            name = n;
+            Loaded += TopControl_Loaded;
+            Data = mp;
+        }
+
+        private async void TopControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.Photo));
+            c1.Text = Data.content[0];
+            c2.Text = Data.content[1];
+            c3.Text = Data.content[2];
         }
     }
 }

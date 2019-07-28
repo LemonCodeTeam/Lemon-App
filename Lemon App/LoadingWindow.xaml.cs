@@ -23,7 +23,6 @@ namespace Lemon_App
         public LoadingWindow()
         {
             InitializeComponent();
-            (Resources["Ex"] as Storyboard).Begin();
         }
     }
 }

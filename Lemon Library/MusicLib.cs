@@ -752,25 +752,33 @@ namespace LemonLibrary
             var data = new List<MusicTop>();
             int i = 0;
             var d0l = o["data"][0]["List"];
-            while (i < d0l.Count())
+            foreach(var d in d0l)
             {
-                var d0li = d0l[i];
+                List<string> content = new List<string>();
+                foreach (var a in d["songlist"])
+                    content.Add(a["songname"] + " - " + a["singername"]);
                 data.Add(new MusicTop
                 {
-                    Name = d0li["ListName"].ToString(),
-                    Photo = d0li["pic_v12"].ToString(),
-                    ID = d0li["topID"].ToString()
+                    Name = d["ListName"].ToString(),
+                    Photo = d["pic_v12"].ToString(),
+                    ID = d["topID"].ToString(),
+                    content=content
                 });
                 i++;
             }
             i = 0;
-            while (i < o["data"][1]["List"].Count())
+            var d1li = o["data"][1]["List"];
+            foreach(var d in d1li)
             {
+                List<string> content = new List<string>();
+                foreach (var a in d["songlist"])
+                    content.Add(a["songname"] + " - " + a["singername"]);
                 data.Add(new MusicTop
                 {
-                    Name = o["data"][1]["List"][i]["ListName"].ToString(),
-                    Photo = o["data"][1]["List"][i]["pic_v12"].ToString(),
-                    ID = o["data"][1]["List"][i]["topID"].ToString()
+                    Name = d["ListName"].ToString(),
+                    Photo = d["pic_v12"].ToString(),
+                    ID = d["topID"].ToString(),
+                    content=content
                 });
                 i++;
             }

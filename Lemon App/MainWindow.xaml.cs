@@ -102,7 +102,7 @@ namespace Lemon_App
             InitializeComponent();
         }
         #region 加载窗口时的基础配置 登录/播放组件
-        private async void window_Loaded(object sender, RoutedEventArgs e)
+        private void window_Loaded(object sender, RoutedEventArgs e)
         {
             //--------检测更新-------
             Updata();
@@ -135,11 +135,13 @@ namespace Lemon_App
                 Pop_sp.HorizontalOffset = offset + 1;
                 Pop_sp.HorizontalOffset = offset;
             };
+            //---------专辑图是圆的吗??-----
+            MusicImage.CornerRadius = new CornerRadius(Settings.USettings.IsRoundMusicImage);
             //---------切割机-----------
             //任务栏 => 正在播放的专辑图片
             Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
             //---------加载TOP页面----- 等待移植
-            await Task.Run(TopLoadac());
+            TopLoadac();
             //--------加载主页---------
             LoadHomePage();
         }
@@ -203,6 +205,9 @@ namespace Lemon_App
                 else
                 {
                     //没有主题配置  （主要考虑到切换登录）
+                    ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
+                    ControlPage.BorderThickness = new Thickness(0, 0, 1, 0);
+                    ControlDownPage.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
                     App.BaseApp.unSkin();
                     Page.Background = new SolidColorBrush(Colors.White);
                 }
@@ -307,7 +312,6 @@ namespace Lemon_App
         private void exShow()
         {
             Show();
-            ShowInTaskbar = true;
             Activate();
         }
         /// <summary>
@@ -317,7 +321,6 @@ namespace Lemon_App
         /// <param name="e"></param>
         private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ShowInTaskbar = false;
             Hide();
         }
         /// <summary>
@@ -571,6 +574,7 @@ namespace Lemon_App
                     WindowBlur.SetIsEnabled(this, false);
                 ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
                 ControlPage.BorderThickness = new Thickness(0, 0, 1, 0);
+                ControlDownPage.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 App.BaseApp.unSkin();
@@ -692,22 +696,16 @@ namespace Lemon_App
         /// 加载TOP列表
         /// </summary>
         /// <returns></returns>
-        private Action TopLoadac() {
-            return new Action(async delegate
+        private async void TopLoadac() {
+            var dt = await ml.GetTopIndexAsync();
+            topIndexList.Children.Clear();
+            foreach (var d in dt)
             {
-                var dt = await ml.GetTopIndexAsync();
-                Dispatcher.Invoke(() => { topIndexList.Children.Clear(); });
-                foreach (var d in dt)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        var top = new TopControl(d.ID, d.Photo, d.Name);
-                        top.MouseDown += Top_MouseDown;
-                        top.Margin = new Thickness(0, 0, 20, 20);
-                        topIndexList.Children.Add(top);
-                    });
-                }
-            });
+                var top = new TopControl(d);
+                top.MouseDown += Top_MouseDown;
+                top.Margin = new Thickness(0, 0, 10, 20);
+                topIndexList.Children.Add(top);
+            }
         }
         /// <summary>
         /// 选择了TOP项
@@ -732,11 +730,11 @@ namespace Lemon_App
             if (osx == 1)
             {
                 NSPage(null, Data);
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.pic));
-                TB.Text = g.name;
+                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
+                TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
             }
-            var dta = await ml.GetToplistAsync(g.topID, osx);
+            var dta = await ml.GetToplistAsync(g.Data.ID, osx);
             foreach (var j in dta)
             {
                 var k = new DataItem(j) { Width = ContentPage.ActualWidth };
@@ -771,6 +769,16 @@ namespace Lemon_App
         }
         #endregion
         #region N/S Page 切换页面
+        public void RunAnimation(DependencyObject TPage)
+        {
+            var sb = Resources["NSPageAnimation"] as Storyboard;
+            foreach (Timeline ac in sb.Children)
+            {
+                Storyboard.SetTarget(ac, TPage);
+            }
+            sb.Begin();
+        }
+
         private Label LastClickLabel = null;
         private Grid LastPage = null;
         public void NSPage(Label ClickLabel, Grid TPage)
@@ -781,7 +789,7 @@ namespace Lemon_App
             if (LastPage == null) LastPage = HomePage;
             LastPage.Visibility = Visibility.Collapsed;
             TPage.Visibility = Visibility.Visible;
-            TPage.BeginAnimation(OpacityProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromSeconds(0.2)));
+            RunAnimation(TPage);
             if (ClickLabel != null) LastClickLabel = ClickLabel;
             LastPage = TPage;
         }
@@ -836,6 +844,8 @@ namespace Lemon_App
             CloseLoading();
         }
         private async void GetSingerList(string index="-100", string area = "-100", string sex = "-100", string genre = "-100", int cur_page = 1) {
+            if (cur_page == 1)
+                SingerItemsList.Opacity = 0;
             string sin = (80 * (cur_page - 1)).ToString();
             OpenLoading();
             ixSingerList = cur_page;
@@ -851,6 +861,10 @@ namespace Lemon_App
             }
             if (cur_page == 1) SingerPage_sv.ScrollToTop();
             CloseLoading();
+            if (cur_page == 1){
+                await Task.Delay(10);
+                RunAnimation(SingerItemsList);
+            }
         }
         private int ixSingerList = 1;
         private void SingerPage_sv_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -1045,6 +1059,8 @@ namespace Lemon_App
             }
         }
         private async void GetGDList(string id, int osx = 1) {
+            if (osx == 1)
+                FLGDItemsList.Opacity = 0;
             FLGDPage_Tag.Uid = id;
             ixFLGD = osx;
             OpenLoading();
@@ -1064,6 +1080,10 @@ namespace Lemon_App
             }
             if (osx == 1) FLGDPage_sv.ScrollToTop();
             CloseLoading();
+            if (osx == 1){
+                await Task.Delay(10);
+                RunAnimation(FLGDItemsList);
+            }
         }
         #endregion
         #region Radio 电台
@@ -1073,80 +1093,66 @@ namespace Lemon_App
             RadioMe.IsChecked = true;
         }
 
-        public void GetRadio(object sender, MouseEventArgs e)
+        public async void GetRadio(object sender, MouseEventArgs e)
         {
             OpenLoading();
-            var x = new Task(new Action(async delegate
-            {
-                var dt = sender as RadioItem;
-                RadioID = dt.id;
-                var data = await ml.GetRadioMusicAsync(dt.id);
-                MusicData.music = data;
-                Dispatcher.Invoke(() =>
-                {
-                    PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.SingerText, true);
-                });
-                Dispatcher.Invoke(() => { CloseLoading(); });
-            }));
-            x.Start();
+            var dt = sender as RadioItem;
+            RadioID = dt.id;
+            var data = await ml.GetRadioMusicAsync(dt.id);
+            MusicData.music = data;
+            PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.SingerText, true);
+            CloseLoading();
         }
-        private void RadioPageChecked(object sender, RoutedEventArgs e)
+        private async void RadioPageChecked(object sender, RoutedEventArgs e)
         {
+            RadioItemsList.Opacity = 0;
             if (sender != null)
             {
                 OpenLoading();
                 var dt = sender as RadioButton;
-                var s = new Task(new Action(async delegate
+                var data = await ml.GetRadioList();
+                RadioItemsList.Children.Clear();
+                List<MusicRadioListItem> dat = null;
+                switch (dt.Uid)
                 {
-                    var data = await ml.GetRadioList();
-                    Dispatcher.Invoke(() => { RadioItemsList.Children.Clear(); });
-                    List<MusicRadioListItem> dat = null;
-                    Dispatcher.Invoke(() =>
-                    {
-                        switch (dt.Uid)
-                        {
-                            case "0":
-                                dat = data.Hot;
-                                break;
-                            case "1":
-                                dat = data.Evening;
-                                break;
-                            case "2":
-                                dat = data.Love;
-                                break;
-                            case "3":
-                                dat = data.Theme;
-                                break;
-                            case "4":
-                                dat = data.Changjing;
-                                break;
-                            case "5":
-                                dat = data.Style;
-                                break;
-                            case "6":
-                                dat = data.Lauch;
-                                break;
-                            case "7":
-                                dat = data.People;
-                                break;
-                            case "8":
-                                dat = data.Diqu;
-                                break;
-                        }
-                    });
-                    foreach (var d in dat)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            RadioItem a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
-                            a.MouseDown += GetRadio;
-                            a.Width = RadioItemsList.ActualWidth / 5;
-                            RadioItemsList.Children.Add(a);
-                        });
-                    }
-                    Dispatcher.Invoke(() => { CloseLoading(); });
-                }));
-                s.Start();
+                    case "0":
+                        dat = data.Hot;
+                        break;
+                    case "1":
+                        dat = data.Evening;
+                        break;
+                    case "2":
+                        dat = data.Love;
+                        break;
+                    case "3":
+                        dat = data.Theme;
+                        break;
+                    case "4":
+                        dat = data.Changjing;
+                        break;
+                    case "5":
+                        dat = data.Style;
+                        break;
+                    case "6":
+                        dat = data.Lauch;
+                        break;
+                    case "7":
+                        dat = data.People;
+                        break;
+                    case "8":
+                        dat = data.Diqu;
+                        break;
+                }
+                foreach (var d in dat)
+                {
+                    RadioItem a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
+                    a.MouseDown += GetRadio;
+                    a.Width = RadioItemsList.ActualWidth / 5;
+                    RadioItemsList.Children.Add(a);
+                }
+                CloseLoading();
+                await Task.Delay(10);
+                RunAnimation(RadioItemsList);
             }
         }
         #endregion
@@ -1632,6 +1638,19 @@ namespace Lemon_App
                 Tasktb.ThumbnailClipMargin = ab;
             };
             ol.Begin();
+        }
+        private void MusicImage_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MusicImage.CornerRadius.Equals(new CornerRadius(5)))
+            {
+                MusicImage.CornerRadius = new CornerRadius(100);
+                Settings.USettings.IsRoundMusicImage = 100;
+            }
+            else
+            {
+                MusicImage.CornerRadius = new CornerRadius(5);
+                Settings.USettings.IsRoundMusicImage = 5;
+            }
         }
         private void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {

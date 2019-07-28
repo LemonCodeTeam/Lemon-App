@@ -51,6 +51,7 @@ namespace LemonLibrary
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
+            public List<string> content { set; get; }
         }
         public class MusicPL {
             public string name { get; set; }

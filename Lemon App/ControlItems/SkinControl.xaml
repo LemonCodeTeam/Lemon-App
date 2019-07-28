@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              Height="129" Width="176">
     <Grid>
-        <Border x:Name="img" Height="99" VerticalAlignment="Top" Background="{DynamicResource ThemeColor}"/>
+        <Border x:Name="img" Height="99" VerticalAlignment="Top" Background="{DynamicResource ThemeColor}" CornerRadius="5"/>
         <TextBlock x:Name="name" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom" Margin="0,0,0,7" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center"/>
 
     </Grid>
