@@ -1021,7 +1021,7 @@
                 <SplineColorKeyFrame KeyTime="0:0:0.3" Value="Transparent"/>
             </ColorAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="ControlDownPage">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="0,1,0,0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Style x:Key="RepeatButtonTransparent3" TargetType="{x:Type RepeatButton}">
