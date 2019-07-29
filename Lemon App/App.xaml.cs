@@ -68,6 +68,12 @@ namespace Lemon_App
             SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#0C000000"));
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0C000000"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
+
+            SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
+            SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("#FF3E3E42"));
+            SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FF252526"));
+            SetColor("PlayDLPage_Font_Most", (Color)ColorConverter.ConvertFromString("#FFB9B9B9"));
+            SetColor("PlayDLPage_Font_Low", (Color)ColorConverter.ConvertFromString("#FF979797"));
         }
         /// <summary>
         /// 适配黑色字体的主题配置
@@ -84,6 +90,12 @@ namespace Lemon_App
             SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
+
+            SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
+            SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
+            SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
+            SetColor("PlayDLPage_Font_Most", (Color)ColorConverter.ConvertFromString("#FF232323"));
+            SetColor("PlayDLPage_Font_Low", (Color)ColorConverter.ConvertFromString("#FF707070"));
         }
         /// <summary>
         /// 恢复 默认主题  /卸载主题
@@ -99,6 +111,12 @@ namespace Lemon_App
             SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
             SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
+
+            SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
+            SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
+            SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
+            SetColor("PlayDLPage_Font_Most", (Color)ColorConverter.ConvertFromString("#FF232323"));
+            SetColor("PlayDLPage_Font_Low", (Color)ColorConverter.ConvertFromString("#FF707070"));
         }
         public SolidColorBrush GetButtonColorBrush()
         {

@@ -32,7 +32,7 @@ namespace Lemon_App
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         LoginWindow lw;
         MusicLib ml = new MusicLib();
-        DataItem MusicData = new DataItem(new Music());
+        PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
         string RadioID = "";
@@ -258,7 +258,7 @@ namespace Lemon_App
             //---------加载上一次播放
             if (Settings.USettings.Playing.MusicName != "")
             {
-                MusicData = new DataItem(Settings.USettings.Playing);
+                MusicData = new PlayDLItem(Settings.USettings.Playing);
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.SingerText, false, false);
             }
             //--------播放时的Timer 进度/歌词
@@ -472,41 +472,52 @@ namespace Lemon_App
         private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
         {
             TextColor_byChoosing = "White";
+            Skin_ChooseBox_Font.Background = (sender as Border).BorderBrush;
         }
         private void Border_MouseDown_5(object sender, MouseButtonEventArgs e)
         {
             TextColor_byChoosing = "Black";
+            Skin_ChooseBox_Font.Background = new SolidColorBrush(Colors.Black);
         }
         private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Color co;
+            if (TextColor_byChoosing == "Black")
+            {
+                co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+            }
+            else
+            {
+                co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
+            }
+            App.BaseApp.SetColor("ThemeColor", Theme_Choose_Color);
+            App.BaseApp.SetColor("ResuColorBrush", co);
+            App.BaseApp.SetColor("ButtonColorBrush", co);
+            App.BaseApp.SetColor("TextX1ColorBrush", co);
+            ControlDownPage.BorderThickness = new Thickness(0);
+            ControlPage.BorderThickness = new Thickness(0);
+            Settings.USettings.Skin_txt = TextColor_byChoosing;
+            Settings.USettings.Skin_Theme_R = Theme_Choose_Color.R.ToString();
+            Settings.USettings.Skin_Theme_G = Theme_Choose_Color.G.ToString();
+            Settings.USettings.Skin_Theme_B = Theme_Choose_Color.B.ToString();
+            Settings.SaveSettings();
+            ChooseText.Visibility = Visibility.Collapsed;
+        }
+        private void ThemeChooseCloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ChooseText.Visibility = Visibility.Collapsed;
+        }
+        Color Theme_Choose_Color;
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Color co;
-                if (TextColor_byChoosing == "Black")
-                {
-                    co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
-                }
-                else
-                {
-                    co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26000000"));
-                }
-                Color col = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
-                App.BaseApp.SetColor("ThemeColor", col);
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                App.BaseApp.SetColor("ButtonColorBrush", co);
-                App.BaseApp.SetColor("TextX1ColorBrush", co);
-                ControlDownPage.BorderThickness = new Thickness(0);
-                ControlPage.BorderThickness = new Thickness(0);
-                Settings.USettings.Skin_txt = TextColor_byChoosing;
-                Settings.USettings.Skin_Theme_R = col.R.ToString();
-                Settings.USettings.Skin_Theme_G = col.G.ToString();
-                Settings.USettings.Skin_Theme_B = col.B.ToString();
-                Settings.SaveSettings();
+                Theme_Choose_Color = Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B);
+                Skin_ChooseBox_Theme.Background = new SolidColorBrush(Theme_Choose_Color);
             }
-            ChooseText.Visibility = Visibility.Collapsed;
         }
         private void ColorThemeBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -519,7 +530,7 @@ namespace Lemon_App
             {
                 string strFileName = ofd.FileName;
                 string file = Settings.USettings.CachePath + "Skin\\" + System.IO.Path.GetFileName(strFileName);
-                System.IO.File.Copy(strFileName, file);
+                System.IO.File.Copy(strFileName, file,true);
                 Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
                 Settings.USettings.Skin_Path = file;
             }
@@ -653,7 +664,18 @@ namespace Lemon_App
                 k.ImMouseDown += (object s, MouseButtonEventArgs es) => {
                     var sx = s as FLGDIndexItem;
                     Music dt = sx.Tag as Music;
-                    MusicData = new DataItem(dt);
+                    //如果是歌单播放 那么将所有歌曲加入播放队列 
+                    PlayDL_List.Items.Clear();
+                    foreach (FLGDIndexItem exs in HomePage_Nm.Children)
+                    {
+                        var kx = new PlayDLItem(exs.Tag as Music);
+                        kx.MouseDoubleClick += K_MouseDoubleClick;
+                        PlayDL_List.Items.Add(kx);
+                    }
+                    int index = HomePage_Nm.Children.IndexOf(s as FLGDIndexItem);
+                    PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+                    dk.p(true);
+                    MusicData = dk;
                     PlayMusic(dt.MusicID, dt.ImageUrl, dt.MusicName, dt.SingerText);
                 };
                 HomePage_Nm.Children.Add(k);
@@ -690,10 +712,21 @@ namespace Lemon_App
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
                 k.Download += K_Download;
-                if (k.music.MusicID == MusicData.music.MusicID)
+                if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    MusicData = k;
+                    //如果是歌单播放 那么将所有歌曲加入播放队列 
+                    PlayDL_List.Items.Clear();
+                    foreach (DataItem es in DataItemsList.Items)
+                    {
+                        var kx = new PlayDLItem(es.music);
+                        kx.MouseDoubleClick += K_MouseDoubleClick;
+                        PlayDL_List.Items.Add(kx);
+                    }
+                    int index = DataItemsList.Items.IndexOf(k);
+                    PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+                    dk.p(true);
+                    MusicData = dk;
                 }
                 DataItemsList.Items.Add(k);
             }
@@ -749,10 +782,21 @@ namespace Lemon_App
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
                 k.Download += K_Download;
-                if (k.music.MusicID == MusicData.music.MusicID)
+                if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    MusicData = k;
+                    var kx = new PlayDLItem(k.music);
+                    kx.MouseDoubleClick += K_MouseDoubleClick;
+                    int index = PlayDL_List.Items.IndexOf(MusicData)+1;
+                    PlayDL_List.Items.Insert(index, kx);
+                    kx.p(true);
+                    MusicData = kx;
+                }
+                if (DataPage_DownloadMod)
+                {
+                    k.MouseDown -= PlayMusic;
+                    k.NSDownload(true);
+                    k.Check();
                 }
                 DataItemsList.Items.Add(k);
             }
@@ -791,6 +835,9 @@ namespace Lemon_App
         private Grid LastPage = null;
         public void NSPage(Label ClickLabel, Grid TPage)
         {
+            if (TPage == Data)
+                if (DataPage_DownloadMod)
+                    CloseDownloadPage();
             if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (ClickLabel != null) ClickLabel.SetResourceReference(ForegroundProperty, "ThemeColor");
@@ -800,6 +847,7 @@ namespace Lemon_App
             RunAnimation(TPage);
             if (ClickLabel != null) LastClickLabel = ClickLabel;
             LastPage = TPage;
+
         }
         private void TopBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -839,13 +887,24 @@ namespace Lemon_App
             {
                 var k = new DataItem(j) { Width = ContentPage.ActualWidth };
                 k.GetToSingerPage += K_GetToSingerPage;
-                if (k.music.MusicID == MusicData.music.MusicID)
+                if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    MusicData = k;
+                    var kx = new PlayDLItem(k.music);
+                    kx.MouseDoubleClick += K_MouseDoubleClick;
+                    int index = PlayDL_List.Items.IndexOf(MusicData)+1;
+                    PlayDL_List.Items.Insert(index, kx);
+                    kx.p(true);
+                    MusicData = kx;
                 }
                 k.Play += PlayMusic;
                 k.Download += K_Download;
+                if (DataPage_DownloadMod)
+                {
+                    k.MouseDown -= PlayMusic;
+                    k.NSDownload(true);
+                    k.Check();
+                }
                 DataItemsList.Items.Add(k);
             }
             if(osx==1)Datasv.ScrollToTop();
@@ -1107,7 +1166,7 @@ namespace Lemon_App
             var dt = sender as RadioItem;
             RadioID = dt.id;
             var data = await ml.GetRadioMusicAsync(dt.id);
-            MusicData.music = data;
+            MusicData.Data = data;
             PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.SingerText, true);
             CloseLoading();
         }
@@ -1191,18 +1250,18 @@ namespace Lemon_App
         {
             if (MusicName.Text != "MusicName")
             {
-                if (Settings.USettings.MusicLike.ContainsKey(MusicData.music.MusicID))
+                if (Settings.USettings.MusicLike.ContainsKey(MusicData.Data.MusicID))
                 {
                     LikeBtnUp();
-                    Settings.USettings.MusicLike.Remove(MusicData.music.MusicID);
-                    string a = MusicLib.DeleteMusicFromGD(MusicData.music.MusicID, MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
+                    Settings.USettings.MusicLike.Remove(MusicData.Data.MusicID);
+                    string a = MusicLib.DeleteMusicFromGD(MusicData.Data.MusicID, MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a);
                 }
                 else
                 {
-                    string[] a = MusicLib.AddMusicToGD(MusicData.music.MusicID, MusicLib.MusicLikeGDdirid);
+                    string[] a = MusicLib.AddMusicToGD(MusicData.Data.MusicID, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a[1] + ": " + a[0]);
-                    Settings.USettings.MusicLike.Add(MusicData.music.MusicID, MusicData.music);
+                    Settings.USettings.MusicLike.Add(MusicData.Data.MusicID, MusicData.Data);
                     LikeBtnDown();
                 }
                 Settings.SaveSettings();
@@ -1232,10 +1291,21 @@ namespace Lemon_App
                     k.Play += PlayMusic;
                     k.Width = DataItemsList.ActualWidth;
                     k.GetToSingerPage += K_GetToSingerPage;
-                    if (j.MusicID == MusicData.music.MusicID)
+                    if (j.MusicID == MusicData.Data.MusicID)
                     {
                         k.ShowDx();
-                        MusicData = k;
+                        //如果是歌单播放 那么将所有歌曲加入播放队列 
+                        PlayDL_List.Items.Clear();
+                        foreach (DataItem es in DataItemsList.Items)
+                        {
+                            var kx = new PlayDLItem(es.music);
+                            kx.MouseDoubleClick += K_MouseDoubleClick;
+                            PlayDL_List.Items.Add(kx);
+                        }
+                        int index = DataItemsList.Items.IndexOf(k);
+                        PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+                        dk.p(true);
+                        MusicData = dk;
                     }
                     loadin.Value = DataItemsList.Items.Count;
                 }), this,
@@ -1250,9 +1320,10 @@ namespace Lemon_App
         {
             PlayMusic(DataItemsList.Items[0] as DataItem, null);
         }
-
+        bool DataPage_DownloadMod = false;
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            DataPage_DownloadMod = true;
             border5.Visibility = Visibility.Collapsed;
             DataDownloadPage.Visibility = Visibility.Visible;
             Download_Path.Text = Settings.USettings.DownloadPath;
@@ -1268,6 +1339,7 @@ namespace Lemon_App
 
         public void CloseDownloadPage()
         {
+            DataPage_DownloadMod = false;
             border5.Visibility = Visibility.Visible;
             DataDownloadPage.Visibility = Visibility.Collapsed;
             foreach (DataItem x in DataItemsList.Items)
@@ -1365,44 +1437,47 @@ namespace Lemon_App
         {
             Search_SmartBox.Visibility = Visibility.Collapsed;
         }
-        public void SearchMusic(string key, int osx = 0)
+        public async void SearchMusic(string key, int osx = 0)
         {
             np = NowPage.Search;
             SearchKey = key;
             OpenLoading();
-            var xs = new Task(new Action(async delegate
+            List<Music> dt = null;
+            if (osx == 0) dt = await ml.SearchMusicAsync(key);
+            else dt = await ml.SearchMusicAsync(key, osx);
+            if (osx == 0)
             {
-                List<Music> dt = null;
-                if (osx == 0) Dispatcher.Invoke(() => { NSPage(null, Data); });
-                if (osx == 0) dt = await ml.SearchMusicAsync(key);
-                else dt = await ml.SearchMusicAsync(key, osx);
-                if (osx == 0)
-                    Dispatcher.Invoke(() =>
-                    {
-                        TB.Text = key;
-                        DataItemsList.Items.Clear();
-                        Datasv.ScrollToTop();
-                    });
-                await Dispatcher.Invoke(async () =>
+                TB.Text = key;
+                DataItemsList.Items.Clear();
+                Datasv.ScrollToTop();
+            }
+            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
+            foreach (var j in dt)
+            {
+                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                if (k.music.MusicID == MusicData.Data.MusicID)
                 {
-                    TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
-                    foreach (var j in dt)
-                    {
-                        var k = new DataItem(j) { Width = ContentPage.ActualWidth };
-                        if (k.music.MusicID == MusicData.music.MusicID)
-                        {
-                            k.ShowDx();
-                            MusicData = k;
-                        }
-                        k.GetToSingerPage += K_GetToSingerPage;
-                        k.Play += PlayMusic;
-                        k.Download += K_Download;
-                        DataItemsList.Items.Add(k);
-                    }
-                });
-                Dispatcher.Invoke(() => { CloseLoading(); });
-            }));
-            xs.Start();
+                    k.ShowDx();
+                    var kx = new PlayDLItem(k.music);
+                    kx.MouseDoubleClick += K_MouseDoubleClick;
+                    int index = PlayDL_List.Items.IndexOf(MusicData)+1;
+                    PlayDL_List.Items.Insert(index, kx);
+                    kx.p(true);
+                    MusicData = kx;
+                }
+                k.GetToSingerPage += K_GetToSingerPage;
+                k.Play += PlayMusic;
+                k.Download += K_Download;
+                if (DataPage_DownloadMod)
+                {
+                    k.MouseDown -= PlayMusic;
+                    k.NSDownload(true);
+                    k.Check();
+                }
+                DataItemsList.Items.Add(k);
+            }
+            CloseLoading();
+            if (osx == 0) NSPage(null, Data);
         }
         #endregion
         #region PlayMusic 播放时的逻辑处理
@@ -1414,19 +1489,19 @@ namespace Lemon_App
                 new CannotPlay().ShowDialog();
             else
             {
+                AddPlayDL(dt);
                 dt.ShowDx();
-                MusicData = dt;
                 PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
             }
         }
         public async void PlayMusic(DataItem dt, bool next = false)
         {
-            MusicData = dt;
             if (await MusicLib.GetUrlAsync(dt.music.MusicID) == null)
                 if (next) PlayControl_PlayNext(null, null);
                 else new CannotPlay().ShowDialog();
             else
             {
+                AddPlayDL(dt);
                 dt.ShowDx();
                 PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
             }
@@ -1437,11 +1512,57 @@ namespace Lemon_App
                 new CannotPlay().ShowDialog();
             else
             {
+                AddPlayDL(dt);
                 dt.ShowDx();
-                MusicData = dt;
                 PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
             }
         }
+        public void AddPlayDL(DataItem dt) {
+            if (np == NowPage.GDItem)
+            {
+                //如果是歌单播放 那么将所有歌曲加入播放队列 
+                PlayDL_List.Items.Clear();
+                foreach (DataItem e in DataItemsList.Items)
+                {
+                    var k = new PlayDLItem(e.music);
+                    k.MouseDoubleClick += K_MouseDoubleClick;
+                    PlayDL_List.Items.Add(k);
+                }
+                int index = DataItemsList.Items.IndexOf(dt);
+                PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+                dk.p(true);
+                MusicData = dk;
+            }
+            else
+            {
+                //如果是其他播放 那么将此歌曲加入播放队列 
+                var k = new PlayDLItem(dt.music);
+                k.MouseDoubleClick += K_MouseDoubleClick;
+                int index = PlayDL_List.Items.IndexOf(MusicData)+1;
+                PlayDL_List.Items.Insert(index, k);
+                k.p(true);
+                MusicData = k;
+            }
+        }
+        private void K_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            PlayDLItem k = sender as PlayDLItem;
+            k.p(true);
+            MusicData = k;
+            PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+            bool find = false;
+            foreach (DataItem a in DataItemsList.Items)
+            {
+                if (a.music.MusicID.Equals(k.Data.MusicID))
+                {
+                    find = true;
+                    a.ShowDx();
+                    break;
+                }
+            }
+            if (!find) new DataItem(new Music()).ShowDx();
+        }
+
         private string LastPlay = "";
         public async void PlayMusic(string id, string x, string name, string singer, bool isRadio = false, bool doesplay = true)
         {
@@ -1469,7 +1590,7 @@ namespace Lemon_App
                     isPlayasRun = true;
                     t.Stop();
                     MusicLib.mp.Pause();
-                    Settings.USettings.Playing = MusicData.music;
+                    Settings.USettings.Playing = MusicData.Data;
                     Settings.SaveSettings();
                     if (Settings.USettings.MusicLike.ContainsKey(id))
                         LikeBtnDown();
@@ -1489,7 +1610,7 @@ namespace Lemon_App
                         t.Start();
                         isplay = true;
                     }
-                    LastPlay = MusicData.music.MusicID;
+                    LastPlay = MusicData.Data.MusicID;
                 }
             }
         }
@@ -1562,12 +1683,52 @@ namespace Lemon_App
         private void PlayControl_PlayLast(object sender, MouseButtonEventArgs e)
         {
             if (!IsRadio)
-                PlayMusic(DataItemsList.Items[DataItemsList.Items.IndexOf(MusicData) - 1] as DataItem, null);
+            {
+                PlayDLItem k;
+                //如果已经到播放队列的第一首，那么上一首就是最后一首歌(列表循环)
+                if (PlayDL_List.Items.IndexOf(MusicData)==0)
+                    k = PlayDL_List.Items[PlayDL_List.Items.Count-1] as PlayDLItem;
+                else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) - 1] as PlayDLItem;
+                k.p(true);
+                MusicData = k;
+                PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+                bool find = false;
+                foreach (DataItem a in DataItemsList.Items)
+                {
+                    if (a.music.MusicID.Equals(k.Data.MusicID))
+                    {
+                        find = true;
+                        a.ShowDx();
+                        break;
+                    }
+                }
+                if (!find) new DataItem(new Music()).ShowDx();
+            }
         }
         private void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
         {
             if (!IsRadio)
-                PlayMusic(DataItemsList.Items[DataItemsList.Items.IndexOf(MusicData) + 1] as DataItem,true);
+            {
+                PlayDLItem k;
+                //如果已到最后一首歌，那么下一首从头播放
+                if (PlayDL_List.Items.IndexOf(MusicData) + 1==PlayDL_List.Items.Count)
+                    k = PlayDL_List.Items[0] as PlayDLItem;
+                else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) + 1] as PlayDLItem;
+                k.p(true);
+                MusicData = k;
+                PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+                bool find = false;
+                foreach (DataItem a in DataItemsList.Items)
+                {
+                    if (a.music.MusicID.Equals(k.Data.MusicID))
+                    {
+                        find = true;
+                        a.ShowDx();
+                        break;
+                    }
+                }
+                if (!find) new DataItem(new Music()).ShowDx();
+            }
             else GetRadio(new RadioItem(RadioID), null);
         }
         private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1694,10 +1855,38 @@ namespace Lemon_App
                 (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Dqxh);
             }
         }
-
+        bool isOpenPlayDLPage = false;
         private void PlayLbBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(null, Data);
+            if (isOpenPlayDLPage) {
+                (Resources["ClosePlayDLPage"] as Storyboard).Begin();
+                isOpenPlayDLPage = false;
+            }
+            else {
+                (Resources["OpenPlayDLPage"] as Storyboard).Begin();
+                isOpenPlayDLPage = true;
+            }
+        }
+        private void PlayDLPage_ClosePage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (Resources["ClosePlayDLPage"] as Storyboard).Begin();
+            isOpenPlayDLPage = false;
+        }
+        private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            PlayDL_List.Items.Clear();
+            foreach (DataItem es in DataItemsList.Items)
+            {
+                var kx = new PlayDLItem(es.music);
+                kx.MouseDoubleClick += K_MouseDoubleClick;
+                PlayDL_List.Items.Add(kx);
+            }
+            int index = 0;
+            PlayDLItem k = PlayDL_List.Items[index] as PlayDLItem;
+            k.p(true);
+            MusicData = k;
+            (DataItemsList.Items[0] as DataItem).ShowDx();
+            PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
         }
         #endregion
         #region Lyric
@@ -2001,10 +2190,21 @@ namespace Lemon_App
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Download += K_Download;
                 k.Width = DataItemsList.ActualWidth;
-                if (j.MusicID == MusicData.music.MusicID)
+                if (j.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    MusicData = k;
+                    //如果是歌单播放 那么将所有歌曲加入播放队列 
+                    PlayDL_List.Items.Clear();
+                    foreach (DataItem es in DataItemsList.Items)
+                    {
+                        var kx = new PlayDLItem(es.music);
+                        kx.MouseDoubleClick += K_MouseDoubleClick;
+                        PlayDL_List.Items.Add(kx);
+                    }
+                    int index = DataItemsList.Items.IndexOf(k);
+                    PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+                    dk.p(true);
+                    MusicData = dk;
                 }
                 loadin.Value = DataItemsList.Items.Count;
             }), this,
@@ -2164,7 +2364,7 @@ namespace Lemon_App
                             var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
                             Console.WriteLine(sl);
                             var sdc = JObject.Parse(sl)["data"]["creator"];
-                            await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString(), Settings.USettings.CachePath + qq + ".jpg");
+                            await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://","https://"), Settings.USettings.CachePath + qq + ".jpg");
                             await Task.Run(() =>
                             {
                                 Settings.LoadUSettings(qq);
@@ -2190,5 +2390,12 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
+
+        private void PlayDLPage_IntoDataPage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (Resources["ClosePlayDLPage"] as Storyboard).Begin();
+            isOpenPlayDLPage = false;
+            NSPage(null, Data);
+        }
     }
 }

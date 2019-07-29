@@ -121,6 +121,9 @@
     <Compile Include="ControlItems\MyMessageBox.xaml.cs">
       <DependentUpon>MyMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControlItems\PlayDLItem.xaml.cs">
+      <DependentUpon>PlayDLItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ControlItems\Ran.cs" />
     <Compile Include="ControlItems\RbBox.xaml.cs">
       <DependentUpon>RbBox.xaml</DependentUpon>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\MyMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\PlayDLItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

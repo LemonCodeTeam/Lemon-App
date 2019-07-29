@@ -123,30 +123,35 @@ namespace Lemon_App
             (Resources["TurnLeft"] as Storyboard).Begin();
         }
 
-        public async void TurnRight() {
-            if (index == lastindex)
-                index = 0;
-            else
-                index++;
-            Console.WriteLine("RIGHT:" + index);
-            Border leftb = new Border(), mid = new Border(), righb = new Border();
-            foreach (Border bd in mj.Children)
+        public async void TurnRight()
+        {
+            try
             {
-                //位于左边的
-                if (bd.Margin.Equals(new Thickness(0, 0, 350, 0)))
-                    leftb = bd;
-                //位于中间的
-                else if (bd.Margin.Equals(new Thickness(125, 0, 125, 0)))
-                    mid = bd;
-                //位于右边的
-                else if (bd.Margin.Equals(new Thickness(350, 0, 0, 0)))
-                    righb = bd;
+                if (index == lastindex)
+                    index = 0;
+                else
+                    index++;
+                Console.WriteLine("RIGHT:" + index);
+                Border leftb = new Border(), mid = new Border(), righb = new Border();
+                foreach (Border bd in mj.Children)
+                {
+                    //位于左边的
+                    if (bd.Margin.Equals(new Thickness(0, 0, 350, 0)))
+                        leftb = bd;
+                    //位于中间的
+                    else if (bd.Margin.Equals(new Thickness(125, 0, 125, 0)))
+                        mid = bd;
+                    //位于右边的
+                    else if (bd.Margin.Equals(new Thickness(350, 0, 0, 0)))
+                        righb = bd;
+                }
+                leftb.Background = mid.Background;
+                mid.Background = righb.Background;
+                if (index + 1 > lastindex)
+                    righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
+                else righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index + 1].pic)) { Stretch = Stretch.Uniform };
             }
-            leftb.Background = mid.Background;
-            mid.Background = righb.Background;
-            if (index + 1 > lastindex)
-                righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
-            else righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index + 1].pic)) { Stretch = Stretch.Uniform };
+            catch { }
         }
         private void Right_MouseDown(object sender, MouseButtonEventArgs e)
         {

@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Lemon_App.PlayDLItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Width="350" Height="60" Background="#00000000">
+    <Grid>
+        <Border BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Height="1" VerticalAlignment="Bottom"/>
+        <TextBlock x:Name="MusicName" TextWrapping="Wrap" Text="Just Dance" VerticalAlignment="Top" Margin="20,12,10,0" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+        <TextBlock x:Name="SingerName" TextWrapping="Wrap" Text="Lady Gaga" VerticalAlignment="Top" Margin="20,32,10,0" Foreground="{DynamicResource PlayDLPage_Font_Low}"/>
+        <Border x:Name="bk" HorizontalAlignment="Left" Width="5" Margin="0,10" Background="{DynamicResource ThemeColor}" Visibility="Collapsed"/>
+
+    </Grid>
+</UserControl>

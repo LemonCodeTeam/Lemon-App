@@ -975,6 +975,7 @@
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
                 <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,20,0,0"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10,0,285,35"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
                 <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,41,165,21"/>
@@ -1003,8 +1004,8 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,20,0,0"/>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="60,20,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,0,285,35"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="60,0,285,35"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
                 <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,41,165,21"/>
@@ -1257,6 +1258,49 @@
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="OpenPlayDLPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PlayDLPage_ClosePage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="PlayDLPage_ClosePage">
+                <EasingThicknessKeyFrame KeyTime="0" Value="0,0,0,75">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,350,75">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="PlayDLPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="350">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ClosePlayDLPage">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="PlayDLPage_ClosePage">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,0,75">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PlayDLPage_ClosePage">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="PlayDLPage">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="AddGDPage_CloseBtn">
@@ -1267,6 +1311,10 @@
         </EventTrigger>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="AddGDPage_OpenBtn">
             <BeginStoryboard x:Name="OpenAddGDPage_BeginStoryboard1" Storyboard="{StaticResource OpenAddGDPage}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource OpenPlayDLPage}"/>
+            <BeginStoryboard Storyboard="{StaticResource ClosePlayDLPage}"/>
         </EventTrigger>
     </Window.Triggers>
     <WindowChrome.WindowChrome>
@@ -1293,6 +1341,22 @@
                 <TextBox x:Name="SearchBox" TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="20,12,0,12" Style="{DynamicResource SearchBox}" Foreground="{DynamicResource ResuColorBrush}" KeyDown="SearchBox_KeyDown" Background="#0C000000" Height="25" TextChanged="SearchBox_TextChanged" MinWidth="175" PreviewKeyDown="SearchBox_PreviewKeyDown" Width="220"/>
             </Grid>
             <Grid x:Name="ContentPage" Background="{DynamicResource ContentPageBursh}" Grid.Column="1" Margin="0,50,0,0">
+
+                <Grid x:Name="HomePage">
+                    <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
+                        <Grid x:Name="HomePage_Grid" Height="715">
+                            <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top"/>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Margin="10,250,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
+                            <ScrollViewer Margin="0,290,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
+                                <WrapPanel x:Name="HomePage_Gdtj"/>
+                            </ScrollViewer>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Margin="10,480.48,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
+                            <ScrollViewer Margin="0,530,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
+                                <WrapPanel x:Name="HomePage_Nm"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
 
                 <Grid x:Name="DownloadPage" Visibility="Collapsed">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
@@ -1327,15 +1391,15 @@
                 <Grid x:Name="SettingsPage" MouseDown="SettingsPage_MouseDown" Visibility="Collapsed">
                     <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
                         <Grid Height="577">
-                            <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" KeyDown="SearchBox_KeyDown" Background="#07000000" Height="172" Margin="20,215,20,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题"/>
+                            <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="172" Margin="20,215,20,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题"/>
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                             <Grid Margin="20,70,20,0" Height="95" VerticalAlignment="Top">
-                                <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="搜索" Foreground="{DynamicResource ResuColorBrush}" KeyDown="SearchBox_KeyDown" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
+                                <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="搜索" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
                                 <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52" Height="15"/>
                                 <lemon_app:MDButton x:Name="CP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,60,0" TName="选择" Width="50" MouseDown="CP_ChooseBtn_MouseDown"/>
                                 <lemon_app:MDButton x:Name="CP_OpenBt" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,0,0" TName="打开" Width="50" MouseDown="CP_OpenBt_MouseDown"/>
-                                <TextBox x:Name="DownloadPathTb" TextWrapping="Wrap" Text="搜索" Foreground="{DynamicResource ResuColorBrush}" KeyDown="SearchBox_KeyDown" Background="#07000000" Height="25" Margin="57,70,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
+                                <TextBox x:Name="DownloadPathTb" TextWrapping="Wrap" Text="搜索" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,70,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
                                 <TextBlock HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="下载目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52" Height="15"/>
                                 <lemon_app:MDButton x:Name="DP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,60,0" TName="选择" Width="50" MouseDown="DP_ChooseBtn_MouseDown"/>
                                 <lemon_app:MDButton x:Name="DP_OpenBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,0,0" TName="打开" Width="50" MouseDown="DP_OpenBtn_MouseDown"/>
@@ -1380,21 +1444,26 @@
                             </Border.Background>
                         </Border>
                     </Border>
-                    <Border x:Name="ChooseText" Background="White" CornerRadius="5" Margin="20" Width="220" Height="160" Visibility="Collapsed">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
-                        </Border.Effect>
+                    <Border x:Name="ChooseText" Background="White" CornerRadius="5" Margin="20" Width="280" Height="160" BorderThickness="1" BorderBrush="#FFDEDEDE" Visibility="Collapsed">
+
                         <Grid>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="请选择字体颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
-                            <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="30,50,0,0" Background="White" CornerRadius="50" MouseDown="Border_MouseDown_4">
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="自定义主题颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
+                            <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="170,40,0,0" Background="White" CornerRadius="5" MouseDown="Border_MouseDown_4">
                                 <TextBlock TextWrapping="Wrap" Text="白色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
                             </Border>
-                            <Border HorizontalAlignment="Right" Height="50" VerticalAlignment="Top" Width="50" Margin="0,50,30,0" Background="#FF2D2D30" CornerRadius="50" MouseDown="Border_MouseDown_5">
-                                <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE" Margin="12,16.38,14,17.62"/>
+                            <Border HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,40,0,0" Background="#FF2D2D30" CornerRadius="5" MouseDown="Border_MouseDown_5">
+                                <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE"/>
                             </Border>
                             <Border Height="35" VerticalAlignment="Bottom" Width="85" Margin="0,0,0,10"  MouseDown="MDButton_MouseDown" Background="{DynamicResource ThemeColor}" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="完成" VerticalAlignment="Center" Foreground="White" FontSize="16"/>
                             </Border>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="字体颜色:" VerticalAlignment="Top" Margin="10,45,0,0"/>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="主题颜色:" VerticalAlignment="Top" Margin="10,85,0,0"/>
+                            <Border x:Name="Skin_ChooseBox_Theme" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Margin="76,85,0,0" Background="{DynamicResource ThemeColor}"/>
+                            <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,80,0,0" Background="White" CornerRadius="5" MouseDown="Border_MouseDown">
+                                <TextBlock TextWrapping="Wrap" Text="选择" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
+                            </Border>
+                            <Border x:Name="Skin_ChooseBox_Font" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Margin="76,45,0,0" Background="Black"/>
                         </Grid>
                     </Border>
                 </Grid>
@@ -1491,8 +1560,7 @@
                                     <TextBlock x:Name="FLGDPage_Tag_Open" HorizontalAlignment="Center" TextWrapping="Wrap" Text="展开" VerticalAlignment="Center" Margin="0" FontSize="14" Foreground="{DynamicResource ResuColorBrush}"/>
                                 </Grid>
                                 <TextBlock TextWrapping="Wrap" Text="语种" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center"/>
-                                <WrapPanel x:Name="FLGDPage_Tag_Lau" Margin="10,20,0,15" >
-                                </WrapPanel>
+                                <WrapPanel x:Name="FLGDPage_Tag_Lau" Margin="10,20,0,15" />
                                 <TextBlock TextWrapping="Wrap" Text="流派" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="1"/>
                                 <WrapPanel x:Name="FLGDPage_Tag_LiuPai" Margin="10,20,0,15" Grid.Column="1" />
                                 <TextBlock TextWrapping="Wrap" Text="主题" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="2"/>
@@ -1595,6 +1663,7 @@
                             <WrapPanel Margin="55,0,5,0" Orientation="Horizontal" Height="23">
                                 <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" Foreground="{DynamicResource ResuColorBrush}" FontSize="16"/>
                                 <lemon_app:MDButton x:Name="DataDownloadBtn" HorizontalAlignment="Left" Height="23" VerticalAlignment="Bottom" Width="60" MouseDown="DataDownloadBtn_MouseDown" Margin="10,0,0,0" TName="下载"/>
+                                <lemon_app:MDButton x:Name="DataPlayAllBtn" HorizontalAlignment="Left" Height="23" VerticalAlignment="Bottom" Width="60" Margin="10,0,0,0" TName="播放全部" MouseDown="DataPlayAllBtn_MouseDown"/>
                             </WrapPanel>
                         </Grid>
                     </Border>
@@ -1632,21 +1701,6 @@
                         </Border.Background>
                     </Border>
                     <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
-                </Grid>
-                <Grid x:Name="HomePage">
-                    <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
-                        <Grid x:Name="HomePage_Grid" Height="715">
-                            <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top"/>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Margin="10,250,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
-                            <ScrollViewer Margin="0,290,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
-                                <WrapPanel x:Name="HomePage_Gdtj"/>
-                            </ScrollViewer>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Margin="10,480.48,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
-                            <ScrollViewer Margin="0,530,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
-                                <WrapPanel x:Name="HomePage_Nm"/>
-                            </ScrollViewer>
-                        </Grid>
-                    </ScrollViewer>
                 </Grid>
             </Grid>
             <Border x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" BorderThickness="0,0,1,0" BorderBrush="{DynamicResource BorderColorBrush}">
@@ -1716,6 +1770,7 @@
             <Border HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="Border_MouseDown_2">
                 <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="25" Width="25"/>
             </Border>
+            <lemon_app:TitlePageBtn x:Name="ThemeChooseCloseBtn" MinOp="0" Margin="0,5,-273,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="ThemeChooseCloseBtn_MouseDown" Grid.ColumnSpan="2"/>
         </Grid>
         <Border x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource BorderColorBrush}">
             <Grid>
@@ -1788,5 +1843,35 @@
         <lemon_app:TitlePageBtn x:Name="CloseBtn" MinOp="0" Margin="0,15,20,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown"/>
         <lemon_app:TitlePageBtn x:Name="MaxBtn" MinOp="0" Margin="0,15,50,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M0 0h1024v1024H0V0z m84.707556 85.447111v853.333333H937.528889v-853.333333H84.707556z" MouseDown="MaxBtn_MouseDown" VerticalAlignment="Top"/>
         <lemon_app:TitlePageBtn x:Name="MinBtn" MinOp="100" Margin="0,15,80,0" Width="20" Height="20" HorizontalAlignment="Right" MouseDown="MinBtn_MouseDown" VerticalAlignment="Top"/>
+        <Grid x:Name="PlayDLPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Right" Width="350" Margin="0,0,0,75">
+            <Grid Height="100" VerticalAlignment="Top" Background="{DynamicResource PlayDLPage_Top}">
+                <Border Height="1" VerticalAlignment="Bottom" Background="{DynamicResource PlayDLPage_Border}"/>
+                <TextBlock Margin="20,30,45,0" TextWrapping="Wrap" Text="播放队列" VerticalAlignment="Top" FontSize="18" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                <TextBlock Margin="20,60,10,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Foreground="{DynamicResource PlayDLPage_Font_Low}"><Run x:Name="PlayDL_Count" Text="{Binding Items.Count, ElementName=PlayDL_List, Mode=OneWay}"/><Run Text="首歌曲"/></TextBlock>
+                <Border x:Name="PlayDLPage_IntoDataPage" HorizontalAlignment="Right" Height="20" Margin="0,30,20,0" VerticalAlignment="Top" Width="20" Background="#00000000" MouseDown="PlayDLPage_IntoDataPage_MouseDown">
+                    <Path Fill="#FFCBCBCB" Data="M435.73767,653.351702L490.502916,708.016664 686.060628,512.51728 490.502916,316.967754 435.73767,371.691045 537.430668,473.325715 158.029018,473.325716 158.029018,551.650517 537.430668,551.650517 435.73767,653.351702z M783.851765,160.502347L236.296515,160.502347C193.260393,160.502347,158.030042,195.675393,158.030042,238.652163L158.030042,395.175899 236.296515,395.175899 236.296515,238.652163 783.851765,238.652163 783.851765,786.32407 236.296515,786.32407 236.296515,629.858662 158.030042,629.858662 158.030042,786.32407C158.030042,829.350983,193.261416,864.533238,236.296515,864.533238L783.851765,864.533238C826.828536,864.533238,862.05991,829.350983,862.05991,786.32407L862.05991,238.652163C862.058886,195.675392,826.828535,160.502347,783.851765,160.502347" Stretch="Uniform" />
+                </Border>
+            </Grid>
+            <ListBox x:Name="PlayDL_List" Margin="0,100,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
+                VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
+        </Grid>
+        <Grid x:Name="PlayDLPage_ClosePage" Margin="0,0,0,75" Background="#00000000" Visibility="Collapsed" MouseDown="PlayDLPage_ClosePage_MouseDown">
+            <Grid HorizontalAlignment="Right" Width="20">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#33000000" Offset="0"/>
+                        <GradientStop Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
