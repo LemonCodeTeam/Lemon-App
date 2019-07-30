@@ -26,38 +26,16 @@ namespace LemonLibrary
             Id = id;
             Path = pa;
         }
-
         public async void Download()
         {
             await Task.Run(async () =>
             {
-                string Url = "";
-                while (true) {
-                    if (Url != "")
-                        break;
-                    else Url= await MusicLib.GetUrlAsync(Id);
-                    await Task.Delay(1000);
-                }
-                Console.WriteLine(Path+"  "+Downloading+"\r\n"+Url);
-                long totalBytes = 0;
-                HttpWebResponse myrp = null;
-                while (true)
-                {
-                    if (totalBytes != 0)
-                        break;
-                    else
-                    {
-                        try
-                        {
-                            HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url);
-                            Myrq.Timeout = 500;
-                            myrp = (HttpWebResponse)Myrq.GetResponse();
-                            Console.WriteLine(myrp.StatusCode.ToString());
-                            totalBytes = myrp.ContentLength;
-                        }
-                        catch { await Task.Delay(1000); }
-                    }
-                }
+                string Url = await MusicLib.GetUrlAsync(Id);
+                Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
+                HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url);
+                var myrp = (HttpWebResponse)Myrq.GetResponse();
+                Console.WriteLine(myrp.StatusCode.ToString());
+                var totalBytes = myrp.ContentLength;
                 GetSize(Getsize(totalBytes));
                 Stream st = myrp.GetResponseStream();
                 Stream so = new FileStream(Path, FileMode.Create);
@@ -79,6 +57,7 @@ namespace LemonLibrary
                 }
                 st.Close();
                 so.Close();
+                myrp.Close();
                 Finished();
             });
         }

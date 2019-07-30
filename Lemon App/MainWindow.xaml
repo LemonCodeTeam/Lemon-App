@@ -1388,28 +1388,36 @@
                         <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞，快去找点东西吧ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center" HorizontalAlignment="Center"/>
                     </Grid>
                 </Grid>
-                <Grid x:Name="SettingsPage" MouseDown="SettingsPage_MouseDown" Visibility="Collapsed">
+                <Grid x:Name="SettingsPage" Visibility="Collapsed">
                     <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
-                        <Grid Height="577">
-                            <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="172" Margin="20,215,20,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题"/>
-                            <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                            <Grid Margin="20,70,20,0" Height="95" VerticalAlignment="Top">
-                                <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="搜索" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
+                        <Grid Height="577" Width="845">
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,0,0,0"/>
+                            <Grid VerticalAlignment="Top" Margin="20,50,15,0" Height="172">
+                                <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" Checked="DownloadWithLyric_Checked"/>
+                                <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
-                                <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52" Height="15"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
                                 <lemon_app:MDButton x:Name="CP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,60,0" TName="选择" Width="50" MouseDown="CP_ChooseBtn_MouseDown"/>
                                 <lemon_app:MDButton x:Name="CP_OpenBt" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,0,0" TName="打开" Width="50" MouseDown="CP_OpenBt_MouseDown"/>
-                                <TextBox x:Name="DownloadPathTb" TextWrapping="Wrap" Text="搜索" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,70,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
-                                <TextBlock HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="下载目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52" Height="15"/>
+                                <TextBox x:Name="DownloadPathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,70,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="下载目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
                                 <lemon_app:MDButton x:Name="DP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,60,0" TName="选择" Width="50" MouseDown="DP_ChooseBtn_MouseDown"/>
                                 <lemon_app:MDButton x:Name="DP_OpenBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,0,0" TName="打开" Width="50" MouseDown="DP_OpenBtn_MouseDown"/>
+                                <TextBox x:Name="DownloadNameTb" TextWrapping="Wrap" Text="[I].  [M] - [S]" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="346,125,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="0,130,0,-49" TextWrapping="Wrap" Text="下载文件名(序号用[I]表示  歌曲名用[M]表示  歌手名用[S]表示):" VerticalAlignment="Top" Width="341"/>
+                                <lemon_app:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown"/>
+
                             </Grid>
-                            <TextBlock x:Name="hhh" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="335" FontSize="72" TextAlignment="Center" Foreground="#33000000" Visibility="Collapsed"><Run Text="🤓???"/><LineBreak/><Run Text="把我召唤出来干哈"/></TextBlock>
-                            <TextBlock HorizontalAlignment="Left" Margin="20,185,0,0" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
-                            <lemon_app:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,394,20,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown"/>
-                            <TextBlock Margin="20,400,115,0" TextWrapping="Wrap" Text="ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="#FFAEAEAE" TextAlignment="Center" FontSize="16"/>
-                            <TextBlock HorizontalAlignment="Left" Margin="20,450,0,0" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
-                            <TextBlock Margin="20,483,20,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:https://github.com/TwilightLemon/Lemon-App 请遵循GPL开源协议" MouseDown="Run_MouseDown"/><LineBreak/><Run/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
+                            <Grid Margin="20,210,15,0" Height="241" VerticalAlignment="Top">
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
+                                <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="172" Margin="0,30,0,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题"/>
+                                <lemon_app:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown"/>
+                                <TextBlock Margin="0,215,95,0" TextWrapping="Wrap" Text="ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="#FFAEAEAE" TextAlignment="Center" FontSize="16"/>
+                            </Grid>
+                            <Grid Margin="20,455,15,0" Height="121" VerticalAlignment="Top">
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
+                                <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:https://github.com/TwilightLemon/Lemon-App 请遵循GPL开源协议" MouseDown="Run_MouseDown"/><LineBreak/><Run/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
+                            </Grid>
                         </Grid>
                     </ScrollViewer>
                 </Grid>
@@ -1843,7 +1851,7 @@
         <lemon_app:TitlePageBtn x:Name="CloseBtn" MinOp="0" Margin="0,15,20,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown"/>
         <lemon_app:TitlePageBtn x:Name="MaxBtn" MinOp="0" Margin="0,15,50,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M0 0h1024v1024H0V0z m84.707556 85.447111v853.333333H937.528889v-853.333333H84.707556z" MouseDown="MaxBtn_MouseDown" VerticalAlignment="Top"/>
         <lemon_app:TitlePageBtn x:Name="MinBtn" MinOp="100" Margin="0,15,80,0" Width="20" Height="20" HorizontalAlignment="Right" MouseDown="MinBtn_MouseDown" VerticalAlignment="Top"/>
-        <Grid x:Name="PlayDLPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Right" Width="350" Margin="0,0,0,75">
+        <Grid x:Name="PlayDLPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Right" Width="0" Margin="0,0,0,75">
             <Grid Height="100" VerticalAlignment="Top" Background="{DynamicResource PlayDLPage_Top}">
                 <Border Height="1" VerticalAlignment="Bottom" Background="{DynamicResource PlayDLPage_Border}"/>
                 <TextBlock Margin="20,30,45,0" TextWrapping="Wrap" Text="播放队列" VerticalAlignment="Top" FontSize="18" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>

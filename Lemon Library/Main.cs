@@ -9,9 +9,9 @@ namespace LemonLibrary
         /// <summary>
         /// API调试台
         /// </summary>
-        static void Main() {
+        static async System.Threading.Tasks.Task Main() {
             Settings.LoadUSettings("2728578956");
-            var d=TextHelper.JSON.ToJSON(MusicLib.GetAlbumSongListByIDAsync("000d4ZXm4JElgo").GetAwaiter().GetResult());
+            var d =TextHelper.JSON.ToJSON(await MusicLib.GetAlbumSongListByIDAsync("000d4ZXm4JElgo"));
             Console.WriteLine(d);
             Console.ReadLine();
         }

@@ -11,33 +11,29 @@ namespace Lemon_App
     /// </summary>
     public partial class DownloadItem : UserControl
     {
-        public delegate void fx();
-        public event fx Loadedd;
         public delegate void en(DownloadItem s);
         public event en Delete;
-        public int index = 0;
+        public event en Finished;
         public bool finished = false;
-        public DownloadItem(Music m,string downloadpath,int ind)
+        private int index = 0;
+        public DownloadItem(Music m,string downloadpath,int id)
         {
             InitializeComponent();
             MData = m;
             path = downloadpath;
-            index = ind;
-            Console.WriteLine(m.MusicName+"   "+ind);
-            Loaded += DownloadItem_LoadedAsync;
             MouseEnter += UserControl_MouseEnter;
             MouseLeave += UserControl_MouseLeave;
+            index = id;
+            Load();
         }
-        private async void DownloadItem_LoadedAsync(object sender, RoutedEventArgs e)
+        private async void Load()
         {
             tb.Text = MData.MusicName + " - " + MData.SingerText;
             d = new HttpDownloadHelper(MData.MusicID, path);
-            Loadedd();
             d.ProgressChanged += (pro) =>
             {
                 Dispatcher.Invoke(() =>
                 {
-                    finished = true;
                     Pb.Value = pro;
                     zt.Text = pro + "%";
                 });
@@ -46,6 +42,7 @@ namespace Lemon_App
             {
                 Dispatcher.Invoke(() =>
                 {
+                    Finished(this);
                     finished = true;
                     zt.Text = "已完成";
                 });
@@ -57,9 +54,10 @@ namespace Lemon_App
                     size.Text = s;
                 });
             };
-            if (index == 0||index==1||index==2)
+            if (index==0)
                 d.Download();
-            await MusicLib.GetLyric(MData.MusicID,path.Replace(".mp3",".lrc"));
+            if (Settings.USettings.DownloadWithLyric)
+                await MusicLib.GetLyric(MData.MusicID, path.Replace(".mp3", ".lrc"));
         }
         public HttpDownloadHelper d;
         public Music MData;
@@ -94,6 +92,7 @@ namespace Lemon_App
 
         private void DeleteBtn_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            Finished(this);
             Delete(this);
         }
     }

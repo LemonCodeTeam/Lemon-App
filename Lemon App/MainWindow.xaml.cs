@@ -211,12 +211,18 @@ namespace Lemon_App
                 }
                 else
                 {
-                    //没有主题配置  （主要考虑到切换登录）
+                    //默认主题  （主要考虑到切换登录）
+                    if (WindowBlur.GetIsEnabled(this))
+                        WindowBlur.SetIsEnabled(this, false);
                     ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
                     ControlPage.BorderThickness = new Thickness(0, 0, 1, 0);
                     ControlDownPage.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
+                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                    Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                     App.BaseApp.unSkin();
-                    Page.Background = new SolidColorBrush(Colors.White);
+                    Settings.USettings.Skin_txt = "";
+                    Settings.USettings.Skin_Path = "";
+                    Settings.SaveSettings();
                 }
             }
             LoadMusicData(hasAnimation);
@@ -397,6 +403,9 @@ namespace Lemon_App
         {
             CachePathTb.Text = Settings.USettings.CachePath;
             DownloadPathTb.Text = Settings.USettings.DownloadPath;
+            DownloadWithLyric.IsChecked = Settings.USettings.DownloadWithLyric;
+            DownloadNameTb.Text = Settings.USettings.DownloadName;
+
         }
         private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -424,15 +433,7 @@ namespace Lemon_App
             LoadSettings();
             NSPage(null, SettingsPage);
         }
-        private void SettingsPage_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount > 3)
-            {
-                if (hhh.Visibility == Visibility.Collapsed)
-                    hhh.Visibility = Visibility.Visible;
-                else hhh.Visibility = Visibility.Collapsed;
-            }
-        }
+
         private void CP_ChooseBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var g = new System.Windows.Forms.FolderBrowserDialog();
@@ -461,6 +462,16 @@ namespace Lemon_App
         private void DP_OpenBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start("explorer", DownloadPathTb.Text);
+        }
+
+        private void DownloadWithLyric_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.DownloadWithLyric = (bool)DownloadWithLyric.IsChecked;
+        }
+
+        private void DownloadNameOK_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.DownloadName = DownloadNameTb.Text;
         }
         #endregion
         #region 主题切换
@@ -1290,6 +1301,7 @@ namespace Lemon_App
                     DataItemsList.Items.Add(k);
                     k.Play += PlayMusic;
                     k.Width = DataItemsList.ActualWidth;
+                    k.Download += K_Download;
                     k.GetToSingerPage += K_GetToSingerPage;
                     if (j.MusicID == MusicData.Data.MusicID)
                     {
@@ -1872,6 +1884,14 @@ namespace Lemon_App
             (Resources["ClosePlayDLPage"] as Storyboard).Begin();
             isOpenPlayDLPage = false;
         }
+
+        private void PlayDLPage_IntoDataPage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (Resources["ClosePlayDLPage"] as Storyboard).Begin();
+            isOpenPlayDLPage = false;
+            NSPage(null, Data);
+        }
+
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             PlayDL_List.Items.Clear();
@@ -1950,42 +1970,43 @@ namespace Lemon_App
         }
         #endregion
         #region Download
+        private List<Music> DownloadDL = new List<Music>();
+        private void AddDownloadTask(Music data) {
+            string name = Settings.USettings.DownloadName
+                .Replace("[I]", (DownloadDL.Count() + 1).ToString())
+                .Replace("[M]", data.MusicName)
+                .Replace("[S]", data.SingerText);
+            string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
+            DownloadItem di = new DownloadItem(data, file,DownloadDL.Count()){
+                Width = ContentPage.ActualWidth
+            };
+            di.Delete += (s) =>{
+                s.d.Stop();
+                s.finished = true;
+                s.zt.Text = "已取消";
+            };
+            di.Finished += (s) => {
+                DownloadDL.Remove(s.MData);
+                if (DownloadDL.Count != 0)
+                {
+                    DownloadItem d = DownloadItemsList.Children[DownloadItemsList.Children.IndexOf(s) + 1] as DownloadItem;
+                    if (!d.finished) d.d.Download();
+                }
+                else {
+                    DownloadIsFinish = true;
+                    (Resources["Downloading"] as Storyboard).Stop();
+                }
+            };
+            DownloadItemsList.Children.Add(di);
+            DownloadDL.Add(data);
+            DownloadIsFinish = false;
+        }
         private void K_Download(DataItem sender)
         {
             var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)
                 cc.Begin();
-            var f = sender;
-            string name = f.music.MusicName + " - " + f.music.SingerText;
-            Console.WriteLine(name);
-            string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
-            DownloadItem di = new DownloadItem(f.music, file, DownloadItemsList.Children.Count)
-            {
-                Width = ContentPage.ActualWidth
-            };
-            di.Delete += (s) =>
-            {
-                s.d.Pause();
-                DownloadItemsList.Children.Remove(s);
-            };
-            di.Loadedd += () =>
-            {
-                di.d.Finished += () =>
-                {
-                    DownloadIsFinish = true;
-                    Dispatcher.Invoke(() =>
-                    {
-                        foreach (var a in DownloadItemsList.Children)
-                        {
-                            DownloadItem dl = a as DownloadItem;
-                            if (!dl.finished)
-                            { DownloadIsFinish = false; dl.d.Download(); break; }
-                        }
-                        if (DownloadIsFinish) (Resources["Downloading"] as Storyboard).Stop();
-                    });
-                };
-            };
-            DownloadItemsList.Children.Add(di);
+            AddDownloadTask(sender.music);
         }
         bool DownloadIsFinish = true;
         private void ckFile_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2053,7 +2074,7 @@ namespace Lemon_App
                 dl.d.Pause();
                 dl.d.Stop();
             }
-            if (DownloadIsFinish) (Resources["Downloading"] as Storyboard).Stop();
+            (Resources["Downloading"] as Storyboard).Stop();
             DownloadItemsList.Children.Clear();
             NonePage_Copy.Visibility = Visibility.Visible;
         }
@@ -2067,35 +2088,7 @@ namespace Lemon_App
                 var f = x as DataItem;
                 if (f.isChecked == true)
                 {
-                    string name = (f.music.MusicName + " - " + f.music.SingerText).Replace("\\", "-").Replace("?", "").Replace("/", "").Replace(":", "").Replace("*", "").Replace("\"", "").Replace("<", "").Replace(">", "").Replace("|", ""); ;
-                    string file = Download_Path.Text + $"\\{name}.mp3";
-                    DownloadItem di = new DownloadItem(f.music, file, DownloadItemsList.Children.Count)
-                    {
-                        Width = ContentPage.ActualWidth
-                    };
-                    di.Delete += (s) =>
-                    {
-                        s.d.Pause();
-                        DownloadItemsList.Children.Remove(s);
-                    };
-                    di.Loadedd += () =>
-                    {
-                        di.d.Finished += () =>
-                        {
-                            DownloadIsFinish = true;
-                            Dispatcher.Invoke(() =>
-                            {
-                                foreach (var a in DownloadItemsList.Children)
-                                {
-                                    DownloadItem dl = a as DownloadItem;
-                                    if (!dl.finished)
-                                    { DownloadIsFinish = false; dl.d.Download(); break; }
-                                }
-                            });
-                            if (DownloadIsFinish) (Resources["Downloading"] as Storyboard).Stop();
-                        };
-                    };
-                    DownloadItemsList.Children.Add(di);
+                    AddDownloadTask(f.music);
                 }
             }
             CloseDownloadPage();
@@ -2390,12 +2383,5 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
-
-        private void PlayDLPage_IntoDataPage_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            (Resources["ClosePlayDLPage"] as Storyboard).Begin();
-            isOpenPlayDLPage = false;
-            NSPage(null, Data);
-        }
     }
 }

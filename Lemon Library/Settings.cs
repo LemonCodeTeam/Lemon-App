@@ -76,6 +76,10 @@ namespace LemonLibrary
                 }
                 if (data.Contains("IsRoundMusicImage"))
                     USettings.IsRoundMusicImage = int.Parse(o["IsRoundMusicImage"].ToString());
+                if (data.Contains("DownloadName"))
+                    USettings.DownloadName = o["DownloadName"].ToString();
+                if (data.Contains("DownloadWithLyric"))
+                    USettings.DownloadWithLyric= bool.Parse(o["DownloadWithLyric"].ToString());
                 if (data.Contains("Skin_Path"))
                 {
                     USettings.Skin_Path = o["Skin_Path"].ToString();
@@ -129,6 +133,8 @@ namespace LemonLibrary
             #region 缓存/下载路径
             public string CachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\";
             public string DownloadPath = "";
+            public string DownloadName = "[I].  [M] - [S]";
+            public bool DownloadWithLyric = true;
             #endregion
         }
         #endregion
