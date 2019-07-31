@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -129,12 +130,13 @@ namespace Lemon_App
             var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
             ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
             ds.Start();
-            //---------"倍速"Popup的移动事件
+            //---------Popup的移动事件
             LocationChanged += delegate
             {
-                var offset = Pop_sp.HorizontalOffset;
-                Pop_sp.HorizontalOffset = offset + 1;
-                Pop_sp.HorizontalOffset = offset;
+                RUNPopup(Pop_sp);
+                RUNPopup(SingerListPop);
+                RUNPopup(MoreBtn_Meum);
+                RUNPopup(Gdpop);
             };
             SizeChanged += delegate
             {
@@ -151,6 +153,12 @@ namespace Lemon_App
             TopLoadac();
             //--------加载主页---------
             LoadHomePage();
+        }
+
+        private void RUNPopup(Popup pp) {
+            var offset = pp.HorizontalOffset;
+            pp.HorizontalOffset = offset + 1;
+            pp.HorizontalOffset = offset;
         }
 
         /// <summary>
@@ -1797,6 +1805,7 @@ namespace Lemon_App
             path4.SetResourceReference(Path.FillProperty, "ThemeColor");
             path5.SetResourceReference(Path.FillProperty, "ThemeColor");
             path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            path10.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             App.BaseApp.SetColor("ButtonColorBrush", LastButtonColor);
             if (!isOpenGc) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
@@ -1829,6 +1838,7 @@ namespace Lemon_App
             path4.Fill = new SolidColorBrush(Colors.White);
             path5.Fill = new SolidColorBrush(Colors.White);
             path6.Fill = new SolidColorBrush(Colors.White);
+            path10.Fill = new SolidColorBrush(Colors.White);
             if (!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
             likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             var ol = Resources["OpenLyricPage"] as Storyboard;
@@ -1853,6 +1863,115 @@ namespace Lemon_App
                 MusicImage.CornerRadius = new CornerRadius(5);
                 Settings.USettings.IsRoundMusicImage = 5;
             }
+        }
+        private void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MoreBtn_Meum.IsOpen = !MoreBtn_Meum.IsOpen;
+            /*
+            if (MoreBtn_Meum.IsOpen)
+            {
+                MoreBtn_Meum.IsOpen = false;
+                await Task.Delay(10);
+                MoreBtn_Meum.StaysOpen = true;
+            }
+            else {
+                MoreBtn_Meum.IsOpen = true;
+                await Task.Delay(10);
+                MoreBtn_Meum.StaysOpen = false;
+            }
+            */
+        }
+        private void MoreBtn_Meum_DL_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MoreBtn_Meum.IsOpen = false;
+            K_Download(new DataItem(MusicData.Data));
+        }
+        private Dictionary<string, string> MoreBtn_Meum_Add_List = new Dictionary<string, string>();
+        private async void MoreBtn_Meum_Add_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Add_Gdlist.Items.Clear();
+            MoreBtn_Meum_Add_List.Clear();
+            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            foreach (var a in o["list"])
+            {
+                string name = a["dirname"].ToString();
+                MoreBtn_Meum_Add_List.Add(name, a["dirid"].ToString());
+                var mdb = new ListBoxItem
+                {
+                    Background = new SolidColorBrush(Colors.Transparent),
+                    Height = 30,
+                    Content = name,
+                    Margin = new Thickness(0, 10, 0, 0)
+                };
+                mdb.PreviewMouseDown += Mdb_MouseDown;
+                Add_Gdlist.Items.Add(mdb);
+            }
+            var md = new ListBoxItem
+            {
+                Background = new SolidColorBrush(Colors.Transparent),
+                Height = 30,
+                Content = "取消",
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+            md.PreviewMouseDown += delegate { Gdpop.IsOpen = false; };
+            Add_Gdlist.Items.Add(md);
+            Gdpop.IsOpen = true;
+        }
+        private void Mdb_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MoreBtn_Meum.IsOpen = false;
+            Gdpop.IsOpen = false;
+            string name = (sender as ListBoxItem).Content.ToString();
+            string id = MoreBtn_Meum_Add_List[name];
+            string[] a = MusicLib.AddMusicToGD(MusicData.Data.MusicID, id);
+            Toast.Send(a[1] + ": " + a[0]);
+        }
+        private void MoreBtn_Meum_PL_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MoreBtn_Meum.IsOpen = false;
+            LoadPl();
+        }
+        private void MoreBtn_Meum_Singer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MusicData.Data.Singer.Count == 1)
+            {
+                MoreBtn_Meum.IsOpen = false;
+                K_GetToSingerPage(MusicData.Data.Singer[0]);
+            }
+            else
+            {
+                Add_SLP.Items.Clear();
+                foreach (var a in MusicData.Data.Singer)
+                {
+                    string name = a.Name;
+                    var mdbs = new ListBoxItem
+                    {
+                        Background = new SolidColorBrush(Colors.Transparent),
+                        Height = 30,
+                        Tag = MusicData.Data.Singer.IndexOf(a),
+                        Content = name,
+                        Margin = new Thickness(0, 10, 0, 0)
+                    };
+                    mdbs.PreviewMouseDown += Mdbs_MouseDown;
+                    Add_SLP.Items.Add(mdbs);
+                }
+                var md = new ListBoxItem
+                {
+                    Background = new SolidColorBrush(Colors.Transparent),
+                    Height = 30,
+                    Content = "取消",
+                    Margin = new Thickness(0, 10, 0, 0)
+                };
+                md.PreviewMouseDown += delegate { SingerListPop.IsOpen = false; };
+                Add_SLP.Items.Add(md);
+                SingerListPop.IsOpen = true;
+            }
+        }
+        private void Mdbs_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MoreBtn_Meum.IsOpen = false;
+            SingerListPop.IsOpen = false;
+            K_GetToSingerPage(MusicData.Data.Singer[(int)((sender as ListBoxItem).Tag)]);
         }
         private void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1910,16 +2029,19 @@ namespace Lemon_App
         }
         #endregion
         #region Lyric
-        private async void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
+        private void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
             Border_MouseDown_2(null,null);
+            LoadPl();
+        }
+        private async void LoadPl() {
             NSPage(null, MusicPLPage);
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
             MusicPlList.Children.Clear();
             foreach (var dt in data)
             {
-                MusicPlList.Children.Add(new PlControl(dt) { Width =MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+                MusicPlList.Children.Add(new PlControl(dt) { Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
             }
         }
         private void ly_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -2383,5 +2505,10 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
+
+        private void MoreBtn_Meum_MouseLeave(object sender, MouseEventArgs e)
+        {
+            MoreBtn_Meum.IsOpen = false;
+        }
     }
 }

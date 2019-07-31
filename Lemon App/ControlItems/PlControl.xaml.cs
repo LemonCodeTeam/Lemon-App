@@ -39,10 +39,19 @@ namespace Lemon_App
         private async void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (data.ispraise)
-            { zp.Fill = new SolidColorBrush(Color.FromRgb(153, 153, 153)); ztb.Text = (int.Parse(data.like) - 1).ToString(); data.like = ztb.Text; }
-            else { zp.SetResourceReference(Shape.FillProperty, "ThemeColor"); ztb.Text = (int.Parse(data.like) + 1).ToString(); data.like = ztb.Text; }
+            {
+                zp.SetResourceReference(Shape.FillProperty, "PlayDLPage_Font_Low");
+                ztb.Text = (int.Parse(data.like) - 1).ToString();
+                data.like = ztb.Text;
+                data.ispraise = false;
+            }
+            else {
+                zp.SetResourceReference(Shape.FillProperty, "ThemeColor");
+                ztb.Text = (int.Parse(data.like) + 1).ToString();
+                data.like = ztb.Text;
+                data.ispraise = true;
+            }
             await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data);
-            data.ispraise = !data.ispraise;
         }
     }
 }

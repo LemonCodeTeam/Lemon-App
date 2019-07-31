@@ -20,7 +20,6 @@ namespace Lemon_App
     {
         public delegate void MouseDownHandle(DataItem sender);
         public event MouseDownHandle Play;
-        public event MouseDownHandle Add;
         public event MouseDownHandle Download;
         public delegate void MouseDownHandle_sm(MusicSinger ms);
         public event MouseDownHandle_sm GetToSingerPage;
@@ -121,27 +120,26 @@ namespace Lemon_App
         private Dictionary<string, string> ListData = new Dictionary<string, string>();//name,id
         private async void AddBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Add_Gdlist.Children.Clear();
+            Add_Gdlist.Items.Clear();
             ListData.Clear();
             JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
             foreach (var a in o["list"]) {
                 string name = a["dirname"].ToString();
                 ListData.Add(name, a["dirid"].ToString());
-                var mdb = new MDButton(true) { TName = name,Margin=new System.Windows.Thickness(0, 10, 0, 0) };
-                mdb.MouseDown += Mdb_MouseDown;
-                Add_Gdlist.Children.Add(mdb);
+                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height =30, Content = name,Margin=new Thickness(0, 10, 0, 0) };
+                mdb.PreviewMouseDown += Mdb_MouseDown;
+                Add_Gdlist.Items.Add(mdb);
             }
-            var md = new MDButton(true) { TName = "取消", Margin = new System.Windows.Thickness(0, 10, 0, 0) };
-            md.MouseDown += delegate { Gdpop.IsOpen = false; };
-            Add_Gdlist.Children.Add(md);
+            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(0, 10, 0, 0) };
+            md.PreviewMouseDown += delegate { Gdpop.IsOpen = false; };
+            Add_Gdlist.Items.Add(md);
             Gdpop.IsOpen = true;
-            Add(this);
         }
 
         private void Mdb_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Gdpop.IsOpen = false;
-            string name = (sender as MDButton).TName;
+            string name = (sender as ListBoxItem).Content.ToString();
             string id = ListData[name];
             string[] a = MusicLib.AddMusicToGD(music.MusicID,id);
             Toast.Send(a[1]+": "+a[0]);
@@ -174,6 +172,12 @@ namespace Lemon_App
             DeleteBtn.Visibility = Visibility.Collapsed;
             grid.Background = new SolidColorBrush(Colors.Transparent);
         }
+        /// <summary>
+        /// 没啥用，留着懒得改模板了
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e) { }
     }
 
 
