@@ -126,11 +126,11 @@ namespace Lemon_App
             foreach (var a in o["list"]) {
                 string name = a["dirname"].ToString();
                 ListData.Add(name, a["dirid"].ToString());
-                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height =30, Content = name,Margin=new Thickness(0, 10, 0, 0) };
+                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height =30, Content = name,Margin=new Thickness(10, 10, 10, 0) };
                 mdb.PreviewMouseDown += Mdb_MouseDown;
                 Add_Gdlist.Items.Add(mdb);
             }
-            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(0, 10, 0, 0) };
+            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10,10, 0) };
             md.PreviewMouseDown += delegate { Gdpop.IsOpen = false; };
             Add_Gdlist.Items.Add(md);
             Gdpop.IsOpen = true;

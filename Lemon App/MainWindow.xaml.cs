@@ -137,6 +137,8 @@ namespace Lemon_App
                 RUNPopup(SingerListPop);
                 RUNPopup(MoreBtn_Meum);
                 RUNPopup(Gdpop);
+                RUNPopup(IntoGDPop);
+                RUNPopup(AddGDPop);
             };
             SizeChanged += delegate
             {
@@ -156,9 +158,12 @@ namespace Lemon_App
         }
 
         private void RUNPopup(Popup pp) {
-            var offset = pp.HorizontalOffset;
-            pp.HorizontalOffset = offset + 1;
-            pp.HorizontalOffset = offset;
+            if (pp.IsOpen)
+            {
+                var offset = pp.HorizontalOffset;
+                pp.HorizontalOffset = offset + 1;
+                pp.HorizontalOffset = offset;
+            }
         }
 
         /// <summary>
@@ -487,6 +492,7 @@ namespace Lemon_App
         private void ColorThemeBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ChooseText.Visibility = Visibility.Visible;
+            Theme_Choose_Color = (Skin_ChooseBox_Theme.Background as SolidColorBrush).Color;
         }
         private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
         {
@@ -1385,9 +1391,12 @@ namespace Lemon_App
         private TopControl tc_now;
         private int ixTop = 1;
         private ScrollViewer Datasv = null;
+        private void Datasv_Loaded(object sender, RoutedEventArgs e)
+        {
+            Datasv = sender as ScrollViewer;
+        }
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (Datasv == null) Datasv = sender as ScrollViewer;
             if (Datasv.IsVerticalScrollBarAtButtom())
             {
                 if (np == NowPage.Search)
@@ -1416,8 +1425,12 @@ namespace Lemon_App
                 Search_SmartBoxList.Items.Clear();
                 if (data.Count == 0)
                     Search_SmartBox.Visibility = Visibility.Collapsed;
-                else foreach (var dt in data)
-                        Search_SmartBoxList.Items.Add(dt);
+                else foreach (var dt in data) {
+                        var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(10, 10, 10, 0) };
+                        mdb.PreviewMouseDown += Bd_MouseDown;
+                        mdb.PreviewKeyDown += Search_SmartBoxList_KeyDown;
+                        Search_SmartBoxList.Items.Add(mdb);
+                    }
             }
             else Search_SmartBox.Visibility = Visibility.Collapsed;
         }
@@ -1434,23 +1447,18 @@ namespace Lemon_App
 
         private void Search_SmartBoxList_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-                if (Search_SmartBoxList.SelectedIndex != -1)
-                {
-                    SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
-                    Search_SmartBox.Visibility = Visibility.Collapsed;
-                    SearchMusic(SearchBox.Text); ixPlay = 1;
-                }
+            if (e.Key == Key.Enter) {
+                SearchBox.Text = (Search_SmartBoxList.SelectedItem as ListBoxItem).Content.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
+                Search_SmartBox.Visibility = Visibility.Collapsed;
+                SearchMusic(SearchBox.Text); ixPlay = 1;
+            }
         }
 
         private void Bd_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Search_SmartBoxList.SelectedIndex != -1)
-            {
-                SearchBox.Text = Search_SmartBoxList.SelectedItem.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
-                Search_SmartBox.Visibility = Visibility.Collapsed;
-                SearchMusic(SearchBox.Text); ixPlay = 1;
-            }
+            SearchBox.Text = (sender as ListBoxItem).Content.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
+            Search_SmartBox.Visibility = Visibility.Collapsed;
+            SearchMusic(SearchBox.Text); ixPlay = 1;
         }
 
         private void Search_SmartBox_MouseLeave(object sender, MouseEventArgs e)
@@ -1901,7 +1909,7 @@ namespace Lemon_App
                     Background = new SolidColorBrush(Colors.Transparent),
                     Height = 30,
                     Content = name,
-                    Margin = new Thickness(0, 10, 0, 0)
+                    Margin = new Thickness(10, 10, 10, 0)
                 };
                 mdb.PreviewMouseDown += Mdb_MouseDown;
                 Add_Gdlist.Items.Add(mdb);
@@ -1911,7 +1919,7 @@ namespace Lemon_App
                 Background = new SolidColorBrush(Colors.Transparent),
                 Height = 30,
                 Content = "取消",
-                Margin = new Thickness(0, 10, 0, 0)
+                Margin = new Thickness(10, 10, 10, 0)
             };
             md.PreviewMouseDown += delegate { Gdpop.IsOpen = false; };
             Add_Gdlist.Items.Add(md);
@@ -1950,7 +1958,7 @@ namespace Lemon_App
                         Height = 30,
                         Tag = MusicData.Data.Singer.IndexOf(a),
                         Content = name,
-                        Margin = new Thickness(0, 10, 0, 0)
+                        Margin = new Thickness(10, 10, 10, 0)
                     };
                     mdbs.PreviewMouseDown += Mdbs_MouseDown;
                     Add_SLP.Items.Add(mdbs);
@@ -1960,7 +1968,7 @@ namespace Lemon_App
                     Background = new SolidColorBrush(Colors.Transparent),
                     Height = 30,
                     Content = "取消",
-                    Margin = new Thickness(0, 10, 0, 0)
+                    Margin = new Thickness(10, 10, 10, 0)
                 };
                 md.PreviewMouseDown += delegate { SingerListPop.IsOpen = false; };
                 Add_SLP.Items.Add(md);
@@ -2051,6 +2059,10 @@ namespace Lemon_App
         }
         #endregion
         #region IntoGD 导入歌单
+        private void IntoGDPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            IntoGDPop.IsOpen = false;
+        }
         private void IntoGDPage_qqmod_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!mod)
@@ -2094,6 +2106,39 @@ namespace Lemon_App
                         GDBtn_MouseDown(null, null);
                     });
             }
+        }
+        #endregion
+        #region AddGD 创建歌单
+        private string AddGDPage_ImgUrl = "";
+        private async void AddGDPage_ImgBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "图像文件(*.png;*.jpg)|*.png;*.jpg";
+            ofd.ValidateNames = true;
+            ofd.CheckPathExists = true;
+            ofd.CheckFileExists = true;
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                AddGDPage_ImgUrl = await MusicLib.UploadAFile(ofd.FileName);
+                AddGDPage_Img.Background = new ImageBrush(new BitmapImage(new Uri(AddGDPage_ImgUrl)));
+            }
+        }
+
+        private void AddGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Toast.Send(MusicLib.AddNewGd(AddGDPage_name.Text, AddGDPage_ImgUrl));
+            AddGDPop.IsOpen = false;
+            GDBtn_MouseDown(null, null);
+        }
+
+        private void AddGDPage_OpenBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            AddGDPop.IsOpen = !AddGDPop.IsOpen;
+        }
+
+        private void AddGDPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            AddGDPop.IsOpen = false;
         }
         #endregion
         #region Download
@@ -2511,9 +2556,20 @@ namespace Lemon_App
         }
         #endregion
 
-        private void IntoGDPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void SearchBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            IntoGDPop.IsOpen = false;
+            Search_SmartBox.Visibility = Visibility.Visible;
+            Search_SmartBoxList.Items.Clear();
+            var data = await MusicLib.SearchHotKey();
+            var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜", Margin = new Thickness(10, 0, 10, 0) };
+            Search_SmartBoxList.Items.Add(mdb);
+            for (int i = 0; i < 5; i++) {
+                var dt = data[i];
+                var bd = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(10, 10, 10, 0) };
+                bd.PreviewMouseDown += Bd_MouseDown;
+                bd.PreviewKeyDown += Search_SmartBoxList_KeyDown;
+                Search_SmartBoxList.Items.Add(bd);
+            }
         }
     }
 }

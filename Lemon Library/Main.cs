@@ -9,10 +9,11 @@ namespace LemonLibrary
         /// <summary>
         /// API调试台
         /// </summary>
-        static void Main() {
+        static async System.Threading.Tasks.Task Main() {
             Settings.LoadUSettings("2728578956");
-            var d = MusicLib.UploadAFile(@"C:\Users\asus\Desktop\1.jpg");
-            Console.WriteLine(d);
+            var d = await MusicLib.SearchHotKey();
+            foreach(var a in d)
+            Console.WriteLine(a);
             Console.ReadLine();
         }
 

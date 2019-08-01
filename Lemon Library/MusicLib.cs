@@ -127,6 +127,14 @@ namespace LemonLibrary
             return list;
         }
 
+        public static async Task<List<string>> SearchHotKey() {
+            var data = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            List<string> list = new List<string>();
+            var dt = data["data"]["hotkey"];
+            foreach(var a in dt)
+                list.Add(a["k"].ToString());
+            return list;
+        }
         /// <summary>
         /// 尝试用歌曲名称在网易云音乐中搜索此歌曲并返回歌曲ID
         /// </summary>
@@ -261,7 +269,7 @@ namespace LemonLibrary
         /// </summary>
         /// <param name="path">文件地址（本机）</param>
         /// <returns></returns>
-        public static string UploadAFile(string path) {
+        public static async Task<string> UploadAFile(string path) {
             FileInfo e = new FileInfo(path);
             string ex = "0";
             string exTen = "";
@@ -290,11 +298,11 @@ Content-Disposition: form-data; name=""parentid""
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""fileid""
 
-2728578956_1564648303129
+{qq}_{new Random().Next(100000000, 999999999)}{new Random().Next(1000,9999)}
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""uin""
 
-2728578956
+{qq}
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""crop""
 
@@ -350,19 +358,20 @@ jpg
             byte[] hByte = Encoding.UTF8.GetBytes(h);
            
             Stream myRequestStream = request.GetRequestStream();
-            myRequestStream.Write(qByte, 0, qByte.Length);
-            myRequestStream.Write(UpdateFile, 0, UpdateFile.Length);
-            myRequestStream.Write(hByte, 0,h.Length);
+            await myRequestStream.WriteAsync(qByte, 0, qByte.Length);
+            await myRequestStream.WriteAsync(UpdateFile, 0, UpdateFile.Length);
+            await myRequestStream.WriteAsync(hByte, 0,h.Length);
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
 
             Stream myResponseStream = response.GetResponseStream();
             StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
 
-            string retString = myStreamReader.ReadToEnd();
+            string retString =await  myStreamReader.ReadToEndAsync();
             myRequestStream.Close();
             myStreamReader.Close();
-            return retString;
+            var json = TextHelper.XtoYGetTo(retString, "frameElement.callback)(", ");</script></body></html>", 0);
+            return JObject.Parse(json)["imageurl"].ToString().Replace("http://","https://");
         }
         #endregion
         #region  歌单数据的获取

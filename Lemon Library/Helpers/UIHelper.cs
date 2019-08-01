@@ -58,5 +58,31 @@ namespace LemonLibrary
             return isAtButtom;
         }
     }
+    public class MyPopup : Popup
+    {
+        [DllImport("user32.dll")]
+        static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
+        static MyPopup()
+        {
+            EventManager.RegisterClassHandler(
+                typeof(MyPopup),
+                Popup.PreviewGotKeyboardFocusEvent,
+                new KeyboardFocusChangedEventHandler(OnPreviewGotKeyboardFocus),
+                true);
+        }
+
+        private static void OnPreviewGotKeyboardFocus(Object sender, KeyboardFocusChangedEventArgs e)
+        {
+            var textBox = e.NewFocus as TextBoxBase;
+            if (textBox != null)
+            {
+                var hwndSource = PresentationSource.FromVisual(textBox) as HwndSource;
+                if (hwndSource != null)
+                {
+                    SetActiveWindow(hwndSource.Handle);
+                }
+            }
+        }
+    }
 }
