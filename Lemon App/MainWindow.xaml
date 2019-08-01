@@ -974,11 +974,10 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,20,0,0"/>
                 <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10,0,285,35"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,41,165,21"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.2" Value="10,41,10,21"/>
             </ThicknessAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
@@ -1008,8 +1007,8 @@
                 <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="60,0,285,35"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="jd">
-                <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,41,165,21"/>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="60,41,165,21"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.1" Value="10,41,10,21"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="60,41,10,21"/>
             </ThicknessAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LyricPage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
@@ -1301,6 +1300,28 @@
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <VisualBrush x:Key="QQTX" >
+            <VisualBrush.Visual>
+                <Grid>
+                    <Path Data="M512 944c238.20799969 0 432-193.79200031 432-432S750.20799969 80 512 80 80 273.79200031 80 512s193.79200031 432 432 432m0 15.984c-247.44 0-448.00000031-200.544-448.00000031-448.00000031C63.99999969 264.56 264.56 63.99999969 512 63.99999969s448.00000031 200.56000031 448.00000031 448.00000031-200.56000031 447.984-448.00000031 447.984z" >
+                        <Path.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#FF2CCFFF"/>
+                                <GradientStop Color="#FF63C194" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                    <Path Data="M751.87200031 610.112c-3.792-52.52800031-38.736-96.55999969-58.97600062-119.328 2.81599969-6.60799969 9.66400031-44.95999969-16.71999938-71.11999969 0.048-0.624 0.048-1.248 0.048-1.84000031 0-103.2-72.83200031-177.456-164.24000062-177.80800031-91.392 0.35200031-164.23999969 74.62399969-164.23999969 177.80800031 0 0.60799969 0 1.23199969 0.048 1.84000031-26.36800031 26.17600031-19.536 64.512-16.73599969 71.11999969-20.17600031 22.76800031-55.152 66.79999969-58.944 119.328-0.672 13.824 1.44 33.91999969 8.12799938 42.864 8.16 10.92799969 30.528-2.17600031 46.52800031-37.008 4.464 16.14400031 14.736 40.78399969 37.99999969 72.03199969-38.91199969 8.95999969-50.016 47.664-36.92799938 68.832 9.23200031 14.89600031 30.36799969 27.168 66.79999969 27.168 64.83199969 0 93.43999969-17.58400031 106.224-29.808 2.62399969-2.65600031 6.35200031-3.95200031 11.15200031-3.95199938s8.52799969 1.296 11.15199938 3.95199938c12.75199969 12.22399969 41.35999969 29.808 106.176 29.808 36.432 0 57.58399969-12.27199969 66.80000062-27.18399938 13.104-21.15199969 1.99999969-59.87200031-36.912-68.832 23.26399969-31.248 33.552-55.88800031 37.98399938-72.03200062 16.01599969 34.848 38.38399969 47.93599969 46.54400062 37.008 6.68800031-8.928 8.81599969-29.02399969 8.112-42.84799969z" >
+                        <Path.Fill>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF43F19D" Offset="0"/>
+                                <GradientStop Color="#FF2CCFFF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                </Grid>
+            </VisualBrush.Visual>
+        </VisualBrush>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="AddGDPage_CloseBtn">
@@ -1713,11 +1734,7 @@
             </Grid>
             <Border x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" BorderThickness="0,0,1,0" BorderBrush="{DynamicResource BorderColorBrush}">
                 <Grid>
-                    <Border x:Name="UserTX" VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,40,0,0" MouseDown="UserTX_MouseDown">
-                        <Border.Background>
-                            <ImageBrush ImageSource="http://q2.qlogo.cn/headimg_dl?bs=qq&amp;dst_uin=0&amp;spec=100"/>
-                        </Border.Background>
-                    </Border>
+                    <Border x:Name="UserTX" VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,40,0,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}"/>
                     <TextBlock x:Name="UserName" Margin="10,110,10,0" TextWrapping="Wrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown"/>
                     <WrapPanel x:Name="PageControls" Margin="0,160,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Vertical">
                         <Grid x:Name="MusicKu">
@@ -1904,7 +1921,7 @@
             <ListBox x:Name="PlayDL_List" Margin="0,100,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
                 VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
         </Grid>
-        <Grid x:Name="PlayDLPage_ClosePage" Margin="0,0,0,75" Background="#00000000" Visibility="Collapsed" MouseDown="PlayDLPage_ClosePage_MouseDown">
+        <Grid x:Name="PlayDLPage_ClosePage" Margin="0,0,0,75" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed">
             <Grid HorizontalAlignment="Right" Width="20">
                 <Grid.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -1917,7 +1934,7 @@
                             </TransformGroup>
                         </LinearGradientBrush.RelativeTransform>
                         <GradientStop Color="#33000000" Offset="0"/>
-                        <GradientStop Offset="1"/>
+                        <GradientStop Offset="1" Color="#00000000"/>
                     </LinearGradientBrush>
                 </Grid.Background>
             </Grid>
