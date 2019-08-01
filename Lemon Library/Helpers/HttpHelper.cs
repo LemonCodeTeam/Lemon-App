@@ -74,10 +74,8 @@ namespace LemonLibrary
         {
             byte[] postData = Encoding.UTF8.GetBytes(data);
             WebClient webClient = new WebClient();
-            if (Header == null)
-            {
-              }
-            else webClient.Headers = Header;
+            if (Header != null)
+                webClient.Headers = Header;
             byte[] responseData = webClient.UploadData(url, "POST", postData);
             webClient.Dispose();
             return Encoding.UTF8.GetString(responseData);

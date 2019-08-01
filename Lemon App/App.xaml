@@ -32,6 +32,7 @@
             <SolidColorBrush x:Key="PlayDLPage_Border" Color="#FFF2F2F2"/>
             <SolidColorBrush x:Key="PlayDLPage_Font_Most" Color="#FF232323"/>
             <SolidColorBrush x:Key="PlayDLPage_Font_Low" Color="#FF707070"/>
+            <DropShadowEffect x:Key="WindowDrop" ShadowDepth="0" BlurRadius="20" Opacity="0.4"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

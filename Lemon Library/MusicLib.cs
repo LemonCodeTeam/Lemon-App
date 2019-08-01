@@ -238,10 +238,10 @@ namespace LemonLibrary
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string AddNewGd(string name)
+        public static string AddNewGd(string name,string imgurl="")
         {
             string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url=&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url={imgurl}&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
         /// <summary>
@@ -254,6 +254,115 @@ namespace LemonLibrary
             string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&delnum=1&deldirids={dirid}&forcedel=1&formsender=1&source=103", HttpHelper.GetWebHeader_YQQCOM());
             return result;
+        }
+
+        /// <summary>
+        /// 上传一个文件
+        /// </summary>
+        /// <param name="path">文件地址（本机）</param>
+        /// <returns></returns>
+        public static string UploadAFile(string path) {
+            FileInfo e = new FileInfo(path);
+            string ex = "0";
+            string exTen = "";
+            if (e.Extension.Equals(".jpg"))
+            {
+                ex = "0";
+                exTen = "jpeg";
+            }
+            else {
+                ex = "1";
+                exTen = "png";
+            }
+            string q = $@"------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""data""; filename=""{e.Name}""
+Content-Type: image/{exTen}
+
+";
+            string h=$@"------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""auth_appid""
+
+music_cover
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""parentid""
+
+/
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""fileid""
+
+2728578956_1564648303129
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""uin""
+
+2728578956
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""crop""
+
+0
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""x""
+
+0
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""y""
+
+0
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""width""
+
+0
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""height""
+
+0
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""origin_size""
+
+1
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""png""
+
+{ex}
+------WebKitFormBoundarye8oXp9zt6XFYGpye
+Content-Disposition: form-data; name=""picformat""
+
+jpg
+------WebKitFormBoundarye8oXp9zt6XFYGpye--";
+            string url = "https://c.y.qq.com/splcloud/fcgi-bin/fcg_upload_image.fcg";
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            request.Timeout = 20000;
+            request.Referer = "https://y.qq.com/portal/mymusic_edit.html?dirid=9";
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36";
+            request.Host = "c.y.qq.com";
+            request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+            request.ContentType = "multipart/form-data; boundary=----WebKitFormBoundarye8oXp9zt6XFYGpye";
+            request.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
+            request.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+            request.Headers.Add(HttpRequestHeader.Pragma, "no-cache");
+            request.Headers.Add(HttpRequestHeader.CacheControl, "no-cache");
+            request.Headers.Add("Origin", "https://y.qq.com");
+            request.Headers.Add("Upgrade-Insecure-Requests", "1");
+
+            byte[] qByte = Encoding.UTF8.GetBytes(q);
+            byte[] UpdateFile = File.ReadAllBytes(path);
+            byte[] hByte = Encoding.UTF8.GetBytes(h);
+           
+            Stream myRequestStream = request.GetRequestStream();
+            myRequestStream.Write(qByte, 0, qByte.Length);
+            myRequestStream.Write(UpdateFile, 0, UpdateFile.Length);
+            myRequestStream.Write(hByte, 0,h.Length);
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            Stream myResponseStream = response.GetResponseStream();
+            StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
+
+            string retString = myStreamReader.ReadToEnd();
+            myRequestStream.Close();
+            myStreamReader.Close();
+            return retString;
         }
         #endregion
         #region  歌单数据的获取

@@ -2050,42 +2050,47 @@ namespace Lemon_App
                 ml.lv.RestWidth(e.NewSize.Width);
         }
         #endregion
-        #region AddGD
-        private void AddGDPage_qqmod_MouseDown(object sender, MouseButtonEventArgs e)
+        #region IntoGD 导入歌单
+        private void IntoGDPage_qqmod_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!mod)
             {
-                AddGDPage_qqmod.Effect = new DropShadowEffect() { BlurRadius = 10, Opacity = 0.4, ShadowDepth = 0 };
-                AddGDPage_wymod.Effect = null;
                 mod = true;
+                QPath_Bg.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF8C913"));
+                QPath_Ic.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF02B053"));
+                IntoGDPage_wymod.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFB2B2B2"));
             }
         }
 
-        private void AddGDPage_wymod_MouseDown(object sender, MouseButtonEventArgs e)
+        private void IntoGDPage_wymod_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (mod)
             {
-                AddGDPage_qqmod.Effect = null;
-                AddGDPage_wymod.Effect = new DropShadowEffect() { BlurRadius = 10, Opacity = 0.4, ShadowDepth = 0 };
                 mod = false;
+                QPath_Bg.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF1F1F1"));
+                QPath_Ic.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFB2B2B2"));
+                IntoGDPage_wymod.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE72D2C"));
             }
         }
-
-        private void AddGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void IntoGDPage_OpenBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            IntoGDPop.IsOpen = !IntoGDPop.IsOpen;
+        }
+        private void IntoGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (mod)
             {
-                MusicLib.AddGDILike(AddGDPage_id.Text);
+                MusicLib.AddGDILike(IntoGDPage_id.Text);
                 TwMessageBox.Show("添加成功");
-                (Resources["CloseAddGDPage"] as Storyboard).Begin();
-                GDBtn_MouseDown(null, null);
+                IntoGDPop.IsOpen = false;
+                 GDBtn_MouseDown(null, null);
             }
             else
             {
-                ml.GetGDbyWYAsync(AddGDPage_id.Text, this, AddGDPage_ps_name, AddGDPage_ps_jd,
+                ml.GetGDbyWYAsync(IntoGDPage_id.Text, this, IntoGDPage_ps_name, IntoGDPage_ps_jd,
                     () =>
                     {
-                        (Resources["CloseAddGDPage"] as Storyboard).Begin();
+                        IntoGDPop.IsOpen = false;
                         GDBtn_MouseDown(null, null);
                     });
             }
@@ -2506,9 +2511,9 @@ namespace Lemon_App
         }
         #endregion
 
-        private void MoreBtn_Meum_MouseLeave(object sender, MouseEventArgs e)
+        private void IntoGDPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MoreBtn_Meum.IsOpen = false;
+            IntoGDPop.IsOpen = false;
         }
     }
 }
