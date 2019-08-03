@@ -43,7 +43,13 @@ namespace Lemon_App
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
         bool isPlayasRun = false;
-        NowPage np;
+        NowPage npLast;
+        NowPage npNow;
+
+        /// <summary>
+        /// 获取当前播放歌曲的来源页面 ，并储存上一次的来源
+        /// </summary>
+        private NowPage np { get => npNow; set { npLast = npNow; npNow = value; } }
         #endregion
         #region 等待动画
         Thread tOL = null;
@@ -555,7 +561,7 @@ namespace Lemon_App
             {
                 string strFileName = ofd.FileName;
                 string file = Settings.USettings.CachePath + "Skin\\" + System.IO.Path.GetFileName(strFileName);
-                System.IO.File.Copy(strFileName, file,true);
+                System.IO.File.Copy(strFileName, file, true);
                 Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource());
                 Settings.USettings.Skin_Path = file;
             }
@@ -644,7 +650,7 @@ namespace Lemon_App
             };
             blur.Margin = new Thickness(10, 0, 0, 0);
             SkinIndexList.Children.Add(blur);
-            SkinControl blurWhite = new SkinControl(-3, "亚克力白", Color.FromArgb(255,240,240,240));
+            SkinControl blurWhite = new SkinControl(-3, "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
                 ControlDownPage.BorderThickness = new Thickness(0, 0, 0, 0);
@@ -670,7 +676,7 @@ namespace Lemon_App
         private async void LoadHomePage() {
             //---------加载主页HomePage
             var data = await MusicLib.GetHomePageData();
-            HomePage_IFV.Updata(data.focus,this);
+            HomePage_IFV.Updata(data.focus, this);
             foreach (var a in data.Gdata)
             {
                 var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 100, Height = 100, Margin = new Thickness(0, 0, 20, 0) };
@@ -690,17 +696,7 @@ namespace Lemon_App
                     var sx = s as FLGDIndexItem;
                     Music dt = sx.Tag as Music;
                     //如果是歌单播放 那么将所有歌曲加入播放队列 
-                    PlayDL_List.Items.Clear();
-                    foreach (FLGDIndexItem exs in HomePage_Nm.Children)
-                    {
-                        var kx = new PlayDLItem(exs.Tag as Music);
-                        kx.MouseDoubleClick += K_MouseDoubleClick;
-                        PlayDL_List.Items.Add(kx);
-                    }
-                    int index = HomePage_Nm.Children.IndexOf(s as FLGDIndexItem);
-                    PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
-                    dk.p(true);
-                    MusicData = dk;
+                    AddPlayDL_All(null, HomePage_Nm.Children.IndexOf(s as FLGDIndexItem));
                     PlayMusic(dt.MusicID, dt.ImageUrl, dt.MusicName, dt.SingerText);
                 };
                 HomePage_Nm.Children.Add(k);
@@ -740,18 +736,6 @@ namespace Lemon_App
                 if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    //如果是歌单播放 那么将所有歌曲加入播放队列 
-                    PlayDL_List.Items.Clear();
-                    foreach (DataItem es in DataItemsList.Items)
-                    {
-                        var kx = new PlayDLItem(es.music);
-                        kx.MouseDoubleClick += K_MouseDoubleClick;
-                        PlayDL_List.Items.Add(kx);
-                    }
-                    int index = DataItemsList.Items.IndexOf(k);
-                    PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
-                    dk.p(true);
-                    MusicData = dk;
                 }
                 DataItemsList.Items.Add(k);
             }
@@ -810,12 +794,6 @@ namespace Lemon_App
                 if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    var kx = new PlayDLItem(k.music);
-                    kx.MouseDoubleClick += K_MouseDoubleClick;
-                    int index = PlayDL_List.Items.IndexOf(MusicData)+1;
-                    PlayDL_List.Items.Insert(index, kx);
-                    kx.p(true);
-                    MusicData = kx;
                 }
                 if (DataPage_DownloadMod)
                 {
@@ -896,12 +874,12 @@ namespace Lemon_App
             SingerItem si = sender as SingerItem;
             GetSinger(si);
         }
-        private async void GetSinger(SingerItem si,int osx=1) {
+        private async void GetSinger(SingerItem si, int osx = 1) {
             np = NowPage.SingerItem;
             singer_now = si.data;
             ixSinger = osx;
             OpenLoading();
-            List<Music> dt = await ml.GetSingerMusicByIdAsync(si.data.Mid,osx);
+            List<Music> dt = await ml.GetSingerMusicByIdAsync(si.data.Mid, osx);
             if (osx == 1) {
                 DataItemsList.Items.Clear();
                 NSPage(null, Data);
@@ -915,12 +893,6 @@ namespace Lemon_App
                 if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    var kx = new PlayDLItem(k.music);
-                    kx.MouseDoubleClick += K_MouseDoubleClick;
-                    int index = PlayDL_List.Items.IndexOf(MusicData)+1;
-                    PlayDL_List.Items.Insert(index, kx);
-                    kx.p(true);
-                    MusicData = kx;
                 }
                 k.Play += PlayMusic;
                 k.Download += K_Download;
@@ -932,28 +904,28 @@ namespace Lemon_App
                 }
                 DataItemsList.Items.Add(k);
             }
-            if(osx==1)Datasv.ScrollToTop();
+            if (osx == 1) Datasv.ScrollToTop();
             CloseLoading();
         }
-        private async void GetSingerList(string index="-100", string area = "-100", string sex = "-100", string genre = "-100", int cur_page = 1) {
+        private async void GetSingerList(string index = "-100", string area = "-100", string sex = "-100", string genre = "-100", int cur_page = 1) {
             if (cur_page == 1)
                 SingerItemsList.Opacity = 0;
             string sin = (80 * (cur_page - 1)).ToString();
             OpenLoading();
             ixSingerList = cur_page;
             var data = await MusicLib.GetSingerListAsync(index, area, sex, genre, sin, cur_page);
-            if (cur_page == 1){
+            if (cur_page == 1) {
                 SingerItemsList.Children.Clear();
             }
             foreach (var d in data)
             {
-                    var sinx = new SingerItem(d) { Margin = new Thickness(20, 0, 0, 20) };
-                    sinx.MouseDown += GetSinger;
-                    SingerItemsList.Children.Add(sinx);
+                var sinx = new SingerItem(d) { Margin = new Thickness(20, 0, 0, 20) };
+                sinx.MouseDown += GetSinger;
+                SingerItemsList.Children.Add(sinx);
             }
             if (cur_page == 1) SingerPage_sv.ScrollToTop();
             CloseLoading();
-            if (cur_page == 1){
+            if (cur_page == 1) {
                 await Task.Delay(10);
                 RunAnimation(SingerItemsList);
             }
@@ -1048,11 +1020,11 @@ namespace Lemon_App
                 var wk = await ml.GetFLGDIndexAsync();
                 //--------语种------------
                 foreach (var d in wk.Lauch) {
-                    var tb=new RbBox()
+                    var tb = new RbBox()
                     {
                         Uid = d.id,
-                        ContentText=d.name,
-                        Margin = new Thickness(0, 0, 5,5)
+                        ContentText = d.name,
+                        Margin = new Thickness(0, 0, 5, 5)
                     };
                     tb.Checked += FLGDPageChecked;
                     FLGDPage_Tag_Lau.Children.Add(tb);
@@ -1062,7 +1034,7 @@ namespace Lemon_App
                     var tb = new RbBox()
                     {
                         Uid = d.id,
-                        ContentText = d.name.Replace("&#38;","&"),
+                        ContentText = d.name.Replace("&#38;", "&"),
                         Margin = new Thickness(0, 0, 5, 5)
                     };
                     tb.Checked += FLGDPageChecked;
@@ -1109,7 +1081,7 @@ namespace Lemon_App
                 FLGDPage_SortId_Newest.Checked += FLGDPage_SortId_Newest_Checked;
             }
         }
-        RbBox FLGDPage_Tag=new RbBox();
+        RbBox FLGDPage_Tag = new RbBox();
         string sortId;
         private void FLGDPageChecked(RbBox sender)
         {
@@ -1156,8 +1128,8 @@ namespace Lemon_App
             FLGDPage_Tag.Uid = id;
             ixFLGD = osx;
             OpenLoading();
-            var data = await ml.GetFLGDAsync(id,sortId, osx);
-            if(osx==1)FLGDItemsList.Children.Clear();
+            var data = await ml.GetFLGDAsync(id, sortId, osx);
+            if (osx == 1) FLGDItemsList.Children.Clear();
             foreach (var d in data)
             {
                 var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
@@ -1172,7 +1144,7 @@ namespace Lemon_App
             }
             if (osx == 1) FLGDPage_sv.ScrollToTop();
             CloseLoading();
-            if (osx == 1){
+            if (osx == 1) {
                 await Task.Delay(10);
                 RunAnimation(FLGDItemsList);
             }
@@ -1320,18 +1292,6 @@ namespace Lemon_App
                     if (j.MusicID == MusicData.Data.MusicID)
                     {
                         k.ShowDx();
-                        //如果是歌单播放 那么将所有歌曲加入播放队列 
-                        PlayDL_List.Items.Clear();
-                        foreach (DataItem es in DataItemsList.Items)
-                        {
-                            var kx = new PlayDLItem(es.music);
-                            kx.MouseDoubleClick += K_MouseDoubleClick;
-                            PlayDL_List.Items.Add(kx);
-                        }
-                        int index = DataItemsList.Items.IndexOf(k);
-                        PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
-                        dk.p(true);
-                        MusicData = dk;
                     }
                     loadin.Value = DataItemsList.Items.Count;
                 }), this,
@@ -1486,12 +1446,6 @@ namespace Lemon_App
                 if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    var kx = new PlayDLItem(k.music);
-                    kx.MouseDoubleClick += K_MouseDoubleClick;
-                    int index = PlayDL_List.Items.IndexOf(MusicData)+1;
-                    PlayDL_List.Items.Insert(index, kx);
-                    kx.p(true);
-                    MusicData = kx;
                 }
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
@@ -1545,32 +1499,43 @@ namespace Lemon_App
                 PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
             }
         }
-        public void AddPlayDL(DataItem dt) {
-            if (np == NowPage.GDItem)
+        public PlayDLItem AddPlayDL_All(DataItem dt,int index=-1) {
+            PlayDL_List.Items.Clear();
+            foreach (DataItem e in DataItemsList.Items)
             {
-                //如果是歌单播放 那么将所有歌曲加入播放队列 
-                PlayDL_List.Items.Clear();
-                foreach (DataItem e in DataItemsList.Items)
-                {
-                    var k = new PlayDLItem(e.music);
-                    k.MouseDoubleClick += K_MouseDoubleClick;
-                    PlayDL_List.Items.Add(k);
-                }
-                int index = DataItemsList.Items.IndexOf(dt);
-                PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
-                dk.p(true);
-                MusicData = dk;
+                var k = new PlayDLItem(e.music);
+                k.MouseDoubleClick += K_MouseDoubleClick;
+                PlayDL_List.Items.Add(k);
+            }
+            if (index == -1)
+                index = DataItemsList.Items.IndexOf(dt);
+            PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+            dk.p(true);
+            MusicData = dk;
+            return dk;
+        }
+        public void AddPlayDl_CR(DataItem dt) {
+            var k = new PlayDLItem(dt.music);
+            k.MouseDoubleClick += K_MouseDoubleClick;
+            int index = PlayDL_List.Items.IndexOf(MusicData) + 1;
+            PlayDL_List.Items.Insert(index, k);
+            k.p(true);
+            MusicData = k;
+        }
+        public void AddPlayDL(DataItem dt) {
+            if (npNow == NowPage.GDItem)
+            {
+                //本次为歌单播放 那么将所有歌曲加入播放队列 
+                AddPlayDL_All(dt);
             }
             else
             {
-                //如果是其他播放 那么将此歌曲加入播放队列 
-                var k = new PlayDLItem(dt.music);
-                k.MouseDoubleClick += K_MouseDoubleClick;
-                int index = PlayDL_List.Items.IndexOf(MusicData)+1;
-                PlayDL_List.Items.Insert(index, k);
-                k.p(true);
-                MusicData = k;
+                //本次为其他播放，若上一次也是其他播放，那么添加所有，不是则插入当前的
+                if (npLast != NowPage.GDItem)
+                    AddPlayDL_All(dt);
+                else AddPlayDl_CR(dt);
             }
+            Console.WriteLine(npNow + " --- " + npLast);
         }
         private void K_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -2021,17 +1986,7 @@ namespace Lemon_App
 
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PlayDL_List.Items.Clear();
-            foreach (DataItem es in DataItemsList.Items)
-            {
-                var kx = new PlayDLItem(es.music);
-                kx.MouseDoubleClick += K_MouseDoubleClick;
-                PlayDL_List.Items.Add(kx);
-            }
-            int index = 0;
-            PlayDLItem k = PlayDL_List.Items[index] as PlayDLItem;
-            k.p(true);
-            MusicData = k;
+            var k = AddPlayDL_All(null, 0);
             (DataItemsList.Items[0] as DataItem).ShowDx();
             PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
         }
@@ -2358,18 +2313,6 @@ namespace Lemon_App
                 if (j.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
-                    //如果是歌单播放 那么将所有歌曲加入播放队列 
-                    PlayDL_List.Items.Clear();
-                    foreach (DataItem es in DataItemsList.Items)
-                    {
-                        var kx = new PlayDLItem(es.music);
-                        kx.MouseDoubleClick += K_MouseDoubleClick;
-                        PlayDL_List.Items.Add(kx);
-                    }
-                    int index = DataItemsList.Items.IndexOf(k);
-                    PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
-                    dk.p(true);
-                    MusicData = dk;
                 }
                 loadin.Value = DataItemsList.Items.Count;
             }), this,

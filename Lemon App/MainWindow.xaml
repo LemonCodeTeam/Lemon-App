@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lemonlib="clr-namespace:LemonLibrary;assembly=LemonLibrary"
         xmlns:lemon_app="clr-namespace:Lemon_App"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" x:Class="Lemon_App.MainWindow"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
+        x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
         Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}">
     <Window.Resources>
