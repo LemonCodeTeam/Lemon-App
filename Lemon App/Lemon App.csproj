@@ -58,7 +58,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -73,6 +73,14 @@
     <Reference Include="Lierda.WPFHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cbb49eab16984ff2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\Lierda.WPFHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -296,12 +304,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
-    <Resource Include="Image\left.png" />
-    <Resource Include="Image\pause.png" />
-    <Resource Include="Image\play.png" />
-    <Resource Include="Image\right.png" />
+    <None Include="Resources\play.ico" />
+    <None Include="Resources\pause.ico" />
+    <None Include="Resources\left.ico" />
+    <None Include="Resources\right.ico" />
+    <Resource Include="Resources\icon.ico" />
     <Content Include="Lib\Lierda.WPFHelper.dll" />
+    <Content Include="Lib\Microsoft.WindowsAPICodePack.dll" />
+    <Content Include="Lib\Microsoft.WindowsAPICodePack.Shell.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>

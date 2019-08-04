@@ -1,4 +1,5 @@
 ﻿using LemonLibrary;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,12 @@ namespace Lemon_App
         /// 获取当前播放歌曲的来源页面 ，并储存上一次的来源
         /// </summary>
         private NowPage np { get => npNow; set { npLast = npNow; npNow = value; } }
+        #endregion
+        #region 任务栏 字段
+        TabbedThumbnail TaskBarImg;
+        ThumbnailToolBarButton TaskBarBtn_Last;
+        ThumbnailToolBarButton TaskBarBtn_Play;
+        ThumbnailToolBarButton TaskBarBtn_Next;
         #endregion
         #region 等待动画
         Thread tOL = null;
@@ -109,7 +116,7 @@ namespace Lemon_App
             InitializeComponent();
         }
         #region 加载窗口时的基础配置 登录/播放组件
-        private void window_Loaded(object sender, RoutedEventArgs e)
+        private async void window_Loaded(object sender, RoutedEventArgs e)
         {
             //--------检测更新-------
             Updata();
@@ -154,9 +161,28 @@ namespace Lemon_App
             };
             //---------专辑图是圆的吗??-----
             MusicImage.CornerRadius = new CornerRadius(Settings.USettings.IsRoundMusicImage);
-            //---------切割机-----------
-            //任务栏 => 正在播放的专辑图片
-            Tasktb.ThumbnailClipMargin = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
+            //---------任务栏 TASKBAR-----------
+            //任务栏 缩略图 按钮
+            TaskBarImg = new TabbedThumbnail(this, this, new Vector());
+            TaskbarManager.Instance.TabbedThumbnail.AddThumbnailPreview(TaskBarImg);
+            TaskBarImg.SetWindowIcon(Properties.Resources.icon);
+            TaskBarImg.Title = Settings.USettings.Playing.MusicName + " - " + Settings.USettings.Playing.SingerText;
+            TaskBarImg.SetImage(await ImageCacheHelp.GetImageByUrl(Settings.USettings.Playing.ImageUrl));
+
+            TaskBarBtn_Last = new ThumbnailToolBarButton(Properties.Resources.icon_left, "上一曲");
+            TaskBarBtn_Last.Enabled = true;
+            TaskBarBtn_Last.Click += TaskBarBtn_Last_Click;
+
+            TaskBarBtn_Play = new ThumbnailToolBarButton(Properties.Resources.icon_play, "播放|暂停");
+            TaskBarBtn_Play.Enabled = true;
+            TaskBarBtn_Play.Click += TaskBarBtn_Play_Click;
+
+            TaskBarBtn_Next = new ThumbnailToolBarButton(Properties.Resources.icon_right, "下一曲");
+            TaskBarBtn_Next.Enabled = true;
+            TaskBarBtn_Next.Click += TaskBarBtn_Next_Click;
+
+            //添加按钮
+            TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this, TaskBarBtn_Last,TaskBarBtn_Play,TaskBarBtn_Next);
             //---------加载TOP页面----- 等待移植
             TopLoadac();
             //--------加载主页---------
@@ -383,16 +409,6 @@ namespace Lemon_App
         }
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //-------任务栏的专辑图片切割机----
-            Console.WriteLine("SIZECHANGED");
-            double tp = ActualWidth / 2;
-            Thickness ab;
-            if (ind == 0)//在主界面的
-                ab = new Thickness(LeftControl.ActualWidth, ActualHeight - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74, 0);
-            //在歌词界面的
-            else ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top, tp + 30, border4.Margin.Bottom);
-            Tasktb.ThumbnailClipMargin = ab;
-            Console.WriteLine("Tasktb   LEFT:" + ab.Left + "   TOP" + ab.Top + "   RIGHT" + ab.Right + "   BOTTOM" + ab.Bottom);
             //------------调整大小时对控件进行伸缩---------------
             WidthUI(SingerItemsList);
             WidthUI(RadioItemsList);
@@ -1569,7 +1585,7 @@ namespace Lemon_App
                     {
                         MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
                         MusicLib.mp.Play();
-                        Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
+                        TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                         (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                         t.Start();
                         isplay = true;
@@ -1590,6 +1606,8 @@ namespace Lemon_App
                     else LikeBtnUp();
                     ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
                     var im = await ImageCacheHelp.GetImageByUrl(x);
+                    TaskBarImg.SetImage(im);
+                    TaskBarImg.Title = name + " - " + singer;
                     MusicImage.Background = new ImageBrush(im);
                     var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
                     var imb = im.ToBitmap();
@@ -1599,7 +1617,7 @@ namespace Lemon_App
                     if (doesplay)
                     {
                         (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
-                        Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
+                        TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                         t.Start();
                         isplay = true;
                     }
@@ -1640,7 +1658,7 @@ namespace Lemon_App
             }
             catch { }
         }
-        private void Tasktb_playBtn_Click(object sender, EventArgs e)
+        private void TaskBarBtn_Play_Click(object sender, EventArgs e)
         {
             PlayBtn_MouseDown(null, null);
         }
@@ -1663,12 +1681,12 @@ namespace Lemon_App
             }
             catch { }
         }
-        private void ThumbButtonInfo_Click(object sender, EventArgs e)
+        private void TaskBarBtn_Last_Click(object sender, EventArgs e)
         {
             PlayControl_PlayLast(null, null);
         }
 
-        private void ThumbButtonInfo_Click_1(object sender, EventArgs e)
+        private void TaskBarBtn_Next_Click(object sender, EventArgs e)
         {
             PlayControl_PlayNext(null, null);
         }
@@ -1730,7 +1748,7 @@ namespace Lemon_App
             {
                 isplay = false;
                 MusicLib.mp.Pause();
-                Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/play.png", UriKind.Absolute));
+                TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
                 t.Stop();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Play);
             }
@@ -1738,7 +1756,7 @@ namespace Lemon_App
             {
                 isplay = true;
                 MusicLib.mp.Play();
-                Tasktb_playBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Image/pause.png", UriKind.Absolute));
+                TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                 t.Start();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
             }
@@ -1784,12 +1802,6 @@ namespace Lemon_App
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             ControlDownPage.BorderThickness = new Thickness(0, 1, 0, 0);
             var ol = Resources["CloseLyricPage"] as Storyboard;
-            ol.Completed += async delegate
-            {
-                await Task.Delay(500);
-                Thickness ab = new Thickness(LeftControl.ActualWidth + 10, ActualHeight - 10 - MusicImage.ActualHeight, ControlDownPage.ActualWidth - LeftControl.ActualWidth - 74 + 10, 10);
-                Tasktb.ThumbnailClipMargin = ab;
-            };
             ol.Begin();
         }
         Color LastButtonColor;
@@ -1815,13 +1827,6 @@ namespace Lemon_App
             if (!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
             likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             var ol = Resources["OpenLyricPage"] as Storyboard;
-            ol.Completed += async delegate
-            {
-                await Task.Delay(500);
-                double tp = ActualWidth / 2;
-                Thickness ab = new Thickness(ActualWidth - tp - 30 - border4.ActualWidth, border4.Margin.Top + 10, tp + 30, border4.Margin.Bottom + 10);
-                Tasktb.ThumbnailClipMargin = ab;
-            };
             ol.Begin();
         }
         private void MusicImage_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

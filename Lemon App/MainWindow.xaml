@@ -8,7 +8,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
         x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}">
+        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="Resources/icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -1322,7 +1322,7 @@
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
     </WindowChrome.WindowChrome>
-    <Window.TaskbarItemInfo>
+    <!--Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="Tasktb">
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfo Description="上一曲" ImageSource="Image/left.png" Click="ThumbButtonInfo_Click"/>
@@ -1330,7 +1330,7 @@
                 <ThumbButtonInfo Description="下一曲" ImageSource="Image/right.png" Click="ThumbButtonInfo_Click_1"/>
             </TaskbarItemInfo.ThumbButtonInfos>
         </TaskbarItemInfo>
-    </Window.TaskbarItemInfo>
+    </-->
     <Grid x:Name="Page" Background="White">
         <Grid x:Name="grid" Margin="0,0,0,75">
             <Grid.ColumnDefinitions>
