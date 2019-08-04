@@ -162,15 +162,15 @@ namespace Lemon_App
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
             Buttons.Visibility = Visibility.Visible;
+            namss.Margin = new Thickness(10, 10, 80, 10);
             if(needb)DeleteBtn.Visibility = Visibility.Visible;
-            grid.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#07000000"));
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
             Buttons.Visibility = Visibility.Collapsed;
             DeleteBtn.Visibility = Visibility.Collapsed;
-            grid.Background = new SolidColorBrush(Colors.Transparent);
+            namss.Margin = new Thickness(10, 10, 10, 10);
         }
         /// <summary>
         /// 没啥用，留着懒得改模板了

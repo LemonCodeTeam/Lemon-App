@@ -44,13 +44,7 @@ namespace Lemon_App
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
         bool isPlayasRun = false;
-        NowPage npLast;
-        NowPage npNow;
-
-        /// <summary>
-        /// 获取当前播放歌曲的来源页面 ，并储存上一次的来源
-        /// </summary>
-        private NowPage np { get => npNow; set { npLast = npNow; npNow = value; } }
+        private NowPage np;
         #endregion
         #region 任务栏 字段
         TabbedThumbnail TaskBarImg;
@@ -415,6 +409,7 @@ namespace Lemon_App
             WidthUI(GDItemsList);
             WidthUI(FLGDItemsList);
             WidthUI(GDILikeItemsList);
+            WidthUI(MusicPlList);
             if (Data.Visibility == Visibility.Visible)
                 foreach (DataItem dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
@@ -1516,6 +1511,7 @@ namespace Lemon_App
             }
         }
         public PlayDLItem AddPlayDL_All(DataItem dt,int index=-1) {
+            DLMode = false;
             PlayDL_List.Items.Clear();
             foreach (DataItem e in DataItemsList.Items)
             {
@@ -1531,6 +1527,7 @@ namespace Lemon_App
             return dk;
         }
         public void AddPlayDl_CR(DataItem dt) {
+            DLMode = true;
             var k = new PlayDLItem(dt.music);
             k.MouseDoubleClick += K_MouseDoubleClick;
             int index = PlayDL_List.Items.IndexOf(MusicData) + 1;
@@ -1538,8 +1535,9 @@ namespace Lemon_App
             k.p(true);
             MusicData = k;
         }
+        bool DLMode = false;
         public void AddPlayDL(DataItem dt) {
-            if (npNow == NowPage.GDItem)
+            if (np == NowPage.GDItem)
             {
                 //本次为歌单播放 那么将所有歌曲加入播放队列 
                 AddPlayDL_All(dt);
@@ -1547,11 +1545,10 @@ namespace Lemon_App
             else
             {
                 //本次为其他播放，若上一次也是其他播放，那么添加所有，不是则插入当前的
-                if (npLast != NowPage.GDItem)
+                if (DLMode)
                     AddPlayDL_All(dt);
                 else AddPlayDl_CR(dt);
             }
-            Console.WriteLine(npNow + " --- " + npLast);
         }
         private void K_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

@@ -1185,7 +1185,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -1344,7 +1344,7 @@
             </Grid>
             <Grid x:Name="ContentPage" Background="{DynamicResource ContentPageBursh}" Grid.Column="1" Margin="0,50,0,0">
 
-                <Grid x:Name="HomePage">
+                <Grid x:Name="HomePage" d:IsHidden="True">
                     <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
                         <Grid x:Name="HomePage_Grid" Height="715">
                             <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top"/>
