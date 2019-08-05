@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,6 +11,20 @@ namespace LemonLibrary
 {
     public class TextHelper
     {
+        public static string MakeValidFileName(string text, string replacement = "_")
+        {
+            StringBuilder str = new StringBuilder();
+            var invalidFileNameChars = Path.GetInvalidFileNameChars();
+            foreach (var c in text)
+            {
+                if (invalidFileNameChars.Contains(c))
+                    str.Append(replacement ?? "");
+                else
+                    str.Append(c);
+            }
+
+            return str.ToString();
+        }
         public static string Exem(string str) {
             string s = str;
             while (s.Contains("[em]")) {

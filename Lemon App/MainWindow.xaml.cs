@@ -2101,10 +2101,10 @@ namespace Lemon_App
         #region Download
         private List<Music> DownloadDL = new List<Music>();
         private void AddDownloadTask(Music data) {
-            string name = Settings.USettings.DownloadName
+            string name =TextHelper.MakeValidFileName (Settings.USettings.DownloadName
                 .Replace("[I]", (DownloadDL.Count() + 1).ToString())
                 .Replace("[M]", data.MusicName)
-                .Replace("[S]", data.SingerText);
+                .Replace("[S]", data.SingerText));
             string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
             DownloadItem di = new DownloadItem(data, file,DownloadDL.Count()){
                 Width = ContentPage.ActualWidth

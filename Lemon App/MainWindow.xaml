@@ -1395,7 +1395,7 @@
                         <Grid Height="577" Width="845">
                             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,0,0,0"/>
                             <Grid VerticalAlignment="Top" Margin="20,50,15,0" Height="172">
-                                <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" Checked="DownloadWithLyric_Checked" BorderBrush="{DynamicResource ResuColorBrush}"/>
+                                <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" Checked="DownloadWithLyric_Checked" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}"/>
                                 <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
                                 <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
