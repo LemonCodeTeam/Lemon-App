@@ -30,7 +30,8 @@ namespace Lemon_App
             InitializeComponent();
             data = dt;
             name.Text = dt.Name;
-            Loaded += async delegate {
+            Loaded += async delegate
+            {
                 try
                 {
                     im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Photo));
@@ -40,6 +41,21 @@ namespace Lemon_App
                     im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"));
                 }
             };
+        }
+        public MusicSinger mData { get => data; set {
+                data = value;
+                new Action(async ()=> {
+                    try{
+                        im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo));
+                    }
+                    catch{
+                        im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000"));
+                    }
+                })();
+            } }
+        public SingerItem()
+        {
+            InitializeComponent();
         }
     }
 }

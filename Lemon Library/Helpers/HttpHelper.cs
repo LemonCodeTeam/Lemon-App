@@ -80,6 +80,27 @@ namespace LemonLibrary
             webClient.Dispose();
             return Encoding.UTF8.GetString(responseData);
         }
+        public static async Task<string> PostInycAsync(string url,string data) {
+            var r = (HttpWebRequest)WebRequest.Create(url);
+            r.Method = "POST";
+            r.ContentType = " application/x-www-form-urlencoded";
+            r.Host = "u.y.qq.com";
+            r.KeepAlive = true;
+            r.Accept = "application/json";
+            r.Headers.Add("Origin", "http://y.qq.com");
+            r.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.47.134 Safari/537.36 QBCore/3.53.47.400 QQBrowser/9.0.2524.400 pcqqmusic/17.10.5105.0801 SkinId/10001|1ecc94|145|1|||1fd4af";
+            r.Referer = "http://y.qq.com/wk_v17/";
+            r.Headers.Add("Accept-Language","zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.5;q=0.4");
+            r.Headers.Add("Cookie", Settings.USettings.Cookie);
+            var byteData = Encoding.UTF8.GetBytes(data);
+            var length = byteData.Length;
+            r.ContentLength = length;
+            var writer =await r.GetRequestStreamAsync();
+            await writer.WriteAsync(byteData, 0, length);
+            writer.Close();
+            var response = (HttpWebResponse)await r.GetResponseAsync();
+            return await new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEndAsync();
+        }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
             HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;

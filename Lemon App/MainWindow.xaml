@@ -1392,19 +1392,15 @@
             </Grid>
             <Grid x:Name="ContentPage" Background="{DynamicResource ContentPageBursh}" Grid.Column="1" Margin="0,50,0,0">
 
-                <Grid x:Name="HomePage" d:IsHidden="True">
+                <Grid x:Name="HomePage">
                     <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
-                        <Grid x:Name="HomePage_Grid" Height="715">
-                            <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top"/>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Margin="10,250,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
-                            <ScrollViewer Margin="0,290,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
-                                <WrapPanel x:Name="HomePage_Gdtj"/>
-                            </ScrollViewer>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Margin="10,480.48,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
-                            <ScrollViewer Margin="0,530,0,0" Height="180" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" Template="{DynamicResource ScrollViewerControlTemplate1}">
-                                <WrapPanel x:Name="HomePage_Nm"/>
-                            </ScrollViewer>
-                        </Grid>
+                        <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
+                            <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=HomePage, Mode=OneWay}"/>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0"/>
+                            <WrapPanel x:Name="HomePage_Gdtj" Margin="0,20,0,0"/>
+                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0"/>
+                            <WrapPanel x:Name="HomePage_Nm" Margin="0,20,0,0"/>
+                        </WrapPanel>
                     </ScrollViewer>
                 </Grid>
 
@@ -1440,9 +1436,9 @@
                 </Grid>
                 <Grid x:Name="SettingsPage" Visibility="Collapsed">
                     <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
-                        <Grid Height="577" Width="845">
+                        <WrapPanel VerticalAlignment="Top" Orientation="Vertical">
                             <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,0,0,0"/>
-                            <Grid VerticalAlignment="Top" Margin="20,50,15,0" Height="172">
+                            <Grid VerticalAlignment="Top" Height="172" Margin="20,20,0,0">
                                 <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" Checked="DownloadWithLyric_Checked" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}"/>
                                 <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
@@ -1458,17 +1454,17 @@
                                 <lemon_app:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown"/>
 
                             </Grid>
-                            <Grid Margin="20,210,15,0" Height="241" VerticalAlignment="Top">
+                            <Grid VerticalAlignment="Top" Margin="20,0,0,0">
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
                                 <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="172" Margin="0,30,0,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题"/>
                                 <lemon_app:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown"/>
                                 <TextBlock Margin="0,215,95,0" TextWrapping="Wrap" Text="ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="#FFAEAEAE" TextAlignment="Center" FontSize="16"/>
                             </Grid>
-                            <Grid Margin="20,455,15,0" Height="121" VerticalAlignment="Top">
+                            <Grid Height="121" VerticalAlignment="Top" Width="810" Margin="20,0,0,0">
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
                                 <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:https://github.com/TwilightLemon/Lemon-App 请遵循GPL开源协议" MouseDown="Run_MouseDown"/><LineBreak/><Run/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
                             </Grid>
-                        </Grid>
+                        </WrapPanel>
                     </ScrollViewer>
                 </Grid>
                 <Grid x:Name="SkinPage" Visibility="Collapsed">
@@ -1640,17 +1636,17 @@
                 <Grid x:Name="RadioIndexPage" Visibility="Collapsed">
                     <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="在线电台" VerticalAlignment="Top" Width="101" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                     <WrapPanel x:Name="RadioIndexList" Margin="10,50,10,0" VerticalAlignment="Top">
-                        <RadioButton x:Name="RadioMe" Content="热门" Uid="0" Margin="20,0,0,0" Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="下午" Uid="1" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="情感" Uid="2" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="主题" Uid="3" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="场景" Uid="4"  Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="曲风" Uid="5" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="语言" Uid="6" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="人群" Uid="7" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
-                        <RadioButton Content="乐器" Uid="8" Margin="20,0,0,0"  Checked="RadioPageChecked" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource RadioButtonStyle}" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}"/>
+                        <lemon_app:RbBox x:Name="RadioMe" ContentText="热门" Uid="0" Margin="20,0,0,0" Checked="RadioPageChecked"/>
+                        <lemon_app:RbBox ContentText="下午" Uid="1" Margin="20,0,0,0"  Checked="RadioPageChecked"/>
+                        <lemon_app:RbBox ContentText="情感" Uid="2" Margin="20,0,0,0"  Checked="RadioPageChecked" />
+                        <lemon_app:RbBox ContentText="主题" Uid="3" Margin="20,0,0,0"  Checked="RadioPageChecked" />
+                        <lemon_app:RbBox ContentText="场景" Uid="4"  Margin="20,0,0,0"  Checked="RadioPageChecked" />
+                        <lemon_app:RbBox ContentText="曲风" Uid="5" Margin="20,0,0,0"  Checked="RadioPageChecked" />
+                        <lemon_app:RbBox ContentText="语言" Uid="6" Margin="20,0,0,0"  Checked="RadioPageChecked" />
+                        <lemon_app:RbBox ContentText="人群" Uid="7" Margin="20,0,0,0"  Checked="RadioPageChecked" />
+                        <lemon_app:RbBox ContentText="乐器" Uid="8" Margin="20,0,0,0"  Checked="RadioPageChecked" />
                     </WrapPanel>
-                    <ScrollViewer  Margin="20,69.24,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <ScrollViewer  Margin="20,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                         <WrapPanel x:Name="RadioItemsList"/>
                     </ScrollViewer>
                 </Grid>
@@ -1744,7 +1740,7 @@
                             <CheckBox x:Name="DownloadQx" Content="全选" HorizontalAlignment="Left" Margin="24,0,0,0" Style="{DynamicResource CheckBoxStyle}" Foreground="{DynamicResource ResuColorBrush}" BorderBrush="{DynamicResource ResuColorBrush}" Background="#00000000" Click="cb_color_Click" Height="16"/>
                         </Grid>
                     </Border>
-                    <Border x:Name="border5" Height="51" VerticalAlignment="Top" BorderThickness="0" Background="{DynamicResource DataTopBrush}" Visibility="Visible">
+                    <Border x:Name="border5" Height="51" VerticalAlignment="Top" BorderThickness="0" Visibility="Visible">
                         <Grid>
                             <Border x:Name="TXx" HorizontalAlignment="Left" Margin="15,10,0,10" Background="#FFF3F3F3" CornerRadius="100" Width="30" Height="30"/>
                             <WrapPanel Margin="55,0,5,0" Orientation="Horizontal" Height="23">
@@ -1757,6 +1753,10 @@
                     <ListBox x:Name="DataItemsList" Margin="0,51,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
                                   VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
                     <ProgressBar x:Name="loadin" Height="2" VerticalAlignment="Top" Margin="0,51,0,0" Background="#00000000" Foreground="{DynamicResource ThemeColor}" Maximum="300" BorderThickness="0" Style="{DynamicResource ProgressBarStyle1}"/>
+                </Grid>
+                <Grid x:Name="ContentItem" Visibility="Collapsed">
+                    <ScrollViewer x:Name="Cisv" Template="{DynamicResource ScrollViewerControlTemplate}" >
+                    </ScrollViewer>
                 </Grid>
                 <Grid x:Name="MusicPLPage" Visibility="Collapsed">
                     <Grid Height="51" VerticalAlignment="Top">
@@ -1826,7 +1826,7 @@
                     </WrapPanel>
                 </Grid>
             </Border>
-            <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" Visibility="Collapsed" CornerRadius="5">
+            <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" Visibility="Collapsed" CornerRadius="5" Effect="{DynamicResource WindowDrop}">
                 <ListBox x:Name="Search_SmartBoxList" VirtualizingPanel.VirtualizationMode="Recycling"
                     VirtualizingPanel.IsVirtualizing="True"  Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" BorderThickness="0" Background="{DynamicResource PlayDLPage_Bg}" >
                 </ListBox>
@@ -1860,7 +1860,7 @@
         <Border x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource BorderColorBrush}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="217*" MinWidth="206" MaxWidth="245"/>
+                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=ControlPage, Mode=OneWay}"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
@@ -1978,7 +1978,7 @@
                 </Border>
             </Grid>
             <ListBox x:Name="PlayDL_List" Margin="0,100,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
-                VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
+                VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
         </Grid>
         <Grid x:Name="PlayDLPage_ClosePage" Margin="0,0,0,75" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed">
             <Grid HorizontalAlignment="Right" Width="20">

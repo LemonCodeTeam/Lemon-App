@@ -111,6 +111,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BottomTick.xaml.cs">
+      <DependentUpon>BottomTick.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ControlItems\CannotPlay.xaml.cs">
       <DependentUpon>CannotPlay.xaml</DependentUpon>
     </Compile>
@@ -138,6 +141,9 @@
     <Compile Include="ControlItems\Ran.cs" />
     <Compile Include="ControlItems\RbBox.xaml.cs">
       <DependentUpon>RbBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ControlItems\SingerPage.xaml.cs">
+      <DependentUpon>SingerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlItems\SkinControl.xaml.cs">
       <DependentUpon>SkinControl.xaml</DependentUpon>
@@ -172,6 +178,9 @@
     <Compile Include="ControlItems\TopControl.xaml.cs">
       <DependentUpon>TopControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVItem.xaml.cs">
+      <DependentUpon>MVItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
@@ -179,6 +188,10 @@
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowBlur.cs" />
+    <Page Include="BottomTick.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ControlItems\CannotPlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\RbBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ControlItems\SingerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -264,6 +281,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\TopControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

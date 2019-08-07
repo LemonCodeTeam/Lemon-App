@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lemon_App"
-             mc:Ignorable="d" MinWidth="130" MaxWidth="200" SizeChanged="UserControl_SizeChanged">
+             mc:Ignorable="d" MinWidth="100" MaxWidth="200" SizeChanged="UserControl_SizeChanged">
     <Grid Background="#00000000">
         <Border x:Name="im" Background="#FF007ACC" Height="{Binding ActualWidth, ElementName=im, Mode=OneWay}" VerticalAlignment="Top" MouseDown="Im_MouseDown" CornerRadius="5"/>
         <TextBlock x:Name="name" Margin="10,0,10,10" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Justify" Height="35" VerticalAlignment="Bottom"/>

@@ -26,6 +26,51 @@ namespace LemonLibrary
             public List<MusicGD> Gdata = new List<MusicGD>();
             public List<Music> NewMusic = new List<Music>();
         }
+        public class SingerPageData {
+            /// <summary>
+            /// 歌手信息
+            /// </summary>
+            public MusicSinger mSinger = new MusicSinger();
+            /// <summary>
+            /// 热门歌曲
+            /// </summary>
+            public List<Music> HotSongs = new List<Music>();
+            /// <summary>
+            /// 专辑
+            /// </summary>
+            public List<MVData> liangxia = new List<MVData>();
+            /// <summary>
+            /// 是否关注
+            /// </summary>
+            public bool HasGJ;
+            /// <summary>
+            /// 是否有大图
+            /// </summary>
+            public bool HasBigPic;
+            /// <summary>
+            /// 专辑
+            /// </summary>
+            public List<MusicGD> Album = new List<MusicGD>();
+            /// <summary>
+            /// MV
+            /// </summary>
+            public List<MVData> mVDatas = new List<MVData>();
+            /// <summary>
+            /// 相似歌手
+            /// </summary>
+            public List<MusicSinger> ssMs = new List<MusicSinger>();
+
+            /// <summary>
+            /// 粉丝数
+            /// </summary>
+            public string FansCount = "";
+        }
+        public class MVData {
+            public string id { get; set; } = "";
+            public string name { set; get; } = "";
+            public string img { set; get; } = "";
+            public string lstCount { get; set; } = "";
+        }
         public class Music
         {
             public string MusicName { set; get; } = "";
@@ -34,6 +79,7 @@ namespace LemonLibrary
             public string SingerText { get; set; } = "";
             public string MusicID { set; get; } = "";
             public string ImageUrl { set; get; } = "";
+            public MusicGD Album { set; get; } = new MusicGD();
         }
         public class MusicSinger {
             public string Name { set; get; }

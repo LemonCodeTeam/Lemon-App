@@ -25,19 +25,23 @@ namespace LemonLibrary
         }
         public static void G(FrameworkElement d)
         {
-            d.FocusVisualStyle = null;
-            RenderOptions.SetBitmapScalingMode(d, BitmapScalingMode.Fant);
-            if (d is Panel)
+            try
             {
-                foreach (var s in (d as Panel).Children)
+                d.FocusVisualStyle = null;
+                RenderOptions.SetBitmapScalingMode(d, BitmapScalingMode.Fant);
+                if (d is Panel)
                 {
-                    G(s as FrameworkElement);
+                    foreach (var s in (d as Panel).Children)
+                    {
+                        G(s as FrameworkElement);
+                    }
+                }
+                if (d is ScrollViewer)
+                {
+                    G((d as ScrollViewer).Content as FrameworkElement);
                 }
             }
-            if (d is ScrollViewer)
-            {
-                G((d as ScrollViewer).Content as FrameworkElement);
-            }
+            catch { }
         }
         public static bool IsVerticalScrollBarAtButtom(this ScrollViewer ex)
         {

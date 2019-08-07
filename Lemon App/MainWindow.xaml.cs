@@ -34,7 +34,7 @@ namespace Lemon_App
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         LoginWindow lw;
         MusicLib ml = new MusicLib();
-        PlayDLItem MusicData = new PlayDLItem(new Music());
+        public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
         string RadioID = "";
@@ -44,7 +44,7 @@ namespace Lemon_App
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
         bool isPlayasRun = false;
-        private NowPage np;
+        public NowPage np;
         #endregion
         #region 任务栏 字段
         TabbedThumbnail TaskBarImg;
@@ -413,6 +413,8 @@ namespace Lemon_App
             if (Data.Visibility == Visibility.Visible)
                 foreach (DataItem dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
+            if (ContentItem.Visibility == Visibility.Visible)
+                (Cisv.Content as FrameworkElement).Width = ContentItem.ActualWidth;
         }
         /// <summary>
         /// 遍历调整宽度
@@ -690,7 +692,7 @@ namespace Lemon_App
             HomePage_IFV.Updata(data.focus, this);
             foreach (var a in data.Gdata)
             {
-                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 100, Height = 100, Margin = new Thickness(0, 0, 20, 0) };
+                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 175, Height =175, Margin = new Thickness(20, 0, 0, 0) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);
@@ -701,7 +703,7 @@ namespace Lemon_App
             }
             foreach (var a in data.NewMusic)
             {
-                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl) { Width = 100, Height = 100, Margin = new Thickness(0, 0, 20, 0) };
+                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl) { Width = 175, Height =175, Margin = new Thickness(20, 0, 0, 0) };
                 k.Tag = a;
                 k.ImMouseDown += (object s, MouseButtonEventArgs es) => {
                     var sx = s as FLGDIndexItem;
@@ -873,7 +875,7 @@ namespace Lemon_App
         }
         #endregion
         #region Singer 歌手界面
-        private void K_GetToSingerPage(MusicSinger ms)
+        public void K_GetToSingerPage(MusicSinger ms)
         {
             var msx = ms;
             Console.WriteLine(ms.Mid);
@@ -885,10 +887,19 @@ namespace Lemon_App
             SingerItem si = sender as SingerItem;
             GetSinger(si);
         }
-        private async void GetSinger(SingerItem si, int osx = 1) {
+        public async void GetSinger(SingerItem si, int osx = 1) {
             np = NowPage.SingerItem;
             singer_now = si.data;
             ixSinger = osx;
+            OpenLoading();
+            var data =await MusicLib.GetSingerPageAsync(si.data.Mid);
+            Cisv.Content = new SingerPage(data, this) {
+                Width= ContentPage.ActualWidth
+            };
+            NSPage(SingerBtn, ContentItem);
+            Cisv.ScrollToVerticalOffset(0);
+            CloseLoading();
+            /*
             OpenLoading();
             List<Music> dt = await ml.GetSingerMusicByIdAsync(si.data.Mid, osx);
             if (osx == 1) {
@@ -917,6 +928,7 @@ namespace Lemon_App
             }
             if (osx == 1) Datasv.ScrollToTop();
             CloseLoading();
+            */
         }
         private async void GetSingerList(string index = "-100", string area = "-100", string sex = "-100", string genre = "-100", int cur_page = 1) {
             if (cur_page == 1)
@@ -1165,7 +1177,8 @@ namespace Lemon_App
         private void RadioBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(RadioBtn, RadioIndexPage);
-            RadioMe.IsChecked = true;
+            RadioMe.Check(true);
+            RadioPageChecked(RadioMe);
         }
 
         public async void GetRadio(object sender, MouseEventArgs e)
@@ -1178,17 +1191,20 @@ namespace Lemon_App
             PlayMusic(data.MusicID, data.ImageUrl, data.MusicName, data.SingerText, true);
             CloseLoading();
         }
-        private async void RadioPageChecked(object sender, RoutedEventArgs e)
+        private RbBox RadioPage_RbLast = null;
+        private async void RadioPageChecked(RbBox sender)
         {
             RadioItemsList.Opacity = 0;
             if (sender != null)
             {
                 OpenLoading();
-                var dt = sender as RadioButton;
+                if (RadioPage_RbLast != null)
+                    RadioPage_RbLast.Check(false);
+                RadioPage_RbLast = sender;
                 var data = await ml.GetRadioList();
                 RadioItemsList.Children.Clear();
                 List<MusicRadioListItem> dat = null;
-                switch (dt.Uid)
+                switch (sender.Uid)
                 {
                     case "0":
                         dat = data.Hot;
@@ -1535,7 +1551,7 @@ namespace Lemon_App
             k.p(true);
             MusicData = k;
         }
-        bool DLMode = false;
+        public bool DLMode = false;
         public void AddPlayDL(DataItem dt) {
             if (np == NowPage.GDItem)
             {
@@ -1550,7 +1566,7 @@ namespace Lemon_App
                 else AddPlayDl_CR(dt);
             }
         }
-        private void K_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        public void K_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = sender as PlayDLItem;
             k.p(true);
@@ -2130,7 +2146,7 @@ namespace Lemon_App
             DownloadDL.Add(data);
             DownloadIsFinish = false;
         }
-        private void K_Download(DataItem sender)
+        public void K_Download(DataItem sender)
         {
             var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)

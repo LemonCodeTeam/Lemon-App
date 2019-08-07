@@ -23,36 +23,32 @@ namespace Lemon_App
         public MDButton()
         {
             InitializeComponent();
+            theme = 0;
         }
-        public MDButton(bool ab=false)
-        {
-            InitializeComponent();
-            this.ab = ab;
-            if (ab) {
-                bd.BorderBrush = new SolidColorBrush(Color.FromRgb(147,161,174));
-                tb.Foreground= new SolidColorBrush(Color.FromRgb(147, 161, 174));
-            }
-        }
-        private bool ab = false;
+        private int theme = 0;
+        public int Theme { get => theme; set {
+                theme = value;
+                if (theme == 0) {
+                    bd.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#19000000"));
+                    tb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                }else if (theme == 1) {
+                    bd.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#19FFFFFF"));
+                    tb.Foreground = new SolidColorBrush(Colors.White);
+                }else if (theme == 2) {
+                    bd.SetResourceReference(BackgroundProperty, "ColorBrush");
+                    tb.Foreground = new SolidColorBrush(Colors.White);
+                }
+            } }
         public string TName { get => tb.Text; set => tb.Text = value; }
+        public Geometry pData { get => p.Data; set =>p.Data = value; }
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
-            bd.SetResourceReference(BorderBrushProperty, "ThemeColor");
-            tb.SetResourceReference(ForegroundProperty, "ThemeColor");
+            cg.Visibility = Visibility.Visible;
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (ab)
-            {
-                bd.BorderBrush = new SolidColorBrush(Color.FromRgb(147, 161, 174));
-                tb.Foreground = new SolidColorBrush(Color.FromRgb(147, 161, 174));
-            }
-            else
-            {
-                bd.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
-                tb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            }
+            cg.Visibility = Visibility.Collapsed;
         }
     }
 }

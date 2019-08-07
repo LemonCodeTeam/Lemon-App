@@ -9,8 +9,16 @@ using System.Web.Script.Serialization;
 
 namespace LemonLibrary
 {
-    public class TextHelper
+    public static class TextHelper
     {
+        public static string IntToWn(this int num) {
+            if (num < 10000)
+                return num.ToString();
+            else {
+                double d = (double)num / (double)10000;
+                return Math.Round(d, 2, MidpointRounding.AwayFromZero)+"万";
+            }
+        }
         public static string MakeValidFileName(string text, string replacement = "_")
         {
             StringBuilder str = new StringBuilder();

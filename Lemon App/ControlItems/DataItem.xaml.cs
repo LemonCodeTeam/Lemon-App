@@ -38,6 +38,7 @@ namespace Lemon_App
                     ser.Inlines.Clear();
                     needb = needDeleteBtn;
                     name.Text = dat.MusicName;
+                    ab.Text = dat.Album.Name.Replace("空","");
                     foreach (MusicSinger a in dat.Singer) {
                         Ran r = new Ran() { Text=a.Name,data=a};
                         r.MouseDown += R_MouseDown;
@@ -65,12 +66,12 @@ namespace Lemon_App
             {
                 mss.Opacity = 0.6;
                 ser.Opacity = 0.8;
-                He.LastItem.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                He.LastItem.bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
                 He.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             }
-            Background = new SolidColorBrush(Color.FromArgb(20, 0, 0, 0));
+            bg.Background = new SolidColorBrush(Color.FromArgb(10, 0, 0, 0));
             ser.SetResourceReference(ForegroundProperty, "ThemeColor");
             namss.SetResourceReference(ForegroundProperty, "ThemeColor");
             color.SetResourceReference(BackgroundProperty, "ThemeColor");
@@ -178,6 +179,11 @@ namespace Lemon_App
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e) { }
+
+        private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Mainwindow.IFVCALLBACK_LoadAlbum(music.Album.ID);
+        }
     }
 
 
