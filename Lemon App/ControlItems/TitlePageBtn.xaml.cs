@@ -24,6 +24,11 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
+        public Brush ColorDx { get => path.Fill; set {
+                path.Fill = value;
+                if (value == null)
+                    path.SetResourceReference(Shape.FillProperty, "ButtonColorBrush");
+            } }
         public Geometry PathData { get => path.Data; set => path.Data = value; }
         public double MinOp { get => min.Opacity; set => min.Opacity = value; }
         public Thickness Pathness { get => path.Margin; set => path.Margin = value; }

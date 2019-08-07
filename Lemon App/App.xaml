@@ -13,15 +13,9 @@
             <!--按钮A1前景色 默认值:#FF787878-->
             <SolidColorBrush x:Key="ButtonColorBrush" Color="#FF7D7D7D"/>
             <!--UI边框色 默认值:#FFE7E8EC-->
-            <SolidColorBrush x:Key="BorderColorBrush" Color="#FFE1E1E2"/>
+            <SolidColorBrush x:Key="BorderColorBrush" Color="#FFF0F0F0"/>
             <!--菜单栏背景色 默认值:#FFFAFAFA-->
-            <SolidColorBrush x:Key="ControlPageBrush" Color="#FFF5F5F7"/>
-            <!--标题栏背景色 默认值:White-->
-            <SolidColorBrush x:Key="TitlePageBrush" Color="#FFFAFAFA"/>
-            <!--主页面背景色 默认值:White-->
-            <SolidColorBrush x:Key="ContentPageBursh" Color="#FFFAFAFA"/>
-            <!--Data标题栏背景色 默认值:#FFFDFDFD-->
-            <SolidColorBrush x:Key="DataTopBrush" Color="#FFFDFDFD"/>
+            <SolidColorBrush x:Key="ControlPageBrush" Color="#FFFAFAFA"/>
             <!--文本X1 默认值:#FFA0A0A0-->
             <SolidColorBrush x:Key="TextX1ColorBrush" Color="#FF535353"/>
 

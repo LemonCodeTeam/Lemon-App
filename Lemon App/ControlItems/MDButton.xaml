@@ -20,7 +20,7 @@
         </LinearGradientBrush>
     </UserControl.Resources>
     <Grid>
-        <Border x:Name="cg" CornerRadius="17" Background="#0C000000" Margin="0" Visibility="Collapsed"/>
+        <Border x:Name="cg" CornerRadius="{Binding CornerRadius, ElementName=bd}" Background="#0C000000" Margin="0" Visibility="Collapsed"/>
         <Border x:Name="bd" CornerRadius="17" Background="#19000000">
             <Grid HorizontalAlignment="Center">
                 <TextBlock x:Name="tb" TextWrapping="NoWrap" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center" TextAlignment="Center" Margin="30,0,10,0" Text="TextBlock"/>

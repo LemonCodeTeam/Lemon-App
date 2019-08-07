@@ -40,7 +40,13 @@ namespace Lemon_App
                 }
             } }
         public string TName { get => tb.Text; set => tb.Text = value; }
-        public Geometry pData { get => p.Data; set =>p.Data = value; }
+        public CornerRadius cr { get => bd.CornerRadius; set => bd.CornerRadius = value; }
+        public Geometry pData { get => p.Data; set {
+                p.Data = value;
+                if (value == null)
+                    tb.Margin = new Thickness(10,0,10,0);
+                else tb.Margin = new Thickness(30, 0, 0, 0);
+            } }
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
             cg.Visibility = Visibility.Visible;

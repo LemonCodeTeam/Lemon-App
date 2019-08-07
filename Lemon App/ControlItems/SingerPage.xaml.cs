@@ -42,6 +42,7 @@ namespace Lemon_App
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            LastPage = TuiJianPage;
             SingerName.Text = Data.mSinger.Name;
 
             if (Data.HasBigPic)
@@ -170,6 +171,53 @@ namespace Lemon_App
                 FanBt.p.Stretch = Stretch.Uniform;
                 FanBt.pData = Geometry.Parse("M825.742222 376.035556l-349.866666 355.612444a45.169778 45.169778 0 0 1-64.568889 0L213.560889 530.602667a46.478222 46.478222 0 0 1-13.368889-32.768c0-25.6 20.48-46.364444 45.624889-46.364445 12.629333 0 24.064 5.233778 32.312889 13.653334l165.489778 168.106666 317.610666-322.844444a45.283556 45.283556 0 0 1 32.312889-13.539556 46.08 46.08 0 0 1 45.624889 46.364445 46.648889 46.648889 0 0 1-13.425778 32.824889z");
             }
+        }
+
+        private FrameworkElement LastPage = null;
+        private void NSPage(FrameworkElement fm) {
+            if (LastPage != null)
+                LastPage.Visibility = Visibility.Collapsed;
+            fm.Visibility = Visibility.Visible;
+            mw.RunAnimation(fm);
+            LastPage = fm;
+            //------------附加处理
+            if(fm!=SongsPage&&mview!=null)
+                mw.Cisv.ScrollChanged += Cisv_MusicListScrollChanged;
+        }
+        private void TuiJianBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NSPage(TuiJianPage);
+        }
+
+        private async void Cisv_MusicListScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (mw.Cisv.IsVerticalScrollBarAtButtom()) {
+                PageIndex++;
+                var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid, PageIndex);
+                mview.CreatItems(data);
+            }
+        }
+
+        /// <summary>
+        /// 歌曲页的页数索引
+        /// </summary>
+        private int PageIndex = 1;
+        private MusicListView mview=null;
+        private async void SongsBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NSPage(SongsPage);
+            mw.Cisv.ScrollChanged += Cisv_MusicListScrollChanged;
+            if (SongsPage.Children.Count == 0) {
+                var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid);
+                mview = new MusicListView(data, mw,NowPage.SingerItem);
+                SongsPage.Children.Add(mview);
+            }
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            foreach (FrameworkElement c in HotMusicList.Children)
+                c.Width = ActualWidth;
         }
     }
 }

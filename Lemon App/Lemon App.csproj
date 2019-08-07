@@ -178,6 +178,9 @@
     <Compile Include="ControlItems\TopControl.xaml.cs">
       <DependentUpon>TopControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MusicListView.xaml.cs">
+      <DependentUpon>MusicListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVItem.xaml.cs">
       <DependentUpon>MVItem.xaml</DependentUpon>
     </Compile>
@@ -281,6 +284,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ControlItems\TopControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MusicListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

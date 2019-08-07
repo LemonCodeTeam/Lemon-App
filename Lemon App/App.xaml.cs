@@ -64,9 +64,6 @@ namespace Lemon_App
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#4C000000"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19000000"));
-            SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("#0C000000"));
-            SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#0C000000"));
-            SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0C000000"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
@@ -86,9 +83,6 @@ namespace Lemon_App
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#33FFFFFF"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FAFAFA"));
-            SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
-            SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
-            SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
@@ -105,12 +99,9 @@ namespace Lemon_App
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
-            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFE1E1E2"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFF5F5F7"));
-            SetColor("TitlePageBrush", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
-            SetColor("ContentPageBursh", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
-            SetColor("DataTopBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
-            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
+            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFF0F0F0"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
+            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF535353"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Lemon_App" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Class="Lemon_App.SingerPage" 
-             mc:Ignorable="d" Width="889" Loaded="UserControl_Loaded" >
+             mc:Ignorable="d" Width="889" Loaded="UserControl_Loaded" SizeChanged="UserControl_SizeChanged" >
     <UserControl.Resources>
         <Storyboard x:Key="mSingerTX">
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="mSingerBig">
@@ -26,7 +26,6 @@
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
-
     </UserControl.Resources>
     <Grid>
         <Grid x:Name="mSingerBig" VerticalAlignment="Top" Height="400" Background="#FF404040">
@@ -35,14 +34,14 @@
                 <TextBlock x:Name="FansCount" Margin="0,70,0,0" TextWrapping="Wrap" Text="粉丝数：999.99万" VerticalAlignment="Top" Foreground="#CCFFFFFF" FontSize="14"/>
                 <local:MDButton x:Name="FanBt" HorizontalAlignment="Left" Height="35" Margin="0,95,0,0" VerticalAlignment="Top" Width="95" TName="关注" pData="M451.318,451.318L87.282,451.318C53.528,451.318 26.548,478.486 26.548,512 26.548,545.747 53.739,572.682 87.282,572.682L451.318,572.682 451.318,936.718C451.318,970.472 478.486,997.452 512,997.452 545.747,997.452 572.682,970.261 572.682,936.718L572.682,572.682 936.718,572.682C970.472,572.682 997.452,545.514 997.452,512 997.452,478.253 970.261,451.318 936.718,451.318L572.682,451.318 572.682,87.282C572.682,53.528 545.514,26.548 512,26.548 478.253,26.548 451.318,53.739 451.318,87.282L451.318,451.318z" Theme="2" MouseDown="FanBt_MouseDown"/>
             </Grid>
-            <WrapPanel x:Name="DHBtns" Height="30" VerticalAlignment="Bottom" Background="#4C000000">
-                <local:BottomTick x:Name="TuiJianBtn" HorizontalAlignment="Left" Width="50" IsChecked="True" HasBg="True" Height="30" Margin="25,0,0,0"/>
-                <local:BottomTick x:Name="SongsBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="30" Margin="40,0,0,0" Text="歌曲"/>
-                <local:BottomTick x:Name="AlbumBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="30" Margin="40,0,0,0" Text="专辑"/>
-                <local:BottomTick x:Name="MVBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="30" Margin="40,0,0,0" Text="MV"/>
-                <local:BottomTick x:Name="MoreBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="30" Margin="40,0,0,0" Text="详情"/>
+            <WrapPanel x:Name="DHBtns" Height="40" VerticalAlignment="Bottom" Background="#4C000000">
+                <local:BottomTick x:Name="TuiJianBtn" HorizontalAlignment="Left" Width="50" IsChecked="True" HasBg="True" Height="40" Margin="25,0,0,0" MouseDown="TuiJianBtn_MouseDown"/>
+                <local:BottomTick x:Name="SongsBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="歌曲" MouseDown="SongsBtn_MouseDown"/>
+                <local:BottomTick x:Name="AlbumBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="专辑"/>
+                <local:BottomTick x:Name="MVBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="MV"/>
+                <local:BottomTick x:Name="MoreBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="详情"/>
             </WrapPanel>
-            <Border x:Name="TX" HorizontalAlignment="Left" Height="250" VerticalAlignment="Center" Width="250" CornerRadius="250" Background="Black" Margin="40,0,0,30" Visibility="Collapsed"/>
+            <Border x:Name="TX" HorizontalAlignment="Left" Height="225" VerticalAlignment="Center" Width="225" CornerRadius="250" Background="Black" Margin="40,0,0,30" Visibility="Collapsed"/>
         </Grid>
         <Grid x:Name="grid" Margin="0,400,0,0">
             <WrapPanel x:Name="TuiJianPage" VerticalAlignment="Top">
@@ -108,8 +107,7 @@
                     <local:SingerItem Height="200" Width="150" Margin="20,0,0,0"/>
                 </WrapPanel>
             </WrapPanel>
-
+            <Grid x:Name="SongsPage"/>
         </Grid>
-
     </Grid>
 </UserControl>

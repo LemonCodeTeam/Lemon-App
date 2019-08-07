@@ -413,8 +413,8 @@ namespace Lemon_App
             if (Data.Visibility == Visibility.Visible)
                 foreach (DataItem dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
-            if (ContentItem.Visibility == Visibility.Visible)
-                (Cisv.Content as FrameworkElement).Width = ContentItem.ActualWidth;
+            if (SingerDataPage.Visibility == Visibility.Visible)
+                (Cisv.Content as FrameworkElement).Width = SingerDataPage.ActualWidth;
         }
         /// <summary>
         /// 遍历调整宽度
@@ -837,19 +837,22 @@ namespace Lemon_App
         }
         #endregion
         #region N/S Page 切换页面
-        public void RunAnimation(DependencyObject TPage)
+        public void RunAnimation(DependencyObject TPage,Thickness value=new Thickness())
         {
             var sb = Resources["NSPageAnimation"] as Storyboard;
             foreach (Timeline ac in sb.Children)
             {
                 Storyboard.SetTarget(ac, TPage);
+                if (ac is ThicknessAnimationUsingKeyFrames) {
+                    (ac as ThicknessAnimationUsingKeyFrames).KeyFrames[1].Value = value;
+                }
             }
             sb.Begin();
         }
 
         private Label LastClickLabel = null;
         private Grid LastPage = null;
-        public void NSPage(Label ClickLabel, Grid TPage)
+        public void NSPage(Label ClickLabel, Grid TPage,Thickness value =new Thickness())
         {
             if (TPage == Data)
                 if (DataPage_DownloadMod)
@@ -860,7 +863,7 @@ namespace Lemon_App
             if (LastPage == null) LastPage = HomePage;
             LastPage.Visibility = Visibility.Collapsed;
             TPage.Visibility = Visibility.Visible;
-            RunAnimation(TPage);
+            RunAnimation(TPage,value);
             if (ClickLabel != null) LastClickLabel = ClickLabel;
             LastPage = TPage;
 
@@ -892,11 +895,30 @@ namespace Lemon_App
             singer_now = si.data;
             ixSinger = osx;
             OpenLoading();
+            BtD.LastBt = null;
             var data =await MusicLib.GetSingerPageAsync(si.data.Mid);
             Cisv.Content = new SingerPage(data, this) {
                 Width= ContentPage.ActualWidth
             };
-            NSPage(SingerBtn, ContentItem);
+            SingerDP_Top.Uid = "gun";
+            if (data.HasBigPic)
+            {
+                SetTopWhite(true);
+                SingerDP_Top.Visibility = Visibility.Visible;
+
+                var im = await ImageCacheHelp.GetImageByUrl(data.mSinger.Photo);
+                var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
+                var imb = im.ToBitmap();
+                imb.GaussianBlur(ref rect, 80);
+                SingerDP_Top.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
+                SingerDP_Top.Uid = "ok";
+
+                NSPage(SingerBtn, SingerDataPage, new Thickness(0, -50, 0, 0));
+            }
+            else {
+                SetTopWhite(false); ;
+                SingerDP_Top.Visibility = Visibility.Collapsed;
+                NSPage(SingerBtn, SingerDataPage); }
             Cisv.ScrollToVerticalOffset(0);
             CloseLoading();
             /*
@@ -1515,6 +1537,12 @@ namespace Lemon_App
                 PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
             }
         }
+        public void PushPlayMusic(DataItem dt,ListBox DataSource)
+        {
+            AddPlayDL(dt,DataSource);
+            dt.ShowDx();
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
+        }
         public async void PlayMusic(DataItem dt)
         {
             if (await MusicLib.GetUrlAsync(dt.music.MusicID) == null)
@@ -1526,17 +1554,18 @@ namespace Lemon_App
                 PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
             }
         }
-        public PlayDLItem AddPlayDL_All(DataItem dt,int index=-1) {
+        public PlayDLItem AddPlayDL_All(DataItem dt,int index=-1,ListBox source=null) {
+            if (source == null) source = DataItemsList;
             DLMode = false;
             PlayDL_List.Items.Clear();
-            foreach (DataItem e in DataItemsList.Items)
+            foreach (DataItem e in source.Items)
             {
                 var k = new PlayDLItem(e.music);
                 k.MouseDoubleClick += K_MouseDoubleClick;
                 PlayDL_List.Items.Add(k);
             }
             if (index == -1)
-                index = DataItemsList.Items.IndexOf(dt);
+                index = source.Items.IndexOf(dt);
             PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
             dk.p(true);
             MusicData = dk;
@@ -1552,17 +1581,17 @@ namespace Lemon_App
             MusicData = k;
         }
         public bool DLMode = false;
-        public void AddPlayDL(DataItem dt) {
+        public void AddPlayDL(DataItem dt,ListBox source=null) {
             if (np == NowPage.GDItem)
             {
                 //本次为歌单播放 那么将所有歌曲加入播放队列 
-                AddPlayDL_All(dt);
+                AddPlayDL_All(dt,-1,source);
             }
             else
             {
                 //本次为其他播放，若上一次也是其他播放，那么添加所有，不是则插入当前的
                 if (DLMode)
-                    AddPlayDL_All(dt);
+                    AddPlayDL_All(dt,-1,source);
                 else AddPlayDl_CR(dt);
             }
         }
@@ -2116,7 +2145,7 @@ namespace Lemon_App
         #endregion
         #region Download
         private List<Music> DownloadDL = new List<Music>();
-        private void AddDownloadTask(Music data) {
+        public void AddDownloadTask(Music data) {
             string name =TextHelper.MakeValidFileName (Settings.USettings.DownloadName
                 .Replace("[I]", (DownloadDL.Count() + 1).ToString())
                 .Replace("[M]", data.MusicName)
@@ -2222,6 +2251,19 @@ namespace Lemon_App
             (Resources["Downloading"] as Storyboard).Stop();
             DownloadItemsList.Children.Clear();
             NonePage_Copy.Visibility = Visibility.Visible;
+        }
+        public void PushDownload(ListBox c) {
+            var cc = (Resources["Downloading"] as Storyboard);
+            if (DownloadIsFinish)
+                cc.Begin();
+            foreach (var x in c.Items)
+            {
+                var f = x as DataItem;
+                if (f.isChecked == true)
+                {
+                    AddDownloadTask(f.music);
+                }
+            }
         }
         private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -2531,6 +2573,49 @@ namespace Lemon_App
                 bd.PreviewKeyDown += Search_SmartBoxList_KeyDown;
                 Search_SmartBoxList.Items.Add(bd);
             }
+        }
+
+        public void SetTopWhite(bool h) {
+            if (h)
+            {
+                SearchBox.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#19000000"));
+                SearchBox.Foreground = new SolidColorBrush(Colors.White);
+                SkinBtn.ColorDx = SearchBox.Foreground;
+                SettingsBtn.ColorDx = SearchBox.Foreground;
+                CloseBtn.ColorDx = SearchBox.Foreground;
+                MaxBtn.ColorDx = SearchBox.Foreground;
+                MinBtn.ColorDx = SearchBox.Foreground;
+            }
+            else {
+                SearchBox.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0C000000"));
+                SearchBox.SetResourceReference(ForegroundProperty,"ResuColorBrush");
+                SkinBtn.ColorDx = null;
+                SettingsBtn.ColorDx = null;
+                CloseBtn.ColorDx = null;
+                MaxBtn.ColorDx = null;
+                MinBtn.ColorDx = null;
+            }
+        }
+
+        private void Cisv_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            Console.WriteLine("ScrollChanged:"+Cisv.VerticalOffset);
+            if (SingerDP_Top.Uid == "ok") {
+                if (Cisv.VerticalOffset >= 350){
+                    if (SingerDP_Top.Visibility == Visibility.Collapsed) {
+                        SingerDP_Top.Visibility = Visibility.Visible;
+                    }
+                }
+                else {
+                    SingerDP_Top.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void SingerDataPage_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (SingerDataPage.Visibility == Visibility.Collapsed)
+                SetTopWhite(false);
         }
     }
 }

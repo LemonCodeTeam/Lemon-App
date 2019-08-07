@@ -23,6 +23,8 @@ namespace Lemon_App
         public BottomTick()
         {
             InitializeComponent();
+            if(BtD.LastBt==null)
+                BtD.LastBt = this;
         }
         private bool isChecked = false;
         public bool IsChecked { get => isChecked;set {
@@ -72,6 +74,7 @@ namespace Lemon_App
                 else tb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 bt.Visibility = Visibility.Collapsed;
             }
+            isChecked = h;
         }
     }
     public class BtD {

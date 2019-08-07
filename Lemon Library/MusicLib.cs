@@ -1105,7 +1105,7 @@ jpg
         /// <param name="mid"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<Music>> GetSingerMusicByIdAsync(string mid,int osx=1) {
+        public static async Task<List<Music>> GetSingerMusicByIdAsync(string mid,int osx=1) {
             int begin = (osx - 1) * 30;
             JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=24&singermid={mid}&order=listen&begin={begin}&num=30&songstatus=1"));
             List<Music> dt = new List<Music>();
