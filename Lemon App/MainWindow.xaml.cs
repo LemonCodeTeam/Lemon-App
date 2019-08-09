@@ -515,7 +515,7 @@ namespace Lemon_App
             Process.Start("explorer", DownloadPathTb.Text);
         }
 
-        private void DownloadWithLyric_Checked(object sender, RoutedEventArgs e)
+        private void DownloadWithLyric_Click(object sender, RoutedEventArgs e)
         {
             Settings.USettings.DownloadWithLyric = (bool)DownloadWithLyric.IsChecked;
         }

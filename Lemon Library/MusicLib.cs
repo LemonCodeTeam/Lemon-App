@@ -1085,6 +1085,22 @@ jpg
             return mg;
         }
 
+        public static async Task<List<MVData>> GetSingerMvList(string id,int osx=1) {
+            int num = 20;
+            int begin = (osx - 1) * num;
+            JObject mv = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?cid=205360581&singermid=" + id + "&order=listen&begin="+begin+"&num="+num+"&g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            List<MVData> mVDatas = new List<MVData>();
+            foreach (var c in mv["data"]["list"])
+            {
+                MVData m = new MVData();
+                m.id = c["vid"].ToString();
+                m.img = c["pic"].ToString();
+                m.name = c["title"].ToString();
+                m.lstCount = int.Parse(c["listenCount"].ToString()).IntToWn();
+                mVDatas.Add(m);
+            }
+            return mVDatas;
+        }
 
         public static async Task<SingerDesc> GetSingerDesc(string id) {
             string data = await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_singer_desc.fcg?singermid="+id+"&utf8=1&outCharset=utf-8&format=xml&r=1565243621590");
