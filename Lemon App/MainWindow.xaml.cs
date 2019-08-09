@@ -351,6 +351,9 @@ namespace Lemon_App
                     if (TwMessageBox.Show("(￣▽￣)\"登录失效了，请重新登录"))
                         UserTX_MouseDown(null, null);
             }
+            //---------------MVPlayer Timer
+            mvt.Interval = 1000;
+            mvt.Tick += Mvt_Tick;
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -1707,7 +1710,7 @@ namespace Lemon_App
                 if (MusicPlay_tb.Text == "1.25x")
                 {
                     MusicLib.mp.SpeedRatio = 1d;
-                    MusicPlay_tb.Text = "1x";
+                    MusicPlay_tb.Text = "倍速";
                 }
                 else
                 {
@@ -2071,12 +2074,10 @@ namespace Lemon_App
             Border_MouseDown_2(null,null);
             LoadPl();
         }
-        private async void LoadPl(string mid="") {
-            if(mid=="")
-                mid= Settings.USettings.Playing.MusicID;
+        private async void LoadPl() {
             NSPage(null, MusicPLPage);
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
-            List<MusicPL> data = await MusicLib.GetPLByQQAsync(mid);
+            List<MusicPL> data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
             MusicPlList.Children.Clear();
             foreach (var dt in data)
             {
@@ -2647,6 +2648,98 @@ namespace Lemon_App
         {
             if (SingerDataPage.Visibility == Visibility.Collapsed)
                 SetTopWhite(false);
+        }
+
+        string mvpause = "M735.744 49.664c-51.2 0-96.256 44.544-96.256 95.744v733.184c0 51.2 45.056 95.744 96.256 95.744s96.256-44.544 96.256-95.744V145.408c0-51.2-45.056-95.744-96.256-95.744z m-447.488 0c-51.2 0-96.256 44.544-96.256 95.744v733.184c0 51.2 45.056 95.744 96.256 95.744S384 929.792 384 878.592V145.408c0-51.2-44.544-95.744-95.744-95.744z";
+        string mvplay = "M766.464,448.170667L301.226667,146.944C244.394667,110.08,213.333333,126.293333,213.333333,191.146667L213.333333,832.853333C213.333333,897.706666,244.394666,913.834666,301.312,876.970667L766.378667,575.744C825.429334,537.514667,825.429334,486.314667,766.378667,448.085333z M347.733333,948.650667C234.666667,1021.781333,128,966.314667,128,832.938667L128,191.146667C128,57.6,234.752,2.218667,347.733333,75.349333L812.8,376.576C923.733333,448.426667,923.733333,575.658667,812.8,647.424L347.733333,948.650667z";
+        bool MVplaying = false;
+        System.Windows.Forms.Timer mvt = new System.Windows.Forms.Timer();
+        public async void PlayMv(MVData mVData) {
+            NSPage(null, MvPage);
+            MVplaying = true;
+            MvPlay_Tb.Text = mVData.name;
+            MvPlay_Tb.Uid = mVData.id;
+            MvPlay_Desc.Text = await MusicLib.GetMVDesc(mVData.id);
+            MvPlay_ME.Source = new Uri(await MusicLib.GetMVUrl(mVData.id));
+            MvPlay_ME.Play();
+            mvpath.Data = Geometry.Parse(mvpause);
+            mvt.Start();
+            if (isplay) PlayBtn_MouseDown(null, null);
+        }
+
+        private void Mvt_Tick(object sender, EventArgs e)
+        {
+            var jd_all = MvPlay_ME.NaturalDuration.HasTimeSpan ? MvPlay_ME.NaturalDuration.TimeSpan: TimeSpan.FromMilliseconds(0);
+            Mvplay_jd.Maximum = jd_all.TotalMilliseconds;
+            Mvplay_jdtb_all.Text = TextHelper.TimeSpanToms(jd_all);
+            var jd_now = MvPlay_ME.Position;
+            Mvplay_jdtb_now.Text=TextHelper.TimeSpanToms(jd_now);
+            Mvplay_jd.Value = jd_now.TotalMilliseconds;
+        }
+
+        private async void MvPlay_PL_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NSPage(null, MusicPLPage);
+            MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
+            List<MusicPL> data = await MusicLib.GetMVPL(MvPlay_Tb.Uid);
+            MusicPlList.Children.Clear();
+            foreach (var dt in data)
+            {
+                MusicPlList.Children.Add(new PlControl(dt) { Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+            }
+        }
+        private void Mvplay_plps_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MVplaying)
+            {
+                MVplaying = false;
+                MvPlay_ME.Pause();
+                mvpath.Data = Geometry.Parse(mvplay);
+            }
+            else
+            {
+                MVplaying = true;
+                MvPlay_ME.Play();
+                mvpath.Data = Geometry.Parse(mvpause);
+            }
+        }
+
+        private void MvPlay_ME_MouseEnter(object sender, MouseEventArgs e)
+        {
+            mvct.Height=30;
+        }
+
+        private void MvPlay_ME_MouseLeave(object sender, MouseEventArgs e)
+        {
+            mvct.Height=0;
+        }
+        private void MvJd_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            MvPlay_ME.Position = TimeSpan.FromMilliseconds(Mvplay_jd.Value);
+            MvCanJd = true;
+        }
+        bool MvCanJd = true;
+        private void MvJd_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MvCanJd = false;
+        }
+        private void MvJd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                if (!MvCanJd)
+                    Mvplay_jdtb_now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(Mvplay_jd.Value));
+            }
+            catch { }
+        }
+
+        private void MvPage_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (MvPage.Visibility == Visibility.Collapsed)
+            {
+                MvPlay_ME.Stop();
+                MvPlay_ME.Close();
+            }
         }
     }
 }

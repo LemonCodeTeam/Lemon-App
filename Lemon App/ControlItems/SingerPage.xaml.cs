@@ -104,6 +104,7 @@ namespace Lemon_App
                 MVItem m = new MVItem();
                 m.Margin = new Thickness(5,0,5,0);
                 Grid.SetColumn(m, ix);
+                m.MouseDown += M_MouseDown;
                 ix++;
                 NewMVList.Children.Add(m);
                 m.Data = c;
@@ -119,6 +120,11 @@ namespace Lemon_App
                 m.MouseDown += mw.GetSinger;
                 SimilarSingerList.Children.Add(m);
             }
+        }
+
+        private void M_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            mw.PlayMv((sender as MVItem).Data);
         }
 
         private void K_Play(DataItem sender)
@@ -206,6 +212,9 @@ namespace Lemon_App
                 else if (LastPage == AlbumPage) {
                     AlbumIndex++;
                     LoadAlbum();
+                }else if (LastPage == MvPage) {
+                    MvIndex++;
+                    LoadMv();
                 }
             }
         }
@@ -230,6 +239,8 @@ namespace Lemon_App
         {
             foreach (FrameworkElement c in HotMusicList.Items)
                 c.Width = ActualWidth;
+            WidthUI(AlbumItemsList);
+            WidthUI(MvItemsList);
         }
 
         private int AlbumIndex = 1;
@@ -247,7 +258,7 @@ namespace Lemon_App
             var data = await MusicLib.GetSingerAlbumById(Data.mSinger.Mid,AlbumIndex);
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(10, 0, 10, 20) };
+                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);
@@ -267,9 +278,9 @@ namespace Lemon_App
                 var uc = wp.Children[0] as UserControl;
                 double max = uc.MaxWidth;
                 double min = uc.MinWidth;
-                if (wp.ActualWidth > (20 + max) * lineCount)
+                if (wp.ActualWidth > (24 + max) * lineCount)
                     lineCount++;
-                else if (wp.ActualWidth < (20 + min) * lineCount)
+                else if (wp.ActualWidth < (24 + min) * lineCount)
                     lineCount--;
                 WidTX(wp, lineCount);
             }
@@ -278,7 +289,7 @@ namespace Lemon_App
         private void WidTX(WrapPanel wp, int lineCount)
         {
             foreach (UserControl dx in wp.Children)
-                dx.Width = (wp.ActualWidth - 20 * lineCount) / lineCount;
+                dx.Width = (wp.ActualWidth - 24 * lineCount) / lineCount;
         }
         private void K_ImMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -313,6 +324,29 @@ namespace Lemon_App
             }
             await Task.Delay(10);
             NSPage(MorePage);
+        }
+
+        int MvIndex = 1;
+        private async void MVBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MvItemsList.Children.Count == 0) {
+                LoadMv();
+            }
+            await Task.Delay(10);
+            NSPage(MvPage);
+        }
+
+        public async void LoadMv() {
+            var data = await MusicLib.GetSingerMvList(Data.mSinger.Mid, MvIndex);
+            foreach (var c in data)
+            {
+                MVItem m = new MVItem();
+                m.Margin = new Thickness(12, 0, 12, 20);
+                m.MouseDown += M_MouseDown;
+                MvItemsList.Children.Add(m);
+                m.Data = c;
+            }
+            WidthUI(MvItemsList);
         }
     }
 }
