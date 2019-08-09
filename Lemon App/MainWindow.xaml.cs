@@ -2071,10 +2071,12 @@ namespace Lemon_App
             Border_MouseDown_2(null,null);
             LoadPl();
         }
-        private async void LoadPl() {
+        private async void LoadPl(string mid="") {
+            if(mid=="")
+                mid= Settings.USettings.Playing.MusicID;
             NSPage(null, MusicPLPage);
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
-            List<MusicPL> data = await ml.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+            List<MusicPL> data = await MusicLib.GetPLByQQAsync(mid);
             MusicPlList.Children.Clear();
             foreach (var dt in data)
             {

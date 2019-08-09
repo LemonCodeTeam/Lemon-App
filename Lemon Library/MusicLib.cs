@@ -1510,6 +1510,38 @@ jpg
         }
         #endregion
         #region MV
+        public static async Task<List<MusicPL>> GetMVPL(string id) {
+            JObject ds = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk="+Settings.USettings.g_tk+"&loginUin="+Settings.USettings.LemonAreeunIts+"&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360772&reqtype=2&biztype=5&topid="+id+"&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=10101010"));
+            List<MusicPL> data = new List<MusicPL>();
+            JToken hcc = ds["hot_comment"]["commentlist"];
+            for (int i = 0; i != hcc.Count(); i++)
+            {
+                JToken hcc_i = ds["hot_comment"]["commentlist"][i];
+                MusicPL mpl = new MusicPL()
+                {
+                    img = hcc_i["avatarurl"].ToString(),
+                    like = hcc_i["praisenum"].ToString(),
+                    name = hcc_i["nick"].ToString(),
+                    text = TextHelper.Exem(hcc_i["rootcommentcontent"].ToString().Replace(@"\n", "\n")),
+                    commentid = hcc_i["commentid"].ToString()
+                };
+                DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+                long lTime = long.Parse(hcc_i["time"].ToString() + "0000000");
+                TimeSpan toNow = new TimeSpan(lTime);
+                DateTime daTime = dtStart.Add(toNow);
+                mpl.time = daTime.ToString("yyyy-MM-dd  HH:mm");
+                if (hcc_i["ispraise"].ToString() == "1")
+                    mpl.ispraise = true;
+                else mpl.ispraise = false;
+                data.Add(mpl);
+            }
+            return data;
+        }
+        public static async Task<string> GetMVDesc(string id) {
+            JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+                "{\"comm\":{\"g_tk\":\""+Settings.USettings.g_tk+"\",\"uin\":\""+Settings.USettings.LemonAreeunIts+"\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"mvinfo\":{\"module\":\"video.VideoDataServer\",\"method\":\"get_video_info_batch\",\"param\":{\"vidlist\":[\""+id+"\"],\"required\":[\"vid\",\"type\",\"sid\",\"cover_pic\",\"duration\",\"singers\",\"video_switch\",\"msg\",\"name\",\"desc\",\"playcnt\",\"pubdate\",\"isfav\",\"gmid\"]}}}"));
+            return o["mvinfo"]["data"][id]["desc"].ToString();
+        }
         public static async Task<string> GetMVUrl(string id) {
             JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
                 "{\"getMvUrl\":{\"module\":\"gosrf.Stream.MvUrlProxy\",\"method\":\"GetMvUrls\",\"param\":{\"vids\":[\""+id+"\"],\"request_typet\":10001}},\"comm\":{\"g_tk\":\""+Settings.USettings.g_tk+"\",\"uin\":\""+Settings.USettings.LemonAreeunIts+"\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
@@ -1556,7 +1588,7 @@ jpg
         /// </summary>
         /// <param name="mid"></param>
         /// <returns></returns>
-        public async Task<List<MusicPL>> GetPLByQQAsync(string mid)
+        public static async Task<List<MusicPL>> GetPLByQQAsync(string mid)
         {
             string id = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&tpl=yqq_song_detail&format=json&g_tk=268405378&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"))["data"][0]["id"].ToString();
             string dt = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=642290724&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010");

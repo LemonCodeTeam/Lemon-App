@@ -1387,7 +1387,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
                 <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,0">
-                    <Grid x:Name="HomePage">
+                    <Grid x:Name="HomePage" d:IsHidden="True">
                         <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
                             <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
                                 <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=HomePage, Mode=OneWay}"/>
@@ -1784,8 +1784,11 @@
                         </Border>
                         <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
                     </Grid>
-                    <Grid x:Name="MvPage" Visibility="Collapsed">
+                    <Grid x:Name="MvPage">
                         <MediaElement Margin="0,0,0,80"/>
+                        <Grid Height="80" VerticalAlignment="Bottom">
+                            <TextBlock Margin="10,15,0,0" TextWrapping="Wrap" Text="Love Story - Taylor Swift" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}" FontSize="20" Height="55"/>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid x:Name="TitlePage" VerticalAlignment="Top" Height="50" Background="#00000000">

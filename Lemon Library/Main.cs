@@ -12,8 +12,8 @@ namespace LemonLibrary
         static async System.Threading.Tasks.Task Main() {
             Settings.LoadUSettings("2728578956");
             string id = "k00242mjco0";
-            var d = await MusicLib.GetMVUrl(id);
-            Console.WriteLine(d);
+            var d = await MusicLib.GetMVPL(id);
+            Console.WriteLine(d[0].text);
             Console.ReadLine();
         }
 
