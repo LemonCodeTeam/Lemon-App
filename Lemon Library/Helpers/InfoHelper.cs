@@ -26,6 +26,13 @@ namespace LemonLibrary
             public List<MusicGD> Gdata = new List<MusicGD>();
             public List<Music> NewMusic = new List<Music>();
         }
+
+        public class SingerDesc {
+            public string Desc;
+            public Dictionary<string, string> basic;
+            public Dictionary<string,string> other;
+        }
+
         public class SingerPageData {
             /// <summary>
             /// 歌手信息

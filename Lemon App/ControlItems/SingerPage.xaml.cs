@@ -32,6 +32,7 @@ namespace Lemon_App
             mw = m;
             if (!spd.HasBigPic) {
                 (Resources["mSingerTX"] as Storyboard).Begin();
+                DHBtns.Background = new SolidColorBrush(Colors.Transparent);
                 SingerName.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 FansCount.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Low");
                 foreach (BottomTick bt in DHBtns.Children) {
@@ -42,6 +43,7 @@ namespace Lemon_App
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            mw.Cisv.ScrollChanged += Cisv_MusicListScrollChanged;
             LastPage = TuiJianPage;
             SingerName.Text = Data.mSinger.Name;
 
@@ -80,9 +82,9 @@ namespace Lemon_App
                     k.ShowDx();
                 }
                 k.GetToSingerPage += mw.K_GetToSingerPage;
-                k.Play += mw.PlayMusic;
+                k.Play += K_Play;
                 k.Download += mw.K_Download;
-                HotMusicList.Children.Add(k);
+                HotMusicList.Items.Add(k);
             }
 
             int i = 0;
@@ -119,6 +121,12 @@ namespace Lemon_App
             }
         }
 
+        private void K_Play(DataItem sender)
+        {
+            mw.np = NowPage.SingerItem;
+            mw.PushPlayMusic(sender, HotMusicList);
+        }
+
         private void F_MouseDown(object sender, MouseButtonEventArgs e)
         {
             mw.IFVCALLBACK_LoadAlbum((sender as FLGDIndexItem).id);
@@ -138,7 +146,7 @@ namespace Lemon_App
         {
             mw.DLMode = false;
             mw.PlayDL_List.Items.Clear();
-            foreach (DataItem ex in HotMusicList.Children)
+            foreach (DataItem ex in HotMusicList.Items)
             {
                 var k = new PlayDLItem(ex.music);
                 k.MouseDoubleClick += mw.K_MouseDoubleClick;
@@ -146,7 +154,7 @@ namespace Lemon_App
             }
             PlayDLItem dk = mw.PlayDL_List.Items[0] as PlayDLItem;
             dk.p(true);
-            var n = HotMusicList.Children[0] as DataItem;
+            var n = HotMusicList.Items[0] as DataItem;
             mw.MusicData = dk;
             mw.PlayMusic(n);
         }
@@ -180,9 +188,6 @@ namespace Lemon_App
             fm.Visibility = Visibility.Visible;
             mw.RunAnimation(fm);
             LastPage = fm;
-            //------------附加处理
-            if(fm!=SongsPage&&mview!=null)
-                mw.Cisv.ScrollChanged += Cisv_MusicListScrollChanged;
         }
         private void TuiJianBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -192,9 +197,16 @@ namespace Lemon_App
         private async void Cisv_MusicListScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (mw.Cisv.IsVerticalScrollBarAtButtom()) {
-                PageIndex++;
-                var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid, PageIndex);
-                mview.CreatItems(data);
+                if (LastPage == SongsPage)
+                {
+                    PageIndex++;
+                    var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid, PageIndex);
+                    mview.CreatItems(data);
+                }
+                else if (LastPage == AlbumPage) {
+                    AlbumIndex++;
+                    LoadAlbum();
+                }
             }
         }
 
@@ -205,19 +217,102 @@ namespace Lemon_App
         private MusicListView mview=null;
         private async void SongsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(SongsPage);
-            mw.Cisv.ScrollChanged += Cisv_MusicListScrollChanged;
             if (SongsPage.Children.Count == 0) {
                 var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid);
                 mview = new MusicListView(data, mw,NowPage.SingerItem);
                 SongsPage.Children.Add(mview);
             }
+            await Task.Delay(10);
+            NSPage(SongsPage);
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            foreach (FrameworkElement c in HotMusicList.Children)
+            foreach (FrameworkElement c in HotMusicList.Items)
                 c.Width = ActualWidth;
+        }
+
+        private int AlbumIndex = 1;
+        private async void AlbumBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (AlbumItemsList.Children.Count == 0) {
+                //new Thickness(10, 0, 10, 20)
+                LoadAlbum();
+
+            }
+            await Task.Delay(10);
+            NSPage(AlbumPage);
+        }
+        private async void LoadAlbum() {
+            var data = await MusicLib.GetSingerAlbumById(Data.mSinger.Mid,AlbumIndex);
+            foreach (var d in data)
+            {
+                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(10, 0, 10, 20) };
+                k.StarEvent += (sx) =>
+                {
+                    MusicLib.AddGDILike(sx.id);
+                    Toast.Send("收藏成功");
+                };
+                k.Width = 200;
+                k.ImMouseDown += K_ImMouseDown;
+                AlbumItemsList.Children.Add(k);
+            }
+            WidthUI(AlbumItemsList);
+        }
+        public void WidthUI(WrapPanel wp)
+        {
+            if (wp.Visibility == Visibility.Visible && wp.Children.Count > 0)
+            {
+                int lineCount = 4;
+                var uc = wp.Children[0] as UserControl;
+                double max = uc.MaxWidth;
+                double min = uc.MinWidth;
+                if (wp.ActualWidth > (20 + max) * lineCount)
+                    lineCount++;
+                else if (wp.ActualWidth < (20 + min) * lineCount)
+                    lineCount--;
+                WidTX(wp, lineCount);
+            }
+        }
+
+        private void WidTX(WrapPanel wp, int lineCount)
+        {
+            foreach (UserControl dx in wp.Children)
+                dx.Width = (wp.ActualWidth - 20 * lineCount) / lineCount;
+        }
+        private void K_ImMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            mw.IFVCALLBACK_LoadAlbum((sender as FLGDIndexItem).id);
+        }
+
+        private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MoreText.Inlines.Count == 0) {
+                var data = await MusicLib.GetSingerDesc(Data.mSinger.Mid);
+                MoreText.Inlines.Add(new Run() { Text=data.Desc});
+                MoreText.Inlines.Add(new LineBreak());
+                MoreText.Inlines.Add(new LineBreak());
+                Run r1 = new Run() { Text = "基本资料" };
+                r1.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Most");
+                MoreText.Inlines.Add(r1);
+                MoreText.Inlines.Add(new LineBreak());
+                foreach (var c in data.basic) {
+                    MoreText.Inlines.Add(new Run() { Text = c.Key+"："+c.Value });
+                    MoreText.Inlines.Add(new LineBreak());
+                }
+                MoreText.Inlines.Add(new LineBreak());
+                foreach (var c in data.other) {
+                    Run r2 = new Run() { Text =c.Key };
+                    r2.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Most");
+                    MoreText.Inlines.Add(r2);
+                    MoreText.Inlines.Add(new LineBreak());
+                    MoreText.Inlines.Add(new Run() { Text = c.Value });
+                    MoreText.Inlines.Add(new LineBreak());
+                    MoreText.Inlines.Add(new LineBreak());
+                }
+            }
+            await Task.Delay(10);
+            NSPage(MorePage);
         }
     }
 }

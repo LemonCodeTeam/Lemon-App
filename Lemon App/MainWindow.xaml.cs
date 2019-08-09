@@ -409,7 +409,14 @@ namespace Lemon_App
             WidthUI(GDItemsList);
             WidthUI(FLGDItemsList);
             WidthUI(GDILikeItemsList);
-            WidthUI(MusicPlList);
+            WidthUI(HomePage_Gdtj);
+            WidthUI(HomePage_Nm);
+            WidthUI(SkinIndexList);
+            WidthUI(topIndexList);
+
+            if (MusicPlList.Visibility == Visibility.Visible)
+                foreach (UserControl dx in MusicPlList.Children)
+                    dx.Width = ContentPage.ActualWidth;
             if (Data.Visibility == Visibility.Visible)
                 foreach (DataItem dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
@@ -422,11 +429,23 @@ namespace Lemon_App
         /// <param name="wp"></param>
         public void WidthUI(WrapPanel wp)
         {
-            if (wp.Visibility == Visibility.Visible)
+            if (wp.Visibility == Visibility.Visible && wp.Children.Count>0)
             {
-                foreach (UserControl dx in wp.Children)
-                    dx.Width = ContentPage.ActualWidth / 5;
+                int lineCount = int.Parse(wp.Uid);
+                var uc = wp.Children[0] as UserControl;
+                double max = uc.MaxWidth;
+                double min = uc.MinWidth;
+                if (ContentPage.ActualWidth > (24 + max) * lineCount)
+                    lineCount++;
+                else if (ContentPage.ActualWidth < (24 + min) * lineCount)
+                    lineCount--;
+                WidTX(wp, lineCount);
             }
+        }
+
+        private void WidTX(WrapPanel wp,int lineCount) {
+            foreach (UserControl dx in wp.Children)
+                dx.Width = (ContentPage.ActualWidth - 24 * lineCount) / lineCount;
         }
         #endregion
         #endregion
@@ -626,7 +645,7 @@ namespace Lemon_App
                     Settings.USettings.Skin_Theme_B = sc.theme.B.ToString();
                     Settings.SaveSettings();
                 };
-                sc.Margin = new Thickness(10, 0, 0, 0);
+                sc.Margin = new Thickness(12, 0, 12, 20);
                 SkinIndexList.Children.Add(sc);
                 i++;
             }
@@ -645,7 +664,7 @@ namespace Lemon_App
                 Settings.USettings.Skin_Path = "";
                 Settings.SaveSettings();
             };
-            sxc.Margin = new Thickness(10, 0, 0, 0);
+            sxc.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(sxc);
 
             SkinControl blur = new SkinControl(-2, "磨砂黑", Color.FromArgb(0, 0, 0, 0));
@@ -661,7 +680,7 @@ namespace Lemon_App
                 Settings.USettings.Skin_Path = "BlurBlackTheme";
                 Settings.SaveSettings();
             };
-            blur.Margin = new Thickness(10, 0, 0, 0);
+            blur.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blur);
             SkinControl blurWhite = new SkinControl(-3, "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
@@ -680,8 +699,9 @@ namespace Lemon_App
                 Settings.USettings.Skin_Path = "BlurWhiteTheme";
                 Settings.SaveSettings();
             };
-            blurWhite.Margin = new Thickness(10, 0, 0, 0);
+            blurWhite.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blurWhite);
+            WidthUI(SkinIndexList);
         }
         #endregion
         #region 功能区
@@ -692,7 +712,7 @@ namespace Lemon_App
             HomePage_IFV.Updata(data.focus, this);
             foreach (var a in data.Gdata)
             {
-                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 175, Height =175, Margin = new Thickness(20, 0, 0, 0) };
+                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 175, Height =175, Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);
@@ -701,9 +721,10 @@ namespace Lemon_App
                 k.ImMouseDown += FxGDMouseDown;
                 HomePage_Gdtj.Children.Add(k);
             }
+            WidthUI(HomePage_Gdtj);
             foreach (var a in data.NewMusic)
             {
-                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl) { Width = 175, Height =175, Margin = new Thickness(20, 0, 0, 0) };
+                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl) { Width = 175, Height =175, Margin = new Thickness(10, 0,10, 20) };
                 k.Tag = a;
                 k.ImMouseDown += (object s, MouseButtonEventArgs es) => {
                     var sx = s as FLGDIndexItem;
@@ -714,6 +735,7 @@ namespace Lemon_App
                 };
                 HomePage_Nm.Children.Add(k);
             }
+            WidthUI(HomePage_Nm);
         }
         bool FLGDPage_Tag_IsOpen = false;
         private void FLGDPage_Tag_Turn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -766,9 +788,10 @@ namespace Lemon_App
             {
                 var top = new TopControl(d);
                 top.MouseDown += Top_MouseDown;
-                top.Margin = new Thickness(0, 0, 10, 20);
+                top.Margin = new Thickness(12, 0, 12, 20);
                 topIndexList.Children.Add(top);
             }
+            WidthUI(topIndexList);
         }
         /// <summary>
         /// 选择了TOP项
@@ -912,12 +935,13 @@ namespace Lemon_App
                 imb.GaussianBlur(ref rect, 80);
                 SingerDP_Top.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
                 SingerDP_Top.Uid = "ok";
-
+                await Task.Delay(10);
                 NSPage(SingerBtn, SingerDataPage, new Thickness(0, -50, 0, 0));
             }
             else {
                 SetTopWhite(false); ;
                 SingerDP_Top.Visibility = Visibility.Collapsed;
+                await Task.Delay(10);
                 NSPage(SingerBtn, SingerDataPage); }
             Cisv.ScrollToVerticalOffset(0);
             CloseLoading();
@@ -964,10 +988,11 @@ namespace Lemon_App
             }
             foreach (var d in data)
             {
-                var sinx = new SingerItem(d) { Margin = new Thickness(20, 0, 0, 20) };
+                var sinx = new SingerItem(d) { Margin = new Thickness(12, 0, 12, 20) };
                 sinx.MouseDown += GetSinger;
                 SingerItemsList.Children.Add(sinx);
             }
+            WidthUI(SingerItemsList);
             if (cur_page == 1) SingerPage_sv.ScrollToTop();
             CloseLoading();
             if (cur_page == 1) {
@@ -1177,7 +1202,7 @@ namespace Lemon_App
             if (osx == 1) FLGDItemsList.Children.Clear();
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(20, 0, 0, 20) };
+                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);
@@ -1187,6 +1212,7 @@ namespace Lemon_App
                 k.ImMouseDown += FxGDMouseDown;
                 FLGDItemsList.Children.Add(k);
             }
+            WidthUI(FLGDItemsList);
             if (osx == 1) FLGDPage_sv.ScrollToTop();
             CloseLoading();
             if (osx == 1) {
@@ -1258,11 +1284,12 @@ namespace Lemon_App
                 }
                 foreach (var d in dat)
                 {
-                    RadioItem a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(0, 0, 20, 20) };
+                    RadioItem a = new RadioItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(12, 0, 12, 20) };
                     a.MouseDown += GetRadio;
                     a.Width = RadioItemsList.ActualWidth / 5;
                     RadioItemsList.Children.Add(a);
                 }
+                WidthUI(RadioItemsList);
                 CloseLoading();
                 await Task.Delay(10);
                 RunAnimation(RadioItemsList);
@@ -2309,7 +2336,7 @@ namespace Lemon_App
                 {
                     if (!GData_Now.Contains(jm.Key))
                     {
-                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
+                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(12, 0, 12, 20) };
                         ks.DeleteEvent += async (fl) =>
                         {
                             if (TwMessageBox.Show("确定要删除吗?"))
@@ -2325,6 +2352,7 @@ namespace Lemon_App
                         GData_Now.Add(jm.Key);
                     }
                 }
+                WidthUI(GDItemsList);
                 var GdLikeData = await ml.GetGdILikeListAsync();
                 if (GdLikeData.Count != GDILikeItemsList.Children.Count)
                 { GDILikeItemsList.Children.Clear(); GLikeData_Now.Clear(); }
@@ -2332,7 +2360,7 @@ namespace Lemon_App
                 {
                     if (!GLikeData_Now.Contains(jm.Key))
                     {
-                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(20, 0, 0, 20) };
+                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(12, 0, 12, 20) };
                         ks.DeleteEvent += (fl) =>
                         {
                             if (TwMessageBox.Show("确定要删除吗?"))
@@ -2347,6 +2375,7 @@ namespace Lemon_App
                         GLikeData_Now.Add(jm.Key);
                     }
                 }
+                WidthUI(GDILikeItemsList);
                 if (GdData.Count == 0 && GdLikeData.Count == 0)
                     NSPage(GDBtn, NonePage);
                 UIHelper.G(Page);

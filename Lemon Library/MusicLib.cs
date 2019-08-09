@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using static LemonLibrary.InfoHelper;
 /*
    作者:Twilight./Lemon        QQ:2728578956
@@ -1060,6 +1061,50 @@ jpg
             string num = int.Parse(gj["num"].ToString()).IntToWn();
             return new SingerPageData() {HasBigPic=hasBigPic,liangxia=lix, mSinger = mSinger, HotSongs = HotSongs, HasGJ = HasGJ, Album = mg, mVDatas = mVDatas, ssMs = ssMs, FansCount = num };
         }
+        /// <summary>
+        /// 该歌手的专辑
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="osx"></param>
+        /// <returns></returns>
+        public static async Task<List<MusicGD>> GetSingerAlbumById(string id,int osx=1) {
+            int num = 20;
+            int begin = (osx - 1) * num;
+            JObject album = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg", 
+                "{\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"singerAlbum\":{\"method\":\"get_singer_album\",\"param\":{\"singermid\":\"" + id + "\",\"order\":\"time\",\"begin\":"+begin+",\"num\":"+num+",\"exstatus\":1},\"module\":\"music.web_singer_info_svr\"}}"));
+            List<MusicGD> mg = new List<MusicGD>();
+            var datac = album["singerAlbum"]["data"]["list"];
+            foreach (var c in datac)
+            {
+                MusicGD m = new MusicGD();
+                m.ID = c["album_mid"].ToString();
+                m.Name = c["album_name"].ToString();
+                m.Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{m.ID}.jpg?max_age=2592000";
+                mg.Add(m);
+            }
+            return mg;
+        }
+
+
+        public static async Task<SingerDesc> GetSingerDesc(string id) {
+            string data = await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_singer_desc.fcg?singermid="+id+"&utf8=1&outCharset=utf-8&format=xml&r=1565243621590");
+            SingerDesc sd = new SingerDesc();
+            XElement x = XDocument.Parse(data).Element("result").Element("data").Element("info");
+            sd.Desc = x.Element("desc").Value.Replace("<![CDATA[","").Replace("]]>","");
+
+            var a = from b in x.Element("basic").Descendants("item")
+                    select new {key=b.Element("key").Value.Replace("<![CDATA[", "").Replace("]]>", ""), value =b.Element("value").Value.Replace("<![CDATA[", "").Replace("]]>", "") };
+            sd.basic = new Dictionary<string, string>();
+            foreach (var c in a)
+                sd.basic.Add(c.key,c.value);
+
+            var d = from b in x.Element("other").Descendants("item")
+                    select new { key = b.Element("key").Value.Replace("<![CDATA[", "").Replace("]]>", ""), value = b.Element("value").Value.Replace("<![CDATA[", "").Replace("]]>", "") };
+            sd.other = new Dictionary<string, string>();
+            foreach (var c in d)
+                sd.other.Add(c.key, c.value);
+            return sd;
+        }
 
         public static async Task<bool> AddSingerLikeById(string id) {
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid={id}&rnd=1565150765773"));
@@ -1446,6 +1491,19 @@ jpg
                 Gdata = Gdata,
                 NewMusic = NewMusic
             };
+        }
+        #endregion
+        #region MV
+        public static async Task<string> GetMVUrl(string id) {
+            JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+                "{\"getMvUrl\":{\"module\":\"gosrf.Stream.MvUrlProxy\",\"method\":\"GetMvUrls\",\"param\":{\"vids\":[\""+id+"\"],\"request_typet\":10001}},\"comm\":{\"g_tk\":\""+Settings.USettings.g_tk+"\",\"uin\":\""+Settings.USettings.LemonAreeunIts+"\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
+            var list=o["getMvUrl"]["data"][id]["mp4"];
+            List<string> sList = new List<string>();
+            foreach (var c in list) {
+                if (c["freeflow_url"].Count() > 0)
+                    sList.Add(c["freeflow_url"][0].ToString());
+            }
+            return sList.Last();
         }
         #endregion
         #region 评论 网易云|QQ音乐

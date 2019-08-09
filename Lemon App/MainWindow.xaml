@@ -1387,14 +1387,14 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
                 <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,0">
-                    <Grid x:Name="HomePage" d:IsHidden="True">
+                    <Grid x:Name="HomePage">
                         <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
                             <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
                                 <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=HomePage, Mode=OneWay}"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0"/>
-                                <WrapPanel x:Name="HomePage_Gdtj" Margin="0,20,0,0"/>
+                                <WrapPanel x:Name="HomePage_Gdtj" Margin="0,20,0,0" Uid="4"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0"/>
-                                <WrapPanel x:Name="HomePage_Nm" Margin="0,20,0,0"/>
+                                <WrapPanel x:Name="HomePage_Nm" Margin="0,20,0,0" Uid="4"/>
                             </WrapPanel>
                         </ScrollViewer>
                     </Grid>
@@ -1463,8 +1463,8 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid x:Name="SkinPage" Visibility="Collapsed">
-                        <ScrollViewer  Margin="20,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
-                            <WrapPanel x:Name="SkinIndexList"/>
+                        <ScrollViewer  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <WrapPanel x:Name="SkinIndexList" Uid="4" Margin="0"/>
                         </ScrollViewer>
                         <Border x:Name="ColorThemeBtn" HorizontalAlignment="Right" Height="45" VerticalAlignment="Bottom" Width="45" Margin="0,0,25,22" CornerRadius="100" Background="{DynamicResource ThemeColor}" MouseDown="ColorThemeBtn_MouseDown">
                             <Border Width="20" Height="20">
@@ -1518,8 +1518,8 @@
                     </Grid>
                     <Grid x:Name="TopIndexPage" Visibility="Collapsed">
                         <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                        <ScrollViewer  Margin="20,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
-                            <WrapPanel x:Name="topIndexList"/>
+                        <ScrollViewer  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <WrapPanel x:Name="topIndexList" Uid="2" Margin="0"/>
                         </ScrollViewer>
                     </Grid>
                     <Grid x:Name="SingerIndexPage" Visibility="Collapsed">
@@ -1588,7 +1588,7 @@
                                         <lemon_app:RbBox ContentText="蓝调" Uid="20" Margin="0,0,5,5"/>
                                     </WrapPanel>
                                 </WrapPanel>
-                                <WrapPanel x:Name="SingerItemsList"/>
+                                <WrapPanel x:Name="SingerItemsList" Uid="5" Margin="0"/>
                             </WrapPanel>
                         </ScrollViewer>
                     </Grid>
@@ -1624,7 +1624,7 @@
                                     <lemon_app:RbBox x:Name="FLGDPage_SortId_Newest" Uid="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" ContentText="最新"/>
                                     <lemon_app:RbBox x:Name="FLGDPage_SortId_Tj" Uid="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,50,0" ContentText="推荐"/>
                                 </Grid>
-                                <WrapPanel x:Name="FLGDItemsList" Margin="0,5,0,0"/>
+                                <WrapPanel x:Name="FLGDItemsList" Margin="0,5,0,0" Uid="4"/>
                             </WrapPanel>
                         </ScrollViewer>
                     </Grid>
@@ -1641,17 +1641,17 @@
                             <lemon_app:RbBox ContentText="人群" Uid="7" Margin="20,0,0,0"  Checked="RadioPageChecked" />
                             <lemon_app:RbBox ContentText="乐器" Uid="8" Margin="20,0,0,0"  Checked="RadioPageChecked" />
                         </WrapPanel>
-                        <ScrollViewer  Margin="20,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
-                            <WrapPanel x:Name="RadioItemsList"/>
+                        <ScrollViewer  Margin="0,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <WrapPanel x:Name="RadioItemsList" Uid="4" Margin="0"/>
                         </ScrollViewer>
                     </Grid>
                     <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
                         <ScrollViewer  Margin="0" Template="{DynamicResource ScrollViewerControlTemplate}">
                             <WrapPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,10,0,0"/>
-                                <WrapPanel x:Name="GDItemsList" Margin="0,10,0,0"/>
+                                <WrapPanel x:Name="GDItemsList" Margin="0,10,0,0" Uid="4"/>
                                 <TextBlock HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="我喜欢的歌单" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Width="145" Margin="20,10,0,0"/>
-                                <WrapPanel x:Name="GDILikeItemsList" Margin="0,10,0,0"/>
+                                <WrapPanel x:Name="GDILikeItemsList" Margin="0,10,0,0" Uid="4"/>
                             </WrapPanel>
                         </ScrollViewer>
                         <Border x:Name="AddGDPage_OpenBtn" HorizontalAlignment="Right" Height="45" VerticalAlignment="Bottom" Width="45" Margin="0,0,25,22" CornerRadius="100" Background="{DynamicResource ThemeColor}" MouseDown="AddGDPage_OpenBtn_MouseDown">

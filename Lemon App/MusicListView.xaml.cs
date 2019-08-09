@@ -47,7 +47,7 @@ namespace Lemon_App
                 k.Play += K_Play;
                 k.Download += mw.K_Download;
                 if (DownloadMode) {
-                    k.MouseDown -= mw.PlayMusic;
+                    k.Play -= K_Play;
                     k.NSDownload(true);
                     k.Check();
                 }
@@ -115,7 +115,7 @@ namespace Lemon_App
             DownloadQx.Content = "全不选";
             foreach (DataItem x in MusicItemsList.Items)
             {
-                x.MouseDown -= mw.PlayMusic;
+                x.Play -= K_Play;
                 x.NSDownload(true);
                 x.Check();
             }
@@ -128,7 +128,7 @@ namespace Lemon_App
             sp.Visibility = Visibility.Visible;
             foreach (DataItem x in MusicItemsList.Items)
             {
-                x.MouseDown += mw.PlayMusic;
+                x.Play += K_Play;
                 x.NSDownload(false);
                 x.Check();
             }
