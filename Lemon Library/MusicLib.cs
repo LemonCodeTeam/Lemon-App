@@ -1420,7 +1420,7 @@ jpg
             JObject o = JObject.Parse(json);
             MusicGData md = new MusicGData();
             md.pic = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{id}.jpg?max_age=2592000";
-            md.name = "专辑: <" + o["data"]["name"] + "> • " + o["data"]["singername"];
+            md.name = "专辑: " + o["data"]["name"] + " - " + o["data"]["singername"];
             var data = new List<Music>();
             var list = o["data"]["list"];
             foreach (var a in list)

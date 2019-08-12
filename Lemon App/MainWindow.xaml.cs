@@ -104,7 +104,7 @@ namespace Lemon_App
             }
         }
         #endregion
-        #region 窗口加载辅助
+        #region 窗口加载时
         public MainWindow()
         {
             InitializeComponent();
@@ -182,7 +182,6 @@ namespace Lemon_App
             //--------加载主页---------
             LoadHomePage();
         }
-
         private void RUNPopup(Popup pp) {
             if (pp.IsOpen)
             {
@@ -354,6 +353,8 @@ namespace Lemon_App
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
+            //---------------保存初始页面
+            AddPage(MusicKuBtn,HomePage);
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -740,23 +741,6 @@ namespace Lemon_App
             }
             WidthUI(HomePage_Nm);
         }
-        bool FLGDPage_Tag_IsOpen = false;
-        private void FLGDPage_Tag_Turn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (FLGDPage_Tag_IsOpen)
-            {
-                FLGDPage_Tag_IsOpen = false;
-                FLGDIndexList.Height = 130;
-                FLGDPage_Tag_Open.Text = "展开";
-            }
-            else
-            {
-                FLGDPage_Tag_IsOpen = true;
-                //相当于xaml中的 Height="Auto"
-                FLGDIndexList.Height = double.NaN;
-                FLGDPage_Tag_Open.Text = "收缩";
-            }
-        }
         //IFV的回调函数
         public async void IFVCALLBACK_LoadAlbum(string id) {
             np = NowPage.GDItem;
@@ -878,7 +862,7 @@ namespace Lemon_App
 
         private Label LastClickLabel = null;
         private Grid LastPage = null;
-        public void NSPage(Label ClickLabel, Grid TPage,Thickness value =new Thickness())
+        public void NSPage(Label ClickLabel, Grid TPage,Thickness value =new Thickness(),bool needSave=true)
         {
             if (TPage == Data)
                 if (DataPage_DownloadMod)
@@ -892,6 +876,8 @@ namespace Lemon_App
             RunAnimation(TPage,value);
             if (ClickLabel != null) LastClickLabel = ClickLabel;
             LastPage = TPage;
+            if (needSave)
+                AddPage(ClickLabel, TPage);
 
         }
         private void TopBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -901,6 +887,30 @@ namespace Lemon_App
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(MusicKuBtn, HomePage);
+        }
+        //前后导航仪
+        int QHNowPageIndex = 0;
+        List<KeyValuePair<Label, Grid>> PageData = new List<KeyValuePair<Label, Grid>>();
+        public void AddPage(Label a,Grid b) {
+            for (int i = 0; i < PageData.Count - 1 -QHNowPageIndex; i++) {
+                PageData.RemoveAt(PageData.Count - 1);
+            }
+            PageData.Add(new KeyValuePair<Label, Grid>(a, b));
+            QHNowPageIndex = PageData.Count - 1;
+        }
+
+        private void LastPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            QHNowPageIndex--;
+            var a = PageData[QHNowPageIndex];
+            NSPage(a.Key, a.Value, default(Thickness), false);
+        }
+
+        private void NextPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            QHNowPageIndex++;
+            var a = PageData[QHNowPageIndex];
+            NSPage(a.Key, a.Value, default(Thickness), false);
         }
         #endregion
         #region Singer 歌手界面
@@ -1083,6 +1093,23 @@ namespace Lemon_App
         }
         #endregion
         #region FLGD 分类歌单
+        bool FLGDPage_Tag_IsOpen = false;
+        private void FLGDPage_Tag_Turn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (FLGDPage_Tag_IsOpen)
+            {
+                FLGDPage_Tag_IsOpen = false;
+                FLGDIndexList.Height = 130;
+                FLGDPage_Tag_Open.Text = "展开";
+            }
+            else
+            {
+                FLGDPage_Tag_IsOpen = true;
+                //相当于xaml中的 Height="Auto"
+                FLGDIndexList.Height = double.NaN;
+                FLGDPage_Tag_Open.Text = "收缩";
+            }
+        }
         private async void ZJBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(ZJBtn, ZJIndexPage);
@@ -1516,7 +1543,7 @@ namespace Lemon_App
             {
                 TB.Text = key;
                 DataItemsList.Items.Clear();
-                Datasv.ScrollToTop();
+                if(Datasv!=null)Datasv.ScrollToTop();
             }
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
             foreach (var j in dt)
