@@ -87,6 +87,8 @@ namespace LemonLibrary
             public string MusicID { set; get; } = "";
             public string ImageUrl { set; get; } = "";
             public MusicGD Album { set; get; } = new MusicGD();
+            public string Mvmid { set; get; } = "";
+            public string Pz { set; get; } = "";
         }
         public class MusicSinger {
             public string Name { set; get; }

@@ -27,6 +27,8 @@ namespace Lemon_App
         public Music music;
         private MainWindow Mainwindow = null;
         private bool needb = false;
+
+        private int BtnWidth = 0;
         public DataItem(Music dat,bool needDeleteBtn=false,MainWindow mw=null)
         {
             try
@@ -47,6 +49,23 @@ namespace Lemon_App
                     }
                     ser.Inlines.Remove(ser.Inlines.LastInline);
                     mss.Text = dat.MusicName_Lyric;
+
+                    int BtnCount = 0;
+                    if (dat.Mvmid != "") { 
+                        MV.Visibility = Visibility.Visible;
+                        BtnCount++;
+                    }
+                    if (dat.Pz == "HQ") { 
+                        HQ.Visibility = Visibility.Visible;
+                        BtnCount++;
+                    }
+                    else if (dat.Pz == "SQ") { 
+                        SQ.Visibility = Visibility.Visible;
+                        BtnCount++;
+                    }
+                    BtnWidth = 32 * BtnCount + 5;
+                    if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
+                        namss.Width = wpl.ActualWidth - 101;
                 };
             }
             catch { }
@@ -84,12 +103,12 @@ namespace Lemon_App
             this.ns = ns;
             if (ns)
             {
-                namss.Margin = new System.Windows.Thickness(60, 0, 10, 0);
+                wpl.Margin = new System.Windows.Thickness(60, 0, 10, 0);
                 CheckView.Visibility = System.Windows.Visibility.Visible;
                 MouseDown += CheckView_MouseDown;
             }
             else {
-                namss.Margin = new System.Windows.Thickness(10, 0, 10, 0);
+                wpl.Margin = new System.Windows.Thickness(10, 0, 10, 0);
                 CheckView.Visibility = System.Windows.Visibility.Collapsed;
                 MouseDown -= CheckView_MouseDown;
             }
@@ -164,8 +183,8 @@ namespace Lemon_App
         {
             Buttons.Visibility = Visibility.Visible;
             if (isChecked)
-                namss.Margin = new Thickness(60, 10, 80, 10);
-            else namss.Margin = new Thickness(10, 10, 80, 10);
+                wpl.Margin = new Thickness(60, 10, 80, 10);
+            else wpl.Margin = new Thickness(10, 10, 80, 10);
             if (needb)DeleteBtn.Visibility = Visibility.Visible;
         }
 
@@ -174,8 +193,8 @@ namespace Lemon_App
             Buttons.Visibility = Visibility.Collapsed;
             DeleteBtn.Visibility = Visibility.Collapsed;
             if (isChecked)
-                namss.Margin = new Thickness(60, 10, 10, 10);
-            else namss.Margin = new Thickness(10, 10, 10, 10);
+                wpl.Margin = new Thickness(60, 10, 10, 10);
+            else wpl.Margin = new Thickness(10, 10, 10, 10);
         }
         /// <summary>
         /// 没啥用，留着懒得改模板了
@@ -187,6 +206,21 @@ namespace Lemon_App
         private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Mainwindow.IFVCALLBACK_LoadAlbum(music.Album.ID);
+        }
+
+        private void MV_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Mainwindow .PlayMv(new MVData() {
+                id=music.Mvmid,
+                name=music.MusicName+" - "+music.SingerText
+            });
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
+                namss.Width = wpl.ActualWidth - BtnWidth;
+            else namss.Width = double.NaN;
         }
     }
 

@@ -56,6 +56,7 @@ namespace LemonLibrary
         public static async Task<BitmapImage> GetImageFromInternet(string url) {
             string file = Settings.USettings.CachePath + "\\Image\\" + TextHelper.MD5.EncryptToMD5string(url) + ".jpg";
             WebClient wc = new WebClient();
+            Console.WriteLine(url+" - "+file);
             BitmapImage bi = (await wc.DownloadDataTaskAsync(url)).ToBitmapImage();
             AddImageToFile(url, bi);
             AddImageToMemory(url, bi);

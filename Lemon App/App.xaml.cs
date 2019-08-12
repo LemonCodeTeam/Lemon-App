@@ -146,6 +146,7 @@ namespace Lemon_App
                 fs.Close();
             };
             BaseApp = this;
+            ConsoleManager.Show();
         }
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {

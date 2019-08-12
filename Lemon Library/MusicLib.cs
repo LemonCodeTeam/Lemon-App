@@ -101,6 +101,12 @@ namespace LemonLibrary
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
                         Name = dsli["album"]["name"].ToString()
                     };
+                    var file = dsli["file"];
+                    if (file["size_320"].ToString() != "0")
+                        m.Pz = "HQ";
+                    if (file["size_flac"].ToString() != "0" || file["size_acc"].ToString() != "0")
+                        m.Pz = "SQ";
+                    m.Mvmid = dsli["mv"]["vid"].ToString();
                     dt.Add(m);
                     i++;
                 }
@@ -452,6 +458,11 @@ jpg
                         m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000" ,
                             Name= c0si["albumname"].ToString()
                         };
+                    if (c0si["size320"].ToString() != "0")
+                        m.Pz = "HQ";
+                    if (c0si["sizeflac"].ToString() != "0")
+                        m.Pz = "SQ";
+                    m.Mvmid = c0si["vid"].ToString();
                     dt.Data.Add(m);
                     await wx.Dispatcher.BeginInvoke(new Action(() => { callback(m, dt.IsOwn); }));
                     await Task.Delay(1);
@@ -920,7 +931,9 @@ jpg
         public async Task<List<Music>> GetToplistAsync(string TopID, int osx = 1)
         {
             int index = (osx - 1) * 30;
-            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
+            string json=await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
+            JObject o = JObject.Parse(json);
+            Console.WriteLine(json);
             List<Music> dt = new List<Music>();
             int i = 0;
             var s = o["songlist"];
@@ -954,6 +967,11 @@ jpg
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
                         Name = sid["albumname"].ToString()
                     };
+                if (sid["size320"].ToString() != "0")
+                    m.Pz = "HQ";
+                if (sid["sizeflac"].ToString() != "0")
+                    m.Pz = "SQ";
+                m.Mvmid = sid["vid"].ToString();
                 dt.Add(m);
                 i++;
             }
@@ -1418,6 +1436,7 @@ jpg
         {
             string json = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid={id}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_begin=0&song_num=50");
             JObject o = JObject.Parse(json);
+            Console.WriteLine(json);
             MusicGData md = new MusicGData();
             md.pic = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{id}.jpg?max_age=2592000";
             md.name = "专辑: " + o["data"]["name"] + " - " + o["data"]["singername"];
@@ -1438,6 +1457,11 @@ jpg
                     m.SingerText += s["name"].ToString() + "&";
                 }
                 m.SingerText = m.SingerText.Substring(0, m.SingerText.Length - 1);
+                if (a["size320"].ToString() != "0")
+                    m.Pz = "HQ";
+                if (a["sizeflac"].ToString() != "0")
+                    m.Pz = "SQ";
+                m.Mvmid = a["vid"].ToString();
                 data.Add(m);
             }
             md.Data = data;

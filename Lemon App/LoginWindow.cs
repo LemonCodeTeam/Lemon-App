@@ -10,58 +10,14 @@ namespace Lemon_App
 {
     public class LoginWindow : Form
     {
-        public LoginWindow()
+        private MainWindow mw;
+        public LoginWindow(MainWindow m)
         {
             InitializeComponent();
             wb.Navigated += delegate { textBox1.Text = wb.Url.AbsoluteUri; };
+            mw = m;
         }
-        protected override void DefWndProc(ref Message m)
-        {
-            if (m.Msg == MsgHelper.WM_COPYDATA)
-            {
-                MsgHelper.COPYDATASTRUCT cdata = new MsgHelper.COPYDATASTRUCT();
-                cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(m.LParam, cdata.GetType());
-                if (cdata.lpData == "IsLogin")
-                    Api_IsLogin();
-                else if (cdata.lpData == "Login")
-                    Api_Login();
-            }
-            else base.DefWndProc(ref m);
-        }
-        #region Api_IsLogin
-        private void Api_IsLogin()
-        {
-            wb.Navigate("https://y.qq.com/portal/profile.html");
-            wb.DocumentCompleted += Wb_Dc_Api_IsLogin;
-        }
-
-        private Button button1;
-        private TextBox textBox1;
-        private Button button2;
-        int wind = 0;
-        private async void Wb_Dc_Api_IsLogin(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            await Task.Delay(100);
-            wb.DocumentCompleted -= Wb_Dc_Api_IsLogin;
-            bool isfind = false;
-            foreach (HtmlElement ele in wb.Document.All)
-            {
-                if (ele.InnerText == "立即登录")
-                {
-                    isfind = true;
-                    MsgHelper.SendMsg("No Login", wind);
-                    break;
-                }
-            }
-            if (!isfind)
-            {
-              // MessageBox.Show(wb.Document.Cookie);
-                string qq = TextHelper.XtoYGetTo(wb.Document.Cookie, "p_luin=o", ";", 0);
-                MsgHelper.SendMsg("Login:" + qq + "###", wind);
-            }
-        }
-        #endregion
-        private void Api_Login()
+        public void Api_Login()
         {
             wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=40&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fsong%2F000edOaL1WZOWq.html%23stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=");
             Opacity = 1;
@@ -92,12 +48,17 @@ namespace Lemon_App
                     long g_tk = hash & 0x7fffffff;
                     send = "Login:" + qq + "### 呱呱呱 Cookie[" + cookie + "]END  叽里咕噜 g_tk["+g_tk+"]sk";
                 }
-                MsgHelper.SendMsg(send, wind);
+                mw.Login(send);
                 wb.DocumentCompleted -= Wb_Dc_Login;
             }
         }
 
+
+
         private WebBrowser wb;
+        private Button button1;
+        private TextBox textBox1;
+        private Button button2;
         private void InitializeComponent()
         {
             this.wb = new System.Windows.Forms.WebBrowser();
@@ -145,16 +106,9 @@ namespace Lemon_App
             this.Opacity = 0D;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
 
         }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-            wind = MsgHelper.FindWindow(null, "LemonApp").ToInt32();
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show(wb.Document.Cookie);

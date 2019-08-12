@@ -45,21 +45,26 @@ namespace LemonLibrary
         }
         public static bool IsVerticalScrollBarAtButtom(this ScrollViewer ex)
         {
-            bool isAtButtom = false;
-            double dVer = ex.VerticalOffset;
-            double dViewport = ex.ViewportHeight;
-            double dExtent = ex.ExtentHeight;
-            if (dVer != 0){
-                if (dVer + dViewport == dExtent)
-                    isAtButtom = true;
+            try
+            {
+                bool isAtButtom = false;
+                double dVer = ex.VerticalOffset;
+                double dViewport = ex.ViewportHeight;
+                double dExtent = ex.ExtentHeight;
+                if (dVer != 0)
+                {
+                    if (dVer + dViewport == dExtent)
+                        isAtButtom = true;
+                    else
+                        isAtButtom = false;
+                }
                 else
                     isAtButtom = false;
+                if (ex.VerticalScrollBarVisibility == ScrollBarVisibility.Disabled || ex.VerticalScrollBarVisibility == ScrollBarVisibility.Hidden)
+                    isAtButtom = true;
+                return isAtButtom;
             }
-            else
-                isAtButtom = false;
-            if (ex.VerticalScrollBarVisibility == ScrollBarVisibility.Disabled || ex.VerticalScrollBarVisibility == ScrollBarVisibility.Hidden)
-                isAtButtom = true;
-            return isAtButtom;
+            catch { return false; }
         }
     }
     public class MyPopup : Popup

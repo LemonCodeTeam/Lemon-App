@@ -1860,7 +1860,7 @@
                     </WrapPanel>
                 </Grid>
             </Border>
-            <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" Visibility="Collapsed" CornerRadius="5" Effect="{DynamicResource WindowDrop}">
+            <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="125,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" CornerRadius="5" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
                 <ListBox x:Name="Search_SmartBoxList" VirtualizingPanel.VirtualizationMode="Recycling"
                     VirtualizingPanel.IsVirtualizing="True"  Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" BorderThickness="0" Background="{DynamicResource PlayDLPage_Bg}" />
             </Border>

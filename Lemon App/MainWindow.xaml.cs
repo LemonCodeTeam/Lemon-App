@@ -161,7 +161,8 @@ namespace Lemon_App
             TaskbarManager.Instance.TabbedThumbnail.AddThumbnailPreview(TaskBarImg);
             TaskBarImg.SetWindowIcon(Properties.Resources.icon);
             TaskBarImg.Title = Settings.USettings.Playing.MusicName + " - " + Settings.USettings.Playing.SingerText;
-            TaskBarImg.SetImage(await ImageCacheHelp.GetImageByUrl(Settings.USettings.Playing.ImageUrl));
+            if (Settings.USettings.Playing.ImageUrl != "")
+                TaskBarImg.SetImage(await ImageCacheHelp.GetImageByUrl(Settings.USettings.Playing.ImageUrl));
 
             TaskBarBtn_Last = new ThumbnailToolBarButton(Properties.Resources.icon_left, "上一曲");
             TaskBarBtn_Last.Enabled = true;
@@ -452,6 +453,58 @@ namespace Lemon_App
                 dx.Width = (ContentPage.ActualWidth - 24 * lineCount) / lineCount;
         }
         #endregion
+        #endregion
+        #region Login 登录
+        public void Login(string cdata) {
+            lw.Close();
+            Console.WriteLine(cdata);
+            string qq = "";
+            if (cdata != "No Login")
+                qq = TextHelper.XtoYGetTo(cdata, "Login:", "###", 0);
+            if (Settings.USettings.LemonAreeunIts == qq)
+            {
+                if (cdata.Contains("g_tk"))
+                {
+                    Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata, "g_tk[", "]sk", 0);
+                    Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata, "Cookie[", "]END", 0);
+                    Settings.SaveSettings();
+                }
+            }
+            else
+            {
+                //此方法中不能使用Async异步，故使用Action
+                Action a = new Action(async () =>
+                {
+                    if (cdata.Contains("g_tk"))
+                    {
+                        Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata, "g_tk[", "]sk", 0);
+                        Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata, "Cookie[", "]END", 0);
+                    }
+                    var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                    Console.WriteLine(sl);
+                    var sdc = JObject.Parse(sl)["data"]["creator"];
+                    await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.CachePath + qq + ".jpg");
+                    await Task.Run(() =>
+                    {
+                        Settings.LoadUSettings(qq);
+                        if (cdata.Contains("g_tk"))
+                        {
+                            Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata, "g_tk[", "]sk", 0);
+                            Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata, "Cookie[", "]END", 0);
+                        }
+                        Settings.USettings.UserName = sdc["nick"].ToString();
+                        Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
+                        Settings.USettings.LemonAreeunIts = qq;
+                        Settings.SaveSettings();
+                        Settings.LSettings.qq = qq;
+                        Settings.SaveLocaSettings();
+                        Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
+                    });
+                    Load_Theme(false);
+                });
+                a();
+            }
+        }
         #endregion
         #region 设置
         public void LoadSettings()
@@ -2342,10 +2395,10 @@ namespace Lemon_App
         #region Login
         private async void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            lw = new LoginWindow();
+            lw = new LoginWindow(this);
             lw.Show();
             await Task.Delay(500);
-            MsgHelper.SendMsg("Login", lw.Handle.ToInt32());
+            lw.Api_Login();
         }
         #endregion
         #region MyGD
@@ -2562,57 +2615,6 @@ namespace Lemon_App
                 cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, mytype);
                 if (cdata.lpData == MsgHelper.SEND_SHOW)
                     exShow();
-                else if (cdata.lpData.Contains("Login"))
-                {
-                    lw.Close();
-                    Console.WriteLine(cdata.lpData);
-                    string qq = "";
-                    if (cdata.lpData != "No Login")
-                        qq = TextHelper.XtoYGetTo(cdata.lpData, "Login:", "###", 0);
-                    if (Settings.USettings.LemonAreeunIts == qq)
-                    {
-                        if (cdata.lpData.Contains("g_tk"))
-                        {
-                            Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
-                            Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
-                            Settings.SaveSettings();
-                        }
-                    }
-                    else
-                    {
-                        //此方法中不能使用Async异步，故使用Action
-                        Action a = new Action(async () =>
-                        {
-                            if (cdata.lpData.Contains("g_tk"))
-                            {
-                                Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
-                                Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
-                            }
-                            var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
-                            Console.WriteLine(sl);
-                            var sdc = JObject.Parse(sl)["data"]["creator"];
-                            await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://","https://"), Settings.USettings.CachePath + qq + ".jpg");
-                            await Task.Run(() =>
-                            {
-                                Settings.LoadUSettings(qq);
-                                if (cdata.lpData.Contains("g_tk"))
-                                {
-                                    Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata.lpData, "g_tk[", "]sk", 0);
-                                    Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata.lpData, "Cookie[", "]END", 0);
-                                }
-                                Settings.USettings.UserName = sdc["nick"].ToString();
-                                Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
-                                Settings.USettings.LemonAreeunIts = qq;
-                                Settings.SaveSettings();
-                                Settings.LSettings.qq = qq;
-                                Settings.SaveLocaSettings();
-                                Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
-                            });
-                            Load_Theme(false);
-                        });
-                        a();
-                    }
-                }
             }
             return IntPtr.Zero;
         }
