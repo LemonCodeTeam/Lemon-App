@@ -63,7 +63,6 @@ namespace Lemon_App
         {
             string url= iv[index].url;
             string type = iv[index].type;
-            Toast.Send(url+"- - - - -"+type);
             // type:3002 活动 ？？？？
             if (type == "3002")
             {
@@ -83,8 +82,8 @@ namespace Lemon_App
                 mw.IFVCALLBACK_LoadAlbum(url);
             }
             else if (type == "10012")
-            {//type:10012 MV 直接跳转 or.  抓个MV的播放连接？ 🤔
-                Process.Start("https://y.qq.com/n/yqq/mv/v/" + url + ".html");
+            {
+                mw.PlayMv(new MVData() { id = url,name="" });
             }
             else Process.Start(url);
         }

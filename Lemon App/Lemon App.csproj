@@ -111,7 +111,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BottomTick.xaml.cs">
+    <Compile Include="ControlItems\BottomTick.xaml.cs">
       <DependentUpon>BottomTick.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlItems\CannotPlay.xaml.cs">
@@ -157,14 +157,11 @@
     <Compile Include="ControlItems\UserTxControl.xaml.cs">
       <DependentUpon>UserTxControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageForceView.xaml.cs">
+    <Compile Include="ControlItems\ImageForceView.xaml.cs">
       <DependentUpon>ImageForceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LoginWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ControlItems\PlControl.xaml.cs">
       <DependentUpon>PlControl.xaml</DependentUpon>
@@ -178,11 +175,14 @@
     <Compile Include="ControlItems\TopControl.xaml.cs">
       <DependentUpon>TopControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MusicListView.xaml.cs">
+    <Compile Include="ControlItems\MusicListView.xaml.cs">
       <DependentUpon>MusicListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVItem.xaml.cs">
+    <Compile Include="ControlItems\MVItem.xaml.cs">
       <DependentUpon>MVItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
@@ -191,7 +191,7 @@
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowBlur.cs" />
-    <Page Include="BottomTick.xaml">
+    <Page Include="ControlItems\BottomTick.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,11 +251,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ImageForceView.xaml">
+    <Page Include="ControlItems\ImageForceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -287,11 +291,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MusicListView.xaml">
+    <Page Include="ControlItems\MusicListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVItem.xaml">
+    <Page Include="ControlItems\MVItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -317,9 +321,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="LoginWindow.resx">
-      <DependentUpon>LoginWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

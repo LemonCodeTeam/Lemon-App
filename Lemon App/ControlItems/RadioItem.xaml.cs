@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static LemonLibrary.InfoHelper;
 
 namespace Lemon_App
 {
@@ -12,23 +13,20 @@ namespace Lemon_App
     /// </summary>
     public partial class RadioItem : UserControl
     {
-        public string id { get; set; }
-        public string Nam { get; set; }
-        public string img { get; set; }
-        public RadioItem(string ID, string name, string pic)
+        public MusicRadioListItem data = new MusicRadioListItem();
+        public RadioItem(MusicRadioListItem da)
         {
             InitializeComponent();
-            id = ID;
-            Nam = name;
-            img = pic;
-            this.name.Text = Nam;
+            data = da;
+            this.name.Text = data.Name;
             Loaded += async delegate {
                 Height = ActualWidth + 40;
-                im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
+                listenCount.Text = data.lstCount.IntToWn();
+                im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo));
             };
         }
         public RadioItem(string ID) {
-            id = ID;
+            data.ID = ID;
         }
 
         private void UserControl_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)

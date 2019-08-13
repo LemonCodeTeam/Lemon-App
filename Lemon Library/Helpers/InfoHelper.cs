@@ -118,21 +118,13 @@ namespace LemonLibrary
             public bool ispraise { get; set; }
         }
         public class MusicRadioList {
-            public List<MusicRadioListItem> Hot { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Evening{ set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Love { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Theme { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Changjing { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Style { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Lauch { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> People { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> MusicTools { set; get; } = new List<MusicRadioListItem>();
-            public List<MusicRadioListItem> Diqu { set; get; } = new List<MusicRadioListItem>();
+            public List<MusicRadioListItem> Items { set; get; } = new List<MusicRadioListItem>();
         }
         public class MusicRadioListItem {
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
+            public int lstCount { get; set; }
         }
         public class MusicFLGDIndexItemsList
         {

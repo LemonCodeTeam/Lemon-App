@@ -13,16 +13,13 @@ namespace LemonLibrary
     public class ImageCacheHelp
     {
         public static async Task<BitmapImage> GetImageByUrl(string url) {
-            Console.WriteLine(url);
             BitmapImage bi = GetImageFormMemory(url);
-            if (bi != null) { Console.WriteLine("从内存读取图片啦..."); return bi; }
+            if (bi != null) {return bi; }
             bi = GetImageFromFile(url);
             if (bi != null) {
-                Console.WriteLine("从文件读取图片啦...");
                 AddImageToMemory(url, bi);
                 return bi;
             }
-            Console.WriteLine("从网络读取图片啦...");
             return await GetImageFromInternet(url);
         }
         public static MyDictionary<string, BitmapImage> MemoryData = new MyDictionary<string, BitmapImage>();
@@ -54,9 +51,7 @@ namespace LemonLibrary
             });
         }
         public static async Task<BitmapImage> GetImageFromInternet(string url) {
-            string file = Settings.USettings.CachePath + "\\Image\\" + TextHelper.MD5.EncryptToMD5string(url) + ".jpg";
             WebClient wc = new WebClient();
-            Console.WriteLine(url+" - "+file);
             BitmapImage bi = (await wc.DownloadDataTaskAsync(url)).ToBitmapImage();
             AddImageToFile(url, bi);
             AddImageToMemory(url, bi);

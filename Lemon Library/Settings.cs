@@ -22,7 +22,7 @@ namespace LemonLibrary
                 try
                 {
                     if (id == "id") id = USettings.LemonAreeunIts;
-                    File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.UTF8.GetBytes(TextHelper.JSON.ToJSON(Settings.USettings))), TextHelper.MD5.EncryptToMD5string(id + ".st")));
+                    File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
                 }
                 catch { }
             });
@@ -32,7 +32,7 @@ namespace LemonLibrary
             USettings = new UserSettings();
             if (File.Exists(USettings.CachePath + qq + ".st"))
             {
-                string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
+                string data = File.ReadAllText(USettings.CachePath + qq + ".st");
                 Console.WriteLine(data);
                 JObject o = JObject.Parse(data);
                 USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
@@ -44,9 +44,12 @@ namespace LemonLibrary
                 USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
                 USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
                 USettings.Playing.SingerText = o["Playing"]["SingerText"].ToString();
-                foreach (var xs in o["Playing"]["Singer"]) {
-                    USettings.Playing.Singer.Add(new MusicSinger() {Name=xs["Name"].ToString(),
-                        Mid=xs["Mid"].ToString()
+                foreach (var xs in o["Playing"]["Singer"])
+                {
+                    USettings.Playing.Singer.Add(new MusicSinger()
+                    {
+                        Name = xs["Name"].ToString(),
+                        Mid = xs["Mid"].ToString()
                     });
                 }
                 foreach (var jx in o["MusicLike"].ToArray())
@@ -58,7 +61,8 @@ namespace LemonLibrary
                             List<MusicSinger> lm = new List<MusicSinger>();
                             foreach (var xs in jm["Singer"])
                             {
-                                lm.Add(new MusicSinger(){
+                                lm.Add(new MusicSinger()
+                                {
                                     Name = xs["Name"].ToString(),
                                     Mid = xs["Mid"].ToString()
                                 });
@@ -67,7 +71,7 @@ namespace LemonLibrary
                             {
                                 MusicID = jm["MusicID"].ToString(),
                                 SingerText = jm["SingerText"].ToString(),
-                                Singer=lm,
+                                Singer = lm,
                                 ImageUrl = jm["ImageUrl"].ToString(),
                                 MusicName = jm["MusicName"].ToString()
                             });
@@ -79,7 +83,7 @@ namespace LemonLibrary
                 if (data.Contains("DownloadName"))
                     USettings.DownloadName = o["DownloadName"].ToString();
                 if (data.Contains("DownloadWithLyric"))
-                    USettings.DownloadWithLyric= bool.Parse(o["DownloadWithLyric"].ToString());
+                    USettings.DownloadWithLyric = bool.Parse(o["DownloadWithLyric"].ToString());
                 if (data.Contains("Skin_Path"))
                 {
                     USettings.Skin_Path = o["Skin_Path"].ToString();
@@ -145,7 +149,7 @@ namespace LemonLibrary
         {
             if (File.Exists(USettings.CachePath + "Data.st"))
             {
-                string data = Encoding.Default.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + "Data.st"), TextHelper.MD5.EncryptToMD5string("Data.st"))));
+                string data = File.ReadAllText(USettings.CachePath + "Data.st");
                 JObject o = JObject.Parse(data);
                 LSettings.qq = o["qq"].ToString();
             }
@@ -153,7 +157,7 @@ namespace LemonLibrary
         }
         public static void SaveLocaSettings()
         {
-            File.WriteAllText(USettings.CachePath + "Data.st", TextHelper.TextEncrypt(Convert.ToBase64String(Encoding.Default.GetBytes(TextHelper.JSON.ToJSON(LSettings))), TextHelper.MD5.EncryptToMD5string("Data.st")));
+            File.WriteAllText(USettings.CachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
         }
         public class LocaSettings
         {

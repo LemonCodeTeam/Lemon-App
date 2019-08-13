@@ -104,7 +104,7 @@ namespace LemonLibrary
                     var file = dsli["file"];
                     if (file["size_320"].ToString() != "0")
                         m.Pz = "HQ";
-                    if (file["size_flac"].ToString() != "0" || file["size_acc"].ToString() != "0")
+                    if (file["size_flac"].ToString() != "0")
                         m.Pz = "SQ";
                     m.Mvmid = dsli["mv"]["vid"].ToString();
                     dt.Add(m);
@@ -1221,209 +1221,72 @@ jpg
         }
         #endregion
         #region 电台
-        public async Task<MusicRadioList> GetRadioList()
+        public static async Task<Dictionary<string, MusicRadioList>> GetRadioList()
         {
-            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://c.y.qq.com/v8/fcg-bin/fcg_v8_radiolist.fcg?channel=radio&format=json&page=index&tpl=wk&new=1&p=0.8663229811059507&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
-            var data = new MusicRadioList();
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_radiolist.fcg?channel=radio&format=json&page=index&tpl=wk&new=1&p=0.8663229811059507&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
+            var data = new Dictionary<string,MusicRadioList>();
             var ddg = o["data"]["data"]["groupList"];
             try
             {
-                int i = 0;
-                while (i < ddg[0]["radioList"].Count())
-                {
-                    var ddgri = ddg[0]["radioList"][i];
-                    data.Hot.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[1]["radioList"].Count())
-                {
-                    var ddgri = ddg[1]["radioList"][i];
-                    data.Evening.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[2]["radioList"].Count())
-                {
-                    var ddgri = ddg[2]["radioList"][i];
-                    data.Love.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[3]["radioList"].Count())
-                {
-                    var ddgri = ddg[3]["radioList"][i];
-                    data.Theme.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[4]["radioList"].Count())
-                {
-                    var ddgri = ddg[4]["radioList"][i];
-                    data.Changjing.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[5]["radioList"].Count())
-                {
-                    var ddgri = ddg[4]["radioList"][i];
-                    data.Style.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[6]["radioList"].Count())
-                {
-                    var ddgri = ddg[6]["radioList"][i];
-                    data.Lauch.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[7]["radioList"].Count())
-                {
-                    var ddgri = ddg[7]["radioList"][i];
-                    data.People.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[8]["radioList"].Count())
-                {
-                    var ddgri = ddg[8]["radioList"][i];
-                    data.MusicTools.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                    i++;
-                }
-                i = 0;
-                while (i < ddg[9]["radioList"].Count())
-                {
-                    var ddgri = ddg[9]["radioList"][i];
-                    data.Diqu.Add(new MusicRadioListItem
-                    {
-                        Name = ddgri["radioName"].ToString(),
-                        Photo = ddgri["radioImg"].ToString(),
-                        ID = ddgri["radioId"].ToString()
-                    });
-                    i++;
-                    i++;
+                foreach (var list in ddg) {
+                    var dt = new MusicRadioList();
+                    string name = list["name"].ToString();
+                    var ax = list["radioList"];
+                    foreach (var ms in ax) {
+                        dt.Items.Add(new MusicRadioListItem
+                        {
+                            Name = ms["radioName"].ToString(),
+                            Photo = ms["radioImg"].ToString(),
+                            ID = ms["radioId"].ToString(),
+                            lstCount = int.Parse(ms["listenNum"].ToString())
+                        });
+                    }
+                    data.Add(name, dt);
                 }
             }
             catch { }
             return data;
         }
-        public async Task<Music> GetRadioMusicAsync(string id)
+        public static async Task<List<Music>> GetRadioMusicAsync(string id)
         {
-            if (id == "99")
-            {
-                var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/rcmusic2/fcgi-bin/fcg_guess_youlike_pc.fcg?g_tk=1206122277&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=703&uin={Settings.USettings.LemonAreeunIts}"));
+            var o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+    "{\"songlist\":{\"module\":\"pf.radiosvr\",\"method\":\"GetRadiosonglist\",\"param\":{\"id\":" + id + ",\"firstplay\":1,\"num\":10}},\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":0}}"))
+                ["songlist"]["data"]["track_list"];
+            List<Music> Data = new List<Music>();
+            foreach (var e in o) {
                 string Singer = "";
-                var s_0 = o["songlist"][0];
-                var s_0_s = o["songlist"][0]["singer"];
                 List<MusicSinger> lm = new List<MusicSinger>();
-                for (int osxc = 0; osxc != s_0_s.Count(); osxc++){
-                    Singer += s_0_s[osxc]["name"] + "&";
-                    lm.Add(new MusicSinger(){
-                        Name= s_0_s[osxc]["name"].ToString(),
-                        Mid= s_0_s[osxc]["mid"].ToString()
+                foreach (var a in e["singer"])
+                {
+                    Singer += a["name"] + "&";
+                    lm.Add(new MusicSinger()
+                    {
+                        Name = a["name"].ToString(),
+                        Mid = a["mid"].ToString()
                     });
                 }
-                string amid = s_0["album"]["mid"].ToString();
-                Music data = new Music
+                string amid = e["album"]["mid"].ToString();
+                Music m = new Music
                 {
-                    MusicName = s_0["name"].ToString(),
+                    MusicName = e["name"].ToString(),
                     SingerText = Singer.Substring(0, Singer.LastIndexOf("&")),
                     Singer = lm,
-                    MusicID = s_0["mid"].ToString(),
-                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg"
+                    MusicID = e["mid"].ToString(),
                 };
+                if (amid == "001ZaCQY2OxVMg")
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{e["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
-                    data.Album = new MusicGD()
+                    m.Album = new MusicGD()
                     {
                         ID = amid,
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
-                        Name = s_0["album"]["name"].ToString()
+                        Name =e["album"]["name"].ToString()
                     };
-                return data;
+                Data.Add(m);
             }
-            else
-            {
-                var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=1206122277&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&data=%7B\"songlist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiosonglist\"%2C\"param\"%3A%7B\"id\"%3A{id}%2C\"firstplay\"%3A1%2C\"num\"%3A10%7D%7D%2C\"radiolist\"%3A%7B\"module\"%3A\"pf.radiosvr\"%2C\"method\"%3A\"GetRadiolist\"%2C\"param\"%3A%7B\"ct\"%3A\"24\"%7D%7D%2C\"comm\"%3A%7B\"ct\"%3A\"24\"%7D%7D"));
-                string Singer = "";
-                var sdt0 = o["songlist"]["data"]["track_list"][0];
-                var sdt0s = sdt0["singer"];
-                List<MusicSinger> lm = new List<MusicSinger>();
-                for (int osxc = 0; osxc != sdt0s.Count(); osxc++){
-                    Singer += sdt0s[osxc]["name"] + "&";
-                    lm.Add(new MusicSinger() {
-                        Name= sdt0s[osxc]["name"].ToString(),
-                        Mid= sdt0s[osxc]["mid"].ToString()
-                    });
-                }
-                string amid = sdt0["album"]["mid"].ToString();
-                var data = new Music
-                {
-                    MusicName = sdt0["name"].ToString(),
-                    SingerText = Singer.Substring(0, Singer.LastIndexOf("&")),
-                    Singer=lm,
-                    MusicID = sdt0["mid"].ToString(),
-                    ImageUrl = $"http://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg"
-                };
-                if (amid != "")
-                    data.Album = new MusicGD()
-                    {
-                        ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
-                        Name = sdt0["album"]["name"].ToString()
-                    };
-                return data;
-            }
+            return Data;
         }
         #endregion
         #region 专辑
