@@ -1528,6 +1528,7 @@ jpg
         public static async Task<string> PraiseMusicPLAsync(string mid, MusicPL mp)
         {
             string id = await GetMusicIdByMidAsync(mid);
+            Console.WriteLine(id+" - "+ mp.commentid);
             string get = "";
             if (mp.ispraise)
                 get = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_praise_h5.fcg?g_tk={Settings.USettings.LemonAreeunIts}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360774&cmd=2&reqtype=2&biztype=1&topid={id}&commentid={mp.commentid}&qq={Settings.USettings.LemonAreeunIts}&domain=qq.com&ct=24&cv=101010");

@@ -43,15 +43,16 @@ namespace Lemon_App
                 zp.SetResourceReference(Shape.FillProperty, "PlayDLPage_Font_Low");
                 ztb.Text = (int.Parse(data.like) - 1).ToString();
                 data.like = ztb.Text;
+                Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
                 data.ispraise = false;
             }
             else {
                 zp.SetResourceReference(Shape.FillProperty, "ThemeColor");
                 ztb.Text = (int.Parse(data.like) + 1).ToString();
                 data.like = ztb.Text;
+                Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
                 data.ispraise = true;
             }
-            await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data);
         }
     }
 }

@@ -305,7 +305,7 @@ namespace Lemon_App
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.SingerText,false);
             }
             //--------播放时的Timer 进度/歌词
-            t.Interval = 500;
+            t.Interval = 1000;
             t.Tick += delegate
             {
                 try

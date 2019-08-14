@@ -61,9 +61,15 @@ namespace Lemon_App
                 FanBt.pData = Geometry.Parse("M825.742222 376.035556l-349.866666 355.612444a45.169778 45.169778 0 0 1-64.568889 0L213.560889 530.602667a46.478222 46.478222 0 0 1-13.368889-32.768c0-25.6 20.48-46.364444 45.624889-46.364445 12.629333 0 24.064 5.233778 32.312889 13.653334l165.489778 168.106666 317.610666-322.844444a45.283556 45.283556 0 0 1 32.312889-13.539556 46.08 46.08 0 0 1 45.624889 46.364445 46.648889 46.648889 0 0 1-13.425778 32.824889z");
             }
 
-            Lx_Img_1.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[0].img));            
-            Lx_Tit_1.Text = Data.liangxia[0].name;
-            Lx_dat_1.Text = Data.liangxia[0].lstCount;
+            if (Data.liangxia.Count >= 1)
+            {
+                Lx_Img_1.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[0].img));
+                Lx_Tit_1.Text = Data.liangxia[0].name;
+                Lx_dat_1.Text = Data.liangxia[0].lstCount;
+            }
+            else {
+                lx1.Visibility = Visibility.Hidden;
+            }
             if (Data.liangxia.Count >= 2)
             {
                 Lx_Img_2.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[1].img));
