@@ -770,7 +770,7 @@ namespace Lemon_App
             HomePage_IFV.Updata(data.focus, this);
             foreach (var a in data.Gdata)
             {
-                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo,a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);
@@ -782,7 +782,7 @@ namespace Lemon_App
             WidthUI(HomePage_Gdtj);
             foreach (var a in data.NewMusic)
             {
-                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl) { Width = 175, Height = 175, Margin = new Thickness(10, 0, 10, 20) };
+                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl,0) { Width = 175, Height = 175, Margin = new Thickness(10, 0, 10, 20) };
                 k.Tag = a;
                 k.ImMouseDown += (object s, MouseButtonEventArgs es) =>
                 {
@@ -1355,7 +1355,7 @@ namespace Lemon_App
             if (osx == 1) FLGDItemsList.Children.Clear();
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo,d.ListenCount) { Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);
@@ -2508,7 +2508,7 @@ namespace Lemon_App
                 {
                     if (!GData_Now.Contains(jm.Key))
                     {
-                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(12, 0, 12, 20) };
+                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,0, true,jm.Value.subtitle) { Margin = new Thickness(12, 0, 12, 20) };
                         ks.DeleteEvent += async (fl) =>
                         {
                             if (TwMessageBox.Show("确定要删除吗?"))
@@ -2532,7 +2532,7 @@ namespace Lemon_App
                 {
                     if (!GLikeData_Now.Contains(jm.Key))
                     {
-                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic, true) { Margin = new Thickness(12, 0, 12, 20) };
+                        var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,jm.Value.listenCount, true) { Margin = new Thickness(12, 0, 12, 20) };
                         ks.DeleteEvent += (fl) =>
                         {
                             if (TwMessageBox.Show("确定要删除吗?"))

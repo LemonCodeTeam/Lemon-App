@@ -6,7 +6,14 @@
              xmlns:local="clr-namespace:Lemon_App"
              mc:Ignorable="d" MinWidth="100" MaxWidth="200" SizeChanged="UserControl_SizeChanged">
     <Grid Background="#00000000">
-        <Border x:Name="im" Background="#FF007ACC" Height="{Binding ActualWidth, ElementName=im, Mode=OneWay}" VerticalAlignment="Top" MouseDown="Im_MouseDown" CornerRadius="5"/>
+        <Border x:Name="im" Background="#FF007ACC" Height="{Binding ActualWidth, ElementName=im, Mode=OneWay}" VerticalAlignment="Top" MouseDown="Im_MouseDown" CornerRadius="5">
+            <Border x:Name="lstBord" HorizontalAlignment="Right" Height="18" VerticalAlignment="Bottom" Margin="0,0,5,5" Background="#CC000000" CornerRadius="10" >
+                <Grid>
+                    <Path Data="M11 8.035v-1.035a4 4 0 1 0-8 0v1.035a1.307 1.307 0 0 1 1.6 1.275v1.38c0 .724-.577 1.31-1.3 1.31-.718 0-1.3-.59-1.3-1.31v-3.69a5 5 0 1 1 10 0v3.69c0 .724-.577 1.31-1.3 1.31-.718 0-1.3-.59-1.3-1.31v-1.38a1.302 1.302 0 0 1 1.6-1.275z" HorizontalAlignment="Left" Height="15" VerticalAlignment="Center" Width="15" Margin="5,0,0,0" Fill="White"/>
+                    <TextBlock x:Name="listenCount" TextWrapping="NoWrap" Text="999.99万" VerticalAlignment="Center" Foreground="White" Margin="20,0,5,0" FontSize="11"/>
+                </Grid>
+            </Border>
+        </Border>
         <TextBlock x:Name="name" Margin="10,0,10,10" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Justify" Height="35" VerticalAlignment="Bottom"/>
         <Border x:Name="DeleteBtn" Height="25" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Background="#7F000000" MouseDown="DeleteBtn_MouseDown" CornerRadius="25" Visibility="Collapsed">
             <Path Data="M590.514383 488.040949 952.888054 851.125263C981.253371 879.546168 981.11016 925.804176 952.546629 954.423734 923.783934 983.242895 877.825294 983.196523 849.450322 954.76589L487.076651 591.681576 124.70298 954.76589C96.337663 983.186795 50.170204 983.043365 21.606672 954.423734-7.156023 925.604646-7.109798 879.555896 21.265175 851.125263L383.638845 488.040949 21.265175 124.956635C-7.100143 96.53573-6.956932 50.277722 21.606672 21.658164 50.369368-7.160997 96.328008-7.114625 124.70298 21.316008L487.076651 384.400322 849.450322 21.316008C877.815566-7.104897 923.983025-6.961467 952.546629 21.658164 981.309325 50.477252 981.263026 96.526002 952.888054 124.956635L590.514383 488.040949 590.514383 488.040949Z" Fill="White" Stretch="Uniform" Margin="7"/>

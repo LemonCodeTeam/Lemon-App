@@ -481,6 +481,7 @@ jpg
                 return new SortedDictionary<string, MusicGData>();
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
             var o = JObject.Parse(dt);
+            Console.WriteLine(o.ToString());
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["mydiss"]["list"];
             foreach (var ex in dx)
@@ -488,6 +489,7 @@ jpg
                 var df = new MusicGData();
                 df.id = ex["dissid"].ToString();
                 df.name = ex["title"].ToString();
+                df.subtitle = ex["subtitle"].ToString();
                 if (ex["picurl"].ToString() != "")
                     df.pic = ex["picurl"].ToString().Replace("http://", "https://");
                 else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
@@ -503,6 +505,7 @@ jpg
         {
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&ct=20&cid=205360956&userid={Settings.USettings.LemonAreeunIts}&reqtype=3&sin=0&ein=25");
             var o = JObject.Parse(dt);
+            Console.WriteLine(o.ToString());
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["cdlist"];
             foreach (var ex in dx)
@@ -510,6 +513,7 @@ jpg
                 var df = new MusicGData();
                 df.id = ex["dissid"].ToString();
                 df.name = ex["dissname"].ToString();
+                df.listenCount =int.Parse(ex["listennum"].ToString());
                 if (ex["logo"].ToString() != "")
                     df.pic = ex["logo"].ToString().Replace("http://","https://");
                 else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
@@ -532,6 +536,7 @@ jpg
             int start = (osx - 1) * 30;
             int end = start + 29;
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId={sortId}&sin={start}&ein={end}", Encoding.UTF8));
+            Console.WriteLine(o.ToString());
             var data = new List<MusicGD>();
             int i = 0;
             var dl = o["data"]["list"];
@@ -542,7 +547,8 @@ jpg
                 {
                     Name = dli["dissname"].ToString(),
                     Photo = dli["imgurl"].ToString().Replace("http://", "https://"),//不知为何，不用https就会报404错误,
-                    ID = dli["dissid"].ToString()
+                    ID = dli["dissid"].ToString(),
+                    ListenCount=int.Parse(dli["listennum"].ToString())
                 });
                 i++;
             }
@@ -1358,6 +1364,7 @@ jpg
                 md.ID = rp["content_id"].ToString();
                 md.Name = rp["title"].ToString();
                 md.Photo = rp["cover"].ToString().Replace("http://","https://");
+                md.ListenCount = int.Parse(rp["listen_num"].ToString());
                 Gdata.Add(md);
             }
             //----新歌首发---

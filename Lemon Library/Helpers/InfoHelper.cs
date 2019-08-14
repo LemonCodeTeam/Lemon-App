@@ -100,6 +100,7 @@ namespace LemonLibrary
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
+            public int ListenCount { set; get; }
         }
         public class MusicTop
         {
@@ -143,8 +144,10 @@ namespace LemonLibrary
             public List<Music> Data { get; set; } = new List<Music>();
             public string name { get; set; }
             public string pic { get; set; }
+            public string subtitle { get; set; }
             public string id { get; set; }
             public bool IsOwn = false;
+            public int listenCount { get; set; }
             public List<string> ids = new List<string>();
         }
         ////////Weather Helper/////

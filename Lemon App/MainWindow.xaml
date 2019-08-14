@@ -1593,7 +1593,7 @@
                         </ScrollViewer>
                     </Grid>
                     <Grid x:Name="ZJIndexPage" Visibility="Collapsed" >
-                        <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="专辑&amp;分类歌单" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
+                        <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="分类歌单" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                         <ScrollViewer x:Name="FLGDPage_sv"  Margin="0,45,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="FLGDPage_sv_ScrollChanged">
                             <WrapPanel Orientation="Vertical">
                                 <Grid x:Name="FLGDIndexList" VerticalAlignment="Top" Margin="0,5,0,0" Width="{Binding ActualWidth, ElementName=ZJIndexPage, Mode=OneWay}" Height="130">
@@ -1827,7 +1827,7 @@
                         </Grid>
                         <Label x:Name="TopBtn" Content="排行" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="TopBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
                         <Label x:Name="SingerBtn" Content="歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="SingerBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
-                        <Label x:Name="ZJBtn" Content="专辑" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="ZJBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
+                        <Label x:Name="ZJBtn" Content="歌单" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="ZJBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
                         <Label x:Name="RadioBtn" Content="电台" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" MouseDown="RadioBtn_MouseDown" Width="58" Margin="24,15,0,0"/>
                         <Grid x:Name="Download" Margin="0,15,0,0">
                             <Border HorizontalAlignment="Left" Height="15" Margin="0,5,0,0" VerticalAlignment="Top" Width="14" ClipToBounds="True">

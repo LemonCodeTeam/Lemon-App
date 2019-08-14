@@ -96,7 +96,7 @@ namespace Lemon_App
             int i = 0;
             NewAlbumList.Children.Clear();
             foreach (var c in Data.Album) {
-                FLGDIndexItem f = new FLGDIndexItem(c.ID, c.Name, c.Photo);
+                FLGDIndexItem f = new FLGDIndexItem(c.ID, c.Name, c.Photo,0);
                 f.Margin = new Thickness(5, 0, 5, 0);
                 f.ImMouseDown += F_MouseDown;
                 Grid.SetColumn(f, i);
@@ -264,7 +264,7 @@ namespace Lemon_App
             var data = await MusicLib.GetSingerAlbumById(Data.mSinger.Mid,AlbumIndex);
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo) { Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo,0) { Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += (sx) =>
                 {
                     MusicLib.AddGDILike(sx.id);

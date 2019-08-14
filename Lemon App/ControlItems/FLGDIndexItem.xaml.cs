@@ -36,14 +36,20 @@ namespace Lemon_App
         {
             InitializeComponent();
         }
-            public FLGDIndexItem(string Id,string nae,string pic,bool hasDeleteBtn=false)
+        public FLGDIndexItem(string Id, string nae, string pic,int lstCount, bool hasDeleteBtn = false,string subtitle="")
         {
             InitializeComponent();
             id = Id;
             sname = nae;
             img = pic;
             name.Text = nae;
-            if (!hasDeleteBtn) {
+            if (lstCount == 0&&subtitle=="")
+                lstBord.Visibility = Visibility.Collapsed;
+            else listenCount.Text = lstCount.IntToWn();
+            if (subtitle != "")
+                listenCount.Text = subtitle;
+            if (!hasDeleteBtn)
+            {
                 MouseEnter += delegate { StarBtn.Visibility = Visibility.Visible; };
                 MouseLeave += delegate { StarBtn.Visibility = Visibility.Collapsed; };
             }
@@ -52,7 +58,8 @@ namespace Lemon_App
                 MouseEnter += delegate { DeleteBtn.Visibility = Visibility.Visible; };
                 MouseLeave += delegate { DeleteBtn.Visibility = Visibility.Collapsed; };
             }
-             Loaded += async delegate {
+            Loaded += async delegate
+            {
                 Height = Height = ActualWidth + 45;
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
             };
@@ -70,7 +77,7 @@ namespace Lemon_App
 
         private void Im_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ImMouseDown(this,null);
+            ImMouseDown(this, null);
         }
 
         private void StarBtn_MouseDown(object sender, MouseButtonEventArgs e)

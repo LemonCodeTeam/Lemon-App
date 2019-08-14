@@ -32,6 +32,7 @@ namespace Lemon_App
             name.Text = dt.Name;
             Loaded += async delegate
             {
+                Height = Height = ActualWidth + 45;
                 try
                 {
                     im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Photo));
@@ -56,6 +57,11 @@ namespace Lemon_App
         public SingerItem()
         {
             InitializeComponent();
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Height = Height = ActualWidth + 45;
         }
     }
 }
