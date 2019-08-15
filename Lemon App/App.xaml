@@ -15,7 +15,7 @@
             <!--UI边框色 默认值:#FFE7E8EC-->
             <SolidColorBrush x:Key="BorderColorBrush" Color="#FFF0F0F0"/>
             <!--菜单栏背景色 默认值:#FFFAFAFA-->
-            <SolidColorBrush x:Key="ControlPageBrush" Color="#FFFAFAFA"/>
+            <SolidColorBrush x:Key="ControlPageBrush" Color="#FFFDFDFD"/>
             <!--文本X1 默认值:#FFA0A0A0-->
             <SolidColorBrush x:Key="TextX1ColorBrush" Color="#FF535353"/>
 

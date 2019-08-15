@@ -63,7 +63,7 @@ namespace Lemon_App
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#4C000000"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19000000"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#00FFFFFF"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
@@ -82,7 +82,7 @@ namespace Lemon_App
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#33FFFFFF"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FAFAFA"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#00FFFFFF"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
@@ -100,7 +100,7 @@ namespace Lemon_App
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
             SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFF0F0F0"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFFAFAFA"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
             SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF535353"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
