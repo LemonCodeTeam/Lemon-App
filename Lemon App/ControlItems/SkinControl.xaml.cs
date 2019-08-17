@@ -11,20 +11,20 @@ namespace Lemon_App
     /// </summary>
     public partial class SkinControl : UserControl
     {
-        public int imgurl;
+        public string imgurl;
         public Color theme;
         public string txtColor;
-        public SkinControl(int imgurl,string name,Color themecolor)
+        public SkinControl(string imgurl,string name,Color themecolor)
         {
             InitializeComponent();
             this.imgurl = imgurl;
             theme = themecolor;
-            if (imgurl == -2)
+            if (imgurl == "-2")
                 img.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF2D2D30"));
-            else if (imgurl == -3)
+            else if (imgurl == "-3")
                 img.Background = new SolidColorBrush(Color.FromArgb(255, 240, 240, 240));
-            else if (imgurl != -1)
-                img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + +imgurl + ".jpg", UriKind.Absolute)));
+            else if (imgurl != "-1")
+                img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + imgurl + ".jpg", UriKind.Absolute)));
             this.name.Text = name;
         }
     }

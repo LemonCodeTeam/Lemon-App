@@ -656,17 +656,17 @@ namespace Lemon_App
         {
             NSPage(null, SkinPage);
             SkinIndexList.Children.Clear();
-            var json = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/SkinList.json"))["data"];
-            int i = 1;
+            var json = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/SkinList.json"))["dataV2"];
             foreach (var dx in json)
             {
                 string name = dx["name"].ToString();
+                string uri=dx["uri"].ToString();
                 Color color = Color.FromRgb(byte.Parse(dx["ThemeColor"]["R"].ToString()),
                     byte.Parse(dx["ThemeColor"]["G"].ToString()),
                     byte.Parse(dx["ThemeColor"]["B"].ToString()));
-                if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + i + ".jpg"))
-                    await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{i}.jpg", Settings.USettings.CachePath + "Skin\\" + i + ".jpg");
-                SkinControl sc = new SkinControl(i, name, color);
+                if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + uri + ".jpg"))
+                    await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{uri}.jpg", Settings.USettings.CachePath + "Skin\\" + uri + ".jpg");
+                SkinControl sc = new SkinControl(uri, name, color);
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) =>
                 {
@@ -690,7 +690,7 @@ namespace Lemon_App
                     App.BaseApp.SetColor("ResuColorBrush", co);
                     App.BaseApp.SetColor("ButtonColorBrush", co);
                     App.BaseApp.SetColor("TextX1ColorBrush", co);
-                    Settings.USettings.Skin_Path = Settings.USettings.CachePath + "Skin\\" + +sc.imgurl + ".png";
+                    Settings.USettings.Skin_Path = Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png";
                     Settings.USettings.Skin_txt = sc.txtColor;
                     Settings.USettings.Skin_Theme_R = sc.theme.R.ToString();
                     Settings.USettings.Skin_Theme_G = sc.theme.G.ToString();
@@ -699,9 +699,8 @@ namespace Lemon_App
                 };
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 SkinIndexList.Children.Add(sc);
-                i++;
             }
-            SkinControl sxc = new SkinControl(-1, "默认主题", Color.FromArgb(0, 0, 0, 0));
+            SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
             sxc.MouseDown += (s, n) =>
             {
                 if (WindowBlur.GetIsEnabled(this))
@@ -716,7 +715,7 @@ namespace Lemon_App
             sxc.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(sxc);
 
-            SkinControl blur = new SkinControl(-2, "磨砂黑", Color.FromArgb(0, 0, 0, 0));
+            SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
             blur.MouseDown += (s, n) =>
             {
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CC000000"));
@@ -729,7 +728,7 @@ namespace Lemon_App
             };
             blur.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blur);
-            SkinControl blurWhite = new SkinControl(-3, "亚克力白", Color.FromArgb(255, 240, 240, 240));
+            SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D8FFFFFF"));

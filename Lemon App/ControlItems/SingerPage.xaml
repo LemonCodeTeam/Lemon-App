@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Lemon_App" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Class="Lemon_App.SingerPage" 
+             xmlns:local="clr-namespace:Lemon_App" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" 
+             x:Class="Lemon_App.SingerPage" 
              mc:Ignorable="d" Width="889" Loaded="UserControl_Loaded" SizeChanged="UserControl_SizeChanged" >
     <UserControl.Resources>
         <Storyboard x:Key="mSingerTX">
