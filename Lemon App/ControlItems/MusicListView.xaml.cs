@@ -38,7 +38,7 @@ namespace Lemon_App
         public void CreatItems(List<Music> Data) {
             foreach (var c in Data)
             {
-                var k = new DataItem(c) { Width = ActualWidth };
+                var k = new DataItem(c,mw) { Width = ActualWidth };
                 if (k.music.MusicID == mw.MusicData.Data.MusicID)
                 {
                     k.ShowDx();
