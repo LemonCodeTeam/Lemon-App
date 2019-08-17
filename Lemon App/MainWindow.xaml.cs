@@ -795,7 +795,7 @@ namespace Lemon_App
             DataItemsList.Items.Clear();
             foreach (var j in dta.Data)
             {
-                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j,this) { Width = ContentPage.ActualWidth };
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
                 k.Download += K_Download;
@@ -855,7 +855,7 @@ namespace Lemon_App
             var dta = await ml.GetToplistAsync(g.Data.ID, osx);
             foreach (var j in dta)
             {
-                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j,this) { Width = ContentPage.ActualWidth };
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
                 k.Download += K_Download;
@@ -1495,7 +1495,7 @@ namespace Lemon_App
                 DataItemsList.Items.Clear();
                 He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<Music, bool>((j, b) =>
                 {
-                    var k = new DataItem(j, b, this);
+                    var k = new DataItem(j, this, b);
                     DataItemsList.Items.Add(k);
                     k.Play += PlayMusic;
                     k.Width = DataItemsList.ActualWidth;
@@ -1675,7 +1675,7 @@ namespace Lemon_App
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
             foreach (var j in dt)
             {
-                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j,this) { Width = ContentPage.ActualWidth };
                 if (k.music.MusicID == MusicData.Data.MusicID)
                 {
                     k.ShowDx();
@@ -2552,7 +2552,7 @@ namespace Lemon_App
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
             He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<Music, bool>((j, b) =>
             {
-                var k = new DataItem(j, b, this);
+                var k = new DataItem(j,this,b);
                 DataItemsList.Items.Add(k);
                 k.Play += PlayMusic;
                 k.GetToSingerPage += K_GetToSingerPage;

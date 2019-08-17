@@ -29,7 +29,7 @@ namespace Lemon_App
         private bool needb = false;
 
         private int BtnWidth = 0;
-        public DataItem(Music dat,bool needDeleteBtn=false,MainWindow mw=null)
+        public DataItem(Music dat, MainWindow mw,bool needDeleteBtn=false)
         {
             try
             {
@@ -70,7 +70,10 @@ namespace Lemon_App
             }
             catch { }
         }
-
+        public DataItem(Music dat) {
+            InitializeComponent();
+            music = dat;
+        }
         private void R_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Ran r = sender as Ran;
@@ -205,6 +208,7 @@ namespace Lemon_App
 
         private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            Console.WriteLine(music.Album.ID);
             Mainwindow.IFVCALLBACK_LoadAlbum(music.Album.ID);
         }
 
