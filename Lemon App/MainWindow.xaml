@@ -1735,7 +1735,10 @@
                                 </WrapPanel>
                             </Grid>
                         </Border>
-                        <ListBox x:Name="DataItemsList" Margin="0,51,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
+                        <ListBox x:Name="DataItemsList"
+                                 IsSynchronizedWithCurrentItem = "true"
+ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "Pixel"
+                                 Margin="0,51,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
                             VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
                         <ProgressBar x:Name="loadin" Height="2" VerticalAlignment="Top" Margin="0,51,0,0" Background="#00000000" Foreground="{DynamicResource ThemeColor}" Maximum="300" BorderThickness="0" Style="{DynamicResource ProgressBarStyle1}"/>
                     </Grid>
@@ -1860,7 +1863,7 @@
             </Grid.ColumnDefinitions>
             <Border x:Name="ThemeColor" Background="Black"  Grid.ColumnSpan="2">
                 <Border x:Name="LyricPage_Background">
-                    <Border Background="#7F000000"/>
+                    <Border Background="#66000000"/>
                 </Border>
             </Border>
             <Border x:Name="border4" Margin="0,160,30,210" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right" CornerRadius="5">
@@ -1876,7 +1879,6 @@
             <Border HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="Border_MouseDown_2">
                 <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="25" Width="25"/>
             </Border>
-            <lemon_app:TitlePageBtn x:Name="ThemeChooseCloseBtn" MinOp="0" Margin="0,5,-273,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="ThemeChooseCloseBtn_MouseDown" Grid.ColumnSpan="2"/>
         </Grid>
         <Grid x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
