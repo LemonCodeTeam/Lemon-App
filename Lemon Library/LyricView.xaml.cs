@@ -140,7 +140,8 @@ namespace LemonLibrary
             Point p = gf.Transform(new Point(0, 0));
             double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 10;
             //c_scrollviewer.ScrollToVerticalOffset(os);
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(200));
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+            da.EasingFunction = new CircleEase() { EasingMode=EasingMode.EaseOut};
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
         public static String[] parserLine(String str, List<String> times, List<String> texs, Dictionary<String, String> data,bool doesAdd=true)
