@@ -1346,7 +1346,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBox}">
                         <Themes:ClassicBorderDecorator x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderStyle="Sunken" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="Datasv"  Template="{DynamicResource ScrollViewerControlTemplate}"  Focusable="False" Padding="{TemplateBinding Padding}" >
+                            <ScrollViewer x:Name="PlayDLDatasv"  Template="{DynamicResource ScrollViewerControlTemplate}"  Focusable="False" Padding="{TemplateBinding Padding}" Loaded="PlayDLDatasv_Loaded" >
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </ScrollViewer>
                         </Themes:ClassicBorderDecorator>
@@ -1361,6 +1361,64 @@
                                 </MultiTrigger.Conditions>
                                 <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
                             </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CheckBoxStyle1" TargetType="{x:Type CheckBox}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="checkBoxBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" CornerRadius="3">
+                                <Grid x:Name="markGrid">
+                                    <Path x:Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Stretch="None"/>
+                                    <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="2" Opacity="0"/>
+                                </Grid>
+                            </Border>
+                            <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="true">
+                                <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
+                                <Setter Property="Padding" Value="4,-1,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -1404,8 +1462,8 @@
                         <ScrollViewer x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                             <WrapPanel x:Name="DownloadItemsList" Orientation="Vertical"/>
                         </ScrollViewer>
-                        <lemon_app:MDButton x:Name="Download_pause" HorizontalAlignment="Left" Height="25" Margin="140,14,0,0" Width="70" TName="暂停" MouseDown="Download_pause_MouseDown" VerticalAlignment="Top"/>
-                        <lemon_app:MDButton x:Name="Download_clear" HorizontalAlignment="Left" Height="25" Margin="225,14,0,0" Width="70" TName="取消全部" MouseDown="Download_clear_MouseDown" VerticalAlignment="Top"/>
+                        <lemon_app:MDButton x:Name="Download_pause" HorizontalAlignment="Left" Height="25" Margin="140,14,0,0" Width="70" TName="暂停" MouseDown="Download_pause_MouseDown" VerticalAlignment="Top" pData="{x:Null}" cr="13"/>
+                        <lemon_app:MDButton x:Name="Download_clear" HorizontalAlignment="Left" Height="25" Margin="225,14,0,0" Width="70" TName="取消全部" MouseDown="Download_clear_MouseDown" VerticalAlignment="Top" cr="13" pData="{x:Null}"/>
                         <Grid x:Name="NonePage_Copy">
                             <Border Width="300" Height="300" Margin="0,0,0,100" >
                                 <Border.Background>
@@ -1431,10 +1489,10 @@
                     </Grid>
                     <Grid x:Name="SettingsPage" Visibility="Collapsed">
                         <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
-                            <WrapPanel VerticalAlignment="Top" Orientation="Vertical">
+                            <WrapPanel x:Name="wrapPanel" VerticalAlignment="Top" Orientation="Vertical" Margin="0,0,15,0">
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,0,0,0"/>
-                                <Grid VerticalAlignment="Top" Height="172" Margin="20,20,0,0">
-                                    <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Click="DownloadWithLyric_Click"/>
+                                <Grid VerticalAlignment="Top" Height="172" Margin="20,10,0,0">
+                                    <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Click="DownloadWithLyric_Click" Style="{DynamicResource CheckBoxStyle1}"/>
                                     <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top"/>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
                                     <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
@@ -1455,9 +1513,9 @@
                                     <lemon_app:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
                                     <TextBlock Margin="0,215,95,0" TextWrapping="Wrap" Text="ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="#FFAEAEAE" TextAlignment="Center" FontSize="16"/>
                                 </Grid>
-                                <Grid Height="121" VerticalAlignment="Top" Width="810" Margin="20,0,0,0">
+                                <Grid Height="121" VerticalAlignment="Top" Margin="20,0,0,0" Width="{Binding ActualWidth, ElementName=wrapPanel, Mode=OneWay}">
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23"/>
-                                    <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:https://github.com/TwilightLemon/Lemon-App 请遵循GPL开源协议" MouseDown="Run_MouseDown"/><LineBreak/><Run/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
+                                    <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:"/><Run x:Name="SettingsPage_URLink" Text="https://github.com/TwilightLemon/Lemon-App" Foreground="#FF007ACC" TextDecorations="Underline" MouseDown="SettingsPage_URLink_MouseDown"/><Run Text="   请遵循 GPL v3.0 以及 Anti 996 开源协议"/><LineBreak/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
                                 </Grid>
                             </WrapPanel>
                         </ScrollViewer>
@@ -1710,7 +1768,7 @@
                                                 <ImageBrush ImageSource="https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000"/>
                                             </Border.Background>
                                         </Border>
-                                        <lemon_app:MDButton x:Name="AddGDPage_ImgBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="146,101,0,0" TName="选择图像" MouseDown="AddGDPage_ImgBtn_MouseDown"/>
+                                        <lemon_app:MDButton x:Name="AddGDPage_ImgBtn" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="146,101,0,0" TName="选择图像" MouseDown="AddGDPage_ImgBtn_MouseDown" Width="162" pData="{x:Null}"/>
                                     </Grid>
                                 </Border>
                             </Border>
@@ -1741,6 +1799,12 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                                  Margin="0,51,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
                             VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
                         <ProgressBar x:Name="loadin" Height="2" VerticalAlignment="Top" Margin="0,51,0,0" Background="#00000000" Foreground="{DynamicResource ThemeColor}" Maximum="300" BorderThickness="0" Style="{DynamicResource ProgressBarStyle1}"/>
+                        <Border x:Name="DataPage_GOTO" HorizontalAlignment="Right" Height="40" VerticalAlignment="Bottom" Width="40" Margin="0,0,25,25" CornerRadius="100" Background="#FFF9F9F9" BorderBrush="#FFD6D6D6" BorderThickness="1" MouseDown="DataPage_GOTO_MouseDown">
+                            <Path Data="M510.976716 128.626761c-211.205756 0-382.401119 171.195363-382.401119 382.401119s171.195363 382.401119 382.401119 382.401119S893.377836 722.131308 893.377836 510.925552 722.182472 128.626761 510.976716 128.626761zM736.508444 736.45728c-29.265914 29.265914-63.443589 52.289797-101.407415 68.355351-29.265914 12.381733-59.964425 20.158689-91.481563 23.433197L543.619466 704.019187l-63.443589 0 0 124.431298c-32.233437-3.069851-63.443589-10.949136-93.323474-23.535525-37.963825-16.065554-72.039173-39.089437-101.407415-68.355351-29.265914-29.265914-52.289797-63.443589-68.355351-101.407415-12.381733-29.265914-20.158689-59.964425-23.433197-91.481563l126.273209 0 0-63.443589L193.554112 480.227041c3.069851-32.233437 10.949136-63.443589 23.535525-93.323474 16.065554-37.963825 39.089437-72.039173 68.355351-101.407415 29.265914-29.265914 63.443589-52.289797 101.407415-68.355351 29.879884-12.58639 61.090037-20.465674 93.323474-23.535525l0 125.863895 63.443589 0L543.619466 193.707605c31.517138 3.172179 62.215649 11.051464 91.481563 23.433197 37.963825 16.065554 72.039173 39.089437 101.407415 68.355351 29.265914 29.265914 52.289797 63.443589 68.355351 101.407415 12.58639 29.879884 20.465674 61.090037 23.535525 93.323474L703.251724 480.227041l0 63.443589 125.045268 0c-3.172179 31.517138-11.051464 62.215649-23.433197 91.481563C788.798241 673.01369 765.876686 707.089038 736.508444 736.45728z M516.093135 415.248526c-56.280604 0-100.793445 43.489557-100.793445 99.770161s44.512841 101.816728 100.793445 101.816728S616.886579 571.29929 616.886579 515.018687 572.373738 415.248526 516.093135 415.248526z" Stretch="UniformToFill" Fill="#FF666666" Width="20" Height="20"/>
+                        </Border>
+                        <Border x:Name="DataPage_Top" HorizontalAlignment="Right" Height="40" VerticalAlignment="Bottom" Width="40" Margin="0,0,25,75" CornerRadius="100" Background="#FFF9F9F9" BorderBrush="#FFD6D6D6" BorderThickness="1" MouseDown="DataPage_Top_MouseDown">
+                            <Path Data="M116.096 596.08064l90.86976 0 0 231.9872 42.48576 0 0-231.9872 90.86976 0 0-42.48064L116.096 553.6 116.096 596.08064zM574.63296 553.6 462.08512 553.6c-13.58848 0-27.18208 5.18656-37.54496 15.54944-10.37312 10.368-15.55456 23.9616-15.55456 37.5552l0 168.24832c0 13.5936 5.18144 27.1872 15.55456 37.5552 10.368 10.368 23.9616 15.55456 37.54496 15.55456l112.54784 0c13.58848 0 27.1872-5.18656 37.5552-15.55456s15.54944-23.9616 15.54944-37.5552l0-168.2432c0-13.59872-5.18144-27.1872-15.54944-37.56032C601.82016 558.78656 588.22656 553.6 574.63296 553.6L574.63296 553.6zM585.26208 774.95296c0 2.01216-0.54784 4.94592-3.10784 7.51616-2.57024 2.57024-5.50912 3.10784-7.51616 3.10784L462.08512 785.57696c-2.00704 0-4.93568-0.5376-7.50592-3.10784s-3.11296-5.504-3.11296-7.51616l0-168.2432c0-2.01216 0.54272-4.94592 3.11296-7.51616s5.49888-3.11296 7.50592-3.11296l112.54784 0c2.00704 0 4.94592 0.54272 7.50592 3.11296 2.57024 2.57024 3.11808 5.504 3.11808 7.51616L585.25696 774.95296 585.26208 774.95296zM892.34944 569.14944c-10.368-10.35776-23.96672-15.54944-37.5552-15.54944l-145.65376 0 0 274.46272 42.48064 0L751.62112 707.6864l103.17312 0c13.5936 0 27.1872-5.18656 37.5552-15.55456s15.55456-23.9616 15.55456-37.55008l0-47.87712C907.904 593.11104 902.72256 579.52256 892.34944 569.14944L892.34944 569.14944zM865.41824 654.58176c0 2.00704-0.5376 4.9408-3.10784 7.51104s-5.50912 3.10784-7.51104 3.10784l-103.168 0 0-69.12 103.168 0c2.00704 0 4.9408 0.54272 7.51104 3.11296s3.10784 5.504 3.10784 7.51616L865.41824 654.58176 865.41824 654.58176z M315.97056 370.06848c55.05024-49.60256 185.7024-167.31136 189.75744-170.89024 5.1456-4.54144 11.38688-3.97824 15.30368-0.384 2.74432 2.51904 138.49088 124.7488 191.22688 172.2368 8.30464 6.99392 6.10304 20.74112-4.31616 20.74112s-377.85088 0.09728-384.43008 0S308.56192 379.35616 315.97056 370.06848z" Stretch="Uniform" Fill="#FF666666" Width="20" Height="20"/>
+                        </Border>
                     </Grid>
                     <Grid x:Name="SingerDataPage" Margin="0,-50,0,0" Visibility="Collapsed" IsVisibleChanged="SingerDataPage_IsVisibleChanged">
                         <ScrollViewer x:Name="Cisv" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Cisv_ScrollChanged" />
@@ -1998,8 +2062,14 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                     <Path Fill="#FFCBCBCB" Data="M435.73767,653.351702L490.502916,708.016664 686.060628,512.51728 490.502916,316.967754 435.73767,371.691045 537.430668,473.325715 158.029018,473.325716 158.029018,551.650517 537.430668,551.650517 435.73767,653.351702z M783.851765,160.502347L236.296515,160.502347C193.260393,160.502347,158.030042,195.675393,158.030042,238.652163L158.030042,395.175899 236.296515,395.175899 236.296515,238.652163 783.851765,238.652163 783.851765,786.32407 236.296515,786.32407 236.296515,629.858662 158.030042,629.858662 158.030042,786.32407C158.030042,829.350983,193.261416,864.533238,236.296515,864.533238L783.851765,864.533238C826.828536,864.533238,862.05991,829.350983,862.05991,786.32407L862.05991,238.652163C862.058886,195.675392,826.828535,160.502347,783.851765,160.502347" Stretch="Uniform" />
                 </Border>
             </Grid>
-            <ListBox x:Name="PlayDL_List" Margin="0,100,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
+            <ListBox x:Name="PlayDL_List" VirtualizingStackPanel.ScrollUnit = "Pixel" Margin="0,100,0,0" VirtualizingPanel.VirtualizationMode="Recycling"
                 VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" />
+            <Border x:Name="PlayDL_GOTO" HorizontalAlignment="Right" Height="40" VerticalAlignment="Bottom" Width="40" CornerRadius="100" Background="#FFF9F9F9" BorderBrush="#FFD6D6D6" BorderThickness="1" MouseDown="PlayDL_GOTO_MouseDown" Margin="0,0,20,20">
+                <Path Data="M510.976716 128.626761c-211.205756 0-382.401119 171.195363-382.401119 382.401119s171.195363 382.401119 382.401119 382.401119S893.377836 722.131308 893.377836 510.925552 722.182472 128.626761 510.976716 128.626761zM736.508444 736.45728c-29.265914 29.265914-63.443589 52.289797-101.407415 68.355351-29.265914 12.381733-59.964425 20.158689-91.481563 23.433197L543.619466 704.019187l-63.443589 0 0 124.431298c-32.233437-3.069851-63.443589-10.949136-93.323474-23.535525-37.963825-16.065554-72.039173-39.089437-101.407415-68.355351-29.265914-29.265914-52.289797-63.443589-68.355351-101.407415-12.381733-29.265914-20.158689-59.964425-23.433197-91.481563l126.273209 0 0-63.443589L193.554112 480.227041c3.069851-32.233437 10.949136-63.443589 23.535525-93.323474 16.065554-37.963825 39.089437-72.039173 68.355351-101.407415 29.265914-29.265914 63.443589-52.289797 101.407415-68.355351 29.879884-12.58639 61.090037-20.465674 93.323474-23.535525l0 125.863895 63.443589 0L543.619466 193.707605c31.517138 3.172179 62.215649 11.051464 91.481563 23.433197 37.963825 16.065554 72.039173 39.089437 101.407415 68.355351 29.265914 29.265914 52.289797 63.443589 68.355351 101.407415 12.58639 29.879884 20.465674 61.090037 23.535525 93.323474L703.251724 480.227041l0 63.443589 125.045268 0c-3.172179 31.517138-11.051464 62.215649-23.433197 91.481563C788.798241 673.01369 765.876686 707.089038 736.508444 736.45728z M516.093135 415.248526c-56.280604 0-100.793445 43.489557-100.793445 99.770161s44.512841 101.816728 100.793445 101.816728S616.886579 571.29929 616.886579 515.018687 572.373738 415.248526 516.093135 415.248526z" Stretch="UniformToFill" Fill="#FF666666" Width="20" Height="20"/>
+            </Border>
+            <Border x:Name="PlayDL_Top" HorizontalAlignment="Right" Height="40" VerticalAlignment="Bottom" Width="40" CornerRadius="100" Background="#FFF9F9F9" BorderBrush="#FFD6D6D6" BorderThickness="1" MouseDown="PlayDL_Top_MouseDown" Margin="0,0,20,70">
+                <Path Data="M116.096 596.08064l90.86976 0 0 231.9872 42.48576 0 0-231.9872 90.86976 0 0-42.48064L116.096 553.6 116.096 596.08064zM574.63296 553.6 462.08512 553.6c-13.58848 0-27.18208 5.18656-37.54496 15.54944-10.37312 10.368-15.55456 23.9616-15.55456 37.5552l0 168.24832c0 13.5936 5.18144 27.1872 15.55456 37.5552 10.368 10.368 23.9616 15.55456 37.54496 15.55456l112.54784 0c13.58848 0 27.1872-5.18656 37.5552-15.55456s15.54944-23.9616 15.54944-37.5552l0-168.2432c0-13.59872-5.18144-27.1872-15.54944-37.56032C601.82016 558.78656 588.22656 553.6 574.63296 553.6L574.63296 553.6zM585.26208 774.95296c0 2.01216-0.54784 4.94592-3.10784 7.51616-2.57024 2.57024-5.50912 3.10784-7.51616 3.10784L462.08512 785.57696c-2.00704 0-4.93568-0.5376-7.50592-3.10784s-3.11296-5.504-3.11296-7.51616l0-168.2432c0-2.01216 0.54272-4.94592 3.11296-7.51616s5.49888-3.11296 7.50592-3.11296l112.54784 0c2.00704 0 4.94592 0.54272 7.50592 3.11296 2.57024 2.57024 3.11808 5.504 3.11808 7.51616L585.25696 774.95296 585.26208 774.95296zM892.34944 569.14944c-10.368-10.35776-23.96672-15.54944-37.5552-15.54944l-145.65376 0 0 274.46272 42.48064 0L751.62112 707.6864l103.17312 0c13.5936 0 27.1872-5.18656 37.5552-15.55456s15.55456-23.9616 15.55456-37.55008l0-47.87712C907.904 593.11104 902.72256 579.52256 892.34944 569.14944L892.34944 569.14944zM865.41824 654.58176c0 2.00704-0.5376 4.9408-3.10784 7.51104s-5.50912 3.10784-7.51104 3.10784l-103.168 0 0-69.12 103.168 0c2.00704 0 4.9408 0.54272 7.51104 3.11296s3.10784 5.504 3.10784 7.51616L865.41824 654.58176 865.41824 654.58176z M315.97056 370.06848c55.05024-49.60256 185.7024-167.31136 189.75744-170.89024 5.1456-4.54144 11.38688-3.97824 15.30368-0.384 2.74432 2.51904 138.49088 124.7488 191.22688 172.2368 8.30464 6.99392 6.10304 20.74112-4.31616 20.74112s-377.85088 0.09728-384.43008 0S308.56192 379.35616 315.97056 370.06848z" Stretch="Uniform" Fill="#FF666666" Width="20" Height="20"/>
+            </Border>
         </Grid>
         <Grid x:Name="PlayDLPage_ClosePage" Margin="0,0,0,75" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed">
             <Grid HorizontalAlignment="Right" Width="20">

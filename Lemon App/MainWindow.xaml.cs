@@ -509,6 +509,10 @@ namespace Lemon_App
             DownloadNameTb.Text = Settings.USettings.DownloadName;
 
         }
+        private void SettingsPage_URLink_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start(SettingsPage_URLink.Text);
+        }
         private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //KEY: xfttsuxaeivzdefd
@@ -1513,6 +1517,24 @@ namespace Lemon_App
         }
         #endregion
         #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
+
+        private void DataPage_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            int p = (DataItemsList.SelectedIndex + 1) * 45;
+            double os = p - (DataItemsList.ActualHeight / 2) + 10;
+            Console.WriteLine(os);
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+            Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+        }
+
+        private void DataPage_Top_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
+            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+            Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+        }
+
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             PlayMusic(DataItemsList.Items[0] as DataItem, null);
@@ -2208,7 +2230,27 @@ namespace Lemon_App
             isOpenPlayDLPage = false;
             NSPage(null, Data);
         }
+        private void PlayDL_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            int p = (PlayDL_List.SelectedIndex + 1) * 45;
+            double os = p - (PlayDL_List.ActualHeight / 2) + 10;
+            Console.WriteLine(os);
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+            PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+        }
 
+        private void PlayDL_Top_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
+            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+            PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+        }
+        ScrollViewer PlayDLSV = null;
+        private void PlayDLDatasv_Loaded(object sender, RoutedEventArgs e)
+        {
+            PlayDLSV = sender as ScrollViewer;
+        }
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var k = AddPlayDL_All(null, 0);
@@ -2784,5 +2826,6 @@ namespace Lemon_App
             return IntPtr.Zero;
         }
         #endregion
+     
     }
 }
