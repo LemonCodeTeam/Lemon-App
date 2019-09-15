@@ -24,7 +24,7 @@ namespace Lemon_App
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1041";
+        public static string EM = "1048";
         #region 启动时 进程检测 配置 登录
         System.Threading.Mutex mut;
         private void Application_Startup(object sender, StartupEventArgs e)
