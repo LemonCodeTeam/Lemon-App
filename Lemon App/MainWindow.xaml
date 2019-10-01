@@ -1249,7 +1249,7 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -1444,6 +1444,51 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ListBoxItemStyle2" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Padding" Value="4,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Bd" Value="#07000000"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Storyboard x:Key="LyricAnit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="ookok">
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="509">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="ookok">
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="509">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ookok">
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
@@ -1805,7 +1850,7 @@
                         </Border>
                         <Border x:Name="border5" Height="51" VerticalAlignment="Top" BorderThickness="0">
                             <Grid>
-                                <Border x:Name="TXx" HorizontalAlignment="Left" Margin="15,10,0,10" Background="#FFF3F3F3" CornerRadius="100" Width="30" Height="30"/>
+                                <Border x:Name="TXx" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Margin="15,10,0,10" Background="#FFF3F3F3" CornerRadius="100" Width="30" Height="30"/>
                                 <WrapPanel Margin="55,0,5,0" Orientation="Horizontal" Height="23">
                                     <TextBlock x:Name="TB" TextWrapping="Wrap" Text="TEXT" Foreground="{DynamicResource ResuColorBrush}" FontSize="16"/>
                                     <lemon_app:MDButton x:Name="DataDownloadBtn" HorizontalAlignment="Left" Height="23" VerticalAlignment="Bottom" Width="90" MouseDown="DataDownloadBtn_MouseDown" Margin="10,0,0,0" TName="下载" cr="10" pData="M919.724,715.073C918.584,687.719 900.7,672.613 877.105,673.173 853.727,673.728 838.305,689.103 836.111,717.063 834.501,737.603 835.879,758.362 835.434,779.014 834.319,830.843 823.095,842.819 771.284,843.841 721.374,844.826 671.43,844.164 621.502,844.168 506.151,844.178 390.798,844.262 275.446,844.103 196.006,843.993 189.121,837.13 188.742,759.899 188.673,746.129 189.367,732.273 188.102,718.606 185.41,689.518 171.774,674.384 148.687,673.079 123.767,671.667 105.603,688.612 103.697,718.574 101.955,746.016 102.934,773.645 103.115,801.189 103.705,890.359 143.211,930.372 232.409,930.881 325.376,931.413 418.348,931 511.319,931.021 538.865,931.044 566.413,931.053 593.959,931.043 664.549,931.018 735.154,932 805.718,930.65 867.93,929.46 913.424,893.473 918.676,838.893 922.617,797.94 921.441,756.293 919.724,715.073z M197.858,440.866C286.615,529.672 375.384,618.468 464.151,707.264 467.798,710.914 471.513,714.494 475.135,718.167 489.42,732.648 506.083,740.811 526.27,733.163 532.855,730.668 537.75,726.908 541.935,722.64 544.698,720.728 547.405,718.623 549.865,716.232 595.5,671.857 789.967,476.764 834.892,431.658 839.718,426.813 844.356,421.605 848.162,415.948 860.375,397.783 858.702,379.988 844.215,364.093 829.397,347.836 810.735,347.153 792.341,356.199 783.411,360.589 776.055,368.659 768.784,375.872 738.544,405.862 629.173,515.136 555.939,588.482 555.977,473.922 555.989,359.362 555.966,244.802 555.96,210.403 557.057,175.942 555.351,141.626 553.764,109.748 538.293,93.486 513.382,92.669 487.831,91.83 472.327,107.397 468.844,138.827 467.524,150.735 468.221,162.881 468.214,174.919 468.174,250.595 468.194,326.274 468.194,401.953 468.192,458.543 468.194,515.134 468.194,571.726L456.409,576.941C433.659,554.278 410.883,531.637 388.164,508.944 340.711,461.539 293.874,413.499 245.588,366.959 223.788,345.945 198.518,345.6 181.159,362.119 162.449,379.922 163.109,401.119 183.485,426.069 187.819,431.375 192.997,436 197.858,440.866z"/>
@@ -1902,7 +1947,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                 </Grid>
             </Grid>
             <Grid x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" >
-                <Border x:Name="UserTX" VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,40,0,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}"/>
+                <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,40,0,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}"/>
                 <TextBlock x:Name="UserName" Margin="10,110,10,0" TextWrapping="Wrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown"/>
                 <WrapPanel x:Name="PageControls" Margin="0,160,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Vertical">
                     <Grid x:Name="MusicKu">
@@ -1937,7 +1982,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
             </Grid>
             <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" CornerRadius="5" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
                 <ListBox x:Name="Search_SmartBoxList" VirtualizingPanel.VirtualizationMode="Recycling"
-                    VirtualizingPanel.IsVirtualizing="True"  Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" BorderThickness="0" Background="{DynamicResource PlayDLPage_Bg}" />
+                    VirtualizingPanel.IsVirtualizing="True"  Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle2}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" BorderThickness="0" Background="{DynamicResource PlayDLPage_Bg}" />
             </Border>
         </Grid>
         <Grid x:Name="LyricPage" Grid.ColumnSpan="2" Visibility="Collapsed">
@@ -1950,12 +1995,24 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                     <Border Background="#66000000"/>
                 </Border>
             </Border>
-            <Border x:Name="border4" Margin="0,160,30,210" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right" CornerRadius="5">
-                <Border HorizontalAlignment="Right" Width="30" Height="30" Background="#00000000" Margin="0,0,5,5" VerticalAlignment="Bottom" MouseDown="Border_MouseDown_3">
-                    <Path x:Name="path2" Data="M850.879104,96.41591L174.576037,96.41591C113.895003,96.41591,64.5266189999999,145.783271,64.5266189999999,206.465328L64.5266189999999,652.665716C64.5266189999999,713.34675,113.89398,762.715134,174.576037,762.715134L264.883832,762.715134 396.936381,931.129846C400.729777,935.968038 406.534993,938.793386 412.683017,938.793386 418.831041,938.793386 424.635233,935.968038 428.429653,931.129846L560.482201,762.715135 850.879104,762.715135C911.560138,762.715135,960.928522,713.347774,960.928522,652.665717L960.928522,206.465329C960.928522,145.784294,911.561162,96.41591,850.879104,96.41591z M920.91111,652.665717C920.91111,691.280176,889.494586,722.6967,850.880127,722.6967L550.744419,722.6967C544.597419,722.6967,538.792203,725.522048,534.998807,730.36024L412.683017,886.356107 290.367227,730.36024C286.574854,725.522048,280.769638,722.6967,274.621615,722.6967L174.576038,722.6967C135.961579,722.6967,104.545055,691.280176,104.545055,652.665717L104.545054,206.465329C104.545054,167.85087,135.961578,136.434346,174.576037,136.434346L850.879104,136.434346C889.493563,136.434346,920.910087,167.85087,920.910087,206.465329L920.910087,652.665717z M272.621051,344.526731C228.488925,344.526731 192.585203,380.430452 192.585203,424.562579 192.585203,468.694705 228.488924,504.59945 272.621051,504.59945 316.753178,504.59945 352.656899,468.694705 352.656899,424.562579 352.655875,380.430452 316.752154,344.526731 272.621051,344.526731z M272.621051,464.582037C250.555499,464.582037 232.603639,446.630176 232.603639,424.563601 232.603639,402.498049 250.556523,384.546189 272.621051,384.546189 294.686603,384.546189 312.638463,402.49805 312.638463,424.563601 312.638463,446.629153 294.686602,464.582037 272.621051,464.582037z M512.727571,344.526731C468.595445,344.526731 432.691723,380.430452 432.691723,424.562579 432.691723,468.694705 468.595444,504.59945 512.727571,504.59945 556.859697,504.59945 592.763419,468.694705 592.763419,424.562579 592.763418,380.430452 556.859697,344.526731 512.727571,344.526731z M512.727571,464.582037C490.662019,464.582037 472.710159,446.630176 472.710159,424.563601 472.710159,402.498049 490.66202,384.546189 512.727571,384.546189 534.793123,384.546189 552.744983,402.49805 552.744983,424.563601 552.746006,446.629153 534.793122,464.582037 512.727571,464.582037z M752.836137,344.526731C708.705034,344.526731 672.800289,380.430452 672.800289,424.562579 672.800289,468.694705 708.705034,504.59945 752.836137,504.59945 796.96724,504.59945 832.871985,468.694705 832.871985,424.562579 832.871985,380.430452 796.96724,344.526731 752.836137,344.526731z M752.836137,464.582037C730.769562,464.582037 712.818725,446.630176 712.818725,424.563601 712.818725,402.498049 730.770586,384.546189 752.836137,384.546189 774.901688,384.546189 792.853549,402.49805 792.853549,424.563601 792.853549,446.629153 774.902712,464.582037 752.836137,464.582037z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="130*"/>
+                    <RowDefinition Height="340*"/>
+                    <RowDefinition Height="200*"/>
+                </Grid.RowDefinitions>
+                <Border x:Name="border4"  Margin="0,0,50,0" MaxWidth="350" MaxHeight="350" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right" CornerRadius="{Binding ActualHeight, ElementName=border4, Mode=OneWay}" BorderThickness="10" BorderBrush="#4CFFFFFF" Grid.Row="1">
+                    <Grid >
+                        <Border Margin="0,0,5,5" HorizontalAlignment="Right" Width="30" Height="30" Background="#00000000" VerticalAlignment="Bottom" MouseDown="Border_MouseDown_3">
+                            <Path x:Name="path2" Data="M850.879104,96.41591L174.576037,96.41591C113.895003,96.41591,64.5266189999999,145.783271,64.5266189999999,206.465328L64.5266189999999,652.665716C64.5266189999999,713.34675,113.89398,762.715134,174.576037,762.715134L264.883832,762.715134 396.936381,931.129846C400.729777,935.968038 406.534993,938.793386 412.683017,938.793386 418.831041,938.793386 424.635233,935.968038 428.429653,931.129846L560.482201,762.715135 850.879104,762.715135C911.560138,762.715135,960.928522,713.347774,960.928522,652.665717L960.928522,206.465329C960.928522,145.784294,911.561162,96.41591,850.879104,96.41591z M920.91111,652.665717C920.91111,691.280176,889.494586,722.6967,850.880127,722.6967L550.744419,722.6967C544.597419,722.6967,538.792203,725.522048,534.998807,730.36024L412.683017,886.356107 290.367227,730.36024C286.574854,725.522048,280.769638,722.6967,274.621615,722.6967L174.576038,722.6967C135.961579,722.6967,104.545055,691.280176,104.545055,652.665717L104.545054,206.465329C104.545054,167.85087,135.961578,136.434346,174.576037,136.434346L850.879104,136.434346C889.493563,136.434346,920.910087,167.85087,920.910087,206.465329L920.910087,652.665717z M272.621051,344.526731C228.488925,344.526731 192.585203,380.430452 192.585203,424.562579 192.585203,468.694705 228.488924,504.59945 272.621051,504.59945 316.753178,504.59945 352.656899,468.694705 352.656899,424.562579 352.655875,380.430452 316.752154,344.526731 272.621051,344.526731z M272.621051,464.582037C250.555499,464.582037 232.603639,446.630176 232.603639,424.563601 232.603639,402.498049 250.556523,384.546189 272.621051,384.546189 294.686603,384.546189 312.638463,402.49805 312.638463,424.563601 312.638463,446.629153 294.686602,464.582037 272.621051,464.582037z M512.727571,344.526731C468.595445,344.526731 432.691723,380.430452 432.691723,424.562579 432.691723,468.694705 468.595444,504.59945 512.727571,504.59945 556.859697,504.59945 592.763419,468.694705 592.763419,424.562579 592.763418,380.430452 556.859697,344.526731 512.727571,344.526731z M512.727571,464.582037C490.662019,464.582037 472.710159,446.630176 472.710159,424.563601 472.710159,402.498049 490.66202,384.546189 512.727571,384.546189 534.793123,384.546189 552.744983,402.49805 552.744983,424.563601 552.746006,446.629153 534.793122,464.582037 512.727571,464.582037z M752.836137,344.526731C708.705034,344.526731 672.800289,380.430452 672.800289,424.562579 672.800289,468.694705 708.705034,504.59945 752.836137,504.59945 796.96724,504.59945 832.871985,468.694705 832.871985,424.562579 832.871985,380.430452 796.96724,344.526731 752.836137,344.526731z M752.836137,464.582037C730.769562,464.582037 712.818725,446.630176 712.818725,424.563601 712.818725,402.498049 730.770586,384.546189 752.836137,384.546189 774.901688,384.546189 792.853549,402.49805 792.853549,424.563601 792.853549,446.629153 774.902712,464.582037 752.836137,464.582037z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
+                        </Border>
+                        <Grid x:Name="LyricAni" Margin="-1000" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border x:Name="ookok"  BorderThickness="1" BorderBrush="White" Height="409" Width="409" CornerRadius="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
+                    </Grid>
                 </Border>
-            </Border>
-            <Grid Margin="30,120,0,170"  MaxWidth="500" MaxHeight="500" Grid.Column="1" HorizontalAlignment="Left" Width="370">
+            </Grid>
+            <Grid Margin="50,120,0,170"  MaxWidth="500" MaxHeight="500" Grid.Column="1" HorizontalAlignment="Left" Width="370">
                 <TextBlock x:Name="m_Name" Margin="0,3,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30"/>
                 <TextBlock x:Name="m_Singer" Margin="0,33,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25"/>
                 <Border x:Name="ly" Margin="0,58,0,0" SizeChanged="ly_SizeChanged"/>
@@ -1986,7 +2043,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                     <Path x:Name="path5" Data="M64.2887 526.511505l0-28.009937c0.255827-1.961678 0.521886-3.924379 0.760317-5.886057 2.851954-23.620977 4.167926-47.549969 8.832156-70.811766 14.083763-70.287833 43.99705-133.49848 88.957031-189.413977 48.498574-60.322877 108.580974-105.307418 180.201152-134.699842 42.823318-17.572214 87.363743-28.181853 133.580345-31.546483 7.624654-0.554632 15.242146-1.221828 22.864754-1.837858l25.00858 0c2.300392 0.265036 4.594645 0.680499 6.903224 0.769526 40.860617 1.629103 80.751139 8.746198 119.567189 21.526269 82.522482 27.164686 151.679561 74.249051 206.785623 141.312446 58.518788 71.213925 91.907223 153.003719 100.166327 244.948805 3.841491 42.792619 1.497097 85.23936-6.865361 127.334083-9.788947 49.266054-27.447119 95.578846-53.03796 138.808416-42.437531 71.684646-100.252285 127.659495-173.500543 167.203116-75.265194 40.634466-155.896606 57.843406-241.327324 52.55496-43.023886-2.663666-84.96102-10.900258-125.158535-26.301016-124.022665-47.52848-211.67191-132.775003-262.123976-255.745708-16.795525-40.937364-26.38288-83.73817-29.724998-127.897925C65.613882 541.375028 64.921103 533.944801 64.2887 526.511505L64.2887 526.511505zM512.174474 904.395972c217.750349-0.727571 392.276245-176.013783 392.001999-392.370389-0.274246-217.231533-175.272909-391.646911-391.82599-391.890458-216.513172-0.242524-392.081817 175.197184-392.257825 391.964136C119.921765 728.489636 295.690978 904.360156 512.174474 904.395972L512.174474 904.395972zM512.174474 904.395972 M686.870238 679.803797l-27.979238 0c-7.724938 0-13.990642-6.261611-13.990642-13.988596L644.900358 358.037443c0-7.722892 6.265704-13.990642 13.990642-13.990642l27.979238 0c7.729032 0 13.990642 6.26775 13.990642 13.990642l0 307.777759C700.859857 673.541163 694.598246 679.803797 686.870238 679.803797L686.870238 679.803797z M563.220057 467.950761c-58.490136-37.305651-133.724631-81.001849-191.854563-116.76333-28.942169-17.801435-48.226375-0.38988-48.226375 29.466102l0 260.597203c0 36.308951 19.049868 48.217165 48.402383 30.91715 63.307861-37.300534 146.037051-83.932598 200.252837-124.563994C599.17085 527.083533 591.658759 486.091934 563.220057 467.950761zM509.895571 525.050224c-30.166043 19.407002-85.557608 52.220339-114.964358 68.882833-9.683547 5.483898-15.690354 0.352017-15.690354-13.011338L379.240859 442.562535c0-12.919241 6.167466-17.626449 16.090467-12.010545 29.379121 16.644075 82.205257 49.037856 114.565269 68.653613C522.693038 506.95817 521.426185 517.635347 509.895571 525.050224z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
                 </Border>
             </Grid>
-            <Border x:Name="MusicImage" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" Grid.Column="1" CornerRadius="5" Height="50" Margin="-0.001,12,0,12" MouseRightButtonDown="MusicImage_MouseRightButtonDown">
+            <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" Grid.Column="1" CornerRadius="5" Height="50" Margin="-0.001,12,0,12" MouseRightButtonDown="MusicImage_MouseRightButtonDown">
                 <Border.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF50AEEE" Offset="0"/>
@@ -1999,7 +2056,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                         </InlineUIContainer></TextBlock>
             <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,10,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged"/>
             <WrapPanel Grid.Column="1" Margin="0,0,10,35" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
+                <!--Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
                     <Grid>
                         <Popup x:Name="Pop_sp" Placement="Top" AllowsTransparency="True" HorizontalOffset="-27" PopupAnimation="Fade" VerticalOffset="7" LostFocus="Pop_sp_LostFocus">
                             <Grid Height="200" Width="90">
@@ -2012,7 +2069,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                         </Popup>
                         <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="倍速" Margin="5,0"/>
                     </Grid>
-                </Border>
+                </Border-->
                 <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
             </WrapPanel>
             <WrapPanel Grid.Column="2" Margin="13,29,20,29" Orientation="Horizontal" VerticalAlignment="Center">

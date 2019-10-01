@@ -23,26 +23,6 @@ namespace LemonLibrary
             public static double GetVerticalOffset(FrameworkElement target) => (double)target.GetValue(VerticalOffsetProperty);
             private static void OnVerticalOffsetChanged(DependencyObject target, DependencyPropertyChangedEventArgs e) => (target as ScrollViewer)?.ScrollToVerticalOffset((double)e.NewValue);
         }
-        public static void G(FrameworkElement d)
-        {
-            try
-            {
-                d.FocusVisualStyle = null;
-                RenderOptions.SetBitmapScalingMode(d, BitmapScalingMode.Fant);
-                if (d is Panel)
-                {
-                    foreach (var s in (d as Panel).Children)
-                    {
-                        G(s as FrameworkElement);
-                    }
-                }
-                if (d is ScrollViewer)
-                {
-                    G((d as ScrollViewer).Content as FrameworkElement);
-                }
-            }
-            catch { }
-        }
         public static bool IsVerticalScrollBarAtButtom(this ScrollViewer ex)
         {
             try

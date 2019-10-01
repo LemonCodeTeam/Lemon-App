@@ -34,9 +34,13 @@
     <StartupObject>LemonLibrary.MainClass</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bass.Net, Version=2.4.14.1, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\Bass.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+      <HintPath>Dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -71,15 +75,19 @@
     <Compile Include="Main.cs" />
     <Compile Include="MusicLib.cs" />
     <Compile Include="Helpers\PopopHelper.cs" />
+    <Compile Include="MusicPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RobotLib.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Helpers\TextHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="WeatherLib.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Newtonsoft.Json.dll" />
+    <Content Include="bass.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dll\Bass.Net.dll" />
+    <Content Include="Dll\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="LyricView.xaml">

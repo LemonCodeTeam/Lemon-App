@@ -46,7 +46,6 @@ namespace LemonLibrary
         public LyricView()
         {
             InitializeComponent();
-            UIHelper.G(p);
         }
 
         #region 

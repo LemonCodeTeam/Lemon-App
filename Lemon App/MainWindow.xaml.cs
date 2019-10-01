@@ -32,7 +32,7 @@ namespace Lemon_App
     {
         #region 一些字段
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
-        MusicLib ml = new MusicLib();
+        MusicLib ml;
         public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
@@ -125,24 +125,17 @@ namespace Lemon_App
             }
             Load_Theme(false);
             //-----Timer user
-            var ds = new System.Windows.Forms.Timer() { Interval = 2000 };
-            ds.Tick += delegate { GC.Collect(); UIHelper.G(Page); };
+            var ds = new System.Windows.Forms.Timer() { Interval = 10000 };
+            ds.Tick += delegate { GC.Collect();};
             ds.Start();
             //---------Popup的移动事件
             LocationChanged += delegate
             {
-                RUNPopup(Pop_sp);
                 RUNPopup(SingerListPop);
                 RUNPopup(MoreBtn_Meum);
                 RUNPopup(Gdpop);
                 RUNPopup(IntoGDPop);
                 RUNPopup(AddGDPop);
-            };
-            SizeChanged += delegate
-            {
-                var offset = Pop_sp.HorizontalOffset;
-                Pop_sp.HorizontalOffset = offset + 1;
-                Pop_sp.HorizontalOffset = offset;
             };
             //---------专辑图是圆的吗??-----
             MusicImage.CornerRadius = new CornerRadius(Settings.USettings.IsRoundMusicImage);
@@ -259,6 +252,7 @@ namespace Lemon_App
             LoadMusicData(hasAnimation);
         }
         private double now = 0;
+        private double all = 0;
         private string lastlyric = "";
         private Toast lyricTa = new Toast("", true);
         private bool isOpenGc = true;
@@ -291,7 +285,7 @@ namespace Lemon_App
                     lastlyric = text;
                 }
             };
-            ml = new MusicLib(lv, Settings.USettings.LemonAreeunIts);
+            ml = new MusicLib(lv, Settings.USettings.LemonAreeunIts, new WindowInteropHelper(this).Handle);
             //---------加载上一次播放
             if (Settings.USettings.Playing.MusicName != "")
             {
@@ -310,31 +304,58 @@ namespace Lemon_App
                         jd.Value = now;
                         Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
                     }
-                    if (isPlayasRun && MusicLib.mp.NaturalDuration.HasTimeSpan)
+                    if (isPlayasRun)
                     {
-                        double all = MusicLib.mp.NaturalDuration.TimeSpan.TotalMilliseconds;
+                        all = MusicLib.mp.GetLength.TotalMilliseconds;
                         string alls = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(all));
                         if (Play_All.Text == alls && Play_All.Text != "00:") isPlayasRun = false;
                         Play_All.Text = alls;
                         jd.Maximum = all;
                     }
                     if (ind == 1)
+                    {
+                        float[] data = MusicLib.mp.GetFFTData();
+                        Console.WriteLine(data[5]);
+                        if (data[5] > 0.04) {
+                            Border b = new Border();
+                            b.BorderThickness = new Thickness(1);
+                            b.BorderBrush = new SolidColorBrush(Colors.White);
+                            b.Height = border4.ActualHeight;
+                            b.Width = border4.ActualWidth;
+                            b.CornerRadius = border4.CornerRadius;
+                            b.HorizontalAlignment = HorizontalAlignment.Center;
+                            b.VerticalAlignment = VerticalAlignment.Center;
+                            var v = b.Height + 100 + data[5] * 1000;
+                            Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
+                            var f=s.Children[0] as DoubleAnimationUsingKeyFrames;
+                            (f.KeyFrames[0] as EasingDoubleKeyFrame).Value = v;
+                            Storyboard.SetTarget(f, b);
+                            var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
+                            (f1.KeyFrames[0] as EasingDoubleKeyFrame).Value = v;
+                            Storyboard.SetTarget(f1, b);
+                            var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
+                            Storyboard.SetTarget(f2, b);
+                            s.Completed += delegate { LyricAni.Children.Remove(b); };
+                            LyricAni.Children.Add(b);
+                            s.Begin();
+                        }
                         ml.lv.LrcRoll(now, true);
+                    }
                     else ml.lv.LrcRoll(now, false);
+                    if (now==all)
+                    {
+                        //-----------播放完成时，判断单曲还是下一首
+                        Console.WriteLine("end");
+                        jd.Value = 0;
+                        if (xh)//单曲循环
+                        {
+                            MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
+                            MusicLib.mp.Play();
+                        }
+                        else PlayControl_PlayNext(null, null);//下一曲
+                    }
                 }
                 catch { }
-            };
-            //-----------播放完成时，判断单曲还是下一首
-            MusicLib.mp.MediaEnded += delegate
-            {
-                Console.WriteLine("end");
-                jd.Value = 0;
-                if (xh)//单曲循环
-                {
-                    MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
-                    MusicLib.mp.Play();
-                }
-                else PlayControl_PlayNext(null, null);//下一曲
             };
             //------检测key是否有效-----------
             if (Settings.USettings.LemonAreeunIts != "")
@@ -1876,37 +1897,37 @@ namespace Lemon_App
         }
         #endregion
         #region PlayControl
-        private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Pop_sp.IsOpen = false;
-        }
-        private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                if (MusicPlay_tb.Text == "1.25x")
-                {
-                    MusicLib.mp.SpeedRatio = 1d;
-                    MusicPlay_tb.Text = "倍速";
-                }
-                else
-                {
-                    MusicLib.mp.SpeedRatio = 1.25d;
-                    MusicPlay_tb.Text = "1.25x";
-                }
-            }
-            else Pop_sp.IsOpen = !Pop_sp.IsOpen;
-        }
+        //private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    Pop_sp.IsOpen = false;
+        //}
+        //private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (e.ClickCount == 2)
+        //    {
+        //        if (MusicPlay_tb.Text == "1.25x")
+        //        {
+        //            MusicLib.mp.SpeedRatio = 1d;
+        //            MusicPlay_tb.Text = "倍速";
+        //        }
+        //        else
+        //        {
+        //            MusicLib.mp.SpeedRatio = 1.25d;
+        //            MusicPlay_tb.Text = "1.25x";
+        //        }
+        //    }
+        //    else Pop_sp.IsOpen = !Pop_sp.IsOpen;
+        //}
+        //private void MusicPlay_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    try
+        //    {
+        //        MusicLib.mp.SpeedRatio = MusicPlay_sp.Value;
+        //        MusicPlay_tb.Text = MusicPlay_sp.Value.ToString("0.00") + "x";
+        //    }
+        //    catch { }
+        //}
 
-        private void MusicPlay_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                MusicLib.mp.SpeedRatio = MusicPlay_sp.Value;
-                MusicPlay_tb.Text = MusicPlay_sp.Value.ToString("0.00") + "x";
-            }
-            catch { }
-        }
         private void TaskBarBtn_Play_Click(object sender, EventArgs e)
         {
             PlayBtn_MouseDown(null, null);
@@ -2577,7 +2598,6 @@ namespace Lemon_App
                 WidthUI(GDILikeItemsList);
                 if (GdData.Count == 0 && GdLikeData.Count == 0)
                     NSPage(GDBtn, NonePage);
-                UIHelper.G(Page);
                 CloseLoading();
             }
         }

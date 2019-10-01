@@ -29,7 +29,7 @@ namespace LemonLibrary
     public class MusicLib
     {
         #region  构造函数
-        public MusicLib(LyricView LV, string id)
+        public MusicLib(LyricView LV, string id,IntPtr win)
         {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
@@ -43,6 +43,7 @@ namespace LemonLibrary
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
             lv = LV;
             qq = id;
+            mp = new MusicPlayer(win);
             GetMusicLikeGDid();
         }
         public MusicLib()
@@ -60,7 +61,7 @@ namespace LemonLibrary
         }
         #endregion
         #region 一些字段
-        public static MediaPlayer mp = new MediaPlayer();
+        public static MusicPlayer mp;
         public LyricView lv;
         public static string qq = "";
         public static string MusicLikeGDid = "";
@@ -392,18 +393,23 @@ jpg
         /// </summary>
         public async void GetMusicLikeGDid()
         {
-            string dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
-            JObject o = JObject.Parse(dta);
-            string id = "";
-            foreach (var a in o["data"]["mymusic"]) {
-                if (a["title"].ToString() == "我喜欢") {
-                    id = a["id"].ToString();
-                    break;
+            try
+            {
+                string dta = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
+                JObject o = JObject.Parse(dta);
+                string id = "";
+                foreach (var a in o["data"]["mymusic"])
+                {
+                    if (a["title"].ToString() == "我喜欢")
+                    {
+                        id = a["id"].ToString();
+                        break;
+                    }
                 }
+                MusicLikeGDid = id;
+                MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
             }
-            MusicLikeGDid = id;
-            Console.WriteLine("kkkkkkkkkkkkkkk" + MusicLikeGDid);
-            MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
+            catch { }
         }
         /// <summary>
         /// 通过歌单ID 获取其中的歌曲和歌单信息
@@ -709,9 +715,7 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            Console.WriteLine(st);
             string vk = TextHelper.XtoYGetTo(st, "http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400001XfZfu20PFBG.m4a", "&fromtag=38", 0);
-            Console.WriteLine(vk);
             var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
             return $"http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400{mid}.m4a" + vk + "&fromtag=38";
 
@@ -765,7 +769,7 @@ jpg
                 dc.DownloadFileCompleted += delegate
                 {
                     dc.Dispose();
-                    mp.Open(new Uri(downloadpath));
+                    mp.Load(downloadpath);
                     if (doesplay)
                         mp.Play();
                     s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
@@ -784,7 +788,7 @@ jpg
             }
             else
             {
-                mp.Open(new Uri(downloadpath));
+                mp.Load(downloadpath);
                 if (doesplay)
                     mp.Play();
                 s.Dispatcher.Invoke(DispatcherPriority.Normal, new System.Windows.Forms.MethodInvoker(delegate ()
