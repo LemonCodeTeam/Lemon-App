@@ -42,7 +42,6 @@ namespace Lemon_App
         bool issingerloaded = false;
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
-        bool isPlayasRun = false;
         public NowPage np;
         #endregion
         #region 任务栏 字段
@@ -293,7 +292,7 @@ namespace Lemon_App
                 PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.SingerText,false);
             }
             //--------播放时的Timer 进度/歌词
-            t.Interval = 1000;
+            t.Interval = 500;
             t.Tick += delegate
             {
                 try
@@ -304,14 +303,10 @@ namespace Lemon_App
                         jd.Value = now;
                         Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
                     }
-                    if (isPlayasRun)
-                    {
-                        all = MusicLib.mp.GetLength.TotalMilliseconds;
-                        string alls = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(all));
-                        if (Play_All.Text == alls && Play_All.Text != "00:") isPlayasRun = false;
-                        Play_All.Text = alls;
-                        jd.Maximum = all;
-                    }
+                    all = MusicLib.mp.GetLength.TotalMilliseconds;
+                    string alls = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(all));
+                    Play_All.Text = alls;
+                    jd.Maximum = all;
                     if (ind == 1)
                     {
                         float[] data = MusicLib.mp.GetFFTData();
@@ -319,7 +314,7 @@ namespace Lemon_App
                         if (data[5] > 0.04) {
                             Border b = new Border();
                             b.BorderThickness = new Thickness(1);
-                            b.BorderBrush = new SolidColorBrush(Colors.White);
+                            b.BorderBrush = new SolidColorBrush(Color.FromArgb(150,255,255,255));
                             b.Height = border4.ActualHeight;
                             b.Width = border4.ActualWidth;
                             b.CornerRadius = border4.CornerRadius;
@@ -328,10 +323,10 @@ namespace Lemon_App
                             var v = b.Height + 100 + data[5] * 1000;
                             Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
                             var f=s.Children[0] as DoubleAnimationUsingKeyFrames;
-                            (f.KeyFrames[0] as EasingDoubleKeyFrame).Value = v;
+                            (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
                             Storyboard.SetTarget(f, b);
                             var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
-                            (f1.KeyFrames[0] as EasingDoubleKeyFrame).Value = v;
+                            (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
                             Storyboard.SetTarget(f1, b);
                             var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
                             Storyboard.SetTarget(f2, b);
@@ -342,8 +337,9 @@ namespace Lemon_App
                         ml.lv.LrcRoll(now, true);
                     }
                     else ml.lv.LrcRoll(now, false);
-                    if (now==all)
+                    if (now==all&&now>2000)
                     {
+                        t.Stop();
                         //-----------播放完成时，判断单曲还是下一首
                         Console.WriteLine("end");
                         jd.Value = 0;
@@ -351,6 +347,7 @@ namespace Lemon_App
                         {
                             MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
                             MusicLib.mp.Play();
+                            t.Start();
                         }
                         else PlayControl_PlayNext(null, null);//下一曲
                     }
@@ -1866,7 +1863,6 @@ namespace Lemon_App
                 {
                     Title = name + " - " + singer;
                     MusicName.Text = "连接资源中...";
-                    isPlayasRun = true;
                     t.Stop();
                     MusicLib.mp.Pause();
                     Settings.USettings.Playing = MusicData.Data;
@@ -1966,8 +1962,9 @@ namespace Lemon_App
             PlayDLItem k = null;
             //如果已经到播放队列的第一首，那么上一首就是最后一首歌(列表循环 非电台)
             //如果已经到播放队列的第一首，没有上一首(电台)
-            if (PlayDL_List.Items.IndexOf(MusicData) == 0)
+            if (PlayDL_List.Items.IndexOf(MusicData) == 0){
                 if (!IsRadio) k = PlayDL_List.Items[PlayDL_List.Items.Count - 1] as PlayDLItem;
+            }
             else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) - 1] as PlayDLItem;
             if (k != null)
             {
