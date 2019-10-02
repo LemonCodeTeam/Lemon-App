@@ -310,8 +310,13 @@ namespace Lemon_App
                     if (ind == 1)
                     {
                         float[] data = MusicLib.mp.GetFFTData();
-                        Console.WriteLine(data[5]);
-                        if (data[5] > 0.04) {
+                        float sv = 0;
+                        foreach (var c in data)
+                            if (c > 0.06) {
+                                sv = c;
+                                break;
+                            }
+                        if (sv!=0) {
                             Border b = new Border();
                             b.BorderThickness = new Thickness(1);
                             b.BorderBrush = new SolidColorBrush(Color.FromArgb(150,255,255,255));
@@ -320,7 +325,7 @@ namespace Lemon_App
                             b.CornerRadius = border4.CornerRadius;
                             b.HorizontalAlignment = HorizontalAlignment.Center;
                             b.VerticalAlignment = VerticalAlignment.Center;
-                            var v = b.Height + 100 + data[5] * 1000;
+                            var v = b.Height + sv *500;
                             Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
                             var f=s.Children[0] as DoubleAnimationUsingKeyFrames;
                             (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
@@ -337,8 +342,11 @@ namespace Lemon_App
                         ml.lv.LrcRoll(now, true);
                     }
                     else ml.lv.LrcRoll(now, false);
-                    if (now==all&&now>2000)
+                    Console.WriteLine(now+" --- - -"+all);
+                    if (now==all&&now>2000&&all!=0)
                     {
+                        now = 0;
+                        all = 0;
                         t.Stop();
                         //-----------播放完成时，判断单曲还是下一首
                         Console.WriteLine("end");
@@ -2755,6 +2763,7 @@ namespace Lemon_App
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
             exit.Click += delegate
             {
+                MusicLib.mp.Free();
                 notifyIcon.Dispose();
                 Settings.SaveSettings();
                 Environment.Exit(0);
