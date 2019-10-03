@@ -10,7 +10,9 @@ namespace LemonLibrary
     public class MusicPlayer
     {
         private int stream = -1024;
+        private IntPtr wind;
         public MusicPlayer(IntPtr win) {
+            wind = win;
             BassNet.Registration("lemon.app@qq.com", "2X52325160022");
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, win);
         }
@@ -48,6 +50,23 @@ namespace LemonLibrary
             float[] fft = new float[256];
             Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT256);
             return fft;
+        }
+        public void UpdataDevice() {
+            var data = Bass.BASS_GetDeviceInfos();
+            int index = -1;
+            for (int i = 0; i < data.Length; i++)
+                if (data[i].IsDefault)
+                {
+                    index = i;
+                    break;
+                }
+            if (!data[index].IsInitialized)
+                Bass.BASS_Init(index, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, wind);
+            var a = Bass.BASS_ChannelGetDevice(stream);
+            if (a != index){
+                Bass.BASS_ChannelSetDevice(stream, index);
+                Bass.BASS_SetDevice(index);
+            }
         }
         public void Free() {
             Bass.BASS_ChannelStop(stream);

@@ -124,10 +124,6 @@ namespace Lemon_App
                 Settings.SaveLocaSettings();
             }
             Load_Theme(false);
-            //-----Timer user
-            var ds = new System.Windows.Forms.Timer() { Interval = 10000 };
-            ds.Tick += delegate { GC.Collect();};
-            ds.Start();
             //---------Popup的移动事件
             LocationChanged += delegate
             {
@@ -372,6 +368,7 @@ namespace Lemon_App
                     {
                         now = 0;
                         all = 0;
+                        MusicLib.mp.Position = TimeSpan.FromSeconds(0);
                         t.Stop();
                         //-----------播放完成时，判断单曲还是下一首
                         Console.WriteLine("end");
@@ -387,6 +384,10 @@ namespace Lemon_App
                 }
                 catch { }
             };
+            //-----Timer 清理与更新播放设备
+            var ds = new System.Windows.Forms.Timer() { Interval = 10000 };
+            ds.Tick += delegate { MusicLib.mp.UpdataDevice(); GC.Collect(); };
+            ds.Start();
             //------检测key是否有效-----------
             if (Settings.USettings.LemonAreeunIts != "")
             {
@@ -412,6 +413,7 @@ namespace Lemon_App
         /// </summary>
         private void exShow()
         {
+            WindowState = WindowState.Normal;
             Show();
             Activate();
         }
@@ -1626,12 +1628,24 @@ namespace Lemon_App
 
         private void DataPage_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            int p = (DataItemsList.SelectedIndex + 1) * 45;
-            double os = p - (DataItemsList.ActualHeight / 2) + 10;
-            Console.WriteLine(os);
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
-            Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            int index = -1;
+            for (int i = 0; i < DataItemsList.Items.Count; i++)
+            {
+                if ((DataItemsList.Items[i] as DataItem).pv)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1)
+            {
+                int p = (index + 1) * 45;
+                double os = p - (DataItemsList.ActualHeight / 2) + 10;
+                Console.WriteLine(os);
+                var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+                da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+                Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            }
         }
 
         private void DataPage_Top_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2338,12 +2352,24 @@ namespace Lemon_App
         }
         private void PlayDL_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            int p = (PlayDL_List.SelectedIndex + 1) * 45;
-            double os = p - (PlayDL_List.ActualHeight / 2) + 10;
-            Console.WriteLine(os);
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
-            PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            int index = -1;
+            for (int i = 0; i < PlayDL_List.Items.Count; i++)
+            {
+                if ((PlayDL_List.Items[i] as PlayDLItem).pv)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1)
+            {
+                int p = (index + 1) * 60;
+                double os = p - (PlayDL_List.ActualHeight / 2) + 10;
+                Console.WriteLine(os);
+                var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+                da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+                PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            }
         }
 
         private void PlayDL_Top_MouseDown(object sender, MouseButtonEventArgs e)

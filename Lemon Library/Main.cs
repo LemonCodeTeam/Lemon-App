@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Un4seen.Bass;
 
 namespace LemonLibrary
 {
@@ -9,11 +10,10 @@ namespace LemonLibrary
         /// <summary>
         /// API调试台
         /// </summary>
-        static async System.Threading.Tasks.Task Main() {
-            Settings.LoadUSettings("2728578956");
-            var d = await MusicLib.GetUrlAsync("004DHn5044x7Oy");
-            Console.WriteLine(d);
-            Process.Start(d);
+        static void Main() {
+            BassNet.Registration("lemon.app@qq.com", "2X52325160022");
+            Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, IntPtr.Zero);
+            var a=Bass.BASS_GetDeviceInfos();
             Console.ReadLine();
         }
 

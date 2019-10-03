@@ -33,7 +33,9 @@ namespace Lemon_App
             PD.LastPD.v(false);
             v(isp);
         }
+        public bool pv;
         private void v(bool isp) {
+            pv = isp;
             if (isp)
             {
                 bk.Visibility = Visibility.Visible;

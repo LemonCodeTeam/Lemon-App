@@ -84,6 +84,7 @@ namespace Lemon_App
 
         bool ns = false;
         public bool isChecked = false;
+        public bool pv;
         public void ShowDx() {
             if (He.LastItem != null)
             {
@@ -93,7 +94,9 @@ namespace Lemon_App
                 He.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                He.LastItem.pv = false;
             }
+            pv = true;
             bg.Background = new SolidColorBrush(Color.FromArgb(10, 0, 0, 0));
             ser.SetResourceReference(ForegroundProperty, "ThemeColor");
             namss.SetResourceReference(ForegroundProperty, "ThemeColor");
