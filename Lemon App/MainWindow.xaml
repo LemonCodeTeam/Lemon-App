@@ -1578,7 +1578,7 @@
                             </WrapPanel>
                         </ScrollViewer>
                     </Grid>
-                    <Grid x:Name="SkinPage" Visibility="Collapsed">
+                    <Grid x:Name="SkinPage" IsVisibleChanged="SkinPage_IsVisibleChanged" Visibility="Collapsed">
                         <ScrollViewer  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                             <WrapPanel x:Name="SkinIndexList" Uid="4" Margin="0"/>
                         </ScrollViewer>

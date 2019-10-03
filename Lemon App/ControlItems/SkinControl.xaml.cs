@@ -27,5 +27,11 @@ namespace Lemon_App
                 img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + imgurl + ".jpg", UriKind.Absolute)));
             this.name.Text = name;
         }
+        public SkinControl(string name,Brush image,Color themecolor) {
+            InitializeComponent();
+            this.name.Text = name;
+            img.Background = image;
+            theme = themecolor;
+        }
     }
 }

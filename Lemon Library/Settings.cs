@@ -32,7 +32,7 @@ namespace LemonLibrary
                 catch { }
             });
         }
-        public static async void LoadUSettings(string qq)
+        public static async Task LoadUSettings(string qq)
         {
             await Task.Run(() =>
             {
