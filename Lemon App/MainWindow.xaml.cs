@@ -188,6 +188,7 @@ namespace Lemon_App
             {
                 //----新的[磨砂黑]主题---
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CC000000"));
+                DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
                 WindowBlur.SetIsEnabled(this, true);
@@ -195,6 +196,7 @@ namespace Lemon_App
             else if (Settings.USettings.Skin_Path == "BlurWhiteTheme")
             {
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D8FFFFFF"));
+                DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
                 App.BaseApp.SetColor("ResuColorBrush", co);
@@ -207,8 +209,8 @@ namespace Lemon_App
                 string DllPath = TextHelper.XtoYGetTo(Settings.USettings.Skin_Path, "DTheme[", "]", 0);
                 Assembly a = Assembly.LoadFrom(DllPath);
                 Type t = a.GetType(Settings.USettings.Skin_txt+".Drawer");
-                MethodInfo mi = t.GetMethod("GetBrush");
-                Page.Background = mi.Invoke(null, null) as Brush;
+                MethodInfo mi = t.GetMethod("GetPage");
+                DThemePage.Child = mi.Invoke(null, null) as UserControl;
                 //字体颜色
                 Color col;
                 if (t.GetMethod("GetFont").Invoke(null, null).ToString() == "Black")
@@ -268,6 +270,7 @@ namespace Lemon_App
                     Settings.USettings.Skin_Path = "";
                     Settings.SaveSettings();
                 }
+                DThemePage.Child = null;
             }
             LoadMusicData(hasAnimation);
         }
@@ -731,17 +734,23 @@ namespace Lemon_App
                 }
                 Assembly a = Assembly.LoadFrom(DllPath);
                 Type t = a.GetType(NameSp+".Drawer");
-                MethodInfo mi = t.GetMethod("GetBrush");
-                var bg = mi.Invoke(null, null) as Brush;
+                MethodInfo mi = t.GetMethod("GetPage");
+                var bg = mi.Invoke(null, null) as UserControl;
+                bg.Clip = new RectangleGeometry(new Rect() { Height = 450, Width = 800 });
+                bg.Width = 800;
+                bg.Height = 450;
+                VisualBrush vb = new VisualBrush(bg);
+                vb.Stretch = Stretch.Fill;
                 string font=t.GetMethod("GetFont").Invoke(null, null).ToString();
                 Color theme = (Color)t.GetMethod("GetThemeColor").Invoke(null, null);
-                SkinControl sc = new SkinControl(name, bg, theme);
+                SkinControl sc = new SkinControl(name,vb,theme);
                 sc.txtColor = font;
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 sc.MouseDown += (s, n) =>{
                     if (WindowBlur.GetIsEnabled(this))
                         WindowBlur.SetIsEnabled(this, false);
-                    Page.Background = bg;
+                    var bgl = mi.Invoke(null, null) as UserControl;
+                    DThemePage.Child = bgl;
                     Color co;
                     if (sc.txtColor == "Black")
                     {
@@ -783,6 +792,7 @@ namespace Lemon_App
                     if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
                         await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
                     Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
+                    DThemePage.Child = null;
                     Color co;
                     if (sc.txtColor == "Black")
                     {
@@ -817,6 +827,7 @@ namespace Lemon_App
                     WindowBlur.SetIsEnabled(this, false);
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                DThemePage.Child = null;
                 App.BaseApp.unSkin();
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "";
@@ -830,6 +841,7 @@ namespace Lemon_App
             blur.MouseDown += (s, n) =>
             {
                 Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CC000000"));
+                DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
                 WindowBlur.SetIsEnabled(this, true);

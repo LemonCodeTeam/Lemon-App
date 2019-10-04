@@ -1496,6 +1496,7 @@
         </TaskbarItemInfo>
     </-->
     <Grid x:Name="Page" Background="White">
+        <Border x:Name="DThemePage"/>
         <Grid x:Name="grid" Margin="0,0,0,75">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="103*" MinWidth="206" MaxWidth="245"/>
