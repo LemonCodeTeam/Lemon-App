@@ -167,6 +167,8 @@ namespace Lemon_App
             TopLoadac();
             //--------加载主页---------
             LoadHomePage();
+            //--------去除可恶的焦点边缘线
+            UIHelper.G(Page);
         }
         private void RUNPopup(Popup pp)
         {

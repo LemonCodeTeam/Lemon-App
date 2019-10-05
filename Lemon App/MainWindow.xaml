@@ -955,7 +955,7 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10,0,285,35">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10,0,82,35">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1009,7 +1009,7 @@
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="60,0,285,35">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="60,0,82,35">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1270,18 +1270,18 @@
         </Style>
         <Storyboard x:Key="NSPageAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HomePage">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="0.2"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="HomePage">
-                <EasingThicknessKeyFrame KeyTime="0" Value="100,0,-100,0">
+                <EasingThicknessKeyFrame KeyTime="0" Value="200,0,-200,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
+                        <QuarticEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
+                        <QuarticEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1504,7 +1504,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
                 <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,0">
-                    <Grid x:Name="HomePage" d:IsHidden="True">
+                    <Grid x:Name="HomePage">
                         <ScrollViewer Template="{DynamicResource ScrollViewerControlTemplate}">
                             <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
                                 <lemon_app:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=HomePage, Mode=OneWay}" Margin="10,0"/>
@@ -2045,7 +2045,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
-            <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Bottom" Grid.Column="1" Margin="60,0,134,35"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
+            <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Bottom" Grid.Column="1" Margin="60,0,82,35"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
                             <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" />
                         </InlineUIContainer></TextBlock>
             <Slider x:Name="jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,10,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged"/>
