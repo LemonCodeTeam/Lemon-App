@@ -899,8 +899,7 @@ namespace Lemon_App
                 {
                     var sx = s as FLGDIndexItem;
                     Music dt = sx.Tag as Music;
-                    //如果是歌单播放 那么将所有歌曲加入播放队列 
-                    AddPlayDL_All(null, HomePage_Nm.Children.IndexOf(s as FLGDIndexItem));
+                    AddPlayDl_CR(new DataItem(dt));
                     PlayMusic(dt.MusicID, dt.ImageUrl, dt.MusicName, dt.SingerText);
                 };
                 HomePage_Nm.Children.Add(k);
@@ -1813,39 +1812,43 @@ namespace Lemon_App
         }
         public async void SearchMusic(string key, int osx = 0)
         {
-            np = NowPage.Search;
-            SearchKey = key;
-            OpenLoading();
-            List<Music> dt = null;
-            if (osx == 0) dt = await ml.SearchMusicAsync(key);
-            else dt = await ml.SearchMusicAsync(key, osx);
-            if (osx == 0)
+            try
             {
-                TB.Text = key;
-                DataItemsList.Items.Clear();
-                if (Datasv != null) Datasv.ScrollToTop();
-            }
-            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
-            foreach (var j in dt)
-            {
-                var k = new DataItem(j,this) { Width = ContentPage.ActualWidth };
-                if (k.music.MusicID == MusicData.Data.MusicID)
+                np = NowPage.Search;
+                SearchKey = key;
+                OpenLoading();
+                List<Music> dt = null;
+                if (osx == 0) dt = await ml.SearchMusicAsync(key);
+                else dt = await ml.SearchMusicAsync(key, osx);
+                if (osx == 0)
                 {
-                    k.ShowDx();
+                    TB.Text = key;
+                    DataItemsList.Items.Clear();
+                    if (Datasv != null) Datasv.ScrollToTop();
                 }
-                k.GetToSingerPage += K_GetToSingerPage;
-                k.Play += PlayMusic;
-                k.Download += K_Download;
-                if (DataPage_DownloadMod)
+                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
+                foreach (var j in dt)
                 {
-                    k.MouseDown -= PlayMusic;
-                    k.NSDownload(true);
-                    k.Check();
+                    var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                    if (k.music.MusicID == MusicData.Data.MusicID)
+                    {
+                        k.ShowDx();
+                    }
+                    k.GetToSingerPage += K_GetToSingerPage;
+                    k.Play += PlayMusic;
+                    k.Download += K_Download;
+                    if (DataPage_DownloadMod)
+                    {
+                        k.MouseDown -= PlayMusic;
+                        k.NSDownload(true);
+                        k.Check();
+                    }
+                    DataItemsList.Items.Add(k);
                 }
-                DataItemsList.Items.Add(k);
+                CloseLoading();
+                if (osx == 0) NSPage(null, Data);
             }
-            CloseLoading();
-            if (osx == 0) NSPage(null, Data);
+            catch { }
         }
         #endregion
         #region PlayMusic 播放时的逻辑处理

@@ -13,14 +13,21 @@ namespace LemonLibrary
     public class ImageCacheHelp
     {
         public static async Task<BitmapImage> GetImageByUrl(string url) {
-            BitmapImage bi = GetImageFormMemory(url);
-            if (bi != null) {return bi; }
-            bi = GetImageFromFile(url);
-            if (bi != null) {
-                AddImageToMemory(url, bi);
-                return bi;
+            try
+            {
+                BitmapImage bi = GetImageFormMemory(url);
+                if (bi != null) { return bi; }
+                bi = GetImageFromFile(url);
+                if (bi != null)
+                {
+                    AddImageToMemory(url, bi);
+                    return bi;
+                }
+                return await GetImageFromInternet(url);
             }
-            return await GetImageFromInternet(url);
+            catch {
+                return null;
+            }
         }
         public static MyDictionary<string, BitmapImage> MemoryData = new MyDictionary<string, BitmapImage>();
         public static BitmapImage GetImageFormMemory(string url) {
