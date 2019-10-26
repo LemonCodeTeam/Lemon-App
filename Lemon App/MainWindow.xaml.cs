@@ -110,6 +110,8 @@ namespace Lemon_App
             Settings.SaveHandle();
             LoadSEND_SHOW();
             LoadHotDog();
+            //-------注册个模糊效果------
+            wac = new WindowAccentCompositor(this);
             //--------登录------
             Settings.LoadLocaSettings();
             if (Settings.LSettings.qq != "")
@@ -179,7 +181,7 @@ namespace Lemon_App
                 pp.HorizontalOffset = offset;
             }
         }
-
+        private WindowAccentCompositor wac=null;
         /// <summary>
         /// 登录之后的主题配置 不同的账号可能使用不同的主题
         /// </summary>
@@ -189,23 +191,23 @@ namespace Lemon_App
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
                 //----新的[磨砂黑]主题---
-                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CC000000"));
+                Page.Background = new SolidColorBrush(Colors.Transparent);
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-                WindowBlur.SetIsEnabled(this, true);
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
+                wac.Composite(Color.FromArgb(150, 30,30,35));
             }
             else if (Settings.USettings.Skin_Path == "BlurWhiteTheme")
             {
-                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D8FFFFFF"));
+                Page.Background = new SolidColorBrush(Colors.Transparent);
                 DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-                WindowBlur.SetIsEnabled(this, true);
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
+                wac.Composite(Color.FromArgb(150, 255, 255, 255));
             }
             else if (Settings.USettings.Skin_Path.Contains("DTheme")) {
                 string DllPath = TextHelper.XtoYGetTo(Settings.USettings.Skin_Path, "DTheme[", "]", 0);
@@ -262,8 +264,7 @@ namespace Lemon_App
                 else
                 {
                     //默认主题  （主要考虑到切换登录）
-                    if (WindowBlur.GetIsEnabled(this))
-                        WindowBlur.SetIsEnabled(this, false);
+                    //EEE
                     ControlDownPage.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
                     ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                     Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
@@ -749,8 +750,7 @@ namespace Lemon_App
                 sc.txtColor = font;
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 sc.MouseDown += (s, n) =>{
-                    if (WindowBlur.GetIsEnabled(this))
-                        WindowBlur.SetIsEnabled(this, false);
+                    //EEE
                     var bgl = mi.Invoke(null, null) as UserControl;
                     DThemePage.Child = bgl;
                     Color co;
@@ -789,8 +789,7 @@ namespace Lemon_App
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) =>
                 {
-                    if (WindowBlur.GetIsEnabled(this))
-                        WindowBlur.SetIsEnabled(this, false);
+                    //EEE
                     if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
                         await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
                     Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
@@ -825,8 +824,7 @@ namespace Lemon_App
             SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
             sxc.MouseDown += (s, n) =>
             {
-                if (WindowBlur.GetIsEnabled(this))
-                    WindowBlur.SetIsEnabled(this, false);
+                //EEE
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 DThemePage.Child = null;
@@ -842,11 +840,11 @@ namespace Lemon_App
             SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
             blur.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CC000000"));
+                Page.Background = new SolidColorBrush(Colors.Transparent);
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
-                WindowBlur.SetIsEnabled(this, true);
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
+                wac.Composite(Color.FromArgb(150, 30,30,35));
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurBlackTheme";
                 Settings.SaveSettings();
@@ -856,14 +854,14 @@ namespace Lemon_App
             SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D8FFFFFF"));
+                Page.Background = new SolidColorBrush(Colors.Transparent);
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-                WindowBlur.SetIsEnabled(this, true);
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
+                wac.Composite(Color.FromArgb(150,255,255,255));
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurWhiteTheme";
                 Settings.SaveSettings();
@@ -1855,29 +1853,18 @@ namespace Lemon_App
         #endregion
         #region PlayMusic 播放时的逻辑处理
 
-        public async void PlayMusic(object sender, MouseEventArgs e)
+        public void PlayMusic(object sender, MouseEventArgs e)
         {
             var dt = sender as DataItem;
-            if (await MusicLib.GetUrlAsync(dt.music.MusicID) == null)
-                new CannotPlay().ShowDialog();
-            else
-            {
-                AddPlayDL(dt);
-                dt.ShowDx();
-                PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
-            }
+            AddPlayDL(dt);
+            dt.ShowDx();
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
         }
-        public async void PlayMusic(DataItem dt, bool next = false)
+        public void PlayMusic(DataItem dt, bool next = false)
         {
-            if (await MusicLib.GetUrlAsync(dt.music.MusicID) == null)
-                if (next) PlayControl_PlayNext(null, null);
-                else new CannotPlay().ShowDialog();
-            else
-            {
-                AddPlayDL(dt);
-                dt.ShowDx();
-                PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
-            }
+            AddPlayDL(dt);
+            dt.ShowDx();
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
         }
         public void PushPlayMusic(DataItem dt, ListBox DataSource)
         {
@@ -1885,16 +1872,11 @@ namespace Lemon_App
             dt.ShowDx();
             PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
         }
-        public async void PlayMusic(DataItem dt)
+        public void PlayMusic(DataItem dt)
         {
-            if (await MusicLib.GetUrlAsync(dt.music.MusicID) == null)
-                new CannotPlay().ShowDialog();
-            else
-            {
-                AddPlayDL(dt);
-                dt.ShowDx();
-                PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
-            }
+            AddPlayDL(dt);
+            dt.ShowDx();
+            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
         }
         public PlayDLItem AddPlayDL_All(DataItem dt, int index = -1, ListBox source = null)
         {
@@ -1962,52 +1944,47 @@ namespace Lemon_App
         private string LastPlay = "";
         public async void PlayMusic(string id, string x, string name, string singer, bool doesplay = true)
         {
-            if (await MusicLib.GetUrlAsync(id) == null)
-                PlayControl_PlayNext(null, null);
+            if (LastPlay == id)
+            {
+                if (doesplay)
+                {
+                    MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
+                    MusicLib.mp.Play();
+                    TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
+                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                    t.Start();
+                    isplay = true;
+                }
+            }
             else
             {
-                if (LastPlay == id)
+                Title = name + " - " + singer;
+                MusicName.Text = "连接资源中...";
+                t.Stop();
+                MusicLib.mp.Pause();
+                Settings.USettings.Playing = MusicData.Data;
+                Settings.SaveSettings();
+                if (Settings.USettings.MusicLike.ContainsKey(id))
+                    LikeBtnDown();
+                else LikeBtnUp();
+                ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
+                var im = await ImageCacheHelp.GetImageByUrl(x);
+                MusicImage.Background = new ImageBrush(im);
+                TaskBarImg.SetImage(im);
+                TaskBarImg.Title = name + " - " + singer;
+                var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
+                var imb = im.ToBitmap();
+                imb.GaussianBlur(ref rect, 80);
+                LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.Fill };
+                Singer.Text = singer;
+                if (doesplay)
                 {
-                    if (doesplay)
-                    {
-                        MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
-                        MusicLib.mp.Play();
-                        TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                        (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
-                        t.Start();
-                        isplay = true;
-                    }
+                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                    TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
+                    t.Start();
+                    isplay = true;
                 }
-                else
-                {
-                    Title = name + " - " + singer;
-                    MusicName.Text = "连接资源中...";
-                    t.Stop();
-                    MusicLib.mp.Pause();
-                    Settings.USettings.Playing = MusicData.Data;
-                    Settings.SaveSettings();
-                    if (Settings.USettings.MusicLike.ContainsKey(id))
-                        LikeBtnDown();
-                    else LikeBtnUp();
-                    ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
-                    var im = await ImageCacheHelp.GetImageByUrl(x);
-                    TaskBarImg.SetImage(im);
-                    TaskBarImg.Title = name + " - " + singer;
-                    MusicImage.Background = new ImageBrush(im);
-                    var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
-                    var imb = im.ToBitmap();
-                    imb.GaussianBlur(ref rect, 80);
-                    LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.Fill };
-                    Singer.Text = singer;
-                    if (doesplay)
-                    {
-                        (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
-                        TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                        t.Start();
-                        isplay = true;
-                    }
-                    LastPlay = MusicData.Data.MusicID;
-                }
+                LastPlay = MusicData.Data.MusicID;
             }
         }
         #endregion

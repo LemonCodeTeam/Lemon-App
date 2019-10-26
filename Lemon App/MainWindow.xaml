@@ -1484,7 +1484,7 @@
         </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
+        <WindowChrome GlassFrameThickness="0 1 0 0" CaptionHeight="1" />
     </WindowChrome.WindowChrome>
     <!--Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="Tasktb">
