@@ -73,7 +73,7 @@ namespace Lemon_App
         {
             // 操作系统版本判定。
             var osVersion = Environment.OSVersion.Version;
-            var windows10_1803 = new Version(10, 0, 17134);
+            var windows10_1809 = new Version(10, 0, 17763);
             var windows10 = new Version(10, 0);
             // 创建 AccentPolicy 对象。
             var accent = new AccentPolicy();
@@ -83,9 +83,11 @@ namespace Lemon_App
             {
                 accent.AccentState = AccentState.ACCENT_DISABLED;
             }
-            else if (osVersion >= windows10_1803)
+            else if (osVersion >= windows10_1809)
             {
-                // 如果系统在 Windows 10 (1803) 以上，则启用亚克力效果，并组合已设置的叠加颜色和透明度。
+                //1803能用但是兼容性不好哇----  1903完美支持 
+
+                // 如果系统在 Windows 10 (1809) 以上，则启用亚克力效果，并组合已设置的叠加颜色和透明度。
                 //  请参见《在 WPF 程序中应用 Windows 10 真•亚克力效果》
                 //  https://blog.walterlv.com/post/using-acrylic-in-wpf-application.html
                 accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
