@@ -577,18 +577,28 @@ namespace Lemon_App
         private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //KEY: xfttsuxaeivzdefd
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("lemon.app@qq.com");
-            mailMessage.To.Add(new MailAddress("2728578956@qq.com"));
-            mailMessage.Subject = "Lemon App用户反馈";
-            mailMessage.Body = "UserID:" + Settings.USettings.LemonAreeunIts + "\r\n  \r\n"
-                + UserSendText.Text;
-            SmtpClient client = new SmtpClient();
-            client.Host = "smtp.qq.com";
-            client.EnableSsl = true;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential("lemon.app@qq.com", "xfttsuxaeivzdefd");
-            client.Send(mailMessage);
+            if (UserSendText.Text != "在此处输入你的建议或问题")
+            {
+                va.Text = "发送中...";
+                string body = "UserAddress:" + knowb.Text + "\r\nUserID:" + Settings.USettings.LemonAreeunIts + "\r\n  \r\n"
+                        + UserSendText.Text;
+                Task.Run(new Action(() =>
+                {
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("lemon.app@qq.com");
+                    mailMessage.To.Add(new MailAddress("2728578956@qq.com"));
+                    mailMessage.Subject = "Lemon App用户反馈";
+                    mailMessage.Body = body;
+                    SmtpClient client = new SmtpClient();
+                    client.Host = "smtp.qq.com";
+                    client.EnableSsl = true;
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("lemon.app@qq.com", "xfttsuxaeivzdefd");
+                    client.Send(mailMessage);
+                    Dispatcher.Invoke(() => va.Text = "发送成功!");
+                }));
+            }
+            else va.Text = "请输入";
         }
 
         private void Run_MouseDown(object sender, MouseButtonEventArgs e)
