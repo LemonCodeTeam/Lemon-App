@@ -191,15 +191,16 @@ namespace Lemon_App
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
                 //----新的[磨砂黑]主题---
-                Page.Background = new SolidColorBrush(Colors.Transparent);
+                Page.Background = new SolidColorBrush(Color.FromArgb(150, 30, 30, 35));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Composite(Color.FromArgb(150, 30,30,35));
+                wac.Color=(Color.FromArgb(0, 30,30,35));
+                wac.IsEnabled = true;
             }
             else if (Settings.USettings.Skin_Path == "BlurWhiteTheme")
             {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
+                Page.Background = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
                 DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
@@ -207,7 +208,8 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Composite(Color.FromArgb(150, 255, 255, 255));
+                wac.Color=(Color.FromArgb(0, 255, 255, 255));
+                wac.IsEnabled = true;
             }
             else if (Settings.USettings.Skin_Path.Contains("DTheme")) {
                 string DllPath = TextHelper.XtoYGetTo(Settings.USettings.Skin_Path, "DTheme[", "]", 0);
@@ -264,7 +266,7 @@ namespace Lemon_App
                 else
                 {
                     //默认主题  （主要考虑到切换登录）
-                    //EEE
+                    if (wac.IsEnabled) wac.IsEnabled = false;
                     ControlDownPage.SetResourceReference(BorderBrushProperty, "BorderColorBrush");
                     ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                     Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
@@ -750,7 +752,7 @@ namespace Lemon_App
                 sc.txtColor = font;
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 sc.MouseDown += (s, n) =>{
-                    //EEE
+                    if (wac.IsEnabled) wac.IsEnabled = false;
                     var bgl = mi.Invoke(null, null) as UserControl;
                     DThemePage.Child = bgl;
                     Color co;
@@ -789,7 +791,7 @@ namespace Lemon_App
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) =>
                 {
-                    //EEE
+                    if (wac.IsEnabled) wac.IsEnabled = false;
                     if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
                         await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
                     Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
@@ -824,7 +826,7 @@ namespace Lemon_App
             SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
             sxc.MouseDown += (s, n) =>
             {
-                //EEE
+                if (wac.IsEnabled) wac.IsEnabled = false;
                 ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 DThemePage.Child = null;
@@ -840,11 +842,12 @@ namespace Lemon_App
             SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
             blur.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
+                Page.Background = new SolidColorBrush(Color.FromArgb(150, 30, 30, 35));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Composite(Color.FromArgb(150, 30,30,35));
+                wac.Color=(Color.FromArgb(0, 30,30,35));
+                wac.IsEnabled = true;
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurBlackTheme";
                 Settings.SaveSettings();
@@ -854,14 +857,16 @@ namespace Lemon_App
             SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
+                Page.Background = new SolidColorBrush(Color.FromArgb(150,255,255,255));
+                DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Composite(Color.FromArgb(150,255,255,255));
+                wac.Color=(Color.FromArgb(0,255,255,255));
+                wac.IsEnabled = true;
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurWhiteTheme";
                 Settings.SaveSettings();
