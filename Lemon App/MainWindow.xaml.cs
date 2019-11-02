@@ -191,21 +191,16 @@ namespace Lemon_App
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
                 //----新的[磨砂黑]主题---
-                Page.Background = new SolidColorBrush(Color.FromArgb(180, 30, 30, 35));
+                Page.Background = new SolidColorBrush(Color.FromArgb(200, 30, 30, 35));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color = (Color.FromArgb(200, 30, 30, 35));
+                wac.Color = Color.FromArgb(0, 30, 30, 35);
                 wac.IsEnabled = true;
-                if (wac.Canrunaswell)
-                {
-                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 30, 30, 35));
-                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 30, 30, 35));
-                }
             }
             else if (Settings.USettings.Skin_Path == "BlurWhiteTheme")
             {
-                Page.Background = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
+                Page.Background = new SolidColorBrush(Color.FromArgb(200, 255, 255, 255));
                 DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
@@ -213,13 +208,8 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color = (Color.FromArgb(200, 255, 255, 255));
+                wac.Color = (Color.FromArgb(0, 255, 255, 255));
                 wac.IsEnabled = true;
-                if (wac.Canrunaswell)
-                {
-                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 255,255,255));
-                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
-                }
             }
             else if (Settings.USettings.Skin_Path.Contains("DTheme")) {
                 string DllPath = TextHelper.XtoYGetTo(Settings.USettings.Skin_Path, "DTheme[", "]", 0);
@@ -417,7 +407,7 @@ namespace Lemon_App
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
             //---------------保存初始页面
-            AddPage(MusicKuBtn, HomePage);
+            AddPage(new MeumInfo(MusicKuBtn, HomePage,MusicKuCom));
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -618,7 +608,7 @@ namespace Lemon_App
         private void SettingsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             LoadSettings();
-            NSPage(null, SettingsPage);
+            NSPage(new MeumInfo(null,SettingsPage,null));
         }
 
         private void CP_ChooseBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -743,7 +733,7 @@ namespace Lemon_App
         #endregion
         private async void SkinBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(null, SkinPage);
+            NSPage(new MeumInfo(null,SkinPage,null));
             SkinIndexList.Children.Clear();
             var DThemeDll = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/DTheme.json"))["DTheme"];
             foreach (var dx in DThemeDll) {
@@ -862,17 +852,12 @@ namespace Lemon_App
             SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
             blur.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Color.FromArgb(180, 30, 30, 35));
+                Page.Background = new SolidColorBrush(Color.FromArgb(200, 30, 30, 35));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(200, 30,30,35));
+                wac.Color=(Color.FromArgb(0, 30,30,35));
                 wac.IsEnabled = true;
-                if (wac.Canrunaswell)
-                {
-                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 30, 30, 35));
-                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 30, 30, 35));
-                }
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurBlackTheme";
                 Settings.SaveSettings();
@@ -882,7 +867,7 @@ namespace Lemon_App
             SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Color.FromArgb(180,255,255,255));
+                Page.Background = new SolidColorBrush(Color.FromArgb(200,255,255,255));
                 DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
@@ -890,13 +875,8 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(200,255,255,255));
+                wac.Color=(Color.FromArgb(0,255,255,255));
                 wac.IsEnabled = true;
-                if (wac.Canrunaswell)
-                {
-                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 255,255,255));
-                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 30, 30, 35));
-                }
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurWhiteTheme";
                 Settings.SaveSettings();
@@ -946,7 +926,7 @@ namespace Lemon_App
         {
             np = NowPage.GDItem;
             var dta = await MusicLib.GetAlbumSongListByIDAsync(id);
-            NSPage(null, Data);
+            NSPage(new MeumInfo(null,Data,null));
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dta.pic));
             TB.Text = dta.name;
             DataItemsList.Items.Clear();
@@ -1004,7 +984,7 @@ namespace Lemon_App
             OpenLoading();
             if (osx == 1)
             {
-                NSPage(null, Data);
+                NSPage(new MeumInfo(null,Data,null));
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
@@ -1063,44 +1043,49 @@ namespace Lemon_App
             sb.Begin();
         }
 
-        private Label LastClickLabel = null;
+        private TextBlock LastClickLabel = null;
         private Grid LastPage = null;
-        public void NSPage(Label ClickLabel, Grid TPage, Thickness value = new Thickness(), bool needSave = true)
+        private Border LastCom = null;
+        public void NSPage(MeumInfo data, Thickness value = new Thickness(), bool needSave = true)
         {
-            if (TPage == Data)
+            if (data.Page == Data)
                 if (DataPage_DownloadMod)
                     CloseDownloadPage();
             if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            if (ClickLabel != null) ClickLabel.SetResourceReference(ForegroundProperty, "ThemeColor");
+            if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
             if (LastPage == null) LastPage = HomePage;
+            if (LastCom == null) LastCom = MusicKuCom;
+            LastCom.Visibility = Visibility.Collapsed;
             LastPage.Visibility = Visibility.Collapsed;
-            TPage.Visibility = Visibility.Visible;
-            RunAnimation(TPage, value);
-            if (ClickLabel != null) LastClickLabel = ClickLabel;
-            LastPage = TPage;
+            if(data.Com!=null)data.Com.Visibility = Visibility.Visible;
+            data.Page.Visibility = Visibility.Visible;
+            RunAnimation(data.Page, value);
+            if (data.tb != null) LastClickLabel = data.tb;
+            LastPage = data.Page;
+            LastCom = data.Com;
             if (needSave)
-                AddPage(ClickLabel, TPage);
+                AddPage(data);
 
         }
         private void TopBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(TopBtn, TopIndexPage);
+            NSPage(new MeumInfo(TopBtn, TopIndexPage,TopCom));
         }
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(MusicKuBtn, HomePage);
+            NSPage(new MeumInfo(MusicKuBtn, HomePage,MusicKuCom));
         }
         //前后导航仪
         int QHNowPageIndex = 0;
-        List<KeyValuePair<Label, Grid>> PageData = new List<KeyValuePair<Label, Grid>>();
-        public void AddPage(Label a, Grid b)
+        List<MeumInfo> PageData = new List<MeumInfo>();
+        public void AddPage(MeumInfo data)
         {
             for (int i = 0; i < PageData.Count - 1 - QHNowPageIndex; i++)
             {
                 PageData.RemoveAt(PageData.Count - 1);
             }
-            PageData.Add(new KeyValuePair<Label, Grid>(a, b));
+            PageData.Add(data);
             QHNowPageIndex = PageData.Count - 1;
         }
 
@@ -1108,14 +1093,14 @@ namespace Lemon_App
         {
             QHNowPageIndex--;
             var a = PageData[QHNowPageIndex];
-            NSPage(a.Key, a.Value, default(Thickness), false);
+            NSPage(a, default(Thickness), false);
         }
 
         private void NextPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             QHNowPageIndex++;
             var a = PageData[QHNowPageIndex];
-            NSPage(a.Key, a.Value, default(Thickness), false);
+            NSPage(a, default(Thickness), false);
         }
         #endregion
         #region Singer 歌手界面
@@ -1205,14 +1190,14 @@ namespace Lemon_App
                 SingerDP_Top.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
                 SingerDP_Top.Uid = "ok";
                 await Task.Delay(10);
-                NSPage(SingerBtn, SingerDataPage, new Thickness(0, -50, 0, 0));
+                NSPage(new MeumInfo(SingerBtn, SingerDataPage,SingerCom), new Thickness(0, -50, 0, 0));
             }
             else
             {
                 SetTopWhite(false); ;
                 SingerDP_Top.Visibility = Visibility.Collapsed;
                 await Task.Delay(10);
-                NSPage(SingerBtn, SingerDataPage);
+                NSPage(new MeumInfo(SingerBtn, SingerDataPage,SingerCom));
             }
             Cisv.ScrollToVerticalOffset(0);
             CloseLoading();
@@ -1286,7 +1271,7 @@ namespace Lemon_App
 
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(SingerBtn, SingerIndexPage);
+            NSPage(new MeumInfo(SingerBtn, SingerIndexPage,SingerCom));
             if (!issingerloaded)
             {
                 issingerloaded = true;
@@ -1374,7 +1359,7 @@ namespace Lemon_App
         }
         private async void ZJBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(ZJBtn, ZJIndexPage);
+            NSPage(new MeumInfo(ZJBtn, ZJIndexPage,GDCom));
             if (FLGDPage_Tag_Lau.Children.Count == 0)
             {
                 OpenLoading();
@@ -1524,7 +1509,7 @@ namespace Lemon_App
         Dictionary<string, MusicRadioList> Radiodata;
         private async void RadioBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(RadioBtn, RadioIndexPage);
+            NSPage(new MeumInfo(RadioBtn, RadioIndexPage,RadioCom));
             if (RadioIndexList.Children.Count == 0)
             {
                 Radiodata = await MusicLib.GetRadioList();
@@ -1641,10 +1626,10 @@ namespace Lemon_App
         private async void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
             if (Settings.USettings.LemonAreeunIts == "Public")
-                NSPage(LikeBtn, NonePage);
+                NSPage(new MeumInfo(ILikeBtn,NonePage,ILikeCom));
             else
             {
-                NSPage(LikeBtn, Data);
+                NSPage(new MeumInfo(ILikeBtn,Data, ILikeCom));
                 loadin.Value = 0;
                 loadin.Opacity = 1;
                 TB.Text = "我喜欢";
@@ -1881,7 +1866,7 @@ namespace Lemon_App
                     DataItemsList.Items.Add(k);
                 }
                 CloseLoading();
-                if (osx == 0) NSPage(null, Data);
+                if (osx == 0) NSPage(new MeumInfo(null, Data, null));
             }
             catch { }
         }
@@ -2377,7 +2362,7 @@ namespace Lemon_App
         {
             (Resources["ClosePlayDLPage"] as Storyboard).Begin();
             isOpenPlayDLPage = false;
-            NSPage(null, Data);
+            NSPage(new MeumInfo(null,Data,null));
         }
         private void PlayDL_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -2427,7 +2412,7 @@ namespace Lemon_App
         }
         private async void LoadPl()
         {
-            NSPage(null, MusicPLPage);
+            NSPage(new MeumInfo(null, MusicPLPage, null));
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
             MusicPlList.Children.Clear();
@@ -2599,7 +2584,7 @@ namespace Lemon_App
         }
         private void Download_Btn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(Download_Btn, DownloadPage);
+            NSPage(new MeumInfo(DownloadMGBtn,DownloadPage,DownloadMGCom));
             if (DownloadItemsList.Children.Count == 0)
                 NonePage_Copy.Visibility = Visibility.Visible;
             else NonePage_Copy.Visibility = Visibility.Collapsed;
@@ -2684,10 +2669,10 @@ namespace Lemon_App
         private async void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (Settings.USettings.LemonAreeunIts == "Public")
-                NSPage(GDBtn, NonePage);
+                NSPage(new MeumInfo(MYGDBtn, NonePage,MYGDCom));
             else
             {
-                NSPage(GDBtn, MyGDIndexPage);
+                NSPage(new MeumInfo(MYGDBtn, MyGDIndexPage, MYGDCom));
                 OpenLoading();
                 var GdData = await ml.GetGdListAsync();
                 if (GdData.Count != GDItemsList.Children.Count)
@@ -2737,7 +2722,7 @@ namespace Lemon_App
                 }
                 WidthUI(GDILikeItemsList);
                 if (GdData.Count == 0 && GdLikeData.Count == 0)
-                    NSPage(GDBtn, NonePage);
+                    NSPage(new MeumInfo (MYGDBtn,MyGDIndexPage,MYGDCom));
                 CloseLoading();
             }
         }
@@ -2746,7 +2731,7 @@ namespace Lemon_App
         {
             loadin.Value = 0;
             loadin.Opacity = 1;
-            NSPage(null, Data);
+            NSPage(new MeumInfo(null, Data, null));
             var dt = sender as FLGDIndexItem;
             TB.Text = dt.name.Text;
             DataItemsList.Items.Clear();
@@ -2779,7 +2764,7 @@ namespace Lemon_App
         System.Windows.Forms.Timer mvt = new System.Windows.Forms.Timer();
         public async void PlayMv(MVData mVData)
         {
-            NSPage(null, MvPage);
+            NSPage(new MeumInfo(null, MvPage, null));
             MVplaying = true;
             MvPlay_Tb.Text = mVData.name;
             MvPlay_Tb.Uid = mVData.id;
@@ -2801,7 +2786,7 @@ namespace Lemon_App
         }
         private async void MvPlay_PL_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(null, MusicPLPage);
+            NSPage(new MeumInfo(null, MusicPLPage, null));
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await MusicLib.GetMVPL(MvPlay_Tb.Uid);
             MusicPlList.Children.Clear();

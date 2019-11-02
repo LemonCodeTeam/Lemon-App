@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Controls;
 
 namespace LemonLibrary
 {
     public class InfoHelper {
         public enum NowPage {
             Search,Top,SingerItem,GDItem
+        }
+        public class MeumInfo {
+            public MeumInfo(TextBlock t, Grid p, Border c) {
+                tb = t;
+                Page = p;
+                Com = c;
+            }
+            public TextBlock tb;
+            public Grid Page;
+            public Border Com;
         }
         ////////Music Helper////////
         public class IFVData

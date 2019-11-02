@@ -135,6 +135,7 @@
     <Compile Include="ControlItems\MyMessageBox.xaml.cs">
       <DependentUpon>MyMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ControlItems\MyScrollView.cs" />
     <Compile Include="ControlItems\PlayDLItem.xaml.cs">
       <DependentUpon>PlayDLItem.xaml</DependentUpon>
     </Compile>

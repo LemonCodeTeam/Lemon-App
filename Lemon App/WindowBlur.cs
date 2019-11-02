@@ -22,9 +22,6 @@ namespace Lemon_App
         /// <param name="window">要创建模糊特效的窗口实例。</param>
         public WindowAccentCompositor(Window window) => _window = window ?? throw new ArgumentNullException(nameof(window));
 
-
-        public bool Canrunaswell { private set; get; }
-
         /// <summary>
         /// 获取或设置此窗口模糊特效是否生效的一个状态。
         /// 默认为 false，即不生效。
@@ -95,7 +92,6 @@ namespace Lemon_App
                 //  https://blog.walterlv.com/post/using-acrylic-in-wpf-application.html
                 accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
                 accent.GradientColor = _blurColor;
-                Canrunaswell = true;
             }
             else if (osVersion >= windows10)
             {
@@ -103,7 +99,6 @@ namespace Lemon_App
                 //  请参见《在 Windows 10 上为 WPF 窗口添加模糊特效》
                 //  https://blog.walterlv.com/post/win10/2017/10/02/wpf-transparent-blur-in-windows-10.html
                 accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
-                Canrunaswell = false;
             }
             else
             {
