@@ -696,7 +696,7 @@ jpg
         /// <returns></returns>
         public static async Task<string> GetUrlAsync(string Musicid)
         {
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://i.y.qq.com/v8/playsong.html?songmid=0013KcQ72u8FY7,0011jIhY1wP6wB");
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://i.y.qq.com/v8/playsong.html?songmid=000edOaL1WZOWq");
             hwr.Timeout = 20000;
             hwr.KeepAlive = true;
             hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
@@ -715,7 +715,8 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            string vk = TextHelper.XtoYGetTo(st, "http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400001XfZfu20PFBG.m4a", "&fromtag=38", 0);
+            Console.WriteLine(st);
+            string vk = TextHelper.XtoYGetTo(st, "http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400000By9MX0yKL2c.m4a", "&fromtag=38", 0);
             var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
             return $"http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400{mid}.m4a" + vk + "&fromtag=98";
 
@@ -789,6 +790,12 @@ jpg
             }
             else
             {
+                var fl = new FileInfo(downloadpath);
+                if (fl.Length == 0) {
+                    fl.Delete();
+                    GetAndPlayMusicUrlAsync(mid, openlyric, x, s, songname, doesplay);
+                    return;
+                }
                 mp.Load(downloadpath);
                 if (doesplay)
                     mp.Play();
