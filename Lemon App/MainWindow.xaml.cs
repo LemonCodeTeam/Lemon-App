@@ -191,16 +191,21 @@ namespace Lemon_App
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
                 //----新的[磨砂黑]主题---
-                Page.Background = new SolidColorBrush(Color.FromArgb(150, 30, 30, 35));
+                Page.Background = new SolidColorBrush(Color.FromArgb(180, 30, 30, 35));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(0, 30,30,35));
+                wac.Color = (Color.FromArgb(200, 30, 30, 35));
                 wac.IsEnabled = true;
+                if (wac.Canrunaswell)
+                {
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 30, 30, 35));
+                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 30, 30, 35));
+                }
             }
             else if (Settings.USettings.Skin_Path == "BlurWhiteTheme")
             {
-                Page.Background = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
+                Page.Background = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
                 DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
@@ -208,8 +213,13 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(0, 255, 255, 255));
+                wac.Color = (Color.FromArgb(200, 255, 255, 255));
                 wac.IsEnabled = true;
+                if (wac.Canrunaswell)
+                {
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 255,255,255));
+                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                }
             }
             else if (Settings.USettings.Skin_Path.Contains("DTheme")) {
                 string DllPath = TextHelper.XtoYGetTo(Settings.USettings.Skin_Path, "DTheme[", "]", 0);
@@ -852,12 +862,17 @@ namespace Lemon_App
             SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
             blur.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Color.FromArgb(150, 30, 30, 35));
+                Page.Background = new SolidColorBrush(Color.FromArgb(180, 30, 30, 35));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(0, 30,30,35));
+                wac.Color=(Color.FromArgb(200, 30,30,35));
                 wac.IsEnabled = true;
+                if (wac.Canrunaswell)
+                {
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 30, 30, 35));
+                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 30, 30, 35));
+                }
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurBlackTheme";
                 Settings.SaveSettings();
@@ -867,7 +882,7 @@ namespace Lemon_App
             SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Color.FromArgb(150,255,255,255));
+                Page.Background = new SolidColorBrush(Color.FromArgb(180,255,255,255));
                 DThemePage.Child = null;
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
@@ -875,8 +890,13 @@ namespace Lemon_App
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(0,255,255,255));
+                wac.Color=(Color.FromArgb(200,255,255,255));
                 wac.IsEnabled = true;
+                if (wac.Canrunaswell)
+                {
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(200, 255,255,255));
+                    Page.Background = new SolidColorBrush(Color.FromArgb(0, 30, 30, 35));
+                }
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurWhiteTheme";
                 Settings.SaveSettings();

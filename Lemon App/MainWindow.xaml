@@ -8,7 +8,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
         x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="Resources/icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}">
+        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="Resources/icon.ico" MinWidth="865" MinHeight="550" Background="{x:Null}" BorderThickness="0,1,0,0" WindowStyle="None">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -1484,7 +1484,7 @@
         </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0 1 0 0" CaptionHeight="1" />
+        <WindowChrome GlassFrameThickness="0,1,0,0" />
     </WindowChrome.WindowChrome>
     <!--Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="Tasktb">
