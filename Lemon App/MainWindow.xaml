@@ -1943,7 +1943,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                 </Grid>
             </Grid>
             <Grid x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" >
-                <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="78.276,35,78.277,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}"/>
+                <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,35,0,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}"/>
                 <TextBlock x:Name="UserName" Margin="10,105,10,0" TextWrapping="NoWrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown"/>
                 <StackPanel x:Name="PageControls" Margin="0,150,0,0" VerticalAlignment="Top" Orientation="Vertical">
                     <TextBlock x:Name="TopBtn_Copy" Text="音乐库" Margin="6,0,15,0" Foreground="{DynamicResource ButtonColorBrush}" Height="15.24" Width="75"/>

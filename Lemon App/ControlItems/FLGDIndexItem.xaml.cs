@@ -60,14 +60,14 @@ namespace Lemon_App
             }
             Loaded += async delegate
             {
-                Height = Height = ActualWidth + 45;
+                Height = Height = ActualWidth + 50;
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(img));
             };
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Height = Height = ActualWidth + 45;
+            Height = Height = ActualWidth + 50;
         }
 
         private void DeleteBtn_MouseDown(object sender, MouseButtonEventArgs e)

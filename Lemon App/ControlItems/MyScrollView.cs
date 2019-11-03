@@ -35,7 +35,7 @@ namespace Lemon_App
             {
                 Animation.To = VerticalOffset +200;
             }
-            Animation.Duration = new Duration(TimeSpan.FromMilliseconds(800));
+            Animation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
             BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
         }
     }
