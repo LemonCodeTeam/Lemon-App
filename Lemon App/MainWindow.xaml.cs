@@ -925,23 +925,23 @@ namespace Lemon_App
         public async void IFVCALLBACK_LoadAlbum(string id)
         {
             np = NowPage.GDItem;
-            var dta = await MusicLib.GetAlbumSongListByIDAsync(id);
-            NSPage(new MeumInfo(null,Data,null));
-            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dta.pic));
-            TB.Text = dta.name;
+            NSPage(new MeumInfo(null, Data, null));
             DataItemsList.Items.Clear();
-            foreach (var j in dta.Data)
-            {
-                var k = new DataItem(j,this) { Width = ContentPage.ActualWidth };
+            int count = (int)(DataItemsList.ActualHeight
+            / 45);
+            var dta = await MusicLib.GetAlbumSongListByIDAsync(id,new Action<Music, bool>(async (j, f) => {
+                var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                DataItemsList.Items.Add(k);
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
                 k.Download += K_Download;
                 if (k.music.MusicID == MusicData.Data.MusicID)
-                {
                     k.ShowDx();
-                }
-                DataItemsList.Items.Add(k);
-            }
+                DataItemsList.Animation(k);
+            }),this,new Action<string,string>(async (pic,name)=> {
+                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(pic));
+                TB.Text = name;
+            }),count);
         }
         #endregion
         #region Top 排行榜
@@ -989,26 +989,25 @@ namespace Lemon_App
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
             }
-            var dta = await ml.GetToplistAsync(g.Data.ID, osx);
-            foreach (var j in dta)
-            {
-                var k = new DataItem(j,this) { Width = ContentPage.ActualWidth };
+            int count = (int)(DataItemsList.ActualHeight/ 45);
+            var dta = await ml.GetToplistAsync(g.Data.ID,new Action<Music, bool>((j,f)=> {
+                var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                DataItemsList.Items.Add(k);
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
                 k.Download += K_Download;
                 if (k.music.MusicID == MusicData.Data.MusicID)
-                {
                     k.ShowDx();
-                }
                 if (DataPage_DownloadMod)
                 {
                     k.MouseDown -= PlayMusic;
                     k.NSDownload(true);
                     k.Check();
                 }
-                DataItemsList.Items.Add(k);
-            }
-            CloseLoading();
+                DataItemsList.Animation(k);
+            }),this,new Action(()=> {
+                CloseLoading();
+            }),count, osx);
         }
         #endregion
         #region Updata 检测更新
@@ -1647,6 +1646,7 @@ namespace Lemon_App
                     {
                         k.ShowDx();
                     }
+                    DataItemsList.Animation(k);
                     loadin.Value = DataItemsList.Items.Count;
                 }), this,
                 new Action<int>(i => loadin.Maximum = i));
@@ -1847,9 +1847,13 @@ namespace Lemon_App
                     if (Datasv != null) Datasv.ScrollToTop();
                 }
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
+                if (osx == 0) NSPage(new MeumInfo(null, Data, null));
+                int aniCount = (int)(DataItemsList.ActualHeight / 45);
+                int i = 0;
                 foreach (var j in dt)
                 {
                     var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                    DataItemsList.Items.Add(k);
                     if (k.music.MusicID == MusicData.Data.MusicID)
                     {
                         k.ShowDx();
@@ -1863,10 +1867,12 @@ namespace Lemon_App
                         k.NSDownload(true);
                         k.Check();
                     }
-                    DataItemsList.Items.Add(k);
+                    DataItemsList.Animation(k);
+                    if (i <= aniCount)
+                        await Task.Delay(10);
+                    i++;
                 }
                 CloseLoading();
-                if (osx == 0) NSPage(new MeumInfo(null, Data, null));
             }
             catch { }
         }
@@ -1990,13 +1996,13 @@ namespace Lemon_App
                 ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
                 var im = await ImageCacheHelp.GetImageByUrl(x);
                 MusicImage.Background = new ImageBrush(im);
-                TaskBarImg.SetImage(im);
-                TaskBarImg.Title = name + " - " + singer;
                 var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
                 var imb = im.ToBitmap();
-                imb.GaussianBlur(ref rect, 80);
-                LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.Fill };
+                imb.GaussianBlur(ref rect, 20);
+                LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
                 Singer.Text = singer;
+                TaskBarImg.SetImage(im);
+                TaskBarImg.Title = name + " - " + singer;
                 if (doesplay)
                 {
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
@@ -2748,6 +2754,7 @@ namespace Lemon_App
                 {
                     k.ShowDx();
                 }
+                DataItemsList.Animation(k);
                 loadin.Value = DataItemsList.Items.Count;
             }), this,
             new Action<int>(i => loadin.Maximum = i));

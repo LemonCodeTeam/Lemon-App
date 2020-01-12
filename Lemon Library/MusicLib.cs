@@ -94,12 +94,12 @@ namespace LemonLibrary
                     m.MusicID = dsli["mid"].ToString();
                     var amid = dsli["album"]["mid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
-                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                     else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                     if (amid != "")
                         m.Album = new MusicGD() { ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
+                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name = dsli["album"]["name"].ToString()
                     };
                     var file = dsli["file"];
@@ -457,11 +457,11 @@ jpg
                     m.MusicID = c0si["songmid"].ToString();
                     var amid = c0si["albummid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
-                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                     else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                     if (amid != "")
-                        m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000" ,
+                        m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000" ,
                             Name= c0si["albumname"].ToString()
                         };
                     if (c0si["size320"].ToString() != "0")
@@ -947,7 +947,7 @@ jpg
         /// <param name="TopID"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<Music>> GetToplistAsync(string TopID, int osx = 1)
+        public async Task<List<Music>> GetToplistAsync(string TopID,Action<Music,bool> callback,Window wx,Action finished,int aniCount, int osx = 1)
         {
             int index = (osx - 1) * 30;
             string json=await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
@@ -976,14 +976,14 @@ jpg
                 m.MusicID = sid["songmid"].ToString();
                 var amid = sid["albummid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{sid["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{sid["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
                     m.Album = new MusicGD()
                     {
                         ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
+                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name = sid["albumname"].ToString()
                     };
                 if (sid["size320"].ToString() != "0")
@@ -991,9 +991,13 @@ jpg
                 if (sid["sizeflac"].ToString() != "0")
                     m.Pz = "SQ";
                 m.Mvmid = sid["vid"].ToString();
+                wx.Dispatcher.Invoke(() => { callback(m, false); });
                 dt.Add(m);
+                if (i <= aniCount)
+                    await Task.Delay(10);
                 i++;
             }
+            wx.Dispatcher.Invoke(() => { finished(); });
             return dt;
         }
         #endregion
@@ -1038,11 +1042,11 @@ jpg
                 m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
                 string amid = data["album"]["mid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{data["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{data["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
-                    m.Album = new MusicGD() {Name = data["album"]["name"].ToString(),ID=amid,Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000"};
+                    m.Album = new MusicGD() {Name = data["album"]["name"].ToString(),ID=amid,Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000"};
                 HotSongs.Add(m);
             }
             //Part 3 是否关注此歌手
@@ -1058,7 +1062,7 @@ jpg
                 m.id = c["albumMid"].ToString();
                 m.lstCount = c["publishDate"].ToString();
                 m.name = c["albumName"].ToString();
-                m.img = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{m.id}.jpg?max_age=2592000";
+                m.img = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{m.id}.jpg?max_age=2592000";
                 lix.Add(m);
             }
             //不知为何 这个API给的专辑数据错乱 所以我们用另一个API
@@ -1069,7 +1073,7 @@ jpg
                 MusicGD m = new MusicGD();
                 m.ID = c["album_mid"].ToString();
                 m.Name = c["album_name"].ToString();
-                m.Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{m.ID}.jpg?max_age=2592000";
+                m.Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{m.ID}.jpg?max_age=2592000";
                 mg.Add(m);
             }
             // MV
@@ -1116,7 +1120,7 @@ jpg
                 MusicGD m = new MusicGD();
                 m.ID = c["album_mid"].ToString();
                 m.Name = c["album_name"].ToString();
-                m.Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{m.ID}.jpg?max_age=2592000";
+                m.Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{m.ID}.jpg?max_age=2592000";
                 mg.Add(m);
             }
             return mg;
@@ -1224,14 +1228,14 @@ jpg
                 m.MusicID = dsli["songmid"].ToString();
                 var amid = dsli["albummid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
                     m.Album = new MusicGD()
                     {
                         ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
+                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name = dsli["albumname"].ToString()
                     };
                 dt.Add(m);
@@ -1293,14 +1297,14 @@ jpg
                     MusicID = e["mid"].ToString(),
                 };
                 if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{e["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{e["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
                     m.Album = new MusicGD()
                     {
                         ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
+                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name =e["album"]["name"].ToString()
                     };
                 Data.Add(m);
@@ -1314,20 +1318,21 @@ jpg
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetAlbumSongListByIDAsync(string id)
+        public static async Task<MusicGData> GetAlbumSongListByIDAsync(string id,Action<Music, bool> callback, Window wx, Action<string,string> getImformation,int aniCount)
         {
             string json = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid={id}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_begin=0&song_num=50");
             JObject o = JObject.Parse(json);
-            Console.WriteLine(json);
             MusicGData md = new MusicGData();
-            md.pic = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{id}.jpg?max_age=2592000";
+            md.pic = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{id}.jpg?max_age=2592000";
             md.name = "专辑: " + o["data"]["name"] + " - " + o["data"]["singername"];
             var data = new List<Music>();
             var list = o["data"]["list"];
+            wx.Dispatcher.Invoke(()=> { getImformation(md.pic, md.name); });
+            int i = 0;
             foreach (var a in list)
             {
                 Music m = new Music();
-                m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{id}.jpg?max_age=2592000";
+                m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{id}.jpg?max_age=2592000";
                 m.Album = new MusicGD() { ID = id, Name = o["data"]["name"].ToString(), Photo = md.pic };
                 m.MusicID = a["songmid"].ToString();
                 m.MusicName = a["songname"].ToString();
@@ -1344,6 +1349,10 @@ jpg
                 if (a["sizeflac"].ToString() != "0")
                     m.Pz = "SQ";
                 m.Mvmid = a["vid"].ToString();
+                wx.Dispatcher.Invoke(() => { callback(m, false); });
+                if (i <= aniCount)
+                    await Task.Delay(10);
+                i++;
                 data.Add(m);
             }
             md.Data = data;
@@ -1388,11 +1397,11 @@ jpg
                 Music m = new Music();
                 var amid = ns["album"]["mid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{ns["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{ns["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
-                    m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R300x300M000{amid}.jpg?max_age=2592000",
+                    m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name= ns["album"]["name"].ToString()
                     };
                 m.MusicID = ns["mid"].ToString();

@@ -1,5 +1,6 @@
 ﻿using LemonLibrary;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -43,5 +44,20 @@ namespace Lemon_App
     public enum ScrollDirection
     {
         Up, Down
+    }
+
+    public static class ListBoxInside{
+        public static async void Animation(this ListBox listbox,FrameworkElement ui) {
+            int count = (int)(listbox.ActualHeight
+                        / 45);
+            Console.WriteLine(count+"--"+listbox.ActualHeight+"--"+ listbox.Items.IndexOf(ui));
+            if (listbox.Items.IndexOf(ui) <= count)
+            {
+                ui.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(
+                      new Thickness(150, 30, -150, -30), new Thickness(0), TimeSpan.FromSeconds(0.3))
+                      { EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } });
+                await Task.Delay(100);
+            }
+        }
     }
 }

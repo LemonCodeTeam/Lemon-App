@@ -8,7 +8,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
         x:Class="Lemon_App.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="Resources/icon.ico" MinWidth="910" MinHeight="620" Background="{x:Null}" WindowStyle="None">
+        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" Icon="Resources/icon.ico" MinWidth="910" MinHeight="620" Background="{x:Null}">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -2017,8 +2017,8 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Border x:Name="ThemeColor" Background="Black"  Grid.ColumnSpan="2">
-                <Border x:Name="LyricPage_Background">
-                    <Border Background="#66000000"/>
+                <Border x:Name="LyricPage_Background" RenderOptions.BitmapScalingMode="Fant">
+                    <Border Background="#99000000"/>
                 </Border>
             </Border>
             <Grid>
@@ -2027,7 +2027,7 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                     <RowDefinition Height="340*"/>
                     <RowDefinition Height="200*"/>
                 </Grid.RowDefinitions>
-                <Border x:Name="border4"  Margin="0,0,50,0" MaxWidth="350" MaxHeight="350" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right" CornerRadius="{Binding ActualHeight, ElementName=border4, Mode=OneWay}" BorderThickness="10" BorderBrush="#4CFFFFFF" Grid.Row="1">
+                <Border x:Name="border4" RenderOptions.BitmapScalingMode="Fant"  Margin="0,0,50,0" MaxWidth="350" MaxHeight="350" Width="{Binding ActualHeight, ElementName=border4}" Background="{Binding Background, ElementName=MusicImage}" HorizontalAlignment="Right" CornerRadius="{Binding ActualHeight, ElementName=border4, Mode=OneWay}" BorderThickness="10" BorderBrush="#33FFFFFF" Grid.Row="1">
                     <Grid >
                         <Border Margin="0,0,5,5" HorizontalAlignment="Right" Width="30" Height="30" Background="#00000000" VerticalAlignment="Bottom" MouseDown="Border_MouseDown_3">
                             <Path x:Name="path2" Data="M850.879104,96.41591L174.576037,96.41591C113.895003,96.41591,64.5266189999999,145.783271,64.5266189999999,206.465328L64.5266189999999,652.665716C64.5266189999999,713.34675,113.89398,762.715134,174.576037,762.715134L264.883832,762.715134 396.936381,931.129846C400.729777,935.968038 406.534993,938.793386 412.683017,938.793386 418.831041,938.793386 424.635233,935.968038 428.429653,931.129846L560.482201,762.715135 850.879104,762.715135C911.560138,762.715135,960.928522,713.347774,960.928522,652.665717L960.928522,206.465329C960.928522,145.784294,911.561162,96.41591,850.879104,96.41591z M920.91111,652.665717C920.91111,691.280176,889.494586,722.6967,850.880127,722.6967L550.744419,722.6967C544.597419,722.6967,538.792203,725.522048,534.998807,730.36024L412.683017,886.356107 290.367227,730.36024C286.574854,725.522048,280.769638,722.6967,274.621615,722.6967L174.576038,722.6967C135.961579,722.6967,104.545055,691.280176,104.545055,652.665717L104.545054,206.465329C104.545054,167.85087,135.961578,136.434346,174.576037,136.434346L850.879104,136.434346C889.493563,136.434346,920.910087,167.85087,920.910087,206.465329L920.910087,652.665717z M272.621051,344.526731C228.488925,344.526731 192.585203,380.430452 192.585203,424.562579 192.585203,468.694705 228.488924,504.59945 272.621051,504.59945 316.753178,504.59945 352.656899,468.694705 352.656899,424.562579 352.655875,380.430452 316.752154,344.526731 272.621051,344.526731z M272.621051,464.582037C250.555499,464.582037 232.603639,446.630176 232.603639,424.563601 232.603639,402.498049 250.556523,384.546189 272.621051,384.546189 294.686603,384.546189 312.638463,402.49805 312.638463,424.563601 312.638463,446.629153 294.686602,464.582037 272.621051,464.582037z M512.727571,344.526731C468.595445,344.526731 432.691723,380.430452 432.691723,424.562579 432.691723,468.694705 468.595444,504.59945 512.727571,504.59945 556.859697,504.59945 592.763419,468.694705 592.763419,424.562579 592.763418,380.430452 556.859697,344.526731 512.727571,344.526731z M512.727571,464.582037C490.662019,464.582037 472.710159,446.630176 472.710159,424.563601 472.710159,402.498049 490.66202,384.546189 512.727571,384.546189 534.793123,384.546189 552.744983,402.49805 552.744983,424.563601 552.746006,446.629153 534.793122,464.582037 512.727571,464.582037z M752.836137,344.526731C708.705034,344.526731 672.800289,380.430452 672.800289,424.562579 672.800289,468.694705 708.705034,504.59945 752.836137,504.59945 796.96724,504.59945 832.871985,468.694705 832.871985,424.562579 832.871985,380.430452 796.96724,344.526731 752.836137,344.526731z M752.836137,464.582037C730.769562,464.582037 712.818725,446.630176 712.818725,424.563601 712.818725,402.498049 730.770586,384.546189 752.836137,384.546189 774.901688,384.546189 792.853549,402.49805 792.853549,424.563601 792.853549,446.629153 774.902712,464.582037 752.836137,464.582037z" Stretch="Uniform" Fill="#FF93A1AE" StrokeThickness="5"/>
@@ -2038,14 +2038,12 @@ ScrollViewer.PanningMode = "VerticalOnly"  VirtualizingStackPanel.ScrollUnit = "
                     </Grid>
                 </Border>
             </Grid>
-            <Grid Margin="50,120,0,170"  MaxWidth="500" MaxHeight="500" Grid.Column="1" HorizontalAlignment="Left" Width="370">
-                <TextBlock x:Name="m_Name" Margin="0,3,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30"/>
-                <TextBlock x:Name="m_Singer" Margin="0,33,0,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25"/>
-                <Border x:Name="ly" Margin="0,58,0,0" SizeChanged="ly_SizeChanged"/>
-            </Grid>
+            <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="50,150,0,200" Grid.Column="1" HorizontalAlignment="Left" Width="370"/>
             <Border HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="Border_MouseDown_2">
-                <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="25" Width="25"/>
+                <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="18" Width="18"/>
             </Border>
+            <TextBlock x:Name="m_Name" Margin="125,33,125,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" Grid.ColumnSpan="2" TextAlignment="Center"/>
+            <TextBlock x:Name="m_Singer" Margin="125,73,125,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Grid.ColumnSpan="2" TextAlignment="Center"/>
         </Grid>
         <Grid x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" >
             <Grid.ColumnDefinitions>
