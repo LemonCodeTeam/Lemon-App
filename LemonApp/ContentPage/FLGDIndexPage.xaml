@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="LemonApp.ContentPage.FLGDIndexPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LemonApp.ContentPage"
+             xmlns:LemonApp="clr-namespace:LemonApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+    <LemonApp:MyScrollView x:Name="FLGDPage_sv" ScrollChanged="FLGDPage_sv_ScrollChanged">
+        <Grid>
+            <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="分类歌单" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
+            <WrapPanel Orientation="Vertical" Margin="0,50,0,0">
+                <Grid x:Name="FLGDIndexList" VerticalAlignment="Top" Margin="0,5,0,0" Width="{Binding ActualWidth, ElementName=ZJIndexPage, Mode=OneWay}" Height="130">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="FLGDPage_Tag_Turn" Grid.ColumnSpan="5" Height="20" VerticalAlignment="Bottom" Background="#00000000" MouseDown="FLGDPage_Tag_Turn_MouseDown">
+                        <Path x:Name="path9" Data="M803.534 403.174c12.79-13.712 12.074-35.304-1.74-48.095-13.098-12.177-33.36-12.177-46.355 0L512.82 597.598 270.3 355.079c-12.79-13.712-34.28-14.53-48.094-1.74-13.712 12.792-14.53 34.28-1.74 48.095 0.512 0.614 1.126 1.126 1.74 1.74l266.565 266.668c13.303 13.302 34.792 13.302 48.095 0l266.668-266.668z" Fill="{DynamicResource ResuColorBrush}" Stretch="Uniform" Height="10" HorizontalAlignment="Center" Margin="0,0,60,0" RenderTransformOrigin="0.5,0.5"/>
+                        <TextBlock x:Name="FLGDPage_Tag_Open" HorizontalAlignment="Center" TextWrapping="Wrap" Text="展开" VerticalAlignment="Center" Margin="0" FontSize="14" Foreground="{DynamicResource ResuColorBrush}"/>
+                    </Grid>
+                    <TextBlock TextWrapping="Wrap" Text="语种" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center"/>
+                    <WrapPanel x:Name="FLGDPage_Tag_Lau" Margin="10,20,0,15" />
+                    <TextBlock TextWrapping="Wrap" Text="流派" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="1"/>
+                    <WrapPanel x:Name="FLGDPage_Tag_LiuPai" Margin="10,20,0,15" Grid.Column="1" />
+                    <TextBlock TextWrapping="Wrap" Text="主题" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="2"/>
+                    <WrapPanel x:Name="FLGDPage_Tag_Theme" Margin="10,20,0,15" Grid.Column="2" />
+                    <TextBlock TextWrapping="Wrap" Text="心情" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="3"/>
+                    <WrapPanel x:Name="FLGDPage_Tag_Heart" Margin="10,20,0,15" Grid.Column="3" />
+                    <TextBlock TextWrapping="Wrap" Text="场景" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="4"/>
+                    <WrapPanel x:Name="FLGDPage_Tag_Changjing" Margin="10,20,0,15" Grid.Column="4" />
+                </Grid>
+                <Grid Height="40">
+                    <LemonApp:RbBox x:Name="FLGDPage_Tag_All" Uid="10000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" ContentText="全部"/>
+                    <LemonApp:RbBox x:Name="FLGDPage_SortId_Newest" Uid="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" ContentText="最新"/>
+                    <LemonApp:RbBox x:Name="FLGDPage_SortId_Tj" Uid="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,50,0" ContentText="推荐"/>
+                </Grid>
+                <WrapPanel x:Name="FLGDItemsList" Margin="0,5,0,0" Uid="4"/>
+            </WrapPanel>
+        </Grid>
+    </LemonApp:MyScrollView>
+</UserControl>

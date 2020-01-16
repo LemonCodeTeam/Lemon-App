@@ -1,4 +1,5 @@
 ﻿using LemonLib;
+using Lierda.WPFHelper;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
@@ -113,14 +114,14 @@ namespace LemonApp
             return (SolidColorBrush)Resources["ButtonColorBrush"];
         }
         #endregion
-        //#region lierda.WPFHelper 内存管控
-        //LierdaCracker cracker = new LierdaCracker();
-        //protected override void OnStartup(StartupEventArgs e)
-        //{
-        //    cracker.Cracker();
-        //    base.OnStartup(e);
-        //}
-        //#endregion
+        #region lierda.WPFHelper 内存管控
+        LierdaCracker cracker = new LierdaCracker();
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            cracker.Cracker();
+            base.OnStartup(e);
+        }
+        #endregion
         #region 全局异常捕获/处理
         public App() {
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;

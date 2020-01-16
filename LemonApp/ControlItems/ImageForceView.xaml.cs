@@ -25,7 +25,6 @@ namespace LemonApp
     public partial class ImageForceView : UserControl
     {
         private List<IFVData> iv = new List<IFVData>();
-        private static int[] ImageSize = new int[2] { 250,625 };
         private int index = 0;
         private int lastindex = 0;
         private int lastcheck = -1;//0:Left 1:Right
@@ -42,9 +41,9 @@ namespace LemonApp
             index = 0;
             lastindex = iv.Count - 1;
             mw = m;
-            M.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic, ImageSize)) { Stretch = Stretch.Uniform };
-            R.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[1].pic, ImageSize)) { Stretch = Stretch.Uniform };
-            L.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv.Last().pic, ImageSize)) { Stretch = Stretch.Uniform };
+            M.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
+            R.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[1].pic)) { Stretch = Stretch.Uniform };
+            L.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv.Last().pic)) { Stretch = Stretch.Uniform };
         }
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -111,8 +110,8 @@ namespace LemonApp
             righb.Background = mid.Background;
             mid.Background = leftb.Background;
             if (index - 1 == -1)
-                leftb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[lastindex].pic, ImageSize)) { Stretch = Stretch.Uniform };
-            else leftb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index - 1].pic, ImageSize)) { Stretch = Stretch.Uniform };
+                leftb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[lastindex].pic)) { Stretch = Stretch.Uniform };
+            else leftb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index - 1].pic)) { Stretch = Stretch.Uniform };
         }
         private void Left_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -148,8 +147,8 @@ namespace LemonApp
                 leftb.Background = mid.Background;
                 mid.Background = righb.Background;
                 if (index + 1 > lastindex)
-                    righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic, ImageSize)) { Stretch = Stretch.Uniform };
-                else righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index + 1].pic, ImageSize)) { Stretch = Stretch.Uniform };
+                    righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
+                else righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index + 1].pic)) { Stretch = Stretch.Uniform };
             }
             catch { }
         }

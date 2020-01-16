@@ -10,18 +10,6 @@ namespace LemonApp
 {
     public class MyScrollView : ScrollViewer
     {
-        public MyScrollView() {
-            VirtualizingPanel.SetIsVirtualizing(this, true);
-            VirtualizingPanel.SetVirtualizationMode(this, VirtualizationMode.Recycling);
-            this.Loaded += MyScrollView_Loaded;
-        }
-
-        private void MyScrollView_Loaded(object sender, RoutedEventArgs e)
-        {
-            VirtualizingPanel.SetIsVirtualizing(this.Content as DependencyObject, true);
-            VirtualizingPanel.SetVirtualizationMode(this.Content as DependencyObject, VirtualizationMode.Recycling);
-        }
-
         private int lastTimestamp = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {

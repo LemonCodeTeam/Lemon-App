@@ -1263,11 +1263,11 @@
             </Setter>
         </Style>
         <Storyboard x:Key="NSPageAnimation">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HomePage">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentIndex">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.2"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="HomePage">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ContentIndex">
                 <EasingThicknessKeyFrame KeyTime="0" Value="200,0,-200,0">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <QuarticEase EasingMode="EaseOut"/>
@@ -1505,18 +1505,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1">
                     <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,0">
-                        <Grid x:Name="HomePage">
-                            <LemonApp:MyScrollView Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
-                                    <LemonApp:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=HomePage, Mode=OneWay}" Margin="10,0"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0"/>
-                                    <WrapPanel x:Name="HomePage_Gdtj" Margin="0,20,0,0" Uid="4"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="新歌首发" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0"/>
-                                    <WrapPanel x:Name="HomePage_Nm" Margin="0,20,0,0" Uid="4"/>
-                                </WrapPanel>
-                            </LemonApp:MyScrollView>
-                        </Grid>
-
+                        <Border x:Name="ContentIndex"/>
                         <Grid x:Name="DownloadPage" Visibility="Collapsed">
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                             <LemonApp:MyScrollView x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
@@ -1548,7 +1537,7 @@
                             </Grid>
                         </Grid>
                         <Grid x:Name="SettingsPage" Visibility="Collapsed">
-                            <LemonApp:MyScrollView Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollView x:Name="TemplateSv"  Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <WrapPanel x:Name="wrapPanel" VerticalAlignment="Top" Orientation="Vertical" Margin="0,0,15,0">
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,0,0,0"/>
                                     <Grid VerticalAlignment="Top" Height="172" Margin="20,10,0,0">
@@ -1635,125 +1624,6 @@
                                 </Grid>
                             </Border>
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="个性主题" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                        </Grid>
-                        <Grid x:Name="TopIndexPage" Visibility="Collapsed">
-                            <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="巅峰榜&amp;全球榜" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                            <LemonApp:MyScrollView  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <WrapPanel x:Name="topIndexList" Uid="2" Margin="0"/>
-                            </LemonApp:MyScrollView>
-                        </Grid>
-                        <Grid x:Name="SingerIndexPage" Visibility="Collapsed">
-                            <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                            <LemonApp:MyScrollView x:Name="SingerPage_sv"  Margin="0,45,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="SingerPage_sv_ScrollChanged">
-                                <WrapPanel Orientation="Vertical">
-                                    <WrapPanel Orientation="Vertical" Margin="15,5,0,0">
-                                        <WrapPanel x:Name="SingerABC">
-                                            <LemonApp:RbBox ContentText="热门"  Uid="-100" Margin="0,0,20,5"/>
-                                            <LemonApp:RbBox ContentText="A" Uid="1" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="B" Uid="2" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="C" Uid="3" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="D" Uid="4" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="E" Uid="5" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="F" Uid="6" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="G" Uid="7" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="H" Uid="8" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="I" Uid="9" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="J" Uid="10" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="K" Uid="11" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="L" Uid="12" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="M" Uid="13" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="N" Uid="14" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="O" Uid="15" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="P" Uid="16" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="Q" Uid="17" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="R" Uid="18" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="S" Uid="19" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="T" Uid="20" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="U" Uid="21" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="V" Uid="22" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="W" Uid="23" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="X" Uid="24" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="Y" Uid="25" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="Z" Uid="26" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="#" Uid="27" Margin="0,0,5,5"/>
-                                        </WrapPanel>
-                                        <WrapPanel x:Name="SingerArea" Margin="0">
-                                            <LemonApp:RbBox ContentText="全部" Uid="-100" Margin="0,0,20,5"/>
-                                            <LemonApp:RbBox ContentText="内地" Uid="200" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="港台" Uid="2" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="欧美" Uid="5" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="日本" Uid="4" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="韩国" Uid="3" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="其他" Uid="6" Margin="0,0,5,5"/>
-                                        </WrapPanel>
-                                        <WrapPanel x:Name="SingerSex" Margin="0">
-                                            <LemonApp:RbBox ContentText="全部" Uid="-100" Margin="0,0,20,5"/>
-                                            <LemonApp:RbBox ContentText="男" Uid="0" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="女" Uid="1" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="组合" Uid="2" Margin="0,0,5,5"/>
-                                        </WrapPanel>
-                                        <WrapPanel x:Name="SingerGenre" Margin="0">
-                                            <LemonApp:RbBox ContentText="全部" Uid="-100" Margin="0,0,20,5"/>
-                                            <LemonApp:RbBox ContentText="流行" Uid="1" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="嘻哈" Uid="6" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="摇滚" Uid="2" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="电子" Uid="4" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="民谣" Uid="3" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="R&amp;B" Uid="8" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="民歌" Uid="10" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="轻音乐" Uid="9" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="爵士" Uid="5" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="古典" Uid="14" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="乡村" Uid="25" Margin="0,0,5,5"/>
-                                            <LemonApp:RbBox ContentText="蓝调" Uid="20" Margin="0,0,5,5"/>
-                                        </WrapPanel>
-                                    </WrapPanel>
-                                    <WrapPanel x:Name="SingerItemsList" Uid="5" Margin="0"/>
-                                </WrapPanel>
-                            </LemonApp:MyScrollView>
-                        </Grid>
-                        <Grid x:Name="ZJIndexPage" Visibility="Collapsed" >
-                            <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="分类歌单" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                            <LemonApp:MyScrollView x:Name="FLGDPage_sv"  Margin="0,45,0,0" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="FLGDPage_sv_ScrollChanged">
-                                <WrapPanel Orientation="Vertical">
-                                    <Grid x:Name="FLGDIndexList" VerticalAlignment="Top" Margin="0,5,0,0" Width="{Binding ActualWidth, ElementName=ZJIndexPage, Mode=OneWay}" Height="130">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid x:Name="FLGDPage_Tag_Turn" Grid.ColumnSpan="5" Height="20" VerticalAlignment="Bottom" Background="#00000000" MouseDown="FLGDPage_Tag_Turn_MouseDown">
-                                            <Path x:Name="path9" Data="M803.534 403.174c12.79-13.712 12.074-35.304-1.74-48.095-13.098-12.177-33.36-12.177-46.355 0L512.82 597.598 270.3 355.079c-12.79-13.712-34.28-14.53-48.094-1.74-13.712 12.792-14.53 34.28-1.74 48.095 0.512 0.614 1.126 1.126 1.74 1.74l266.565 266.668c13.303 13.302 34.792 13.302 48.095 0l266.668-266.668z" Fill="{DynamicResource ResuColorBrush}" Stretch="Uniform" Height="10" HorizontalAlignment="Center" Margin="0,0,60,0" RenderTransformOrigin="0.5,0.5"/>
-                                            <TextBlock x:Name="FLGDPage_Tag_Open" HorizontalAlignment="Center" TextWrapping="Wrap" Text="展开" VerticalAlignment="Center" Margin="0" FontSize="14" Foreground="{DynamicResource ResuColorBrush}"/>
-                                        </Grid>
-                                        <TextBlock TextWrapping="Wrap" Text="语种" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center"/>
-                                        <WrapPanel x:Name="FLGDPage_Tag_Lau" Margin="10,20,0,15" />
-                                        <TextBlock TextWrapping="Wrap" Text="流派" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="1"/>
-                                        <WrapPanel x:Name="FLGDPage_Tag_LiuPai" Margin="10,20,0,15" Grid.Column="1" />
-                                        <TextBlock TextWrapping="Wrap" Text="主题" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="2"/>
-                                        <WrapPanel x:Name="FLGDPage_Tag_Theme" Margin="10,20,0,15" Grid.Column="2" />
-                                        <TextBlock TextWrapping="Wrap" Text="心情" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="3"/>
-                                        <WrapPanel x:Name="FLGDPage_Tag_Heart" Margin="10,20,0,15" Grid.Column="3" />
-                                        <TextBlock TextWrapping="Wrap" Text="场景" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" FontSize="14" TextAlignment="Center" Grid.Column="4"/>
-                                        <WrapPanel x:Name="FLGDPage_Tag_Changjing" Margin="10,20,0,15" Grid.Column="4" />
-                                    </Grid>
-                                    <Grid Height="40">
-                                        <LemonApp:RbBox x:Name="FLGDPage_Tag_All" Uid="10000000" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" ContentText="全部"/>
-                                        <LemonApp:RbBox x:Name="FLGDPage_SortId_Newest" Uid="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" ContentText="最新"/>
-                                        <LemonApp:RbBox x:Name="FLGDPage_SortId_Tj" Uid="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,50,0" ContentText="推荐"/>
-                                    </Grid>
-                                    <WrapPanel x:Name="FLGDItemsList" Margin="0,5,0,0" Uid="4"/>
-                                </WrapPanel>
-                            </LemonApp:MyScrollView>
-                        </Grid>
-                        <Grid x:Name="RadioIndexPage" Visibility="Collapsed">
-                            <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="在线电台" VerticalAlignment="Top" Width="101" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
-                            <WrapPanel x:Name="RadioIndexList" Margin="10,50,10,0" VerticalAlignment="Top"/>
-                            <LemonApp:MyScrollView  Margin="0,90,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <WrapPanel x:Name="RadioItemsList" Uid="4" Margin="0"/>
-                            </LemonApp:MyScrollView>
                         </Grid>
                         <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
                             <LemonApp:MyScrollView  Margin="0" Template="{DynamicResource ScrollViewerControlTemplate}">
@@ -1955,8 +1825,8 @@
                             </Grid>
                             <Border x:Name="MusicKuCom" HorizontalAlignment="Left" Margin="0,2" Background="{DynamicResource ThemeColor}" Width="5"/>
                         </Grid>
-                        <Grid x:Name="TopM" Height="25.24" Margin="0,15,0,0" Background="#00000000">
-                            <Grid Margin="6,0,15,0"  MouseDown="TopBtn_MouseDown" VerticalAlignment="Center" Width="75" HorizontalAlignment="Center">
+                        <Grid x:Name="TopM" MouseDown="TopBtn_MouseDown" Height="25.24" Margin="0,15,0,0" Background="#00000000">
+                            <Grid Margin="6,0,15,0"  VerticalAlignment="Center" Width="75" HorizontalAlignment="Center">
                                 <Path HorizontalAlignment="Left" Margin="0" Width="14" Data="M246.471,843.016C289.405,843.016 857.81,842.989 900.753,843.016 918.622,843.016 925.899,850.299 925.899,868.065 925.899,879.496 925.973,890.925 925.881,902.357 925.754,916.232 917.682,924.647 903.892,924.676 815.833,924.761 202.321,924.761 114.27,924.676 100.653,924.651 92.732,916.632 92.464,902.811 92.223,890.416 92.293,877.993 92.437,865.591 92.608,850.778 100.34,843.073 115.267,843.047 158.997,842.961 202.729,843.018 246.468,843.018L246.468,843.018z M152.764,628.864C152.764,600.732 152.679,513.887 152.764,485.753 152.845,461.906 163.785,451.006 187.531,450.948 204.77,450.903 222.005,450.824 239.243,450.985 260.004,451.175 271.734,462.839 271.771,483.767 271.935,541.465 271.894,657.872 271.81,715.577 271.729,736.855 259.794,748.64 238.62,748.762 220.849,748.87 203.031,748.893 185.209,748.762 164.949,748.598 153.014,737.017 152.85,716.714 152.56,687.415 152.769,658.138 152.769,628.868L152.769,628.868z M449.223,581.8C449.223,538.989 449.223,349.863 449.262,307.047 449.262,282.967 460.545,271.666 484.563,271.603 501.818,271.566 519.076,271.461 536.29,271.626 556.577,271.832 568.816,283.425 568.897,303.709 569.103,391.923 569.103,626.457 568.897,714.687 568.858,735.283 556.412,747.11 535.755,747.253 519.118,747.384 502.445,747.276 485.767,747.276 460.665,747.253 449.265,735.989 449.265,711.144 449.22,668.022 449.22,624.921 449.22,581.797L449.22,581.797z M866.475,523.858C866.475,586.417 866.52,648.991 866.475,711.561 866.475,737.599 855.869,748.206 829.977,748.206 813.323,748.206 796.669,748.304 780.016,748.183 759.798,748 747.536,736.233 747.494,716.142 747.37,587.84 747.37,252.673 747.494,124.375 747.533,104.532 759.218,92.9939999999998 779.352,92.6009999999998 797.418,92.2499999999998 815.521,92.3499999999998 833.583,92.5619999999998 855.168,92.8129999999998 866.392,104.08 866.434,125.825 866.561,189.54 866.479,460.128 866.479,523.858L866.479,523.858z" Stretch="Uniform" Fill="{Binding Foreground, ElementName=TopBtn}" StrokeThickness="0" Height="14"/>
                                 <TextBlock x:Name="TopBtn" Text="排行榜" Margin="25,0,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
                             </Grid>

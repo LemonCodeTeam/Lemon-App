@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace LemonLib
@@ -10,14 +11,15 @@ namespace LemonLib
             Search,Top,SingerItem,GDItem
         }
         public class MeumInfo {
-            public MeumInfo(TextBlock t, Grid p, Border c) {
+            public MeumInfo(TextBlock t, UIElement p, Border c) {
                 tb = t;
                 Page = p;
                 Com = c;
             }
             public TextBlock tb;
-            public Grid Page;
+            public UIElement Page;
             public Border Com;
+            public string cmd="";
         }
         ////////Music Helper////////
         public class IFVData

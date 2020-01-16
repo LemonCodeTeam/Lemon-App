@@ -1,4 +1,5 @@
-﻿using LemonLib;
+﻿using LemonApp.ContentPage;
+using LemonLib;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Newtonsoft.Json.Linq;
 using System;
@@ -33,14 +34,13 @@ namespace LemonApp
     {
         #region 一些字段
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
-        MusicLib ml;
+        public MusicLib ml;
         public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
         string RadioID = "";
         int ind = 0;//歌词页面是否打开
         bool xh = false;//false: lb true:dq  循环/单曲 播放控制
-        bool issingerloaded = false;
         bool mod = true;//true : qq false : wy
         bool isLoading = false;
         public NowPage np;
@@ -166,10 +166,8 @@ namespace LemonApp
 
             //添加按钮
             TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this, TaskBarBtn_Last, TaskBarBtn_Play, TaskBarBtn_Next);
-            //---------加载TOP页面----- 等待移植
-            TopLoadac();
             //--------加载主页---------
-            LoadHomePage();
+            ContentIndex.Child = new HomePage(this, TemplateSv.Template);
             //--------去除可恶的焦点边缘线
             UIHelper.G(Page);
         }
@@ -396,8 +394,8 @@ namespace LemonApp
                 catch { }
             };
             //-----Timer 清理与更新播放设备
-            var ds = new System.Windows.Forms.Timer() { Interval = 10000 };
-            ds.Tick += delegate { MusicLib.mp.UpdataDevice(); GC.Collect(); };
+            var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
+            ds.Tick += delegate {if(t.Enabled)MusicLib.mp.UpdataDevice(); GC.Collect(); };
             ds.Start();
             //------检测key是否有效-----------
             if (Settings.USettings.LemonAreeunIts != "")
@@ -410,7 +408,7 @@ namespace LemonApp
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
             //---------------保存初始页面
-            AddPage(new MeumInfo(MusicKuBtn, HomePage,MusicKuCom));
+            AddPage(new MeumInfo(MusicKuBtn, ContentIndex, MusicKuCom) {cmd="HomePage"});
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -465,15 +463,9 @@ namespace LemonApp
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //------------调整大小时对控件进行伸缩---------------
-            WidthUI(SingerItemsList);
-            WidthUI(RadioItemsList);
             WidthUI(GDItemsList);
-            WidthUI(FLGDItemsList);
             WidthUI(GDILikeItemsList);
-            WidthUI(HomePage_Gdtj);
-            WidthUI(HomePage_Nm);
             WidthUI(SkinIndexList);
-            WidthUI(topIndexList);
 
             if (MusicPlList.Visibility == Visibility.Visible)
                 foreach (UserControl dx in MusicPlList.Children)
@@ -894,43 +886,11 @@ namespace LemonApp
         #endregion
         #region 功能区
         #region HomePage 主页
-        private async void LoadHomePage()
-        {
-            //---------加载主页HomePage
-            var data = await MusicLib.GetHomePageData();
-            HomePage_IFV.Updata(data.focus, this);
-            foreach (var a in data.Gdata)
-            {
-                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo,a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent += (sx) =>
-                {
-                    MusicLib.AddGDILike(sx.id);
-                    Toast.Send("收藏成功");
-                };
-                k.ImMouseDown += FxGDMouseDown;
-                HomePage_Gdtj.Children.Add(k);
-            }
-            WidthUI(HomePage_Gdtj);
-            foreach (var a in data.NewMusic)
-            {
-                var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl,0) { Width = 175, Height = 175, Margin = new Thickness(10, 0, 10, 20) };
-                k.Tag = a;
-                k.ImMouseDown += (object s, MouseButtonEventArgs es) =>
-                {
-                    var sx = s as FLGDIndexItem;
-                    Music dt = sx.Tag as Music;
-                    AddPlayDl_CR(new DataItem(dt));
-                    PlayMusic(dt.MusicID, dt.ImageUrl, dt.MusicName, dt.SingerText);
-                };
-                HomePage_Nm.Children.Add(k);
-            }
-            WidthUI(HomePage_Nm);
-        }
         //IFV的回调函数
         public async void IFVCALLBACK_LoadAlbum(string id)
         {
             np = NowPage.GDItem;
-            NSPage(new MeumInfo(null, Data, null));
+            NSPage(new MeumInfo(null, Data, null) { cmd= "[DataUrl]{\"type\":\"Album\",\"key\":\""+id+"\"}" });
             DataItemsList.Items.Clear();
             int count = (int)(DataItemsList.ActualHeight
             / 45);
@@ -951,28 +911,11 @@ namespace LemonApp
         #endregion
         #region Top 排行榜
         /// <summary>
-        /// 加载TOP列表
-        /// </summary>
-        /// <returns></returns>
-        private async void TopLoadac()
-        {
-            var dt = await ml.GetTopIndexAsync();
-            topIndexList.Children.Clear();
-            foreach (var d in dt)
-            {
-                var top = new TopControl(d);
-                top.MouseDown += Top_MouseDown;
-                top.Margin = new Thickness(12, 0, 12, 20);
-                topIndexList.Children.Add(top);
-            }
-            WidthUI(topIndexList);
-        }
-        /// <summary>
         /// 选择了TOP项
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Top_MouseDown(object sender, MouseButtonEventArgs e)
+        public void Top_MouseDown(object sender, MouseButtonEventArgs e)
         {
             GetTopItems(sender as TopControl);
         }
@@ -989,7 +932,7 @@ namespace LemonApp
             OpenLoading();
             if (osx == 1)
             {
-                NSPage(new MeumInfo(null,Data,null));
+                NSPage(new MeumInfo(null,Data,null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\""+g.Data.ID+"\",\"name\":\""+g.Data.Name+ "\",\"img\":\"" + g.Data.Photo + "\"}" });
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
@@ -1048,7 +991,7 @@ namespace LemonApp
         }
 
         private TextBlock LastClickLabel = null;
-        private Grid LastPage = null;
+        private UIElement LastPage = null;
         private Border LastCom = null;
         public void NSPage(MeumInfo data, Thickness value = new Thickness(), bool needSave = true)
         {
@@ -1058,10 +1001,66 @@ namespace LemonApp
             if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
-            if (LastPage == null) LastPage = HomePage;
+            if (LastPage == null) LastPage = ContentIndex;
             if (LastCom == null) LastCom = MusicKuCom;
             LastCom.Visibility = Visibility.Collapsed;
             LastPage.Visibility = Visibility.Collapsed;
+            //-----cmd处理----
+            if (!needSave)
+            {
+                switch (data.cmd)
+                {
+                    case "TopPage":
+                        ContentIndex.Child = new TopPage(this, TemplateSv.Template);
+                        break;
+                    case "HomePage":
+                        ContentIndex.Child = new HomePage(this, TemplateSv.Template);
+                        break;
+                    case "SingerIndexPage":
+                        ContentIndex.Child = new SingerIndexPage(this, TemplateSv.Template);
+                        break;
+                    case "FLGDIndexPage":
+                        ContentIndex.Child = new FLGDIndexPage(this, TemplateSv.Template);
+                        break;
+                    case "RadioIndexPage":
+                        ContentIndex.Child = new RadioIndexPage(this, TemplateSv.Template);
+                        break;
+                }
+                if (data.cmd.Contains("DataUrl"))
+                {
+                    if (data.cmd == "DataUrl[ILike]")
+                        LikeBtn_MouseDown_1(null, null);
+                    else
+                    {
+                        JObject o = JObject.Parse(data.cmd.Replace("[DataUrl]", ""));
+                        string type = o["type"].ToString();
+                        string key = o["key"].ToString();
+                        switch (type)
+                        {
+                            case "Search":
+                                SearchMusic(key, 0);
+                                break;
+                            case "GD":
+                                string name = o["name"].ToString();
+                                string img = o["img"].ToString();
+                                var a = new FLGDIndexItem() { id = key,img=img };
+                                a.name.Text = name;
+                                FxGDMouseDown(a, null);
+                                break;
+                            case "Album":
+                                IFVCALLBACK_LoadAlbum(key);
+                                break;
+                            case "Top":
+                                string nam = o["name"].ToString();
+                                string im = o["img"].ToString();
+                                var b = new TopControl(new MusicTop() { ID = key, Name = nam,Photo=im });
+                                GetTopItems(b, 0);
+                                break;
+                        }
+                    }
+                }
+            }
+            //------------------
             if(data.Com!=null)data.Com.Visibility = Visibility.Visible;
             data.Page.Visibility = Visibility.Visible;
             RunAnimation(data.Page, value);
@@ -1070,15 +1069,18 @@ namespace LemonApp
             LastCom = data.Com;
             if (needSave)
                 AddPage(data);
-
         }
         private void TopBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(TopBtn, TopIndexPage,TopCom));
+            ContentIndex.Child = null;
+            ContentIndex.Child = new TopPage(this, TemplateSv.Template);
+            NSPage(new MeumInfo(TopBtn, ContentIndex, TopCom) {cmd="TopPage"});
         }
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(MusicKuBtn, HomePage,MusicKuCom));
+            ContentIndex.Child = null;
+            ContentIndex.Child = new HomePage(this, TemplateSv.Template);
+            NSPage(new MeumInfo(MusicKuBtn, ContentIndex, MusicKuCom) {cmd="HomePage"});
         }
         //前后导航仪
         int QHNowPageIndex = 0;
@@ -1097,14 +1099,14 @@ namespace LemonApp
         {
             QHNowPageIndex--;
             var a = PageData[QHNowPageIndex];
-            NSPage(a, default(Thickness), false);
+            NSPage(a, default, false);
         }
 
         private void NextPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             QHNowPageIndex++;
             var a = PageData[QHNowPageIndex];
-            NSPage(a, default(Thickness), false);
+            NSPage(a, default, false);
         }
         #endregion
         #region Singer 歌手界面
@@ -1205,330 +1207,29 @@ namespace LemonApp
             }
             Cisv.ScrollToVerticalOffset(0);
             CloseLoading();
-            /*
-            OpenLoading();
-            List<Music> dt = await ml.GetSingerMusicByIdAsync(si.data.Mid, osx);
-            if (osx == 1) {
-                DataItemsList.Items.Clear();
-                NSPage(null, Data);
-                TB.Text = si.data.Name;
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(si.data.Photo));
-            }
-            foreach (var j in dt)
-            {
-                var k = new DataItem(j) { Width = ContentPage.ActualWidth };
-                k.GetToSingerPage += K_GetToSingerPage;
-                if (k.music.MusicID == MusicData.Data.MusicID)
-                {
-                    k.ShowDx();
-                }
-                k.Play += PlayMusic;
-                k.Download += K_Download;
-                if (DataPage_DownloadMod)
-                {
-                    k.MouseDown -= PlayMusic;
-                    k.NSDownload(true);
-                    k.Check();
-                }
-                DataItemsList.Items.Add(k);
-            }
-            if (osx == 1) Datasv.ScrollToTop();
-            CloseLoading();
-            */
-        }
-        private async void GetSingerList(string index = "-100", string area = "-100", string sex = "-100", string genre = "-100", int cur_page = 1)
-        {
-            if (cur_page == 1)
-                SingerItemsList.Opacity = 0;
-            string sin = (80 * (cur_page - 1)).ToString();
-            OpenLoading();
-            ixSingerList = cur_page;
-            var data = await MusicLib.GetSingerListAsync(index, area, sex, genre, sin, cur_page);
-            if (cur_page == 1)
-            {
-                SingerItemsList.Children.Clear();
-            }
-            foreach (var d in data)
-            {
-                var sinx = new SingerItem(d) { Margin = new Thickness(12, 0, 12, 20) };
-                sinx.MouseDown += GetSinger;
-                SingerItemsList.Children.Add(sinx);
-            }
-            WidthUI(SingerItemsList);
-            if (cur_page == 1) SingerPage_sv.ScrollToTop();
-            CloseLoading();
-            if (cur_page == 1)
-            {
-                await Task.Delay(10);
-                RunAnimation(SingerItemsList);
-            }
-        }
-        private int ixSingerList = 1;
-        private void SingerPage_sv_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (SingerPage_sv.IsVerticalScrollBarAtButtom())
-            {
-                ixSingerList++;
-                GetSingerList(SingerTab_ABC.Uid, SingerTab_Area.Uid, SingerTab_Sex.Uid, SingerTab_Genre.Uid, ixSingerList);
-            }
         }
 
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(SingerBtn, SingerIndexPage,SingerCom));
-            if (!issingerloaded)
-            {
-                issingerloaded = true;
-                SingerTab_ABC = SingerABC.Children[0] as RbBox;
-                SingerTab_ABC.Check(true);
-                SingerTab_Area = SingerArea.Children[0] as RbBox;
-                SingerTab_Area.Check(true);
-                SingerTab_Sex = SingerSex.Children[0] as RbBox;
-                SingerTab_Sex.Check(true);
-                SingerTab_Genre = SingerGenre.Children[0] as RbBox;
-                SingerTab_Genre.Check(true);
-                foreach (var c in SingerABC.Children)
-                    (c as RbBox).Checked += SingerTabChecked_ABC;
-                foreach (var c in SingerArea.Children)
-                    (c as RbBox).Checked += SingerTabChecked_Area;
-                foreach (var c in SingerSex.Children)
-                    (c as RbBox).Checked += SingerTabChecked_Sex;
-                foreach (var c in SingerGenre.Children)
-                    (c as RbBox).Checked += SingerTabChecked_Genre;
-                GetSingerList();
-            }
-        }
-
-        RbBox SingerTab_ABC = new RbBox() { Uid = "-100" };
-        RbBox SingerTab_Area = new RbBox() { Uid = "-100" };
-        RbBox SingerTab_Sex = new RbBox() { Uid = "-100" };
-        RbBox SingerTab_Genre = new RbBox() { Uid = "-100" };
-        private void SingerTabChecked_ABC(RbBox sender)
-        {
-            if (sender != null)
-            {
-                SingerTab_ABC.Check(false);
-                SingerTab_ABC = sender;
-                GetSingerList(SingerTab_ABC.Uid, SingerTab_Area.Uid, SingerTab_Sex.Uid, SingerTab_Genre.Uid, 1);
-            }
-        }
-
-        private void SingerTabChecked_Genre(RbBox sender)
-        {
-            if (sender != null)
-            {
-                SingerTab_Genre.Check(false);
-                SingerTab_Genre = sender;
-                GetSingerList(SingerTab_ABC.Uid, SingerTab_Area.Uid, SingerTab_Sex.Uid, SingerTab_Genre.Uid, 1);
-            }
-        }
-
-        private void SingerTabChecked_Sex(RbBox sender)
-        {
-            if (sender != null)
-            {
-                SingerTab_Sex.Check(false);
-                SingerTab_Sex = sender;
-                GetSingerList(SingerTab_ABC.Uid, SingerTab_Area.Uid, SingerTab_Sex.Uid, SingerTab_Genre.Uid, 1);
-            }
-        }
-
-        private void SingerTabChecked_Area(RbBox sender)
-        {
-            if (sender != null)
-            {
-                SingerTab_Area.Check(false);
-                SingerTab_Area = sender;
-                GetSingerList(SingerTab_ABC.Uid, SingerTab_Area.Uid, SingerTab_Sex.Uid, SingerTab_Genre.Uid, 1);
-            }
+            ContentIndex.Child = null;
+            ContentIndex.Child = new SingerIndexPage(this, TemplateSv.Template);
+            NSPage(new MeumInfo(SingerBtn, ContentIndex, SingerCom) {cmd="SingerIndexPage"});
         }
         #endregion
         #region FLGD 分类歌单
-        bool FLGDPage_Tag_IsOpen = false;
-        private void FLGDPage_Tag_Turn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void ZJBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (FLGDPage_Tag_IsOpen)
-            {
-                FLGDPage_Tag_IsOpen = false;
-                FLGDIndexList.Height = 130;
-                FLGDPage_Tag_Open.Text = "展开";
-            }
-            else
-            {
-                FLGDPage_Tag_IsOpen = true;
-                //相当于xaml中的 Height="Auto"
-                FLGDIndexList.Height = double.NaN;
-                FLGDPage_Tag_Open.Text = "收缩";
-            }
-        }
-        private async void ZJBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            NSPage(new MeumInfo(ZJBtn, ZJIndexPage,GDCom));
-            if (FLGDPage_Tag_Lau.Children.Count == 0)
-            {
-                OpenLoading();
-                //加载Tag标签
-                var wk = await ml.GetFLGDIndexAsync();
-                //--------语种------------
-                foreach (var d in wk.Lauch)
-                {
-                    var tb = new RbBox()
-                    {
-                        Uid = d.id,
-                        ContentText = d.name,
-                        Margin = new Thickness(0, 0, 5, 5)
-                    };
-                    tb.Checked += FLGDPageChecked;
-                    FLGDPage_Tag_Lau.Children.Add(tb);
-                }
-                //--------流派-------------
-                foreach (var d in wk.LiuPai)
-                {
-                    var tb = new RbBox()
-                    {
-                        Uid = d.id,
-                        ContentText = d.name.Replace("&#38;", "&"),
-                        Margin = new Thickness(0, 0, 5, 5)
-                    };
-                    tb.Checked += FLGDPageChecked;
-                    FLGDPage_Tag_LiuPai.Children.Add(tb);
-                }
-                //--------主题------------
-                foreach (var d in wk.Theme)
-                {
-                    var tb = new RbBox()
-                    {
-                        Uid = d.id,
-                        ContentText = d.name,
-                        Margin = new Thickness(0, 0, 5, 5)
-                    };
-                    tb.Checked += FLGDPageChecked;
-                    FLGDPage_Tag_Theme.Children.Add(tb);
-                }
-                //---------心情-----------
-                foreach (var d in wk.Heart)
-                {
-                    var tb = new RbBox()
-                    {
-                        Uid = d.id,
-                        ContentText = d.name,
-                        Margin = new Thickness(0, 0, 5, 5)
-                    };
-                    tb.Checked += FLGDPageChecked;
-                    FLGDPage_Tag_Heart.Children.Add(tb);
-                }
-                //--------场景-------
-                foreach (var d in wk.Changjing)
-                {
-                    var tb = new RbBox()
-                    {
-                        Uid = d.id,
-                        ContentText = d.name,
-                        Margin = new Thickness(0, 0, 5, 5)
-                    };
-                    tb.Checked += FLGDPageChecked;
-                    FLGDPage_Tag_Changjing.Children.Add(tb);
-                }
-                GetGDList("10000000");
-                FLGDPage_Tag = FLGDPage_Tag_All;
-                FLGDPage_Tag_All.Check(true);
-                FLGDPage_Tag_All.Checked += FLGDPage_Tag_All_Checked;
-                FLGDPage_SortId_Tj.Checked += FLGDPage_SortId_Tj_Checked;
-                FLGDPage_SortId_Newest.Checked += FLGDPage_SortId_Newest_Checked;
-            }
-        }
-        RbBox FLGDPage_Tag = new RbBox();
-        string sortId;
-        private void FLGDPageChecked(RbBox sender)
-        {
-            if (sender != null)
-            {
-                FLGDPage_Tag.Check(false);
-                FLGDPage_Tag = sender;
-                OpenLoading();
-                GetGDList(sender.Uid);
-            }
-        }
-        private void FLGDPage_Tag_All_Checked(RbBox sender)
-        {
-            FLGDPage_Tag.Check(false);
-            FLGDPage_Tag = FLGDPage_Tag_All;
-            OpenLoading();
-            GetGDList(FLGDPage_Tag_All.Uid);
-        }
-        private void FLGDPage_SortId_Tj_Checked(RbBox sender)
-        {
-            sortId = "5";
-            FLGDPage_SortId_Newest.Check(false);
-            GetGDList(FLGDPage_Tag.Uid, ixFLGD);
-        }
-
-        private void FLGDPage_SortId_Newest_Checked(RbBox sender)
-        {
-            sortId = "2";
-            FLGDPage_SortId_Tj.Check(false);
-            GetGDList(FLGDPage_Tag.Uid, ixFLGD);
-        }
-        private int ixFLGD = 0;
-        private void FLGDPage_sv_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (FLGDPage_sv.IsVerticalScrollBarAtButtom())
-            {
-                ixFLGD++;
-                GetGDList(FLGDPage_Tag.Uid, ixFLGD);
-            }
-        }
-        private async void GetGDList(string id, int osx = 1)
-        {
-            if (osx == 1)
-                FLGDItemsList.Opacity = 0;
-            FLGDPage_Tag.Uid = id;
-            ixFLGD = osx;
-            OpenLoading();
-            var data = await ml.GetFLGDAsync(id, sortId, osx);
-            if (osx == 1) FLGDItemsList.Children.Clear();
-            foreach (var d in data)
-            {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo,d.ListenCount) { Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent += (sx) =>
-                {
-                    MusicLib.AddGDILike(sx.id);
-                    Toast.Send("收藏成功");
-                };
-                k.Width = ContentPage.ActualWidth / 5;
-                k.ImMouseDown += FxGDMouseDown;
-                FLGDItemsList.Children.Add(k);
-            }
-            WidthUI(FLGDItemsList);
-            if (osx == 1) FLGDPage_sv.ScrollToTop();
-            CloseLoading();
-            if (osx == 1)
-            {
-                await Task.Delay(10);
-                RunAnimation(FLGDItemsList);
-            }
+            ContentIndex.Child = null;
+            ContentIndex.Child = new FLGDIndexPage(this, TemplateSv.Template);
+            NSPage(new MeumInfo(ZJBtn, ContentIndex, GDCom) {cmd="FLGDIndexPage"});
         }
         #endregion
         #region Radio 电台
-        Dictionary<string, MusicRadioList> Radiodata;
-        private async void RadioBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void RadioBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(RadioBtn, RadioIndexPage,RadioCom));
-            if (RadioIndexList.Children.Count == 0)
-            {
-                Radiodata = await MusicLib.GetRadioList();
-                foreach (var list in Radiodata)
-                {
-                    RbBox r = new RbBox();
-                    r.ContentText = list.Key;
-                    r.Margin = new Thickness(20, 0, 0, 0);
-                    r.Checked += RadioPageChecked;
-                    RadioIndexList.Children.Add(r);
-                }
-                RbBox first = RadioIndexList.Children[0] as RbBox;
-                first.Check(true);
-                RadioPageChecked(first);
-            }
+            ContentIndex.Child = null;
+            ContentIndex.Child = new RadioIndexPage(this, TemplateSv.Template);
+            NSPage(new MeumInfo(RadioBtn, ContentIndex, RadioCom) {cmd="RadioIndexPage"});
         }
 
         public async void GetRadio(object sender, MouseEventArgs e)
@@ -1551,31 +1252,6 @@ namespace LemonApp
             IsRadio = true;
             PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
             CloseLoading();
-        }
-        private RbBox RadioPage_RbLast = null;
-        private async void RadioPageChecked(RbBox sender)
-        {
-            RadioItemsList.Opacity = 0;
-            if (sender != null)
-            {
-                OpenLoading();
-                if (RadioPage_RbLast != null)
-                    RadioPage_RbLast.Check(false);
-                RadioPage_RbLast = sender;
-                RadioItemsList.Children.Clear();
-                List<MusicRadioListItem> dat = Radiodata[sender.ContentText].Items;
-                foreach (var d in dat)
-                {
-                    RadioItem a = new RadioItem(d) { Margin = new Thickness(12, 0, 12, 20) };
-                    a.MouseDown += GetRadio;
-                    a.Width = RadioItemsList.ActualWidth / 5;
-                    RadioItemsList.Children.Add(a);
-                }
-                WidthUI(RadioItemsList);
-                CloseLoading();
-                await Task.Delay(10);
-                RunAnimation(RadioItemsList);
-            }
         }
         #endregion
         #region ILike 我喜欢 列表加载/数据处理
@@ -1633,7 +1309,7 @@ namespace LemonApp
                 NSPage(new MeumInfo(ILikeBtn,NonePage,ILikeCom));
             else
             {
-                NSPage(new MeumInfo(ILikeBtn,Data, ILikeCom));
+                NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) {cmd="DataUrl[ILike]" });
                 loadin.Value = 0;
                 loadin.Opacity = 1;
                 TB.Text = "我喜欢";
@@ -1852,7 +1528,7 @@ namespace LemonApp
                     if (Datasv != null) Datasv.ScrollToTop();
                 }
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
-                if (osx == 0) NSPage(new MeumInfo(null, Data, null));
+                if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" });
                 int aniCount = (int)(DataItemsList.ActualHeight / 45);
                 int i = 0;
                 foreach (var j in dt)
@@ -2738,12 +2414,12 @@ namespace LemonApp
             }
         }
 
-        private async void FxGDMouseDown(object sender, MouseButtonEventArgs e)
+        public async void FxGDMouseDown(object sender, MouseButtonEventArgs e)
         {
             loadin.Value = 0;
             loadin.Opacity = 1;
-            NSPage(new MeumInfo(null, Data, null));
             var dt = sender as FLGDIndexItem;
+            NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\""+dt.id+"\",\"name\":\""+ dt.name.Text + "\",\"img\":\""+ dt.img + "\"}" });
             TB.Text = dt.name.Text;
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
