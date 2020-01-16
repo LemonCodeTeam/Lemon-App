@@ -1,0 +1,17 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="LemonApp.TopControl"
+             Height="127" Width="400">
+    <Border Background="{DynamicResource ControlPageBrush}" CornerRadius="5">
+        <Grid>
+            <Border x:Name="im" Width="127" HorizontalAlignment="Left" CornerRadius="5">
+                <Border.Background>
+                    <ImageBrush ImageSource="http://y.gtimg.cn/music/common/upload/iphone_order_channel/toplist_4_300_213023435.jpg"/>
+                </Border.Background>
+            </Border>
+            <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="137,31,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="1  "/><Run x:Name="c1" Text="TextBlock"/></TextBlock>
+            <TextBlock TextWrapping="NoWrap" VerticalAlignment="Center" Margin="137,0,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="2  "/><Run x:Name="c2" Text="TextBlock"/></TextBlock>
+            <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="137,81,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="3  "/><Run x:Name="c3" Text="TextBlock"/></TextBlock>
+        </Grid>
+    </Border>
+</UserControl>

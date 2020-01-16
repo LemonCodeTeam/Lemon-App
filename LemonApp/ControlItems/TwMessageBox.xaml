@@ -1,0 +1,26 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LemonApp"
+        xmlns:LemonApp="clr-namespace:LemonApp" x:Class="LemonApp.TwMessageBox"
+        mc:Ignorable="d"
+        Title="TwMessageBox" Height="150" Width="300" ResizeMode="NoResize" MouseLeftButtonDown="Window_MouseLeftButtonDown" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterOwner">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="1" CaptionHeight="1" ResizeBorderThickness="0,30,0,0"/>
+    </WindowChrome.WindowChrome>
+    <Border BorderThickness="1" BorderBrush="{DynamicResource ThemeColor}">
+        <Grid Background="#FFFDFDFD">
+            <Border Height="10" VerticalAlignment="Top" Background="{DynamicResource ThemeColor}"/>
+            <TextBlock x:Name="title" Margin="85,30,10,55" TextWrapping="Wrap" Text="确定要删除这首歌吗？" Foreground="#FF4B4B4B"/>
+            <Path Margin="20,30,0,0" Stretch="Fill" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50" Data="M512,32C246.912,32 32,246.912 32,512 32,777.088 246.912,992 512,992 777.088,992 992,777.088 992,512 992,246.912 777.088,32 512,32z M512,928C282.24,928 96,741.76 96,512 96,282.24 282.24,96 512,96 741.76,96 928,282.24 928,512 928,741.76 741.76,928 512,928z M512 384a32 32 0 0 0-32 32v352a32 32 0 0 0 64 0V416a32 32 0 0 0-32-32z M512 272m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" Fill="#FFFFC937"/>
+            <Border HorizontalAlignment="Right" Height="30" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="70" Background="#FFF7F7F7" CornerRadius="5" BorderThickness="1" BorderBrush="#FFF3F3F3" MouseDown="Border_MouseDown">
+                <TextBlock TextWrapping="Wrap" Text="取消" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF4B4B4B"/>
+            </Border>
+            <Border HorizontalAlignment="Right" Height="30" Margin="0,0,90,10" VerticalAlignment="Bottom" Width="70" Background="{DynamicResource ThemeColor}" CornerRadius="5" MouseDown="Border_MouseDown_1">
+                <TextBlock TextWrapping="Wrap" Text="确定" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFFDFDFD"/>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

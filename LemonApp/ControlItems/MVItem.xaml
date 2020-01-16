@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="LemonApp.MVItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LemonApp"
+             mc:Ignorable="d" 
+             Width="150" Height="145" MinWidth="125" MaxWidth="200">
+    <Grid>
+        <Border x:Name="img" Height="100"  VerticalAlignment="Top" Background="#FFF0F0F0" CornerRadius="5"/>
+        <TextBlock x:Name="tit" Text="TextBlock" VerticalAlignment="Top" Margin="10,110,10,0" Foreground="{DynamicResource ResuColorBrush}"/>
+        <TextBlock x:Name="bfCount" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Margin="33,127,10,-2" Foreground="{DynamicResource PlayDLPage_Font_Low}"/>
+        <Path HorizontalAlignment="Left" Height="14" VerticalAlignment="Top" Width="18" Margin="10,128,0,-2" Data="M329.866827,432.246351A102.379524,102.379524,0,1,1,329.866827,227.692062A102.379524,102.379524,0,0,1,329.866827,432.246351 M1391.747251,177.321336A57.230154,57.230154,0,0,0,1333.186163,180.392721L1170.402719,290.757848 1170.402719,113.846031C1170.402719,50.985003,1119.520096,0.102379999999997,1056.761448,0L113.846031,0C50.882623,0,0,50.985003,0,113.743651L0,910.153969C0,973.014997,50.985003,1024,113.743651,1024L1056.761448,1024A113.846031,113.846031,0,0,0,1170.402719,910.153969L1170.402719,834.393121 1171.119376,789.346131 1332.879024,900.223155A56.923015,56.923015,0,0,0,1421.94921,853.128574L1421.94921,227.589682A57.127774,57.127774,0,0,0,1391.747251,177.321336" SnapsToDevicePixels="True" Stretch="Uniform" Fill="{DynamicResource PlayDLPage_Font_Low}"/>
+    </Grid>
+</UserControl>
