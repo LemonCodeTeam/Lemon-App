@@ -25,11 +25,13 @@ namespace LemonApp
     {
         public SingerPageData Data;
         private MainWindow mw;
-        public SingerPage(SingerPageData spd,MainWindow m)
+        private Action Finished;
+        public SingerPage(SingerPageData spd,MainWindow m,Action ac)
         {
             InitializeComponent();
             Data = spd;
             mw = m;
+            Finished = ac;
             if (!spd.HasBigPic) {
                 (Resources["mSingerTX"] as Storyboard).Begin();
                 DHBtns.Background = new SolidColorBrush(Colors.Transparent);
@@ -41,7 +43,7 @@ namespace LemonApp
             }
         }
 
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        public async void Load()
         {
             mw.Cisv.ScrollChanged += Cisv_MusicListScrollChanged;
             LastPage = TuiJianPage;
@@ -77,7 +79,7 @@ namespace LemonApp
                 Lx_dat_2.Text = Data.liangxia[1].lstCount;
             }
             else {
-                lx2.Visibility = Visibility.Hidden;
+                LiangxiaPi.Visibility = Visibility.Collapsed;
             }
 
             foreach (var c in Data.HotSongs) {
@@ -127,6 +129,7 @@ namespace LemonApp
                 m.MouseDown += mw.GetSinger;
                 SimilarSingerList.Children.Add(m);
             }
+            Finished();
         }
 
         private void M_MouseDown(object sender, MouseButtonEventArgs e)

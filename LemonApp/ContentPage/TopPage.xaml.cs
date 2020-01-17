@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -30,7 +31,9 @@ namespace LemonApp.ContentPage
         }
         private async void LoadTopData()
         {
+            mw.OpenLoading();
             var dt = await mw.ml.GetTopIndexAsync();
+            topIndexList.Visibility = Visibility.Hidden;
             topIndexList.Children.Clear();
             foreach (var d in dt)
             {
@@ -40,6 +43,9 @@ namespace LemonApp.ContentPage
                 topIndexList.Children.Add(top);
             }
             mw.WidthUI(topIndexList);
+            await Task.Delay(50);
+            mw.CloseLoading();
+            topIndexList.Visibility = Visibility.Visible;
             mw.RunAnimation(topIndexList);
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

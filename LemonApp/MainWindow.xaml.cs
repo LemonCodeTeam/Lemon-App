@@ -1116,6 +1116,8 @@ namespace LemonApp
             {
                 SearchBox.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#19000000"));
                 SearchBox.Foreground = new SolidColorBrush(Colors.White);
+                (LastPageBtn.Child as Path).Fill = SearchBox.Foreground;
+                (NextPageBtn.Child as Path).Fill = SearchBox.Foreground;
                 SkinBtn.ColorDx = SearchBox.Foreground;
                 SettingsBtn.ColorDx = SearchBox.Foreground;
                 CloseBtn.ColorDx = SearchBox.Foreground;
@@ -1126,6 +1128,8 @@ namespace LemonApp
             {
                 SearchBox.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0C000000"));
                 SearchBox.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                (LastPageBtn.Child as Path).SetResourceReference(Path.FillProperty, "ButtonColorBrush");
+                (NextPageBtn.Child as Path).SetResourceReference(Path.FillProperty, "ButtonColorBrush");
                 SkinBtn.ColorDx = null;
                 SettingsBtn.ColorDx = null;
                 CloseBtn.ColorDx = null;
@@ -1179,11 +1183,23 @@ namespace LemonApp
             OpenLoading();
             BtD.LastBt = null;
             var data = await MusicLib.GetSingerPageAsync(si.data.Mid);
-            Cisv.Content = new SingerPage(data, this)
+            var cc= new SingerPage(data, this,new Action(async ()=> {
+                if (data.HasBigPic)
+                {
+                    await Task.Delay(100);
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom), new Thickness(0, -50, 0, 0));
+                }
+                else {
+                    await Task.Delay(100);
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom));
+                }
+            }))
             {
                 Width = ContentPage.ActualWidth
             };
+            Cisv.Content = cc;
             SingerDP_Top.Uid = "gun";
+            Cisv.ScrollToVerticalOffset(0);
             if (data.HasBigPic)
             {
                 SetTopWhite(true);
@@ -1195,17 +1211,13 @@ namespace LemonApp
                 imb.GaussianBlur(ref rect, 80);
                 SingerDP_Top.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
                 SingerDP_Top.Uid = "ok";
-                await Task.Delay(10);
-                NSPage(new MeumInfo(SingerBtn, SingerDataPage,SingerCom), new Thickness(0, -50, 0, 0));
             }
             else
             {
-                SetTopWhite(false); ;
-                SingerDP_Top.Visibility = Visibility.Collapsed;
-                await Task.Delay(10);
-                NSPage(new MeumInfo(SingerBtn, SingerDataPage,SingerCom));
+                SetTopWhite(false);
+                SingerDP_Top.Visibility = Visibility.Collapsed;              
             }
-            Cisv.ScrollToVerticalOffset(0);
+            cc.Load();
             CloseLoading();
         }
 

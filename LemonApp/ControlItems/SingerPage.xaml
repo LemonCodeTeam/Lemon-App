@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LemonApp" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" 
              x:Class="LemonApp.SingerPage" 
-             mc:Ignorable="d" Width="889" Loaded="UserControl_Loaded" SizeChanged="UserControl_SizeChanged" >
+             mc:Ignorable="d" Width="889" SizeChanged="UserControl_SizeChanged" >
     <UserControl.Resources>
         <Storyboard x:Key="mSingerTX">
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="mSingerBig">

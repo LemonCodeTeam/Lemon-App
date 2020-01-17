@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
+using System.Threading.Tasks;
 
 namespace LemonApp.ContentPage
 {
@@ -34,7 +35,10 @@ namespace LemonApp.ContentPage
 
         private async void LoadHomePage()
         {
-            //---------加载主页HomePage
+            //---------加载主页HomePage----动画加持--
+            mw.OpenLoading();
+            HomePage_IFV.Visibility = Visibility.Hidden;
+            GDTJ.Visibility = Visibility.Hidden;
             var data = await MusicLib.GetHomePageData();
             HomePage_IFV.Updata(data.focus, mw);
             foreach (var a in data.Gdata)
@@ -63,6 +67,14 @@ namespace LemonApp.ContentPage
                 HomePage_Nm.Children.Add(k);
             }
             mw.WidthUI(HomePage_Nm);
+            mw.CloseLoading();
+            await Task.Delay(50);
+            HomePage_IFV.Visibility = Visibility.Visible;
+            mw.RunAnimation(HomePage_IFV);
+            await Task.Delay(200);
+            GDTJ.Visibility = Visibility.Visible;
+            mw.RunAnimation(GDTJ);
+            tb.Text = "新歌首发";
         }
 
         private void page_Loaded(object sender, RoutedEventArgs e)
