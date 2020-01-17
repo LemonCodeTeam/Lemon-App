@@ -2,7 +2,7 @@
 Lemon App 是一款开源（遵循GPL以及Anti 996协议）的基于QQ音乐的在线音乐播放器。
 支持同步QQ音乐歌单及喜欢，更有排行版、分类歌单、歌手、电台等功能 发现好音乐！
 
-[![Build status](https://github.com/TwilightLemon/Lemon-App/workflows/.NET%20Core/badge.svg)]()
+[![Build status](https://github.com/TwilightLemon/Lemon-App/workflows/.NET%20Core/badge.svg)](https://github.com/TwilightLemon/Lemon-App/actions)
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/TwilightLemon/Lemon-App/blob/master/LICENSE)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
