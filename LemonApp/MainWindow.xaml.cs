@@ -90,7 +90,6 @@ namespace LemonApp
                     da.Completed += delegate { aw.Close(); };
                     aw.BeginAnimation(OpacityProperty, da);
                 });
-                tOL.Abort();
             }
         }
         #endregion
@@ -372,7 +371,6 @@ namespace LemonApp
                         ml.lv.LrcRoll(now, true);
                     }
                     else ml.lv.LrcRoll(now, false);
-                    Console.WriteLine(now+" --- - -"+all);
                     if (now==all&&now>2000&&all!=0)
                     {
                         now = 0;
@@ -2625,7 +2623,6 @@ namespace LemonApp
             source.AddHook(HotKeyHook);
             return true;
         }
-        bool IsDebug = false;
         private IntPtr HotKeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_HOTKEY)
@@ -2642,17 +2639,15 @@ namespace LemonApp
                 { PlayControl_PlayNext(null, null); Toast.Send("成功切换到下一曲"); }
                 else if (wParam.ToInt32() == 129)
                 {
-                    if (!IsDebug)
+                    if (Console.pipe==null)
                     {
-                        IsDebug = true;
                         Toast.Send("已进入调试模式🐱‍👤");
-                        ConsoleManager.Toggle();
+                        Console.Open();
                         Console.WriteLine("调试模式");
                     }
                     else
                     {
-                        IsDebug = false;
-                        ConsoleManager.Hide();
+                        Console.Close();
                         Toast.Send("已退出调试模式🐱‍👤");
                     }
                 }

@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DebugConsole\DebugConsole.csproj" />
     <ProjectReference Include="..\LemonLib\LemonLib.csproj" />
   </ItemGroup>
 

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonApp", "LemonApp\LemonApp.csproj", "{46FF122B-202F-4F60-BB4E-2983C3C1221A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp", "LemonApp\LemonApp.csproj", "{46FF122B-202F-4F60-BB4E-2983C3C1221A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LemonLib", "LemonLib\LemonLib.csproj", "{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonLib", "LemonLib\LemonLib.csproj", "{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{EACD87E6-0CD8-4CDD-B37C-DE5B19BF42A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EACD87E6-0CD8-4CDD-B37C-DE5B19BF42A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EACD87E6-0CD8-4CDD-B37C-DE5B19BF42A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EACD87E6-0CD8-4CDD-B37C-DE5B19BF42A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EACD87E6-0CD8-4CDD-B37C-DE5B19BF42A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

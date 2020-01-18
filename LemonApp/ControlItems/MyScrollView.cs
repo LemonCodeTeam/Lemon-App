@@ -15,7 +15,6 @@ namespace LemonApp
         {
             if (Math.Abs(e.Delta) >= 80 && e.Timestamp-lastTimestamp >=100)
             {
-                Console.WriteLine(e.Delta+" -- "+e.Timestamp);
                 var sc = ScrollDirection.Up;
                 if (e.Delta > 0)
                     sc = ScrollDirection.Down;
@@ -58,9 +57,7 @@ namespace LemonApp
 
     public static class ListBoxInside{
         public static async void Animation(this ListBox listbox,FrameworkElement ui) {
-            int count = (int)(listbox.ActualHeight
-                        / 45);
-            Console.WriteLine(count+"--"+listbox.ActualHeight+"--"+ listbox.Items.IndexOf(ui));
+            int count = (int)(listbox.ActualHeight / 45);
             if (listbox.Items.IndexOf(ui) <= count)
             {
                 ui.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(
