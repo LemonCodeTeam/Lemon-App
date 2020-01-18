@@ -190,12 +190,12 @@ namespace LemonApp
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
                 //----新的[磨砂黑]主题---
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(64, 64, 64));
+                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32,32,32));
                 Page.Background = new SolidColorBrush(Colors.Transparent);
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color = Color.FromArgb(153, 0, 0, 0);
+                wac.Color = Color.FromArgb(200, 0, 0, 0);
                 wac.IsEnabled = true;
             }
             else if (Settings.USettings.Skin_Path == "BlurWhiteTheme")
@@ -209,7 +209,7 @@ namespace LemonApp
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color = (Color.FromArgb(153, 255, 255, 255));
+                wac.Color = (Color.FromArgb(200, 255, 255, 255));
                 wac.IsEnabled = true;
             }
             else if (Settings.USettings.Skin_Path.Contains("DTheme")) {
@@ -730,57 +730,65 @@ namespace LemonApp
         {
             NSPage(new MeumInfo(null,SkinPage,null));
             SkinIndexList.Children.Clear();
-            var DThemeDll = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/DTheme.json"))["DTheme"];
-            foreach (var dx in DThemeDll) {
-                string name = dx["name"].ToString();
-                string uri = dx["uri"].ToString();
-                string NameSp = dx["NameSp"].ToString();
-                string DllPath = Settings.USettings.CachePath + "Skin\\" + uri + ".dll";
-                if (!System.IO.File.Exists(DllPath))
+            #region 动态皮肤
+            try
+            {
+                var DThemeDll = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/DTheme.json"))["DTheme"];
+                foreach (var dx in DThemeDll)
                 {
-                    string base64 = await HttpHelper.GetWebAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{uri}.data");
-                    byte[] b = Convert.FromBase64String(base64);
-                    System.IO.File.WriteAllBytes(DllPath, b);
+                    string name = dx["name"].ToString();
+                    string uri = dx["uri"].ToString();
+                    string NameSp = dx["NameSp"].ToString();
+                    string DllPath = Settings.USettings.CachePath + "Skin\\" + uri + ".dll";
+                    if (!System.IO.File.Exists(DllPath))
+                    {
+                        string base64 = await HttpHelper.GetWebAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{uri}.data");
+                        byte[] b = Convert.FromBase64String(base64);
+                        System.IO.File.WriteAllBytes(DllPath, b);
+                    }
+                    Assembly a = Assembly.LoadFrom(DllPath);
+                    Type t = a.GetType(NameSp + ".Drawer");
+                    MethodInfo mi = t.GetMethod("GetPage");
+                    var bg = mi.Invoke(null, null) as UserControl;
+                    bg.Clip = new RectangleGeometry(new Rect() { Height = 450, Width = 800 });
+                    bg.Width = 800;
+                    bg.Height = 450;
+                    VisualBrush vb = new VisualBrush(bg);
+                    vb.Stretch = Stretch.Fill;
+                    string font = t.GetMethod("GetFont").Invoke(null, null).ToString();
+                    Color theme = (Color)t.GetMethod("GetThemeColor").Invoke(null, null);
+                    SkinControl sc = new SkinControl(name, vb, theme);
+                    sc.txtColor = font;
+                    sc.Margin = new Thickness(12, 0, 12, 20);
+                    sc.MouseDown += (s, n) =>
+                    {
+                        if (wac.IsEnabled) wac.IsEnabled = false;
+                        var bgl = mi.Invoke(null, null) as UserControl;
+                        DThemePage.Child = bgl;
+                        Color co;
+                        if (sc.txtColor == "Black")
+                        {
+                            co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
+                            ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+                        }
+                        else
+                        {
+                            co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
+                            ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+                        }
+                        App.BaseApp.SetColor("ThemeColor", sc.theme);
+                        App.BaseApp.SetColor("ResuColorBrush", co);
+                        App.BaseApp.SetColor("ButtonColorBrush", co);
+                        App.BaseApp.SetColor("TextX1ColorBrush", co);
+                        Settings.USettings.Skin_Path = "DTheme[" + DllPath + "]";
+                        Settings.USettings.Skin_txt = NameSp;
+                        Settings.SaveSettings();
+                    };
+                    SkinIndexList.Children.Add(sc);
                 }
-                Assembly a = Assembly.LoadFrom(DllPath);
-                Type t = a.GetType(NameSp+".Drawer");
-                MethodInfo mi = t.GetMethod("GetPage");
-                var bg = mi.Invoke(null, null) as UserControl;
-                bg.Clip = new RectangleGeometry(new Rect() { Height = 450, Width = 800 });
-                bg.Width = 800;
-                bg.Height = 450;
-                VisualBrush vb = new VisualBrush(bg);
-                vb.Stretch = Stretch.Fill;
-                string font=t.GetMethod("GetFont").Invoke(null, null).ToString();
-                Color theme = (Color)t.GetMethod("GetThemeColor").Invoke(null, null);
-                SkinControl sc = new SkinControl(name,vb,theme);
-                sc.txtColor = font;
-                sc.Margin = new Thickness(12, 0, 12, 20);
-                sc.MouseDown += (s, n) =>{
-                    if (wac.IsEnabled) wac.IsEnabled = false;
-                    var bgl = mi.Invoke(null, null) as UserControl;
-                    DThemePage.Child = bgl;
-                    Color co;
-                    if (sc.txtColor == "Black")
-                    {
-                        co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-                    }
-                    else
-                    {
-                        co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-                    }
-                    App.BaseApp.SetColor("ThemeColor", sc.theme);
-                    App.BaseApp.SetColor("ResuColorBrush", co);
-                    App.BaseApp.SetColor("ButtonColorBrush", co);
-                    App.BaseApp.SetColor("TextX1ColorBrush", co);
-                    Settings.USettings.Skin_Path = "DTheme["+DllPath+"]";
-                    Settings.USettings.Skin_txt = NameSp;
-                    Settings.SaveSettings();
-                };
-                SkinIndexList.Children.Add(sc);
             }
+            catch { }
+            #endregion
             #region 在线主题
             var json = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/SkinList.json"))["dataV2"];
             foreach (var dx in json)
@@ -848,11 +856,11 @@ namespace LemonApp
             blur.MouseDown += (s, n) =>
             {
                 Page.Background = new SolidColorBrush(Colors.Transparent);
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(64, 64, 64));
+                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32,32,32));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=Color.FromArgb(153, 0,0,0);
+                wac.Color=Color.FromArgb(200, 0,0,0);
                 wac.IsEnabled = true;
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurBlackTheme";
@@ -872,7 +880,7 @@ namespace LemonApp
                 App.BaseApp.SetColor("ButtonColorBrush", co);
                 App.BaseApp.SetColor("TextX1ColorBrush", co);
                 ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(153,255,255,255));
+                wac.Color=(Color.FromArgb(200,255,255,255));
                 wac.IsEnabled = true;
                 Settings.USettings.Skin_txt = "";
                 Settings.USettings.Skin_Path = "BlurWhiteTheme";
@@ -2573,14 +2581,14 @@ namespace LemonApp
             };
             //notifyIcon
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.Text = "小萌";
+            notifyIcon.Text = "Lemon App";
             notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Windows.Forms.Application.ExecutablePath);
             notifyIcon.Visible = true;
             //打开菜单项
-            System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("打开");
+            System.Windows.Forms.ToolStripMenuItem open = new System.Windows.Forms.ToolStripMenuItem("打开");
             open.Click += delegate { exShow(); };
             //退出菜单项
-            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("关闭");
+            System.Windows.Forms.ToolStripMenuItem exit = new System.Windows.Forms.ToolStripMenuItem("关闭");
             exit.Click += delegate
             {
                 MusicLib.mp.Free();
@@ -2589,9 +2597,10 @@ namespace LemonApp
                 Environment.Exit(0);
             };
             //关联托盘控件
-            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
-
+            var a = new System.Windows.Forms.ContextMenuStrip();
+            a.Items.Add(open);
+            a.Items.Add(exit);
+            notifyIcon.ContextMenuStrip = a;
             notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, m) =>
             {
                 if (m.Button == System.Windows.Forms.MouseButtons.Left) exShow();
