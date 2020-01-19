@@ -214,8 +214,10 @@ namespace LemonApp
             else if (Settings.USettings.Skin_Path.Contains("DTheme")) {
                 string DllPath = TextHelper.XtoYGetTo(Settings.USettings.Skin_Path, "DTheme[", "]", 0);
                 Assembly a = Assembly.LoadFrom(DllPath);
-                Type t = a.GetType(Settings.USettings.Skin_txt+".Drawer");
-                MethodInfo mi = t.GetMethod("GetPage");
+                Type ty = a.GetType("LemonApp.Theme.Standard.Standard");
+                string NameSpace = ty.GetField("NameSpace").GetValue("").ToString();
+                Type t = a.GetType(NameSpace + ".Drawer");
+                MethodInfo mi = t.GetMethod("GetPage", BindingFlags.Public | BindingFlags.Static | BindingFlags.Default);
                 DThemePage.Child = mi.Invoke(null, null) as UserControl;
                 //字体颜色
                 Color col;
@@ -726,27 +728,30 @@ namespace LemonApp
         #endregion
         private async void SkinBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(null,SkinPage,null));
+            NSPage(new MeumInfo(null, SkinPage, null));
             SkinIndexList.Children.Clear();
             #region 动态皮肤
-            try
+            var DThemeDll = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/DTheme/raw/master/List.json"))["List"];
+            foreach (var dx in DThemeDll)
             {
-                var DThemeDll = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/DTheme.json"))["DTheme"];
-                foreach (var dx in DThemeDll)
+                try
                 {
-                    string name = dx["name"].ToString();
-                    string uri = dx["uri"].ToString();
-                    string NameSp = dx["NameSp"].ToString();
-                    string DllPath = Settings.USettings.CachePath + "Skin\\" + uri + ".dll";
+                    string ParkUrl = dx.ToString();
+                    Console.WriteLine(ParkUrl);
+                    string DllPath = Settings.USettings.CachePath + "Skin\\" + ParkUrl + ".dll";
                     if (!System.IO.File.Exists(DllPath))
                     {
-                        string base64 = await HttpHelper.GetWebAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{uri}.data");
+                        string base64 = await HttpHelper.GetWebAsync($"https://gitee.com/TwilightLemon/DTheme/raw/master/{ParkUrl}.data");
                         byte[] b = Convert.FromBase64String(base64);
                         System.IO.File.WriteAllBytes(DllPath, b);
                     }
                     Assembly a = Assembly.LoadFrom(DllPath);
-                    Type t = a.GetType(NameSp + ".Drawer");
-                    MethodInfo mi = t.GetMethod("GetPage");
+                    Type ty = a.GetType("LemonApp.Theme.Standard.Standard");
+                    string NameSpace = ty.GetField("NameSpace").GetValue("").ToString();
+                    string ThemeName = ty.GetField("ThemeName").GetValue("").ToString();
+                    Console.WriteLine(NameSpace + " --- " + ThemeName);
+                    Type t = a.GetType(NameSpace + ".Drawer");
+                    MethodInfo mi = t.GetMethod("GetPage", BindingFlags.Public | BindingFlags.Static | BindingFlags.Default);
                     var bg = mi.Invoke(null, null) as UserControl;
                     bg.Clip = new RectangleGeometry(new Rect() { Height = 450, Width = 800 });
                     bg.Width = 800;
@@ -755,7 +760,7 @@ namespace LemonApp
                     vb.Stretch = Stretch.Fill;
                     string font = t.GetMethod("GetFont").Invoke(null, null).ToString();
                     Color theme = (Color)t.GetMethod("GetThemeColor").Invoke(null, null);
-                    SkinControl sc = new SkinControl(name, vb, theme);
+                    SkinControl sc = new SkinControl(ThemeName, vb, theme);
                     sc.txtColor = font;
                     sc.Margin = new Thickness(12, 0, 12, 20);
                     sc.MouseDown += (s, n) =>
@@ -779,13 +784,13 @@ namespace LemonApp
                         App.BaseApp.SetColor("ButtonColorBrush", co);
                         App.BaseApp.SetColor("TextX1ColorBrush", co);
                         Settings.USettings.Skin_Path = "DTheme[" + DllPath + "]";
-                        Settings.USettings.Skin_txt = NameSp;
+                        Settings.USettings.Skin_txt = ThemeName;
                         Settings.SaveSettings();
                     };
                     SkinIndexList.Children.Add(sc);
                 }
+                catch { }
             }
-            catch { }
             #endregion
             #region 在线主题
             var json = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/SkinList.json"))["dataV2"];
