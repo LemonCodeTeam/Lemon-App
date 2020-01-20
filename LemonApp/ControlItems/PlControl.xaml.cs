@@ -40,18 +40,18 @@ namespace LemonApp
         {
             if (data.ispraise)
             {
+                data.ispraise = false;
                 zp.SetResourceReference(Shape.FillProperty, "PlayDLPage_Font_Low");
                 ztb.Text = (int.Parse(data.like) - 1).ToString();
                 data.like = ztb.Text;
                 Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
-                data.ispraise = false;
             }
             else {
+                data.ispraise = true;
                 zp.SetResourceReference(Shape.FillProperty, "ThemeColor");
                 ztb.Text = (int.Parse(data.like) + 1).ToString();
                 data.like = ztb.Text;
                 Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
-                data.ispraise = true;
             }
         }
     }

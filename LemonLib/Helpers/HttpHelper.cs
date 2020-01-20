@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace LemonLib
 {
-    public class HttpHelper {
-        public static async Task<int> GetWebCode(String url) {
+    public class HttpHelper
+    {
+        public static async Task<int> GetWebCode(String url)
+        {
             try
             {
                 HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
@@ -19,36 +21,27 @@ namespace LemonLib
             }
             catch { return 404; }
         }
-        public static async Task<string> GetWebForCodingAsync(string url) {
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-            hwr.Accept="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
-            hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-            hwr.Headers.Add("Cache-Control", "max-age=0");
-            hwr.KeepAlive = true;
-            hwr.Headers.Add("Cookie", "sid=5129400e-3ae5-4d8f-b4c6-55a2d8dcf866; c=access-token%3Dtrue%2Ccoding-cli%3Dfalse%2Ccoding-ocd-pages%3Dtrue%2Ccoding-ocd%3Dtrue%2Ccoding-owas%3Dtrue%2Cdepot-sharing%3Dtrue%2Cmarkdown-graph%3Dtrue%2Cnew-home%3Dtrue%2Cqc-v2%3Dtrue%2Ctask-comment%3Dfalse%2Ctask-history%3Dtrue%2Cvip%3Dtrue%2Czip-download%3Dtrue%2C5d095651; exp=89cd78c2; frontlog_sample_rate=1");
-            hwr.Host="coding.net";
-            hwr.Referer=url;
-            hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
-            hwr.UserAgent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
-            hwr.Timeout = 20000;
-            StreamReader sr = new StreamReader((await hwr.GetResponseAsync()).GetResponseStream(), Encoding.UTF8);
-            var st = await sr.ReadToEndAsync();
-            sr.Dispose();
-            return st;
-        }
-        public static async Task<string> GetWebAsync(string url,Encoding e=null)
+        public static async Task<string> GetWebAsync(string url, Encoding e = null)
         {
+            try
+            {
                 if (e == null)
                     e = Encoding.UTF8;
                 HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-                hwr.Timeout = 20000;
+                hwr.Timeout = 5000;
                 var o = await hwr.GetResponseAsync();
-                StreamReader sr = new StreamReader(o.GetResponseStream(),e);
+                StreamReader sr = new StreamReader(o.GetResponseStream(), e);
                 var st = await sr.ReadToEndAsync();
                 sr.Dispose();
                 return st;
+            }
+            catch (TimeoutException)
+            {//超时重连
+                return await GetWebAsync(url, e);
+            }
         }
-        public static WebHeaderCollection GetWebHeader_MKBlog() {
+        public static WebHeaderCollection GetWebHeader_MKBlog()
+        {
             var whc = new WebHeaderCollection();
             whc.Add("Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01");
             whc.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -59,7 +52,8 @@ namespace LemonLib
             whc.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
             return whc;
         }
-        public static WebHeaderCollection GetWebHeader_YQQCOM() {
+        public static WebHeaderCollection GetWebHeader_YQQCOM()
+        {
             var header = new WebHeaderCollection();
             header.Add(HttpRequestHeader.Accept, "*/*");
             header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
@@ -70,81 +64,110 @@ namespace LemonLib
             header.Add(HttpRequestHeader.Host, "c.y.qq.com");
             return header;
         }
-        public static string PostWeb(string url, string data,WebHeaderCollection Header=null)
+        public static string PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
-            byte[] postData = Encoding.UTF8.GetBytes(data);
-            WebClient webClient = new WebClient();
-            if (Header != null)
-                webClient.Headers = Header;
-            byte[] responseData = webClient.UploadData(url, "POST", postData);
-            webClient.Dispose();
-            return Encoding.UTF8.GetString(responseData);
+            try
+            {
+                byte[] postData = Encoding.UTF8.GetBytes(data);
+                HttpClient webClient = new HttpClient();
+                webClient.Timeout = 5000;
+                if (Header != null)
+                    webClient.Headers = Header;
+                byte[] responseData = webClient.UploadData(url, "POST", postData);
+                webClient.Dispose();
+                return Encoding.UTF8.GetString(responseData);
+            }
+            catch
+            {
+                return PostWeb(url, data, Header);
+            }
         }
-        public static async Task<string> PostInycAsync(string url,string data) {
-            var r = (HttpWebRequest)WebRequest.Create(url);
-            r.Method = "POST";
-            r.ContentType = " application/x-www-form-urlencoded";
-            r.Host = "u.y.qq.com";
-            r.KeepAlive = true;
-            r.Accept = "application/json";
-            r.Headers.Add("Origin", "http://y.qq.com");
-            r.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.47.134 Safari/537.36 QBCore/3.53.47.400 QQBrowser/9.0.2524.400 pcqqmusic/17.10.5105.0801 SkinId/10001|1ecc94|145|1|||1fd4af";
-            r.Referer = "http://y.qq.com/wk_v17/";
-            r.Headers.Add("Accept-Language","zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.5;q=0.4");
-            r.Headers.Add("Cookie", Settings.USettings.Cookie);
-            var byteData = Encoding.UTF8.GetBytes(data);
-            var length = byteData.Length;
-            r.ContentLength = length;
-            var writer =await r.GetRequestStreamAsync();
-            await writer.WriteAsync(byteData, 0, length);
-            writer.Close();
-            var response = (HttpWebResponse)await r.GetResponseAsync();
-            return await new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEndAsync();
+        public static async Task<string> PostInycAsync(string url, string data)
+        {
+            try
+            {
+                var r = (HttpWebRequest)WebRequest.Create(url);
+                r.Method = "POST";
+                r.ContentType = " application/x-www-form-urlencoded";
+                r.Host = "u.y.qq.com";
+                r.KeepAlive = true;
+                r.Accept = "application/json";
+                r.Headers.Add("Origin", "http://y.qq.com");
+                r.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.47.134 Safari/537.36 QBCore/3.53.47.400 QQBrowser/9.0.2524.400 pcqqmusic/17.10.5105.0801 SkinId/10001|1ecc94|145|1|||1fd4af";
+                r.Referer = "http://y.qq.com/wk_v17/";
+                r.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.5;q=0.4");
+                r.Headers.Add("Cookie", Settings.USettings.Cookie);
+                var byteData = Encoding.UTF8.GetBytes(data);
+                r.Timeout = 5000;
+                var length = byteData.Length;
+                r.ContentLength = length;
+                var writer = await r.GetRequestStreamAsync();
+                await writer.WriteAsync(byteData, 0, length);
+                writer.Close();
+                var response = (HttpWebResponse)await r.GetResponseAsync();
+                return await new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEndAsync();
+            }
+            catch
+            {
+                return await PostInycAsync(url, data);
+            }
         }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
-            HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
-            hwr.Accept="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
-            hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-            hwr.Headers.Add("Cache-Control", "max-age=0");
-            hwr.KeepAlive = true;
-            hwr.Referer = url;
-            hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
-            hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
-            hwr.Timeout = 20000;
-            HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
-            Stream responseStream = response.GetResponseStream();
-            Stream stream = new FileStream(path, FileMode.Create,FileAccess.ReadWrite);
-            byte[] bArr = new byte[1024];
-            int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
-            while (size > 0)
+            try
             {
-                await stream.WriteAsync(bArr, 0, size);
-                size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
+                hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+                hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+                hwr.Headers.Add("Cache-Control", "max-age=0");
+                hwr.KeepAlive = true;
+                hwr.Referer = url;
+                hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
+                hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
+                hwr.Timeout = 5000;
+                HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
+                Stream responseStream = response.GetResponseStream();
+                Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+                byte[] bArr = new byte[1024];
+                int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                while (size > 0)
+                {
+                    await stream.WriteAsync(bArr, 0, size);
+                    size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                }
+                stream.Close();
+                responseStream.Close();
             }
-            stream.Close();
-            responseStream.Close();
+            catch {
+                await HttpDownloadFileAsync(url, path);
+            }
         }
-        public static async Task<string> GetWebDatacAsync(string url, Encoding c=null)
+        public static async Task<string> GetWebDatacAsync(string url, Encoding c = null)
         {
-            Console.WriteLine(Settings.USettings.Cookie+"\r\n"+Settings.USettings.g_tk);
-            if (c == null) c = Encoding.UTF8;
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-            hwr.Timeout = 20000;
-            hwr.KeepAlive = true;
-            hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
-            hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
-            hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36";
-            hwr.Accept="*/*";
-            hwr.Referer = "https://y.qq.com/portal/player.html";
-            hwr.Host = "c.y.qq.com";
-            hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
-            hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
-            var o = await hwr.GetResponseAsync();
-            StreamReader sr = new StreamReader(o.GetResponseStream(), c);
-            var st = await sr.ReadToEndAsync();
-            sr.Dispose();
-            return st;
+            try
+            {
+                Console.WriteLine(Settings.USettings.Cookie + "\r\n" + Settings.USettings.g_tk);
+                if (c == null) c = Encoding.UTF8;
+                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
+                hwr.Timeout = 5000;
+                hwr.KeepAlive = true;
+                hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
+                hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
+                hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36";
+                hwr.Accept = "*/*";
+                hwr.Referer = "https://y.qq.com/portal/player.html";
+                hwr.Host = "c.y.qq.com";
+                hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
+                hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+                var o = await hwr.GetResponseAsync();
+                StreamReader sr = new StreamReader(o.GetResponseStream(), c);
+                var st = await sr.ReadToEndAsync();
+                sr.Dispose();
+                return st;
+            }
+            catch {
+                return await GetWebDatacAsync(url, c);
+            }
         }
         public static bool IsNetworkTrue
         {

@@ -56,14 +56,13 @@ namespace LemonApp
     }
 
     public static class ListBoxInside{
-        public static async void Animation(this ListBox listbox,FrameworkElement ui) {
+        public static void Animation(this ListBox listbox,FrameworkElement ui) {
             int count = (int)(listbox.ActualHeight / 45);
             if (listbox.Items.IndexOf(ui) <= count)
             {
                 ui.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(
                       new Thickness(0, 50, 0, -50), new Thickness(0), TimeSpan.FromSeconds(0.5))
                       { EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut } });
-                await Task.Delay(100);
             }
         }
     }
