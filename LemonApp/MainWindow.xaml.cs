@@ -1333,15 +1333,14 @@ namespace LemonApp
             else
             {
                 NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) {cmd="DataUrl[ILike]" });
-                loadin.Value = 0;
-                loadin.Opacity = 1;
+                OpenLoading();
                 TB.Text = "我喜欢";
                 TXx.Background = Resources["LoveIcon"] as VisualBrush;
                 DataItemsList.Items.Clear();
-                He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<Music, bool>((j, b) =>
+                He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<int,Music, bool>((i,j, b) =>
                 {
                     var k = new DataItem(j, this, b);
-                    DataItemsList.Items.Add(k);
+                    DataItemsList.Items[i] = k;
                     k.Play += PlayMusic;
                     k.Width = DataItemsList.ActualWidth;
                     k.Download += K_Download;
@@ -1351,10 +1350,13 @@ namespace LemonApp
                         k.ShowDx();
                     }
                     DataItemsList.Animation(k);
-                    loadin.Value = DataItemsList.Items.Count;
-                }), this,
-                new Action<int>(i => loadin.Maximum = i));
-                loadin.Opacity = 0;
+                }), this,new Action<int>(i => {
+                                while (DataItemsList.Items.Count != i)
+                                {
+                                    DataItemsList.Items.Add("");
+                                }
+                            }));
+                CloseLoading();
                 np = NowPage.GDItem;
             }
         }
@@ -2439,17 +2441,18 @@ namespace LemonApp
 
         public async void FxGDMouseDown(object sender, MouseButtonEventArgs e)
         {
-            loadin.Value = 0;
-            loadin.Opacity = 1;
             var dt = sender as FLGDIndexItem;
             NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\""+dt.id+"\",\"name\":\""+ dt.name.Text + "\",\"img\":\""+ dt.img + "\"}" });
             TB.Text = dt.name.Text;
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
-            He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<Music, bool>((j, b) =>
+            OpenLoading();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<int,Music, bool>((i,j, b) =>
             {
                 var k = new DataItem(j,this,b);
-                DataItemsList.Items.Add(k);
+                DataItemsList.Items[i] = k;
                 k.Play += PlayMusic;
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Download += K_Download;
@@ -2459,11 +2462,16 @@ namespace LemonApp
                     k.ShowDx();
                 }
                 DataItemsList.Animation(k);
-                loadin.Value = DataItemsList.Items.Count;
             }), this,
-            new Action<int>(i => loadin.Maximum = i));
-            loadin.Opacity = 0;
+            new Action<int>(i =>
+            {
+                while(DataItemsList.Items.Count!=i) {
+                    DataItemsList.Items.Add("");
+                }
+            }));
             CloseLoading();
+            sw.Stop();
+            Console.WriteLine("耗时:" + sw.Elapsed.TotalSeconds + "s");
             np = NowPage.GDItem;
         }
         #endregion

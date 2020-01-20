@@ -11,7 +11,6 @@ namespace DebugConsole
         {
             Console.Title = "LemonApp Debug Console";
             Console.SetWindowSize(48, 30);
-            Console.SetBufferSize(48, 30);
             Console.WriteLine("Hello World!");
             Console.WriteLine("LemonApp Debug Console");
             Console.WriteLine("Power by TwilightLemon");

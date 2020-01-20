@@ -419,7 +419,7 @@ jpg
         /// <param name="wx"></param>
         /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<Music, bool> callback = null, Window wx = null,Action<int> getAll=null)
+        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<int,Music, bool> callback = null, Window wx = null,Action<int> getAll=null)
         {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
             Console.WriteLine(s);
@@ -435,9 +435,10 @@ jpg
             await wx.Dispatcher.BeginInvoke(new Action(() => getAll(c0s.Count())));
             try
             {
-                foreach (var c0si in c0s)
+                Parallel.For(0, c0s.Count(), async (index) =>
                 {
                     string singer = "";
+                    var c0si = c0s[index];
                     var c0sis = c0si["singer"];
                     List<MusicSinger> lm = new List<MusicSinger>();
                     foreach (var cc in c0sis)
@@ -461,8 +462,11 @@ jpg
                     else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                     if (amid != "")
-                        m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000" ,
-                            Name= c0si["albumname"].ToString()
+                        m.Album = new MusicGD()
+                        {
+                            ID = amid,
+                            Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
+                            Name = c0si["albumname"].ToString()
                         };
                     if (c0si["size320"].ToString() != "0")
                         m.Pz = "HQ";
@@ -470,9 +474,8 @@ jpg
                         m.Pz = "SQ";
                     m.Mvmid = c0si["vid"].ToString();
                     dt.Data.Add(m);
-                    await wx.Dispatcher.BeginInvoke(new Action(() => { callback(m, dt.IsOwn); }));
-                    await Task.Delay(1);
-                }
+                    await wx.Dispatcher.BeginInvoke(new Action(() => { callback(index, m, dt.IsOwn); }));
+                });
             }
             catch { }
             return dt;
