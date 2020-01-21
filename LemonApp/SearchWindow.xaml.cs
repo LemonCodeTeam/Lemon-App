@@ -1,4 +1,5 @@
 ﻿using LemonLib;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +28,7 @@ namespace LemonApp
         public SearchWindow()
         {
             InitializeComponent();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
         double Tp = 0;
         string uri = "https://www.baidu.com/s?wd=%2a";
@@ -36,10 +38,10 @@ namespace LemonApp
             {
                 if (textBox1.Text != "搜索")
                 {
-                    var data = await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text).Replace("#","%23") + "&action=opensearch",Encoding.Default);
-                    data = data.Replace("\0", "");
-                    string Htp = data.Substring(data.LastIndexOf(",[")).Replace("]]", "").Replace(",[", "").Replace(",", "");
-                    string[] aa = Htp.Split(new char[] { '\"' }, StringSplitOptions.RemoveEmptyEntries);
+                    var data = "{\"data\":" + await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text).Replace("#","%23") + "&action=opensearch", Encoding.GetEncoding("GBK")) +"}";
+                    Console.WriteLine(data);
+                    JObject obj = JObject.Parse(data);
+                    var aa = obj["data"][1];
                     listBox.Items.Clear();
                     foreach (var item in aa)
                         listBox.Items.Add(new ListBoxItem() { Content = item, Height = 35 });
