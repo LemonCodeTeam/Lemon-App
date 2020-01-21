@@ -36,7 +36,7 @@ namespace LemonApp
                 OnIsEnabledChanged(value);
             }
         }
-
+        private Color c;
         /// <summary>
         /// 获取或设置此窗口模糊特效叠加的颜色。
         /// </summary>
@@ -51,15 +51,19 @@ namespace LemonApp
                 (byte)((_blurColor & 0x00ff0000) >> 16),
                 // 取出透明分量。
                 (byte)((_blurColor & 0xff000000) >> 24));
-            set => _blurColor =
-                // 组装红色分量。
-                value.R << 0 |
-                // 组装绿色分量。
-                value.G << 8 |
-                // 组装蓝色分量。
-                value.B << 16 |
-                // 组装透明分量。
-                value.A << 24;
+            set
+            {
+                c = value;
+                _blurColor =
+               // 组装红色分量。
+               value.R << 0 |
+               // 组装绿色分量。
+               value.G << 8 |
+               // 组装蓝色分量。
+               value.B << 16 |
+               // 组装透明分量。
+               value.A << 24;
+            }
         }
 
         private void OnIsEnabledChanged(bool isEnabled)
@@ -98,7 +102,7 @@ namespace LemonApp
                 // 如果系统在 Windows 10 以上，则启用 Windows 10 早期的模糊特效。
                 //  请参见《在 Windows 10 上为 WPF 窗口添加模糊特效》
                 //  https://blog.walterlv.com/post/win10/2017/10/02/wpf-transparent-blur-in-windows-10.html
-                _window.Page.Background = new SolidColorBrush(Color);
+                _window.Page.Background = new SolidColorBrush(c);
                 accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
             }
             else
