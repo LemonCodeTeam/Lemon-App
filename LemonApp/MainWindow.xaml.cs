@@ -18,6 +18,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -50,6 +51,13 @@ namespace LemonApp
         ThumbnailToolBarButton TaskBarBtn_Last;
         ThumbnailToolBarButton TaskBarBtn_Play;
         ThumbnailToolBarButton TaskBarBtn_Next;
+        #endregion
+        #region 控件集
+        private HomePage ClHomePage = null;
+        private TopPage ClTopPage = null;
+        private SingerIndexPage ClSingerIndexPage = null;
+        private FLGDIndexPage ClFLGDIndexPage = null;
+        private RadioIndexPage ClRadioIndexPage = null;
         #endregion
         #region 等待动画
         Thread tOL = null;
@@ -166,7 +174,9 @@ namespace LemonApp
             //添加按钮
             TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this, TaskBarBtn_Last, TaskBarBtn_Play, TaskBarBtn_Next);
             //--------加载主页---------
-            ContentIndex.Child = new HomePage(this, TemplateSv.Template);
+            ClHomePage = new HomePage(this, TemplateSv.Template);
+            ContentPage.Children.Add(ClHomePage);
+            NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom), default, true, false);
             //--------去除可恶的焦点边缘线
             UIHelper.G(Page);
         }
@@ -407,8 +417,6 @@ namespace LemonApp
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
-            //---------------保存初始页面
-            AddPage(new MeumInfo(MusicKuBtn, ContentIndex, MusicKuCom) {cmd="HomePage"});
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -898,10 +906,10 @@ namespace LemonApp
         #region 功能区
         #region HomePage 主页
         //IFV的回调函数
-        public async void IFVCALLBACK_LoadAlbum(string id)
+        public async void IFVCALLBACK_LoadAlbum(string id,bool NeedSave=true)
         {
             np = NowPage.GDItem;
-            NSPage(new MeumInfo(null, Data, null) { cmd= "[DataUrl]{\"type\":\"Album\",\"key\":\""+id+"\"}" });
+            NSPage(new MeumInfo(null, Data, null) { cmd= "[DataUrl]{\"type\":\"Album\",\"key\":\""+id+"\"}" },default, NeedSave, false);
             DataItemsList.Items.Clear();
             int count = (int)(DataItemsList.ActualHeight
             / 45);
@@ -935,7 +943,7 @@ namespace LemonApp
         /// </summary>
         /// <param name="g">Top ID</param>
         /// <param name="osx">页数</param>
-        private async void GetTopItems(TopControl g, int osx = 1)
+        private async void GetTopItems(TopControl g, int osx = 1,bool NeedSave=true)
         {
             np = NowPage.Top;
             tc_now = g;
@@ -943,7 +951,7 @@ namespace LemonApp
             OpenLoading();
             if (osx == 1)
             {
-                NSPage(new MeumInfo(null,Data,null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\""+g.Data.ID+"\",\"name\":\""+g.Data.Name+ "\",\"img\":\"" + g.Data.Photo + "\"}" });
+                NSPage(new MeumInfo(null,Data,null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\""+g.Data.ID+"\",\"name\":\""+g.Data.Name+ "\",\"img\":\"" + g.Data.Photo + "\"}" },default, NeedSave, false);
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
@@ -1004,7 +1012,7 @@ namespace LemonApp
         private TextBlock LastClickLabel = null;
         private UIElement LastPage = null;
         private Border LastCom = null;
-        public void NSPage(MeumInfo data, Thickness value = new Thickness(), bool needSave = true)
+        public void NSPage(MeumInfo data, Thickness value = new Thickness(), bool needSave = true,bool Check=true)
         {
             if (data.Page == Data)
                 if (DataPage_DownloadMod)
@@ -1012,112 +1020,112 @@ namespace LemonApp
             if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
-            if (LastPage == null) LastPage = ContentIndex;
+            if (LastPage == null) LastPage = ClHomePage;
             if (LastCom == null) LastCom = MusicKuCom;
             LastCom.Visibility = Visibility.Collapsed;
             LastPage.Visibility = Visibility.Collapsed;
             //-----cmd处理----
-            if (!needSave)
+            if (Check)
             {
-                switch (data.cmd)
-                {
-                    case "TopPage":
-                        ContentIndex.Child = new TopPage(this, TemplateSv.Template);
-                        break;
-                    case "HomePage":
-                        ContentIndex.Child = new HomePage(this, TemplateSv.Template);
-                        break;
-                    case "SingerIndexPage":
-                        ContentIndex.Child = new SingerIndexPage(this, TemplateSv.Template);
-                        break;
-                    case "FLGDIndexPage":
-                        ContentIndex.Child = new FLGDIndexPage(this, TemplateSv.Template);
-                        break;
-                    case "RadioIndexPage":
-                        ContentIndex.Child = new RadioIndexPage(this, TemplateSv.Template);
-                        break;
-                }
                 if (data.cmd.Contains("DataUrl"))
                 {
-                    if (data.cmd == "DataUrl[ILike]")
-                        LikeBtn_MouseDown_1(null, null);
-                    else
+                    if (data.Page.Uid != data.cmd)
                     {
-                        JObject o = JObject.Parse(data.cmd.Replace("[DataUrl]", ""));
-                        string type = o["type"].ToString();
-                        string key = o["key"].ToString();
-                        switch (type)
+                        if (data.cmd == "DataUrl[ILike]")
+                            LoadILikeItems(false);
+                        else
                         {
-                            case "Search":
-                                SearchMusic(key, 0);
-                                break;
-                            case "GD":
-                                string name = o["name"].ToString();
-                                string img = o["img"].ToString();
-                                var a = new FLGDIndexItem() { id = key,img=img };
-                                a.name.Text = name;
-                                FxGDMouseDown(a, null);
-                                break;
-                            case "Album":
-                                IFVCALLBACK_LoadAlbum(key);
-                                break;
-                            case "Top":
-                                string nam = o["name"].ToString();
-                                string im = o["img"].ToString();
-                                var b = new TopControl(new MusicTop() { ID = key, Name = nam,Photo=im });
-                                GetTopItems(b, 0);
-                                break;
+                            JObject o = JObject.Parse(data.cmd.Replace("[DataUrl]", ""));
+                            string type = o["type"].ToString();
+                            string key = o["key"].ToString();
+                            switch (type)
+                            {
+                                case "Search":
+                                    SearchMusic(key, 0,false);
+                                    break;
+                                case "GD":
+                                    string name = o["name"].ToString();
+                                    string img = o["img"].ToString();
+                                    var a = new FLGDIndexItem() { id = key, img = img };
+                                    a.name.Text = name;
+                                    LoadFxGDItems(a,false);
+                                    break;
+                                case "Album":
+                                    IFVCALLBACK_LoadAlbum(key,false);
+                                    break;
+                                case "Top":
+                                    string nam = o["name"].ToString();
+                                    string im = o["img"].ToString();
+                                    var b = new TopControl(new MusicTop() { ID = key, Name = nam, Photo = im });
+                                    GetTopItems(b, 0,false);
+                                    break;
+                            }
                         }
                     }
                 }
             }
             //------------------
-            if(data.Com!=null)data.Com.Visibility = Visibility.Visible;
+            data.Page.Uid = data.cmd;
+            if (data.Com!=null)data.Com.Visibility = Visibility.Visible;
             data.Page.Visibility = Visibility.Visible;
             RunAnimation(data.Page, value);
             if (data.tb != null) LastClickLabel = data.tb;
             LastPage = data.Page;
             LastCom = data.Com;
             if (needSave)
+            {
                 AddPage(data);
+            }
         }
         private void TopBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ContentIndex.Child = null;
-            ContentIndex.Child = new TopPage(this, TemplateSv.Template);
-            NSPage(new MeumInfo(TopBtn, ContentIndex, TopCom) {cmd="TopPage"});
+            if (ClTopPage == null) {
+                ClTopPage = new TopPage(this,TemplateSv.Template);
+                ContentPage.Children.Add(ClTopPage);
+            }
+            NSPage(new MeumInfo(TopBtn, ClTopPage, TopCom), default, true, false);
         }
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ContentIndex.Child = null;
-            ContentIndex.Child = new HomePage(this, TemplateSv.Template);
-            NSPage(new MeumInfo(MusicKuBtn, ContentIndex, MusicKuCom) {cmd="HomePage"});
+            NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom));
         }
         //前后导航仪
         int QHNowPageIndex = 0;
         List<MeumInfo> PageData = new List<MeumInfo>();
         public void AddPage(MeumInfo data)
         {
-            for (int i = 0; i < PageData.Count - 1 - QHNowPageIndex; i++)
-            {
+            if(PageData.Count!=0)
+            while (!(PageData.Count - 1).Equals(QHNowPageIndex)) {
                 PageData.RemoveAt(PageData.Count - 1);
             }
             PageData.Add(data);
-            QHNowPageIndex = PageData.Count - 1;
+            QHNowPageIndex = PageData.Count-1;
+            foreach (var a in PageData) {
+                Console.WriteLine(PageData.IndexOf(a)+" "+a.Page);
+            }
+            Console.WriteLine(QHNowPageIndex);
         }
 
         private void LastPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            QHNowPageIndex--;
-            var a = PageData[QHNowPageIndex];
-            NSPage(a, default, false);
+            if (QHNowPageIndex != 0)
+            {
+                QHNowPageIndex--;
+                var a = PageData[QHNowPageIndex];
+                NSPage(a, default, false,true);
+            }
+            Console.WriteLine(QHNowPageIndex);
         }
 
         private void NextPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            QHNowPageIndex++;
-            var a = PageData[QHNowPageIndex];
-            NSPage(a, default, false);
+            if (QHNowPageIndex != PageData.Count - 1)
+            {
+                QHNowPageIndex++;
+                var a = PageData[QHNowPageIndex];
+                NSPage(a, default, false,true);
+            }
+            Console.WriteLine(QHNowPageIndex);
         }
         #endregion
         #region Singer 歌手界面
@@ -1234,25 +1242,33 @@ namespace LemonApp
 
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ContentIndex.Child = null;
-            ContentIndex.Child = new SingerIndexPage(this, TemplateSv.Template);
-            NSPage(new MeumInfo(SingerBtn, ContentIndex, SingerCom) {cmd="SingerIndexPage"});
+            if (ClSingerIndexPage == null) {
+                ClSingerIndexPage = new SingerIndexPage(this, TemplateSv.Template);
+                ContentPage.Children.Add(ClSingerIndexPage);
+            }
+            NSPage(new MeumInfo(SingerBtn, ClSingerIndexPage, SingerCom),default,true,false);
         }
         #endregion
         #region FLGD 分类歌单
         private void ZJBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ContentIndex.Child = null;
-            ContentIndex.Child = new FLGDIndexPage(this, TemplateSv.Template);
-            NSPage(new MeumInfo(ZJBtn, ContentIndex, GDCom) {cmd="FLGDIndexPage"});
+            if (ClFLGDIndexPage == null)
+            {
+                ClFLGDIndexPage = new FLGDIndexPage(this, TemplateSv.Template);
+                ContentPage.Children.Add(ClFLGDIndexPage);
+            }
+            NSPage(new MeumInfo(ZJBtn, ClFLGDIndexPage, GDCom),default, true, false);
         }
         #endregion
         #region Radio 电台
         private void RadioBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ContentIndex.Child = null;
-            ContentIndex.Child = new RadioIndexPage(this, TemplateSv.Template);
-            NSPage(new MeumInfo(RadioBtn, ContentIndex, RadioCom) {cmd="RadioIndexPage"});
+            if (ClRadioIndexPage == null)
+            {
+                ClRadioIndexPage = new RadioIndexPage(this, TemplateSv.Template);
+                ContentPage.Children.Add(ClRadioIndexPage);
+            }
+            NSPage(new MeumInfo(RadioBtn, ClRadioIndexPage, RadioCom), default, true, false);
         }
 
         public async void GetRadio(object sender, MouseEventArgs e)
@@ -1326,18 +1342,21 @@ namespace LemonApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
+        private void LikeBtn_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
+            LoadILikeItems();
+        }
+        private async void LoadILikeItems(bool NeedSave=true) {
             if (Settings.USettings.LemonAreeunIts == "Public")
-                NSPage(new MeumInfo(ILikeBtn,NonePage,ILikeCom));
+                NSPage(new MeumInfo(ILikeBtn, NonePage, ILikeCom),default,NeedSave,false);
             else
             {
-                NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) {cmd="DataUrl[ILike]" });
+                NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) { cmd = "DataUrl[ILike]" }, default, NeedSave, false);
                 OpenLoading();
                 TB.Text = "我喜欢";
                 TXx.Background = Resources["LoveIcon"] as VisualBrush;
                 DataItemsList.Items.Clear();
-                He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<int,Music, bool>((i,j, b) =>
+                He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<int, Music, bool>((i, j, b) =>
                 {
                     var k = new DataItem(j, this, b);
                     DataItemsList.Items[i] = k;
@@ -1350,12 +1369,12 @@ namespace LemonApp
                         k.ShowDx();
                     }
                     DataItemsList.Animation(k);
-                }), this,new Action<int>(i => {
-                                while (DataItemsList.Items.Count != i)
-                                {
-                                    DataItemsList.Items.Add("");
-                                }
-                            }));
+                }), this, new Action<int>(i => {
+                    while (DataItemsList.Items.Count != i)
+                    {
+                        DataItemsList.Items.Add("");
+                    }
+                }));
                 CloseLoading();
                 np = NowPage.GDItem;
             }
@@ -1536,7 +1555,7 @@ namespace LemonApp
         {
             Search_SmartBox.Visibility = Visibility.Collapsed;
         }
-        public async void SearchMusic(string key, int osx = 0)
+        public async void SearchMusic(string key, int osx = 0,bool NeedSave=true)
         {
             try
             {
@@ -1553,7 +1572,7 @@ namespace LemonApp
                     if (Datasv != null) Datasv.ScrollToTop();
                 }
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
-                if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" });
+                if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" },default, NeedSave, false);
                 int aniCount = (int)(DataItemsList.ActualHeight / 45);
                 int i = 0;
                 foreach (var j in dt)
@@ -2439,19 +2458,22 @@ namespace LemonApp
             }
         }
 
-        public async void FxGDMouseDown(object sender, MouseButtonEventArgs e)
+        public void FxGDMouseDown(object sender, MouseButtonEventArgs e)
         {
             var dt = sender as FLGDIndexItem;
-            NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\""+dt.id+"\",\"name\":\""+ dt.name.Text + "\",\"img\":\""+ dt.img + "\"}" });
+            LoadFxGDItems(dt);
+        }
+        private async void LoadFxGDItems(FLGDIndexItem dt,bool NeedSave=true) {
+            NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.id + "\",\"name\":\"" + dt.name.Text + "\",\"img\":\"" + dt.img + "\"}" },default, NeedSave, false);
             TB.Text = dt.name.Text;
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
             OpenLoading();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<int,Music, bool>((i,j, b) =>
+            He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<int, Music, bool>((i, j, b) =>
             {
-                var k = new DataItem(j,this,b);
+                var k = new DataItem(j, this, b);
                 DataItemsList.Items[i] = k;
                 k.Play += PlayMusic;
                 k.GetToSingerPage += K_GetToSingerPage;
@@ -2465,7 +2487,8 @@ namespace LemonApp
             }), this,
             new Action<int>(i =>
             {
-                while(DataItemsList.Items.Count!=i) {
+                while (DataItemsList.Items.Count != i)
+                {
                     DataItemsList.Items.Add("");
                 }
             }));

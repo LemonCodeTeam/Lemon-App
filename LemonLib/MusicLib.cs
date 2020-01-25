@@ -433,51 +433,51 @@ jpg
             dt.IsOwn = c0["login"].ToString() == c0["uin"].ToString();
             var c0s = c0["songlist"];
             await wx.Dispatcher.BeginInvoke(new Action(() => getAll(c0s.Count())));
-            try
-            {
-                Parallel.For(0, c0s.Count(), async (index) =>
+            Parallel.For(0, c0s.Count(), async (index) =>
                 {
-                    string singer = "";
-                    var c0si = c0s[index];
-                    var c0sis = c0si["singer"];
-                    List<MusicSinger> lm = new List<MusicSinger>();
-                    foreach (var cc in c0sis)
+                    try
                     {
-                        singer += cc["name"].ToString() + "&";
-                        lm.Add(new MusicSinger()
+                        string singer = "";
+                        var c0si = c0s[index];
+                        var c0sis = c0si["singer"];
+                        List<MusicSinger> lm = new List<MusicSinger>();
+                        foreach (var cc in c0sis)
                         {
-                            Name = cc["name"].ToString(),
-                            Mid = cc["mid"].ToString()
-                        });
+                            singer += cc["name"].ToString() + "&";
+                            lm.Add(new MusicSinger()
+                            {
+                                Name = cc["name"].ToString(),
+                                Mid = cc["mid"].ToString()
+                            });
+                        }
+                        Music m = new Music();
+                        m.MusicName = c0si["songname"].ToString();
+                        m.MusicName_Lyric = c0si["albumdesc"].ToString();
+                        m.Singer = lm;
+                        m.SingerText = singer.Substring(0, singer.Length - 1);
+                        m.MusicID = c0si["songmid"].ToString();
+                        var amid = c0si["albummid"].ToString();
+                        if (amid == "001ZaCQY2OxVMg")
+                            m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                        else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                        else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
+                        if (amid != "")
+                            m.Album = new MusicGD()
+                            {
+                                ID = amid,
+                                Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
+                                Name = c0si["albumname"].ToString()
+                            };
+                        if (c0si["size320"].ToString() != "0")
+                            m.Pz = "HQ";
+                        if (c0si["sizeflac"].ToString() != "0")
+                            m.Pz = "SQ";
+                        m.Mvmid = c0si["vid"].ToString();
+                        dt.Data.Add(m);
+                        await wx.Dispatcher.BeginInvoke(new Action(() => { callback(index, m, dt.IsOwn); }));
                     }
-                    Music m = new Music();
-                    m.MusicName = c0si["songname"].ToString();
-                    m.MusicName_Lyric = c0si["albumdesc"].ToString();
-                    m.Singer = lm;
-                    m.SingerText = singer.Substring(0, singer.Length - 1);
-                    m.MusicID = c0si["songmid"].ToString();
-                    var amid = c0si["albummid"].ToString();
-                    if (amid == "001ZaCQY2OxVMg")
-                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
-                    else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
-                    if (amid != "")
-                        m.Album = new MusicGD()
-                        {
-                            ID = amid,
-                            Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                            Name = c0si["albumname"].ToString()
-                        };
-                    if (c0si["size320"].ToString() != "0")
-                        m.Pz = "HQ";
-                    if (c0si["sizeflac"].ToString() != "0")
-                        m.Pz = "SQ";
-                    m.Mvmid = c0si["vid"].ToString();
-                    dt.Data.Add(m);
-                    await wx.Dispatcher.BeginInvoke(new Action(() => { callback(index, m, dt.IsOwn); }));
+                    catch { }
                 });
-            }
-            catch { }
             return dt;
         }
         /// <summary>
@@ -770,24 +770,12 @@ jpg
                 string musicurl = "";
                 musicurl = await GetUrlAsync(mid);
                 Console.WriteLine(musicurl);
-                WebClient dc = new WebClient();
-                dc.DownloadFileCompleted += delegate
-                {
-                    dc.Dispose();
-                    mp.Load(downloadpath);
-                    if (doesplay)
-                        mp.Play();
-                    s.Dispatcher.Invoke(()=> {
-                        x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
-                    });
-                };
-                dc.DownloadFileAsync(new Uri(musicurl), downloadpath);
-                dc.DownloadProgressChanged += delegate (object sender, DownloadProgressChangedEventArgs e)
-                {
-                    s.Dispatcher.Invoke(()=> {
-                        x.Text = "加载中..." + e.ProgressPercentage + "%";
-                    });
-                };
+                mp.LoadUrl(musicurl,downloadpath);
+                if (doesplay)
+                    mp.Play();
+                s.Dispatcher.Invoke(() => {
+                    x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
+                });
             }
             else
             {

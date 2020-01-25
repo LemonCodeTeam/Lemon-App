@@ -1505,7 +1505,6 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1">
                     <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,0">
-                        <Border x:Name="ContentIndex"/>
                         <Grid x:Name="DownloadPage" Visibility="Collapsed">
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
                             <LemonApp:MyScrollView x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
