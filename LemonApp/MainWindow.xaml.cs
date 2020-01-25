@@ -1634,11 +1634,15 @@ namespace LemonApp
             if (source == null) source = DataItemsList;
             DLMode = false;
             PlayDL_List.Items.Clear();
-            foreach (DataItem e in source.Items)
+            foreach (Object e in source.Items)
             {
-                var k = new PlayDLItem(e.music);
-                k.MouseDoubleClick += K_MouseDoubleClick;
-                PlayDL_List.Items.Add(k);
+                if (e is DataItem)
+                {
+                    var ae = e as DataItem;
+                    var k = new PlayDLItem(ae.music);
+                    k.MouseDoubleClick += K_MouseDoubleClick;
+                    PlayDL_List.Items.Add(k);
+                }
             }
             if (index == -1)
                 index = source.Items.IndexOf(dt);
