@@ -29,7 +29,7 @@ namespace LemonLib
     public class MusicLib
     {
         #region  构造函数
-        public MusicLib(LyricView LV, string id,IntPtr win)
+        public MusicLib(string id,IntPtr win)
         {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
@@ -41,7 +41,6 @@ namespace LemonLib
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
-            lv = LV;
             qq = id;
             mp = new MusicPlayer(win);
             GetMusicLikeGDid();
@@ -62,7 +61,6 @@ namespace LemonLib
         #endregion
         #region 一些字段
         public static MusicPlayer mp;
-        public LyricView lv;
         public static string qq = "";
         public static string MusicLikeGDid = "";
         public static string MusicLikeGDdirid = "";
@@ -762,7 +760,7 @@ jpg
         /// <param name="s"></param>
         /// <param name="songname"></param>
         /// <param name="doesplay"></param>
-        public async void GetAndPlayMusicUrlAsync(string mid, Boolean openlyric, Run x, Window s, string songname, bool doesplay = true)
+        public async void GetAndPlayMusicUrlAsync(string mid, Run x, Window s, string songname, bool doesplay = true)
         {
             string downloadpath = Settings.USettings.CachePath + "Music\\" + mid + ".mp3";
             if (!File.Exists(downloadpath))
@@ -770,19 +768,28 @@ jpg
                 string musicurl = "";
                 musicurl = await GetUrlAsync(mid);
                 Console.WriteLine(musicurl);
-                mp.LoadUrl(musicurl,downloadpath);
+                mp.LoadUrl(musicurl);
                 if (doesplay)
                     mp.Play();
                 s.Dispatcher.Invoke(() => {
                     x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
                 });
+                string cache = downloadpath + ".cache";
+                WebClient wc = new WebClient();
+                wc.DownloadFileAsync(new Uri(musicurl), cache);
+                wc.DownloadFileCompleted +=async delegate {
+                    await Task.Run(() =>{
+                        File.Move(cache, downloadpath);
+                        File.Delete(cache);
+                    });
+                };
             }
             else
             {
                 var fl = new FileInfo(downloadpath);
                 if (fl.Length == 0) {
                     fl.Delete();
-                    GetAndPlayMusicUrlAsync(mid, openlyric, x, s, songname, doesplay);
+                    GetAndPlayMusicUrlAsync(mid,x, s, songname, doesplay);
                     return;
                 }
                 mp.Load(downloadpath);
@@ -791,11 +798,6 @@ jpg
                 s.Dispatcher.Invoke(()=> {
                     x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
                 });
-            }
-            if (openlyric)
-            {
-                string dt = await GetLyric(mid);
-                lv.LoadLrc(dt);
             }
         }
         #endregion
@@ -814,13 +816,13 @@ jpg
             Dictionary<string, string> gcdata = new Dictionary<string, string>();
             string[] dta = t.Split('\n');
             foreach (var dt in dta)
-                LyricView.parserLine(dt, datatime, datatext, gcdata);
+                LyricHelper.parserLine(dt, datatime, datatext, gcdata);
             List<String> dataatimes = new List<String>();
             List<String> dataatexs = new List<String>();
             Dictionary<String, String> fydata = new Dictionary<String, String>();
             String[] dtaa = x.Split('\n');
             foreach (var dt in dtaa)
-                LyricView.parserLine(dt, dataatimes, dataatexs, fydata);
+                LyricHelper.parserLine(dt, dataatimes, dataatexs, fydata);
             List<String> KEY = new List<String>();
             Dictionary<String, String> gcfydata = new Dictionary<String, String>();
             Dictionary<String, String> list = new Dictionary<String, String>();
@@ -835,7 +837,7 @@ jpg
                     gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
                 else
                 {
-                    string dt = LyricView.YwY(KEY[i], 1);
+                    string dt = LyricHelper.YwY(KEY[i], 1);
                     if (fydata.ContainsKey(dt))
                         gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[dt]).Replace("\n", "").Replace("\r", "");
                     else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");

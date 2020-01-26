@@ -43,6 +43,7 @@ namespace LemonApp
         int ind = 0;//歌词页面是否打开
         bool xh = false;//false: lb true:dq  循环/单曲 播放控制
         bool mod = true;//true : qq false : wy
+        LyricView lv;
         bool isLoading = false;
         public NowPage np;
         #endregion
@@ -133,7 +134,7 @@ namespace LemonApp
                 Settings.LSettings.qq = qq;
                 Settings.SaveLocaSettings();
             }
-            Load_Theme(false);
+            Load_Theme();
             //---------Popup的移动事件
             LocationChanged += delegate
             {
@@ -194,7 +195,7 @@ namespace LemonApp
         /// 登录之后的主题配置 不同的账号可能使用不同的主题
         /// </summary>
         /// <param name="hasAnimation"></param>
-        private void Load_Theme(bool hasAnimation = true)
+        private void Load_Theme()
         {
             if (Settings.USettings.Skin_Path == "BlurBlackTheme")
             {
@@ -289,14 +290,26 @@ namespace LemonApp
                 }
                 DThemePage.Child = null;
             }
-            LoadMusicData(hasAnimation);
+            //---------------歌词页专辑图转动
+            LyricBigAniRound = new Storyboard();
+            DependencyProperty[] propertyChain = new DependencyProperty[]{
+                      RenderTransformProperty,
+                      RotateTransform.AngleProperty };
+            DoubleAnimationUsingKeyFrames us = new DoubleAnimationUsingKeyFrames();
+            EasingDoubleKeyFrame edf = new EasingDoubleKeyFrame(360, TimeSpan.FromSeconds(15));
+            us.RepeatBehavior = RepeatBehavior.Forever;
+            Storyboard.SetTarget(us, LyricBig);
+            Storyboard.SetTargetProperty(us, new PropertyPath("(0).(1)", propertyChain));
+            us.KeyFrames.Add(edf);
+            LyricBigAniRound.Children.Add(us);
+            LoadMusicData();
         }
         private double now = 0;
         private double all = 0;
         private string lastlyric = "";
         private Toast lyricTa = new Toast("", true);
         private bool isOpenGc = true;
-        private void LoadMusicData(bool hasAnimation = true)
+        private void LoadMusicData()
         {
             LoadSettings();
             //-------用户的头像、名称等配置加载
@@ -310,10 +323,9 @@ namespace LemonApp
                 }
             }
             //-----歌词显示 歌曲播放 等组件的加载
-            LyricView lv = new LyricView();
-            lv.FoucsLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
-            lv.TextAlignment = TextAlignment.Left;
+            lv = new LyricView();
+            lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            lv.TextAlignment = TextAlignment.Center;
             ly.Child = lv;
             lv.NextLyric += (text) =>
             {
@@ -325,7 +337,7 @@ namespace LemonApp
                     lastlyric = text;
                 }
             };
-            ml = new MusicLib(lv, Settings.USettings.LemonAreeunIts, new WindowInteropHelper(this).Handle);
+            ml = new MusicLib( Settings.USettings.LemonAreeunIts, new WindowInteropHelper(this).Handle);
             //---------加载上一次播放
             if (Settings.USettings.Playing.MusicName != "")
             {
@@ -350,39 +362,44 @@ namespace LemonApp
                     jd.Maximum = all;
                     if (ind == 1)
                     {
-                        float[] data = MusicLib.mp.GetFFTData();
-                        float sv = 0;
-                        foreach (var c in data)
-                            if (c > 0.06) {
-                                sv = c;
-                                break;
+                        if (Settings.USettings.LyricAnimationMode == 0)
+                        {
+                            float[] data = MusicLib.mp.GetFFTData();
+                            float sv = 0;
+                            foreach (var c in data)
+                                if (c > 0.06)
+                                {
+                                    sv = c;
+                                    break;
+                                }
+                            if (sv != 0)
+                            {
+                                Border b = new Border();
+                                b.BorderThickness = new Thickness(1);
+                                b.BorderBrush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
+                                b.Height = LyricBig.ActualHeight;
+                                b.Width = LyricBig.ActualWidth;
+                                b.CornerRadius = LyricBig.CornerRadius;
+                                b.HorizontalAlignment = HorizontalAlignment.Center;
+                                b.VerticalAlignment = VerticalAlignment.Center;
+                                var v = b.Height + sv * 500;
+                                Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
+                                var f = s.Children[0] as DoubleAnimationUsingKeyFrames;
+                                (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
+                                Storyboard.SetTarget(f, b);
+                                var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
+                                (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
+                                Storyboard.SetTarget(f1, b);
+                                var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
+                                Storyboard.SetTarget(f2, b);
+                                s.Completed += delegate { LyricAni.Children.Remove(b); };
+                                LyricAni.Children.Add(b);
+                                s.Begin();
                             }
-                        if (sv!=0) {
-                            Border b = new Border();
-                            b.BorderThickness = new Thickness(1);
-                            b.BorderBrush = new SolidColorBrush(Color.FromArgb(150,255,255,255));
-                            b.Height = border4.ActualHeight;
-                            b.Width = border4.ActualWidth;
-                            b.CornerRadius = border4.CornerRadius;
-                            b.HorizontalAlignment = HorizontalAlignment.Center;
-                            b.VerticalAlignment = VerticalAlignment.Center;
-                            var v = b.Height + sv *500;
-                            Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
-                            var f=s.Children[0] as DoubleAnimationUsingKeyFrames;
-                            (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
-                            Storyboard.SetTarget(f, b);
-                            var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
-                            (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
-                            Storyboard.SetTarget(f1, b);
-                            var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
-                            Storyboard.SetTarget(f2, b);
-                            s.Completed += delegate { LyricAni.Children.Remove(b); };
-                            LyricAni.Children.Add(b);
-                            s.Begin();
                         }
-                        ml.lv.LrcRoll(now, true);
+                        lv.LrcRoll(now, true);
                     }
-                    else ml.lv.LrcRoll(now, false);
+                    else lv.LrcRoll(now, false);
                     if (now==all&&now>2000&&all!=0)
                     {
                         now = 0;
@@ -558,7 +575,7 @@ namespace LemonApp
                         Settings.SaveLocaSettings();
                         Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
                     });
-                    Load_Theme(false);
+                    Load_Theme();
                 });
                 a();
             }
@@ -1722,7 +1739,9 @@ namespace LemonApp
                 if (Settings.USettings.MusicLike.ContainsKey(id))
                     LikeBtnDown();
                 else LikeBtnUp();
-                ml.GetAndPlayMusicUrlAsync(id, true, MusicName, this, name + " - " + singer, doesplay);
+                ml.GetAndPlayMusicUrlAsync(id, MusicName, this, name + " - " + singer, doesplay);
+                string dt = await MusicLib.GetLyric(id);
+                lv.LoadLrc(dt);
                 var im = await ImageCacheHelp.GetImageByUrl(x);
                 MusicImage.Background = new ImageBrush(im);
                 var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
@@ -1738,6 +1757,8 @@ namespace LemonApp
                     TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                     t.Start();
                     isplay = true;
+                    if (Settings.USettings.LyricAnimationMode == 1)
+                        LyricBigAniRound.Begin();
                 }
                 LastPlay = MusicData.Data.MusicID;
             }
@@ -1872,6 +1893,8 @@ namespace LemonApp
             {
                 isplay = false;
                 MusicLib.mp.Pause();
+                if (Settings.USettings.LyricAnimationMode == 1)
+                    LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
                 t.Stop();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Play);
@@ -1880,6 +1903,8 @@ namespace LemonApp
             {
                 isplay = true;
                 MusicLib.mp.Play();
+                if (Settings.USettings.LyricAnimationMode == 1)
+                    LyricBigAniRound.Begin();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                 t.Start();
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
@@ -2158,8 +2183,8 @@ namespace LemonApp
         }
         private void ly_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (ml.lv != null)
-                ml.lv.RestWidth(e.NewSize.Width);
+            if (lv != null)
+                lv.RestWidth(e.NewSize.Width);
         }
         #endregion
         #region IntoGD 导入歌单
@@ -2716,5 +2741,28 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void LyricBig_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LyricAnimationMode == 0)
+                Settings.USettings.LyricAnimationMode = 1;
+            else Settings.USettings.LyricAnimationMode = 0;
+            CheckLyricAnimation(Settings.USettings.LyricAnimationMode);
+        }
+        private Storyboard LyricBigAniRound = null;
+        private void CheckLyricAnimation(int mode) {
+            if (mode == 0)
+            {
+                LyricBigAniRound.Stop();
+                RotateTransform rtf = new RotateTransform();
+                LyricBig.RenderTransform = rtf;
+                DoubleAnimation dbAscending = new DoubleAnimation(0, new Duration
+                (TimeSpan.FromSeconds(2)));
+                rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
+            }
+            else {
+                LyricBigAniRound.Begin();
+            }
+        }
     }
 }

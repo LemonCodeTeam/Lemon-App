@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLib;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -18,7 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace LemonLib
+namespace LemonApp
 {
     /// <summary>
     /// LyricView.xaml 的交互逻辑
@@ -39,8 +40,7 @@ namespace LemonLib
         public Dictionary<double, LrcModel> Lrcs = new Dictionary<double, LrcModel>();
         public LrcModel foucslrc { get; set; }
 
-        public SolidColorBrush NoramlLrcColor = new SolidColorBrush(Colors.Black);
-        public SolidColorBrush FoucsLrcColor = new SolidColorBrush(Colors.OrangeRed);
+        public SolidColorBrush NoramlLrcColor;
         public TextAlignment TextAlignment = TextAlignment.Center;
         #endregion
         public LyricView()
@@ -65,13 +65,13 @@ namespace LemonLib
                     TimeSpan time = GetTime(str);
                     string lrc = str.Split(']')[1];
                     TextBlock c_lrcbk = new TextBlock();
-                    c_lrcbk.FontSize = 14;
+                    c_lrcbk.FontSize = 18;
                     c_lrcbk.Foreground = NoramlLrcColor;
                     c_lrcbk.TextWrapping = TextWrapping.Wrap;
                     c_lrcbk.TextAlignment = TextAlignment;
                     c_lrcbk.Text = lrc.Replace("^","\n").Replace("//","").Replace("null","");
                     if (c_lrc_items.Children.Count > 0)
-                        c_lrcbk.Margin = new Thickness(0, 20, 0, 0);
+                        c_lrcbk.Margin = new Thickness(0, 15, 0, 15);
                     if(!Lrcs.ContainsKey(time.TotalMilliseconds))
                     Lrcs.Add(time.TotalMilliseconds, new LrcModel()
                     {
@@ -107,7 +107,7 @@ namespace LemonLib
             if (foucslrc == null)
             {
                 foucslrc = Lrcs.Values.First();
-                foucslrc.c_LrcTb.Foreground = FoucsLrcColor;
+                foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
             }
             else
             {
@@ -120,7 +120,7 @@ namespace LemonLib
 
                     foucslrc = lm;
                     if (needScrol){
-                        foucslrc.c_LrcTb.Foreground = FoucsLrcColor;
+                        foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                         ResetLrcviewScroll();
                     }
                     string tx = foucslrc.LrcText.Replace("//","");
@@ -138,45 +138,9 @@ namespace LemonLib
             GeneralTransform gf = foucslrc.c_LrcTb.TransformToVisual(c_lrc_items);
             Point p = gf.Transform(new Point(0, 0));
             double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 10;
-            //c_scrollviewer.ScrollToVerticalOffset(os);
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CircleEase() { EasingMode=EasingMode.EaseOut};
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(500));
+            da.EasingFunction = new QuinticEase() { EasingMode=EasingMode.EaseOut};
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
-        }
-        public static String[] parserLine(String str, List<String> times, List<String> texs, Dictionary<String, String> data,bool doesAdd=true)
-        {
-            if (!str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:")&&!str.StartsWith("[kana")&&str.Length!=0)
-            {
-                String TimeData = TextHelper.XtoYGetTo(str, "[", "]", 0);
-                String io = "[" +TimeData + "]";
-                String TexsData = str.Replace(io, "");
-                //String unTimeData = TimeData.Substring(0, TimeData.Length - 1);
-                if (doesAdd)
-                {
-                    if (data.ContainsKey(TimeData))
-                    {
-                        texs.Add(TexsData);
-                        data[TimeData] += "^" + TexsData;
-                    }
-                    else
-                    {
-                        times.Add(TimeData);
-                        texs.Add(TexsData);
-                        data.Add(TimeData, TexsData);
-                    }
-                }
-                return new string[2] {TimeData,TexsData};
-            }
-            else return null;
-        }
-
-        public static string YwY(string str,int i)
-        {//00:02.06 => 00:02.07
-            string lstr = TextHelper.XtoYGetTo(str+"]", ".", "]", 0);//06
-            string LastTime =(int.Parse(lstr) + i).ToString();//06+i
-            if (LastTime.Length == 1)
-                LastTime = "0" + LastTime;
-            return str.Replace(lstr, LastTime.ToString());
         }
         #endregion
     }

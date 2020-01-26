@@ -25,46 +25,14 @@ namespace LemonLib
             }
             stream = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_SAMPLE_FLOAT);
         }
-        private FileStream _fs = null;
-        private byte[] _data;
-        private string DownloadPath;
-        private DOWNLOADPROC _download;
-        public void LoadUrl(string url,string Saveloc) {
+
+        public void LoadUrl(string url) {
             if (stream != -1024)
             {
                 Bass.BASS_ChannelStop(stream);
                 Bass.BASS_StreamFree(stream);
             }
-            DownloadPath = Saveloc;
-            _download = new DOWNLOADPROC(download);
-            stream = Bass.BASS_StreamCreateURL(url, 0, BASSFlag.BASS_SAMPLE_FLOAT, _download, IntPtr.Zero);
-        }
-        private async void download(IntPtr buffer, int length, IntPtr user) {
-            try
-            {
-                if (_fs == null)
-                {
-                    _fs = File.OpenWrite(DownloadPath);
-                }
-                if (buffer == IntPtr.Zero)
-                {
-                    //下载完成...
-                    await _fs.FlushAsync();
-                    _fs.Close();
-                    _fs = null;
-                }
-                else
-                {
-                    // increase the data buffer as needed
-                    if (_data == null || _data.Length < length)
-                        _data = new byte[length];
-                    // copy from managed to unmanaged memory
-                    Marshal.Copy(buffer, _data, 0, length);
-                    // write to file
-                    await _fs.WriteAsync(_data, 0, length);
-                }
-            }
-            catch { }
+            stream = Bass.BASS_StreamCreateURL(url, 0, BASSFlag.BASS_SAMPLE_FLOAT, null, IntPtr.Zero);
         }
         public void Play() {
             Bass.BASS_ChannelPlay(stream,false);

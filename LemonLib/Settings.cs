@@ -99,6 +99,8 @@ namespace LemonLib
                     }
                 }
             }
+            if (data.Contains("LyricAnimationMode"))
+                USettings.LyricAnimationMode = int.Parse(o["LyricAnimationMode"].ToString());
             if (data.Contains("IsRoundMusicImage"))
                 USettings.IsRoundMusicImage = int.Parse(o["IsRoundMusicImage"].ToString());
             if (data.Contains("DownloadName"))
@@ -147,6 +149,9 @@ namespace LemonLib
             #region 主题配置
             //启用圆的MusicImage?
             public int IsRoundMusicImage { get; set; } = 5;
+            //启动歌词页动效
+            //0=波澜 1=转动
+            public int LyricAnimationMode { get; set; } = 0;
             public string Skin_Path { get; set; } = "";
             public string Skin_txt { get; set; } = "";
             public string Skin_Theme_R { get; set; } = "";
