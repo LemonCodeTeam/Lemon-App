@@ -1,5 +1,6 @@
 ﻿using LemonApp.ContentPage;
 using LemonLib;
+using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Newtonsoft.Json.Linq;
 using System;
@@ -177,7 +178,7 @@ namespace LemonApp
             //--------加载主页---------
             ClHomePage = new HomePage(this, TemplateSv.Template);
             ContentPage.Children.Add(ClHomePage);
-            NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom), default, true, false);
+            NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom), true, false);
             //--------去除可恶的焦点边缘线
             UIHelper.G(Page);
         }
@@ -596,12 +597,17 @@ namespace LemonApp
         }
         private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            //⚠警告!!!: 以下key仅供本开发者(TwilightLemon)使用,
+            //               若发现滥用现象，将走法律程序解决!!!
             //KEY: xfttsuxaeivzdefd
             if (UserSendText.Text != "在此处输入你的建议或问题")
             {
                 va.Text = "发送中...";
-                string body = "UserAddress:" + knowb.Text + "\r\nUserID:" + Settings.USettings.LemonAreeunIts + "\r\n  \r\n"
-                        + UserSendText.Text;
+                string body = "Lemon App 版本号:"+App.EM+
+                    "\r\nUserAddress:" + knowb.Text + 
+                    "\r\nUserID:" + Settings.USettings.LemonAreeunIts + 
+                    "\r\n  \r\n"
+                    + UserSendText.Text;
                 Task.Run(new Action(() =>
                 {
                     MailMessage mailMessage = new MailMessage();
@@ -609,6 +615,10 @@ namespace LemonApp
                     mailMessage.To.Add(new MailAddress("2728578956@qq.com"));
                     mailMessage.Subject = "Lemon App用户反馈";
                     mailMessage.Body = body;
+                    //添加附件...
+                    if (HasFJ)
+                        foreach(var file in USFJFilePath)
+                        mailMessage.Attachments.Add(new Attachment(file));
                     SmtpClient client = new SmtpClient();
                     client.Host = "smtp.qq.com";
                     client.EnableSsl = true;
@@ -620,7 +630,20 @@ namespace LemonApp
             }
             else va.Text = "请输入";
         }
-
+        private string[] USFJFilePath=null;
+        private bool HasFJ = false;
+        private void UserSend_fj_Drag(object sender, DragEventArgs e)
+        {
+            HasFJ = true;
+            USFJFilePath = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (USFJFilePath.Count() > 1)
+                UserSend_fj.TName = "已选多个文件";
+            else
+            {
+                System.IO.FileInfo f = new System.IO.FileInfo(USFJFilePath[0]);
+                UserSend_fj.TName = f.Name;
+            }
+        }
         private void Run_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start("https://github.com/TwilightLemon/Lemon-App");
@@ -926,7 +949,7 @@ namespace LemonApp
         public async void IFVCALLBACK_LoadAlbum(string id,bool NeedSave=true)
         {
             np = NowPage.GDItem;
-            NSPage(new MeumInfo(null, Data, null) { cmd= "[DataUrl]{\"type\":\"Album\",\"key\":\""+id+"\"}" },default, NeedSave, false);
+            NSPage(new MeumInfo(null, Data, null) { cmd= "[DataUrl]{\"type\":\"Album\",\"key\":\""+id+"\"}" },NeedSave, false);
             DataItemsList.Items.Clear();
             int count = (int)(DataItemsList.ActualHeight
             / 45);
@@ -968,7 +991,7 @@ namespace LemonApp
             OpenLoading();
             if (osx == 1)
             {
-                NSPage(new MeumInfo(null,Data,null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\""+g.Data.ID+"\",\"name\":\""+g.Data.Name+ "\",\"img\":\"" + g.Data.Photo + "\"}" },default, NeedSave, false);
+                NSPage(new MeumInfo(null,Data,null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\""+g.Data.ID+"\",\"name\":\""+g.Data.Name+ "\",\"img\":\"" + g.Data.Photo + "\"}" },NeedSave, false);
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
@@ -1029,7 +1052,7 @@ namespace LemonApp
         private TextBlock LastClickLabel = null;
         private UIElement LastPage = null;
         private Border LastCom = null;
-        public void NSPage(MeumInfo data, Thickness value = new Thickness(), bool needSave = true,bool Check=true)
+        public void NSPage(MeumInfo data, bool needSave = true,bool Check=true)
         {
             if (data.Page == Data)
                 if (DataPage_DownloadMod)
@@ -1080,12 +1103,15 @@ namespace LemonApp
                         }
                     }
                 }
+                if (data.cmd == "SingerBig") {
+                    SetTopWhite(true);
+                }
             }
             //------------------
             data.Page.Uid = data.cmd;
             if (data.Com!=null)data.Com.Visibility = Visibility.Visible;
             data.Page.Visibility = Visibility.Visible;
-            RunAnimation(data.Page, value);
+            RunAnimation(data.Page, data.value);
             if (data.tb != null) LastClickLabel = data.tb;
             LastPage = data.Page;
             LastCom = data.Com;
@@ -1100,7 +1126,7 @@ namespace LemonApp
                 ClTopPage = new TopPage(this,TemplateSv.Template);
                 ContentPage.Children.Add(ClTopPage);
             }
-            NSPage(new MeumInfo(TopBtn, ClTopPage, TopCom), default, true, false);
+            NSPage(new MeumInfo(TopBtn, ClTopPage, TopCom), true, false);
         }
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1129,7 +1155,7 @@ namespace LemonApp
             {
                 QHNowPageIndex--;
                 var a = PageData[QHNowPageIndex];
-                NSPage(a, default, false,true);
+                NSPage(a,false,true);
             }
             Console.WriteLine(QHNowPageIndex);
         }
@@ -1140,7 +1166,7 @@ namespace LemonApp
             {
                 QHNowPageIndex++;
                 var a = PageData[QHNowPageIndex];
-                NSPage(a, default, false,true);
+                NSPage(a,false,true);
             }
             Console.WriteLine(QHNowPageIndex);
         }
@@ -1223,7 +1249,7 @@ namespace LemonApp
                 if (data.HasBigPic)
                 {
                     await Task.Delay(100);
-                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom), new Thickness(0, -50, 0, 0));
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { value= new Thickness(0, -50, 0, 0) ,cmd="SingerBig"});
                 }
                 else {
                     await Task.Delay(100);
@@ -1263,7 +1289,7 @@ namespace LemonApp
                 ClSingerIndexPage = new SingerIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClSingerIndexPage);
             }
-            NSPage(new MeumInfo(SingerBtn, ClSingerIndexPage, SingerCom),default,true,false);
+            NSPage(new MeumInfo(SingerBtn, ClSingerIndexPage, SingerCom),true,false);
         }
         #endregion
         #region FLGD 分类歌单
@@ -1274,7 +1300,7 @@ namespace LemonApp
                 ClFLGDIndexPage = new FLGDIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClFLGDIndexPage);
             }
-            NSPage(new MeumInfo(ZJBtn, ClFLGDIndexPage, GDCom),default, true, false);
+            NSPage(new MeumInfo(ZJBtn, ClFLGDIndexPage, GDCom), true, false);
         }
         #endregion
         #region Radio 电台
@@ -1285,7 +1311,7 @@ namespace LemonApp
                 ClRadioIndexPage = new RadioIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClRadioIndexPage);
             }
-            NSPage(new MeumInfo(RadioBtn, ClRadioIndexPage, RadioCom), default, true, false);
+            NSPage(new MeumInfo(RadioBtn, ClRadioIndexPage, RadioCom), true, false);
         }
 
         public async void GetRadio(object sender, MouseEventArgs e)
@@ -1365,10 +1391,10 @@ namespace LemonApp
         }
         private async void LoadILikeItems(bool NeedSave=true) {
             if (Settings.USettings.LemonAreeunIts == "Public")
-                NSPage(new MeumInfo(ILikeBtn, NonePage, ILikeCom),default,NeedSave,false);
+                NSPage(new MeumInfo(ILikeBtn, NonePage, ILikeCom),NeedSave,false);
             else
             {
-                NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) { cmd = "DataUrl[ILike]" }, default, NeedSave, false);
+                NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) { cmd = "DataUrl[ILike]" }, NeedSave, false);
                 OpenLoading();
                 TB.Text = "我喜欢";
                 TXx.Background = Resources["LoveIcon"] as VisualBrush;
@@ -1589,7 +1615,7 @@ namespace LemonApp
                     if (Datasv != null) Datasv.ScrollToTop();
                 }
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
-                if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" },default, NeedSave, false);
+                if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" }, NeedSave, false);
                 int aniCount = (int)(DataItemsList.ActualHeight / 45);
                 int i = 0;
                 foreach (var j in dt)
@@ -2493,7 +2519,7 @@ namespace LemonApp
             LoadFxGDItems(dt);
         }
         private async void LoadFxGDItems(FLGDIndexItem dt,bool NeedSave=true) {
-            NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.id + "\",\"name\":\"" + dt.name.Text + "\",\"img\":\"" + dt.img + "\"}" },default, NeedSave, false);
+            NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.id + "\",\"name\":\"" + dt.name.Text + "\",\"img\":\"" + dt.img + "\"}" }, NeedSave, false);
             TB.Text = dt.name.Text;
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
@@ -2762,6 +2788,21 @@ namespace LemonApp
             }
             else {
                 LyricBigAniRound.Begin();
+            }
+        }
+
+        private void UserSend_fj_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog o = new OpenFileDialog();
+            o.Multiselect = true;
+            o.ShowDialog();
+            USFJFilePath = o.FileNames;
+            if (USFJFilePath.Count() > 1)
+                UserSend_fj.TName = "已选多个文件";
+            else
+            {
+                System.IO.FileInfo f = new System.IO.FileInfo(USFJFilePath[0]);
+                UserSend_fj.TName = f.Name;
             }
         }
     }

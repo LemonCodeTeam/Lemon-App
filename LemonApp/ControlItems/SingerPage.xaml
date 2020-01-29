@@ -141,10 +141,10 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="热门歌曲" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,10,0,0"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="热门歌曲" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,10,0,0" FontWeight="Bold"/>
                 <local:MDButton x:Name="HotSong_PaBtn" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="100" TName="播放全部" Margin="20,10,0,0" MouseDown="HotSong_PaBtn_MouseDown"/>
                 <ListBox x:Name="HotMusicList" Margin="0,10,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" VirtualizingPanel.VirtualizationMode="Recycling" Style="{DynamicResource ListBoxStyle1}" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="{x:Null}"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="最新专辑" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="最新专辑" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" FontWeight="Bold"/>
                 <Grid x:Name="NewAlbumList" Margin="0,10,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -159,7 +159,7 @@
                     <local:FLGDIndexItem Grid.Column="3" Margin="5,0"/>
                     <local:FLGDIndexItem Grid.Column="4" Margin="5,0"/>
                 </Grid>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="推荐视频" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="推荐视频" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" FontWeight="Bold"/>
                 <Grid x:Name="NewMVList" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -174,7 +174,7 @@
                     <local:MVItem Grid.Column="3" Margin="5,0"/>
                     <local:MVItem Grid.Column="4" Margin="5,0"/>
                 </Grid>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="相似歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="相似歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" FontWeight="Bold"/>
                 <WrapPanel x:Name="SimilarSingerList" Height="200" Orientation="Horizontal">
                     <local:SingerItem Height="200" Width="150" Margin="20,0,0,0"/>
                     <local:SingerItem Height="200" Width="150" Margin="20,0,0,0"/>

@@ -68,50 +68,48 @@ namespace LemonLib
         #region 搜索歌曲&搜索智能提示 (似乎不太智能)
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
-            if (HttpHelper.IsNetworkTrue)
+            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"http://59.37.96.220/soso/fcgi-bin/client_search_cp?format=json&t=0&inCharset=GB2312&outCharset=utf-8&qqmusic_ver=1302&catZhida=0&p={osx}&n=20&w={HttpUtility.UrlDecode(Content)}&flag_qc=0&remoteplace=sizer.newclient.song&new_json=1&lossless=0&aggr=1&cr=1&sem=0&force_zonghe=0"));
+            List<Music> dt = new List<Music>();
+            int i = 0;
+            var dsl = o["data"]["song"]["list"];
+            while (i < dsl.Count())
             {
-                JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"http://59.37.96.220/soso/fcgi-bin/client_search_cp?format=json&t=0&inCharset=GB2312&outCharset=utf-8&qqmusic_ver=1302&catZhida=0&p={osx}&n=20&w={HttpUtility.UrlDecode(Content)}&flag_qc=0&remoteplace=sizer.newclient.song&new_json=1&lossless=0&aggr=1&cr=1&sem=0&force_zonghe=0"));
-                List<Music> dt = new List<Music>();
-                int i = 0;
-                var dsl = o["data"]["song"]["list"];
-                while (i < dsl.Count())
+                var dsli = dsl[i];
+                Music m = new Music();
+                m.MusicName = dsli["title"].ToString();
+                m.MusicName_Lyric = dsli["lyric"].ToString();
+                string Singer = "";
+                List<MusicSinger> lm = new List<MusicSinger>();
+                for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
                 {
-                    var dsli = dsl[i];
-                    Music m = new Music();
-                    m.MusicName = dsli["title"].ToString();
-                    m.MusicName_Lyric = dsli["lyric"].ToString();
-                    string Singer = "";
-                    List<MusicSinger> lm = new List<MusicSinger>();
-                    for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
+                    Singer += dsli["singer"][osxc]["name"] + "&";
+                    lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid = dsli["singer"][osxc]["mid"].ToString() });
+                }
+                m.Singer = lm;
+                m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
+                m.MusicID = dsli["mid"].ToString();
+                var amid = dsli["album"]["mid"].ToString();
+                if (amid == "001ZaCQY2OxVMg")
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
+                if (amid != "")
+                    m.Album = new MusicGD()
                     {
-                        Singer += dsli["singer"][osxc]["name"] + "&";
-                        lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid = dsli["singer"][osxc]["mid"].ToString() });
-                    }
-                    m.Singer = lm;
-                    m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
-                    m.MusicID = dsli["mid"].ToString();
-                    var amid = dsli["album"]["mid"].ToString();
-                    if (amid == "001ZaCQY2OxVMg")
-                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
-                    else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
-                    if (amid != "")
-                        m.Album = new MusicGD() { ID = amid,
+                        ID = amid,
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name = dsli["album"]["name"].ToString()
                     };
-                    var file = dsli["file"];
-                    if (file["size_320"].ToString() != "0")
-                        m.Pz = "HQ";
-                    if (file["size_flac"].ToString() != "0")
-                        m.Pz = "SQ";
-                    m.Mvmid = dsli["mv"]["vid"].ToString();
-                    dt.Add(m);
-                    i++;
-                }
-                return dt;
+                var file = dsli["file"];
+                if (file["size_320"].ToString() != "0")
+                    m.Pz = "HQ";
+                if (file["size_flac"].ToString() != "0")
+                    m.Pz = "SQ";
+                m.Mvmid = dsli["mv"]["vid"].ToString();
+                dt.Add(m);
+                i++;
             }
-            else return null;
+            return dt;
         }
         public async Task<List<string>> Search_SmartBoxAsync(string key)
         {
@@ -893,41 +891,27 @@ jpg
         /// <returns></returns>
         public async Task<List<MusicTop>> GetTopIndexAsync()
         {
-            var dt = await HttpHelper.GetWebAsync("https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_opt.fcg?page=index&format=html&tpl=macv4&v8debug=1");
-            var sh = "{\"data\":" + dt.Replace("jsonCallback(", "").Replace("}]\n)", "") + "}]" + "}";
-            var o = JObject.Parse(sh);
+            var dt = await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?_=1580276407716&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1,%22ct%22:23,%22cv%22:0},%22topList%22:{%22module%22:%22musicToplist.ToplistInfoServer%22,%22method%22:%22GetAll%22,%22param%22:{}}}");
+            Console.WriteLine(dt);
+            var o = JObject.Parse(dt);
             var data = new List<MusicTop>();
-            int i = 0;
-            var d0l = o["data"][0]["List"];
-            foreach(var d in d0l)
+            var d0l = o["topList"]["data"]["group"];
+            foreach(var c in d0l)
             {
-                List<string> content = new List<string>();
-                foreach (var a in d["songlist"])
-                    content.Add(a["songname"] + " - " + a["singername"]);
-                data.Add(new MusicTop
+                var toplist = c["toplist"];
+                foreach (var d in toplist)
                 {
-                    Name = d["ListName"].ToString(),
-                    Photo = d["pic_v12"].ToString().Replace("http://", "https://"),
-                    ID = d["topID"].ToString(),
-                    content=content
-                });
-                i++;
-            }
-            i = 0;
-            var d1li = o["data"][1]["List"];
-            foreach(var d in d1li)
-            {
-                List<string> content = new List<string>();
-                foreach (var a in d["songlist"])
-                    content.Add(a["songname"] + " - " + a["singername"]);
-                data.Add(new MusicTop
-                {
-                    Name = d["ListName"].ToString(),
-                    Photo = d["pic_v12"].ToString().Replace("http://", "https://"),
-                    ID = d["topID"].ToString(),
-                    content=content
-                });
-                i++;
+                    List<string> content = new List<string>();
+                    foreach (var a in d["song"])
+                        content.Add(a["title"] + " - " + a["singerName"]);
+                    data.Add(new MusicTop
+                    {
+                        Name = d["title"].ToString(),
+                        Photo = d["frontPicUrl"].ToString().Replace("http://", "https://"),
+                        ID = d["topId"].ToString(),
+                        content = content
+                    });
+                }
             }
             return data;
         }
@@ -1016,6 +1000,7 @@ jpg
             var req1 = o["req_1"]["data"]["songList"];
             List<Music> HotSongs = new List<Music>();
             foreach (var c in req1) {
+                Debug.Print(c.ToString());
                 var data = c["songInfo"];
                 Music m = new Music();
                 m.MusicName = data["name"].ToString();
@@ -1037,6 +1022,12 @@ jpg
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
                     m.Album = new MusicGD() {Name = data["album"]["name"].ToString(),ID=amid,Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000"};
+                var file = data["file"];
+                if (file["size_320mp3"].ToString() != "0")
+                    m.Pz = "HQ";
+                if (file["size_flac"].ToString() != "0")
+                    m.Pz = "SQ";
+                m.Mvmid = data["mv"]["vid"].ToString();
                 HotSongs.Add(m);
             }
             //Part 3 是否关注此歌手
@@ -1228,6 +1219,11 @@ jpg
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
                         Name = dsli["albumname"].ToString()
                     };
+                if (dsli["size320"].ToString() != "0")
+                    m.Pz = "HQ";
+                if (dsli["sizeflac"].ToString() != "0")
+                    m.Pz = "SQ";
+                m.Mvmid = dsli["vid"].ToString();
                 dt.Add(m);
             }
             return dt;
@@ -1407,9 +1403,40 @@ jpg
                 m.SingerText = m.SingerText.Substring(0, m.SingerText.Length - 1);
                 NewMusic.Add(m);
             }
+            //---------官方歌单和达人歌单--------(QQ音乐的歌单和电台都是鸡肋)
+            JObject obj = JObject.Parse(await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?cgiKey=GetHomePage&_=1580282140913&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1},%22MusicHallHomePage%22:{%22module%22:%22music.musicHall.MusicHallPlatform%22,%22method%22:%22MobileWebHome%22,%22param%22:{%22ShelfId%22:[101,102]}}}"));
+            var data = obj["MusicHallHomePage"]["data"]["v_shelf"];
+            //--官方歌单--
+            var gf = data[0]["v_niche"][0]["v_card"];
+            List<MusicGD> gdList = new List<MusicGD>();
+            foreach (var ab in gf) {
+                MusicGD d = new MusicGD() {
+                    ID = ab["id"].ToString(),
+                    Name=ab["title"].ToString(),
+                    Photo=ab["cover"].ToString(),
+                    ListenCount=int.Parse(ab["cnt"].ToString())
+                };
+                gdList.Add(d);
+            }
+            //--达人歌单--
+            var dr = data[1]["v_niche"][0]["v_card"];
+            List<MusicGD> drList = new List<MusicGD>();
+            foreach (var ab in dr)
+            {
+                MusicGD d = new MusicGD()
+                {
+                    ID = ab["id"].ToString(),
+                    Name = ab["title"].ToString(),
+                    Photo = ab["cover"].ToString(),
+                    ListenCount = int.Parse(ab["cnt"].ToString())
+                };
+                drList.Add(d);
+            }
             return new HomePageData()
             {
                 focus = focus,
+                GFdata=gdList,
+                DRdata=drList,
                 Gdata = Gdata,
                 NewMusic = NewMusic
             };

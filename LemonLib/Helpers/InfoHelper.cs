@@ -19,6 +19,7 @@ namespace LemonLib
             public TextBlock tb;
             public UIElement Page;
             public Border Com;
+            public Thickness value = default;
             public string cmd="";
         }
         ////////Music Helper////////
@@ -36,6 +37,8 @@ namespace LemonLib
         }
         public class HomePageData {
             public List<IFVData> focus = new List<IFVData>();
+            public List<MusicGD> GFdata = new List<MusicGD>();
+            public List<MusicGD> DRdata = new List<MusicGD>();
             public List<MusicGD> Gdata = new List<MusicGD>();
             public List<Music> NewMusic = new List<Music>();
         }

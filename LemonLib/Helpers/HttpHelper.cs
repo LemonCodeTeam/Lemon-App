@@ -23,22 +23,15 @@ namespace LemonLib
         }
         public static async Task<string> GetWebAsync(string url, Encoding e = null)
         {
-            try
-            {
-                if (e == null)
-                    e = Encoding.UTF8;
-                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-                hwr.Timeout = 5000;
-                var o = await hwr.GetResponseAsync();
-                StreamReader sr = new StreamReader(o.GetResponseStream(), e);
-                var st = await sr.ReadToEndAsync();
-                sr.Dispose();
-                return st;
-            }
-            catch (TimeoutException)
-            {//超时重连
-                return await GetWebAsync(url, e);
-            }
+            if (e == null)
+                e = Encoding.UTF8;
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
+            hwr.Timeout = 5000;
+            var o = await hwr.GetResponseAsync();
+            StreamReader sr = new StreamReader(o.GetResponseStream(), e);
+            var st = await sr.ReadToEndAsync();
+            sr.Dispose();
+            return st;
         }
         public static WebHeaderCollection GetWebHeader_MKBlog()
         {
@@ -66,8 +59,6 @@ namespace LemonLib
         }
         public static string PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
-            try
-            {
                 byte[] postData = Encoding.UTF8.GetBytes(data);
                 HttpClient webClient = new HttpClient();
                 webClient.Timeout = 5000;
@@ -76,16 +67,9 @@ namespace LemonLib
                 byte[] responseData = webClient.UploadData(url, "POST", postData);
                 webClient.Dispose();
                 return Encoding.UTF8.GetString(responseData);
-            }
-            catch
-            {
-                return PostWeb(url, data, Header);
-            }
         }
         public static async Task<string> PostInycAsync(string url, string data)
         {
-            try
-            {
                 var r = (HttpWebRequest)WebRequest.Create(url);
                 r.Method = "POST";
                 r.ContentType = " application/x-www-form-urlencoded";
@@ -106,16 +90,9 @@ namespace LemonLib
                 writer.Close();
                 var response = (HttpWebResponse)await r.GetResponseAsync();
                 return await new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEndAsync();
-            }
-            catch
-            {
-                return await PostInycAsync(url, data);
-            }
         }
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
-            try
-            {
                 HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
                 hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
                 hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
@@ -137,19 +114,12 @@ namespace LemonLib
                 }
                 stream.Close();
                 responseStream.Close();
-            }
-            catch {
-                await HttpDownloadFileAsync(url, path);
-            }
         }
         public static async Task<string> GetWebDatacAsync(string url, Encoding c = null)
         {
-            try
-            {
                 Console.WriteLine(Settings.USettings.Cookie + "\r\n" + Settings.USettings.g_tk);
                 if (c == null) c = Encoding.UTF8;
                 HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-                hwr.Timeout = 5000;
                 hwr.KeepAlive = true;
                 hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
                 hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
@@ -164,26 +134,6 @@ namespace LemonLib
                 var st = await sr.ReadToEndAsync();
                 sr.Dispose();
                 return st;
-            }
-            catch {
-                return await GetWebDatacAsync(url, c);
-            }
-        }
-        public static bool IsNetworkTrue
-        {
-            get
-            {
-                try
-                {
-                    Ping ping = new Ping();
-                    PingReply La = ping.Send("www.mi.com");
-                    if (La.Status == IPStatus.Success)
-                        return true;
-                    else
-                        return false;
-                }
-                catch { return false; }
-            }
         }
     }
 }

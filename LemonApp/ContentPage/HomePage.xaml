@@ -10,12 +10,20 @@
     <LemonApp:MyScrollView x:Name="sv" >
         <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
             <LemonApp:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=page, Mode=OneWay}" Margin="10,0"/>
+            <Grid x:Name="GFGD" VerticalAlignment="Top">
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="官方歌单" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
+                <WrapPanel x:Name="HomePage_GFGD" Margin="0,50,0,0" Uid="4"/>
+            </Grid>
+            <Grid x:Name="DRGD" VerticalAlignment="Top">
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="达人歌单" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
+                <WrapPanel x:Name="HomePage_DRGD" Margin="0,50,0,0" Uid="4"/>
+            </Grid>
             <Grid x:Name="GDTJ" VerticalAlignment="Top">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
                 <WrapPanel x:Name="HomePage_Gdtj" Margin="0,50,0,0" Uid="4"/>
             </Grid>
             <Grid VerticalAlignment="Top">
-                <TextBlock x:Name="tb" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0"/>
+                <TextBlock x:Name="tb" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
                 <WrapPanel x:Name="HomePage_Nm" Margin="0,50,0,0" Uid="4"/>
             </Grid>
         </WrapPanel>

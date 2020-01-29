@@ -12,8 +12,8 @@ namespace LemonLib
         /// API调试台
         /// </summary>
         static async Task Main() {
-            string i=await MusicLib.GetUrlAsync("0032UZe62rZk9K");
-            Console.WriteLine(i);
+            var _ = await MusicLib.GetHomePageData();
+            Console.WriteLine(_.DRdata.Count);
             Console.ReadLine();
         }
 

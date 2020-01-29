@@ -38,9 +38,39 @@ namespace LemonApp.ContentPage
             //---------加载主页HomePage----动画加持--
             mw.OpenLoading();
             HomePage_IFV.Visibility = Visibility.Hidden;
+            GFGD.Visibility = Visibility.Hidden;
+            DRGD.Visibility = Visibility.Hidden;
             GDTJ.Visibility = Visibility.Hidden;
             var data = await MusicLib.GetHomePageData();
+            //--Top Focus--------
             HomePage_IFV.Updata(data.focus, mw);
+            //--官方歌单----------
+            foreach (var a in data.GFdata)
+            {
+                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                k.StarEvent += (sx) =>
+                {
+                    MusicLib.AddGDILike(sx.id);
+                    Toast.Send("收藏成功");
+                };
+                k.ImMouseDown += mw.FxGDMouseDown;
+                HomePage_GFGD.Children.Add(k);
+            }
+            mw.WidthUI(HomePage_GFGD);
+            //--达人歌单----------
+            foreach (var a in data.DRdata)
+            {
+                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                k.StarEvent += (sx) =>
+                {
+                    MusicLib.AddGDILike(sx.id);
+                    Toast.Send("收藏成功");
+                };
+                k.ImMouseDown += mw.FxGDMouseDown;
+                HomePage_DRGD.Children.Add(k);
+            }
+            mw.WidthUI(HomePage_DRGD);
+            //--歌单推荐----------
             foreach (var a in data.Gdata)
             {
                 var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
@@ -53,6 +83,7 @@ namespace LemonApp.ContentPage
                 HomePage_Gdtj.Children.Add(k);
             }
             mw.WidthUI(HomePage_Gdtj);
+            //--新歌首发----------
             foreach (var a in data.NewMusic)
             {
                 var k = new FLGDIndexItem(a.MusicID, a.MusicName + " - " + a.SingerText, a.ImageUrl, 0) { Width = 175, Height = 175, Margin = new Thickness(10, 0, 10, 20) };
@@ -67,10 +98,17 @@ namespace LemonApp.ContentPage
                 HomePage_Nm.Children.Add(k);
             }
             mw.WidthUI(HomePage_Nm);
+            //------------------
             mw.CloseLoading();
             await Task.Delay(50);
             HomePage_IFV.Visibility = Visibility.Visible;
             mw.RunAnimation(HomePage_IFV);
+            await Task.Delay(200);
+            GFGD.Visibility = Visibility.Visible;
+            mw.RunAnimation(GFGD);
+            await Task.Delay(200);
+            DRGD.Visibility = Visibility.Visible;
+            mw.RunAnimation(DRGD);
             await Task.Delay(200);
             GDTJ.Visibility = Visibility.Visible;
             mw.RunAnimation(GDTJ);

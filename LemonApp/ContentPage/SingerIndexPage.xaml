@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
      <LemonApp:MyScrollView x:Name="SingerPage_sv" ScrollChanged="SingerPage_sv_ScrollChanged">
             <WrapPanel Orientation="Vertical">
-                <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24"/>
+                <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
                 <WrapPanel Orientation="Vertical" Margin="15,5,0,0">
                     <WrapPanel x:Name="SingerABC">
                         <LemonApp:RbBox ContentText="热门"  Uid="-100" Margin="0,0,20,5"/>
