@@ -1247,7 +1247,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="5">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="{DynamicResource AppCornerRadius}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -1290,23 +1290,108 @@
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,350,75">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,300,0">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="PlayDLPage">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="350">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="300">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <CubicEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="20,40,45,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="20,40,45,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.5000000" Value="20,30,45,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseIn"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="textBlock1" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.8000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="textBlock1" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="20,70,10,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.5000000" Value="20,70,10,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.8000000" Value="20,60,10,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PlayDL_List" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.8000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="PlayDL_List" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,120,0,-20"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.8000000" Value="0,120,0,-20"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01" Value="0,100,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="PlayDLPage_IntoDataPage" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,40,20,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,40,20,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.5000000" Value="0,30,20,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PlayDLPage_IntoDataPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="PlayDL_Top" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,0,20,60"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01" Value="0,0,20,60"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01.3000000" Value="0,0,20,70"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PlayDL_Top" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.3000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PlayDL_GOTO" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.3000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.6000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="PlayDL_GOTO" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,0,20,10"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01.3000000" Value="0,0,20,10"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01.6000000" Value="0,0,20,20"/>
+            </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="ClosePlayDLPage">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="PlayDLPage_ClosePage">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,0,75">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,0,300,0"/>
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,0,0">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1449,7 +1534,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="5">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="{DynamicResource AppCornerRadius}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -1606,13 +1691,13 @@
                                     </Border.Background>
                                 </Border>
                             </Border>
-                            <Border x:Name="ChooseText" Background="White" CornerRadius="5" Margin="20" Width="280" Height="160" BorderThickness="1" BorderBrush="#FFDEDEDE" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
+                            <Border x:Name="ChooseText" Background="White" CornerRadius="{DynamicResource AppCornerRadius}" Margin="20" Width="280" Height="160" BorderThickness="1" BorderBrush="#FFDEDEDE" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
                                 <Grid>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="自定义主题颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
-                                    <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="170,40,0,0" Background="White" CornerRadius="5" MouseDown="Border_MouseDown_4">
+                                    <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="170,40,0,0" Background="White" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Border_MouseDown_4">
                                         <TextBlock TextWrapping="Wrap" Text="白色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
                                     </Border>
-                                    <Border HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,40,0,0" Background="#FF2D2D30" CornerRadius="5" MouseDown="Border_MouseDown_5">
+                                    <Border HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,40,0,0" Background="#FF2D2D30" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Border_MouseDown_5">
                                         <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE"/>
                                     </Border>
                                     <Border Height="35" VerticalAlignment="Bottom" Width="85" Margin="0,0,0,10"  MouseDown="MDButton_MouseDown" Background="{DynamicResource ThemeColor}" CornerRadius="10">
@@ -1621,7 +1706,7 @@
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="字体颜色:" VerticalAlignment="Top" Margin="10,45,0,0"/>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="主题颜色:" VerticalAlignment="Top" Margin="10,85,0,0"/>
                                     <Border x:Name="Skin_ChooseBox_Theme" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Margin="76,85,0,0" Background="{DynamicResource ThemeColor}"/>
-                                    <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,80,0,0" Background="White" CornerRadius="5" MouseDown="Border_MouseDown">
+                                    <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,80,0,0" Background="White" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Border_MouseDown">
                                         <TextBlock TextWrapping="Wrap" Text="选择" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
                                     </Border>
                                     <Border x:Name="Skin_ChooseBox_Font" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Margin="76,45,0,0" Background="Black"/>
@@ -1646,7 +1731,7 @@
                             </Border>
                             <Popup x:Name="IntoGDPop" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
                                 <Border x:Name="IntoGDPage" Effect="{DynamicResource WindowDrop}" Height="250" Width="360" >
-                                    <Border Height="210" Margin="20" Width="320" Background="{DynamicResource PlayDLPage_Bg}" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" CornerRadius="5" >
+                                    <Border Height="210" Margin="20" Width="320" Background="{DynamicResource PlayDLPage_Bg}" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" CornerRadius="{DynamicResource AppCornerRadius}" >
                                         <Grid>
                                             <Grid.Clip>
                                                 <RectangleGeometry RadiusX="5" RadiusY="5">
@@ -1683,7 +1768,7 @@
                             </Popup>
                             <lemonlib:MyPopup x:Name="AddGDPop" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
                                 <Border x:Name="AddGDPage" Effect="{DynamicResource WindowDrop}" Height="250" Width="360" >
-                                    <Border Height="210" Margin="20" Width="320" Background="{DynamicResource PlayDLPage_Bg}" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" CornerRadius="5" >
+                                    <Border Height="210" Margin="20" Width="320" Background="{DynamicResource PlayDLPage_Bg}" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" CornerRadius="{DynamicResource AppCornerRadius}" >
                                         <Grid>
                                             <Grid.Clip>
                                                 <RectangleGeometry RadiusX="5" RadiusY="5">
@@ -1699,7 +1784,7 @@
                                                 <TextBlock TextWrapping="Wrap" Text="创建" Foreground="#FFFDFDFD" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
                                             </Border>
                                             <TextBlock Height="18" Margin="146,55,10,0" TextWrapping="Wrap" Text="名称:" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
-                                            <Border x:Name="AddGDPage_Img" HorizontalAlignment="Left" Height="125" VerticalAlignment="Top" Width="125" Margin="10,30,0,0" CornerRadius="5">
+                                            <Border x:Name="AddGDPage_Img" HorizontalAlignment="Left" Height="125" VerticalAlignment="Top" Width="125" Margin="10,30,0,0" CornerRadius="{DynamicResource AppCornerRadius}">
                                                 <Border.Background>
                                                     <ImageBrush ImageSource="https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000"/>
                                                 </Border.Background>
@@ -1880,7 +1965,7 @@
                         </Grid>
                     </StackPanel>
                 </Grid>
-                <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" CornerRadius="5" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
+                <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" CornerRadius="{DynamicResource AppCornerRadius}" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
                     <ListBox x:Name="Search_SmartBoxList" VirtualizingPanel.VirtualizationMode="Recycling"
                         VirtualizingPanel.IsVirtualizing="True"  Style="{DynamicResource ListBoxStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle2}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" BorderThickness="0" Background="{DynamicResource PlayDLPage_Bg}" />
                 </Border>
@@ -1958,7 +2043,7 @@
                         <Path x:Name="path5" Data="M64.2887 526.511505l0-28.009937c0.255827-1.961678 0.521886-3.924379 0.760317-5.886057 2.851954-23.620977 4.167926-47.549969 8.832156-70.811766 14.083763-70.287833 43.99705-133.49848 88.957031-189.413977 48.498574-60.322877 108.580974-105.307418 180.201152-134.699842 42.823318-17.572214 87.363743-28.181853 133.580345-31.546483 7.624654-0.554632 15.242146-1.221828 22.864754-1.837858l25.00858 0c2.300392 0.265036 4.594645 0.680499 6.903224 0.769526 40.860617 1.629103 80.751139 8.746198 119.567189 21.526269 82.522482 27.164686 151.679561 74.249051 206.785623 141.312446 58.518788 71.213925 91.907223 153.003719 100.166327 244.948805 3.841491 42.792619 1.497097 85.23936-6.865361 127.334083-9.788947 49.266054-27.447119 95.578846-53.03796 138.808416-42.437531 71.684646-100.252285 127.659495-173.500543 167.203116-75.265194 40.634466-155.896606 57.843406-241.327324 52.55496-43.023886-2.663666-84.96102-10.900258-125.158535-26.301016-124.022665-47.52848-211.67191-132.775003-262.123976-255.745708-16.795525-40.937364-26.38288-83.73817-29.724998-127.897925C65.613882 541.375028 64.921103 533.944801 64.2887 526.511505L64.2887 526.511505zM512.174474 904.395972c217.750349-0.727571 392.276245-176.013783 392.001999-392.370389-0.274246-217.231533-175.272909-391.646911-391.82599-391.890458-216.513172-0.242524-392.081817 175.197184-392.257825 391.964136C119.921765 728.489636 295.690978 904.360156 512.174474 904.395972L512.174474 904.395972zM512.174474 904.395972 M686.870238 679.803797l-27.979238 0c-7.724938 0-13.990642-6.261611-13.990642-13.988596L644.900358 358.037443c0-7.722892 6.265704-13.990642 13.990642-13.990642l27.979238 0c7.729032 0 13.990642 6.26775 13.990642 13.990642l0 307.777759C700.859857 673.541163 694.598246 679.803797 686.870238 679.803797L686.870238 679.803797z M563.220057 467.950761c-58.490136-37.305651-133.724631-81.001849-191.854563-116.76333-28.942169-17.801435-48.226375-0.38988-48.226375 29.466102l0 260.597203c0 36.308951 19.049868 48.217165 48.402383 30.91715 63.307861-37.300534 146.037051-83.932598 200.252837-124.563994C599.17085 527.083533 591.658759 486.091934 563.220057 467.950761zM509.895571 525.050224c-30.166043 19.407002-85.557608 52.220339-114.964358 68.882833-9.683547 5.483898-15.690354 0.352017-15.690354-13.011338L379.240859 442.562535c0-12.919241 6.167466-17.626449 16.090467-12.010545 29.379121 16.644075 82.205257 49.037856 114.565269 68.653613C522.693038 506.95817 521.426185 517.635347 509.895571 525.050224z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
                     </Border>
                 </Grid>
-                <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" Grid.Column="1" CornerRadius="5" Height="50" Margin="-0.001,12,0,12" MouseRightButtonDown="MusicImage_MouseRightButtonDown">
+                <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" Grid.Column="1" CornerRadius="{DynamicResource AppCornerRadius}" Height="50" Margin="-0.001,12,0,12" MouseRightButtonDown="MusicImage_MouseRightButtonDown">
                     <Border.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF50AEEE" Offset="0"/>
@@ -2001,10 +2086,10 @@
                         <Grid>
                             <Popup x:Name="MoreBtn_Meum"  Placement="Top" HorizontalOffset="-65" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="5">
                                 <Border Height="166" Width="140">
-                                    <Border Height="126" Width="100" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="5" Effect="{DynamicResource WindowDrop}">
+                                    <Border Height="126" Width="100" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" Effect="{DynamicResource WindowDrop}">
                                         <Grid>
                                             <Popup x:Name="Gdpop" AllowsTransparency="True" Placement="Mouse">
-                                                <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="5" Margin="10" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1">
+                                                <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" Margin="10" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1">
                                                     <Grid>
                                                         <ListBox x:Name="Add_Gdlist"  VirtualizingPanel.VirtualizationMode="Recycling"
                                                             VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" >
@@ -2014,7 +2099,7 @@
                                                 </Border>
                                             </Popup>
                                             <Popup x:Name="SingerListPop" AllowsTransparency="True" Placement="Mouse">
-                                                <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="5" Margin="10" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1">
+                                                <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" Margin="10" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1">
                                                     <Grid>
                                                         <ListBox x:Name="Add_SLP"  VirtualizingPanel.VirtualizationMode="Recycling"
                                                             VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" >
@@ -2045,11 +2130,11 @@
             <LemonApp:TitlePageBtn x:Name="CloseBtn" MinOp="0" Margin="0,15,20,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown"/>
             <LemonApp:TitlePageBtn x:Name="MaxBtn" MinOp="0" Margin="0,15,50,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M0 0h1024v1024H0V0z m84.707556 85.447111v853.333333H937.528889v-853.333333H84.707556z" MouseDown="MaxBtn_MouseDown" VerticalAlignment="Top"/>
             <LemonApp:TitlePageBtn x:Name="MinBtn" MinOp="100" Margin="0,15,80,0" Width="20" Height="20" HorizontalAlignment="Right" MouseDown="MinBtn_MouseDown" VerticalAlignment="Top"/>
-            <Grid x:Name="PlayDLPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Right" Width="0" Margin="0,0,0,75">
+            <Grid x:Name="PlayDLPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Right" Width="0" Visibility="Visible" Effect="{DynamicResource WindowDrop}">
                 <Grid Height="100" VerticalAlignment="Top" Background="{DynamicResource PlayDLPage_Top}">
                     <Border Height="1" VerticalAlignment="Bottom" Background="{DynamicResource PlayDLPage_Border}"/>
-                    <TextBlock Margin="20,30,45,0" TextWrapping="Wrap" Text="播放队列" VerticalAlignment="Top" FontSize="18" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
-                    <TextBlock Margin="20,60,10,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Foreground="{DynamicResource PlayDLPage_Font_Low}"><Run x:Name="PlayDL_Count" Text="{Binding Items.Count, ElementName=PlayDL_List, Mode=OneWay}"/><Run Text="首歌曲"/></TextBlock>
+                    <TextBlock x:Name="textBlock" Margin="20,30,45,0" TextWrapping="Wrap" Text="播放队列" VerticalAlignment="Top" FontSize="18" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                    <TextBlock x:Name="textBlock1" Margin="20,60,10,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Foreground="{DynamicResource PlayDLPage_Font_Low}"><Run x:Name="PlayDL_Count" Text="{Binding Items.Count, ElementName=PlayDL_List, Mode=OneWay}"/><Run Text="首歌曲"/></TextBlock>
                     <Border x:Name="PlayDLPage_IntoDataPage" HorizontalAlignment="Right" Height="20" Margin="0,30,20,0" VerticalAlignment="Top" Width="20" Background="#00000000" MouseDown="PlayDLPage_IntoDataPage_MouseDown">
                         <Path Fill="#FFCBCBCB" Data="M435.73767,653.351702L490.502916,708.016664 686.060628,512.51728 490.502916,316.967754 435.73767,371.691045 537.430668,473.325715 158.029018,473.325716 158.029018,551.650517 537.430668,551.650517 435.73767,653.351702z M783.851765,160.502347L236.296515,160.502347C193.260393,160.502347,158.030042,195.675393,158.030042,238.652163L158.030042,395.175899 236.296515,395.175899 236.296515,238.652163 783.851765,238.652163 783.851765,786.32407 236.296515,786.32407 236.296515,629.858662 158.030042,629.858662 158.030042,786.32407C158.030042,829.350983,193.261416,864.533238,236.296515,864.533238L783.851765,864.533238C826.828536,864.533238,862.05991,829.350983,862.05991,786.32407L862.05991,238.652163C862.058886,195.675392,826.828535,160.502347,783.851765,160.502347" Stretch="Uniform" />
                     </Border>
@@ -2063,24 +2148,7 @@
                     <Path Data="M116.096 596.08064l90.86976 0 0 231.9872 42.48576 0 0-231.9872 90.86976 0 0-42.48064L116.096 553.6 116.096 596.08064zM574.63296 553.6 462.08512 553.6c-13.58848 0-27.18208 5.18656-37.54496 15.54944-10.37312 10.368-15.55456 23.9616-15.55456 37.5552l0 168.24832c0 13.5936 5.18144 27.1872 15.55456 37.5552 10.368 10.368 23.9616 15.55456 37.54496 15.55456l112.54784 0c13.58848 0 27.1872-5.18656 37.5552-15.55456s15.54944-23.9616 15.54944-37.5552l0-168.2432c0-13.59872-5.18144-27.1872-15.54944-37.56032C601.82016 558.78656 588.22656 553.6 574.63296 553.6L574.63296 553.6zM585.26208 774.95296c0 2.01216-0.54784 4.94592-3.10784 7.51616-2.57024 2.57024-5.50912 3.10784-7.51616 3.10784L462.08512 785.57696c-2.00704 0-4.93568-0.5376-7.50592-3.10784s-3.11296-5.504-3.11296-7.51616l0-168.2432c0-2.01216 0.54272-4.94592 3.11296-7.51616s5.49888-3.11296 7.50592-3.11296l112.54784 0c2.00704 0 4.94592 0.54272 7.50592 3.11296 2.57024 2.57024 3.11808 5.504 3.11808 7.51616L585.25696 774.95296 585.26208 774.95296zM892.34944 569.14944c-10.368-10.35776-23.96672-15.54944-37.5552-15.54944l-145.65376 0 0 274.46272 42.48064 0L751.62112 707.6864l103.17312 0c13.5936 0 27.1872-5.18656 37.5552-15.55456s15.55456-23.9616 15.55456-37.55008l0-47.87712C907.904 593.11104 902.72256 579.52256 892.34944 569.14944L892.34944 569.14944zM865.41824 654.58176c0 2.00704-0.5376 4.9408-3.10784 7.51104s-5.50912 3.10784-7.51104 3.10784l-103.168 0 0-69.12 103.168 0c2.00704 0 4.9408 0.54272 7.51104 3.11296s3.10784 5.504 3.10784 7.51616L865.41824 654.58176 865.41824 654.58176z M315.97056 370.06848c55.05024-49.60256 185.7024-167.31136 189.75744-170.89024 5.1456-4.54144 11.38688-3.97824 15.30368-0.384 2.74432 2.51904 138.49088 124.7488 191.22688 172.2368 8.30464 6.99392 6.10304 20.74112-4.31616 20.74112s-377.85088 0.09728-384.43008 0S308.56192 379.35616 315.97056 370.06848z" Stretch="Uniform" Fill="{DynamicResource PlayDLPage_Font_Low}" Width="20" Height="20"/>
                 </Border>
             </Grid>
-            <Grid x:Name="PlayDLPage_ClosePage" Margin="0,0,0,75" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed">
-                <Grid HorizontalAlignment="Right" Width="20">
-                    <Grid.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <LinearGradientBrush.RelativeTransform>
-                                <TransformGroup>
-                                    <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                                    <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                                    <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </LinearGradientBrush.RelativeTransform>
-                            <GradientStop Color="#33000000" Offset="0"/>
-                            <GradientStop Offset="1" Color="#00000000"/>
-                        </LinearGradientBrush>
-                    </Grid.Background>
-                </Grid>
-            </Grid>
+            <Grid x:Name="PlayDLPage_ClosePage" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed"/>
         </Grid>
     </Border>
 </Window>

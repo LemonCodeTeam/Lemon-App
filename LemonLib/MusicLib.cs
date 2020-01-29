@@ -907,7 +907,7 @@ jpg
                 data.Add(new MusicTop
                 {
                     Name = d["ListName"].ToString(),
-                    Photo = d["pic_v12"].ToString(),
+                    Photo = d["pic_v12"].ToString().Replace("http://", "https://"),
                     ID = d["topID"].ToString(),
                     content=content
                 });
@@ -923,7 +923,7 @@ jpg
                 data.Add(new MusicTop
                 {
                     Name = d["ListName"].ToString(),
-                    Photo = d["pic_v12"].ToString(),
+                    Photo = d["pic_v12"].ToString().Replace("http://", "https://"),
                     ID = d["topID"].ToString(),
                     content=content
                 });

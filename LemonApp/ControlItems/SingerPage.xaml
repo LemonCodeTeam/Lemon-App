@@ -39,7 +39,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="5">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="{DynamicResource AppCornerRadius}">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -126,17 +126,17 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Border x:Name="lx1" Margin="20,10" Height="80" Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="5" MouseDown="Lx1_MouseDown">
+                    <Border x:Name="lx1" Margin="20,10" Height="80" Background="#0C000000" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Lx1_MouseDown">
                         <Grid>
                             <TextBlock x:Name="Lx_Tit_1" Text="The Archer" VerticalAlignment="Top" Margin="75,10,10,0" Foreground="{DynamicResource PlayDLPage_Font_Most}" FontSize="22"/>
-                            <Border x:Name="Lx_Img_1" HorizontalAlignment="Left" Width="60" Height="60" Margin="10,0,0,0" CornerRadius="5" Background="#FFF3F3F3"/>
+                            <Border x:Name="Lx_Img_1" HorizontalAlignment="Left" Width="60" Height="60" Margin="10,0,0,0" CornerRadius="{DynamicResource AppCornerRadius}" Background="#FFF3F3F3"/>
                             <TextBlock x:Name="Lx_dat_1" TextWrapping="Wrap" Text="2019-07-03" VerticalAlignment="Top" Margin="75,40,10,0" Foreground="{DynamicResource PlayDLPage_Font_Low}" FontSize="16"/>
                         </Grid>
                     </Border>
-                    <Border x:Name="lx2" Margin="20,10" Height="80" Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="5" Grid.Column="1" MouseDown="Lx2_MouseDown">
+                    <Border x:Name="lx2" Margin="20,10" Height="80" Background="#0C000000" CornerRadius="{DynamicResource AppCornerRadius}" Grid.Column="1" MouseDown="Lx2_MouseDown">
                         <Grid>
                             <TextBlock x:Name="Lx_Tit_2" Text="The Archer" VerticalAlignment="Top" Margin="75,10,10,0" Foreground="{DynamicResource PlayDLPage_Font_Most}" FontSize="22"/>
-                            <Border x:Name="Lx_Img_2" HorizontalAlignment="Left" Width="60" Height="60" Margin="10,0,0,0" CornerRadius="5" Background="#FFF3F3F3"/>
+                            <Border x:Name="Lx_Img_2" HorizontalAlignment="Left" Width="60" Height="60" Margin="10,0,0,0" CornerRadius="{DynamicResource AppCornerRadius}" Background="#FFF3F3F3"/>
                             <TextBlock x:Name="Lx_dat_2" TextWrapping="Wrap" Text="2019-07-03" VerticalAlignment="Top" Margin="75,40,10,0" Foreground="{DynamicResource PlayDLPage_Font_Low}" FontSize="16"/>
                         </Grid>
                     </Border>

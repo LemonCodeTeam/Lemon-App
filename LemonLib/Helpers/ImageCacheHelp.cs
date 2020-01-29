@@ -44,23 +44,14 @@ namespace LemonLib
         private static BitmapImage GetImageFromFile(string url,int[] DecodePixel) {
             string file = Settings.USettings.CachePath + "\\Image\\" + TextHelper.MD5.EncryptToMD5string(url)+".jpg";
             if (File.Exists(file))
-                return new System.Drawing.Bitmap(file).ToBitmapImage(DecodePixel);
+                return new BitmapImage(new Uri(file, UriKind.Absolute));
             else return null;
         }
-        private static async void AddImageToFile(string url, BitmapImage data) {
-            await Task.Run(() => {
-                string filename = TextHelper.MD5.EncryptToMD5string(url) + ".jpg";
-                BitmapEncoder encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(data));
 
-                using (var fileStream = new FileStream(Settings.USettings.CachePath + "\\Image\\" + filename, FileMode.Create))
-                    encoder.Save(fileStream);
-            });
-        }
         private static async Task<BitmapImage> GetImageFromInternet(string url,int[] DecodePixel) {
-            WebClient wc = new WebClient();
-            BitmapImage bi = (await wc.DownloadDataTaskAsync(url)).ToBitmapImage(DecodePixel);
-            AddImageToFile(url, bi);
+            string file = Settings.USettings.CachePath + "\\Image\\" + TextHelper.MD5.EncryptToMD5string(url) + ".jpg";
+            await HttpHelper.HttpDownloadFileAsync(url, file);
+            BitmapImage bi = new BitmapImage(new Uri(file, UriKind.Absolute));
             AddImageToMemory(url, bi);
             return bi;
         }

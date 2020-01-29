@@ -235,7 +235,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Border x:Name="bg" CornerRadius="5">
+    <Border x:Name="bg" CornerRadius="{DynamicResource AppCornerRadius}">
         <Grid x:Name="grid" Background="#00000000">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>

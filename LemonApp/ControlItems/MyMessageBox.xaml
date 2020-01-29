@@ -10,7 +10,7 @@
     <Window.Effect>
         <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>
-    <Border Margin="20,20,20,20" CornerRadius="5" Background="White" VerticalAlignment="Center">
+    <Border Margin="20,20,20,20" CornerRadius="{DynamicResource AppCornerRadius}" Background="White" VerticalAlignment="Center">
         <Grid>
             <Border Height="160" VerticalAlignment="Top" Margin="10,0">
                 <Border.Background>
