@@ -852,7 +852,9 @@ namespace LemonApp
                     };
                     SkinIndexList.Children.Add(sc);
                 }
-                catch { }
+                catch(Exception ex) {
+                    App.BaseApp.CurrentDomain_UnhandledException(null, new UnhandledExceptionEventArgs(ex, true));
+                }
             }
             #endregion
             #region 在线主题

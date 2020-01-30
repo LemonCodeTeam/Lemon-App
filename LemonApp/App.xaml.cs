@@ -149,7 +149,7 @@ namespace LemonApp
             };
             BaseApp = this;
         }
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:"+EM + "\r\n" + ((Exception)e.ExceptionObject).Message + "\r\n 导致错误的对象名称:" + ((Exception)e.ExceptionObject).Source + "\r\n 引发异常的方法:" + ((Exception)e.ExceptionObject).TargetSite + "\r\n  帮助链接:" + ((Exception)e.ExceptionObject).HelpLink + "\r\n 调用堆:" + ((Exception)e.ExceptionObject).StackTrace;
             Console.WriteLine(i);
