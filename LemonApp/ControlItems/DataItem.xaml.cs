@@ -33,13 +33,16 @@ namespace LemonApp
         private bool needb = false;
         private bool needDeleteBtn;
         private int BtnWidth = 0;
-        public DataItem(Music dat, MainWindow mw,bool NeedDeleteBtn=false)
+
+        private int index;
+        public DataItem(Music dat, MainWindow mw,int inx=0,bool NeedDeleteBtn=false)
         {
             try
             {
                 InitializeComponent();
                 Mainwindow = mw;
                 music = dat;
+                index = inx;
                 needDeleteBtn = NeedDeleteBtn;
                 Loaded += DataItem_Loaded;
             }
@@ -261,11 +264,11 @@ namespace LemonApp
         {
             if (TwMessageBox.Show("确定要删除此歌曲吗?"))
             {
-                int index = He.MGData_Now.Data.IndexOf(music);
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
                 string Musicid = He.MGData_Now.ids[index];
-                Mainwindow.DataItemsList.Items.RemoveAt(index);
                 Toast.Send(MusicLib.DeleteMusicFromGD(Musicid, He.MGData_Now.id, dirid));
+                Mainwindow.DataItemsList.Items.Remove(this);
+                He.MGData_Now.Data.Remove(music);
             }
         }
 

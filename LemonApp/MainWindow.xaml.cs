@@ -953,8 +953,9 @@ namespace LemonApp
             DataItemsList.Items.Clear();
             int count = (int)(DataItemsList.ActualHeight
             / 45);
+            int index = 0;
             var dta = await MusicLib.GetAlbumSongListByIDAsync(id,new Action<Music, bool>((j, f) => {
-                var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j, this, index) { Width = ContentPage.ActualWidth };
                 DataItemsList.Items.Add(k);
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
@@ -962,6 +963,7 @@ namespace LemonApp
                 if (k.music.MusicID == MusicData.Data.MusicID)
                     k.ShowDx();
                 DataItemsList.Animation(k);
+                index++;
             }),this,new Action<string,string>(async (pic,name)=> {
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(pic));
                 TB.Text = name;
@@ -997,8 +999,9 @@ namespace LemonApp
                 DataItemsList.Items.Clear();
             }
             int count = (int)(DataItemsList.ActualHeight/ 45);
+            int index = 0;
             var dta = await ml.GetToplistAsync(g.Data.ID,new Action<Music, bool>((j,f)=> {
-                var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j, this,index) { Width = ContentPage.ActualWidth };
                 DataItemsList.Items.Add(k);
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
@@ -1012,6 +1015,7 @@ namespace LemonApp
                     k.Check();
                 }
                 DataItemsList.Animation(k);
+                index++;
             }),this,new Action(()=> {
                 CloseLoading();
             }),count, osx);
@@ -1401,7 +1405,7 @@ namespace LemonApp
                 DataItemsList.Items.Clear();
                 He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<int, Music, bool>((i, j, b) =>
                 {
-                    var k = new DataItem(j, this, b);
+                    var k = new DataItem(j, this, i,b);
                     DataItemsList.Items[i] = k;
                     k.Play += PlayMusic;
                     k.Width = DataItemsList.ActualWidth;
@@ -1620,7 +1624,7 @@ namespace LemonApp
                 int i = 0;
                 foreach (var j in dt)
                 {
-                    var k = new DataItem(j, this) { Width = ContentPage.ActualWidth };
+                    var k = new DataItem(j, this,i) { Width = ContentPage.ActualWidth };
                     DataItemsList.Items.Add(k);
                     if (k.music.MusicID == MusicData.Data.MusicID)
                     {
@@ -2528,7 +2532,7 @@ namespace LemonApp
             sw.Start();
             He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<int, Music, bool>((i, j, b) =>
             {
-                var k = new DataItem(j, this, b);
+                var k = new DataItem(j, this, i,b);
                 DataItemsList.Items[i] = k;
                 k.Play += PlayMusic;
                 k.GetToSingerPage += K_GetToSingerPage;
