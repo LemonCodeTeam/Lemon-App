@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -644,6 +645,20 @@ namespace LemonApp
                 UserSend_fj.TName = f.Name;
             }
         }
+        private void UserSend_fj_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog o = new OpenFileDialog();
+            o.Multiselect = true;
+            o.ShowDialog();
+            USFJFilePath = o.FileNames;
+            if (USFJFilePath.Count() > 1)
+                UserSend_fj.TName = "已选多个文件";
+            else
+            {
+                System.IO.FileInfo f = new System.IO.FileInfo(USFJFilePath[0]);
+                UserSend_fj.TName = f.Name;
+            }
+        }
         private void Run_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start("https://github.com/TwilightLemon/Lemon-App");
@@ -1029,12 +1044,7 @@ namespace LemonApp
             string dt = o["description"].ToString().Replace("@32", "\n");
             if (int.Parse(v) > int.Parse(App.EM))
             {
-                if (MyMessageBox.Show("小萌有更新啦", dt, "立即更新"))
-                {
-                    var xpath = Settings.USettings.CachePath + "win-release.exe";
-                    await HttpHelper.HttpDownloadFileAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/win-release.exe", xpath);
-                    Process.Start(xpath);
-                }
+                new UpdataBox(v, dt).ShowDialog();
             }
         }
         #endregion
@@ -2195,6 +2205,31 @@ namespace LemonApp
         }
         #endregion
         #region Lyric
+
+        private void LyricBig_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LyricAnimationMode == 0)
+                Settings.USettings.LyricAnimationMode = 1;
+            else Settings.USettings.LyricAnimationMode = 0;
+            CheckLyricAnimation(Settings.USettings.LyricAnimationMode);
+        }
+        private Storyboard LyricBigAniRound = null;
+        private void CheckLyricAnimation(int mode)
+        {
+            if (mode == 0)
+            {
+                LyricBigAniRound.Stop();
+                RotateTransform rtf = new RotateTransform();
+                LyricBig.RenderTransform = rtf;
+                DoubleAnimation dbAscending = new DoubleAnimation(0, new Duration
+                (TimeSpan.FromSeconds(2)));
+                rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
+            }
+            else
+            {
+                LyricBigAniRound.Begin();
+            }
+        }
         private void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
             Border_MouseDown_2(null, null);
@@ -2771,43 +2806,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void LyricBig_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Settings.USettings.LyricAnimationMode == 0)
-                Settings.USettings.LyricAnimationMode = 1;
-            else Settings.USettings.LyricAnimationMode = 0;
-            CheckLyricAnimation(Settings.USettings.LyricAnimationMode);
-        }
-        private Storyboard LyricBigAniRound = null;
-        private void CheckLyricAnimation(int mode) {
-            if (mode == 0)
-            {
-                LyricBigAniRound.Stop();
-                RotateTransform rtf = new RotateTransform();
-                LyricBig.RenderTransform = rtf;
-                DoubleAnimation dbAscending = new DoubleAnimation(0, new Duration
-                (TimeSpan.FromSeconds(2)));
-                rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
-            }
-            else {
-                LyricBigAniRound.Begin();
-            }
-        }
-
-        private void UserSend_fj_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            OpenFileDialog o = new OpenFileDialog();
-            o.Multiselect = true;
-            o.ShowDialog();
-            USFJFilePath = o.FileNames;
-            if (USFJFilePath.Count() > 1)
-                UserSend_fj.TName = "已选多个文件";
-            else
-            {
-                System.IO.FileInfo f = new System.IO.FileInfo(USFJFilePath[0]);
-                UserSend_fj.TName = f.Name;
-            }
-        }
     }
 }

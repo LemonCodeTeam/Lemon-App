@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LemonApp"
-        xmlns:LemonApp="clr-namespace:LemonApp" x:Class="LemonApp.MyMessageBox"
+        xmlns:LemonApp="clr-namespace:LemonApp" x:Class="LemonApp.UpdataBox"
         mc:Ignorable="d"
-        Title="MyMessageBox" Width="320" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="LemonApp Updata" Width="320" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Effect>
         <DropShadowEffect BlurRadius="20" Opacity="0.4" ShadowDepth="0"/>
     </Window.Effect>
@@ -47,13 +47,14 @@
                     </VisualBrush>
                 </Border.Background>
             </Border>
-            <TextBlock x:Name="title" Margin="10,155,10,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="#FF4EB7FB" FontSize="22" TextAlignment="Center"/>
-            <TextBlock x:Name="con" Margin="20,188,20,55" TextWrapping="Wrap" Text="TextBlock" Foreground="#FF999999"/>
-            <Border Height="35" Margin="74,0,76,10" VerticalAlignment="Bottom" Background="#FF4EB7FB" CornerRadius="18" MouseDown="Border_MouseDown">
-                <TextBlock x:Name="tb" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FFFDFDFD" FontSize="14"/>
+            <TextBlock x:Name="tb" Margin="10,155,10,0" TextWrapping="Wrap" Text="LemonApp有新版本啦" VerticalAlignment="Top" Foreground="#FF4EB7FB" FontSize="22" TextAlignment="Center"/>
+            <TextBlock x:Name="con" Margin="20,188,20,55" TextWrapping="Wrap" Text="TextBlock" Foreground="#FF999999" Visibility="Visible"/>
+            <Border x:Name="btn" Height="35" Margin="74,0,76,10" VerticalAlignment="Bottom" Background="#FF4EB7FB" CornerRadius="18" MouseDown="Border_MouseDown" Visibility="Visible">
+                <TextBlock TextWrapping="Wrap" Text="更新" VerticalAlignment="Center" TextAlignment="Center" Foreground="#FFFDFDFD" FontSize="14"/>
             </Border>
 
             <LemonApp:TitlePageBtn x:Name="CloseBtn" MinOp="0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Margin="0,5,5,0" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown"/>
+            <ProgressBar x:Name="pro" Height="5" Margin="20,188,20,10" VerticalAlignment="Top" Foreground="#FF4EB7FB" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Background="#FFF0F0F0" Visibility="Collapsed"/>
 
         </Grid>
     </Border>
