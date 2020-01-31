@@ -21,10 +21,12 @@ namespace LemonApp.ContentPage
     public partial class SingerIndexPage : UserControl
     {
         private MainWindow mw;
-        public SingerIndexPage(MainWindow m, ControlTemplate ct)
+        private Action GetTo;
+        public SingerIndexPage(MainWindow m, ControlTemplate ct,Action Gt)
         {
             InitializeComponent();
             mw = m;
+            GetTo = Gt;
             SingerPage_sv.Template = ct;
             SizeChanged += delegate {
                 mw.WidthUI(SingerItemsList);
@@ -130,6 +132,11 @@ namespace LemonApp.ContentPage
             foreach (var c in SingerGenre.Children)
                 (c as RbBox).Checked += SingerTabChecked_Genre;
             GetSingerList();
+        }
+
+        private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            GetTo();
         }
     }
 }

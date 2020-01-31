@@ -12,8 +12,9 @@ namespace LemonLib
         /// API调试台
         /// </summary>
         static async Task Main() {
-            var _ = await MusicLib.GetHomePageData();
-            Console.WriteLine(_.DRdata.Count);
+            await Settings.LoadUSettings("2728578956");
+            var _ = await MusicLib.GetSingerIFollowListAsync(1);
+            Console.WriteLine(_.Count);
             Console.ReadLine();
         }
 

@@ -1153,6 +1153,25 @@ jpg
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_del.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid={id}&rnd=1565150765773"));
             return o["code"].ToString() == "0";
         }
+        public static async Task<List<MusicSinger>> GetSingerIFollowListAsync(int index) {
+            int size = 30;
+            int from = 30 * (index - 1);
+            string str = await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22music.concern.RelationList%22%2C%22method%22%3A%22GetFollowSingerList%22%2C%22param%22%3A%7B%22From%22%3A" + from + "%2C%22Size%22%3A" + size + "%7D%7D%7D");
+            Console.WriteLine(str);
+            JToken obj = JObject.Parse(str)
+                ["singerList"]["data"]["List"];
+
+            List<MusicSinger> data = new List<MusicSinger>();
+            foreach (var a in obj) {
+                string mid = a["MID"].ToString();
+                data.Add(new MusicSinger() {
+                Mid=mid,
+                Name=a["Name"].ToString(),
+                Photo= "https://y.gtimg.cn/music/photo_new/T001R500x500M000"+mid+".jpg?max_age=2592000"
+                });
+            }
+            return data;
+        }
         /// <summary>
         /// 歌手列表
         /// </summary>
@@ -1168,7 +1187,6 @@ jpg
             var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?-=getUCGI6639758764435573&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data="+
                 $"%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22Music.SingerListServer%22%2C%22method%22%3A%22get_singer_list%22%2C%22param%22%3A%7B%22area%22%3A{area}%2C%22sex%22%3A{sex}%2C%22genre%22%3A{genre}%2C%22index%22%3A{index}%2C%22sin%22%3A{sin}%2C%22cur_page%22%3A{cur_page}%7D%7D%7D"));
             var data = new List<MusicSinger>();
-            int i = 0;
             var dl = o["singerList"]["data"]["singerlist"];
             foreach(var dli in dl)
             {
@@ -1178,7 +1196,6 @@ jpg
                     Mid=dli["singer_mid"].ToString(),
                     Photo = $"https://y.gtimg.cn/music/photo_new/T001R150x150M000{dli["singer_mid"]}.jpg?max_age=2592000"
                 });
-                i++;
             }
             return data;
         }

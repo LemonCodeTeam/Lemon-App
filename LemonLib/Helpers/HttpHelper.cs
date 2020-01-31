@@ -125,7 +125,7 @@ namespace LemonLib
                 hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
                 hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36";
                 hwr.Accept = "*/*";
-                hwr.Referer = "https://y.qq.com/portal/player.html";
+            hwr.Referer = "https://y.qq.com/portal/player.html";
                 hwr.Host = "c.y.qq.com";
                 hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
                 hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
@@ -134,6 +134,19 @@ namespace LemonLib
                 var st = await sr.ReadToEndAsync();
                 sr.Dispose();
                 return st;
+        }
+        public static async Task<string> GetWebDataqAsync(string url, Encoding c = null)
+        {
+            Console.WriteLine(Settings.USettings.Cookie + "\r\n" + Settings.USettings.g_tk);
+            if (c == null) c = Encoding.UTF8;
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
+            hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36";
+            hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+            var o = await hwr.GetResponseAsync();
+            StreamReader sr = new StreamReader(o.GetResponseStream(), c);
+            var st = await sr.ReadToEndAsync();
+            sr.Dispose();
+            return st;
         }
     }
 }

@@ -76,6 +76,7 @@ namespace LemonApp
                     var MV = (Border)XamlReader.Parse(@"<Border xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Height=""15"" Width=""30"" Background=""#00000000"">
                     <Path Data=""M878.028 244.364H145.842c-54.044 0-97.486 43.83-97.486 97.874v341.075c0 53.915 43.7 97.875 97.486 97.875h732.316c54.044 0 97.486-43.83 97.486-97.875V342.238c-0.129-53.915-43.7-97.874-97.616-97.874z m48.744 438.95c0 27.021-21.85 49.001-48.614 49.001H145.842c-26.893 0-48.614-21.98-48.614-49.002V342.238c0-27.022 21.85-49.002 48.614-49.002h732.316c26.893 0 48.614 21.98 48.614 49.002v341.075zM437.657 376.888h47.191v265.697h-47.191V463.903L358.4 568.372l-79.257-104.469v178.683h-47.062V376.889h47.192l79.256 106.796 79.128-106.796z m220.573 199.37l84.3-198.594h52.622L677.107 643.362h-38.141L520.92 377.665h52.881l84.428 198.594z"" Stretch=""Uniform"" Fill=""{DynamicResource PlayDLPage_Font_Low}""/>
                 </Border>");
+                    MV.Cursor = Cursors.Hand;
                     MV.MouseDown += MV_MouseDown;
                     wpl.Children.Add(MV);
                     BtnCount++;

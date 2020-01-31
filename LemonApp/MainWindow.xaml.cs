@@ -62,6 +62,7 @@ namespace LemonApp
         private SingerIndexPage ClSingerIndexPage = null;
         private FLGDIndexPage ClFLGDIndexPage = null;
         private RadioIndexPage ClRadioIndexPage = null;
+        private MyFollowSingerList ClMyFollowSingerList = null;
         #endregion
         #region 等待动画
         Thread tOL = null;
@@ -1281,10 +1282,18 @@ namespace LemonApp
         private void SingerBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (ClSingerIndexPage == null) {
-                ClSingerIndexPage = new SingerIndexPage(this, TemplateSv.Template);
+                ClSingerIndexPage = new SingerIndexPage(this, TemplateSv.Template,SingerGetToIFollow);
                 ContentPage.Children.Add(ClSingerIndexPage);
             }
             NSPage(new MeumInfo(SingerBtn, ClSingerIndexPage, SingerCom),true,false);
+        }
+        private void SingerGetToIFollow() {
+            if (ClMyFollowSingerList == null)
+            {
+                ClMyFollowSingerList = new MyFollowSingerList(this, TemplateSv.Template);
+                ContentPage.Children.Add(ClMyFollowSingerList);
+            }
+            NSPage(new MeumInfo(SingerBtn, ClMyFollowSingerList, TopCom), true, false);
         }
         #endregion
         #region FLGD 分类歌单
