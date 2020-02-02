@@ -8,24 +8,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="page_Loaded">
     <LemonApp:MyScrollView x:Name="sv" >
-        <WrapPanel x:Name="HomePage_Grid" Orientation="Vertical" VerticalAlignment="Top">
-            <LemonApp:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=page, Mode=OneWay}" Margin="10,0"/>
-            <Grid x:Name="GFGD" VerticalAlignment="Top">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="官方歌单" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
-                <WrapPanel x:Name="HomePage_GFGD" Margin="0,50,0,0" Uid="4"/>
+        <Grid Width="{Binding ActualWidth, ElementName=sv, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <WrapPanel x:Name="wrapPanel" HorizontalAlignment="Stretch" Orientation="Vertical" VerticalAlignment="Top" Margin="0,0,10,0">
+                <Grid x:Name="JCTJ" Width="{Binding ActualWidth, ElementName=wrapPanel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="精彩推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <LemonApp:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Margin="0,40,0,0"/>
+                </Grid>
+                <Grid x:Name="GFGD" VerticalAlignment="Top">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="官方歌单" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0" FontWeight="Bold"/>
+                    <WrapPanel x:Name="HomePage_GFGD" Margin="0,60,0,0" Uid="3"/>
+                </Grid>
+                <Grid x:Name="GDTJ" VerticalAlignment="Top">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0" FontWeight="Bold"/>
+                    <WrapPanel x:Name="HomePage_Gdtj" Margin="0,60,0,0" Uid="3"/>
+                </Grid>
+            </WrapPanel>
+            <Grid x:Name="NewSongs" VerticalAlignment="Stretch" Grid.Column="1">
+                <TextBlock x:Name="tb" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,20,0" FontWeight="Bold" Text="新歌首发"/>
+                <StackPanel x:Name="HomePage_Nm" Margin="0,50,0,0" Uid="1"/>
             </Grid>
-            <Grid x:Name="DRGD" VerticalAlignment="Top">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="达人歌单" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
-                <WrapPanel x:Name="HomePage_DRGD" Margin="0,50,0,0" Uid="4"/>
-            </Grid>
-            <Grid x:Name="GDTJ" VerticalAlignment="Top">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="歌单推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
-                <WrapPanel x:Name="HomePage_Gdtj" Margin="0,50,0,0" Uid="4"/>
-            </Grid>
-            <Grid VerticalAlignment="Top">
-                <TextBlock x:Name="tb" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,0,0,0" FontWeight="Bold"/>
-                <WrapPanel x:Name="HomePage_Nm" Margin="0,50,0,0" Uid="4"/>
-            </Grid>
-        </WrapPanel>
+        </Grid>
     </LemonApp:MyScrollView>
 </UserControl>

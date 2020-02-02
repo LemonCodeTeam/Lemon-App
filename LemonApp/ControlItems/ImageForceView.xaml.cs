@@ -26,36 +26,31 @@ namespace LemonApp
     {
         private List<IFVData> iv = new List<IFVData>();
         private int index = 0;
-        private int lastindex = 0;
-        private int lastcheck = -1;//0:Left 1:Right
+        private int lastindex = 0;//最后一个索引
+        private bool HasCheck=false;
         private MainWindow mw;
         public ImageForceView()
         {
             InitializeComponent();
-            M.MouseDown += PartMouseDown;
-            R.MouseDown += PartMouseDown;
-            L.MouseDown += PartMouseDown;
+            Image.MouseDown += PartMouseDown;
         }
         public async void Updata(List<IFVData> iFVData,MainWindow m) {
             iv = iFVData;
             index = 0;
             lastindex = iv.Count - 1;
             mw = m;
-            M.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
-            R.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[1].pic)) { Stretch = Stretch.Uniform };
-            L.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv.Last().pic)) { Stretch = Stretch.Uniform };
+            Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Fill };
         }
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             while (true) {
-                if (lastcheck != -1)
+                await Task.Delay(5000);
+                if (HasCheck)
                 {
-                    lastcheck = -1;
+                    HasCheck = false;
                     await Task.Delay(10000);
                 }
                 TurnRight();
-                (Resources["TurnRight"] as Storyboard).Begin();
-                await Task.Delay(5000);
             }
         }
 
@@ -94,32 +89,15 @@ namespace LemonApp
             else
                 index--;
             Console.WriteLine("LEFT" + index);
-            Border leftb = new Border(), mid = new Border(), righb = new Border();
-            foreach (Border bd in mj.Children)
-            {
-                //位于左边的
-                if (bd.Margin.Equals(new Thickness(0, 0, 350, 0)))
-                    leftb = bd;
-                //位于中间的
-                else if (bd.Margin.Equals(new Thickness(125, 0, 125, 0)))
-                    mid = bd;
-                //位于右边的
-                else if (bd.Margin.Equals(new Thickness(350, 0, 0, 0)))
-                    righb = bd;
-            }
-            righb.Background = mid.Background;
-            mid.Background = leftb.Background;
             if (index - 1 == -1)
-                leftb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[lastindex].pic)) { Stretch = Stretch.Uniform };
-            else leftb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index - 1].pic)) { Stretch = Stretch.Uniform };
+                Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[lastindex].pic)) { Stretch = Stretch.Fill};
+            else Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic)) { Stretch = Stretch.Fill };
+            (Resources["CheckAniLeft"] as Storyboard).Begin();
         }
         private void Left_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (lastcheck == 1)
-                TurnLeft();
             TurnLeft();
-            lastcheck = 0;
-            (Resources["TurnLeft"] as Storyboard).Begin();
+            HasCheck = true;
         }
 
         public async void TurnRight()
@@ -131,34 +109,17 @@ namespace LemonApp
                 else
                     index++;
                 Console.WriteLine("RIGHT:" + index);
-                Border leftb = new Border(), mid = new Border(), righb = new Border();
-                foreach (Border bd in mj.Children)
-                {
-                    //位于左边的
-                    if (bd.Margin.Equals(new Thickness(0, 0, 350, 0)))
-                        leftb = bd;
-                    //位于中间的
-                    else if (bd.Margin.Equals(new Thickness(125, 0, 125, 0)))
-                        mid = bd;
-                    //位于右边的
-                    else if (bd.Margin.Equals(new Thickness(350, 0, 0, 0)))
-                        righb = bd;
-                }
-                leftb.Background = mid.Background;
-                mid.Background = righb.Background;
                 if (index + 1 > lastindex)
-                    righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Uniform };
-                else righb.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index + 1].pic)) { Stretch = Stretch.Uniform };
+                    Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Fill };
+                else Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic)) { Stretch = Stretch.Fill };
+                (Resources["CheckAniRight"] as Storyboard).Begin();
             }
             catch { }
         }
         private void Right_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (lastcheck == 0)
-                TurnRight();
             TurnRight();
-            lastcheck = 1;
-            (Resources["TurnRight"] as Storyboard).Begin();
+            HasCheck = true;
         }
     }
 }

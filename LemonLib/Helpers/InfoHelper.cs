@@ -38,7 +38,6 @@ namespace LemonLib
         public class HomePageData {
             public List<IFVData> focus = new List<IFVData>();
             public List<MusicGD> GFdata = new List<MusicGD>();
-            public List<MusicGD> DRdata = new List<MusicGD>();
             public List<MusicGD> Gdata = new List<MusicGD>();
             public List<Music> NewMusic = new List<Music>();
         }

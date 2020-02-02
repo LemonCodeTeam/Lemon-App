@@ -33,7 +33,7 @@ namespace LemonApp
                 GetSingerList();
             };
         }
-        private async void GetSingerList(int cur_page = 1)
+        public async void GetSingerList(int cur_page = 1)
         {
             if (cur_page == 1)
                 ItemsList.Opacity = 0;

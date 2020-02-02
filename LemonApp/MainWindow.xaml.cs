@@ -311,9 +311,8 @@ namespace LemonApp
         private double now = 0;
         private double all = 0;
         private string lastlyric = "";
-        private Toast lyricTa = new Toast("", true);
-        private bool isOpenGc = true;
-        private void LoadMusicData()
+        private Toast lyricTa = null;
+        private async void LoadMusicData()
         {
             LoadSettings();
             //-------用户的头像、名称等配置加载
@@ -325,6 +324,31 @@ namespace LemonApp
                     var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
                     UserTX.Background = new ImageBrush(image.ToImageSource());
                 }
+                await Task.Run( async () => {
+                    var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                    Debug.WriteLine(sl);
+                    JObject j = JObject.Parse(sl);
+                    if (j["code"].ToString() == "0")
+                    {
+                        var sdc = JObject.Parse(sl)["data"]["creator"];
+                        await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.CachePath + Settings.USettings.LemonAreeunIts + ".jpg");
+                        string name = sdc["nick"].ToString();
+                        Settings.USettings.UserName = name;
+                        var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
+                        Dispatcher.Invoke(() =>
+                        {
+                            UserName.Text = name;
+                            UserTX.Background = new ImageBrush(image.ToImageSource());
+                        });
+                    }
+                    else {
+                        Dispatcher.Invoke(() =>
+                        {
+                            if (TwMessageBox.Show("登录已失效，请重新登录！"))
+                            UserTX_MouseDown(null, null);
+                        });
+                    }
+                });
             }
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
@@ -334,7 +358,7 @@ namespace LemonApp
             lv.NextLyric += (text) =>
             {
                 //主要用于桌面歌词的显示
-                if (isOpenGc)
+                if (Settings.USettings.DoesOpenDeskLyric)
                 {
                     if (lastlyric != text) if (text != "")
                             lyricTa.Updata(text);
@@ -342,6 +366,10 @@ namespace LemonApp
                 }
             };
             ml = new MusicLib( Settings.USettings.LemonAreeunIts, new WindowInteropHelper(this).Handle);
+            if (Settings.USettings.DoesOpenDeskLyric == true){
+                lyricTa = new Toast("", true);
+                path7.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
             //---------加载上一次播放
             if (Settings.USettings.Playing.MusicName != "")
             {
@@ -428,13 +456,6 @@ namespace LemonApp
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
             ds.Tick += delegate {if(t.Enabled)MusicLib.mp.UpdataDevice(); GC.Collect(); };
             ds.Start();
-            //------检测key是否有效-----------
-            if (Settings.USettings.LemonAreeunIts != "")
-            {
-                if (Settings.USettings.Cookie == "" || Settings.USettings.g_tk == "")
-                    if (TwMessageBox.Show("(￣▽￣)\"登录失效了，请重新登录"))
-                        UserTX_MouseDown(null, null);
-            }
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
@@ -509,7 +530,7 @@ namespace LemonApp
         /// 遍历调整宽度
         /// </summary>
         /// <param name="wp"></param>
-        public void WidthUI(WrapPanel wp)
+        public void WidthUI(WrapPanel wp,double? ContentWidth=null)
         {
             if (wp.Visibility == Visibility.Visible && wp.Children.Count > 0)
             {
@@ -517,18 +538,19 @@ namespace LemonApp
                 var uc = wp.Children[0] as UserControl;
                 double max = uc.MaxWidth;
                 double min = uc.MinWidth;
-                if (ContentPage.ActualWidth > (24 + max) * lineCount)
+                ContentWidth = ContentWidth ?? ContentPage.ActualWidth;
+                if (ContentWidth > (24 + max) * lineCount)
                     lineCount++;
-                else if (ContentPage.ActualWidth < (24 + min) * lineCount)
+                else if (ContentWidth < (24 + min) * lineCount)
                     lineCount--;
-                WidTX(wp, lineCount);
+                WidTX(wp, lineCount, (double)ContentWidth);
             }
         }
 
-        private void WidTX(WrapPanel wp, int lineCount)
+        private void WidTX(WrapPanel wp, int lineCount, double ContentWidth)
         {
             foreach (UserControl dx in wp.Children)
-                dx.Width = (ContentPage.ActualWidth - 24 * lineCount) / lineCount;
+                dx.Width = (ContentWidth - 24 * lineCount) / lineCount;
         }
         #endregion
         #endregion
@@ -563,6 +585,7 @@ namespace LemonApp
                     Console.WriteLine(sl);
                     var sdc = JObject.Parse(sl)["data"]["creator"];
                     await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.CachePath + qq + ".jpg");
+                    string name= sdc["nick"].ToString();
                     await Task.Run(async () =>
                     {
                         await Settings.LoadUSettings(qq);
@@ -571,15 +594,15 @@ namespace LemonApp
                             Settings.USettings.g_tk = TextHelper.XtoYGetTo(cdata, "g_tk[", "]sk", 0);
                             Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata, "Cookie[", "]END", 0);
                         }
-                        Settings.USettings.UserName = sdc["nick"].ToString();
+                        Settings.USettings.UserName = name;
                         Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
                         Settings.USettings.LemonAreeunIts = qq;
                         Settings.SaveSettings();
                         Settings.LSettings.qq = qq;
                         Settings.SaveLocaSettings();
                         Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
+                        this.Dispatcher.Invoke(()=> { Load_Theme(); });
                     });
-                    Load_Theme();
                 });
                 a();
             }
@@ -1122,11 +1145,13 @@ namespace LemonApp
                 ClTopPage = new TopPage(this,TemplateSv.Template);
                 ContentPage.Children.Add(ClTopPage);
             }
+            else { ClTopPage.LoadTopData(); }
             NSPage(new MeumInfo(TopBtn, ClTopPage, TopCom), true, false);
         }
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom));
+            ClHomePage.LoadHomePage();
         }
         //前后导航仪
         int QHNowPageIndex = 0;
@@ -1292,7 +1317,7 @@ namespace LemonApp
             {
                 ClMyFollowSingerList = new MyFollowSingerList(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClMyFollowSingerList);
-            }
+            }else ClMyFollowSingerList.GetSingerList();
             NSPage(new MeumInfo(SingerBtn, ClMyFollowSingerList, TopCom), true, false);
         }
         #endregion
@@ -1403,7 +1428,8 @@ namespace LemonApp
                 TB.Text = "我喜欢";
                 TXx.Background = Resources["LoveIcon"] as VisualBrush;
                 DataItemsList.Items.Clear();
-                He.MGData_Now = await MusicLib.GetGDAsync(MusicLib.MusicLikeGDid, new Action<int, Music, bool>((i, j, b) =>
+                string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
+                He.MGData_Now = await MusicLib.GetGDAsync(id, new Action<int, Music, bool>((i, j, b) =>
                 {
                     var k = new DataItem(j, this, i,b);
                     DataItemsList.Items[i] = k;
@@ -1944,9 +1970,9 @@ namespace LemonApp
 
         private void GcBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (isOpenGc)
+            if (Settings.USettings.DoesOpenDeskLyric)
             {
-                isOpenGc = false;
+                Settings.USettings.DoesOpenDeskLyric = false;
                 lyricTa.Close();
                 if (ind == 1)
                     path7.Fill = new SolidColorBrush(Colors.White);
@@ -1955,7 +1981,7 @@ namespace LemonApp
             }
             else
             {
-                isOpenGc = true;
+                Settings.USettings.DoesOpenDeskLyric = true;
                 lyricTa = new Toast("", true);
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
@@ -1977,7 +2003,7 @@ namespace LemonApp
             path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             path10.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             App.BaseApp.SetColor("ButtonColorBrush", LastButtonColor);
-            if (!isOpenGc) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            if (!Settings.USettings.DoesOpenDeskLyric) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             var ol = Resources["CloseLyricPage"] as Storyboard;
             ol.Begin();
@@ -2001,7 +2027,7 @@ namespace LemonApp
             path5.Fill = new SolidColorBrush(Colors.White);
             path6.Fill = new SolidColorBrush(Colors.White);
             path10.Fill = new SolidColorBrush(Colors.White);
-            if (!isOpenGc) path7.Fill = new SolidColorBrush(Colors.White);
+            if (!Settings.USettings.DoesOpenDeskLyric) path7.Fill = new SolidColorBrush(Colors.White);
             likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             var ol = Resources["OpenLyricPage"] as Storyboard;
             ol.Begin();
@@ -2283,6 +2309,8 @@ namespace LemonApp
             }
             else
             {
+                IntoGDPage_main.Visibility = Visibility.Collapsed;
+                IntoGDPage_loading.Visibility = Visibility.Visible;
                 ml.GetGDbyWYAsync(IntoGDPage_id.Text, this, IntoGDPage_ps_name, IntoGDPage_ps_jd,
                     () =>
                     {
@@ -2709,8 +2737,12 @@ namespace LemonApp
             System.Windows.Forms.ToolStripMenuItem exit = new System.Windows.Forms.ToolStripMenuItem("关闭");
             exit.Click += delegate
             {
-                MusicLib.mp.Free();
-                notifyIcon.Dispose();
+                try
+                {
+                    MusicLib.mp.Free();
+                    notifyIcon.Dispose();
+                }
+                catch { }
                 Settings.SaveSettings();
                 Environment.Exit(0);
             };

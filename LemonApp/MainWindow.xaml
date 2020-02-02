@@ -8,7 +8,7 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
         x:Class="LemonApp.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1070" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MinWidth="910" MinHeight="620" Background="{x:Null}">
+        Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MinWidth="910" MinHeight="620" Background="{x:Null}">
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -104,27 +104,16 @@
             </ControlTemplate.Resources>
             <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TickBar x:Name="TopTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,0,0,2" Placement="Top" Grid.Row="0" Visibility="Collapsed"/>
-                    <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Margin="0,2,0,0" Placement="Bottom" Grid.Row="2" Visibility="Collapsed"/>
-                    <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="0,0,0,0" Opacity="0.1" Margin="0,0,1,0">
-                        <Canvas>
-                            <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Visibility="Hidden"/>
-                        </Canvas>
-                    </Border>
+                    <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="0,0,0,0" Opacity="0.1" Margin="0,0,0,0"/>
                     <Track x:Name="PART_Track" Grid.Row="1">
                         <Track.DecreaseRepeatButton>
-                            <RepeatButton x:Name="Qm" Margin="0,0,-11,0" Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
+                            <RepeatButton x:Name="Qm" Margin="0,0,0,0" Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
                         </Track.DecreaseRepeatButton>
                         <Track.IncreaseRepeatButton>
                             <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{DynamicResource RepeatButtonStyle}"/>
                         </Track.IncreaseRepeatButton>
                         <Track.Thumb>
-                            <Thumb x:Name="Thumb" Focusable="False" Height="12" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbHorizontalDefault}" VerticalAlignment="Center" Width="12" Background="Black" Opacity="0"/>
+                            <Thumb x:Name="Thumb" Focusable="False" Height="12" OverridesDefaultStyle="True" Template="{StaticResource SliderThumbHorizontalDefault}" VerticalAlignment="Center" Width="12" Background="Black" Opacity="0" Margin="-6,0,6,0"/>
                         </Track.Thumb>
                     </Track>
                 </Grid>
@@ -140,22 +129,15 @@
                     <BeginStoryboard x:Name="OnMouseLeave1_BeginStoryboard" Storyboard="{StaticResource OnMouseLeave1}"/>
                 </EventTrigger>
                 <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
                     <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalTop}"/>
                     <Setter Property="Margin" TargetName="TrackBackground" Value="5,2,5,0"/>
                 </Trigger>
                 <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
                     <Setter Property="Template" TargetName="Thumb" Value="{StaticResource SliderThumbHorizontalBottom}"/>
                     <Setter Property="Margin" TargetName="TrackBackground" Value="5,0,5,2"/>
                 </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsSelectionRangeEnabled" Value="true">
-                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
-                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both"/>
+                <Trigger Property="IsSelectionRangeEnabled" Value="true"/>
                 <Trigger Property="IsKeyboardFocused" Value="true">
                     <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
                 </Trigger>
@@ -1775,7 +1757,7 @@
                                                 </Border>
                                                 <TextBox x:Name="IntoGDPage_id" Height="23" Margin="0,70,0,0" TextWrapping="Wrap" Text="歌单ID   例如:2591355982" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" Foreground="{DynamicResource PlayDLPage_Font_Most}" Background="{DynamicResource PlayDLPage_Bg}" BorderBrush="{DynamicResource PlayDLPage_Border}"/>
                                                 <Border x:Name="IntoGDPage_DrBtn"  Height="35" VerticalAlignment="Top" Width="120" Margin="0,105,0,0" CornerRadius="20" Background="{DynamicResource ThemeColor}" MouseDown="IntoGDPage_DrBtn_MouseDown">
-                                                    <TextBlock TextWrapping="Wrap" Text="导入" Foreground="#FFFDFDFD" FontSize="20" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock TextWrapping="Wrap" Text="导入" Foreground="#FFFDFDFD" FontSize="14" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Border>
                                             </Grid>
                                             <Grid x:Name="IntoGDPage_loading" Margin="10,5,5,70" Visibility="Collapsed">
@@ -1802,7 +1784,7 @@
                                             <TextBlock Height="18" Margin="28,7,28,0" TextWrapping="Wrap" Text="创建歌单" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}" TextAlignment="Center"/>
                                             <TextBox x:Name="AddGDPage_name" Height="23" Margin="146,73,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" Foreground="{DynamicResource PlayDLPage_Font_Most}" Background="{DynamicResource PlayDLPage_Bg}" BorderBrush="{DynamicResource PlayDLPage_Border}"/>
                                             <Border x:Name="AddGDPage_DrBtn"  Height="35" VerticalAlignment="Bottom" Width="120" Margin="0,0,0,10" CornerRadius="20" Background="{DynamicResource ThemeColor}" MouseDown="AddGDPage_DrBtn_MouseDown">
-                                                <TextBlock TextWrapping="Wrap" Text="创建" Foreground="#FFFDFDFD" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+                                                <TextBlock TextWrapping="Wrap" Text="创建" Foreground="#FFFDFDFD" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14"/>
                                             </Border>
                                             <TextBlock Height="18" Margin="146,55,10,0" TextWrapping="Wrap" Text="名称:" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
                                             <Border x:Name="AddGDPage_Img" HorizontalAlignment="Left" Height="125" VerticalAlignment="Top" Width="125" Margin="10,30,0,0" CornerRadius="{DynamicResource AppCornerRadius}">
@@ -2079,7 +2061,7 @@
                 <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Bottom" Grid.Column="1" Margin="60,0,82,35"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
                         <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" />
                     </InlineUIContainer></TextBlock>
-                <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,8,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged"/>
+                <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,10,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="9"/>
                 <WrapPanel Grid.Column="1" Margin="0,0,10,35" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <!--Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
                     <Grid>
@@ -2099,7 +2081,7 @@
                 </WrapPanel>
                 <WrapPanel Grid.Column="2" Margin="13,29,20,29" Orientation="Horizontal" VerticalAlignment="Center">
                     <Border x:Name="GcBtn" HorizontalAlignment="Right" Width="15" Height="15" Background="#00000000" MouseDown="GcBtn_MouseDown" Margin="0">
-                        <Path x:Name="path7" Data="M267.31290994,336.0572459L267.31290994,816.61622664C299.13858517,786.97741836,333.16080231,752.98423003,370.45364197,714.57860402L391.29660469,799.05356336C330.94490654,861.59212748,266.21947743,917.55073983,198.19439504,965.82629201L167.48150614,895.6046677C182.83795058,881.34165672,191.62412019,865.98521131,191.62412022,848.422549L191.62412022,411.76538751 32.53445177,411.76538751 32.53445177,336.0572459z M349.56229756,180.26722879L295.80022712,235.13240865C249.73089379,181.36066225,186.09889717,124.30861643,107.11045611,65.07938056L161.98531193,11.30763417C236.60002105,67.26624654,299.13858515,123.21518295,349.6010033,180.26722879z M748.92661841,1002.02569917L729.23514775,926.31755658 858.71503673,928.53345235C894.9144439,928.53345235,913.55118682,908.77424618,913.55118682,869.27518767L913.55118682,121.02831698 389.09038585,121.02831698 389.09038585,46.41360787 991.46554823,46.41360787 991.46554823,892.30501636C991.46554823,964.73285951,951.98584259,1002.02569917,875.18426654,1002.02569917z M837.80433947,250.47917715L837.80433947,326.18731877 414.33610933,326.18731877 414.33610933,250.47917715z M793.94122401,445.77792871L793.94122401,785.88398489 453.83516879,785.88398489 453.83516879,445.77792871z M719.35554467,514.90611955L530.66577271,514.90611955 530.66577271,716.76546999 719.35554467,716.76546999z" Stretch="Uniform" Fill="{DynamicResource ThemeColor}" StrokeThickness="5"/>
+                        <Path x:Name="path7" Data="M267.31290994,336.0572459L267.31290994,816.61622664C299.13858517,786.97741836,333.16080231,752.98423003,370.45364197,714.57860402L391.29660469,799.05356336C330.94490654,861.59212748,266.21947743,917.55073983,198.19439504,965.82629201L167.48150614,895.6046677C182.83795058,881.34165672,191.62412019,865.98521131,191.62412022,848.422549L191.62412022,411.76538751 32.53445177,411.76538751 32.53445177,336.0572459z M349.56229756,180.26722879L295.80022712,235.13240865C249.73089379,181.36066225,186.09889717,124.30861643,107.11045611,65.07938056L161.98531193,11.30763417C236.60002105,67.26624654,299.13858515,123.21518295,349.6010033,180.26722879z M748.92661841,1002.02569917L729.23514775,926.31755658 858.71503673,928.53345235C894.9144439,928.53345235,913.55118682,908.77424618,913.55118682,869.27518767L913.55118682,121.02831698 389.09038585,121.02831698 389.09038585,46.41360787 991.46554823,46.41360787 991.46554823,892.30501636C991.46554823,964.73285951,951.98584259,1002.02569917,875.18426654,1002.02569917z M837.80433947,250.47917715L837.80433947,326.18731877 414.33610933,326.18731877 414.33610933,250.47917715z M793.94122401,445.77792871L793.94122401,785.88398489 453.83516879,785.88398489 453.83516879,445.77792871z M719.35554467,514.90611955L530.66577271,514.90611955 530.66577271,716.76546999 719.35554467,716.76546999z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                     </Border>
                     <Border x:Name="likeBtn" HorizontalAlignment="Right" Width="15" Height="15" MouseDown="likeBtn_MouseDown" Background="#00000000" Margin="18,0,0,0">
                         <Path x:Name="likeBtn_path" Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>

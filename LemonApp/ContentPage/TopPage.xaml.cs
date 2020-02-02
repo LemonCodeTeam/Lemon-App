@@ -29,7 +29,7 @@ namespace LemonApp.ContentPage
                 mw.WidthUI(topIndexList);
             };
         }
-        private async void LoadTopData()
+        public async void LoadTopData()
         {
             mw.OpenLoading();
             var dt = await mw.ml.GetTopIndexAsync();

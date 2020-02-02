@@ -62,7 +62,7 @@ namespace LemonLib
         #region 一些字段
         public static MusicPlayer mp;
         public static string qq = "";
-        public static string MusicLikeGDid = "";
+        public static string MusicLikeGDid = null;
         public static string MusicLikeGDdirid = "";
         #endregion
         #region 搜索歌曲&搜索智能提示 (似乎不太智能)
@@ -387,7 +387,7 @@ jpg
         /// <summary>
         /// 获取“我喜欢”的歌单ID
         /// </summary>
-        public async void GetMusicLikeGDid()
+        public async Task<string> GetMusicLikeGDid()
         {
             try
             {
@@ -404,8 +404,9 @@ jpg
                 }
                 MusicLikeGDid = id;
                 MusicLikeGDdirid = await GetGDdiridByNameAsync("我喜欢");
+                return id;
             }
-            catch { }
+            catch { return null; }
         }
         /// <summary>
         /// 通过歌单ID 获取其中的歌曲和歌单信息
@@ -1420,10 +1421,9 @@ jpg
                 m.SingerText = m.SingerText.Substring(0, m.SingerText.Length - 1);
                 NewMusic.Add(m);
             }
-            //---------官方歌单和达人歌单--------(QQ音乐的歌单和电台都是鸡肋)
-            JObject obj = JObject.Parse(await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?cgiKey=GetHomePage&_=1580282140913&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1},%22MusicHallHomePage%22:{%22module%22:%22music.musicHall.MusicHallPlatform%22,%22method%22:%22MobileWebHome%22,%22param%22:{%22ShelfId%22:[101,102]}}}"));
+            //---------官方歌单--------(QQ音乐的歌单和电台都是鸡肋)
+            JObject obj = JObject.Parse(await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?cgiKey=GetHomePage&_=1580282140913&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1},%22MusicHallHomePage%22:{%22module%22:%22music.musicHall.MusicHallPlatform%22,%22method%22:%22MobileWebHome%22,%22param%22:{%22ShelfId%22:[101]}}}"));
             var data = obj["MusicHallHomePage"]["data"]["v_shelf"];
-            //--官方歌单--
             var gf = data[0]["v_niche"][0]["v_card"];
             List<MusicGD> gdList = new List<MusicGD>();
             foreach (var ab in gf) {
@@ -1435,25 +1435,10 @@ jpg
                 };
                 gdList.Add(d);
             }
-            //--达人歌单--
-            var dr = data[1]["v_niche"][0]["v_card"];
-            List<MusicGD> drList = new List<MusicGD>();
-            foreach (var ab in dr)
-            {
-                MusicGD d = new MusicGD()
-                {
-                    ID = ab["id"].ToString(),
-                    Name = ab["title"].ToString(),
-                    Photo = ab["cover"].ToString(),
-                    ListenCount = int.Parse(ab["cnt"].ToString())
-                };
-                drList.Add(d);
-            }
             return new HomePageData()
             {
                 focus = focus,
                 GFdata=gdList,
-                DRdata=drList,
                 Gdata = Gdata,
                 NewMusic = NewMusic
             };

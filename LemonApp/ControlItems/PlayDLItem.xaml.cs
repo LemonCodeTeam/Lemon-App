@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,23 @@ namespace LemonApp
             SingerName.Text = m.SingerText;
             MusicName.Text = m.MusicName;
         }
+        public PlayDLItem(Music m,bool NeedImg,string imgUrl)
+        {
+            InitializeComponent();
+            Loaded += async delegate {
+                if (NeedImg)
+                {
+                    img.Visibility = Visibility.Visible;
+                    SingerName.Margin = new Thickness(61, 32, 10, 0);
+                    MusicName.Margin = new Thickness(61, 12, 10, 0);
+                    RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.Fant);
+                    img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(imgUrl, new int[2] { 200, 200 }));
+                }
+            };
+            Data = m;
+            SingerName.Text = m.SingerText;
+            MusicName.Text = m.MusicName;
+        }
         public void p(bool isp) {
             PD.LastPD.v(false);
             v(isp);
@@ -50,6 +68,16 @@ namespace LemonApp
                 SingerName.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Low");
             }
             PD.LastPD = this;
+        }
+
+        private void UserControl_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Borderbg.Background = Resources["Touched"] as SolidColorBrush;
+        }
+
+        private void UserControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Borderbg.Background = null;
         }
     }
 

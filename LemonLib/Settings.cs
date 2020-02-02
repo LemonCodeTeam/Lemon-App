@@ -101,6 +101,8 @@ namespace LemonLib
             }
             if (data.Contains("LyricAnimationMode"))
                 USettings.LyricAnimationMode = int.Parse(o["LyricAnimationMode"].ToString());
+            if (data.Contains("DoesOpenDeskLyric"))
+                USettings.DoesOpenDeskLyric = bool.Parse(o["DoesOpenDeskLyric"].ToString());
             if (data.Contains("IsRoundMusicImage"))
                 USettings.IsRoundMusicImage = int.Parse(o["IsRoundMusicImage"].ToString());
             if (data.Contains("DownloadName"))
@@ -152,6 +154,8 @@ namespace LemonLib
             //启动歌词页动效
             //0=波澜 1=转动
             public int LyricAnimationMode { get; set; } = 0;
+            //是否打开桌面歌词
+            public bool DoesOpenDeskLyric { get; set; } = true;
             public string Skin_Path { get; set; } = "";
             public string Skin_txt { get; set; } = "";
             public string Skin_Theme_R { get; set; } = "";
