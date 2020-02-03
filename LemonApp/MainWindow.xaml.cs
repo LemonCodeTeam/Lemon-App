@@ -2627,6 +2627,13 @@ namespace LemonApp
             MvPlay_ME.Play();
             mvpath.Data = Geometry.Parse(mvpause);
             mvt.Start();
+            //加载评论
+            List<MusicPL> data = await MusicLib.GetMVPL(MvPlay_Tb.Uid);
+            MVPlList.Children.Clear();
+            foreach (var dt in data)
+            {
+                MVPlList.Children.Add(new PlControl(dt) { Width = MvPage.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+            }
             if (isplay) PlayBtn_MouseDown(null, null);
         }
         private void Mvt_Tick(object sender, EventArgs e)
@@ -2638,17 +2645,7 @@ namespace LemonApp
             Mvplay_jdtb_now.Text = TextHelper.TimeSpanToms(jd_now);
             Mvplay_jd.Value = jd_now.TotalMilliseconds;
         }
-        private async void MvPlay_PL_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            NSPage(new MeumInfo(null, MusicPLPage, null));
-            MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
-            List<MusicPL> data = await MusicLib.GetMVPL(MvPlay_Tb.Uid);
-            MusicPlList.Children.Clear();
-            foreach (var dt in data)
-            {
-                MusicPlList.Children.Add(new PlControl(dt) { Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
-            }
-        }
+
         private void Mvplay_plps_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (MVplaying)

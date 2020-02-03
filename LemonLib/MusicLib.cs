@@ -43,7 +43,7 @@ namespace LemonLib
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
             qq = id;
             mp = new MusicPlayer(win);
-            GetMusicLikeGDid();
+            new Action(async() => { await GetMusicLikeGDid(); })();
         }
         public MusicLib()
         {
@@ -1460,7 +1460,7 @@ jpg
                     text = TextHelper.Exem(hcc_i["rootcommentcontent"].ToString().Replace(@"\n", "\n")),
                     commentid = hcc_i["commentid"].ToString()
                 };
-                DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+                DateTime dtStart = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
                 long lTime = long.Parse(hcc_i["time"].ToString() + "0000000");
                 TimeSpan toNow = new TimeSpan(lTime);
                 DateTime daTime = dtStart.Add(toNow);
@@ -1540,7 +1540,7 @@ jpg
                     text =TextHelper.Exem(hcc_i["rootcommentcontent"].ToString().Replace(@"\n", "\n")),
                     commentid = hcc_i["commentid"].ToString()
                 };
-                DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+                DateTime dtStart = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
                 long lTime = long.Parse(hcc_i["time"].ToString() + "0000000");
                 TimeSpan toNow = new TimeSpan(lTime);
                 DateTime daTime = dtStart.Add(toNow);
