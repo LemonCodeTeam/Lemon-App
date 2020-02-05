@@ -315,6 +315,9 @@ namespace LemonApp
         private async void LoadMusicData()
         {
             LoadSettings();
+            MainClass.DebugCallBack = (s) => {
+                Console.WriteLine(s);
+            };
             //-------用户的头像、名称等配置加载
             if (Settings.USettings.UserName != string.Empty)
             {
@@ -984,10 +987,13 @@ namespace LemonApp
                     k.ShowDx();
                 DataItemsList.Animation(k);
                 index++;
-            }),this,new Action<string,string>(async (pic,name)=> {
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(pic));
-                TB.Text = name;
-            }),count);
+            }),this,async (md)=> {
+                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.Creater.Photo));
+                DataPage_Creater.Text = md.Creater.Name;
+                DataPage_Sim.Text = md.desc;
+                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.pic));
+                TB.Text = md.name;
+            },count);
         }
         #endregion
         #region Top 排行榜
@@ -1014,6 +1020,9 @@ namespace LemonApp
             if (osx == 1)
             {
                 NSPage(new MeumInfo(null,Data,null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\""+g.Data.ID+"\",\"name\":\""+g.Data.Name+ "\",\"img\":\"" + g.Data.Photo + "\"}" },NeedSave, false);
+                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
+                DataPage_Creater.Text = "QQ音乐官方";
+                DataPage_Sim.Text = g.Data.desc;
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
@@ -1062,7 +1071,9 @@ namespace LemonApp
                 Storyboard.SetTarget(ac, TPage);
                 if (ac is ThicknessAnimationUsingKeyFrames)
                 {
-                    (ac as ThicknessAnimationUsingKeyFrames).KeyFrames[1].Value = value;
+                    var ta = ac as ThicknessAnimationUsingKeyFrames;
+                    ta.KeyFrames[0].Value = new Thickness(200, value.Top, -200, value.Bottom);
+                    ta.KeyFrames[1].Value = value;
                 }
             }
             sb.Begin();
@@ -1429,9 +1440,15 @@ namespace LemonApp
                 TXx.Background = Resources["LoveIcon"] as VisualBrush;
                 DataItemsList.Items.Clear();
                 string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
-                He.MGData_Now = await MusicLib.GetGDAsync(id, new Action<int, Music, bool>((i, j, b) =>
-                {
-                    var k = new DataItem(j, this, i,b);
+                He.MGData_Now = await MusicLib.GetGDAsync(id,
+                   (dt) =>{Dispatcher.Invoke(async () =>{
+                                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo));
+                                DataPage_Creater.Text = dt.Creater.Name;
+                                DataPage_Sim.Text = dt.desc;
+                          });
+                    },
+                    new Action<int, Music, bool>((i, j, b) =>{
+                    var k = new DataItem(j, this, i, b);
                     DataItemsList.Items[i] = k;
                     k.Play += PlayMusic;
                     k.Width = DataItemsList.ActualWidth;
@@ -1492,8 +1509,9 @@ namespace LemonApp
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DataPage_DownloadMod = true;
-            border5.Visibility = Visibility.Collapsed;
+            DataPage_MainInfo.Visibility = Visibility.Collapsed;
             DataDownloadPage.Visibility = Visibility.Visible;
+            DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 50, 0, 0), TimeSpan.FromSeconds(0)));
             Download_Path.Text = Settings.USettings.DownloadPath;
             DownloadQx.IsChecked = true;
             DownloadQx.Content = "全不选";
@@ -1508,7 +1526,10 @@ namespace LemonApp
         public void CloseDownloadPage()
         {
             DataPage_DownloadMod = false;
-            border5.Visibility = Visibility.Visible;
+            DataPage_MainInfo.Visibility = Visibility.Visible;
+            if (HB == 1)
+                DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 80, 0, 0), TimeSpan.FromSeconds(0)));
+            else DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 200, 0, 0), TimeSpan.FromSeconds(0)));
             DataDownloadPage.Visibility = Visibility.Collapsed;
             foreach (DataItem x in DataItemsList.Items)
             {
@@ -1518,7 +1539,7 @@ namespace LemonApp
             }
         }
 
-        private void DataDownloadBtn_Copy_MouseDown(object sender, MouseButtonEventArgs e)
+        private void DataDownloadBtn_Back_MouseDown(object sender, MouseButtonEventArgs e)
         {
             CloseDownloadPage();
         }
@@ -1537,8 +1558,27 @@ namespace LemonApp
         {
             Datasv = sender as ScrollViewer;
         }
+        int HB = 0;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            Console.WriteLine(Datasv.VerticalOffset);
+            if (!DataPage_DownloadMod &&np != NowPage.Search)
+                if (Datasv.VerticalOffset >= 100)
+                {
+                    if (HB == 0)
+                    {
+                        HB = 1;
+                        (Resources["DataPage_Min"] as Storyboard).Begin();
+                    }
+                }
+                else
+                {
+                    if (HB == 1)
+                    {
+                        HB = 0;
+                        (Resources["DataPage_Max"] as Storyboard).Begin();
+                    }
+                }
             if (Datasv.IsVerticalScrollBarAtButtom())
             {
                 if (np == NowPage.Search)
@@ -1643,6 +1683,8 @@ namespace LemonApp
                     TB.Text = key;
                     DataItemsList.Items.Clear();
                     if (Datasv != null) Datasv.ScrollToTop();
+                    HB = 1;
+                    (Resources["DataPage_Min"] as Storyboard).Begin();
                 }
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                 if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" }, NeedSave, false);
@@ -2583,8 +2625,15 @@ namespace LemonApp
             OpenLoading();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            He.MGData_Now = await MusicLib.GetGDAsync(dt.id, new Action<int, Music, bool>((i, j, b) =>
-            {
+            He.MGData_Now = await MusicLib.GetGDAsync(dt.id,
+                (dt) => {
+                    Dispatcher.Invoke(async() => {
+                        DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo));
+                        DataPage_Creater.Text = dt.Creater.Name;
+                        DataPage_Sim.Text = dt.desc;
+                    });
+                },
+                new Action<int, Music, bool>((i, j, b) =>{
                 var k = new DataItem(j, this, i,b);
                 DataItemsList.Items[i] = k;
                 k.Play += PlayMusic;

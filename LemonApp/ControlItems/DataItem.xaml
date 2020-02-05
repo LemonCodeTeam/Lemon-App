@@ -243,7 +243,7 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <WrapPanel x:Name="wpl" Margin="10,0" Height="16" SizeChanged="UserControl_SizeChanged">
-                <TextBlock x:Name="namss" TextWrapping="NoWrap" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center"><Run  x:Name="name" Text="Tb00000"/><Run Text="  "/><InlineUIContainer>
+                <TextBlock x:Name="namss" TextWrapping="NoWrap" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center" TextTrimming="None"><Run  x:Name="name" Text="Tb00000"/><Run Text="  "/><InlineUIContainer>
                         <TextBlock  x:Name="mss"  Text="mss" Opacity="0.6"/>
                     </InlineUIContainer></TextBlock>
             </WrapPanel>

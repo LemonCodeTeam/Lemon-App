@@ -6,7 +6,7 @@ using Un4seen.Bass;
 
 namespace LemonLib
 {
-    class MainClass
+    public class MainClass
     {
         /// <summary>
         /// API调试台
@@ -17,7 +17,7 @@ namespace LemonLib
             Console.WriteLine(_.Count);
             Console.ReadLine();
         }
-
+        public static Action<string> DebugCallBack;
         #region #DEBUG 评论获取/点赞测试:
         /*
             Settings.LoadUSettings("2728578956");

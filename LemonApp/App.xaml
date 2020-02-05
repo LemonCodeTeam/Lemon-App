@@ -6,6 +6,13 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="SCDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <!--全局TextBlock文本样式-->
+            <Style TargetType="{x:Type TextBlock}">
+                <Style.Setters>
+                    <!--超出范围加省略号-->
+                    <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+                </Style.Setters>
+            </Style>
             <!--全局圆角-->
             <CornerRadius x:Key="AppCornerRadius">10,10,10,10</CornerRadius>
             <!--主题颜色 默认值:#FF31C27C-->

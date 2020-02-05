@@ -416,7 +416,7 @@ jpg
         /// <param name="wx"></param>
         /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<int,Music, bool> callback = null, Window wx = null,Action<int> getAll=null)
+        public static async Task<MusicGData> GetGDAsync(string id = "2591355982",Action<MusicGData> GetInfo=null, Action<int,Music, bool> callback = null, Window wx = null,Action<int> getAll=null)
         {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
             Console.WriteLine(s);
@@ -428,6 +428,12 @@ jpg
             dt.id = id;
             dt.ids = c0["songids"].ToString().Split(',').ToList();
             dt.IsOwn = c0["login"].ToString() == c0["uin"].ToString();
+            dt.desc = c0["desc"].ToString();
+            dt.Creater = new MusicSinger() { 
+               Name=c0["nick"].ToString(),
+               Photo=c0["headurl"].ToString()
+            };
+            GetInfo(dt);
             var c0s = c0["songlist"];
             await wx.Dispatcher.BeginInvoke(new Action(() => getAll(c0s.Count())));
             Parallel.For(0, c0s.Count(), async (index) =>
@@ -893,7 +899,6 @@ jpg
         public async Task<List<MusicTop>> GetTopIndexAsync()
         {
             var dt = await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?_=1580276407716&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1,%22ct%22:23,%22cv%22:0},%22topList%22:{%22module%22:%22musicToplist.ToplistInfoServer%22,%22method%22:%22GetAll%22,%22param%22:{}}}");
-            Console.WriteLine(dt);
             var o = JObject.Parse(dt);
             var data = new List<MusicTop>();
             var d0l = o["topList"]["data"]["group"];
@@ -910,6 +915,7 @@ jpg
                         Name = d["title"].ToString(),
                         Photo = d["frontPicUrl"].ToString().Replace("http://", "https://"),
                         ID = d["topId"].ToString(),
+                        desc="["+d["titleShare"] +"] "+d["intro"].ToString().Replace("<br>", ""),
                         content = content
                     });
                 }
@@ -1322,16 +1328,21 @@ jpg
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetAlbumSongListByIDAsync(string id,Action<Music, bool> callback, Window wx, Action<string,string> getImformation,int aniCount)
+        public static async Task<MusicGData> GetAlbumSongListByIDAsync(string id,Action<Music, bool> callback, Window wx, Action<MusicGData> getImformation,int aniCount)
         {
             string json = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid={id}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_begin=0&song_num=50");
             JObject o = JObject.Parse(json);
             MusicGData md = new MusicGData();
             md.pic = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{id}.jpg?max_age=2592000";
-            md.name = "专辑: " + o["data"]["name"] + " - " + o["data"]["singername"];
+            md.name = o["data"]["name"].ToString();
             var data = new List<Music>();
             var list = o["data"]["list"];
-            wx.Dispatcher.Invoke(()=> { getImformation(md.pic, md.name); });
+            md.desc = o["data"]["desc"].ToString().Replace("\r","").Replace("\n","");
+            md.Creater = new MusicSinger(){
+                Name = o["data"]["singername"].ToString(),
+                Photo = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{o["data"]["singermid"].ToString()}.jpg?max_age=2592000"
+            };
+            wx.Dispatcher.Invoke(()=> { getImformation(md); });
             int i = 0;
             foreach (var a in list)
             {
@@ -1431,7 +1442,7 @@ jpg
                     ID = ab["id"].ToString(),
                     Name=ab["title"].ToString(),
                     Photo=ab["cover"].ToString(),
-                    ListenCount=int.Parse(ab["cnt"].ToString())
+                    ListenCount=int.Parse(ab["cnt"].ToString()),
                 };
                 gdList.Add(d);
             }

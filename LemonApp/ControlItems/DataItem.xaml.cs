@@ -95,7 +95,14 @@ namespace LemonApp
                 </Border>"));
                     BtnCount++;
                 }
-                BtnWidth = 32 * BtnCount + 5;
+                if (ns)
+                    NSDownload(ns);
+                if (isChecked){
+                    GO.Visibility = Visibility.Visible;
+                    CheckView.SetResourceReference(BorderBrushProperty, "ThemeColor");
+                    isChecked = true;
+                }
+                 BtnWidth = 32 * BtnCount + 5;
                 if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
                     namss.Width = wpl.ActualWidth - 101;
                 LoadUI();
@@ -276,7 +283,7 @@ namespace LemonApp
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
             Buttons.Visibility = Visibility.Visible;
-            if (isChecked)
+            if (ns)
                 wpl.Margin = new Thickness(60, 10, 80, 10);
             else wpl.Margin = new Thickness(10, 10, 80, 10);
             if (needb)DeleteBtn.Visibility = Visibility.Visible;
@@ -286,7 +293,7 @@ namespace LemonApp
         {
             Buttons.Visibility = Visibility.Collapsed;
             DeleteBtn.Visibility = Visibility.Collapsed;
-            if (isChecked)
+            if (ns)
                 wpl.Margin = new Thickness(60, 10, 10, 10);
             else wpl.Margin = new Thickness(10, 10, 10, 10);
         }

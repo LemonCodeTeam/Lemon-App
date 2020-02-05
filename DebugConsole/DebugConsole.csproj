@@ -1,15 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Authors>TwilightLemon</Authors>
-    <AssemblyVersion>1.1.3.2</AssemblyVersion>
-    <FileVersion>1.1.3.2</FileVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Optimize>true</Optimize>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
 </Project>

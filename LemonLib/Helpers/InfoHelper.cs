@@ -122,6 +122,7 @@ namespace LemonLib
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
+            public string desc;
             public List<string> content { set; get; }
         }
         public class MusicPL {
@@ -160,6 +161,9 @@ namespace LemonLib
             public string name { get; set; }
             public string pic { get; set; }
             public string subtitle { get; set; }
+
+            public string desc;
+            public MusicSinger Creater;
             public string id { get; set; }
             public bool IsOwn = false;
             public int listenCount { get; set; }
