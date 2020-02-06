@@ -195,16 +195,23 @@ namespace LemonLib
             return new string[2] { msg, title };
         }
         /// <summary>
-        /// 从我的歌单里删除一首歌
+        /// 从我的歌单里删除歌曲(可批量)
         /// </summary>
-        /// <param name="Musicid"></param>
-        /// <param name="Dissid"></param>
-        /// <param name="dirid"></param>
+        /// <param name="Musicid">Array 歌曲id(s)</param>
+        /// <param name="dirid">歌单id</param>
         /// <returns></returns>
-        public static string DeleteMusicFromGD(string Musicid, string Dissid, string dirid)
+        public static string DeleteMusicFromGD(string[] Musicids, string dirid)
         {
+            string Musicid = "";
+            string types = "";
+            foreach (string id in Musicids)
+            {
+                types += "3,";
+            }
+            Musicid = string.Join(",", Musicids);
+            types = types[0..^1];
             string result = HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types=3&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types={types}&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             string ok = JObject.Parse(result)["msg"].ToString();
             return ok;
         }

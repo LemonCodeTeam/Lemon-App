@@ -49,7 +49,7 @@ namespace LemonApp
                 if (DownloadMode) {
                     k.Play -= K_Play;
                     k.NSDownload(true);
-                    k.Check();
+                    k.Check(true);
                 }
                 MusicItemsList.Items.Add(k);
             }
@@ -78,13 +78,13 @@ namespace LemonApp
             {
                 d.Content = "全不选";
                 foreach (DataItem x in MusicItemsList.Items)
-                { x.isChecked = false; x.Check(); }
+                { x.isChecked = false; x.Check(true); }
             }
             else
             {
                 d.Content = "全选";
                 foreach (DataItem x in MusicItemsList.Items)
-                { x.isChecked = true; x.Check(); }
+                { x.isChecked = true; x.Check(false); }
             }
         }
 
@@ -117,7 +117,7 @@ namespace LemonApp
             {
                 x.Play -= K_Play;
                 x.NSDownload(true);
-                x.Check();
+                x.Check(true);
             }
         }
 
@@ -130,7 +130,7 @@ namespace LemonApp
             {
                 x.Play += K_Play;
                 x.NSDownload(false);
-                x.Check();
+                x.Check(false);
             }
         }
 

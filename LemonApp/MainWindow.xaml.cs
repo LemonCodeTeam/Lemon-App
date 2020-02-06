@@ -1041,7 +1041,7 @@ namespace LemonApp
                 {
                     k.MouseDown -= PlayMusic;
                     k.NSDownload(true);
-                    k.Check();
+                    k.Check(true);
                 }
                 DataItemsList.Animation(k);
                 index++;
@@ -1407,7 +1407,7 @@ namespace LemonApp
                 {
                     LikeBtnUp();
                     Settings.USettings.MusicLike.Remove(MusicData.Data.MusicID);
-                    string a = MusicLib.DeleteMusicFromGD(MusicData.Data.MusicID, MusicLib.MusicLikeGDid, MusicLib.MusicLikeGDdirid);
+                    string a = MusicLib.DeleteMusicFromGD(new string[1]{MusicData.Data.MusicID}, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a);
                 }
                 else
@@ -1515,11 +1515,15 @@ namespace LemonApp
             Download_Path.Text = Settings.USettings.DownloadPath;
             DownloadQx.IsChecked = true;
             DownloadQx.Content = "全不选";
-            foreach (DataItem x in DataItemsList.Items)
+            foreach (var xs in DataItemsList.Items)
             {
-                x.MouseDown -= PlayMusic;
-                x.NSDownload(true);
-                x.Check();
+                if (xs is DataItem)
+                {
+                    var x = xs as DataItem;
+                    x.MouseDown -= PlayMusic;
+                    x.NSDownload(true);
+                    x.Check(true);
+                }
             }
         }
 
@@ -1531,11 +1535,15 @@ namespace LemonApp
                 DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 80, 0, 0), TimeSpan.FromSeconds(0)));
             else DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 200, 0, 0), TimeSpan.FromSeconds(0)));
             DataDownloadPage.Visibility = Visibility.Collapsed;
-            foreach (DataItem x in DataItemsList.Items)
+            foreach (var xs in DataItemsList.Items)
             {
-                x.MouseDown += PlayMusic;
-                x.NSDownload(false);
-                x.Check();
+                if (xs is DataItem)
+                {
+                    var x = xs as DataItem;
+                    x.MouseDown += PlayMusic;
+                    x.NSDownload(false);
+                    x.Check(false);
+                }
             }
         }
 
@@ -1705,7 +1713,7 @@ namespace LemonApp
                     {
                         k.MouseDown -= PlayMusic;
                         k.NSDownload(true);
-                        k.Check();
+                        k.Check(true);
                     }
                     DataItemsList.Animation(k);
                     if (i <= aniCount)
@@ -2458,13 +2466,13 @@ namespace LemonApp
             {
                 d.Content = "全不选";
                 foreach (DataItem x in DataItemsList.Items)
-                { x.isChecked = false; x.Check(); }
+                { x.Check(true); }
             }
             else
             {
                 d.Content = "全选";
                 foreach (DataItem x in DataItemsList.Items)
-                { x.isChecked = true; x.Check(); }
+                { x.Check(false); }
             }
         }
         private void Download_Btn_MouseDown(object sender, MouseButtonEventArgs e)

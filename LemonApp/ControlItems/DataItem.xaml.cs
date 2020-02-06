@@ -95,45 +95,21 @@ namespace LemonApp
                 </Border>"));
                     BtnCount++;
                 }
-                if (ns)
-                    NSDownload(ns);
-                if (isChecked){
-                    GO.Visibility = Visibility.Visible;
-                    CheckView.SetResourceReference(BorderBrushProperty, "ThemeColor");
-                    isChecked = true;
-                }
                  BtnWidth = 32 * BtnCount + 5;
                 if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
                     namss.Width = wpl.ActualWidth - 101;
                 LoadUI();
             }
         }
-        private Border CheckView;
-        private Border GO;
+        private Border CheckView=null;
+        private Border GO=null;
 
         private Grid Buttons;
         private Popup Gdpop;
         private ListBox Add_Gdlist;
         private TitlePageBtn DeleteBtn;
         private void LoadUI() {
-            string CheckViewxaml = @"<Border xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource TextX1ColorBrush}"" Visibility=""Collapsed"">
-                <Border x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
-                    <Border.Background>
-                        <VisualBrush Stretch=""Uniform"">
-                            <VisualBrush.Visual>
-                                <Grid>
-                                    <Path Data=""M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909L64.698182,554.821818A59.578182,59.578182,0,0,1,64.698182,469.178182A61.905455,61.905455,0,0,1,151.738182,469.178182L418.909091,734.021818A60.043636,60.043636,0,0,1,418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z"" Fill=""{DynamicResource ThemeColor}""/>
-                                    <Path Data=""M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909A60.043636,60.043636,0,0,1,333.730909,734.021818L872.261818,203.869091A61.905455,61.905455,0,0,1,959.301818,203.869091A60.043636,60.043636,0,0,1,959.301818,289.978182L418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z"" Fill=""{DynamicResource ThemeColor}""/>
-                                </Grid>
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Border.Background>
-                </Border>
-            </Border>";
-            CheckView = (Border)XamlReader.Parse(CheckViewxaml);
-            GO = (Border)CheckView.Child;
-            grid.Children.Add(CheckView);
-
+            //TODO: 优化性能 控件在需要之时创建
             string Buttonsxaml = @"<Grid xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""Buttons"" Margin=""0,15,10,15"" HorizontalAlignment=""Right"" Width=""65"" Visibility=""Collapsed""/>";
             Buttons = (Grid)XamlReader.Parse(Buttonsxaml);
             TitlePageBtn DownloadBtn = new TitlePageBtn() { Pathness=new Thickness(0),PathData=Geometry.Parse("M168.064,498.7008L493.9008,824.5376C496.2944,826.9312 499.0848,828.7232 502.0416,829.9648 502.0544,829.9648 502.0544,829.9776 502.0672,829.9776 503.3216,830.5024 504.6144,830.8608 505.92,831.1808 506.2656,831.2704 506.5856,831.4112 506.944,831.488 510.2848,832.1536 513.728,832.1536 517.056,831.488 517.4144,831.4112 517.7344,831.2704 518.08,831.1808 519.3856,830.8608 520.6784,830.5024 521.9328,829.9776 521.9456,829.9648 521.9584,829.9648 521.984,829.952 524.9408,828.7104 527.7056,826.9184 530.0992,824.5248L855.936,498.7008C865.8944,488.7424 865.8944,472.448 855.936,462.5024 845.9776,452.544 829.6832,452.544 819.7376,462.5024L537.6,744.64 537.6,89.6128C537.6,75.5328 526.08,64.0128 512,64.0128 497.92,64.0128 486.4,75.5328 486.4,89.6128L486.4,744.64 204.2624,462.5024C194.304,452.544 178.0096,452.544 168.064,462.5024 158.1056,472.4608 158.1056,488.7424 168.064,498.7008z M972.8,729.6L972.8,857.6C972.8,885.8752,949.8752,908.8,921.6,908.8L102.4,908.8C74.1248,908.8,51.2,885.8752,51.2,857.6L51.2,729.6C51.2,715.456,39.744,704,25.6,704L25.6,704C11.456,704,0,715.456,0,729.6L0,857.6C0,913.92,46.08,960,102.4,960L921.6,960C977.92,960,1024,913.92,1024,857.6L1024,729.6C1024,715.456,1012.544,704,998.4,704L998.4,704C984.256,704,972.8,715.456,972.8,729.6z"),Height=15,Width=15,HorizontalAlignment=HorizontalAlignment.Right };
@@ -164,6 +140,27 @@ namespace LemonApp
             DeleteBtn.MouseDown += DeleteBtn_MouseDown;
             Grid.SetColumn(DeleteBtn, 2);
             grid.Children.Add(DeleteBtn);
+        }
+        private void LoadCheckView() {
+            string CheckViewxaml = @"<Border xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource TextX1ColorBrush}"" Visibility=""Collapsed""/>";
+            CheckView = (Border)XamlReader.Parse(CheckViewxaml);
+            grid.Children.Add(CheckView);
+        }
+        private void LoadGO() {
+            string CheckViewxaml = @"<Border xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
+                    <Border.Background>
+                        <VisualBrush Stretch=""Uniform"">
+                            <VisualBrush.Visual>
+                                <Grid>
+                                    <Path Data=""M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909L64.698182,554.821818A59.578182,59.578182,0,0,1,64.698182,469.178182A61.905455,61.905455,0,0,1,151.738182,469.178182L418.909091,734.021818A60.043636,60.043636,0,0,1,418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z"" Fill=""{DynamicResource ThemeColor}""/>
+                                    <Path Data=""M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909A60.043636,60.043636,0,0,1,333.730909,734.021818L872.261818,203.869091A61.905455,61.905455,0,0,1,959.301818,203.869091A60.043636,60.043636,0,0,1,959.301818,289.978182L418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z"" Fill=""{DynamicResource ThemeColor}""/>
+                                </Grid>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Border.Background>
+                </Border>";
+            GO = (Border)XamlReader.Parse(CheckViewxaml);
+            CheckView.Child = GO;
         }
         public DataItem(Music dat) {
             InitializeComponent();
@@ -202,6 +199,13 @@ namespace LemonApp
         }
         public void NSDownload(bool ns) {
             this.ns = ns;
+            if (CheckView == null)
+            {
+                LoadCheckView();
+                LoadGO();
+            }
+            else if (GO == null)
+                LoadGO();
             if (ns)
             {
                 wpl.Margin = new Thickness(60, 0, 10, 0);
@@ -217,20 +221,26 @@ namespace LemonApp
 
         private void CheckView_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Check();
+            Check(!isChecked);
         }
 
-        public void Check() {
-            if (!isChecked)
+        public void Check(bool IsCheck) {
+            isChecked = IsCheck;
+            if (CheckView == null)
+            {
+                LoadCheckView();
+                LoadGO();
+            }
+            else if (GO == null)
+                LoadGO();
+            if (IsCheck)
             {
                 GO.Visibility = Visibility.Visible;
                 CheckView.SetResourceReference(BorderBrushProperty, "ThemeColor");
-                isChecked = true;
             }
             else {
                 GO.Visibility = Visibility.Collapsed;
                 CheckView.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
-                isChecked = false;
             }
         }
 
@@ -274,7 +284,7 @@ namespace LemonApp
             {
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
                 string Musicid = He.MGData_Now.ids[index];
-                Toast.Send(MusicLib.DeleteMusicFromGD(Musicid, He.MGData_Now.id, dirid));
+                Toast.Send(MusicLib.DeleteMusicFromGD(new string[1] { Musicid }, dirid));
                 Mainwindow.DataItemsList.Items.Remove(this);
                 He.MGData_Now.Data.Remove(music);
             }

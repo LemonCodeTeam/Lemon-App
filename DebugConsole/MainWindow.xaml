@@ -57,7 +57,7 @@
     </WindowChrome.WindowChrome>
     <Grid>
         <ScrollViewer x:Name="sv" Margin="0,30,0,0">
-            <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="tb" TextWrapping="Wrap" Background="#FFF0F0F0" Foreground="#FF2D2D30"/>
+            <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="tb" TextWrapping="Wrap" Background="#FFF0F0F0" Foreground="#FF2D2D30" FontFamily="Comic Sans MS"/>
         </ScrollViewer>
         <Grid VerticalAlignment="Top" Height="30" Background="#FFDEDEDE">
             <TextBlock HorizontalAlignment="Left" Text="{Binding Title, ElementName=window}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="#FF1B1B1C"/>
