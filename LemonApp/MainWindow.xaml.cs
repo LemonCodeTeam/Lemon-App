@@ -1037,7 +1037,7 @@ namespace LemonApp
                 k.Download += K_Download;
                 if (k.music.MusicID == MusicData.Data.MusicID)
                     k.ShowDx();
-                if (DataPage_DownloadMod)
+                if (DataPage_ControlMod)
                 {
                     k.MouseDown -= PlayMusic;
                     k.NSDownload(true);
@@ -1085,8 +1085,8 @@ namespace LemonApp
         public void NSPage(MeumInfo data, bool needSave = true,bool Check=true)
         {
             if (data.Page == Data)
-                if (DataPage_DownloadMod)
-                    CloseDownloadPage();
+                if (DataPage_ControlMod)
+                    CloseDataControlPage();
             if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
@@ -1505,16 +1505,33 @@ namespace LemonApp
         {
             PlayMusic(DataItemsList.Items[0] as DataItem, null);
         }
-        bool DataPage_DownloadMod = false;
+        bool DataPage_ControlMod = false;
+        int DataPage_CMType = 0;//0:Download 1:批量操作
         private void DataDownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            DataPage_DownloadMod = true;
+            DataPage_CMType = 0;
+            OpenDataControlPage();
+        }
+        private void OpenDataControlPage() {
+            DataPage_ControlMod = true;
             DataPage_MainInfo.Visibility = Visibility.Collapsed;
-            DataDownloadPage.Visibility = Visibility.Visible;
+            DataControlPage.Visibility = Visibility.Visible;
+            if (DataPage_CMType == 0)
+            {
+                DataDownloadPage.Visibility = Visibility.Visible;
+                DataPLCZPage.Visibility = Visibility.Collapsed;
+                Download_Path.Text = Settings.USettings.DownloadPath;
+                DownloadQx.IsChecked = true;
+                DownloadQx.Content = "全不选";
+            }
+            else
+            {
+                DataDownloadPage.Visibility = Visibility.Collapsed;
+                DataPLCZPage.Visibility = Visibility.Visible;
+                DataPage_PLCZChoose.IsChecked = true;
+                DataPage_PLCZChoose.Content = "全不选";
+            }
             DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 50, 0, 0), TimeSpan.FromSeconds(0)));
-            Download_Path.Text = Settings.USettings.DownloadPath;
-            DownloadQx.IsChecked = true;
-            DownloadQx.Content = "全不选";
             foreach (var xs in DataItemsList.Items)
             {
                 if (xs is DataItem)
@@ -1526,15 +1543,14 @@ namespace LemonApp
                 }
             }
         }
-
-        public void CloseDownloadPage()
+        public void CloseDataControlPage()
         {
-            DataPage_DownloadMod = false;
+            DataPage_ControlMod = false;
             DataPage_MainInfo.Visibility = Visibility.Visible;
             if (HB == 1)
                 DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 80, 0, 0), TimeSpan.FromSeconds(0)));
             else DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 200, 0, 0), TimeSpan.FromSeconds(0)));
-            DataDownloadPage.Visibility = Visibility.Collapsed;
+            DataControlPage.Visibility = Visibility.Collapsed;
             foreach (var xs in DataItemsList.Items)
             {
                 if (xs is DataItem)
@@ -1549,7 +1565,7 @@ namespace LemonApp
 
         private void DataDownloadBtn_Back_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            CloseDownloadPage();
+            CloseDataControlPage();
         }
         #endregion
         #region SearchMusic  搜索音乐
@@ -1569,8 +1585,7 @@ namespace LemonApp
         int HB = 0;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            Console.WriteLine(Datasv.VerticalOffset);
-            if (!DataPage_DownloadMod &&np != NowPage.Search)
+            if (!DataPage_ControlMod &&np != NowPage.Search)
                 if (Datasv.VerticalOffset >= 100)
                 {
                     if (HB == 0)
@@ -1709,7 +1724,7 @@ namespace LemonApp
                     k.GetToSingerPage += K_GetToSingerPage;
                     k.Play += PlayMusic;
                     k.Download += K_Download;
-                    if (DataPage_DownloadMod)
+                    if (DataPage_ControlMod)
                     {
                         k.MouseDown -= PlayMusic;
                         k.NSDownload(true);
@@ -2465,14 +2480,14 @@ namespace LemonApp
             if (d.IsChecked == true)
             {
                 d.Content = "全不选";
-                foreach (DataItem x in DataItemsList.Items)
-                { x.Check(true); }
+                foreach (var x in DataItemsList.Items)
+                if(x is DataItem) (x as DataItem).Check(true); 
             }
             else
             {
                 d.Content = "全选";
-                foreach (DataItem x in DataItemsList.Items)
-                { x.Check(false); }
+                foreach (var x in DataItemsList.Items)
+                    if (x is DataItem) (x as DataItem).Check(false);
             }
         }
         private void Download_Btn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2544,7 +2559,7 @@ namespace LemonApp
                     AddDownloadTask(f.music);
                 }
             }
-            CloseDownloadPage();
+            CloseDataControlPage();
         }
         #endregion
         #region User
@@ -2625,8 +2640,10 @@ namespace LemonApp
             var dt = sender as FLGDIndexItem;
             LoadFxGDItems(dt);
         }
+        private FLGDIndexItem NowType;
         private async void LoadFxGDItems(FLGDIndexItem dt,bool NeedSave=true) {
             NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.id + "\",\"name\":\"" + dt.name.Text + "\",\"img\":\"" + dt.img + "\"}" }, NeedSave, false);
+            NowType = dt;
             TB.Text = dt.name.Text;
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
@@ -2882,5 +2899,94 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void Md_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _Gdpop.IsOpen = false;
+            string name = (sender as ListBoxItem).Content.ToString();
+            string id = _ListData[name];
+            string Musicid = "";
+            string types = "";
+            foreach (DataItem d in DataItemsList.Items)
+            {
+                if (d.isChecked){
+                    types += "3,";
+                    Musicid += d.music.MusicID + ",";
+                }
+            }
+            Musicid = Musicid[0..^1];
+            types = types[0..^1];
+            string[] a = MusicLib.AddMusicToGDPL(Musicid, id,types);
+            Toast.Send(a[1] + ": " + a[0]);
+        }
+        private Popup _Gdpop=null;
+        private ListBox _Add_Gdlist=null;
+        private Dictionary<string, string> _ListData = new Dictionary<string, string>();//name,id
+        private async void DataPage_PLCZ_AddTo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_Gdpop == null) {
+                string Gdpopxaml = @"<Popup xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
+                <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
+                    <Grid>
+                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
+                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" Style=""{DynamicResource ListBoxStyle1}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyle1}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
+                            <ListBoxItem Content=""我喜欢的歌单""/>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Popup>";
+                _Gdpop = (Popup)XamlReader.Parse(Gdpopxaml);
+                _Add_Gdlist = (ListBox)((Grid)((Border)_Gdpop.Child).Child).Children[0];
+                grid.Children.Add(_Gdpop);
+            }
+            _Add_Gdlist.Items.Clear();
+            _ListData.Clear();
+            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            foreach (var a in o["list"])
+            {
+                string name = a["dirname"].ToString();
+                _ListData.Add(name, a["dirid"].ToString());
+                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = name, Margin = new Thickness(10, 10, 10, 0) };
+                mdb.PreviewMouseDown += Md_MouseDown;
+                _Add_Gdlist.Items.Add(mdb);
+            }
+            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10, 10, 0) };
+            md.PreviewMouseDown += delegate { _Gdpop.IsOpen = false; };
+            _Add_Gdlist.Items.Add(md);
+            _Gdpop.IsOpen = true;
+        }
+
+        private async void DataPage_PLCZ_Delete_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (TwMessageBox.Show("确定要删除这些歌曲吗?"))
+            {
+                List<DataItem> ReadytoDelete = new List<DataItem>();
+                List<string> Musicid = new List<string>();
+                foreach(var dx in DataItemsList.Items)
+                {
+                    if (dx is DataItem)
+                    {
+                        var d = dx as DataItem;
+                        if (d.isChecked)
+                        {
+                            ReadytoDelete.Add(d);
+                            Musicid.Add(He.MGData_Now.ids[d.index]);
+                        }
+                    }
+                }
+                string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
+                Toast.Send(MusicLib.DeleteMusicFromGD(Musicid.ToArray(), dirid));
+                foreach (var d in ReadytoDelete) {
+                    He.MGData_Now.Data.Remove(d.music);
+                    DataItemsList.Items.Remove(d);
+                }
+            }
+        }
+
+        private void DataPLCZBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DataPage_CMType = 1;
+            OpenDataControlPage();
+        }
     }
 }

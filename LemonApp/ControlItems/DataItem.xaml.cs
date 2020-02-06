@@ -34,7 +34,7 @@ namespace LemonApp
         private bool needDeleteBtn;
         private int BtnWidth = 0;
 
-        private int index;
+        public int index;
         public DataItem(Music dat, MainWindow mw,int inx=0,bool NeedDeleteBtn=false)
         {
             try
@@ -136,6 +136,7 @@ namespace LemonApp
             Gdpop = (Popup)XamlReader.Parse(Gdpopxaml);
             Add_Gdlist = (ListBox)((Grid)((Border)Gdpop.Child).Child).Children[0];
             grid.Children.Add(Gdpop);
+
             DeleteBtn = new TitlePageBtn() {Visibility=Visibility.Collapsed,Pathness=new Thickness(0),Height=15,Width=15,HorizontalAlignment=HorizontalAlignment.Right,Margin=new Thickness(0, 0, 25, 0),PathData=Geometry.Parse("M880,240L704,240 704,176C704,123.2,660.8,80,608,80L416,80C363.2,80,320,123.2,320,176L320,240 144,240C126.4,240 112,254.4 112,272 112,289.6 126.4,304 144,304L192,304 192,816C192,886.4,249.6,944,320,944L704,944C774.4,944,832,886.4,832,816L832,304 880,304C897.6,304 912,289.6 912,272 912,254.4 897.6,240 880,240z M384,176C384,158.4,398.4,144,416,144L608,144C625.6,144,640,158.4,640,176L640,240 384,240 384,176z M768,816C768,851.2,739.2,880,704,880L320,880C284.8,880,256,851.2,256,816L256,304 768,304 768,816z M416 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32zM608 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32z") };
             DeleteBtn.MouseDown += DeleteBtn_MouseDown;
             Grid.SetColumn(DeleteBtn, 2);
