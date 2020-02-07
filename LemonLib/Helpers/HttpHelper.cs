@@ -11,60 +11,46 @@ namespace LemonLib
 {
     public class HttpHelper
     {
-        public static async Task<int> GetWebCode(String url)
-        {
-            try
-            {
-                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-                var o = (await hwr.GetResponseAsync()) as HttpWebResponse;
-                return (int)o.StatusCode;
-            }
-            catch { return 404; }
-        }
         public static async Task<string> GetWebAsync(string url, Encoding e = null)
         {
             if (e == null)
                 e = Encoding.UTF8;
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-            var o = await hwr.GetResponseAsync();
-            StreamReader sr = new StreamReader(o.GetResponseStream(), e);
+            using WebResponse res = await hwr.GetResponseAsync();
+            using StreamReader sr = new StreamReader(res.GetResponseStream(), e);
             var st = await sr.ReadToEndAsync();
-            sr.Dispose();
             return st;
         }
-        public static WebHeaderCollection GetWebHeader_MKBlog()
-        {
-            var whc = new WebHeaderCollection();
-            whc.Add("Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01");
-            whc.Add("Content-Type", "application/x-www-form-urlencoded");
-            whc.Add("Cookie", "Hm_lvt_6e8dac14399b608f633394093523542e=1522910113; Hm_lpvt_6e8dac14399b608f633394093523542e=1522910122; Hm_lvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125; Hm_lpvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125");
-            whc.Add("Host", "lab.mkblog.cn");
-            whc.Add("Origin", "http://lab.mkblog.cn");
-            whc.Add("Referer", "http://lab.mkblog.cn/music/");
-            whc.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
-            return whc;
-        }
-        public static WebHeaderCollection GetWebHeader_YQQCOM()
-        {
-            var header = new WebHeaderCollection();
-            header.Add(HttpRequestHeader.Accept, "*/*");
-            header.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
-            header.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8");
-            header.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
-            header.Add(HttpRequestHeader.Referer, "https://y.qq.com/n/yqq/singer/0020PeOh4ZaCw1.html");
-            header.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
-            header.Add(HttpRequestHeader.Host, "c.y.qq.com");
-            return header;
-        }
+        public static WebHeaderCollection GetWebHeader_MKBlog() => new WebHeaderCollection
+            {
+                { "Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
+                { "Content-Type", "application/x-www-form-urlencoded" },
+                { "Cookie", "Hm_lvt_6e8dac14399b608f633394093523542e=1522910113; Hm_lpvt_6e8dac14399b608f633394093523542e=1522910122; Hm_lvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125; Hm_lpvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125" },
+                { "Host", "lab.mkblog.cn" },
+                { "Origin", "http://lab.mkblog.cn" },
+                { "Referer", "http://lab.mkblog.cn/music/" },
+                { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" }
+            };
+        public static WebHeaderCollection GetWebHeader_YQQCOM() => new WebHeaderCollection
+            {
+                { HttpRequestHeader.Accept, "*/*" },
+                { HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9" },
+                { HttpRequestHeader.ContentType, "application/x-www-form-urlencoded; charset=UTF-8" },
+                { HttpRequestHeader.Cookie, Settings.USettings.Cookie },
+                { HttpRequestHeader.Referer, "https://y.qq.com/n/yqq/singer/0020PeOh4ZaCw1.html" },
+                { HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36" },
+                { HttpRequestHeader.Host, "c.y.qq.com" }
+            };
         public static string PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
             byte[] postData = Encoding.UTF8.GetBytes(data);
-            HttpClient webClient = new HttpClient();
-            if (Header != null)
-                webClient.Headers = Header;
-            byte[] responseData = webClient.UploadData(url, "POST", postData);
-            webClient.Dispose();
-            return Encoding.UTF8.GetString(responseData);
+            using (HttpClient webClient = new HttpClient())
+            {
+                if (Header != null)
+                    webClient.Headers = Header;
+                byte[] responseData = webClient.UploadData(url, "POST", postData);
+                return Encoding.UTF8.GetString(responseData);
+            }
         }
         public static async Task<string> PostInycAsync(string url, string data)
         {
@@ -85,8 +71,10 @@ namespace LemonLib
             var writer = await r.GetRequestStreamAsync();
             await writer.WriteAsync(byteData, 0, length);
             writer.Close();
-            var response = (HttpWebResponse)await r.GetResponseAsync();
-            return await new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEndAsync();
+            using HttpWebResponse response = (HttpWebResponse)await r.GetResponseAsync();
+            using var stream = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string dt = await stream.ReadToEndAsync();
+            return dt;
         }
         public static async Task HttpDownloadAsync(string url, string path)
         {
@@ -98,17 +86,19 @@ namespace LemonLib
             hwr.Referer = url;
             hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
             hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
-            HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
-            Stream responseStream = response.GetResponseStream();
-            Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
-            byte[] bArr = new byte[1024];
-            int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
-            while (size > 0)
+            using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
+            using Stream responseStream = response.GetResponseStream();
+            using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
             {
-                await stream.WriteAsync(bArr, 0, size);
-                size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                byte[] bArr = new byte[1024];
+                int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                while (size > 0)
+                {
+                    await stream.WriteAsync(bArr, 0, size);
+                    size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                }
+                stream.Close();
             }
-            stream.Close();
             responseStream.Close();
         }
 
@@ -122,17 +112,19 @@ namespace LemonLib
             hwr.Referer = url;
             hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
             hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
-            HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
-            Stream responseStream = response.GetResponseStream();
-            Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
-            byte[] bArr = new byte[1024];
-            int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
-            while (size > 0)
+            using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
+            using Stream responseStream = response.GetResponseStream();
+            using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
             {
-                await stream.WriteAsync(bArr, 0, size);
-                size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                byte[] bArr = new byte[1024];
+                int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                while (size > 0)
+                {
+                    await stream.WriteAsync(bArr, 0, size);
+                    size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
+                }
+                stream.Close();
             }
-            stream.Close();
             responseStream.Close();
         }
         public static async Task<string> GetWebDatacAsync(string url, Encoding c = null)
@@ -149,8 +141,8 @@ namespace LemonLib
             hwr.Host = "c.y.qq.com";
             hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
             hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
-            var o = await hwr.GetResponseAsync();
-            StreamReader sr = new StreamReader(o.GetResponseStream(), c);
+            using WebResponse o = await hwr.GetResponseAsync();
+            using StreamReader sr = new StreamReader(o.GetResponseStream(), c);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
             return st;
@@ -162,8 +154,8 @@ namespace LemonLib
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
             hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36";
             hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
-            var o = await hwr.GetResponseAsync();
-            StreamReader sr = new StreamReader(o.GetResponseStream(), c);
+            using WebResponse o = await hwr.GetResponseAsync();
+            using StreamReader sr = new StreamReader(o.GetResponseStream(), c);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
             return st;

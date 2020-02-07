@@ -66,8 +66,8 @@ namespace LemonLib
             if (DecodePixel != null)
             {
                 HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
-                HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
-                Stream responseStream = response.GetResponseStream();
+                using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
+                using Stream responseStream = response.GetResponseStream();
                 Image img = Image.FromStream(responseStream);
                 Bitmap bitmap = new Bitmap(DecodePixel[1], DecodePixel[0]);
                 Graphics g = Graphics.FromImage(bitmap);
