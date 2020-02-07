@@ -312,13 +312,13 @@ namespace LemonApp
         private double all = 0;
         private string lastlyric = "";
         private Toast lyricTa = null;
-        private async void LoadMusicData()
+        private void LoadMusicData()
         {
             LoadSettings();
             MainClass.DebugCallBack = (s) => {
                 Console.WriteLine(s);
             };
-            //-------用户的头像、名称等配置加载
+            //-------[登录]用户的头像、名称等配置加载
             if (Settings.USettings.UserName != string.Empty)
             {
                 UserName.Text = Settings.USettings.UserName;
@@ -326,8 +326,9 @@ namespace LemonApp
                 {
                     var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
                     UserTX.Background = new ImageBrush(image.ToImageSource());
+                    image.Dispose();
                 }
-                await Task.Run( async () => {
+                Thread t=new Thread( async () => {
                     var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0", Encoding.UTF8);
                     Debug.WriteLine(sl);
                     JObject j = JObject.Parse(sl);
@@ -352,6 +353,7 @@ namespace LemonApp
                         });
                     }
                 });
+                t.Start();
             }
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
@@ -389,10 +391,10 @@ namespace LemonApp
                     if (CanJd)
                     {
                         jd.Value = now;
-                        Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(now));
+                        Play_Now.Text = TimeSpan.FromMilliseconds(now).ToString(@"mm\:ss");
                     }
                     all = MusicLib.mp.GetLength.TotalMilliseconds;
-                    string alls = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(all));
+                    string alls = TimeSpan.FromMilliseconds(all).ToString(@"mm\:ss");
                     Play_All.Text = alls;
                     jd.Maximum = all;
                     if (ind == 1)
@@ -457,7 +459,7 @@ namespace LemonApp
             };
             //-----Timer 清理与更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
-            ds.Tick += delegate {if(t.Enabled)MusicLib.mp.UpdataDevice(); GC.Collect(); };
+            ds.Tick += delegate { GC.Collect(); if(t.Enabled)MusicLib.mp.UpdataDevice(); GC.Collect(); };
             ds.Start();
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
@@ -533,7 +535,7 @@ namespace LemonApp
         /// 遍历调整宽度
         /// </summary>
         /// <param name="wp"></param>
-        public void WidthUI(WrapPanel wp,double? ContentWidth=null)
+        public void WidthUI(Panel wp,double? ContentWidth=null)
         {
             if (wp.Visibility == Visibility.Visible && wp.Children.Count > 0)
             {
@@ -550,7 +552,7 @@ namespace LemonApp
             }
         }
 
-        private void WidTX(WrapPanel wp, int lineCount, double ContentWidth)
+        private void WidTX(Panel wp, int lineCount, double ContentWidth)
         {
             foreach (UserControl dx in wp.Children)
                 dx.Width = (ContentWidth - 24 * lineCount) / lineCount;
@@ -988,7 +990,7 @@ namespace LemonApp
                 DataItemsList.Animation(k);
                 index++;
             }),this,async (md)=> {
-                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.Creater.Photo));
+                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.Creater.Photo, new int[2] { 36, 36 }));
                 DataPage_Creater.Text = md.Creater.Name;
                 DataPage_Sim.Text = md.desc;
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.pic));
@@ -1442,7 +1444,7 @@ namespace LemonApp
                 string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
                 He.MGData_Now = await MusicLib.GetGDAsync(id,
                    (dt) =>{Dispatcher.Invoke(async () =>{
-                                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo));
+                                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 36, 36 }));
                                 DataPage_Creater.Text = dt.Creater.Name;
                                 DataPage_Sim.Text = dt.desc;
                           });
@@ -1708,8 +1710,8 @@ namespace LemonApp
                     if (Datasv != null) Datasv.ScrollToTop();
                     HB = 1;
                     (Resources["DataPage_Min"] as Storyboard).Begin();
+                   TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                 }
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                 if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\""+key+"\"}" }, NeedSave, false);
                 int aniCount = (int)(DataItemsList.ActualHeight / 45);
                 int i = 0;
@@ -1936,7 +1938,7 @@ namespace LemonApp
             try
             {
                 if (!CanJd)
-                    Play_Now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(jd.Value));
+                    Play_Now.Text = TimeSpan.FromMilliseconds(jd.Value).ToString(@"mm\:ss");
             }
             catch { }
         }
@@ -2653,7 +2655,7 @@ namespace LemonApp
             He.MGData_Now = await MusicLib.GetGDAsync(dt.id,
                 (dt) => {
                     Dispatcher.Invoke(async() => {
-                        DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo));
+                        DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 36, 36 }));
                         DataPage_Creater.Text = dt.Creater.Name;
                         DataPage_Sim.Text = dt.desc;
                     });
@@ -2714,9 +2716,9 @@ namespace LemonApp
         {
             var jd_all = MvPlay_ME.NaturalDuration.HasTimeSpan ? MvPlay_ME.NaturalDuration.TimeSpan : TimeSpan.FromMilliseconds(0);
             Mvplay_jd.Maximum = jd_all.TotalMilliseconds;
-            Mvplay_jdtb_all.Text = TextHelper.TimeSpanToms(jd_all);
+            Mvplay_jdtb_all.Text = jd_all.ToString(@"mm\:ss");
             var jd_now = MvPlay_ME.Position;
-            Mvplay_jdtb_now.Text = TextHelper.TimeSpanToms(jd_now);
+            Mvplay_jdtb_now.Text = jd_now.ToString(@"mm\:ss");
             Mvplay_jd.Value = jd_now.TotalMilliseconds;
         }
 
@@ -2759,7 +2761,7 @@ namespace LemonApp
             try
             {
                 if (!MvCanJd)
-                    Mvplay_jdtb_now.Text = TextHelper.TimeSpanToms(TimeSpan.FromMilliseconds(Mvplay_jd.Value));
+                    Mvplay_jdtb_now.Text = TimeSpan.FromMilliseconds(Mvplay_jd.Value).ToString(@"mm\:ss");
             }
             catch { }
         }

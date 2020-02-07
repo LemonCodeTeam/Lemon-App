@@ -117,10 +117,10 @@ namespace LemonApp
         }
         #endregion
         #region lierda.WPFHelper 内存管控
-        LierdaCracker cracker = new LierdaCracker();
+       // LierdaCracker cracker = new LierdaCracker();
         protected override void OnStartup(StartupEventArgs e)
         {
-            cracker.Cracker();
+            //cracker.Cracker();
             base.OnStartup(e);
         }
         #endregion

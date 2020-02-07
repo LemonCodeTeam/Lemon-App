@@ -105,12 +105,12 @@ namespace LemonApp
         private Border GO=null;
 
         private Grid Buttons;
-        private Popup Gdpop;
+        private Popup Gdpop=null;
         private ListBox Add_Gdlist;
         private TitlePageBtn DeleteBtn;
         private void LoadUI() {
             //TODO: 优化性能 控件在需要之时创建
-            string Buttonsxaml = @"<Grid xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""Buttons"" Margin=""0,15,10,15"" HorizontalAlignment=""Right"" Width=""65"" Visibility=""Collapsed""/>";
+            string Buttonsxaml = @"<Grid " + He.XAMLUSINGS + @" x:Name=""Buttons"" Margin=""0,15,10,15"" HorizontalAlignment=""Right"" Width=""65"" Visibility=""Collapsed""/>";
             Buttons = (Grid)XamlReader.Parse(Buttonsxaml);
             TitlePageBtn DownloadBtn = new TitlePageBtn() { Pathness=new Thickness(0),PathData=Geometry.Parse("M168.064,498.7008L493.9008,824.5376C496.2944,826.9312 499.0848,828.7232 502.0416,829.9648 502.0544,829.9648 502.0544,829.9776 502.0672,829.9776 503.3216,830.5024 504.6144,830.8608 505.92,831.1808 506.2656,831.2704 506.5856,831.4112 506.944,831.488 510.2848,832.1536 513.728,832.1536 517.056,831.488 517.4144,831.4112 517.7344,831.2704 518.08,831.1808 519.3856,830.8608 520.6784,830.5024 521.9328,829.9776 521.9456,829.9648 521.9584,829.9648 521.984,829.952 524.9408,828.7104 527.7056,826.9184 530.0992,824.5248L855.936,498.7008C865.8944,488.7424 865.8944,472.448 855.936,462.5024 845.9776,452.544 829.6832,452.544 819.7376,462.5024L537.6,744.64 537.6,89.6128C537.6,75.5328 526.08,64.0128 512,64.0128 497.92,64.0128 486.4,75.5328 486.4,89.6128L486.4,744.64 204.2624,462.5024C194.304,452.544 178.0096,452.544 168.064,462.5024 158.1056,472.4608 158.1056,488.7424 168.064,498.7008z M972.8,729.6L972.8,857.6C972.8,885.8752,949.8752,908.8,921.6,908.8L102.4,908.8C74.1248,908.8,51.2,885.8752,51.2,857.6L51.2,729.6C51.2,715.456,39.744,704,25.6,704L25.6,704C11.456,704,0,715.456,0,729.6L0,857.6C0,913.92,46.08,960,102.4,960L921.6,960C977.92,960,1024,913.92,1024,857.6L1024,729.6C1024,715.456,1012.544,704,998.4,704L998.4,704C984.256,704,972.8,715.456,972.8,729.6z"),Height=15,Width=15,HorizontalAlignment=HorizontalAlignment.Right };
             DownloadBtn.MouseDown += DownloadBtn_MouseDown;
@@ -123,32 +123,18 @@ namespace LemonApp
             Buttons.Children.Add(PlayBtn);
             grid.Children.Add(Buttons);
 
-            string Gdpopxaml = @"<Popup xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
-                <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
-                    <Grid>
-                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
-                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" Style=""{DynamicResource ListBoxStyle1}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyle1}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
-                            <ListBoxItem Content=""我喜欢的歌单""/>
-                        </ListBox>
-                    </Grid>
-                </Border>
-            </Popup>";
-            Gdpop = (Popup)XamlReader.Parse(Gdpopxaml);
-            Add_Gdlist = (ListBox)((Grid)((Border)Gdpop.Child).Child).Children[0];
-            grid.Children.Add(Gdpop);
-
             DeleteBtn = new TitlePageBtn() {Visibility=Visibility.Collapsed,Pathness=new Thickness(0),Height=15,Width=15,HorizontalAlignment=HorizontalAlignment.Right,Margin=new Thickness(0, 0, 25, 0),PathData=Geometry.Parse("M880,240L704,240 704,176C704,123.2,660.8,80,608,80L416,80C363.2,80,320,123.2,320,176L320,240 144,240C126.4,240 112,254.4 112,272 112,289.6 126.4,304 144,304L192,304 192,816C192,886.4,249.6,944,320,944L704,944C774.4,944,832,886.4,832,816L832,304 880,304C897.6,304 912,289.6 912,272 912,254.4 897.6,240 880,240z M384,176C384,158.4,398.4,144,416,144L608,144C625.6,144,640,158.4,640,176L640,240 384,240 384,176z M768,816C768,851.2,739.2,880,704,880L320,880C284.8,880,256,851.2,256,816L256,304 768,304 768,816z M416 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32zM608 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32z") };
             DeleteBtn.MouseDown += DeleteBtn_MouseDown;
             Grid.SetColumn(DeleteBtn, 2);
             grid.Children.Add(DeleteBtn);
         }
         private void LoadCheckView() {
-            string CheckViewxaml = @"<Border xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource TextX1ColorBrush}"" Visibility=""Collapsed""/>";
+            string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource TextX1ColorBrush}"" Visibility=""Collapsed""/>";
             CheckView = (Border)XamlReader.Parse(CheckViewxaml);
             grid.Children.Add(CheckView);
         }
         private void LoadGO() {
-            string CheckViewxaml = @"<Border xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
+            string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
                     <Border.Background>
                         <VisualBrush Stretch=""Uniform"">
                             <VisualBrush.Visual>
@@ -252,6 +238,21 @@ namespace LemonApp
         private Dictionary<string, string> ListData = new Dictionary<string, string>();//name,id
         private async void AddBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (Gdpop == null) {
+                string Gdpopxaml = "<Popup "+He.XAMLUSINGS+@" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
+                <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
+                    <Grid>
+                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
+                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" Style=""{DynamicResource ListBoxStyle1}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyle1}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
+                            <ListBoxItem Content=""我喜欢的歌单""/>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Popup>";
+                Gdpop = (Popup)XamlReader.Parse(Gdpopxaml);
+                Add_Gdlist = (ListBox)((Grid)((Border)Gdpop.Child).Child).Children[0];
+                grid.Children.Add(Gdpop);
+            }
             Add_Gdlist.Items.Clear();
             ListData.Clear();
             JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
@@ -342,5 +343,6 @@ namespace LemonApp
     {
         public static DataItem LastItem = null;
         public static MusicGData MGData_Now = null;
+        public static string XAMLUSINGS = @"xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""";
     }
 }

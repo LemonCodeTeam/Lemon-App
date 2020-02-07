@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,17 +30,31 @@ namespace LemonApp
         private int lastindex = 0;//最后一个索引
         private bool HasCheck=false;
         private MainWindow mw;
+        private ConditionalWeakTable<string, ImageBrush> WeakBrushCache = new ConditionalWeakTable<string, ImageBrush>();
         public ImageForceView()
         {
             InitializeComponent();
             Image.MouseDown += PartMouseDown;
         }
-        public async void Updata(List<IFVData> iFVData,MainWindow m) {
+        public void Updata(List<IFVData> iFVData,MainWindow m) {
             iv = iFVData;
             index = 0;
             lastindex = iv.Count - 1;
             mw = m;
-            Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Fill };
+            SetImageAsync(0);
+        }
+        private async void SetImageAsync(int index)
+        {
+            try
+            {
+                if (!WeakBrushCache.TryGetValue(iv[index].pic, out ImageBrush ib))
+                {
+                    ib = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic, new int[2] { 303, 756 })) { Stretch = Stretch.Fill };
+                    WeakBrushCache.AddOrUpdate(iv[index].pic, ib);
+                }
+                Image.Background = ib;
+            }
+            catch { }
         }
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -83,15 +98,16 @@ namespace LemonApp
             else Process.Start(url);
         }
 
-        private async void TurnLeft() {
-            if (index == 0)
+        private void TurnLeft() {
+            if (index.Equals(0)){
+                SetImageAsync(lastindex);
                 index = lastindex;
-            else
+            }
+            else {
                 index--;
+                SetImageAsync(index);
+            }
             Console.WriteLine("LEFT" + index);
-            if (index - 1 == -1)
-                Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[lastindex].pic)) { Stretch = Stretch.Fill};
-            else Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic)) { Stretch = Stretch.Fill };
             (Resources["CheckAniLeft"] as Storyboard).Begin();
         }
         private void Left_MouseDown(object sender, MouseButtonEventArgs e)
@@ -100,18 +116,19 @@ namespace LemonApp
             HasCheck = true;
         }
 
-        public async void TurnRight()
+        public void TurnRight()
         {
             try
             {
-                if (index == lastindex)
+                if (index.Equals(lastindex)){
+                    SetImageAsync(0);
                     index = 0;
-                else
+                }
+                else {
                     index++;
+                    SetImageAsync(index);
+                }
                 Console.WriteLine("RIGHT:" + index);
-                if (index + 1 > lastindex)
-                    Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[0].pic)) { Stretch = Stretch.Fill };
-                else Image.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic)) { Stretch = Stretch.Fill };
                 (Resources["CheckAniRight"] as Storyboard).Begin();
             }
             catch { }

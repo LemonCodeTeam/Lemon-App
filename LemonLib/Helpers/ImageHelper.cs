@@ -46,26 +46,22 @@ namespace LemonLib
 
             return bmp;
         }
-        public static BitmapImage ToBitmapImage(this Bitmap bitmap,int[] DecodePixel=null)
+        public static BitmapImage ToBitmapImage(this Bitmap bitmap)
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                bitmap.Save(stream, ImageFormat.Jpeg);
+                bitmap.Save(stream, ImageFormat.Png);
                 stream.Position = 0;
                 BitmapImage result = new BitmapImage();
                 result.BeginInit();
                 result.CacheOption = BitmapCacheOption.OnLoad;
                 result.StreamSource = stream;
-                if (DecodePixel != null){
-                    result.DecodePixelWidth = DecodePixel[0];
-                    result.DecodePixelHeight = DecodePixel[0];
-                }
                 result.EndInit();
                 result.Freeze();
                 return result;
             }
         }
-        public static BitmapImage ToBitmapImage(this byte[] array,int[] DecodePixel=null)
+        public static BitmapImage ToBitmapImage(this byte[] array)
         {
             using (var ms = new MemoryStream(array))
             {
@@ -73,10 +69,6 @@ namespace LemonLib
                 image.BeginInit();
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.StreamSource = ms;
-                if (DecodePixel != null){
-                    image.DecodePixelHeight = DecodePixel[0];
-                    image.DecodePixelWidth = DecodePixel[1];
-                }
                 image.EndInit();
                 image.Freeze();
                 return image;

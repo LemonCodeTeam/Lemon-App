@@ -175,7 +175,7 @@
                     <local:MVItem Grid.Column="4" Margin="5,0"/>
                 </Grid>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="相似歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" FontWeight="Bold"/>
-                <WrapPanel x:Name="SimilarSingerList" Height="200" Orientation="Horizontal">
+                <WrapPanel x:Name="SimilarSingerList" Height="200">
                     <local:SingerItem Height="200" Width="150" Margin="20,0,0,0"/>
                     <local:SingerItem Height="200" Width="150" Margin="20,0,0,0"/>
                     <local:SingerItem Height="200" Width="150" Margin="20,0,0,0"/>

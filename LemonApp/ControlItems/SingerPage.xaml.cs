@@ -50,8 +50,8 @@ namespace LemonApp
             SingerName.Text = Data.mSinger.Name;
 
             if (Data.HasBigPic)
-                mSingerBig.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo)) { Stretch=Stretch.UniformToFill};
-            else TX.Background= new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo));
+                mSingerBig.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo,new int[2] {469,1000})) { Stretch=Stretch.UniformToFill};
+            else TX.Background= new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo,new int[2] { 225 , 225 }));
 
             FansCount.Text = "粉丝数：" + Data.FansCount;
             if (Data.HasGJ) {
@@ -65,7 +65,7 @@ namespace LemonApp
 
             if (Data.liangxia.Count >= 1)
             {
-                Lx_Img_1.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[0].img));
+                Lx_Img_1.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[0].img,new int[2] { 60, 60 }));
                 Lx_Tit_1.Text = Data.liangxia[0].name;
                 Lx_dat_1.Text = Data.liangxia[0].lstCount;
             }
@@ -74,7 +74,7 @@ namespace LemonApp
             }
             if (Data.liangxia.Count >= 2)
             {
-                Lx_Img_2.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[1].img));
+                Lx_Img_2.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[1].img, new int[2] { 60, 60 }));
                 Lx_Tit_2.Text = Data.liangxia[1].name;
                 Lx_dat_2.Text = Data.liangxia[1].lstCount;
             }
@@ -281,7 +281,7 @@ namespace LemonApp
             }
             WidthUI(AlbumItemsList);
         }
-        public void WidthUI(WrapPanel wp)
+        public void WidthUI(Panel wp)
         {
             if (wp.Visibility == Visibility.Visible && wp.Children.Count > 0)
             {
@@ -297,7 +297,7 @@ namespace LemonApp
             }
         }
 
-        private void WidTX(WrapPanel wp, int lineCount)
+        private void WidTX(Panel wp, int lineCount)
         {
             foreach (UserControl dx in wp.Children)
                 dx.Width = (wp.ActualWidth - 24 * lineCount) / lineCount;
