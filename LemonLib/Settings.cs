@@ -152,7 +152,7 @@ namespace LemonLib
             //启用圆的MusicImage?
             public int IsRoundMusicImage { get; set; } = 5;
             //启动歌词页动效
-            //0=波澜 1=转动
+            //0=波澜 1=无 2=转动
             public int LyricAnimationMode { get; set; } = 0;
             //是否打开桌面歌词
             public bool DoesOpenDeskLyric { get; set; } = true;

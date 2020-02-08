@@ -55,6 +55,7 @@ namespace LemonApp.Theme.TheFirstSnow
             {
                 await Task.Delay(i * 100);
                 var b = new Image();
+                RenderOptions.SetBitmapScalingMode(b, BitmapScalingMode.LowQuality);
                 Random rd = new Random();
                 int width = rd.Next(10, 20);
                 b.Width = width;

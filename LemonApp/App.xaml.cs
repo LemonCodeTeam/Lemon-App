@@ -26,7 +26,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1132";
+        public static string EM = "1136";
         #region 启动时 进程检测 配置 登录
         System.Threading.Mutex mut;
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -117,10 +117,10 @@ namespace LemonApp
         }
         #endregion
         #region lierda.WPFHelper 内存管控
-       // LierdaCracker cracker = new LierdaCracker();
+        LierdaCracker cracker = new LierdaCracker();
         protected override void OnStartup(StartupEventArgs e)
         {
-            //cracker.Cracker();
+            cracker.Cracker();
             base.OnStartup(e);
         }
         #endregion

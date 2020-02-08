@@ -44,7 +44,7 @@ namespace Lierda.WPFHelper
             currentUser.Dispose();
         }
 
-        public void Cracker(int sleepSpan = 15)
+        public void Cracker(int sleepSpan = 50)
         {
             _ = Task.Factory.StartNew(delegate{
                   while (true){

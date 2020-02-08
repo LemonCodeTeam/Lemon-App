@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LemonApp"
+             xmlns:local="clr-namespace:LemonApp" RenderOptions.BitmapScalingMode="LowQuality"
              mc:Ignorable="d" Width="130" MinWidth="130" MaxWidth="200" SizeChanged="UserControl_SizeChanged" Height="170">
     <Grid>
         <Border x:Name="im" Background="#FF007ACC" VerticalAlignment="Top" CornerRadius="100" Height="{Binding ActualWidth, ElementName=im, Mode=OneWay}" Margin="0,15,0,0" Width="{Binding ActualWidth, ElementName=userControl, Mode=OneWay}"/>

@@ -51,6 +51,7 @@ namespace LemonApp.Theme.Dtpp
             {
                 await Task.Delay(i * 100);
                 Border b = new Border();
+                RenderOptions.SetBitmapScalingMode(b, BitmapScalingMode.LowQuality);
                 Random rd = new Random();
                 int width = rd.Next(25, 150);
                 b.Width = width;

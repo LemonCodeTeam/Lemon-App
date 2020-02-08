@@ -30,7 +30,6 @@ namespace LemonApp
         private int lastindex = 0;//最后一个索引
         private bool HasCheck=false;
         private MainWindow mw;
-        private ConditionalWeakTable<string, ImageBrush> WeakBrushCache = new ConditionalWeakTable<string, ImageBrush>();
         public ImageForceView()
         {
             InitializeComponent();
@@ -47,17 +46,19 @@ namespace LemonApp
         {
             try
             {
-                if (!WeakBrushCache.TryGetValue(iv[index].pic, out ImageBrush ib))
-                {
-                    ib = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic, new int[2] { 303, 756 })) { Stretch = Stretch.Fill };
-                    WeakBrushCache.AddOrUpdate(iv[index].pic, ib);
-                }
+                
+                Image.Background = null;
+                var ib = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic, new int[2] { 303, 756 })) { Stretch = Stretch.Fill };
                 Image.Background = ib;
+                GC.Collect();
             }
             catch { }
         }
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            CheckAniLeft = Resources["CheckAniLeft"] as Storyboard;
+            CheckAniRight = Resources["CheckAniRight"] as Storyboard;
+            RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.LowQuality);
             while (true) {
                 await Task.Delay(5000);
                 if (HasCheck)
@@ -98,6 +99,8 @@ namespace LemonApp
             else Process.Start(url);
         }
 
+        private Storyboard CheckAniLeft;
+        private Storyboard CheckAniRight;
         private void TurnLeft() {
             if (index.Equals(0)){
                 SetImageAsync(lastindex);
@@ -108,7 +111,7 @@ namespace LemonApp
                 SetImageAsync(index);
             }
             Console.WriteLine("LEFT" + index);
-            (Resources["CheckAniLeft"] as Storyboard).Begin();
+            CheckAniLeft.Begin();
         }
         private void Left_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -129,7 +132,7 @@ namespace LemonApp
                     SetImageAsync(index);
                 }
                 Console.WriteLine("RIGHT:" + index);
-                (Resources["CheckAniRight"] as Storyboard).Begin();
+                CheckAniRight.Begin();
             }
             catch { }
         }

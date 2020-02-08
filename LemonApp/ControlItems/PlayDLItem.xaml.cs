@@ -40,6 +40,7 @@ namespace LemonApp
                     SingerName.Margin = new Thickness(66, 32, 10, 0);
                     MusicName.Margin = new Thickness(66, 12, 10, 0);
                     img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(imgUrl, new int[2] { 54,54 }));
+                    RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.LowQuality);
                 }
             };
             Data = m;

@@ -1880,7 +1880,7 @@ namespace LemonApp
                     TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                     t.Start();
                     isplay = true;
-                    if (Settings.USettings.LyricAnimationMode == 1)
+                    if (Settings.USettings.LyricAnimationMode == 2)
                         LyricBigAniRound.Begin();
                 }
                 LastPlay = MusicData.Data.MusicID;
@@ -2016,7 +2016,7 @@ namespace LemonApp
             {
                 isplay = false;
                 MusicLib.mp.Pause();
-                if (Settings.USettings.LyricAnimationMode == 1)
+                if (Settings.USettings.LyricAnimationMode == 2)
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
                 t.Stop();
@@ -2026,7 +2026,7 @@ namespace LemonApp
             {
                 isplay = true;
                 MusicLib.mp.Play();
-                if (Settings.USettings.LyricAnimationMode == 1)
+                if (Settings.USettings.LyricAnimationMode == 2)
                     LyricBigAniRound.Begin();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                 t.Start();
@@ -2293,7 +2293,10 @@ namespace LemonApp
         {
             if (Settings.USettings.LyricAnimationMode == 0)
                 Settings.USettings.LyricAnimationMode = 1;
-            else Settings.USettings.LyricAnimationMode = 0;
+            else if (Settings.USettings.LyricAnimationMode == 1)
+                    Settings.USettings.LyricAnimationMode = 2;
+            else if (Settings.USettings.LyricAnimationMode == 2)
+                Settings.USettings.LyricAnimationMode = 0;
             CheckLyricAnimation(Settings.USettings.LyricAnimationMode);
         }
         private Storyboard LyricBigAniRound = null;
@@ -2308,7 +2311,7 @@ namespace LemonApp
                 (TimeSpan.FromSeconds(2)));
                 rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
             }
-            else
+            else if(mode ==2)
             {
                 LyricBigAniRound.Begin();
             }

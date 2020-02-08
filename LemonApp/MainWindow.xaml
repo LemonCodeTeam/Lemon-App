@@ -1577,8 +1577,8 @@
                 <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="509" KeySpline="0,0.8,0.2,1"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ookok">
-                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="LyricBigAniRound">
