@@ -704,8 +704,8 @@ namespace LemonApp
             var g = new System.Windows.Forms.FolderBrowserDialog();
             if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                DownloadPathTb.Text = g.SelectedPath;
-                Settings.USettings.DownloadPath = g.SelectedPath;
+                CachePathTb.Text = g.SelectedPath;
+                Settings.USettings.CachePath = g.SelectedPath;
             }
         }
 
@@ -714,7 +714,7 @@ namespace LemonApp
             var g = new System.Windows.Forms.FolderBrowserDialog();
             if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                CachePathTb.Text = g.SelectedPath;
+                DownloadPathTb.Text = g.SelectedPath;
                 Settings.USettings.DownloadPath = g.SelectedPath;
             }
         }
@@ -865,6 +865,60 @@ namespace LemonApp
             LoadDTheme(new Theme.Dtpp.Drawer());
             LoadDTheme(new Theme.TheFirstSnow.Drawer());
             #endregion
+            #region 默认主题
+            SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
+            sxc.MouseDown += (s, n) =>
+            {
+                if (wac.IsEnabled) wac.IsEnabled = false;
+                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
+                Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                DThemePage.Child = null;
+                App.BaseApp.unSkin();
+                Settings.USettings.Skin_txt = "";
+                Settings.USettings.Skin_Path = "";
+                Settings.SaveSettings();
+            };
+            sxc.Margin = new Thickness(12, 0, 12, 20);
+            SkinIndexList.Children.Add(sxc);
+            #endregion
+            #region 磨砂主题
+            SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
+            blur.MouseDown += (s, n) =>
+            {
+                Page.Background = new SolidColorBrush(Colors.Transparent);
+                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+                DThemePage.Child = null;
+                App.BaseApp.Skin();
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
+                wac.Color = Color.FromArgb(200, 0, 0, 0);
+                wac.IsEnabled = true;
+                Settings.USettings.Skin_txt = "";
+                Settings.USettings.Skin_Path = "BlurBlackTheme";
+                Settings.SaveSettings();
+            };
+            blur.Margin = new Thickness(12, 0, 12, 20);
+            SkinIndexList.Children.Add(blur);
+            SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
+            blurWhite.MouseDown += (s, n) =>
+            {
+                Page.Background = new SolidColorBrush(Colors.Transparent);
+                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
+                DThemePage.Child = null;
+                App.BaseApp.Skin_Black();
+                Color co = Color.FromRgb(64, 64, 64);
+                App.BaseApp.SetColor("ResuColorBrush", co);
+                App.BaseApp.SetColor("ButtonColorBrush", co);
+                App.BaseApp.SetColor("TextX1ColorBrush", co);
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
+                wac.Color = (Color.FromArgb(200, 255, 255, 255));
+                wac.IsEnabled = true;
+                Settings.USettings.Skin_txt = "";
+                Settings.USettings.Skin_Path = "BlurWhiteTheme";
+                Settings.SaveSettings();
+            };
+            blurWhite.Margin = new Thickness(12, 0, 12, 20);
+            SkinIndexList.Children.Add(blurWhite);
+            #endregion
             #region 在线主题
             var json = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/ux/raw/master/SkinList.json"))["dataV2"];
             foreach (var dx in json)
@@ -910,60 +964,6 @@ namespace LemonApp
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 SkinIndexList.Children.Add(sc);
             }
-            #endregion
-            #region 默认主题
-            SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
-            sxc.MouseDown += (s, n) =>
-            {
-                if (wac.IsEnabled) wac.IsEnabled = false;
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
-                Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                DThemePage.Child = null;
-                App.BaseApp.unSkin();
-                Settings.USettings.Skin_txt = "";
-                Settings.USettings.Skin_Path = "";
-                Settings.SaveSettings();
-            };
-            sxc.Margin = new Thickness(12, 0, 12, 20);
-            SkinIndexList.Children.Add(sxc);
-            #endregion
-            #region 磨砂主题
-            SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
-            blur.MouseDown += (s, n) =>
-            {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32,32,32));
-                DThemePage.Child = null;
-                App.BaseApp.Skin();
-                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=Color.FromArgb(200, 0,0,0);
-                wac.IsEnabled = true;
-                Settings.USettings.Skin_txt = "";
-                Settings.USettings.Skin_Path = "BlurBlackTheme";
-                Settings.SaveSettings();
-            };
-            blur.Margin = new Thickness(12, 0, 12, 20);
-            SkinIndexList.Children.Add(blur);
-            SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
-            blurWhite.MouseDown += (s, n) =>
-            {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180,180,180));
-                DThemePage.Child = null;
-                App.BaseApp.Skin_Black();
-                Color co = Color.FromRgb(64, 64, 64);
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                App.BaseApp.SetColor("ButtonColorBrush", co);
-                App.BaseApp.SetColor("TextX1ColorBrush", co);
-                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
-                wac.Color=(Color.FromArgb(200,255,255,255));
-                wac.IsEnabled = true;
-                Settings.USettings.Skin_txt = "";
-                Settings.USettings.Skin_Path = "BlurWhiteTheme";
-                Settings.SaveSettings();
-            };
-            blurWhite.Margin = new Thickness(12, 0, 12, 20);
-            SkinIndexList.Children.Add(blurWhite);
             #endregion
             WidthUI(SkinIndexList);
         }
