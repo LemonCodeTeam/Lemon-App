@@ -624,7 +624,7 @@ namespace LemonApp
         }
         private void SettingsPage_URLink_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start(SettingsPage_URLink.Text);
+            Process.Start("explorer",SettingsPage_URLink.Text);
         }
         private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -689,10 +689,7 @@ namespace LemonApp
                 UserSend_fj.TName = f.Name;
             }
         }
-        private void Run_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Process.Start("https://github.com/TwilightLemon/Lemon-App");
-        }
+
         private void SettingsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             LoadSettings();
@@ -1331,7 +1328,7 @@ namespace LemonApp
                 ClMyFollowSingerList = new MyFollowSingerList(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClMyFollowSingerList);
             }else ClMyFollowSingerList.GetSingerList();
-            NSPage(new MeumInfo(SingerBtn, ClMyFollowSingerList, TopCom), true, false);
+            NSPage(new MeumInfo(SingerBtn, ClMyFollowSingerList, SingerCom), true, false);
         }
         #endregion
         #region FLGD 分类歌单
