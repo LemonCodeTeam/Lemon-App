@@ -7,33 +7,14 @@ namespace LemonLib
 {
     public class HttpClient : WebClient
     {
-        private int _timeout;
-
-        /// <summary>
-        /// 超时时间(毫秒)
-        /// </summary>
-        public int Timeout
-        {
-            get
-            {
-                return _timeout;
-            }
-            set
-            {
-                _timeout = value;
-            }
+        public void Stop() {
+            wr.Abort();
         }
-
-        public HttpClient()
-        {
-            this._timeout = 60000;
-        }
-
+        private WebRequest wr;
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var result = base.GetWebRequest(address);
-            result.Timeout = this._timeout;
-            return result;
+            wr = base.GetWebRequest(address);
+            return wr;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace LemonLib
     public class MusicLib
     {
         #region  构造函数
-        public MusicLib(string id,IntPtr win)
+        public MusicLib(string id)
         {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
@@ -42,7 +42,6 @@ namespace LemonLib
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
             qq = id;
-            mp = new MusicPlayer(win);
             new Action(async() => { await GetMusicLikeGDid(); })();
         }
         public MusicLib()
@@ -60,7 +59,6 @@ namespace LemonLib
         }
         #endregion
         #region 一些字段
-        public static MusicPlayer mp;
         public static string qq = "";
         public static string MusicLikeGDid = null;
         public static string MusicLikeGDdirid = "";
@@ -763,55 +761,7 @@ jpg
             return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid=" + guid;
         */
         }
-        /// <summary>
-        /// 播放音乐
-        /// </summary>
-        /// <param name="mid"></param>
-        /// <param name="openlyric"></param>
-        /// <param name="x"></param>
-        /// <param name="s"></param>
-        /// <param name="songname"></param>
-        /// <param name="doesplay"></param>
-        public async void GetAndPlayMusicUrlAsync(string mid, Run x, Window s, string songname, bool doesplay = true)
-        {
-            string downloadpath = Settings.USettings.CachePath + "Music\\" + mid + ".mp3";
-            if (!File.Exists(downloadpath))
-            {
-                string musicurl = "";
-                musicurl = await GetUrlAsync(mid);
-                Console.WriteLine(musicurl);
-                mp.LoadUrl(musicurl);
-                if (doesplay)
-                    mp.Play();
-                s.Dispatcher.Invoke(() => {
-                    x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
-                });
-                string cache = downloadpath + ".cache";
-                WebClient wc = new WebClient();
-                wc.DownloadFileAsync(new Uri(musicurl), cache);
-                wc.DownloadFileCompleted +=async delegate {
-                    await Task.Run(() =>{
-                        File.Move(cache, downloadpath);
-                        File.Delete(cache);
-                    });
-                };
-            }
-            else
-            {
-                var fl = new FileInfo(downloadpath);
-                if (fl.Length == 0) {
-                    fl.Delete();
-                    GetAndPlayMusicUrlAsync(mid,x, s, songname, doesplay);
-                    return;
-                }
-                mp.Load(downloadpath);
-                if (doesplay)
-                    mp.Play();
-                s.Dispatcher.Invoke(()=> {
-                    x.Text = TextHelper.XtoYGetTo("[" + songname, "[", " -", 0).Replace("Wy", "");
-                });
-            }
-        }
+
         #endregion
         #region 歌词 获取|处理
         /// <summary>

@@ -83,7 +83,7 @@ namespace LemonApp.ContentPage
                     var sx = s as PlayDLItem;
                     Music dt = sx.Tag as Music;
                     mw.AddPlayDl_CR(new DataItem(dt));
-                    mw.PlayMusic(dt.MusicID, dt.ImageUrl, dt.MusicName, dt.SingerText);
+                    mw.PlayMusic(dt);
                 };
                 HomePage_Nm.Children.Add(k);
                 if (HomePage_Nm.Children.Count == 22)

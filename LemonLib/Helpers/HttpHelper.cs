@@ -44,13 +44,11 @@ namespace LemonLib
         public static string PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
             byte[] postData = Encoding.UTF8.GetBytes(data);
-            using (HttpClient webClient = new HttpClient())
-            {
-                if (Header != null)
-                    webClient.Headers = Header;
-                byte[] responseData = webClient.UploadData(url, "POST", postData);
-                return Encoding.UTF8.GetString(responseData);
-            }
+            using WebClient webClient = new WebClient();
+            if (Header != null)
+                webClient.Headers = Header;
+            byte[] responseData = webClient.UploadData(url, "POST", postData);
+            return Encoding.UTF8.GetString(responseData);
         }
         public static async Task<string> PostInycAsync(string url, string data)
         {

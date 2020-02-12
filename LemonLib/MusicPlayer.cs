@@ -38,7 +38,8 @@ namespace LemonLib
             Bass.BASS_ChannelPlay(stream,false);
         }
         public void Pause() {
-            Bass.BASS_ChannelPause(stream);
+            if (stream != -1024)
+                Bass.BASS_ChannelPause(stream);
         }
         public TimeSpan GetLength {
             get {

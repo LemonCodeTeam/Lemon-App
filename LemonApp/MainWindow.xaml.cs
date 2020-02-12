@@ -43,6 +43,7 @@ namespace LemonApp
         bool isplay = false;
         bool IsRadio = false;
         string RadioID = "";
+        public static MusicPlayer mp;
         int ind = 0;//歌词页面是否打开
         bool xh = false;//false: lb true:dq  循环/单曲 播放控制
         bool mod = true;//true : qq false : wy
@@ -117,6 +118,8 @@ namespace LemonApp
         {
             //--------检测更新-------
             Updata();
+            //----播放组件-----------
+            mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
             //--------应用程序配置 热键和消息回调--------
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
@@ -183,7 +186,7 @@ namespace LemonApp
             ContentPage.Children.Add(ClHomePage);
             NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom), true, false);
             //--------去除可恶的焦点边缘线
-            UIHelper.G(Page);
+            UIHelper.G(Page);          
         }
         private void RUNPopup(Popup pp)
         {
@@ -370,7 +373,7 @@ namespace LemonApp
                     lastlyric = text;
                 }
             };
-            ml = new MusicLib( Settings.USettings.LemonAreeunIts, new WindowInteropHelper(this).Handle);
+            ml = new MusicLib( Settings.USettings.LemonAreeunIts);
             if (Settings.USettings.DoesOpenDeskLyric == true){
                 lyricTa = new Toast("", true);
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
@@ -379,7 +382,7 @@ namespace LemonApp
             if (Settings.USettings.Playing.MusicName != "")
             {
                 MusicData = new PlayDLItem(Settings.USettings.Playing);
-                PlayMusic(Settings.USettings.Playing.MusicID, Settings.USettings.Playing.ImageUrl, Settings.USettings.Playing.MusicName, Settings.USettings.Playing.SingerText,false);
+                PlayMusic(Settings.USettings.Playing,false);
             }
             //--------播放时的Timer 进度/歌词
             t.Interval = 500;
@@ -387,13 +390,13 @@ namespace LemonApp
             {
                 try
                 {
-                    now = MusicLib.mp.Position.TotalMilliseconds;
+                    now = mp.Position.TotalMilliseconds;
                     if (CanJd)
                     {
                         jd.Value = now;
                         Play_Now.Text = TimeSpan.FromMilliseconds(now).ToString(@"mm\:ss");
                     }
-                    all = MusicLib.mp.GetLength.TotalMilliseconds;
+                    all = mp.GetLength.TotalMilliseconds;
                     string alls = TimeSpan.FromMilliseconds(all).ToString(@"mm\:ss");
                     Play_All.Text = alls;
                     jd.Maximum = all;
@@ -401,7 +404,7 @@ namespace LemonApp
                     {
                         if (Settings.USettings.LyricAnimationMode == 0)
                         {
-                            float[] data = MusicLib.mp.GetFFTData();
+                            float[] data = mp.GetFFTData();
                             float sv = 0;
                             foreach (var c in data)
                                 if (c > 0.06)
@@ -441,15 +444,15 @@ namespace LemonApp
                     {
                         now = 0;
                         all = 0;
-                        MusicLib.mp.Position = TimeSpan.FromSeconds(0);
+                        mp.Position = TimeSpan.FromSeconds(0);
                         t.Stop();
                         //-----------播放完成时，判断单曲还是下一首
                         Console.WriteLine("end");
                         jd.Value = 0;
                         if (xh)//单曲循环
                         {
-                            MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
-                            MusicLib.mp.Play();
+                            mp.Position = TimeSpan.FromMilliseconds(0);
+                            mp.Play();
                             t.Start();
                         }
                         else PlayControl_PlayNext(null, null);//下一曲
@@ -459,7 +462,7 @@ namespace LemonApp
             };
             //-----Timer 清理与更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
-            ds.Tick += delegate { GC.Collect(); if(t.Enabled)MusicLib.mp.UpdataDevice(); GC.Collect(); };
+            ds.Tick += delegate { GC.Collect(); if(t.Enabled)mp.UpdataDevice(); GC.Collect(); };
             ds.Start();
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
@@ -1371,7 +1374,7 @@ namespace LemonApp
             k.p(true);
             MusicData = k;
             IsRadio = true;
-            PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+            PlayMusic(k.Data);
             CloseLoading();
         }
         #endregion
@@ -1585,7 +1588,7 @@ namespace LemonApp
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (!DataPage_ControlMod &&np != NowPage.Search)
-                if (Datasv.VerticalOffset >= 100)
+                if (Datasv.VerticalOffset > 0)
                 {
                     if (HB == 0)
                     {
@@ -1746,25 +1749,25 @@ namespace LemonApp
             var dt = sender as DataItem;
             AddPlayDL(dt);
             dt.ShowDx();
-            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
+            PlayMusic(dt.music);
         }
         public void PlayMusic(DataItem dt, bool next = false)
         {
             AddPlayDL(dt);
             dt.ShowDx();
-            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
+            PlayMusic(dt.music);
         }
         public void PushPlayMusic(DataItem dt, ListBox DataSource)
         {
             AddPlayDL(dt, DataSource);
             dt.ShowDx();
-            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
+            PlayMusic(dt.music);
         }
         public void PlayMusic(DataItem dt)
         {
             AddPlayDL(dt);
             dt.ShowDx();
-            PlayMusic(dt.music.MusicID, dt.music.ImageUrl, dt.music.MusicName, dt.music.SingerText);
+            PlayMusic(dt.music);
         }
         public PlayDLItem AddPlayDL_All(DataItem dt, int index = -1, ListBox source = null)
         {
@@ -1819,7 +1822,7 @@ namespace LemonApp
             PlayDLItem k = sender as PlayDLItem;
             k.p(true);
             MusicData = k;
-            PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+            PlayMusic(k.Data);
             bool find = false;
             foreach (DataItem a in DataItemsList.Items)
             {
@@ -1832,56 +1835,90 @@ namespace LemonApp
             }
             if (!find) new DataItem(new Music()).ShowDx();
         }
-
-        private string LastPlay = "";
-        public async void PlayMusic(string id, string x, string name, string singer, bool doesplay = true)
+        private HttpClient PlayMusic_Downloader = null;
+        public async void PlayMusic(Music data, bool doesplay = true)
         {
-            if (LastPlay == id)
+            t.Stop();
+            Title = data.MusicName + " - " + data.SingerText;
+            MusicName.Text = "连接资源中...";
+            mp.Pause();
+            Settings.USettings.Playing = MusicData.Data;
+            Settings.SaveSettings();
+            if (Settings.USettings.MusicLike.ContainsKey(data.MusicID))
+                LikeBtnDown();
+            else LikeBtnUp();
+
+
+            var im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl);
+            MusicImage.Background = new ImageBrush(im);
+            var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
+            var imb = im.ToBitmap();
+            imb.GaussianBlur(ref rect, 20);
+            LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
+            Singer.Text = data.SingerText;
+
+            string downloadpath = Settings.USettings.CachePath + "Music\\" + data.MusicID + ".mp3";
+            if (!System.IO.File.Exists(downloadpath))
             {
-                if (doesplay)
+                string musicurl = "";
+                musicurl = await MusicLib.GetUrlAsync(data.MusicID);
+                Console.WriteLine(musicurl);
+                string cache = downloadpath + ".cache";
+                if (PlayMusic_Downloader != null)
                 {
-                    MusicLib.mp.Position = TimeSpan.FromMilliseconds(0);
-                    MusicLib.mp.Play();
-                    TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
-                    t.Start();
-                    isplay = true;
+                    PlayMusic_Downloader.Dispose();
+                    PlayMusic_Downloader = null;
                 }
+                if (PlayMusic_Downloader == null)
+                {
+                    PlayMusic_Downloader = new HttpClient();
+                    PlayMusic_Downloader.DownloadProgressChanged += (oc, es) =>
+                    {
+                        MusicName.Text = "Loading...[" + es.ProgressPercentage + "%] " + data.MusicName + " - " + data.SingerText;
+                    };
+                    PlayMusic_Downloader.DownloadFileCompleted += async delegate
+                    {
+                        await Task.Run(() =>
+                        {
+                            System.IO.File.Move(cache, downloadpath, true);
+                            Dispatcher.Invoke(() =>
+                            {
+                                mp.Load(downloadpath);
+                                if (doesplay)
+                                    mp.Play();
+                                MusicName.Text = data.MusicName + " - " + data.SingerText;
+                            });
+                        });
+                    };
+                }
+                PlayMusic_Downloader.DownloadFileAsync(new Uri(musicurl), cache);
             }
             else
             {
-                Title = name + " - " + singer;
-                MusicName.Text = "连接资源中...";
-                t.Stop();
-                MusicLib.mp.Pause();
-                Settings.USettings.Playing = MusicData.Data;
-                Settings.SaveSettings();
-                if (Settings.USettings.MusicLike.ContainsKey(id))
-                    LikeBtnDown();
-                else LikeBtnUp();
-                ml.GetAndPlayMusicUrlAsync(id, MusicName, this, name + " - " + singer, doesplay);
-                string dt = await MusicLib.GetLyric(id);
-                lv.LoadLrc(dt);
-                var im = await ImageCacheHelp.GetImageByUrl(x);
-                MusicImage.Background = new ImageBrush(im);
-                var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
-                var imb = im.ToBitmap();
-                imb.GaussianBlur(ref rect, 20);
-                LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
-                Singer.Text = singer;
-                TaskBarImg.SetImage(im);
-                TaskBarImg.Title = name + " - " + singer;
+                mp.Load(downloadpath);
                 if (doesplay)
-                {
-                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
-                    TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                    t.Start();
-                    isplay = true;
-                    if (Settings.USettings.LyricAnimationMode == 2)
-                        LyricBigAniRound.Begin();
-                }
-                LastPlay = MusicData.Data.MusicID;
+                    mp.Play();
+                MusicName.Text = data.MusicName + " - " + data.SingerText;
             }
+
+            string dt = await MusicLib.GetLyric(data.MusicID);
+            lv.LoadLrc(dt);
+
+            if (doesplay)
+            {
+                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
+                t.Start();
+                isplay = true;
+                if (Settings.USettings.LyricAnimationMode == 2)
+                    LyricBigAniRound.Begin();
+            }
+            try
+            {
+                TaskBarImg.SetImage(im);
+                TaskBarImg.Title = data.MusicName + " - " + data.SingerText;
+            }
+            catch { }
         }
         #endregion
         #region PlayControl
@@ -1922,7 +1959,7 @@ namespace LemonApp
         }
         private void Jd_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {//若使用ValueChanged事件，在value改变时也会触发，而不单是拖动jd.
-            MusicLib.mp.Position = TimeSpan.FromMilliseconds(jd.Value);
+            mp.Position = TimeSpan.FromMilliseconds(jd.Value);
             CanJd = true;
         }
         bool CanJd = true;
@@ -1962,7 +1999,7 @@ namespace LemonApp
             {
                 k.p(true);
                 MusicData = k;
-                PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+                PlayMusic(k.Data);
                 bool find = false;
                 foreach (DataItem a in DataItemsList.Items)
                 {
@@ -1993,7 +2030,7 @@ namespace LemonApp
             {
                 k.p(true);
                 MusicData = k;
-                PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+                PlayMusic(k.Data);
                 bool find = false;
                 foreach (DataItem a in DataItemsList.Items)
                 {
@@ -2012,7 +2049,7 @@ namespace LemonApp
             if (isplay)
             {
                 isplay = false;
-                MusicLib.mp.Pause();
+                mp.Pause();
                 if (Settings.USettings.LyricAnimationMode == 2)
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
@@ -2022,7 +2059,7 @@ namespace LemonApp
             else
             {
                 isplay = true;
-                MusicLib.mp.Play();
+                mp.Play();
                 if (Settings.USettings.LyricAnimationMode == 2)
                     LyricBigAniRound.Begin();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
@@ -2281,7 +2318,7 @@ namespace LemonApp
         {
             var k = AddPlayDL_All(null, 0);
             (DataItemsList.Items[0] as DataItem).ShowDx();
-            PlayMusic(k.Data.MusicID, k.Data.ImageUrl, k.Data.MusicName, k.Data.SingerText);
+            PlayMusic(k.Data);
         }
         #endregion
         #region Lyric
@@ -2812,7 +2849,7 @@ namespace LemonApp
             {
                 try
                 {
-                    MusicLib.mp.Free();
+                    mp.Free();
                     notifyIcon.Dispose();
                 }
                 catch { }
