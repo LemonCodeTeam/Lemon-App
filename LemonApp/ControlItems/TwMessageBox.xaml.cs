@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LemonLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,32 @@ namespace LemonApp
         {
             DialogResult = true;
             Close();
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await Task.Delay(100);
+            if (Settings.USettings.Skin_txt == "Black")
+            {
+                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
+                title.Foreground = new SolidColorBrush(Color.FromRgb(75, 75, 75));
+                candle.Theme = 0;
+                WindowAccentCompositor wac = new WindowAccentCompositor(this,(c)=> {
+                    Background = new SolidColorBrush(c);
+                });
+                wac.Color = Color.FromArgb(200, 255, 255, 255);
+                wac.IsEnabled = true;
+            }
+            else {
+                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+                title.Foreground = new SolidColorBrush(Color.FromRgb(234,234,234));
+                candle.Theme = 1;
+                WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) => {
+                    Background = new SolidColorBrush(c);
+                }); 
+                wac.Color = Color.FromArgb(220, 0, 0, 0);
+                wac.IsEnabled = true;
+            }
         }
     }
 }

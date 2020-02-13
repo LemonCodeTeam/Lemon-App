@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -12,15 +13,20 @@ namespace LemonApp
     /// </summary>
     public class WindowAccentCompositor
     {
-        private readonly MainWindow _window;
+        private readonly Window _window;
         private bool _isEnabled;
         private int _blurColor;
+        private Action<Color> NoFunCallback;
 
         /// <summary>
         /// 创建 <see cref="WindowAccentCompositor"/> 的一个新实例。
         /// </summary>
         /// <param name="window">要创建模糊特效的窗口实例。</param>
-        public WindowAccentCompositor(MainWindow window) => _window = window ?? throw new ArgumentNullException(nameof(window));
+        public WindowAccentCompositor(Window window,Action<Color> nofun)
+        {
+            _window = window;
+            NoFunCallback = nofun;
+        }
 
         /// <summary>
         /// 获取或设置此窗口模糊特效是否生效的一个状态。
@@ -102,7 +108,7 @@ namespace LemonApp
                 // 如果系统在 Windows 10 以上，则启用 Windows 10 早期的模糊特效。
                 //  请参见《在 Windows 10 上为 WPF 窗口添加模糊特效》
                 //  https://blog.walterlv.com/post/win10/2017/10/02/wpf-transparent-blur-in-windows-10.html
-                _window.Page.Background = new SolidColorBrush(c);
+                NoFunCallback(Color);
                 accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
             }
             else

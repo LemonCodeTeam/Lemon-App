@@ -127,7 +127,9 @@ namespace LemonApp
             LoadSEND_SHOW();
             LoadHotDog();
             //-------注册个模糊效果------
-            wac = new WindowAccentCompositor(this);
+            wac = new WindowAccentCompositor(this,(c)=> {
+                Page.Background = new SolidColorBrush(c);
+            });
             //--------登录------
             Settings.LoadLocaSettings();
             if (Settings.LSettings.qq != "")
@@ -257,7 +259,7 @@ namespace LemonApp
             }
             else
             {
-                if (Settings.USettings.Skin_txt != "")
+                if (Settings.USettings.Skin_Path != "MR")
                 {//有主题配置 （非默认）
                     //    主题背景图片
                     if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
@@ -291,9 +293,6 @@ namespace LemonApp
                     ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                     Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                     App.BaseApp.unSkin();
-                    Settings.USettings.Skin_txt = "";
-                    Settings.USettings.Skin_Path = "";
-                    Settings.SaveSettings();
                 }
                 DThemePage.Child = null;
             }
@@ -874,8 +873,8 @@ namespace LemonApp
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 DThemePage.Child = null;
                 App.BaseApp.unSkin();
-                Settings.USettings.Skin_txt = "";
-                Settings.USettings.Skin_Path = "";
+                Settings.USettings.Skin_txt = "Black";
+                Settings.USettings.Skin_Path = "MR";
                 Settings.SaveSettings();
             };
             sxc.Margin = new Thickness(12, 0, 12, 20);
