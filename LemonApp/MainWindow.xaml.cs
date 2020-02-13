@@ -1473,6 +1473,97 @@ namespace LemonApp
         #endregion
         #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
 
+        private void Md_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _Gdpop.IsOpen = false;
+            string name = (sender as ListBoxItem).Content.ToString();
+            string id = _ListData[name];
+            string Musicid = "";
+            string types = "";
+            foreach (DataItem d in DataItemsList.Items)
+            {
+                if (d.isChecked)
+                {
+                    types += "3,";
+                    Musicid += d.music.MusicID + ",";
+                }
+            }
+            Musicid = Musicid[0..^1];
+            types = types[0..^1];
+            string[] a = MusicLib.AddMusicToGDPL(Musicid, id, types);
+            Toast.Send(a[1] + ": " + a[0]);
+        }
+        private Popup _Gdpop = null;
+        private ListBox _Add_Gdlist = null;
+        private Dictionary<string, string> _ListData = new Dictionary<string, string>();//name,id
+        private async void DataPage_PLCZ_AddTo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_Gdpop == null)
+            {
+                string Gdpopxaml = @"<Popup xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
+                <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
+                    <Grid>
+                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
+                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" Style=""{DynamicResource ListBoxStyle1}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyle1}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
+                            <ListBoxItem Content=""我喜欢的歌单""/>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Popup>";
+                _Gdpop = (Popup)XamlReader.Parse(Gdpopxaml);
+                _Add_Gdlist = (ListBox)((Grid)((Border)_Gdpop.Child).Child).Children[0];
+                grid.Children.Add(_Gdpop);
+            }
+            _Add_Gdlist.Items.Clear();
+            _ListData.Clear();
+            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            foreach (var a in o["list"])
+            {
+                string name = a["dirname"].ToString();
+                _ListData.Add(name, a["dirid"].ToString());
+                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = name, Margin = new Thickness(10, 10, 10, 0) };
+                mdb.PreviewMouseDown += Md_MouseDown;
+                _Add_Gdlist.Items.Add(mdb);
+            }
+            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10, 10, 0) };
+            md.PreviewMouseDown += delegate { _Gdpop.IsOpen = false; };
+            _Add_Gdlist.Items.Add(md);
+            _Gdpop.IsOpen = true;
+        }
+
+        private async void DataPage_PLCZ_Delete_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (TwMessageBox.Show("确定要删除这些歌曲吗?"))
+            {
+                List<DataItem> ReadytoDelete = new List<DataItem>();
+                List<string> Musicid = new List<string>();
+                foreach (var dx in DataItemsList.Items)
+                {
+                    if (dx is DataItem)
+                    {
+                        var d = dx as DataItem;
+                        if (d.isChecked)
+                        {
+                            ReadytoDelete.Add(d);
+                            Musicid.Add(He.MGData_Now.ids[d.index]);
+                        }
+                    }
+                }
+                string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
+                Toast.Send(MusicLib.DeleteMusicFromGD(Musicid.ToArray(), dirid));
+                foreach (var d in ReadytoDelete)
+                {
+                    He.MGData_Now.Data.Remove(d.music);
+                    DataItemsList.Items.Remove(d);
+                }
+            }
+        }
+
+        private void DataPLCZBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DataPage_CMType = 1;
+            OpenDataControlPage();
+        }
         private void DataPage_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
         {
             int index = -1;
@@ -1873,7 +1964,7 @@ namespace LemonApp
                     PlayMusic_Downloader = new HttpClient();
                     PlayMusic_Downloader.DownloadProgressChanged += (oc, es) =>
                     {
-                        MusicName.Text = "Loading...[" + es.ProgressPercentage + "%] " + data.MusicName + " - " + data.SingerText;
+                        MusicName.Text = "Loading...[" + es.ProgressPercentage + "%] " + data.MusicName;
                     };
                     PlayMusic_Downloader.DownloadFileCompleted += async delegate
                     {
@@ -1885,7 +1976,7 @@ namespace LemonApp
                                 mp.Load(downloadpath);
                                 if (doesplay)
                                     mp.Play();
-                                MusicName.Text = data.MusicName + " - " + data.SingerText;
+                                MusicName.Text = data.MusicName;
                             });
                         });
                     };
@@ -1897,7 +1988,7 @@ namespace LemonApp
                 mp.Load(downloadpath);
                 if (doesplay)
                     mp.Play();
-                MusicName.Text = data.MusicName + " - " + data.SingerText;
+                MusicName.Text = data.MusicName;
             }
 
             string dt = await MusicLib.GetLyric(data.MusicID);
@@ -2937,94 +3028,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void Md_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            _Gdpop.IsOpen = false;
-            string name = (sender as ListBoxItem).Content.ToString();
-            string id = _ListData[name];
-            string Musicid = "";
-            string types = "";
-            foreach (DataItem d in DataItemsList.Items)
-            {
-                if (d.isChecked){
-                    types += "3,";
-                    Musicid += d.music.MusicID + ",";
-                }
-            }
-            Musicid = Musicid[0..^1];
-            types = types[0..^1];
-            string[] a = MusicLib.AddMusicToGDPL(Musicid, id,types);
-            Toast.Send(a[1] + ": " + a[0]);
-        }
-        private Popup _Gdpop=null;
-        private ListBox _Add_Gdlist=null;
-        private Dictionary<string, string> _ListData = new Dictionary<string, string>();//name,id
-        private async void DataPage_PLCZ_AddTo_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (_Gdpop == null) {
-                string Gdpopxaml = @"<Popup xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
-                <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
-                    <Grid>
-                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
-                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" Style=""{DynamicResource ListBoxStyle1}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyle1}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
-                            <ListBoxItem Content=""我喜欢的歌单""/>
-                        </ListBox>
-                    </Grid>
-                </Border>
-            </Popup>";
-                _Gdpop = (Popup)XamlReader.Parse(Gdpopxaml);
-                _Add_Gdlist = (ListBox)((Grid)((Border)_Gdpop.Child).Child).Children[0];
-                grid.Children.Add(_Gdpop);
-            }
-            _Add_Gdlist.Items.Clear();
-            _ListData.Clear();
-            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
-            foreach (var a in o["list"])
-            {
-                string name = a["dirname"].ToString();
-                _ListData.Add(name, a["dirid"].ToString());
-                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = name, Margin = new Thickness(10, 10, 10, 0) };
-                mdb.PreviewMouseDown += Md_MouseDown;
-                _Add_Gdlist.Items.Add(mdb);
-            }
-            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10, 10, 0) };
-            md.PreviewMouseDown += delegate { _Gdpop.IsOpen = false; };
-            _Add_Gdlist.Items.Add(md);
-            _Gdpop.IsOpen = true;
-        }
-
-        private async void DataPage_PLCZ_Delete_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (TwMessageBox.Show("确定要删除这些歌曲吗?"))
-            {
-                List<DataItem> ReadytoDelete = new List<DataItem>();
-                List<string> Musicid = new List<string>();
-                foreach(var dx in DataItemsList.Items)
-                {
-                    if (dx is DataItem)
-                    {
-                        var d = dx as DataItem;
-                        if (d.isChecked)
-                        {
-                            ReadytoDelete.Add(d);
-                            Musicid.Add(He.MGData_Now.ids[d.index]);
-                        }
-                    }
-                }
-                string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
-                Toast.Send(MusicLib.DeleteMusicFromGD(Musicid.ToArray(), dirid));
-                foreach (var d in ReadytoDelete) {
-                    He.MGData_Now.Data.Remove(d.music);
-                    DataItemsList.Items.Remove(d);
-                }
-            }
-        }
-
-        private void DataPLCZBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            DataPage_CMType = 1;
-            OpenDataControlPage();
-        }
     }
 }
