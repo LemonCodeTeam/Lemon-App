@@ -49,18 +49,21 @@ namespace LemonApp
         }
         #endregion
         #region 主题颜色配置
+        /// <summary>
+        /// 指定当前主题背景色 default:0(white) 1(black)
+        /// </summary>
+        public int ThemeColor = 0;
         public void SetColor(string id,Color c)
         {
             var color = new SolidColorBrush() { Color = c };
             Resources[id] = color;
         }
-        public bool skin = false;
         /// <summary>
         /// 适配白色字体的主题配置（默认）
         /// </summary>
         public void Skin()
         {
-            skin = true;
+            ThemeColor = 1;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
@@ -79,7 +82,7 @@ namespace LemonApp
         /// </summary>
         public void Skin_Black()
         {
-            skin = true;
+            ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
@@ -97,7 +100,7 @@ namespace LemonApp
         /// 恢复 默认主题  /卸载主题
         /// </summary>
         public void unSkin() {
-            skin = false;
+            ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));

@@ -49,7 +49,7 @@ namespace LemonApp
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await Task.Delay(100);
-            if (Settings.USettings.Skin_txt == "Black")
+            if (App.BaseApp.ThemeColor==0)
             {
                 WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
                 title.Foreground = new SolidColorBrush(Color.FromRgb(75, 75, 75));

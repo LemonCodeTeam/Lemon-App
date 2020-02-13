@@ -259,7 +259,7 @@ namespace LemonApp
             }
             else
             {
-                if (Settings.USettings.Skin_Path != "MR")
+                if (Settings.USettings.Skin_Path != "")
                 {//有主题配置 （非默认）
                     //    主题背景图片
                     if (Settings.USettings.Skin_Path != "" && System.IO.File.Exists(Settings.USettings.Skin_Path))
@@ -873,8 +873,8 @@ namespace LemonApp
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 DThemePage.Child = null;
                 App.BaseApp.unSkin();
-                Settings.USettings.Skin_txt = "Black";
-                Settings.USettings.Skin_Path = "MR";
+                Settings.USettings.Skin_txt = "";
+                Settings.USettings.Skin_Path = "";
                 Settings.SaveSettings();
             };
             sxc.Margin = new Thickness(12, 0, 12, 20);
