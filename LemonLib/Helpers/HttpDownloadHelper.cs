@@ -58,7 +58,7 @@ namespace LemonLib
                 st.Close();
                 so.Close();
                 myrp.Close();
-                Finished();
+                if(!stop)Finished();
             });
         }
         public void Pause()

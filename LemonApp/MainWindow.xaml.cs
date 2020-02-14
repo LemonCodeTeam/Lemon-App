@@ -1925,10 +1925,15 @@ namespace LemonApp
             }
             if (!find) new DataItem(new Music()).ShowDx();
         }
-        private HttpClient PlayMusic_Downloader = null;
+        private HttpDownloadHelper PlayMusic_Downloader = null;
         public async void PlayMusic(Music data, bool doesplay = true)
         {
             t.Stop();
+            if (PlayMusic_Downloader != null)
+            {
+                PlayMusic_Downloader.Stop();
+                PlayMusic_Downloader = null;
+            }
             Title = data.MusicName + " - " + data.SingerText;
             MusicName.Text = "连接资源中...";
             mp.Pause();
@@ -1954,19 +1959,15 @@ namespace LemonApp
                 musicurl = await MusicLib.GetUrlAsync(data.MusicID);
                 Console.WriteLine(musicurl);
                 string cache = downloadpath + ".cache";
-                if (PlayMusic_Downloader != null)
-                {
-                    PlayMusic_Downloader.Dispose();
-                    PlayMusic_Downloader = null;
-                }
-                if (PlayMusic_Downloader == null)
-                {
-                    PlayMusic_Downloader = new HttpClient();
-                    PlayMusic_Downloader.DownloadProgressChanged += (oc, es) =>
+                PlayMusic_Downloader = new HttpDownloadHelper(data.MusicID,cache);
+                PlayMusic_Downloader.GetSize += (a) => { };
+                PlayMusic_Downloader.ProgressChanged += (pro) =>
                     {
-                        MusicName.Text = "Loading...[" + es.ProgressPercentage + "%] " + data.MusicName;
+                        Dispatcher.Invoke(()=> {
+                            MusicName.Text = "Loading...(" + pro + "%)  " + data.MusicName;
+                        });
                     };
-                    PlayMusic_Downloader.DownloadFileCompleted += async delegate
+                PlayMusic_Downloader.Finished += async delegate
                     {
                         await Task.Run(() =>
                         {
@@ -1980,8 +1981,7 @@ namespace LemonApp
                             });
                         });
                     };
-                }
-                PlayMusic_Downloader.DownloadFileAsync(new Uri(musicurl), cache);
+                PlayMusic_Downloader.Download();
             }
             else
             {
