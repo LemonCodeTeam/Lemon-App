@@ -37,11 +37,13 @@ namespace LemonApp.Theme.TheFirstSnow
             ThemeColor = Color.FromArgb(255, 158, 194, 248);
             FontColor = "White";
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             border.Source = Properties.Resources.motionelement.ToBitmapImage();
             Resources["snow"] = new ImageBrush(Properties.Resources.a.ToBitmapImage());
             canvas.Background = new ImageBrush(Properties.Resources.thefirstsnow.ToBitmapImage());
             Draw();
-            (Resources["Ani"] as Storyboard).Begin();
+            var ani = Resources["Ani"] as Storyboard;
+            ani.Begin();
         }
         public override ThemeBase GetPage()
         {
@@ -55,28 +57,22 @@ namespace LemonApp.Theme.TheFirstSnow
             {
                 await Task.Delay(i * 100);
                 var b = new Image();
-                RenderOptions.SetBitmapScalingMode(b, BitmapScalingMode.LowQuality);
                 Random rd = new Random();
                 int width = rd.Next(10, 20);
                 b.Width = width;
                 b.Height = width;
                 b.Source = (Resources["snow"] as ImageBrush).ImageSource;
                 b.Opacity = 0.8;
-                RenderOptions.SetBitmapScalingMode(b, BitmapScalingMode.LowQuality);
                 int left = rd.Next(0, (int)canvas.ActualWidth);
                 Canvas.SetLeft(b, left);
-                int speed = rd.Next(15, 25);
-                DoubleAnimationUsingPath d = new DoubleAnimationUsingPath()
+                int speed = rd.Next(20, 30);
+                DoubleAnimation d = new DoubleAnimation()
                 {
                     Duration = TimeSpan.FromSeconds(speed),
                     RepeatBehavior = RepeatBehavior.Forever,
-                    PathGeometry = new PathGeometry(new List<PathFigure>() {
-                    new PathFigure(new Point(left, 0-width),
-                    new List<PathSegment>() {
-                        new LineSegment( new Point(left, canvas.ActualHeight), false) }
-                    , false) }),
-                    Source = PathAnimationSource.Y
+                    From = 0 - width, To = canvas.ActualHeight
                 };
+                Timeline.SetDesiredFrameRate(d, 35);
                 canvas.Children.Add(b);
                 b.BeginAnimation(Canvas.TopProperty, d);
             }

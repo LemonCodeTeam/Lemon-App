@@ -138,8 +138,8 @@ namespace LemonApp
             GeneralTransform gf = foucslrc.c_LrcTb.TransformToVisual(c_lrc_items);
             Point p = gf.Transform(new Point(0, 0));
             double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 10;
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(500));
-            da.EasingFunction = new QuinticEase() { EasingMode=EasingMode.EaseOut};
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+            da.EasingFunction = new CircleEase { EasingMode=EasingMode.EaseOut};
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
         #endregion

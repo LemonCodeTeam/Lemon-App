@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 
 /*
            Lemon App 通用主题模板 V2 Run on .Net Core 3.1
@@ -36,6 +37,7 @@ namespace LemonApp.Theme.Dtpp
             ThemeColor = Color.FromArgb(255, 32, 143, 255);
             FontColor = "White";
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             Draw();
         }
         public static new string NameSpace = "LemonApp.Theme.Dtpp.Drawer";
@@ -50,29 +52,22 @@ namespace LemonApp.Theme.Dtpp
             for (int i = 0; i < 10; i++)
             {
                 await Task.Delay(i * 100);
-                Border b = new Border();
-                RenderOptions.SetBitmapScalingMode(b, BitmapScalingMode.LowQuality);
+                Ellipse b = new Ellipse();
                 Random rd = new Random();
                 int width = rd.Next(25, 150);
                 b.Width = width;
                 b.Height = width;
-                b.CornerRadius = new CornerRadius(width);
                 int color = rd.Next(51, 127);
-                b.Background = new SolidColorBrush(Color.FromArgb((byte)color, 255, 255, 255));
+                b.Fill = new SolidColorBrush(Color.FromArgb((byte)color, 255, 255, 255));
                 int left = rd.Next(0, (int)canvas.ActualWidth);
                 Canvas.SetLeft(b, left);
-                int speed = rd.Next(5, 10);
-                DoubleAnimationUsingPath d = new DoubleAnimationUsingPath()
-                {
+                int speed = rd.Next(8, 15);
+                DoubleAnimation d = new DoubleAnimation() {
                     Duration = TimeSpan.FromSeconds(speed),
-                    RepeatBehavior = RepeatBehavior.Forever,
-                    PathGeometry = new PathGeometry(new List<PathFigure>() {
-                    new PathFigure(new Point(left, canvas.ActualHeight),
-                    new List<PathSegment>() {
-                        new LineSegment(new Point(left, 0-width), false) }
-                    , false) }),
-                    Source = PathAnimationSource.Y
+                    From = canvas.ActualHeight, To = 0-width,
+                    RepeatBehavior = RepeatBehavior.Forever
                 };
+                Timeline.SetDesiredFrameRate(d, 35);
                 canvas.Children.Add(b);
                 b.BeginAnimation(Canvas.TopProperty, d);
             }

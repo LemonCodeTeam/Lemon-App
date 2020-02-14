@@ -5,12 +5,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LemonApp.Theme.TheFirstSnow"
-      mc:Ignorable="d" 
-      d:DesignWidth="1070" d:DesignHeight="690"
-      RenderOptions.BitmapScalingMode="LowQuality">
+      mc:Ignorable="d"
+      d:DesignWidth="1070" d:DesignHeight="690">
     <UserControl.Resources>
         <ImageBrush x:Key="snow"/>
-        <Storyboard x:Key="Ani" RepeatBehavior="Forever">
+        <Storyboard x:Key="Ani" RepeatBehavior="Forever" Timeline.DesiredFrameRate="35">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="border">
                 <EasingDoubleKeyFrame KeyTime="0:0:1" Value="10"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0"/>

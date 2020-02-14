@@ -947,12 +947,12 @@
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="LyricPage">
                 <EasingThicknessKeyFrame KeyTime="0" Value="0,600,0,-600">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
                 <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1283,12 +1283,12 @@
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ContentIndex">
                 <EasingThicknessKeyFrame KeyTime="0" Value="200,0,-200,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuarticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
                 <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuarticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1590,7 +1590,7 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_MainInfo" Storyboard.TargetProperty="(FrameworkElement.Height)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="80">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
@@ -1618,49 +1618,49 @@
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TXx" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="30,10,0,10">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TXx" Storyboard.TargetProperty="(FrameworkElement.Width)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="60">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPlayAllBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="120,0,0,25">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataDownloadBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="250,0,0,25">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPLCZBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="380,0,0,25">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataShareBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="510,0,0,25">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataItemsList" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,80,0,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1678,7 +1678,7 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_MainInfo" Storyboard.TargetProperty="(FrameworkElement.Height)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="200">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
@@ -1716,49 +1716,49 @@
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TXx" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="20,15,0,15">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TXx" Storyboard.TargetProperty="(FrameworkElement.Width)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="170">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPlayAllBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="210,0,0,30">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataDownloadBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="330,0,0,30">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPLCZBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="450,0,0,30">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataShareBtn" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="570,0,0,30">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataItemsList" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,200,0,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <QuinticEase EasingMode="EaseOut"/>
+                        <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -2157,8 +2157,8 @@
                     </Grid>
                 </Grid>
                 <Grid x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" >
-                    <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,35,0,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}"/>
-                    <TextBlock x:Name="UserName" Margin="10,105,10,0" TextWrapping="NoWrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown"/>
+                    <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,35,0,0" MouseDown="UserTX_MouseDown" Background="{DynamicResource QQTX}" Cursor="Hand"/>
+                    <TextBlock x:Name="UserName" Margin="10,105,10,0" TextWrapping="NoWrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown" Cursor="Hand"/>
                     <StackPanel x:Name="PageControls" Margin="0,150,0,0" VerticalAlignment="Top" Orientation="Vertical">
                         <TextBlock x:Name="TopBtn_Copy" Text="音乐库" Margin="6,0,15,0" Foreground="{DynamicResource ButtonColorBrush}" Height="15.24" Width="75"/>
                         <Grid x:Name="MusicKu" MouseDown="MusicKuBtn_MouseDown" Height="25.24" Margin="0,15,0,0" Background="#00000000">
