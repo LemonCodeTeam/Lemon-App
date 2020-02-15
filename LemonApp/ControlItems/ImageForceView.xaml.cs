@@ -58,7 +58,6 @@ namespace LemonApp
         {
             CheckAniLeft = Resources["CheckAniLeft"] as Storyboard;
             CheckAniRight = Resources["CheckAniRight"] as Storyboard;
-            RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.LowQuality);
             while (true) {
                 await Task.Delay(5000);
                 if (HasCheck)

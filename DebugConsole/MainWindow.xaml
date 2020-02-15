@@ -320,7 +320,7 @@
         <ScrollViewer Template="{DynamicResource ScrollViewerTemplate}" x:Name="sv" Margin="0,30,0,0">
             <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="tb" TextWrapping="Wrap" Foreground="LightGray" FontFamily="Comic Sans MS" Background="Transparent" FontSize="16"/>
         </ScrollViewer>
-        <Grid VerticalAlignment="Top" Height="30" Background="#FF101011">
+        <Grid MouseDown="Grid_MouseDown" VerticalAlignment="Top" Height="30" Background="#FF101011">
             <TextBlock HorizontalAlignment="Left" Text="{Binding Title, ElementName=window}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="LightGray" FontWeight="Bold"/>
             <Border HorizontalAlignment="Right" Height="30"  VerticalAlignment="Center" Width="30" Background="#00000000" Margin="0,0,10,0" Cursor="Hand" MouseDown="Border_MouseDown">
                 <Path Data="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Stretch="Uniform" Fill="#FFF1F2F7" Margin="3,3,3,3" Width="10" Height="10"/>

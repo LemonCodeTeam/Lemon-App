@@ -78,7 +78,7 @@ namespace LemonApp
             Loaded += async delegate
             {
                 Height = Height = ActualWidth + 50;
-                var ims = await ImageCacheHelp.GetImageByUrl(img,new int[2] {200,200});
+                var ims = await ImageCacheHelp.GetImageByUrl(img,new int[2] {300,300});
                 im.Background = new ImageBrush(ims);
             };
         }

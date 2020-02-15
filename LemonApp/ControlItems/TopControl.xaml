@@ -1,7 +1,7 @@
 ﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="LemonApp.TopControl"
-             Height="150" RenderOptions.BitmapScalingMode="LowQuality" Width="400" MinWidth="300" MaxWidth="500">
+             Height="150" Width="400" MinWidth="300" MaxWidth="500">
     <Border Background="{DynamicResource ControlPageBrush}" CornerRadius="{DynamicResource AppCornerRadius}">
         <Grid>
             <Border x:Name="im" Width="150" HorizontalAlignment="Left" CornerRadius="{DynamicResource AppCornerRadius}" Background="#FFF1F1F1"/>

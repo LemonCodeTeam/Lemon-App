@@ -35,7 +35,7 @@ namespace LemonApp
             DoubleAnimation Animation = new DoubleAnimation();
             if (needAni)
             {
-                Animation.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+                Animation.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
                 if (ScrollDirection.Down == direction)
                     Animation.To = VerticalOffset - 200;
                 else if (ScrollDirection.Up == direction)
@@ -60,9 +60,10 @@ namespace LemonApp
             int count = (int)(listbox.ActualHeight / 45);
             if (listbox.Items.IndexOf(ui) <= count)
             {
-                ui.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(
-                      new Thickness(0, 50, 0, -50), new Thickness(0), TimeSpan.FromSeconds(0.5))
-                      { EasingFunction = new QuinticEase() { EasingMode = EasingMode.EaseOut } });
+                var ani = new ThicknessAnimation(
+                      new Thickness(0, 50, 0, -50), new Thickness(0), TimeSpan.FromSeconds(0.3))
+                { EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut } };
+                ui.BeginAnimation(FrameworkElement.MarginProperty, ani);
             }
         }
     }

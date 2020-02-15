@@ -27,7 +27,8 @@ namespace DebugConsole
         private void Add(string text) {
             Dispatcher.Invoke(() => {
                 tb.Text += text+"\r\n";
-                sv.ScrollToBottom();
+                if (NeedTurnToBottom)
+                    sv.ScrollToBottom();
             });
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -71,6 +72,14 @@ namespace DebugConsole
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
+        }
+        bool NeedTurnToBottom = true;
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2) {
+                NeedTurnToBottom = !NeedTurnToBottom;
+                Add("[Console] NeedTurnToBottom: " + NeedTurnToBottom);
+            }
         }
     }
 }

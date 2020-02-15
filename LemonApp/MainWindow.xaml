@@ -1278,7 +1278,7 @@
         <Storyboard x:Key="NSPageAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentIndex">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.2"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ContentIndex">
                 <EasingThicknessKeyFrame KeyTime="0" Value="200,0,-200,0">
@@ -1286,7 +1286,7 @@
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1300,12 +1300,12 @@
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="PlayDLPage_ClosePage">
                 <EasingThicknessKeyFrame KeyTime="0" Value="0,0,0,75">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
                 <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,300,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1319,34 +1319,34 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
                 <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00" Value="20,40,45,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="20,40,45,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
                 <EasingThicknessKeyFrame KeyTime="00:00:00.5000000" Value="20,30,45,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseIn"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1406,7 +1406,7 @@
                 <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,0,300,0"/>
                 <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,0,0,0">
                     <EasingThicknessKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
@@ -1416,7 +1416,7 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="PlayDLPage">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
+                        <CubicEase EasingMode="EaseOut"/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
