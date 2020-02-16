@@ -778,13 +778,21 @@ jpg
             Dictionary<string, string> gcdata = new Dictionary<string, string>();
             string[] dta = t.Split('\n');
             foreach (var dt in dta)
-                LyricHelper.parserLine(dt, datatime, datatext, gcdata);
+                try
+                {
+                    LyricHelper.parserLine(dt, datatime, datatext, gcdata);
+                }
+                catch { }
             List<String> dataatimes = new List<String>();
             List<String> dataatexs = new List<String>();
             Dictionary<String, String> fydata = new Dictionary<String, String>();
             String[] dtaa = x.Split('\n');
             foreach (var dt in dtaa)
-                LyricHelper.parserLine(dt, dataatimes, dataatexs, fydata);
+                try
+                {
+                    LyricHelper.parserLine(dt, dataatimes, dataatexs, fydata);
+                }
+                catch { }
             List<String> KEY = new List<String>();
             Dictionary<String, String> gcfydata = new Dictionary<String, String>();
             Dictionary<String, String> list = new Dictionary<String, String>();

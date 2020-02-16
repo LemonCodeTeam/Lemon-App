@@ -39,7 +39,7 @@ namespace LemonLib
                 Myrq.KeepAlive = true;
                 Myrq.Host = "aqqmusic.tc.qq.com";
                 Myrq.Headers.Add("Upgrade-Insecure-Requests", "1");
-                Myrq.UserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
+                Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40";
                 var myrp = (HttpWebResponse)Myrq.GetResponse();
                 Console.WriteLine(myrp.StatusCode.ToString());
                 var totalBytes = myrp.ContentLength;

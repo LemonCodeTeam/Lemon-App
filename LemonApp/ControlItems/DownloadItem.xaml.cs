@@ -26,7 +26,7 @@ namespace LemonApp
             index = id;
             Load();
         }
-        private async void Load()
+        private void Load()
         {
             tb.Text = MData.MusicName + " - " + MData.SingerText;
             d = new HttpDownloadHelper(MData.MusicID, path);
@@ -38,8 +38,10 @@ namespace LemonApp
                     zt.Text = pro + "%";
                 });
             };
-            d.Finished += () =>
+            d.Finished += async () =>
             {
+                if (Settings.USettings.DownloadWithLyric)
+                    await MusicLib.GetLyric(MData.MusicID, path.Replace(".mp3", ".lrc"));
                 Dispatcher.Invoke(() =>
                 {
                     Finished(this);
@@ -56,8 +58,6 @@ namespace LemonApp
             };
             if (index==0)
                 d.Download();
-            if (Settings.USettings.DownloadWithLyric)
-                await MusicLib.GetLyric(MData.MusicID, path.Replace(".mp3", ".lrc"));
         }
         public HttpDownloadHelper d;
         public Music MData;
