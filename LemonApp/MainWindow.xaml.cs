@@ -1925,15 +1925,20 @@ namespace LemonApp
             }
             if (!find) new DataItem(new Music()).ShowDx();
         }
-        private HttpDownloadHelper PlayMusic_Downloader = null;
+        private ProgressBar MusicPlay_LoadProc;
+        private void MusicPlay_LoadProc_Loaded(object sender, RoutedEventArgs e)
+        {
+            MusicPlay_LoadProc = sender as ProgressBar;
+        }
+        //private HttpDownloadHelper PlayMusic_Downloader = null;
         public async void PlayMusic(Music data, bool doesplay = true)
         {
             t.Stop();
-            if (PlayMusic_Downloader != null)
-            {
-                PlayMusic_Downloader.Stop();
-                PlayMusic_Downloader = null;
-            }
+            //if (PlayMusic_Downloader != null)
+            //{
+            //    PlayMusic_Downloader.Stop();
+            //    PlayMusic_Downloader = null;
+            //}
             Title = data.MusicName + " - " + data.SingerText;
             MusicName.Text = "连接资源中...";
             mp.Pause();
@@ -1955,33 +1960,52 @@ namespace LemonApp
             string downloadpath = Settings.USettings.CachePath + "Music\\" + data.MusicID + ".mp3";
             if (!System.IO.File.Exists(downloadpath))
             {
-                string musicurl = "";
-                musicurl = await MusicLib.GetUrlAsync(data.MusicID);
+                MusicPlay_LoadProc.Value = 0;
+                MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
+                var musicurl = await MusicLib.GetUrlAsync(data.MusicID);
                 Console.WriteLine(musicurl);
-                string cache = downloadpath + ".cache";
-                PlayMusic_Downloader = new HttpDownloadHelper(data.MusicID,cache);
-                PlayMusic_Downloader.GetSize += (a) => { };
-                PlayMusic_Downloader.ProgressChanged += (pro) =>
+                mp.LoadUrl(downloadpath,musicurl, (max,value) =>
+                {
+                    Dispatcher.Invoke(() =>
                     {
-                        Dispatcher.Invoke(()=> {
-                            MusicName.Text = "Loading...(" + pro + "%)  " + data.MusicName;
-                        });
-                    };
-                PlayMusic_Downloader.Finished += async delegate
-                    {
-                        await Task.Run(() =>
-                        {
-                            System.IO.File.Move(cache, downloadpath, true);
-                            Dispatcher.Invoke(() =>
-                            {
-                                mp.Load(downloadpath);
-                                if (doesplay)
-                                    mp.Play();
-                                MusicName.Text = data.MusicName;
-                            });
-                        });
-                    };
-                PlayMusic_Downloader.Download();
+                        MusicPlay_LoadProc.Maximum = max;
+                        MusicPlay_LoadProc.Value = value;                   
+                    });
+                },()=> {
+                    Dispatcher.Invoke(() =>{
+                        MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
+                    });
+                });
+                if (doesplay)
+                    mp.Play();
+                MusicName.Text = data.MusicName;
+                //string musicurl = "";
+                //musicurl = await MusicLib.GetUrlAsync(data.MusicID);
+                //Console.WriteLine(musicurl);
+                //string cache = downloadpath + ".cache";
+                //PlayMusic_Downloader = new HttpDownloadHelper(data.MusicID,cache);
+                //PlayMusic_Downloader.GetSize += (a) => { };
+                //PlayMusic_Downloader.ProgressChanged += (pro) =>
+                //    {
+                //        Dispatcher.Invoke(()=> {
+                //            MusicName.Text = "Loading...(" + pro + "%)  " + data.MusicName;
+                //        });
+                //    };
+                //PlayMusic_Downloader.Finished += async delegate
+                //    {
+                //        await Task.Run(() =>
+                //        {
+                //            System.IO.File.Move(cache, downloadpath, true);
+                //            Dispatcher.Invoke(() =>
+                //            {
+                //                mp.Load(downloadpath);
+                //                if (doesplay)
+                //                    mp.Play();
+                //                MusicName.Text = data.MusicName;
+                //            });
+                //        });
+                //    };
+                //PlayMusic_Downloader.Download();
             }
             else
             {

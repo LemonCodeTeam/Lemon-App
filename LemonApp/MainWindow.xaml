@@ -105,6 +105,7 @@
             <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                 <Grid>
                     <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="0,0,0,0" Opacity="0.1" Margin="0,0,0,0"/>
+                    <ProgressBar x:Name="MusicPlay_LoadProc" Height="2" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Background="{x:Null}" Foreground="#19000000" Value="3" Loaded="MusicPlay_LoadProc_Loaded"/>
                     <Track x:Name="PART_Track" Grid.Row="1">
                         <Track.DecreaseRepeatButton>
                             <RepeatButton x:Name="Qm" Margin="0,0,0,0" Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
