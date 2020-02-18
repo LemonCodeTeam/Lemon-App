@@ -1400,7 +1400,7 @@ namespace LemonApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (MusicName.Text != "MusicName")
             {
@@ -1408,12 +1408,12 @@ namespace LemonApp
                 {
                     LikeBtnUp();
                     Settings.USettings.MusicLike.Remove(MusicData.Data.MusicID);
-                    string a = MusicLib.DeleteMusicFromGD(new string[1]{MusicData.Data.MusicID}, MusicLib.MusicLikeGDdirid);
+                    string a =await MusicLib.DeleteMusicFromGDAsync(new string[1]{MusicData.Data.MusicID}, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a);
                 }
                 else
                 {
-                    string[] a = MusicLib.AddMusicToGD(MusicData.Data.MusicID, MusicLib.MusicLikeGDdirid);
+                    string[] a =await MusicLib.AddMusicToGDAsync(MusicData.Data.MusicID, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a[1] + ": " + a[0]);
                     Settings.USettings.MusicLike.Add(MusicData.Data.MusicID, MusicData.Data);
                     LikeBtnDown();
@@ -1473,7 +1473,7 @@ namespace LemonApp
         #endregion
         #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
 
-        private void Md_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Md_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _Gdpop.IsOpen = false;
             string name = (sender as ListBoxItem).Content.ToString();
@@ -1490,7 +1490,7 @@ namespace LemonApp
             }
             Musicid = Musicid[0..^1];
             types = types[0..^1];
-            string[] a = MusicLib.AddMusicToGDPL(Musicid, id, types);
+            string[] a = await MusicLib.AddMusicToGDPLAsync(Musicid, id, types);
             Toast.Send(a[1] + ": " + a[0]);
         }
         private Popup _Gdpop = null;
@@ -1550,7 +1550,7 @@ namespace LemonApp
                     }
                 }
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
-                Toast.Send(MusicLib.DeleteMusicFromGD(Musicid.ToArray(), dirid));
+                Toast.Send(await MusicLib.DeleteMusicFromGDAsync(Musicid.ToArray(), dirid));
                 foreach (var d in ReadytoDelete)
                 {
                     He.MGData_Now.Data.Remove(d.music);
@@ -1930,24 +1930,64 @@ namespace LemonApp
         {
             MusicPlay_LoadProc = sender as ProgressBar;
         }
-        //private HttpDownloadHelper PlayMusic_Downloader = null;
+        public async void LoadMusic(Music data, bool doesplay) {
+            string downloadpath = Settings.USettings.CachePath + "Music\\" + data.MusicID + ".mp3";
+            MusicPlay_LoadProc.Value = 0;
+            if (!System.IO.File.Exists(downloadpath))
+            {
+                MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
+                var musicurl = await MusicLib.GetUrlAsync(data.MusicID);
+                Console.WriteLine(musicurl);
+                mp.LoadUrl(downloadpath, musicurl, (max, value) =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        MusicPlay_LoadProc.Maximum = max;
+                        MusicPlay_LoadProc.Value = value;
+                    });
+                }, () => {
+                    Dispatcher.Invoke(() => {
+                        MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
+                    });
+                });
+                if (doesplay)
+                    mp.Play();
+                MusicName.Text = data.MusicName;
+            }
+            else
+            {
+                System.IO.FileInfo fi = new System.IO.FileInfo(downloadpath);
+                if (fi.Length < await HttpHelper.GetHTTPFileSize(await MusicLib.GetUrlAsync(data.MusicID)))
+                {
+                    fi.Delete();
+                    LoadMusic(data, doesplay);
+                }
+                else
+                {
+                    mp.Load(downloadpath);
+                    if (doesplay)
+                        mp.Play();
+                    MusicName.Text = data.MusicName;
+                }
+            }
+        }
         public async void PlayMusic(Music data, bool doesplay = true)
         {
             t.Stop();
-            //if (PlayMusic_Downloader != null)
-            //{
-            //    PlayMusic_Downloader.Stop();
-            //    PlayMusic_Downloader = null;
-            //}
-            Title = data.MusicName + " - " + data.SingerText;
+            if (mp.BassdlList.Count > 0)
+                mp.BassdlList.Last().SetClose();
+
             MusicName.Text = "连接资源中...";
             mp.Pause();
+
+            LoadMusic(data, doesplay);
+
+            Title = data.MusicName + " - " + data.SingerText;
             Settings.USettings.Playing = MusicData.Data;
             Settings.SaveSettings();
             if (Settings.USettings.MusicLike.ContainsKey(data.MusicID))
                 LikeBtnDown();
             else LikeBtnUp();
-
 
             var im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl);
             MusicImage.Background = new ImageBrush(im);
@@ -1956,64 +1996,6 @@ namespace LemonApp
             imb.GaussianBlur(ref rect, 20);
             LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
             Singer.Text = data.SingerText;
-
-            string downloadpath = Settings.USettings.CachePath + "Music\\" + data.MusicID + ".mp3";
-            if (!System.IO.File.Exists(downloadpath))
-            {
-                MusicPlay_LoadProc.Value = 0;
-                MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
-                var musicurl = await MusicLib.GetUrlAsync(data.MusicID);
-                Console.WriteLine(musicurl);
-                mp.LoadUrl(downloadpath,musicurl, (max,value) =>
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        MusicPlay_LoadProc.Maximum = max;
-                        MusicPlay_LoadProc.Value = value;                   
-                    });
-                },()=> {
-                    Dispatcher.Invoke(() =>{
-                        MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
-                    });
-                });
-                if (doesplay)
-                    mp.Play();
-                MusicName.Text = data.MusicName;
-                //string musicurl = "";
-                //musicurl = await MusicLib.GetUrlAsync(data.MusicID);
-                //Console.WriteLine(musicurl);
-                //string cache = downloadpath + ".cache";
-                //PlayMusic_Downloader = new HttpDownloadHelper(data.MusicID,cache);
-                //PlayMusic_Downloader.GetSize += (a) => { };
-                //PlayMusic_Downloader.ProgressChanged += (pro) =>
-                //    {
-                //        Dispatcher.Invoke(()=> {
-                //            MusicName.Text = "Loading...(" + pro + "%)  " + data.MusicName;
-                //        });
-                //    };
-                //PlayMusic_Downloader.Finished += async delegate
-                //    {
-                //        await Task.Run(() =>
-                //        {
-                //            System.IO.File.Move(cache, downloadpath, true);
-                //            Dispatcher.Invoke(() =>
-                //            {
-                //                mp.Load(downloadpath);
-                //                if (doesplay)
-                //                    mp.Play();
-                //                MusicName.Text = data.MusicName;
-                //            });
-                //        });
-                //    };
-                //PlayMusic_Downloader.Download();
-            }
-            else
-            {
-                mp.Load(downloadpath);
-                if (doesplay)
-                    mp.Play();
-                MusicName.Text = data.MusicName;
-            }
 
             string dt = await MusicLib.GetLyric(data.MusicID);
             lv.LoadLrc(dt);
@@ -2300,13 +2282,13 @@ namespace LemonApp
             Add_Gdlist.Items.Add(md);
             Gdpop.IsOpen = true;
         }
-        private void Mdb_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Mdb_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MoreBtn_Meum.IsOpen = false;
             Gdpop.IsOpen = false;
             string name = (sender as ListBoxItem).Content.ToString();
             string id = MoreBtn_Meum_Add_List[name];
-            string[] a = MusicLib.AddMusicToGD(MusicData.Data.MusicID, id);
+            string[] a =await MusicLib.AddMusicToGDAsync(MusicData.Data.MusicID, id);
             Toast.Send(a[1] + ": " + a[0]);
         }
         private void MoreBtn_Meum_PL_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2435,7 +2417,7 @@ namespace LemonApp
             PlayMusic(k.Data);
         }
         #endregion
-        #region Lyric
+        #region Lyric & 评论加载
 
         private void LyricBig_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -2472,6 +2454,53 @@ namespace LemonApp
         private async void LoadPl()
         {
             NSPage(new MeumInfo(null, MusicPLPage, null));
+            OpenLoading();
+            MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
+            List<MusicPL> data;
+            bool cp = true;
+            if (MusicPLPage_QQ.Visibility == Visibility.Visible)
+                data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+            else {
+                cp = false;
+                data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text); 
+            }
+            MusicPlList.Children.Clear();
+            foreach (var dt in data)
+            {
+                MusicPlList.Children.Add(new PlControl(dt) {couldpraise=cp, Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+            }
+            CloseLoading();
+        }
+        /// <summary>
+        /// 加载QQ音乐评论
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MusicPLPage_QQ_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MusicPLPage_Wy.Visibility = Visibility.Visible;
+            MusicPLPage_QQ.Visibility = Visibility.Collapsed;
+            OpenLoading();
+            MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
+            List<MusicPL> data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text);
+            MusicPlList.Children.Clear();
+            foreach (var dt in data)
+            {
+                MusicPlList.Children.Add(new PlControl(dt) { couldpraise = false, Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+            }
+            CloseLoading();
+        }
+
+        /// <summary>
+        /// 加载网易云音乐的评论
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MusicPLPage_Wy_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MusicPLPage_Wy.Visibility = Visibility.Collapsed;
+            MusicPLPage_QQ.Visibility = Visibility.Visible;
+            OpenLoading();
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
             MusicPlList.Children.Clear();
@@ -2479,6 +2508,7 @@ namespace LemonApp
             {
                 MusicPlList.Children.Add(new PlControl(dt) { Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
             }
+            CloseLoading();
         }
         private void ly_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -2516,11 +2546,11 @@ namespace LemonApp
         {
             IntoGDPop.IsOpen = !IntoGDPop.IsOpen;
         }
-        private void IntoGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void IntoGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (mod)
             {
-                MusicLib.AddGDILike(IntoGDPage_id.Text);
+                await MusicLib.AddGDILikeAsync(IntoGDPage_id.Text);
                 TwMessageBox.Show("添加成功");
                 IntoGDPop.IsOpen = false;
                 GDBtn_MouseDown(null, null);
@@ -2554,9 +2584,9 @@ namespace LemonApp
             }
         }
 
-        private void AddGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void AddGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Toast.Send(MusicLib.AddNewGd(AddGDPage_name.Text, AddGDPage_ImgUrl));
+            Toast.Send(await MusicLib.AddNewGdAsync(AddGDPage_name.Text, AddGDPage_ImgUrl));
             AddGDPop.IsOpen = false;
             GDBtn_MouseDown(null, null);
         }
@@ -2748,7 +2778,7 @@ namespace LemonApp
                             if (TwMessageBox.Show("确定要删除吗?"))
                             {
                                 string dirid = await MusicLib.GetGDdiridByNameAsync(fl.sname);
-                                string a = MusicLib.DeleteGdById(dirid);
+                                string a =await MusicLib.DeleteGdByIdAsync(dirid);
                                 GDBtn_MouseDown(null, null);
                             }
                         };
@@ -2767,11 +2797,11 @@ namespace LemonApp
                     if (!GLikeData_Now.Contains(jm.Key))
                     {
                         var ks = new FLGDIndexItem(jm.Key, jm.Value.name, jm.Value.pic,jm.Value.listenCount, true) { Margin = new Thickness(12, 0, 12, 20) };
-                        ks.DeleteEvent += (fl) =>
+                        ks.DeleteEvent +=async (fl) =>
                         {
                             if (TwMessageBox.Show("确定要删除吗?"))
                             {
-                                string a = MusicLib.DelGDILike(fl.id);
+                                string a = await MusicLib.DelGDILikeAsync(fl.id);
                                 GDBtn_MouseDown(null, null);
                             }
                         };

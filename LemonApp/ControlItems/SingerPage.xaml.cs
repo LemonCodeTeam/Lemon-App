@@ -270,9 +270,9 @@ namespace LemonApp
             foreach (var d in data)
             {
                 var k = new FLGDIndexItem(d.ID, d.Name, d.Photo,0) { Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent += (sx) =>
+                k.StarEvent +=async (sx) =>
                 {
-                    MusicLib.AddGDILike(sx.id);
+                    await MusicLib.AddGDILikeAsync(sx.id);
                     Toast.Send("收藏成功");
                 };
                 k.Width = 200;

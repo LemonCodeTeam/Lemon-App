@@ -13,8 +13,15 @@ namespace LemonLib
         /// </summary>
         static async Task Main() {
             await Settings.LoadUSettings("2728578956");
-            var _ = await MusicLib.GetSingerIFollowListAsync(1);
-            Console.WriteLine(_.Count);
+            List<InfoHelper.MusicPL> a =await MusicLib.GetPLByQQAsync("0034Ge6Q2b504d");
+            int i = 0;
+            foreach (var b in a)
+            {
+                Console.WriteLine($"[{i}]  {b.text}  Like:{b.like}");
+                i++;
+            }
+            int index = int.Parse(Console.ReadLine());
+            Console.WriteLine(await MusicLib.PraiseMusicPLAsync("0034Ge6Q2b504d", a[index]));
             Console.ReadLine();
         }
         public static Action<string> DebugCallBack;

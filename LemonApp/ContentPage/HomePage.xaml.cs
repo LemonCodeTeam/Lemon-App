@@ -49,9 +49,9 @@ namespace LemonApp.ContentPage
             foreach (var a in data.GFdata)
             {
                 var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent += (sx) =>
+                k.StarEvent +=async (sx) =>
                 {
-                    MusicLib.AddGDILike(sx.id);
+                    await MusicLib.AddGDILikeAsync(sx.id);
                     Toast.Send("收藏成功");
                 };
                 k.ImMouseDown += mw.FxGDMouseDown;
@@ -63,9 +63,9 @@ namespace LemonApp.ContentPage
             foreach (var a in data.Gdata)
             {
                 var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent += (sx) =>
+                k.StarEvent += async (sx) =>
                 {
-                    MusicLib.AddGDILike(sx.id);
+                    await MusicLib.AddGDILikeAsync(sx.id);
                     Toast.Send("收藏成功");
                 };
                 k.ImMouseDown += mw.FxGDMouseDown;

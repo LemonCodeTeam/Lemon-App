@@ -269,12 +269,12 @@ namespace LemonApp
             Gdpop.IsOpen = true;
         }
 
-        private void Mdb_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Mdb_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Gdpop.IsOpen = false;
             string name = (sender as ListBoxItem).Content.ToString();
             string id = ListData[name];
-            string[] a = MusicLib.AddMusicToGD(music.MusicID,id);
+            string[] a = await MusicLib.AddMusicToGDAsync(music.MusicID,id);
             Toast.Send(a[1]+": "+a[0]);
         }
 
@@ -286,7 +286,7 @@ namespace LemonApp
             {
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
                 string Musicid = He.MGData_Now.ids[index];
-                Toast.Send(MusicLib.DeleteMusicFromGD(new string[1] { Musicid }, dirid));
+                Toast.Send(await MusicLib.DeleteMusicFromGDAsync(new string[1] { Musicid }, dirid));
                 Mainwindow.DataItemsList.Items.Remove(this);
                 He.MGData_Now.Data.Remove(music);
             }

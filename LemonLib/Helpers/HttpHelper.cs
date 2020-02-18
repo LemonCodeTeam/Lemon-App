@@ -11,6 +11,23 @@ namespace LemonLib
 {
     public class HttpHelper
     {
+        public static async Task<long> GetHTTPFileSize(string sURL)
+        {
+            long size = 0L;
+            try
+            {
+                var request = (HttpWebRequest)WebRequest.Create(sURL);
+                request.Method = "HEAD";
+                using var response = (HttpWebResponse)await request.GetResponseAsync();
+                size = response.ContentLength;
+                response.Close();
+            }
+            catch
+            {
+                size = 0L;
+            }
+            return size;
+        }
         public static async Task<string> GetWebAsync(string url, Encoding e = null)
         {
             if (e == null)
@@ -21,14 +38,14 @@ namespace LemonLib
             var st = await sr.ReadToEndAsync();
             return st;
         }
-        public static WebHeaderCollection GetWebHeader_MKBlog() => new WebHeaderCollection
+        public static WebHeaderCollection GetWebHeader_Yeie() => new WebHeaderCollection
             {
                 { "Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
-                { "Content-Type", "application/x-www-form-urlencoded" },
-                { "Cookie", "Hm_lvt_6e8dac14399b608f633394093523542e=1522910113; Hm_lpvt_6e8dac14399b608f633394093523542e=1522910122; Hm_lvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125; Hm_lpvt_ea4269d8a00e95fdb9ee61e3041a8f98=1522910125" },
-                { "Host", "lab.mkblog.cn" },
-                { "Origin", "http://lab.mkblog.cn" },
-                { "Referer", "http://lab.mkblog.cn/music/" },
+                { "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" },
+                { "Cookie", "Hm_lvt_f2ab64b4338dae3e26502b1fe7be3b5b=1581997330; Hm_lpvt_f2ab64b4338dae3e26502b1fe7be3b5b=1581997406" },
+                { "Host", "music.yeie.net" },
+                { "Origin", "https://music.yeie.net" },
+                { "Referer", "https://music.yeie.net" },
                 { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" }
             };
         public static WebHeaderCollection GetWebHeader_YQQCOM() => new WebHeaderCollection
@@ -41,13 +58,14 @@ namespace LemonLib
                 { HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36" },
                 { HttpRequestHeader.Host, "c.y.qq.com" }
             };
-        public static string PostWeb(string url, string data, WebHeaderCollection Header = null)
+        public static async Task<string> PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
             byte[] postData = Encoding.UTF8.GetBytes(data);
             using WebClient webClient = new WebClient();
             if (Header != null)
                 webClient.Headers = Header;
-            byte[] responseData = webClient.UploadData(url, "POST", postData);
+            byte[] responseData =await webClient.UploadDataTaskAsync(new Uri(url), "POST", postData);
+
             return Encoding.UTF8.GetString(responseData);
         }
         public static async Task<string> PostInycAsync(string url, string data)

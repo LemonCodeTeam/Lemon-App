@@ -100,9 +100,9 @@ namespace LemonApp.ContentPage
             foreach (var d in data)
             {
                 var k = new FLGDIndexItem(d.ID, d.Name, d.Photo, d.ListenCount) { Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent += (sx) =>
+                k.StarEvent +=async (sx) =>
                 {
-                    MusicLib.AddGDILike(sx.id);
+                    await MusicLib.AddGDILikeAsync(sx.id);
                     Toast.Send("收藏成功");
                 };
                 k.ImMouseDown += mw.FxGDMouseDown;

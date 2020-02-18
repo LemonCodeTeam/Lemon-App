@@ -147,9 +147,10 @@ namespace LemonLib
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string GetWYIdByName(string name)
+        public static async Task<string> GetWYIdByName(string name)
         {
-            var ds = "{\"data\":" + HttpHelper.PostWeb("http://lab.mkblog.cn/music/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name), HttpHelper.GetWebHeader_MKBlog()) + "}";
+            string data =await HttpHelper.PostWeb("https://music.yeie.net/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name), HttpHelper.GetWebHeader_Yeie());
+            var ds = "{\"data\":" + data + "}";
             var s = JObject.Parse(ds);
             return s["data"][0]["id"].ToString();
         }
@@ -163,10 +164,10 @@ namespace LemonLib
         /// <param name="id"></param>
         /// <param name="dirid"></param>
         /// <returns></returns>
-        public static string[] AddMusicToGD(string id, string dirid)
+        public static async Task<string[]> AddMusicToGDAsync(string id, string dirid)
         {
             Console.WriteLine(Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result =await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
             JObject o = JObject.Parse(result);
@@ -181,10 +182,10 @@ namespace LemonLib
         /// <param name="dirid"></param>
         /// <param name="typelist"></param>
         /// <returns></returns>
-        public static string[] AddMusicToGDPL(string ids, string dirid, string typelist)
+        public static async Task<string[]> AddMusicToGDPLAsync(string ids, string dirid, string typelist)
         {
             Console.WriteLine(Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={ids}&typelist={typelist}&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
             JObject o = JObject.Parse(result);
@@ -198,7 +199,7 @@ namespace LemonLib
         /// <param name="Musicid">Array 歌曲id(s)</param>
         /// <param name="dirid">歌单id</param>
         /// <returns></returns>
-        public static string DeleteMusicFromGD(string[] Musicids, string dirid)
+        public static async Task<string> DeleteMusicFromGDAsync(string[] Musicids, string dirid)
         {
             string Musicid = "";
             string types = "";
@@ -208,7 +209,7 @@ namespace LemonLib
             }
             Musicid = string.Join(",", Musicids);
             types = types[0..^1];
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result =await HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types={types}&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             string ok = JObject.Parse(result)["msg"].ToString();
             return ok;
@@ -238,9 +239,9 @@ namespace LemonLib
         /// </summary>
         /// <param name="dissid"></param>
         /// <returns></returns>
-        public static string AddGDILike(string dissid)
+        public static async Task<string> AddGDILikeAsync(string dissid)
         {
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&dissid={dissid}&from=1&optype=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fplaysquare%2F{dissid}.html%23stat%3Dy_new.playlist.pic_click", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -249,9 +250,9 @@ namespace LemonLib
         /// </summary>
         /// <param name="dissid"></param>
         /// <returns></returns>
-        public static string DelGDILike(string dissid)
+        public static async Task<string> DelGDILikeAsync(string dissid)
         {
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result =await HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&ordertype=0&optype=2&dissid={dissid}&from=1", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -260,9 +261,9 @@ namespace LemonLib
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string AddNewGd(string name,string imgurl="")
+        public static async Task<string> AddNewGdAsync(string name,string imgurl="")
         {
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result =await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url={imgurl}&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -271,9 +272,9 @@ namespace LemonLib
         /// </summary>
         /// <param name="dirid"></param>
         /// <returns></returns>
-        public static string DeleteGdById(string dirid)
+        public static async Task<string> DeleteGdByIdAsync(string dirid)
         {
-            string result = HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result =await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&delnum=1&deldirids={dirid}&forcedel=1&formsender=1&source=103", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -685,11 +686,11 @@ jpg
             ids = ids.Substring(0, ids.LastIndexOf(","));
             typelist = typelist.Substring(0, typelist.LastIndexOf(","));
             Console.WriteLine("ids:" + ids);
-            AddNewGd(dt.name);
+            await AddNewGdAsync(dt.name);
             await Task.Delay(500);
             string dir = await GetGDdiridByNameAsync(dt.name);
             Console.WriteLine("dirId" + dir);
-            var amt = AddMusicToGDPL(ids, dir, typelist);
+            var amt =await AddMusicToGDPLAsync(ids, dir, typelist);
             Console.WriteLine(amt[0] + amt[1]);
             x.Dispatcher.Invoke(() =>
             {
@@ -1472,11 +1473,13 @@ jpg
         /// <param name="name"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public async Task<List<MusicPL>> GetPLByWyyAsync(string name, int page = 1)
+        public static async Task<List<MusicPL>> GetPLByWyyAsync(string name, int page = 1)
         {
             string Page = ((page - 1) * 20).ToString();
-            string id = GetWYIdByName(name);
+            string id =await GetWYIdByName(name);
+            Console.WriteLine(id);
             var data = await HttpHelper.GetWebAsync($"https://music.163.com/api/v1/resource/comments/R_SO_4_{id}?offset={Page}");
+            Console.WriteLine(data);
             JObject o = JObject.Parse(data);
             var d = new List<MusicPL>();
             var hc = o["hotComments"];
@@ -1553,7 +1556,7 @@ jpg
         {
             string id = await GetMusicIdByMidAsync(mid);
             Console.WriteLine(id+" - "+ mp.commentid);
-            string get = "";
+            string get;
             if (mp.ispraise)
                 get = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_praise_h5.fcg?g_tk={Settings.USettings.LemonAreeunIts}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360774&cmd=2&reqtype=2&biztype=1&topid={id}&commentid={mp.commentid}&qq={Settings.USettings.LemonAreeunIts}&domain=qq.com&ct=24&cv=101010");
             else get = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_praise_h5.fcg?g_tk={Settings.USettings.LemonAreeunIts}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360774&cmd=1&reqtype=2&biztype=1&topid={id}&commentid={mp.commentid}&qq={Settings.USettings.LemonAreeunIts}&domain=qq.com&ct=24&cv=101010");

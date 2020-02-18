@@ -20,13 +20,9 @@ namespace LemonLib
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, win);
         }
         public void Load(string file) {
-            if (stream != -1024) {
-                Bass.BASS_ChannelStop(stream);
-                Bass.BASS_StreamFree(stream);
-            }
             stream = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_SAMPLE_FLOAT);
         }
-        private List<BASSDL> BassdlList = new List<BASSDL>();
+        public List<BASSDL> BassdlList = new List<BASSDL>();
         IntPtr ip = IntPtr.Zero;
         public void LoadUrl(string path,string url,Action<long,long> proc,Action finish) {
             try
@@ -34,8 +30,6 @@ namespace LemonLib
                 ip = new IntPtr(BassdlList.Count);
                 var Bassdl = new BASSDL(path);
                 BassdlList.Add(Bassdl);
-                if (BassdlList.Count > 1)
-                    BassdlList[BassdlList.Count - 1].SetClose();
                 Bassdl.procChanged = proc;
                 Bassdl.finished = finish;
                 stream = Bass.BASS_StreamCreateURL(url + "\r\n"
