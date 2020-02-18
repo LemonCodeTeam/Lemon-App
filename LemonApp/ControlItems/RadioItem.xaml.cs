@@ -1,7 +1,4 @@
 ﻿using LemonLib;
-using System;
-using System.IO;
-using System.Net;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static LemonLib.InfoHelper;
@@ -19,13 +16,15 @@ namespace LemonApp
             InitializeComponent();
             data = da;
             this.name.Text = data.Name;
-            Loaded += async delegate {
+            Loaded += async delegate
+            {
                 Height = ActualWidth + 40;
                 listenCount.Text = data.lstCount.IntToWn();
-                im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo,new int[2] {200,200}));
+                im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo, new int[2] { 200, 200 }));
             };
         }
-        public RadioItem(string ID) {
+        public RadioItem(string ID)
+        {
             data.ID = ID;
         }
 

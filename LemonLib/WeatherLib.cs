@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LemonLib
@@ -17,16 +15,19 @@ namespace LemonLib
 
             JObject obj = JObject.Parse(await HttpHelper.GetWebAsync($"https://free-api.heweather.com/v5/now?city={Uri.EscapeUriString(i)}&key=f97e6a6ad4cd49babd0538747c86b88d"));
             dt.TiGan = "体感温度:" + obj["HeWeather5"][0]["now"]["fl"] + "°";
-            dt.FenSu= obj["HeWeather5"][0]["now"]["wind"]["dir"] + "    " + obj["HeWeather5"][0]["now"]["wind"]["sc"] + "级";
+            dt.FenSu = obj["HeWeather5"][0]["now"]["wind"]["dir"] + "    " + obj["HeWeather5"][0]["now"]["wind"]["sc"] + "级";
             dt.MiaoShu = obj["HeWeather5"][0]["now"]["cond"]["txt"].ToString();
-            dt.NenJianDu= "能见度:" + obj["HeWeather5"][0]["now"]["vis"];
-            dt.Qiwen= obj["HeWeather5"][0]["now"]["tmp"] + "°";
+            dt.NenJianDu = "能见度:" + obj["HeWeather5"][0]["now"]["vis"];
+            dt.Qiwen = obj["HeWeather5"][0]["now"]["tmp"] + "°";
 
             JObject obj1 = JObject.Parse(await HttpHelper.GetWebAsync($"https://free-api.heweather.com/v5/forecast?city={Uri.EscapeUriString(i)}&key=f97e6a6ad4cd49babd0538747c86b88d"));
             List<InfoHelper.WeatherByDay> ddt = new List<InfoHelper.WeatherByDay>();
-            ddt.Add(new InfoHelper.WeatherByDay() {Icon= $"http://files.heweather.com/cond_icon/{obj1["HeWeather5"][0]["daily_forecast"][0]["cond"]["code_d"]}.png",
-            Date= obj1["HeWeather5"][0]["daily_forecast"][0]["date"].ToString(),
-            QiWen= obj1["HeWeather5"][0]["daily_forecast"][0]["tmp"]["max"] + "℃-" + obj1["HeWeather5"][0]["daily_forecast"][0]["tmp"]["min"] + "°"});
+            ddt.Add(new InfoHelper.WeatherByDay()
+            {
+                Icon = $"http://files.heweather.com/cond_icon/{obj1["HeWeather5"][0]["daily_forecast"][0]["cond"]["code_d"]}.png",
+                Date = obj1["HeWeather5"][0]["daily_forecast"][0]["date"].ToString(),
+                QiWen = obj1["HeWeather5"][0]["daily_forecast"][0]["tmp"]["max"] + "℃-" + obj1["HeWeather5"][0]["daily_forecast"][0]["tmp"]["min"] + "°"
+            });
             ddt.Add(new InfoHelper.WeatherByDay()
             {
                 Icon = $"http://files.heweather.com/cond_icon/{obj1["HeWeather5"][0]["daily_forecast"][1]["cond"]["code_d"]}.png",

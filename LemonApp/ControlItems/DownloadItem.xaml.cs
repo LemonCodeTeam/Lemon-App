@@ -1,5 +1,4 @@
 ﻿using LemonLib;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using static LemonLib.InfoHelper;
@@ -16,7 +15,7 @@ namespace LemonApp
         public event en Finished;
         public bool finished = false;
         private int index = 0;
-        public DownloadItem(Music m,string downloadpath,int id)
+        public DownloadItem(Music m, string downloadpath, int id)
         {
             InitializeComponent();
             MData = m;
@@ -56,7 +55,7 @@ namespace LemonApp
                     size.Text = s;
                 });
             };
-            if (index==0)
+            if (index == 0)
                 d.Download();
         }
         public HttpDownloadHelper d;

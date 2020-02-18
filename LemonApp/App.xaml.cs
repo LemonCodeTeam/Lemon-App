@@ -1,18 +1,13 @@
 ﻿using LemonLib;
 using Lierda.WPFHelper;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace LemonApp
@@ -26,7 +21,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1136";
+        public static string EM = "1141";
         #region 启动时 进程检测 配置 登录
         System.Threading.Mutex mut;
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -53,7 +48,7 @@ namespace LemonApp
         /// 指定当前主题背景色 default:0(white) 1(black)
         /// </summary>
         public int ThemeColor = 0;
-        public void SetColor(string id,Color c)
+        public void SetColor(string id, Color c)
         {
             var color = new SolidColorBrush() { Color = c };
             Resources[id] = color;
@@ -99,7 +94,8 @@ namespace LemonApp
         /// <summary>
         /// 恢复 默认主题  /卸载主题
         /// </summary>
-        public void unSkin() {
+        public void unSkin()
+        {
             ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
@@ -128,7 +124,8 @@ namespace LemonApp
         }
         #endregion
         #region 全局异常捕获/处理
-        public App() {
+        public App()
+        {
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += (sender, args) =>
@@ -154,7 +151,7 @@ namespace LemonApp
         }
         public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:"+EM + "\r\n" + ((Exception)e.ExceptionObject).Message + "\r\n 导致错误的对象名称:" + ((Exception)e.ExceptionObject).Source + "\r\n 引发异常的方法:" + ((Exception)e.ExceptionObject).TargetSite + "\r\n  帮助链接:" + ((Exception)e.ExceptionObject).HelpLink + "\r\n 调用堆:" + ((Exception)e.ExceptionObject).StackTrace;
+            string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:" + EM + "\r\n" + ((Exception)e.ExceptionObject).Message + "\r\n 导致错误的对象名称:" + ((Exception)e.ExceptionObject).Source + "\r\n 引发异常的方法:" + ((Exception)e.ExceptionObject).TargetSite + "\r\n  帮助链接:" + ((Exception)e.ExceptionObject).HelpLink + "\r\n 调用堆:" + ((Exception)e.ExceptionObject).StackTrace;
             Console.WriteLine(i);
             FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
@@ -166,7 +163,7 @@ namespace LemonApp
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-            string i = "\n(Dispatcher)小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:"+EM+ "\r\n" + e.Exception.Message + "\r\n 导致错误的对象名称:" + e.Exception.Source + "\r\n 引发异常的方法:" + e.Exception.TargetSite + "\r\n  帮助链接:" + e.Exception.HelpLink + "\r\n 调用堆:" + e.Exception.StackTrace;
+            string i = "\n(Dispatcher)小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:" + EM + "\r\n" + e.Exception.Message + "\r\n 导致错误的对象名称:" + e.Exception.Source + "\r\n 引发异常的方法:" + e.Exception.TargetSite + "\r\n  帮助链接:" + e.Exception.HelpLink + "\r\n 调用堆:" + e.Exception.StackTrace;
             Console.WriteLine(i);
             FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
@@ -178,18 +175,21 @@ namespace LemonApp
         #endregion
     }
     #region Console 调试模式
-    public class Console {
+    public class Console
+    {
         private static Process p = null;
         private static StreamWriter sw = null;
         public static NamedPipeClientStream pipe = null;
-        public static async void Open() {
+        public static async void Open()
+        {
             p = Process.Start(AppDomain.CurrentDomain.BaseDirectory + "DebugConsole.exe");
             pipe = new NamedPipeClientStream("localhost", "DebugConsolePipeForLemonApp", PipeDirection.InOut, PipeOptions.None, TokenImpersonationLevel.None);
             await Task.Delay(500);
             await pipe.ConnectAsync();
             sw = new StreamWriter(pipe);
         }
-        public static async void WriteLine(object text) {
+        public static async void WriteLine(object text)
+        {
             if (sw != null)
             {
                 try
@@ -197,13 +197,15 @@ namespace LemonApp
                     await sw.WriteLineAsync(text.ToString());
                     sw.Flush();
                 }
-                catch {
+                catch
+                {
                     Close();
                     Toast.Send("已退出调试模式🐱‍👤");
                 }
             }
         }
-        public static void Close() {
+        public static void Close()
+        {
             p.Kill();
             sw.Close();
             sw.Dispose();

@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -22,7 +21,7 @@ namespace LemonApp
         /// 创建 <see cref="WindowAccentCompositor"/> 的一个新实例。
         /// </summary>
         /// <param name="window">要创建模糊特效的窗口实例。</param>
-        public WindowAccentCompositor(Window window,Action<Color> nofun)
+        public WindowAccentCompositor(Window window, Action<Color> nofun)
         {
             _window = window;
             NoFunCallback = nofun;

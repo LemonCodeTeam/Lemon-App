@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -25,7 +16,8 @@ namespace LemonApp
             InitializeComponent();
             Opacity = 0;
             tb.Text = text;
-            Loaded +=async delegate {
+            Loaded += async delegate
+            {
                 if (tb.Text.Contains("\r\n"))
                     Height = 90;
                 Width = SystemParameters.WorkArea.Width;
@@ -38,24 +30,27 @@ namespace LemonApp
                 Close();
             };
         }
-        public static void Send(string text) {
+        public static void Send(string text)
+        {
             new Toast(text).Show();
         }
-        public Toast(string text,bool staylonger)
+        public Toast(string text, bool staylonger)
         {
             InitializeComponent();
             tb.Text = text;
-            Loaded += delegate {
+            Loaded += delegate
+            {
                 if (tb.Text.Contains("\r\n"))
                     Height = 90;
                 if (text == "") Opacity = 0;
                 Width = SystemParameters.WorkArea.Width;
                 Left = 0;
-                Top = SystemParameters.WorkArea.Height - Height-30;
+                Top = SystemParameters.WorkArea.Height - Height - 30;
             };
             Show();
         }
-        public void Updata(string Text) {
+        public void Updata(string Text)
+        {
             tb.Text = Text;
             if (tb.Text.Contains("\r\n"))
                 Height = 90;

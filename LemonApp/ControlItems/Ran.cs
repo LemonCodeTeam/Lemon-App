@@ -2,7 +2,7 @@
 
 namespace LemonApp
 {
-    public class Ran:Run
+    public class Ran : Run
     {
         public object data { get; set; }
     }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -62,9 +60,11 @@ namespace LemonApp.Theme.Dtpp
                 int left = rd.Next(0, (int)canvas.ActualWidth);
                 Canvas.SetLeft(b, left);
                 int speed = rd.Next(8, 15);
-                DoubleAnimation d = new DoubleAnimation() {
+                DoubleAnimation d = new DoubleAnimation()
+                {
                     Duration = TimeSpan.FromSeconds(speed),
-                    From = canvas.ActualHeight, To = 0-width,
+                    From = canvas.ActualHeight,
+                    To = 0 - width,
                     RepeatBehavior = RepeatBehavior.Forever
                 };
                 Timeline.SetDesiredFrameRate(d, 35);

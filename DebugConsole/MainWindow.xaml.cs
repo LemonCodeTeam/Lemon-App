@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
-using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DebugConsole
 {
@@ -24,9 +16,11 @@ namespace DebugConsole
         {
             InitializeComponent();
         }
-        private void Add(string text) {
-            Dispatcher.Invoke(() => {
-                tb.Text += text+"\r\n";
+        private void Add(string text)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                tb.Text += text + "\r\n";
                 if (NeedTurnToBottom)
                     sv.ScrollToBottom();
             });
@@ -76,7 +70,8 @@ namespace DebugConsole
         bool NeedTurnToBottom = true;
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 2) {
+            if (e.ClickCount == 2)
+            {
                 NeedTurnToBottom = !NeedTurnToBottom;
                 Add("[Console] NeedTurnToBottom: " + NeedTurnToBottom);
             }

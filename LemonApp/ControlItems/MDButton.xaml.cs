@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -26,27 +16,40 @@ namespace LemonApp
             theme = 0;
         }
         private int theme = 0;
-        public int Theme { get => theme; set {
+        public int Theme
+        {
+            get => theme; set
+            {
                 theme = value;
-                if (theme == 0) {
+                if (theme == 0)
+                {
                     bd.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#19000000"));
                     tb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                }else if (theme == 1) {
+                }
+                else if (theme == 1)
+                {
                     bd.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#19FFFFFF"));
                     tb.Foreground = new SolidColorBrush(Colors.White);
-                }else if (theme == 2) {
+                }
+                else if (theme == 2)
+                {
                     bd.SetResourceReference(BackgroundProperty, "ColorBrush");
                     tb.Foreground = new SolidColorBrush(Colors.White);
                 }
-            } }
+            }
+        }
         public string TName { get => tb.Text; set => tb.Text = value; }
         public CornerRadius cr { get => bd.CornerRadius; set => bd.CornerRadius = value; }
-        public Geometry pData { get => p.Data; set {
+        public Geometry pData
+        {
+            get => p.Data; set
+            {
                 p.Data = value;
                 if (value == null)
-                    tb.Margin = new Thickness(10,0,10,0);
+                    tb.Margin = new Thickness(10, 0, 10, 0);
                 else tb.Margin = new Thickness(30, 0, 0, 0);
-            } }
+            }
+        }
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
             cg.Visibility = Visibility.Visible;

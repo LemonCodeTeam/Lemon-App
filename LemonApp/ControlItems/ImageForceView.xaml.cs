@@ -2,20 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp
@@ -28,14 +20,15 @@ namespace LemonApp
         private List<IFVData> iv = new List<IFVData>();
         private int index = 0;
         private int lastindex = 0;//最后一个索引
-        private bool HasCheck=false;
+        private bool HasCheck = false;
         private MainWindow mw;
         public ImageForceView()
         {
             InitializeComponent();
             Image.MouseDown += PartMouseDown;
         }
-        public void Updata(List<IFVData> iFVData,MainWindow m) {
+        public void Updata(List<IFVData> iFVData, MainWindow m)
+        {
             iv = iFVData;
             index = 0;
             lastindex = iv.Count - 1;
@@ -46,7 +39,7 @@ namespace LemonApp
         {
             try
             {
-                
+
                 Image.Background = null;
                 var ib = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic, new int[2] { 303, 756 })) { Stretch = Stretch.Fill };
                 Image.Background = ib;
@@ -58,7 +51,8 @@ namespace LemonApp
         {
             CheckAniLeft = Resources["CheckAniLeft"] as Storyboard;
             CheckAniRight = Resources["CheckAniRight"] as Storyboard;
-            while (true) {
+            while (true)
+            {
                 await Task.Delay(5000);
                 if (HasCheck)
                 {
@@ -71,7 +65,7 @@ namespace LemonApp
 
         private void PartMouseDown(object sender, MouseButtonEventArgs e)
         {
-            string url= iv[index].url;
+            string url = iv[index].url;
             string type = iv[index].type;
             // type:3002 活动 ？？？？
             if (type == "3002")
@@ -82,7 +76,8 @@ namespace LemonApp
                     string mid = TextHelper.XtoYGetTo(url, "&mid=", "&g_f=yqqjiaodian", 0);
                     mw.IFVCALLBACK_LoadAlbum(mid);
                 }
-                else if (url.Contains("y.qq.com/topic/piaowu")) {
+                else if (url.Contains("y.qq.com/topic/piaowu"))
+                {
                     Process.Start(url);
                 }
             }
@@ -93,19 +88,22 @@ namespace LemonApp
             }
             else if (type == "10012")
             {
-                mw.PlayMv(new MVData() { id = url,name="" });
+                mw.PlayMv(new MVData() { id = url, name = "" });
             }
             else Process.Start(url);
         }
 
         private Storyboard CheckAniLeft;
         private Storyboard CheckAniRight;
-        private void TurnLeft() {
-            if (index.Equals(0)){
+        private void TurnLeft()
+        {
+            if (index.Equals(0))
+            {
                 SetImageAsync(lastindex);
                 index = lastindex;
             }
-            else {
+            else
+            {
                 index--;
                 SetImageAsync(index);
             }
@@ -122,11 +120,13 @@ namespace LemonApp
         {
             try
             {
-                if (index.Equals(lastindex)){
+                if (index.Equals(lastindex))
+                {
                     SetImageAsync(0);
                     index = 0;
                 }
-                else {
+                else
+                {
                     index++;
                     SetImageAsync(index);
                 }

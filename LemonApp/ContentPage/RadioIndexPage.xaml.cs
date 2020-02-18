@@ -1,17 +1,8 @@
 ﻿using LemonLib;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp.ContentPage
@@ -27,7 +18,8 @@ namespace LemonApp.ContentPage
             InitializeComponent();
             mw = m;
             sv.Template = ct;
-            SizeChanged += delegate {
+            SizeChanged += delegate
+            {
                 mw.WidthUI(RadioIndexList);
             };
         }

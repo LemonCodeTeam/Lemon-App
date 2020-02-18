@@ -6,12 +6,12 @@
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
-    <Version>1.1.3.2</Version>
+    <Version>1.1.4.1</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>

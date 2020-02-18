@@ -1,19 +1,12 @@
 ﻿using LemonLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp
@@ -26,18 +19,20 @@ namespace LemonApp
         public SingerPageData Data;
         private MainWindow mw;
         private Action Finished;
-        public SingerPage(SingerPageData spd,MainWindow m,Action ac)
+        public SingerPage(SingerPageData spd, MainWindow m, Action ac)
         {
             InitializeComponent();
             Data = spd;
             mw = m;
             Finished = ac;
-            if (!spd.HasBigPic) {
+            if (!spd.HasBigPic)
+            {
                 (Resources["mSingerTX"] as Storyboard).Begin();
                 DHBtns.Background = new SolidColorBrush(Colors.Transparent);
                 SingerName.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 FansCount.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Low");
-                foreach (BottomTick bt in DHBtns.Children) {
+                foreach (BottomTick bt in DHBtns.Children)
+                {
                     bt.HasBg = false;
                 }
             }
@@ -50,11 +45,12 @@ namespace LemonApp
             SingerName.Text = Data.mSinger.Name;
 
             if (Data.HasBigPic)
-                mSingerBig.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo,new int[2] {469,1000})) { Stretch=Stretch.UniformToFill};
-            else TX.Background= new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo,new int[2] { 225 , 225 }));
+                mSingerBig.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] { 469, 1000 })) { Stretch = Stretch.UniformToFill };
+            else TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] { 225, 225 }));
 
             FansCount.Text = "粉丝数：" + Data.FansCount;
-            if (Data.HasGJ) {
+            if (Data.HasGJ)
+            {
                 if (Data.HasBigPic)
                     FanBt.Theme = 1;
                 else FanBt.Theme = 0;
@@ -65,11 +61,12 @@ namespace LemonApp
 
             if (Data.liangxia.Count >= 1)
             {
-                Lx_Img_1.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[0].img,new int[2] { 60, 60 }));
+                Lx_Img_1.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.liangxia[0].img, new int[2] { 60, 60 }));
                 Lx_Tit_1.Text = Data.liangxia[0].name;
                 Lx_dat_1.Text = Data.liangxia[0].lstCount;
             }
-            else {
+            else
+            {
                 lx1.Visibility = Visibility.Hidden;
             }
             if (Data.liangxia.Count >= 2)
@@ -78,13 +75,15 @@ namespace LemonApp
                 Lx_Tit_2.Text = Data.liangxia[1].name;
                 Lx_dat_2.Text = Data.liangxia[1].lstCount;
             }
-            else {
+            else
+            {
                 LiangxiaPi.Visibility = Visibility.Collapsed;
             }
 
-            foreach (var c in Data.HotSongs) {
+            foreach (var c in Data.HotSongs)
+            {
                 mw.np = NowPage.SingerItem;
-                var k = new DataItem(c,mw) { Width = ActualWidth };
+                var k = new DataItem(c, mw) { Width = ActualWidth };
                 if (k.music.MusicID == mw.MusicData.Data.MusicID)
                 {
                     k.ShowDx();
@@ -98,8 +97,9 @@ namespace LemonApp
 
             int i = 0;
             NewAlbumList.Children.Clear();
-            foreach (var c in Data.Album) {
-                FLGDIndexItem f = new FLGDIndexItem(c.ID, c.Name, c.Photo,0);
+            foreach (var c in Data.Album)
+            {
+                FLGDIndexItem f = new FLGDIndexItem(c.ID, c.Name, c.Photo, 0);
                 f.Margin = new Thickness(5, 0, 5, 0);
                 f.ImMouseDown += F_MouseDown;
                 Grid.SetColumn(f, i);
@@ -109,9 +109,10 @@ namespace LemonApp
 
             NewMVList.Children.Clear();
             int ix = 0;
-            foreach (var c in Data.mVDatas) {
+            foreach (var c in Data.mVDatas)
+            {
                 MVItem m = new MVItem();
-                m.Margin = new Thickness(5,0,5,0);
+                m.Margin = new Thickness(5, 0, 5, 0);
                 Grid.SetColumn(m, ix);
                 m.MouseDown += M_MouseDown;
                 ix++;
@@ -120,11 +121,13 @@ namespace LemonApp
             }
 
             SimilarSingerList.Children.Clear();
-            foreach (var c in Data.ssMs) {
-                SingerItem m = new SingerItem(c) {
-                    Height=200,
-                    Width=150,
-                    Margin=new Thickness(20,0,0,0)
+            foreach (var c in Data.ssMs)
+            {
+                SingerItem m = new SingerItem(c)
+                {
+                    Height = 200,
+                    Width = 150,
+                    Margin = new Thickness(20, 0, 0, 0)
                 };
                 m.MouseDown += mw.GetSinger;
                 SimilarSingerList.Children.Add(m);
@@ -178,7 +181,8 @@ namespace LemonApp
 
         private async void FanBt_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Data.HasGJ){
+            if (Data.HasGJ)
+            {
                 Data.HasGJ = false;
                 FanBt.p.Stretch = Stretch.Fill;
                 await MusicLib.DelSingerLikeById(Data.mSinger.Mid);
@@ -186,7 +190,8 @@ namespace LemonApp
                 FanBt.pData = Geometry.Parse("M451.318,451.318L87.282,451.318C53.528,451.318 26.548,478.486 26.548,512 26.548,545.747 53.739,572.682 87.282,572.682L451.318,572.682 451.318,936.718C451.318,970.472 478.486,997.452 512,997.452 545.747,997.452 572.682,970.261 572.682,936.718L572.682,572.682 936.718,572.682C970.472,572.682 997.452,545.514 997.452,512 997.452,478.253 970.261,451.318 936.718,451.318L572.682,451.318 572.682,87.282C572.682,53.528 545.514,26.548 512,26.548 478.253,26.548 451.318,53.739 451.318,87.282L451.318,451.318z");
                 FanBt.Theme = 2;
             }
-            else {
+            else
+            {
                 Data.HasGJ = true;
                 await MusicLib.AddSingerLikeById(Data.mSinger.Mid);
                 if (Data.HasBigPic)
@@ -199,7 +204,8 @@ namespace LemonApp
         }
 
         private FrameworkElement LastPage = null;
-        private void NSPage(FrameworkElement fm) {
+        private void NSPage(FrameworkElement fm)
+        {
             if (LastPage != null)
                 LastPage.Visibility = Visibility.Collapsed;
             fm.Visibility = Visibility.Visible;
@@ -213,17 +219,21 @@ namespace LemonApp
 
         private async void Cisv_MusicListScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (mw.Cisv.IsVerticalScrollBarAtButtom()) {
+            if (mw.Cisv.IsVerticalScrollBarAtButtom())
+            {
                 if (LastPage == SongsPage)
                 {
                     PageIndex++;
                     var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid, PageIndex);
                     mview.CreatItems(data);
                 }
-                else if (LastPage == AlbumPage) {
+                else if (LastPage == AlbumPage)
+                {
                     AlbumIndex++;
                     LoadAlbum();
-                }else if (LastPage == MvPage) {
+                }
+                else if (LastPage == MvPage)
+                {
                     MvIndex++;
                     LoadMv();
                 }
@@ -234,12 +244,13 @@ namespace LemonApp
         /// 歌曲页的页数索引
         /// </summary>
         private int PageIndex = 1;
-        private MusicListView mview=null;
+        private MusicListView mview = null;
         private async void SongsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (SongsPage.Children.Count == 0) {
+            if (SongsPage.Children.Count == 0)
+            {
                 var data = await MusicLib.GetSingerMusicByIdAsync(Data.mSinger.Mid);
-                mview = new MusicListView(data, mw,NowPage.SingerItem);
+                mview = new MusicListView(data, mw, NowPage.SingerItem);
                 SongsPage.Children.Add(mview);
             }
             await Task.Delay(10);
@@ -257,7 +268,8 @@ namespace LemonApp
         private int AlbumIndex = 1;
         private async void AlbumBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (AlbumItemsList.Children.Count == 0) {
+            if (AlbumItemsList.Children.Count == 0)
+            {
                 //new Thickness(10, 0, 10, 20)
                 LoadAlbum();
 
@@ -265,16 +277,17 @@ namespace LemonApp
             await Task.Delay(10);
             NSPage(AlbumPage);
         }
-        private async void LoadAlbum() {
-            var data = await MusicLib.GetSingerAlbumById(Data.mSinger.Mid,AlbumIndex);
+        private async void LoadAlbum()
+        {
+            var data = await MusicLib.GetSingerAlbumById(Data.mSinger.Mid, AlbumIndex);
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo,0) { Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent +=async (sx) =>
-                {
-                    await MusicLib.AddGDILikeAsync(sx.id);
-                    Toast.Send("收藏成功");
-                };
+                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo, 0) { Margin = new Thickness(12, 0, 12, 20) };
+                k.StarEvent += async (sx) =>
+                 {
+                     await MusicLib.AddGDILikeAsync(sx.id);
+                     Toast.Send("收藏成功");
+                 };
                 k.Width = 200;
                 k.ImMouseDown += K_ImMouseDown;
                 AlbumItemsList.Children.Add(k);
@@ -309,22 +322,25 @@ namespace LemonApp
 
         private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (MoreText.Inlines.Count == 0) {
+            if (MoreText.Inlines.Count == 0)
+            {
                 var data = await MusicLib.GetSingerDesc(Data.mSinger.Mid);
-                MoreText.Inlines.Add(new Run() { Text=data.Desc});
+                MoreText.Inlines.Add(new Run() { Text = data.Desc });
                 MoreText.Inlines.Add(new LineBreak());
                 MoreText.Inlines.Add(new LineBreak());
                 Run r1 = new Run() { Text = "基本资料" };
                 r1.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Most");
                 MoreText.Inlines.Add(r1);
                 MoreText.Inlines.Add(new LineBreak());
-                foreach (var c in data.basic) {
-                    MoreText.Inlines.Add(new Run() { Text = c.Key+"："+c.Value });
+                foreach (var c in data.basic)
+                {
+                    MoreText.Inlines.Add(new Run() { Text = c.Key + "：" + c.Value });
                     MoreText.Inlines.Add(new LineBreak());
                 }
                 MoreText.Inlines.Add(new LineBreak());
-                foreach (var c in data.other) {
-                    Run r2 = new Run() { Text =c.Key };
+                foreach (var c in data.other)
+                {
+                    Run r2 = new Run() { Text = c.Key };
                     r2.SetResourceReference(ForegroundProperty, "PlayDLPage_Font_Most");
                     MoreText.Inlines.Add(r2);
                     MoreText.Inlines.Add(new LineBreak());
@@ -340,14 +356,16 @@ namespace LemonApp
         int MvIndex = 1;
         private async void MVBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (MvItemsList.Children.Count == 0) {
+            if (MvItemsList.Children.Count == 0)
+            {
                 LoadMv();
             }
             await Task.Delay(10);
             NSPage(MvPage);
         }
 
-        public async void LoadMv() {
+        public async void LoadMv()
+        {
             var data = await MusicLib.GetSingerMvList(Data.mSinger.Mid, MvIndex);
             foreach (var c in data)
             {

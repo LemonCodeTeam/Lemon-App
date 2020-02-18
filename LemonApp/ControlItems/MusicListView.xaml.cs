@@ -1,19 +1,8 @@
 ﻿using LemonLib;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp
@@ -25,20 +14,22 @@ namespace LemonApp
     {
         public MainWindow mw;
         private NowPage np;
-        public MusicListView(List<Music> data,MainWindow m,NowPage n)
+        public MusicListView(List<Music> data, MainWindow m, NowPage n)
         {
             InitializeComponent();
             mw = m;
             np = n;
-            Loaded += delegate {
+            Loaded += delegate
+            {
                 CreatItems(data);
             };
         }
 
-        public void CreatItems(List<Music> Data) {
+        public void CreatItems(List<Music> Data)
+        {
             foreach (var c in Data)
             {
-                var k = new DataItem(c,mw) { Width = ActualWidth };
+                var k = new DataItem(c, mw) { Width = ActualWidth };
                 if (k.music.MusicID == mw.MusicData.Data.MusicID)
                 {
                     k.ShowDx();
@@ -46,7 +37,8 @@ namespace LemonApp
                 k.GetToSingerPage += mw.K_GetToSingerPage;
                 k.Play += K_Play;
                 k.Download += mw.K_Download;
-                if (DownloadMode) {
+                if (DownloadMode)
+                {
                     k.Play -= K_Play;
                     k.NSDownload(true);
                     k.Check(true);

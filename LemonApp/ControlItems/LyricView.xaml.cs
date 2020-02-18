@@ -3,21 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace LemonApp
 {
@@ -49,7 +39,8 @@ namespace LemonApp
         }
 
         #region 
-        public void RestWidth(double width) {
+        public void RestWidth(double width)
+        {
             foreach (TextBlock tb in c_lrc_items.Children)
                 tb.Width = width;
         }
@@ -60,7 +51,7 @@ namespace LemonApp
             foucslrc = null;
             foreach (string str in lrcstr.Split("\r\n".ToCharArray()))
             {
-                if (str.Length > 0 && str.IndexOf(":") != -1&& !str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:"))
+                if (str.Length > 0 && str.IndexOf(":") != -1 && !str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:"))
                 {
                     TimeSpan time = GetTime(str);
                     string lrc = str.Split(']')[1];
@@ -69,17 +60,17 @@ namespace LemonApp
                     c_lrcbk.Foreground = NoramlLrcColor;
                     c_lrcbk.TextWrapping = TextWrapping.Wrap;
                     c_lrcbk.TextAlignment = TextAlignment;
-                    c_lrcbk.Text = lrc.Replace("^","\n").Replace("//","").Replace("null","");
+                    c_lrcbk.Text = lrc.Replace("^", "\n").Replace("//", "").Replace("null", "");
                     if (c_lrc_items.Children.Count > 0)
                         c_lrcbk.Margin = new Thickness(0, 15, 0, 15);
-                    if(!Lrcs.ContainsKey(time.TotalMilliseconds))
-                    Lrcs.Add(time.TotalMilliseconds, new LrcModel()
-                    {
-                        c_LrcTb = c_lrcbk,
-                        LrcText = lrc,
-                        Time = time.TotalMilliseconds
+                    if (!Lrcs.ContainsKey(time.TotalMilliseconds))
+                        Lrcs.Add(time.TotalMilliseconds, new LrcModel()
+                        {
+                            c_LrcTb = c_lrcbk,
+                            LrcText = lrc,
+                            Time = time.TotalMilliseconds
 
-                    });
+                        });
                     c_lrc_items.Children.Add(c_lrcbk);
                 }
             }
@@ -102,7 +93,7 @@ namespace LemonApp
         }
         #endregion
         #region
-        public void LrcRoll(double nowtime,bool needScrol)
+        public void LrcRoll(double nowtime, bool needScrol)
         {
             if (foucslrc == null)
             {
@@ -115,18 +106,19 @@ namespace LemonApp
                 if (s.Count() > 0)
                 {
                     LrcModel lm = s.Last().Value;
-                    if(needScrol)
-                    foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
+                    if (needScrol)
+                        foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
 
                     foucslrc = lm;
-                    if (needScrol){
+                    if (needScrol)
+                    {
                         foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                         ResetLrcviewScroll();
                     }
-                    string tx = foucslrc.LrcText.Replace("//","");
+                    string tx = foucslrc.LrcText.Replace("//", "");
                     if (tx.Substring(tx.Length - 1, 1) == "^")
                         tx = tx.Substring(0, tx.Length - 1);
-                    tx=tx.Replace("^", "\r\n");
+                    tx = tx.Replace("^", "\r\n");
                     NextLyric(tx);
                 }
             }
@@ -139,7 +131,7 @@ namespace LemonApp
             Point p = gf.Transform(new Point(0, 0));
             double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 10;
             var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CircleEase { EasingMode=EasingMode.EaseOut};
+            da.EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut };
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
         #endregion

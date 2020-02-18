@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LemonLib;
+﻿using LemonLib;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
-using System.Threading.Tasks;
 
 namespace LemonApp.ContentPage
 {
@@ -26,10 +17,11 @@ namespace LemonApp.ContentPage
         {
             InitializeComponent();
             mw = Context;
-            sv.Template=ct;
-            SizeChanged += delegate {
-                mw.WidthUI(HomePage_GFGD, wrapPanel.ActualWidth-12);
-                mw.WidthUI(HomePage_Gdtj, wrapPanel.ActualWidth-12);
+            sv.Template = ct;
+            SizeChanged += delegate
+            {
+                mw.WidthUI(HomePage_GFGD, wrapPanel.ActualWidth - 12);
+                mw.WidthUI(HomePage_Gdtj, wrapPanel.ActualWidth - 12);
             };
         }
 
@@ -49,11 +41,11 @@ namespace LemonApp.ContentPage
             foreach (var a in data.GFdata)
             {
                 var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent +=async (sx) =>
-                {
-                    await MusicLib.AddGDILikeAsync(sx.id);
-                    Toast.Send("收藏成功");
-                };
+                k.StarEvent += async (sx) =>
+                 {
+                     await MusicLib.AddGDILikeAsync(sx.id);
+                     Toast.Send("收藏成功");
+                 };
                 k.ImMouseDown += mw.FxGDMouseDown;
                 HomePage_GFGD.Children.Add(k);
             }
@@ -76,7 +68,7 @@ namespace LemonApp.ContentPage
             HomePage_Nm.Children.Clear();
             foreach (var a in data.NewMusic)
             {
-                var k = new PlayDLItem(a,true,a.ImageUrl) { Margin = new Thickness(10, 0, 10, 20) };
+                var k = new PlayDLItem(a, true, a.ImageUrl) { Margin = new Thickness(10, 0, 10, 20) };
                 k.Tag = a;
                 k.MouseDown += (object s, MouseButtonEventArgs es) =>
                 {

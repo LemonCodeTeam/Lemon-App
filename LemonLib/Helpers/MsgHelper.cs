@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LemonLib
 {
@@ -26,7 +23,8 @@ namespace LemonLib
         [DllImport("User32.dll")]
         public static extern int SendMessage(int hwnd, int msg, int wParam, ref COPYDATASTRUCT IParam);
 
-        public static void SendMsg(String strSent,int WindowHandle=0) {
+        public static void SendMsg(String strSent, int WindowHandle = 0)
+        {
             int WINDOW_HANDLE = WindowHandle;
             if (WindowHandle == 0)
                 WINDOW_HANDLE = Settings.ReadHandle().WINDOW_HANDLE;

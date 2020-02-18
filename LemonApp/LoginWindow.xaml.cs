@@ -1,20 +1,8 @@
 ﻿using LemonLib;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -41,7 +29,7 @@ namespace LemonApp
         {
             if (wb.DocumentTitle.Contains("QQ音乐"))
             {
-                
+
                 Topmost = false;
                 await Task.Delay(100);
                 string cookie = wb.Document.Cookie;
@@ -61,7 +49,8 @@ namespace LemonApp
                 mw.Dispatcher.Invoke(delegate { mw.Login(send); });
                 wb.DocumentCompleted -= Wb_Dc_Login;
             }
-            else {
+            else
+            {
                 loading.Visibility = Visibility.Collapsed;
                 wf.Visibility = Visibility.Visible;
                 wb.Document.GetElementById("title_0").InnerText = "登录到 Lemon App";

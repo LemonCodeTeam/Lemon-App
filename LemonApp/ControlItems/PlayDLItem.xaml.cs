@@ -1,18 +1,8 @@
 ﻿using LemonLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp
@@ -30,28 +20,31 @@ namespace LemonApp
             SingerName.Text = m.SingerText;
             MusicName.Text = m.MusicName;
         }
-        public PlayDLItem(Music m,bool NeedImg,string imgUrl)
+        public PlayDLItem(Music m, bool NeedImg, string imgUrl)
         {
             InitializeComponent();
-            Loaded += async delegate {
+            Loaded += async delegate
+            {
                 if (NeedImg)
                 {
                     img.Visibility = Visibility.Visible;
                     SingerName.Margin = new Thickness(66, 32, 10, 0);
                     MusicName.Margin = new Thickness(66, 12, 10, 0);
-                    img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(imgUrl, new int[2] { 55,55 }));
+                    img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(imgUrl, new int[2] { 55, 55 }));
                 }
             };
             Data = m;
             SingerName.Text = m.SingerText;
             MusicName.Text = m.MusicName;
         }
-        public void p(bool isp) {
+        public void p(bool isp)
+        {
             PD.LastPD.v(false);
             v(isp);
         }
         public bool pv;
-        private void v(bool isp) {
+        private void v(bool isp)
+        {
             pv = isp;
             if (isp)
             {
@@ -80,7 +73,8 @@ namespace LemonApp
         }
     }
 
-    public class PD {
+    public class PD
+    {
         public static PlayDLItem LastPD = new PlayDLItem(new Music());
     }
 }

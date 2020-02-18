@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -70,7 +68,8 @@ namespace LemonApp.Theme.TheFirstSnow
                 {
                     Duration = TimeSpan.FromSeconds(speed),
                     RepeatBehavior = RepeatBehavior.Forever,
-                    From = 0 - width, To = canvas.ActualHeight
+                    From = 0 - width,
+                    To = canvas.ActualHeight
                 };
                 Timeline.SetDesiredFrameRate(d, 35);
                 canvas.Children.Add(b);

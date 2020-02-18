@@ -1,17 +1,9 @@
 ﻿using LemonLib;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LemonApp.ContentPage
 {
@@ -22,13 +14,14 @@ namespace LemonApp.ContentPage
     {
         private MainWindow mw;
         private Action GetTo;
-        public SingerIndexPage(MainWindow m, ControlTemplate ct,Action Gt)
+        public SingerIndexPage(MainWindow m, ControlTemplate ct, Action Gt)
         {
             InitializeComponent();
             mw = m;
             GetTo = Gt;
             SingerPage_sv.Template = ct;
-            SizeChanged += delegate {
+            SizeChanged += delegate
+            {
                 mw.WidthUI(SingerItemsList);
             };
         }

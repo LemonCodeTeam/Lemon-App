@@ -1,6 +1,5 @@
 ﻿using LemonLib;
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,7 +12,7 @@ namespace LemonApp
         private int lastTimestamp = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            if (Math.Abs(e.Delta) >= 80 && e.Timestamp-lastTimestamp >=100)
+            if (Math.Abs(e.Delta) >= 80 && e.Timestamp - lastTimestamp >= 100)
             {
                 var sc = ScrollDirection.Up;
                 if (e.Delta > 0)
@@ -21,16 +20,17 @@ namespace LemonApp
                 SmoothScroll(sc);
                 e.Handled = true;
             }
-            else {
+            else
+            {
                 var sc = ScrollDirection.Up;
                 if (e.Delta > 0)
                     sc = ScrollDirection.Down;
-                SmoothScroll(sc,false,e.Delta, e.Timestamp - lastTimestamp);
+                SmoothScroll(sc, false, e.Delta, e.Timestamp - lastTimestamp);
                 e.Handled = true;
             }
             lastTimestamp = e.Timestamp;
         }
-        private void SmoothScroll(ScrollDirection direction,bool needAni=true,int Delta=0,int time=0)
+        private void SmoothScroll(ScrollDirection direction, bool needAni = true, int Delta = 0, int time = 0)
         {
             DoubleAnimation Animation = new DoubleAnimation();
             if (needAni)
@@ -42,8 +42,9 @@ namespace LemonApp
                     Animation.To = VerticalOffset + 200;
                 Animation.Duration = TimeSpan.FromMilliseconds(500);
             }
-            else {
-                Animation.To = VerticalOffset - Delta*1.5;
+            else
+            {
+                Animation.To = VerticalOffset - Delta * 1.5;
                 Animation.Duration = TimeSpan.FromMilliseconds(0);
             }
             BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
@@ -55,8 +56,10 @@ namespace LemonApp
         Up, Down
     }
 
-    public static class ListBoxInside{
-        public static void Animation(this ListBox listbox,FrameworkElement ui) {
+    public static class ListBoxInside
+    {
+        public static void Animation(this ListBox listbox, FrameworkElement ui)
+        {
             int count = (int)(listbox.ActualHeight / 45);
             if (listbox.Items.IndexOf(ui) <= count)
             {

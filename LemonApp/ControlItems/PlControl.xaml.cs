@@ -1,17 +1,9 @@
 ﻿using LemonLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
 
@@ -39,20 +31,21 @@ namespace LemonApp
 
         private async void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(couldpraise)
-            if (data.ispraise)
-            {
-                zp.SetResourceReference(Shape.FillProperty, "PlayDLPage_Font_Low");
-                ztb.Text = (int.Parse(data.like) - 1).ToString();
-                data.like = ztb.Text;
-                Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
-            }
-            else {
-                zp.SetResourceReference(Shape.FillProperty, "ThemeColor");
-                ztb.Text = (int.Parse(data.like) + 1).ToString();
-                data.like = ztb.Text;
-                Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
-            }
+            if (couldpraise)
+                if (data.ispraise)
+                {
+                    zp.SetResourceReference(Shape.FillProperty, "PlayDLPage_Font_Low");
+                    ztb.Text = (int.Parse(data.like) - 1).ToString();
+                    data.like = ztb.Text;
+                    Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
+                }
+                else
+                {
+                    zp.SetResourceReference(Shape.FillProperty, "ThemeColor");
+                    ztb.Text = (int.Parse(data.like) + 1).ToString();
+                    data.like = ztb.Text;
+                    Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
+                }
         }
     }
 }

@@ -1,17 +1,7 @@
 ﻿using LemonLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -26,10 +16,12 @@ namespace LemonApp
             InitializeComponent();
             mw = m;
             sv.Template = ct;
-            SizeChanged += delegate {
+            SizeChanged += delegate
+            {
                 mw.WidthUI(ItemsList);
             };
-            Loaded += delegate {
+            Loaded += delegate
+            {
                 GetSingerList();
             };
         }
@@ -55,7 +47,7 @@ namespace LemonApp
             if (cur_page == 1)
             {
                 await Task.Delay(10);
-                mw.RunAnimation(ItemsList,new Thickness(0,50,0,0));
+                mw.RunAnimation(ItemsList, new Thickness(0, 50, 0, 0));
             }
         }
         private int ixSingerList = 1;

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using Un4seen.Bass;
 
@@ -68,7 +65,7 @@ namespace LemonLib
                 st.Close();
                 so.Close();
                 myrp.Close();
-                if(!stop)Finished();
+                if (!stop) Finished();
             });
         }
         public void Pause()
@@ -82,7 +79,8 @@ namespace LemonLib
             Console.WriteLine("Start.");
         }
         public bool stop = false;
-        public void Stop() {
+        public void Stop()
+        {
             stop = true;
         }
         private string Getsize(double size)
@@ -98,7 +96,8 @@ namespace LemonLib
             return size.ToString("0.00") + units[i];
         }
     }
-    public class BASSDL {
+    public class BASSDL
+    {
         public DOWNLOADPROC _myDownloadProc;
         private FileStream _fs = null;
         private byte[] _data; // local data buffer
@@ -106,11 +105,13 @@ namespace LemonLib
         public Action<long, long> procChanged = null;
         public Action finished = null;
         public int stream;
-        public BASSDL(string path) {
+        public BASSDL(string path)
+        {
             _myDownloadProc = new DOWNLOADPROC(DownloadCallBack);
             DLPath = path;
         }
-        public void SetClose() {
+        public void SetClose()
+        {
             procChanged = null;
             finished = null;
         }

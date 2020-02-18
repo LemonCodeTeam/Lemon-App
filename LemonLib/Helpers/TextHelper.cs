@@ -10,12 +10,14 @@ namespace LemonLib
 {
     public static class TextHelper
     {
-        public static string IntToWn(this int num) {
+        public static string IntToWn(this int num)
+        {
             if (num < 10000)
                 return num.ToString();
-            else {
+            else
+            {
                 double d = (double)num / (double)10000;
-                return Math.Round(d, 2, MidpointRounding.AwayFromZero)+"万";
+                return Math.Round(d, 2, MidpointRounding.AwayFromZero) + "万";
             }
         }
         public static string MakeValidFileName(string text, string replacement = "_")
@@ -32,10 +34,12 @@ namespace LemonLib
 
             return str.ToString();
         }
-        public static string Exem(string str) {
+        public static string Exem(string str)
+        {
             string s = str;
-            while (s.Contains("[em]")) {
-                string em = "[em]"+XtoYGetTo(s, "[em]", "[/em]", 0)+"[/em]";
+            while (s.Contains("[em]"))
+            {
+                string em = "[em]" + XtoYGetTo(s, "[em]", "[/em]", 0) + "[/em]";
                 s = s.Replace(em, "");
             }
             return s;

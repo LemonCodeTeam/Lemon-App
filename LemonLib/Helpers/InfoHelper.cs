@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace LemonLib
 {
-    public class InfoHelper {
-        public enum NowPage {
-            Search,Top,SingerItem,GDItem
+    public class InfoHelper
+    {
+        public enum NowPage
+        {
+            Search, Top, SingerItem, GDItem
         }
-        public class MeumInfo {
-            public MeumInfo(TextBlock t, UIElement p, Border c) {
+        public class MeumInfo
+        {
+            public MeumInfo(TextBlock t, UIElement p, Border c)
+            {
                 tb = t;
                 Page = p;
                 Com = c;
@@ -20,12 +22,12 @@ namespace LemonLib
             public UIElement Page;
             public Border Com;
             public Thickness value = default;
-            public string cmd="";
+            public string cmd = "";
         }
         ////////Music Helper////////
         public class IFVData
         {
-            public IFVData(string image, string uri,string ty)
+            public IFVData(string image, string uri, string ty)
             {
                 pic = image;
                 url = uri;
@@ -35,20 +37,23 @@ namespace LemonLib
             public string url;
             public string type;
         }
-        public class HomePageData {
+        public class HomePageData
+        {
             public List<IFVData> focus = new List<IFVData>();
             public List<MusicGD> GFdata = new List<MusicGD>();
             public List<MusicGD> Gdata = new List<MusicGD>();
             public List<Music> NewMusic = new List<Music>();
         }
 
-        public class SingerDesc {
+        public class SingerDesc
+        {
             public string Desc;
             public Dictionary<string, string> basic;
-            public Dictionary<string,string> other;
+            public Dictionary<string, string> other;
         }
 
-        public class SingerPageData {
+        public class SingerPageData
+        {
             /// <summary>
             /// 歌手信息
             /// </summary>
@@ -87,7 +92,8 @@ namespace LemonLib
             /// </summary>
             public string FansCount = "";
         }
-        public class MVData {
+        public class MVData
+        {
             public string id { get; set; } = "";
             public string name { set; get; } = "";
             public string img { set; get; } = "";
@@ -105,7 +111,8 @@ namespace LemonLib
             public string Mvmid { set; get; } = "";
             public string Pz { set; get; } = "";
         }
-        public class MusicSinger {
+        public class MusicSinger
+        {
             public string Name { set; get; }
             public string Photo { set; get; }
             public string Mid { set; get; }
@@ -125,7 +132,8 @@ namespace LemonLib
             public string desc;
             public List<string> content { set; get; }
         }
-        public class MusicPL {
+        public class MusicPL
+        {
             public string name { get; set; }
             public string img { get; set; }
             public string like { get; set; }
@@ -134,10 +142,12 @@ namespace LemonLib
             public string time { get; set; }
             public bool ispraise { get; set; }
         }
-        public class MusicRadioList {
+        public class MusicRadioList
+        {
             public List<MusicRadioListItem> Items { set; get; } = new List<MusicRadioListItem>();
         }
-        public class MusicRadioListItem {
+        public class MusicRadioListItem
+        {
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
@@ -152,11 +162,13 @@ namespace LemonLib
             public List<MusicFLGDIndexItems> Heart { get; set; } = new List<MusicFLGDIndexItems>();
             public List<MusicFLGDIndexItems> Changjing { get; set; } = new List<MusicFLGDIndexItems>();
         }
-        public class MusicFLGDIndexItems {
+        public class MusicFLGDIndexItems
+        {
             public string name { get; set; }
             public string id { get; set; }
         }
-        public class MusicGData {
+        public class MusicGData
+        {
             public List<Music> Data { get; set; } = new List<Music>();
             public string name { get; set; }
             public string pic { get; set; }
@@ -170,7 +182,8 @@ namespace LemonLib
             public List<string> ids = new List<string>();
         }
         ////////Weather Helper/////
-        public class Weather {
+        public class Weather
+        {
             public string Qiwen { get; set; }
             public string KongQiZhiLiang { get; set; }
             public string MiaoShu { get; set; }
@@ -180,7 +193,8 @@ namespace LemonLib
             public List<WeatherByDay> Data { get; set; }
 
         }
-        public class WeatherByDay {
+        public class WeatherByDay
+        {
             public string Date { set; get; }
             public string Icon { set; get; }
             public string QiWen { set; get; }

@@ -1,22 +1,13 @@
 ﻿using LemonLib;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -38,7 +29,7 @@ namespace LemonApp
             {
                 if (textBox1.Text != "搜索")
                 {
-                    var data = "{\"data\":" + await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text).Replace("#","%23") + "&action=opensearch", Encoding.GetEncoding("GBK")) +"}";
+                    var data = "{\"data\":" + await HttpHelper.GetWebAsync("http://suggestion.baidu.com/su?wd=" + Uri.EscapeDataString(textBox1.Text).Replace("#", "%23") + "&action=opensearch", Encoding.GetEncoding("GBK")) + "}";
                     Console.WriteLine(data);
                     JObject obj = JObject.Parse(data);
                     var aa = obj["data"][1];
@@ -47,7 +38,7 @@ namespace LemonApp
                         listBox.Items.Add(new ListBoxItem() { Content = item, Height = 35 });
                     if (aa.Count() != 0)
                     {
-                        var d = new DoubleAnimation(70+listBox.Items.Count*35, TimeSpan.FromSeconds(0.3));
+                        var d = new DoubleAnimation(70 + listBox.Items.Count * 35, TimeSpan.FromSeconds(0.3));
                         d.Completed += delegate { BeginAnimation(TopProperty, new DoubleAnimation(Tp - listBox.Items.Count * 25, TimeSpan.FromSeconds(0.3))); };
                         BeginAnimation(HeightProperty, d);
                     }
@@ -114,7 +105,7 @@ namespace LemonApp
 
         private void listBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key==Key.Enter)
+            if (e.Key == Key.Enter)
                 if (listBox.SelectedIndex != -1)
                 {
                     textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();

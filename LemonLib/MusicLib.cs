@@ -10,10 +10,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
 using System.Xml.Linq;
 using static LemonLib.InfoHelper;
 /*
@@ -42,7 +38,7 @@ namespace LemonLib
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
             qq = id;
-            new Action(async() => { await GetMusicLikeGDid(); })();
+            new Action(async () => { await GetMusicLikeGDid(); })();
         }
         public MusicLib()
         {
@@ -134,11 +130,12 @@ namespace LemonLib
             return list;
         }
 
-        public static async Task<List<string>> SearchHotKey() {
+        public static async Task<List<string>> SearchHotKey()
+        {
             var data = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
             List<string> list = new List<string>();
             var dt = data["data"]["hotkey"];
-            foreach(var a in dt)
+            foreach (var a in dt)
                 list.Add(a["k"].ToString());
             return list;
         }
@@ -149,7 +146,7 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> GetWYIdByName(string name)
         {
-            string data =await HttpHelper.PostWeb("https://music.yeie.net/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name), HttpHelper.GetWebHeader_Yeie());
+            string data = await HttpHelper.PostWeb("https://music.yeie.net/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name), HttpHelper.GetWebHeader_Yeie());
             var ds = "{\"data\":" + data + "}";
             var s = JObject.Parse(ds);
             return s["data"][0]["id"].ToString();
@@ -167,7 +164,7 @@ namespace LemonLib
         public static async Task<string[]> AddMusicToGDAsync(string id, string dirid)
         {
             Console.WriteLine(Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
-            string result =await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
             JObject o = JObject.Parse(result);
@@ -209,7 +206,7 @@ namespace LemonLib
             }
             Musicid = string.Join(",", Musicids);
             types = types[0..^1];
-            string result =await HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types={types}&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             string ok = JObject.Parse(result)["msg"].ToString();
             return ok;
@@ -252,7 +249,7 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> DelGDILikeAsync(string dissid)
         {
-            string result =await HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&ordertype=0&optype=2&dissid={dissid}&from=1", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -261,9 +258,9 @@ namespace LemonLib
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<string> AddNewGdAsync(string name,string imgurl="")
+        public static async Task<string> AddNewGdAsync(string name, string imgurl = "")
         {
-            string result =await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url={imgurl}&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -274,7 +271,7 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> DeleteGdByIdAsync(string dirid)
         {
-            string result =await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&delnum=1&deldirids={dirid}&forcedel=1&formsender=1&source=103", HttpHelper.GetWebHeader_YQQCOM());
             return result;
         }
@@ -284,7 +281,8 @@ namespace LemonLib
         /// </summary>
         /// <param name="path">文件地址（本机）</param>
         /// <returns></returns>
-        public static async Task<string> UploadAFile(string path) {
+        public static async Task<string> UploadAFile(string path)
+        {
             FileInfo e = new FileInfo(path);
             string ex = "0";
             string exTen = "";
@@ -293,7 +291,8 @@ namespace LemonLib
                 ex = "0";
                 exTen = "jpeg";
             }
-            else {
+            else
+            {
                 ex = "1";
                 exTen = "png";
             }
@@ -302,7 +301,7 @@ Content-Disposition: form-data; name=""data""; filename=""{e.Name}""
 Content-Type: image/{exTen}
 
 ";
-            string h=$@"------WebKitFormBoundarye8oXp9zt6XFYGpye
+            string h = $@"------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""auth_appid""
 
 music_cover
@@ -313,7 +312,7 @@ Content-Disposition: form-data; name=""parentid""
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""fileid""
 
-{qq}_{new Random().Next(100000000, 999999999)}{new Random().Next(1000,9999)}
+{qq}_{new Random().Next(100000000, 999999999)}{new Random().Next(1000, 9999)}
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""uin""
 
@@ -371,22 +370,22 @@ jpg
             byte[] qByte = Encoding.UTF8.GetBytes(q);
             byte[] UpdateFile = File.ReadAllBytes(path);
             byte[] hByte = Encoding.UTF8.GetBytes(h);
-           
+
             Stream myRequestStream = request.GetRequestStream();
             await myRequestStream.WriteAsync(qByte, 0, qByte.Length);
             await myRequestStream.WriteAsync(UpdateFile, 0, UpdateFile.Length);
-            await myRequestStream.WriteAsync(hByte, 0,h.Length);
+            await myRequestStream.WriteAsync(hByte, 0, h.Length);
 
             HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
 
             Stream myResponseStream = response.GetResponseStream();
             StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
 
-            string retString =await  myStreamReader.ReadToEndAsync();
+            string retString = await myStreamReader.ReadToEndAsync();
             myRequestStream.Close();
             myStreamReader.Close();
             var json = TextHelper.XtoYGetTo(retString, "frameElement.callback)(", ");</script></body></html>", 0);
-            return JObject.Parse(json)["imageurl"].ToString().Replace("http://","https://");
+            return JObject.Parse(json)["imageurl"].ToString().Replace("http://", "https://");
         }
         #endregion
         #region  歌单数据的获取
@@ -422,7 +421,7 @@ jpg
         /// <param name="wx"></param>
         /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetGDAsync(string id = "2591355982",Action<MusicGData> GetInfo=null, Action<int,Music, bool> callback = null, Window wx = null,Action<int> getAll=null)
+        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<MusicGData> GetInfo = null, Action<int, Music, bool> callback = null, Window wx = null, Action<int> getAll = null)
         {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
             Console.WriteLine(s);
@@ -435,9 +434,10 @@ jpg
             dt.ids = c0["songids"].ToString().Split(',').ToList();
             dt.IsOwn = c0["login"].ToString() == c0["uin"].ToString();
             dt.desc = c0["desc"].ToString();
-            dt.Creater = new MusicSinger() { 
-               Name=c0["nick"].ToString(),
-               Photo=c0["headurl"].ToString()
+            dt.Creater = new MusicSinger()
+            {
+                Name = c0["nick"].ToString(),
+                Photo = c0["headurl"].ToString()
             };
             GetInfo(dt);
             var c0s = c0["songlist"];
@@ -495,7 +495,7 @@ jpg
         /// <returns></returns>
         public async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()
         {
-            if(Settings.USettings.LemonAreeunIts=="")
+            if (Settings.USettings.LemonAreeunIts == "")
                 return new SortedDictionary<string, MusicGData>();
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
             var o = JObject.Parse(dt);
@@ -531,9 +531,9 @@ jpg
                 var df = new MusicGData();
                 df.id = ex["dissid"].ToString();
                 df.name = ex["dissname"].ToString();
-                df.listenCount =int.Parse(ex["listennum"].ToString());
+                df.listenCount = int.Parse(ex["listennum"].ToString());
                 if (ex["logo"].ToString() != "")
-                    df.pic = ex["logo"].ToString().Replace("http://","https://");
+                    df.pic = ex["logo"].ToString().Replace("http://", "https://");
                 else df.pic = "https://y.gtimg.cn/mediastyle/global/img/cover_playlist.png?max_age=31536000";
                 data.Add(df.id, df);
             }
@@ -549,7 +549,7 @@ jpg
         /// <param name="sortId">最新:2  推荐:5 </param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<MusicGD>> GetFLGDAsync(string id,string sortId="5",int osx=1)
+        public async Task<List<MusicGD>> GetFLGDAsync(string id, string sortId = "5", int osx = 1)
         {
             int start = (osx - 1) * 30;
             int end = start + 29;
@@ -566,7 +566,7 @@ jpg
                     Name = dli["dissname"].ToString(),
                     Photo = dli["imgurl"].ToString().Replace("http://", "https://"),//不知为何，不用https就会报404错误,
                     ID = dli["dissid"].ToString(),
-                    ListenCount=int.Parse(dli["listennum"].ToString())
+                    ListenCount = int.Parse(dli["listennum"].ToString())
                 });
                 i++;
             }
@@ -690,7 +690,7 @@ jpg
             await Task.Delay(500);
             string dir = await GetGDdiridByNameAsync(dt.name);
             Console.WriteLine("dirId" + dir);
-            var amt =await AddMusicToGDPLAsync(ids, dir, typelist);
+            var amt = await AddMusicToGDPLAsync(ids, dir, typelist);
             Console.WriteLine(amt[0] + amt[1]);
             x.Dispatcher.Invoke(() =>
             {
@@ -830,9 +830,9 @@ jpg
         /// <param name="McMind"></param>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static async Task<string> GetLyric(string McMind,string file="")
+        public static async Task<string> GetLyric(string McMind, string file = "")
         {
-            if(file=="") file=Settings.USettings.CachePath + "Lyric\\" + McMind + ".lrc";
+            if (file == "") file = Settings.USettings.CachePath + "Lyric\\" + McMind + ".lrc";
             if (!File.Exists(file))
             {
                 WebClient c = new WebClient();
@@ -840,7 +840,7 @@ jpg
                 c.Headers.Add("Accept", "*/*");
                 c.Headers.Add("Referer", "https://y.qq.com/portal/player.html");
                 c.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
-                c.Headers.Add("Cookie",Settings.USettings.Cookie);
+                c.Headers.Add("Cookie", Settings.USettings.Cookie);
                 c.Headers.Add("Host", "c.y.qq.com");
                 string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&pcachetime=1563410858607&songmid={McMind}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
                 string td = c.DownloadString(url);
@@ -868,7 +868,7 @@ jpg
             var o = JObject.Parse(dt);
             var data = new List<MusicTop>();
             var d0l = o["topList"]["data"]["group"];
-            foreach(var c in d0l)
+            foreach (var c in d0l)
             {
                 var toplist = c["toplist"];
                 foreach (var d in toplist)
@@ -881,7 +881,7 @@ jpg
                         Name = d["title"].ToString(),
                         Photo = d["frontPicUrl"].ToString().Replace("http://", "https://"),
                         ID = d["topId"].ToString(),
-                        desc="["+d["titleShare"] +"] "+d["intro"].ToString().Replace("<br>", ""),
+                        desc = "[" + d["titleShare"] + "] " + d["intro"].ToString().Replace("<br>", ""),
                         content = content
                     });
                 }
@@ -894,10 +894,10 @@ jpg
         /// <param name="TopID"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<Music>> GetToplistAsync(string TopID,Action<Music,bool> callback,Window wx,Action finished,int aniCount, int osx = 1)
+        public async Task<List<Music>> GetToplistAsync(string TopID, Action<Music, bool> callback, Window wx, Action finished, int aniCount, int osx = 1)
         {
             int index = (osx - 1) * 30;
-            string json=await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
+            string json = await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
             JObject o = JObject.Parse(json);
             Console.WriteLine(json);
             List<Music> dt = new List<Music>();
@@ -914,7 +914,9 @@ jpg
                 for (int osxc = 0; osxc != sid["singer"].Count(); osxc++)
                 {
                     Singer += sid["singer"][osxc]["name"] + "&";
-                    lm.Add(new MusicSinger() { Name = sid["singer"][osxc]["name"].ToString(),
+                    lm.Add(new MusicSinger()
+                    {
+                        Name = sid["singer"][osxc]["name"].ToString(),
                         Mid = sid["singer"][osxc]["mid"].ToString()
                     });
                 }
@@ -954,9 +956,10 @@ jpg
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<SingerPageData> GetSingerPageAsync(string id) {
+        public static async Task<SingerPageData> GetSingerPageAsync(string id)
+        {
             JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
-                "{\"req_0\":{\"module\":\"musichall.singer_info_server\",\"method\":\"GetSingerDetail\",\"param\":{\"singer_mids\":[\"" + id + "\"],\"pic\":1,\"group_singer\":1,\"wiki_singer\":1,\"ex_singer\":1}},\"req_1\":{\"module\":\"musichall.song_list_server\",\"method\":\"GetSingerSongList\",\"param\":{\"singerMid\":\"" + id + "\",\"begin\":0,\"num\":10,\"order\":1}},\"req_2\":{\"module\":\"Concern.ConcernSystemServer\",\"method\":\"cgi_qry_concern_status\",\"param\":{\"vec_userinfo\":[{\"usertype\":1,\"userid\":\"" + id+ "\"}],\"opertype\":5,\"encrypt_singerid\":1}},\"req_3\":{\"module\":\"music.musichallAlbum.SelectedAlbumServer\",\"method\":\"SelectedAlbumList\",\"param\":{\"singerMid\":\""+id+"\"}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk+",\"uin\":\""+Settings.USettings.LemonAreeunIts+"\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
+                "{\"req_0\":{\"module\":\"musichall.singer_info_server\",\"method\":\"GetSingerDetail\",\"param\":{\"singer_mids\":[\"" + id + "\"],\"pic\":1,\"group_singer\":1,\"wiki_singer\":1,\"ex_singer\":1}},\"req_1\":{\"module\":\"musichall.song_list_server\",\"method\":\"GetSingerSongList\",\"param\":{\"singerMid\":\"" + id + "\",\"begin\":0,\"num\":10,\"order\":1}},\"req_2\":{\"module\":\"Concern.ConcernSystemServer\",\"method\":\"cgi_qry_concern_status\",\"param\":{\"vec_userinfo\":[{\"usertype\":1,\"userid\":\"" + id + "\"}],\"opertype\":5,\"encrypt_singerid\":1}},\"req_3\":{\"module\":\"music.musichallAlbum.SelectedAlbumServer\",\"method\":\"SelectedAlbumList\",\"param\":{\"singerMid\":\"" + id + "\"}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
             //Part 1 歌手信息
             var req0 = o["req_0"]["data"]["singer_list"][0];
             MusicSinger mSinger = new MusicSinger();
@@ -964,15 +967,17 @@ jpg
             mSinger.Name = req0["basic_info"]["name"].ToString();
             string pic = req0["pic"]["big_black"].ToString();
             bool hasBigPic = true;
-            if (pic == "") {
+            if (pic == "")
+            {
                 hasBigPic = false;
                 pic = req0["pic"]["pic"].ToString();
-             }
+            }
             mSinger.Photo = pic.Replace("http://", "https://");
             //Part 2 热门歌曲
             var req1 = o["req_1"]["data"]["songList"];
             List<Music> HotSongs = new List<Music>();
-            foreach (var c in req1) {
+            foreach (var c in req1)
+            {
                 Debug.Print(c.ToString());
                 var data = c["songInfo"];
                 Music m = new Music();
@@ -984,7 +989,7 @@ jpg
                 foreach (var s in data["singer"])
                 {
                     Singer += s["name"] + "&";
-                    lm.Add(new MusicSinger() { Name =s["name"].ToString(), Mid = s["mid"].ToString() });
+                    lm.Add(new MusicSinger() { Name = s["name"].ToString(), Mid = s["mid"].ToString() });
                 }
                 m.Singer = lm;
                 m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
@@ -994,7 +999,7 @@ jpg
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
-                    m.Album = new MusicGD() {Name = data["album"]["name"].ToString(),ID=amid,Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000"};
+                    m.Album = new MusicGD() { Name = data["album"]["name"].ToString(), ID = amid, Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000" };
                 var file = data["file"];
                 if (file["size_320mp3"].ToString() != "0")
                     m.Pz = "HQ";
@@ -1010,8 +1015,9 @@ jpg
             else HasGJ = true;
             //Part 4 顶部的凉虾
             var lx = o["req_3"]["data"]["albumList"];
-            List<MVData > lix = new List<MVData>();
-            foreach (var c in lx) {
+            List<MVData> lix = new List<MVData>();
+            foreach (var c in lx)
+            {
                 MVData m = new MVData();
                 m.id = c["albumMid"].ToString();
                 m.lstCount = c["publishDate"].ToString();
@@ -1023,7 +1029,8 @@ jpg
             JObject album = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg", "{\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"singerAlbum\":{\"method\":\"get_singer_album\",\"param\":{\"singermid\":\"" + id + "\",\"order\":\"time\",\"begin\":0,\"num\":5,\"exstatus\":1},\"module\":\"music.web_singer_info_svr\"}}"));
             List<MusicGD> mg = new List<MusicGD>();
             var datac = album["singerAlbum"]["data"]["list"];
-            foreach (var c in datac) {
+            foreach (var c in datac)
+            {
                 MusicGD m = new MusicGD();
                 m.ID = c["album_mid"].ToString();
                 m.Name = c["album_name"].ToString();
@@ -1031,9 +1038,10 @@ jpg
                 mg.Add(m);
             }
             // MV
-            JObject mv = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?cid=205360581&singermid="+id+"&order=listen&begin=0&num=5&g_tk="+Settings.USettings.g_tk+ "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            JObject mv = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?cid=205360581&singermid=" + id + "&order=listen&begin=0&num=5&g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
             List<MVData> mVDatas = new List<MVData>();
-            foreach (var c in mv["data"]["list"]) {
+            foreach (var c in mv["data"]["list"])
+            {
                 MVData m = new MVData();
                 m.id = c["vid"].ToString();
                 m.img = c["pic"].ToString();
@@ -1042,9 +1050,10 @@ jpg
                 mVDatas.Add(m);
             }
             //相似歌手
-            var ss = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/v8/fcg-bin/fcg_v8_simsinger.fcg?utf8=1&singer_mid="+id+"&start=0&num=5&g_tk="+Settings.USettings.g_tk+"&loginUin="+Settings.USettings.LemonAreeunIts+"&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"))["singers"]["items"];
+            var ss = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/v8/fcg-bin/fcg_v8_simsinger.fcg?utf8=1&singer_mid=" + id + "&start=0&num=5&g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"))["singers"]["items"];
             List<MusicSinger> ssMs = new List<MusicSinger>();
-            foreach (var c in ss) {
+            foreach (var c in ss)
+            {
                 MusicSinger m = new MusicSinger();
                 m.Mid = c["mid"].ToString();
                 m.Name = c["name"].ToString();
@@ -1052,9 +1061,9 @@ jpg
                 ssMs.Add(m);
             }
             //关注量
-            var gj = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_getnum.fcg?g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&singermid="+id+"&utf8=1&rnd=1565074512297"));
+            var gj = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_getnum.fcg?g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&singermid=" + id + "&utf8=1&rnd=1565074512297"));
             string num = int.Parse(gj["num"].ToString()).IntToWn();
-            return new SingerPageData() {HasBigPic=hasBigPic,liangxia=lix, mSinger = mSinger, HotSongs = HotSongs, HasGJ = HasGJ, Album = mg, mVDatas = mVDatas, ssMs = ssMs, FansCount = num };
+            return new SingerPageData() { HasBigPic = hasBigPic, liangxia = lix, mSinger = mSinger, HotSongs = HotSongs, HasGJ = HasGJ, Album = mg, mVDatas = mVDatas, ssMs = ssMs, FansCount = num };
         }
         /// <summary>
         /// 该歌手的专辑
@@ -1062,11 +1071,12 @@ jpg
         /// <param name="id"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public static async Task<List<MusicGD>> GetSingerAlbumById(string id,int osx=1) {
+        public static async Task<List<MusicGD>> GetSingerAlbumById(string id, int osx = 1)
+        {
             int num = 20;
             int begin = (osx - 1) * num;
-            JObject album = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg", 
-                "{\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"singerAlbum\":{\"method\":\"get_singer_album\",\"param\":{\"singermid\":\"" + id + "\",\"order\":\"time\",\"begin\":"+begin+",\"num\":"+num+",\"exstatus\":1},\"module\":\"music.web_singer_info_svr\"}}"));
+            JObject album = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+                "{\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"singerAlbum\":{\"method\":\"get_singer_album\",\"param\":{\"singermid\":\"" + id + "\",\"order\":\"time\",\"begin\":" + begin + ",\"num\":" + num + ",\"exstatus\":1},\"module\":\"music.web_singer_info_svr\"}}"));
             List<MusicGD> mg = new List<MusicGD>();
             var datac = album["singerAlbum"]["data"]["list"];
             foreach (var c in datac)
@@ -1080,10 +1090,11 @@ jpg
             return mg;
         }
 
-        public static async Task<List<MVData>> GetSingerMvList(string id,int osx=1) {
+        public static async Task<List<MVData>> GetSingerMvList(string id, int osx = 1)
+        {
             int num = 20;
             int begin = (osx - 1) * num;
-            JObject mv = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?cid=205360581&singermid=" + id + "&order=listen&begin="+begin+"&num="+num+"&g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            JObject mv = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?cid=205360581&singermid=" + id + "&order=listen&begin=" + begin + "&num=" + num + "&g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
             List<MVData> mVDatas = new List<MVData>();
             foreach (var c in mv["data"]["list"])
             {
@@ -1097,17 +1108,18 @@ jpg
             return mVDatas;
         }
 
-        public static async Task<SingerDesc> GetSingerDesc(string id) {
-            string data = await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_singer_desc.fcg?singermid="+id+"&utf8=1&outCharset=utf-8&format=xml&r=1565243621590");
+        public static async Task<SingerDesc> GetSingerDesc(string id)
+        {
+            string data = await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_singer_desc.fcg?singermid=" + id + "&utf8=1&outCharset=utf-8&format=xml&r=1565243621590");
             SingerDesc sd = new SingerDesc();
             XElement x = XDocument.Parse(data).Element("result").Element("data").Element("info");
-            sd.Desc = x.Element("desc").Value.Replace("<![CDATA[","").Replace("]]>","");
+            sd.Desc = x.Element("desc").Value.Replace("<![CDATA[", "").Replace("]]>", "");
 
             var a = from b in x.Element("basic").Descendants("item")
-                    select new {key=b.Element("key").Value.Replace("<![CDATA[", "").Replace("]]>", ""), value =b.Element("value").Value.Replace("<![CDATA[", "").Replace("]]>", "") };
+                    select new { key = b.Element("key").Value.Replace("<![CDATA[", "").Replace("]]>", ""), value = b.Element("value").Value.Replace("<![CDATA[", "").Replace("]]>", "") };
             sd.basic = new Dictionary<string, string>();
             foreach (var c in a)
-                sd.basic.Add(c.key,c.value);
+                sd.basic.Add(c.key, c.value);
 
             var d = from b in x.Element("other").Descendants("item")
                     select new { key = b.Element("key").Value.Replace("<![CDATA[", "").Replace("]]>", ""), value = b.Element("value").Value.Replace("<![CDATA[", "").Replace("]]>", "") };
@@ -1117,7 +1129,8 @@ jpg
             return sd;
         }
 
-        public static async Task<bool> AddSingerLikeById(string id) {
+        public static async Task<bool> AddSingerLikeById(string id)
+        {
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid={id}&rnd=1565150765773"));
             return o["code"].ToString() == "0";
         }
@@ -1126,7 +1139,8 @@ jpg
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_del.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid={id}&rnd=1565150765773"));
             return o["code"].ToString() == "0";
         }
-        public static async Task<List<MusicSinger>> GetSingerIFollowListAsync(int index) {
+        public static async Task<List<MusicSinger>> GetSingerIFollowListAsync(int index)
+        {
             int size = 30;
             int from = 30 * (index - 1);
             string str = await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22music.concern.RelationList%22%2C%22method%22%3A%22GetFollowSingerList%22%2C%22param%22%3A%7B%22From%22%3A" + from + "%2C%22Size%22%3A" + size + "%7D%7D%7D");
@@ -1135,12 +1149,14 @@ jpg
                 ["singerList"]["data"]["List"];
 
             List<MusicSinger> data = new List<MusicSinger>();
-            foreach (var a in obj) {
+            foreach (var a in obj)
+            {
                 string mid = a["MID"].ToString();
-                data.Add(new MusicSinger() {
-                Mid=mid,
-                Name=a["Name"].ToString(),
-                Photo= "https://y.gtimg.cn/music/photo_new/T001R500x500M000"+mid+".jpg?max_age=2592000"
+                data.Add(new MusicSinger()
+                {
+                    Mid = mid,
+                    Name = a["Name"].ToString(),
+                    Photo = "https://y.gtimg.cn/music/photo_new/T001R500x500M000" + mid + ".jpg?max_age=2592000"
                 });
             }
             return data;
@@ -1155,18 +1171,18 @@ jpg
         /// <param name="sin">80*(页数-1)</param>
         /// <param name="cur_page">页数</param>
         /// <returns></returns>
-        public static async Task<List<MusicSinger>> GetSingerListAsync(string index,string area,string sex,string genre,string sin,int cur_page)
+        public static async Task<List<MusicSinger>> GetSingerListAsync(string index, string area, string sex, string genre, string sin, int cur_page)
         {
-            var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?-=getUCGI6639758764435573&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data="+
+            var o = JObject.Parse(await HttpHelper.GetWebAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?-=getUCGI6639758764435573&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=" +
                 $"%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22Music.SingerListServer%22%2C%22method%22%3A%22get_singer_list%22%2C%22param%22%3A%7B%22area%22%3A{area}%2C%22sex%22%3A{sex}%2C%22genre%22%3A{genre}%2C%22index%22%3A{index}%2C%22sin%22%3A{sin}%2C%22cur_page%22%3A{cur_page}%7D%7D%7D"));
             var data = new List<MusicSinger>();
             var dl = o["singerList"]["data"]["singerlist"];
-            foreach(var dli in dl)
+            foreach (var dli in dl)
             {
                 data.Add(new MusicSinger
                 {
                     Name = dli["singer_name"].ToString(),
-                    Mid=dli["singer_mid"].ToString(),
+                    Mid = dli["singer_mid"].ToString(),
                     Photo = $"https://y.gtimg.cn/music/photo_new/T001R150x150M000{dli["singer_mid"]}.jpg?max_age=2592000"
                 });
             }
@@ -1178,21 +1194,24 @@ jpg
         /// <param name="mid"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public static async Task<List<Music>> GetSingerMusicByIdAsync(string mid,int osx=1) {
+        public static async Task<List<Music>> GetSingerMusicByIdAsync(string mid, int osx = 1)
+        {
             int begin = (osx - 1) * 30;
             JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=24&singermid={mid}&order=listen&begin={begin}&num=30&songstatus=1"));
             List<Music> dt = new List<Music>();
             JToken dtl = o["data"]["list"];
-            foreach (JToken dtli in dtl) {
+            foreach (JToken dtli in dtl)
+            {
                 var dsli = dtli["musicData"];
                 Music m = new Music();
                 m.MusicName = dsli["songname"].ToString();
                 m.MusicName_Lyric = dsli["albumdesc"].ToString();
                 string Singer = "";
                 List<MusicSinger> lm = new List<MusicSinger>();
-                for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++) {
+                for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
+                {
                     Singer += dsli["singer"][osxc]["name"] + "&";
-                    lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid= dsli["singer"][osxc]["mid"].ToString() });
+                    lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid = dsli["singer"][osxc]["mid"].ToString() });
                 }
                 m.Singer = lm;
                 m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
@@ -1223,15 +1242,17 @@ jpg
         public static async Task<Dictionary<string, MusicRadioList>> GetRadioList()
         {
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_radiolist.fcg?channel=radio&format=json&page=index&tpl=wk&new=1&p=0.8663229811059507&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
-            var data = new Dictionary<string,MusicRadioList>();
+            var data = new Dictionary<string, MusicRadioList>();
             var ddg = o["data"]["data"]["groupList"];
             try
             {
-                foreach (var list in ddg) {
+                foreach (var list in ddg)
+                {
                     var dt = new MusicRadioList();
                     string name = list["name"].ToString();
                     var ax = list["radioList"];
-                    foreach (var ms in ax) {
+                    foreach (var ms in ax)
+                    {
                         dt.Items.Add(new MusicRadioListItem
                         {
                             Name = ms["radioName"].ToString(),
@@ -1252,7 +1273,8 @@ jpg
     "{\"songlist\":{\"module\":\"pf.radiosvr\",\"method\":\"GetRadiosonglist\",\"param\":{\"id\":" + id + ",\"firstplay\":1,\"num\":10}},\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":0}}"))
                 ["songlist"]["data"]["track_list"];
             List<Music> Data = new List<Music>();
-            foreach (var e in o) {
+            foreach (var e in o)
+            {
                 string Singer = "";
                 List<MusicSinger> lm = new List<MusicSinger>();
                 foreach (var a in e["singer"])
@@ -1281,7 +1303,7 @@ jpg
                     {
                         ID = amid,
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                        Name =e["album"]["name"].ToString()
+                        Name = e["album"]["name"].ToString()
                     };
                 Data.Add(m);
             }
@@ -1294,7 +1316,7 @@ jpg
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetAlbumSongListByIDAsync(string id,Action<Music, bool> callback, Window wx, Action<MusicGData> getImformation,int aniCount)
+        public static async Task<MusicGData> GetAlbumSongListByIDAsync(string id, Action<Music, bool> callback, Window wx, Action<MusicGData> getImformation, int aniCount)
         {
             string json = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid={id}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_begin=0&song_num=50");
             JObject o = JObject.Parse(json);
@@ -1303,12 +1325,13 @@ jpg
             md.name = o["data"]["name"].ToString();
             var data = new List<Music>();
             var list = o["data"]["list"];
-            md.desc = o["data"]["desc"].ToString().Replace("\r","").Replace("\n","");
-            md.Creater = new MusicSinger(){
+            md.desc = o["data"]["desc"].ToString().Replace("\r", "").Replace("\n", "");
+            md.Creater = new MusicSinger()
+            {
                 Name = o["data"]["singername"].ToString(),
                 Photo = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{o["data"]["singermid"].ToString()}.jpg?max_age=2592000"
             };
-            wx.Dispatcher.Invoke(()=> { getImformation(md); });
+            wx.Dispatcher.Invoke(() => { getImformation(md); });
             int i = 0;
             foreach (var a in list)
             {
@@ -1366,7 +1389,7 @@ jpg
                 MusicGD md = new MusicGD();
                 md.ID = rp["content_id"].ToString();
                 md.Name = rp["title"].ToString();
-                md.Photo = rp["cover"].ToString().Replace("http://","https://");
+                md.Photo = rp["cover"].ToString().Replace("http://", "https://");
                 md.ListenCount = int.Parse(rp["listen_num"].ToString());
                 Gdata.Add(md);
             }
@@ -1382,8 +1405,11 @@ jpg
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
-                    m.Album = new MusicGD() {ID=amid,Photo= $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                        Name= ns["album"]["name"].ToString()
+                    m.Album = new MusicGD()
+                    {
+                        ID = amid,
+                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
+                        Name = ns["album"]["name"].ToString()
                     };
                 m.MusicID = ns["mid"].ToString();
                 m.MusicName = ns["name"].ToString();
@@ -1403,27 +1429,30 @@ jpg
             var data = obj["MusicHallHomePage"]["data"]["v_shelf"];
             var gf = data[0]["v_niche"][0]["v_card"];
             List<MusicGD> gdList = new List<MusicGD>();
-            foreach (var ab in gf) {
-                MusicGD d = new MusicGD() {
+            foreach (var ab in gf)
+            {
+                MusicGD d = new MusicGD()
+                {
                     ID = ab["id"].ToString(),
-                    Name=ab["title"].ToString(),
-                    Photo=ab["cover"].ToString(),
-                    ListenCount=int.Parse(ab["cnt"].ToString()),
+                    Name = ab["title"].ToString(),
+                    Photo = ab["cover"].ToString(),
+                    ListenCount = int.Parse(ab["cnt"].ToString()),
                 };
                 gdList.Add(d);
             }
             return new HomePageData()
             {
                 focus = focus,
-                GFdata=gdList,
+                GFdata = gdList,
                 Gdata = Gdata,
                 NewMusic = NewMusic
             };
         }
         #endregion
         #region MV
-        public static async Task<List<MusicPL>> GetMVPL(string id) {
-            JObject ds = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk="+Settings.USettings.g_tk+"&loginUin="+Settings.USettings.LemonAreeunIts+"&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360772&reqtype=2&biztype=5&topid="+id+"&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=10101010"));
+        public static async Task<List<MusicPL>> GetMVPL(string id)
+        {
+            JObject ds = JObject.Parse(await HttpHelper.GetWebDatacAsync("https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=" + Settings.USettings.g_tk + "&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360772&reqtype=2&biztype=5&topid=" + id + "&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=10101010"));
             List<MusicPL> data = new List<MusicPL>();
             JToken hcc = ds["hot_comment"]["commentlist"];
             for (int i = 0; i != hcc.Count(); i++)
@@ -1449,17 +1478,20 @@ jpg
             }
             return data;
         }
-        public static async Task<string> GetMVDesc(string id) {
+        public static async Task<string> GetMVDesc(string id)
+        {
             JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
-                "{\"comm\":{\"g_tk\":\""+Settings.USettings.g_tk+"\",\"uin\":\""+Settings.USettings.LemonAreeunIts+"\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"mvinfo\":{\"module\":\"video.VideoDataServer\",\"method\":\"get_video_info_batch\",\"param\":{\"vidlist\":[\""+id+"\"],\"required\":[\"vid\",\"type\",\"sid\",\"cover_pic\",\"duration\",\"singers\",\"video_switch\",\"msg\",\"name\",\"desc\",\"playcnt\",\"pubdate\",\"isfav\",\"gmid\"]}}}"));
+                "{\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"mvinfo\":{\"module\":\"video.VideoDataServer\",\"method\":\"get_video_info_batch\",\"param\":{\"vidlist\":[\"" + id + "\"],\"required\":[\"vid\",\"type\",\"sid\",\"cover_pic\",\"duration\",\"singers\",\"video_switch\",\"msg\",\"name\",\"desc\",\"playcnt\",\"pubdate\",\"isfav\",\"gmid\"]}}}"));
             return o["mvinfo"]["data"][id]["desc"].ToString();
         }
-        public static async Task<string> GetMVUrl(string id) {
+        public static async Task<string> GetMVUrl(string id)
+        {
             JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
-                "{\"getMvUrl\":{\"module\":\"gosrf.Stream.MvUrlProxy\",\"method\":\"GetMvUrls\",\"param\":{\"vids\":[\""+id+"\"],\"request_typet\":10001}},\"comm\":{\"g_tk\":\""+Settings.USettings.g_tk+"\",\"uin\":\""+Settings.USettings.LemonAreeunIts+"\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
-            var list=o["getMvUrl"]["data"][id]["mp4"];
+                "{\"getMvUrl\":{\"module\":\"gosrf.Stream.MvUrlProxy\",\"method\":\"GetMvUrls\",\"param\":{\"vids\":[\"" + id + "\"],\"request_typet\":10001}},\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
+            var list = o["getMvUrl"]["data"][id]["mp4"];
             List<string> sList = new List<string>();
-            foreach (var c in list) {
+            foreach (var c in list)
+            {
                 if (c["freeflow_url"].Count() > 0)
                     sList.Add(c["freeflow_url"][0].ToString());
             }
@@ -1476,7 +1508,7 @@ jpg
         public static async Task<List<MusicPL>> GetPLByWyyAsync(string name, int page = 1)
         {
             string Page = ((page - 1) * 20).ToString();
-            string id =await GetWYIdByName(name);
+            string id = await GetWYIdByName(name);
             Console.WriteLine(id);
             var data = await HttpHelper.GetWebAsync($"https://music.163.com/api/v1/resource/comments/R_SO_4_{id}?offset={Page}");
             Console.WriteLine(data);
@@ -1512,11 +1544,12 @@ jpg
             for (int i = 0; i != hcc.Count(); i++)
             {
                 JToken hcc_i = ds["hot_comment"]["commentlist"][i];
-                MusicPL mpl = new MusicPL(){
-                    img =hcc_i["avatarurl"].ToString(),
+                MusicPL mpl = new MusicPL()
+                {
+                    img = hcc_i["avatarurl"].ToString(),
                     like = hcc_i["praisenum"].ToString(),
                     name = hcc_i["nick"].ToString(),
-                    text =TextHelper.Exem(hcc_i["rootcommentcontent"].ToString().Replace(@"\n", "\n")),
+                    text = TextHelper.Exem(hcc_i["rootcommentcontent"].ToString().Replace(@"\n", "\n")),
                     commentid = hcc_i["commentid"].ToString()
                 };
                 DateTime dtStart = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
@@ -1555,7 +1588,7 @@ jpg
         public static async Task<string> PraiseMusicPLAsync(string mid, MusicPL mp)
         {
             string id = await GetMusicIdByMidAsync(mid);
-            Console.WriteLine(id+" - "+ mp.commentid);
+            Console.WriteLine(id + " - " + mp.commentid);
             string get;
             if (mp.ispraise)
                 get = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_praise_h5.fcg?g_tk={Settings.USettings.LemonAreeunIts}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360774&cmd=2&reqtype=2&biztype=1&topid={id}&commentid={mp.commentid}&qq={Settings.USettings.LemonAreeunIts}&domain=qq.com&ct=24&cv=101010");

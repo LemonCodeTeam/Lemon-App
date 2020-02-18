@@ -1,17 +1,8 @@
 ﻿using LemonLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LemonApp.ContentPage
 {
@@ -21,12 +12,13 @@ namespace LemonApp.ContentPage
     public partial class FLGDIndexPage : UserControl
     {
         private MainWindow mw;
-        public FLGDIndexPage(MainWindow m,ControlTemplate ct)
+        public FLGDIndexPage(MainWindow m, ControlTemplate ct)
         {
             InitializeComponent();
             mw = m;
             FLGDPage_sv.Template = ct;
-            SizeChanged += delegate {
+            SizeChanged += delegate
+            {
                 mw.WidthUI(FLGDItemsList);
             };
         }
@@ -100,11 +92,11 @@ namespace LemonApp.ContentPage
             foreach (var d in data)
             {
                 var k = new FLGDIndexItem(d.ID, d.Name, d.Photo, d.ListenCount) { Margin = new Thickness(12, 0, 12, 20) };
-                k.StarEvent +=async (sx) =>
-                {
-                    await MusicLib.AddGDILikeAsync(sx.id);
-                    Toast.Send("收藏成功");
-                };
+                k.StarEvent += async (sx) =>
+                 {
+                     await MusicLib.AddGDILikeAsync(sx.id);
+                     Toast.Send("收藏成功");
+                 };
                 k.ImMouseDown += mw.FxGDMouseDown;
                 FLGDItemsList.Children.Add(k);
             }

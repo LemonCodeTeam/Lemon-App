@@ -1,20 +1,11 @@
 ﻿using LemonLib;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -23,7 +14,7 @@ namespace LemonApp
     /// </summary>
     public partial class UpdataBox : Window
     {
-        public UpdataBox(string ver,string des)
+        public UpdataBox(string ver, string des)
         {
             InitializeComponent();
             con.Text = "最新版:" + ver + "\r\n" +
@@ -43,13 +34,16 @@ namespace LemonApp
             tb.Text = "下载升级包中...";
             var xpath = Settings.USettings.CachePath + "win-release.zip";
             WebClient wb = new WebClient();
-            wb.DownloadProgressChanged += (o, ex) => {
+            wb.DownloadProgressChanged += (o, ex) =>
+            {
                 pro.Value = ex.ProgressPercentage;
             };
-            wb.DownloadFileCompleted += async delegate{
+            wb.DownloadFileCompleted += async delegate
+            {
                 tb.Text = "下载完成，解压升级包...";
                 string file = Settings.USettings.CachePath + "win-release.exe";
-                await Task.Run(() => { 
+                await Task.Run(() =>
+                {
                     ZipFile.ExtractToDirectory(xpath, Settings.USettings.CachePath, true);
                 });
                 tb.Text = "完成";

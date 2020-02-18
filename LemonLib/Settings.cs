@@ -5,15 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Media;
 using static LemonLib.InfoHelper;
 
 namespace LemonLib
 {
     public class Settings
     {
-        private static string ReadEncode(string qq) {
+        private static string ReadEncode(string qq)
+        {
             string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
             Console.WriteLine(data);
             return data;
@@ -54,7 +53,8 @@ namespace LemonLib
                 }
             });
         }
-        private static void XDUsettings(string data) {
+        private static void XDUsettings(string data)
+        {
             JObject o = JObject.Parse(data);
             USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
             USettings.UserImage = o["UserImage"].ToString();
@@ -185,7 +185,8 @@ namespace LemonLib
                 }
                 else SaveLocaSettings();
             }
-            catch {
+            catch
+            {
                 string data = ReadEncode("Data");
                 JObject o = JObject.Parse(data);
                 LSettings.qq = o["qq"].ToString();
@@ -206,7 +207,7 @@ namespace LemonLib
         public static HANDLE Handle = new HANDLE();
         public static void SaveHandle()
         {
-            File.WriteAllText(USettings.CachePath + "HANDLE.st",TextHelper.JSON.ToJSON(Handle));
+            File.WriteAllText(USettings.CachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
         }
         public static HANDLE ReadHandle()
         {
@@ -215,7 +216,8 @@ namespace LemonLib
             Handle.WINDOW_HANDLE = int.Parse(o["WINDOW_HANDLE"].ToString());
             return Handle;
         }
-        public class HANDLE {
+        public class HANDLE
+        {
             //公共运行常量处理类..
             public int WINDOW_HANDLE { get; set; } = 0;
             public int ProcessId { get; set; } = 0;

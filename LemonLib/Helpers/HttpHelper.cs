@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Specialized;
+﻿using System;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -64,7 +61,7 @@ namespace LemonLib
             using WebClient webClient = new WebClient();
             if (Header != null)
                 webClient.Headers = Header;
-            byte[] responseData =await webClient.UploadDataTaskAsync(new Uri(url), "POST", postData);
+            byte[] responseData = await webClient.UploadDataTaskAsync(new Uri(url), "POST", postData);
 
             return Encoding.UTF8.GetString(responseData);
         }

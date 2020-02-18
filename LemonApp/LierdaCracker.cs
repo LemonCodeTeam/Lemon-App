@@ -46,16 +46,19 @@ namespace Lierda.WPFHelper
 
         public void Cracker(int sleepSpan = 50)
         {
-            _ = Task.Factory.StartNew(delegate{
-                  while (true){
-                      try{
-                          SetDate();
-                          FlushMemory();
-                          Thread.Sleep(TimeSpan.FromSeconds((double)sleepSpan));
-                      }
-                      catch { }
-                  }
-              });
+            _ = Task.Factory.StartNew(delegate
+            {
+                while (true)
+                {
+                    try
+                    {
+                        SetDate();
+                        FlushMemory();
+                        Thread.Sleep(TimeSpan.FromSeconds((double)sleepSpan));
+                    }
+                    catch { }
+                }
+            });
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using Un4seen.Bass;
 
 namespace LemonLib
 {
@@ -11,9 +9,10 @@ namespace LemonLib
         /// <summary>
         /// API调试台
         /// </summary>
-        static async Task Main() {
+        static async Task Main()
+        {
             await Settings.LoadUSettings("2728578956");
-            List<InfoHelper.MusicPL> a =await MusicLib.GetPLByQQAsync("0034Ge6Q2b504d");
+            List<InfoHelper.MusicPL> a = await MusicLib.GetPLByQQAsync("0034Ge6Q2b504d");
             int i = 0;
             foreach (var b in a)
             {

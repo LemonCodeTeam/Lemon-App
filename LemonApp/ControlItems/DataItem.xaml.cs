@@ -1,10 +1,6 @@
 ﻿using LemonLib;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,7 +8,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Xml;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp
@@ -35,7 +30,7 @@ namespace LemonApp
         private int BtnWidth = 0;
 
         public int index;
-        public DataItem(Music dat, MainWindow mw,int inx=0,bool NeedDeleteBtn=false)
+        public DataItem(Music dat, MainWindow mw, int inx = 0, bool NeedDeleteBtn = false)
         {
             try
             {
@@ -95,45 +90,48 @@ namespace LemonApp
                 </Border>"));
                     BtnCount++;
                 }
-                 BtnWidth = 32 * BtnCount + 5;
+                BtnWidth = 32 * BtnCount + 5;
                 if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
                     namss.Width = wpl.ActualWidth - 101;
                 LoadUI();
             }
         }
-        private Border CheckView=null;
-        private Border GO=null;
+        private Border CheckView = null;
+        private Border GO = null;
 
         private Grid Buttons;
-        private Popup Gdpop=null;
+        private Popup Gdpop = null;
         private ListBox Add_Gdlist;
         private TitlePageBtn DeleteBtn;
-        private void LoadUI() {
+        private void LoadUI()
+        {
             //TODO: 优化性能 控件在需要之时创建
             string Buttonsxaml = @"<Grid " + He.XAMLUSINGS + @" x:Name=""Buttons"" Margin=""0,15,10,15"" HorizontalAlignment=""Right"" Width=""65"" Visibility=""Collapsed""/>";
             Buttons = (Grid)XamlReader.Parse(Buttonsxaml);
-            TitlePageBtn DownloadBtn = new TitlePageBtn() { Pathness=new Thickness(0),PathData=Geometry.Parse("M168.064,498.7008L493.9008,824.5376C496.2944,826.9312 499.0848,828.7232 502.0416,829.9648 502.0544,829.9648 502.0544,829.9776 502.0672,829.9776 503.3216,830.5024 504.6144,830.8608 505.92,831.1808 506.2656,831.2704 506.5856,831.4112 506.944,831.488 510.2848,832.1536 513.728,832.1536 517.056,831.488 517.4144,831.4112 517.7344,831.2704 518.08,831.1808 519.3856,830.8608 520.6784,830.5024 521.9328,829.9776 521.9456,829.9648 521.9584,829.9648 521.984,829.952 524.9408,828.7104 527.7056,826.9184 530.0992,824.5248L855.936,498.7008C865.8944,488.7424 865.8944,472.448 855.936,462.5024 845.9776,452.544 829.6832,452.544 819.7376,462.5024L537.6,744.64 537.6,89.6128C537.6,75.5328 526.08,64.0128 512,64.0128 497.92,64.0128 486.4,75.5328 486.4,89.6128L486.4,744.64 204.2624,462.5024C194.304,452.544 178.0096,452.544 168.064,462.5024 158.1056,472.4608 158.1056,488.7424 168.064,498.7008z M972.8,729.6L972.8,857.6C972.8,885.8752,949.8752,908.8,921.6,908.8L102.4,908.8C74.1248,908.8,51.2,885.8752,51.2,857.6L51.2,729.6C51.2,715.456,39.744,704,25.6,704L25.6,704C11.456,704,0,715.456,0,729.6L0,857.6C0,913.92,46.08,960,102.4,960L921.6,960C977.92,960,1024,913.92,1024,857.6L1024,729.6C1024,715.456,1012.544,704,998.4,704L998.4,704C984.256,704,972.8,715.456,972.8,729.6z"),Height=15,Width=15,HorizontalAlignment=HorizontalAlignment.Right };
+            TitlePageBtn DownloadBtn = new TitlePageBtn() { Pathness = new Thickness(0), PathData = Geometry.Parse("M168.064,498.7008L493.9008,824.5376C496.2944,826.9312 499.0848,828.7232 502.0416,829.9648 502.0544,829.9648 502.0544,829.9776 502.0672,829.9776 503.3216,830.5024 504.6144,830.8608 505.92,831.1808 506.2656,831.2704 506.5856,831.4112 506.944,831.488 510.2848,832.1536 513.728,832.1536 517.056,831.488 517.4144,831.4112 517.7344,831.2704 518.08,831.1808 519.3856,830.8608 520.6784,830.5024 521.9328,829.9776 521.9456,829.9648 521.9584,829.9648 521.984,829.952 524.9408,828.7104 527.7056,826.9184 530.0992,824.5248L855.936,498.7008C865.8944,488.7424 865.8944,472.448 855.936,462.5024 845.9776,452.544 829.6832,452.544 819.7376,462.5024L537.6,744.64 537.6,89.6128C537.6,75.5328 526.08,64.0128 512,64.0128 497.92,64.0128 486.4,75.5328 486.4,89.6128L486.4,744.64 204.2624,462.5024C194.304,452.544 178.0096,452.544 168.064,462.5024 158.1056,472.4608 158.1056,488.7424 168.064,498.7008z M972.8,729.6L972.8,857.6C972.8,885.8752,949.8752,908.8,921.6,908.8L102.4,908.8C74.1248,908.8,51.2,885.8752,51.2,857.6L51.2,729.6C51.2,715.456,39.744,704,25.6,704L25.6,704C11.456,704,0,715.456,0,729.6L0,857.6C0,913.92,46.08,960,102.4,960L921.6,960C977.92,960,1024,913.92,1024,857.6L1024,729.6C1024,715.456,1012.544,704,998.4,704L998.4,704C984.256,704,972.8,715.456,972.8,729.6z"), Height = 15, Width = 15, HorizontalAlignment = HorizontalAlignment.Right };
             DownloadBtn.MouseDown += DownloadBtn_MouseDown;
             Buttons.Children.Add(DownloadBtn);
-            TitlePageBtn AddBtn = new TitlePageBtn() {Pathness=new Thickness(0),Width=15,Height=15,PathData=Geometry.Parse("M1024,972.8C1024,1001.075,1001.075,1024,972.8,1024L51.2,1024C22.922,1024,0,1001.075,0,972.8L0,51.2C0,22.922,22.922,0,51.2,0L972.8,0C1001.075,0,1024,22.922,1024,51.2L1024,972.8z M972.8,102.4C972.8,74.123,949.875,51.2,921.6,51.2L102.4,51.2C74.125,51.2,51.2,74.123,51.2,102.4L51.2,921.6C51.2,949.875,74.125,972.8,102.4,972.8L921.6,972.8C949.875,972.8,972.8,949.875,972.8,921.6L972.8,102.4z M768,512C768,526.14,756.54,537.6,742.4,537.6L537.6,537.6 537.6,746.776C537.6,758.496 526.14,768.001 512,768.001 497.86,768.001 486.4,758.496 486.4,746.776L486.4,537.6 281.6,537.6C267.46,537.6 256,526.14 256,512 256,497.86 267.46,486.4 281.6,486.4L486.4,486.4 486.4,277.225C486.4,265.5 497.86,256 512,256 526.14,256 537.6,265.5 537.6,277.225L537.6,486.4 742.4,486.4C756.54,486.4,768,497.86,768,512z") };
+            TitlePageBtn AddBtn = new TitlePageBtn() { Pathness = new Thickness(0), Width = 15, Height = 15, PathData = Geometry.Parse("M1024,972.8C1024,1001.075,1001.075,1024,972.8,1024L51.2,1024C22.922,1024,0,1001.075,0,972.8L0,51.2C0,22.922,22.922,0,51.2,0L972.8,0C1001.075,0,1024,22.922,1024,51.2L1024,972.8z M972.8,102.4C972.8,74.123,949.875,51.2,921.6,51.2L102.4,51.2C74.125,51.2,51.2,74.123,51.2,102.4L51.2,921.6C51.2,949.875,74.125,972.8,102.4,972.8L921.6,972.8C949.875,972.8,972.8,949.875,972.8,921.6L972.8,102.4z M768,512C768,526.14,756.54,537.6,742.4,537.6L537.6,537.6 537.6,746.776C537.6,758.496 526.14,768.001 512,768.001 497.86,768.001 486.4,758.496 486.4,746.776L486.4,537.6 281.6,537.6C267.46,537.6 256,526.14 256,512 256,497.86 267.46,486.4 281.6,486.4L486.4,486.4 486.4,277.225C486.4,265.5 497.86,256 512,256 526.14,256 537.6,265.5 537.6,277.225L537.6,486.4 742.4,486.4C756.54,486.4,768,497.86,768,512z") };
             AddBtn.MouseDown += AddBtn_MouseDown;
             Buttons.Children.Add(AddBtn);
-            TitlePageBtn PlayBtn = new TitlePageBtn() {Pathness=new Thickness(0),PathData=Geometry.Parse("M914.24,512C914.24,511.808 914.24,511.68 914.24,511.488 914.304,498.304 907.712,485.504 895.872,478.336L164.736,41.664C147.136,31.168 124.736,37.376 114.624,55.488 110.08,63.616 108.8,72.768 110.336,81.28L110.336,942.656C108.8,951.232 110.08,960.384 114.624,968.512 124.736,986.624 147.136,992.832 164.672,982.336L895.872,545.664C907.776,538.56 914.304,525.696 914.24,512.512 914.24,512.32 914.24,512.192 914.24,512z M183.36,140.288L805.76,512 183.36,883.712 183.36,140.288z"),Width=15,Height=15,HorizontalAlignment=HorizontalAlignment.Left };
+            TitlePageBtn PlayBtn = new TitlePageBtn() { Pathness = new Thickness(0), PathData = Geometry.Parse("M914.24,512C914.24,511.808 914.24,511.68 914.24,511.488 914.304,498.304 907.712,485.504 895.872,478.336L164.736,41.664C147.136,31.168 124.736,37.376 114.624,55.488 110.08,63.616 108.8,72.768 110.336,81.28L110.336,942.656C108.8,951.232 110.08,960.384 114.624,968.512 124.736,986.624 147.136,992.832 164.672,982.336L895.872,545.664C907.776,538.56 914.304,525.696 914.24,512.512 914.24,512.32 914.24,512.192 914.24,512z M183.36,140.288L805.76,512 183.36,883.712 183.36,140.288z"), Width = 15, Height = 15, HorizontalAlignment = HorizontalAlignment.Left };
             PlayBtn.MouseDown += PlayBtn_MouseDown;
             Buttons.Children.Add(PlayBtn);
             grid.Children.Add(Buttons);
 
-            DeleteBtn = new TitlePageBtn() {Visibility=Visibility.Collapsed,Pathness=new Thickness(0),Height=15,Width=15,HorizontalAlignment=HorizontalAlignment.Right,Margin=new Thickness(0, 0, 25, 0),PathData=Geometry.Parse("M880,240L704,240 704,176C704,123.2,660.8,80,608,80L416,80C363.2,80,320,123.2,320,176L320,240 144,240C126.4,240 112,254.4 112,272 112,289.6 126.4,304 144,304L192,304 192,816C192,886.4,249.6,944,320,944L704,944C774.4,944,832,886.4,832,816L832,304 880,304C897.6,304 912,289.6 912,272 912,254.4 897.6,240 880,240z M384,176C384,158.4,398.4,144,416,144L608,144C625.6,144,640,158.4,640,176L640,240 384,240 384,176z M768,816C768,851.2,739.2,880,704,880L320,880C284.8,880,256,851.2,256,816L256,304 768,304 768,816z M416 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32zM608 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32z") };
+            DeleteBtn = new TitlePageBtn() { Visibility = Visibility.Collapsed, Pathness = new Thickness(0), Height = 15, Width = 15, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 0, 25, 0), PathData = Geometry.Parse("M880,240L704,240 704,176C704,123.2,660.8,80,608,80L416,80C363.2,80,320,123.2,320,176L320,240 144,240C126.4,240 112,254.4 112,272 112,289.6 126.4,304 144,304L192,304 192,816C192,886.4,249.6,944,320,944L704,944C774.4,944,832,886.4,832,816L832,304 880,304C897.6,304 912,289.6 912,272 912,254.4 897.6,240 880,240z M384,176C384,158.4,398.4,144,416,144L608,144C625.6,144,640,158.4,640,176L640,240 384,240 384,176z M768,816C768,851.2,739.2,880,704,880L320,880C284.8,880,256,851.2,256,816L256,304 768,304 768,816z M416 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32zM608 432c-17.6 0-32 14.4-32 32v256c0 17.6 14.4 32 32 32s32-14.4 32-32V464c0-17.6-14.4-32-32-32z") };
             DeleteBtn.MouseDown += DeleteBtn_MouseDown;
             Grid.SetColumn(DeleteBtn, 2);
             grid.Children.Add(DeleteBtn);
         }
-        private void LoadCheckView() {
+        private void LoadCheckView()
+        {
             string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource TextX1ColorBrush}"" Visibility=""Collapsed""/>";
             CheckView = (Border)XamlReader.Parse(CheckViewxaml);
             grid.Children.Add(CheckView);
         }
-        private void LoadGO() {
+        private void LoadGO()
+        {
             string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
                     <Border.Background>
                         <VisualBrush Stretch=""Uniform"">
@@ -149,7 +147,8 @@ namespace LemonApp
             GO = (Border)XamlReader.Parse(CheckViewxaml);
             CheckView.Child = GO;
         }
-        public DataItem(Music dat) {
+        public DataItem(Music dat)
+        {
             InitializeComponent();
             music = dat;
         }
@@ -163,7 +162,8 @@ namespace LemonApp
         bool ns = false;
         public bool isChecked = false;
         public bool pv;
-        public void ShowDx() {
+        public void ShowDx()
+        {
             if (He.LastItem != null)
             {
                 mss.Opacity = 0.6;
@@ -184,7 +184,8 @@ namespace LemonApp
 
             He.LastItem = this;
         }
-        public void NSDownload(bool ns) {
+        public void NSDownload(bool ns)
+        {
             this.ns = ns;
             if (CheckView == null)
             {
@@ -199,7 +200,8 @@ namespace LemonApp
                 CheckView.Visibility = Visibility.Visible;
                 MouseDown += CheckView_MouseDown;
             }
-            else {
+            else
+            {
                 wpl.Margin = new Thickness(10, 0, 10, 0);
                 CheckView.Visibility = Visibility.Collapsed;
                 MouseDown -= CheckView_MouseDown;
@@ -211,7 +213,8 @@ namespace LemonApp
             Check(!isChecked);
         }
 
-        public void Check(bool IsCheck) {
+        public void Check(bool IsCheck)
+        {
             isChecked = IsCheck;
             if (CheckView == null)
             {
@@ -225,7 +228,8 @@ namespace LemonApp
                 GO.Visibility = Visibility.Visible;
                 CheckView.SetResourceReference(BorderBrushProperty, "ThemeColor");
             }
-            else {
+            else
+            {
                 GO.Visibility = Visibility.Collapsed;
                 CheckView.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
             }
@@ -238,8 +242,9 @@ namespace LemonApp
         private Dictionary<string, string> ListData = new Dictionary<string, string>();//name,id
         private async void AddBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Gdpop == null) {
-                string Gdpopxaml = "<Popup "+He.XAMLUSINGS+@" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
+            if (Gdpop == null)
+            {
+                string Gdpopxaml = "<Popup " + He.XAMLUSINGS + @" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
                 <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
                     <Grid>
                         <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
@@ -256,14 +261,15 @@ namespace LemonApp
             Add_Gdlist.Items.Clear();
             ListData.Clear();
             JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
-            foreach (var a in o["list"]) {
+            foreach (var a in o["list"])
+            {
                 string name = a["dirname"].ToString();
                 ListData.Add(name, a["dirid"].ToString());
-                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height =30, Content = name,Margin=new Thickness(10, 10, 10, 0) };
+                var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = name, Margin = new Thickness(10, 10, 10, 0) };
                 mdb.PreviewMouseDown += Mdb_MouseDown;
                 Add_Gdlist.Items.Add(mdb);
             }
-            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10,10, 0) };
+            var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10, 10, 0) };
             md.PreviewMouseDown += delegate { Gdpop.IsOpen = false; };
             Add_Gdlist.Items.Add(md);
             Gdpop.IsOpen = true;
@@ -274,8 +280,8 @@ namespace LemonApp
             Gdpop.IsOpen = false;
             string name = (sender as ListBoxItem).Content.ToString();
             string id = ListData[name];
-            string[] a = await MusicLib.AddMusicToGDAsync(music.MusicID,id);
-            Toast.Send(a[1]+": "+a[0]);
+            string[] a = await MusicLib.AddMusicToGDAsync(music.MusicID, id);
+            Toast.Send(a[1] + ": " + a[0]);
         }
 
         private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e) => Download(this);
@@ -298,7 +304,7 @@ namespace LemonApp
             if (ns)
                 wpl.Margin = new Thickness(60, 10, 80, 10);
             else wpl.Margin = new Thickness(10, 10, 80, 10);
-            if (needb)DeleteBtn.Visibility = Visibility.Visible;
+            if (needb) DeleteBtn.Visibility = Visibility.Visible;
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
@@ -324,9 +330,10 @@ namespace LemonApp
 
         private void MV_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Mainwindow .PlayMv(new MVData() {
-                id=music.Mvmid,
-                name=music.MusicName+" - "+music.SingerText
+            Mainwindow.PlayMv(new MVData()
+            {
+                id = music.Mvmid,
+                name = music.MusicName + " - " + music.SingerText
             });
         }
 
