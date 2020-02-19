@@ -106,7 +106,7 @@
                 <Grid>
                     <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="0,0,0,0" Opacity="0.1" Margin="0,0,0,0"/>
                     <ProgressBar x:Name="MusicPlay_LoadProc" Height="2" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Background="{x:Null}" Foreground="#19000000" Value="3" Loaded="MusicPlay_LoadProc_Loaded"/>
-                    <Track x:Name="PART_Track" Grid.Row="1">
+                    <Track x:Name="PART_Track" Grid.Row="1" Margin="0,0,-12,0">
                         <Track.DecreaseRepeatButton>
                             <RepeatButton x:Name="Qm" Margin="0,0,0,0" Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}"/>
                         </Track.DecreaseRepeatButton>
@@ -2319,7 +2319,7 @@
                 <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Bottom" Grid.Column="1" Margin="60,0,82,35"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
                         <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" />
                     </InlineUIContainer></TextBlock>
-                <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,10,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="9"/>
+                <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,10,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="0"/>
                 <WrapPanel Grid.Column="1" Margin="0,0,10,35" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <!--Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
                     <Grid>

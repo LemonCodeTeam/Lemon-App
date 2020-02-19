@@ -126,18 +126,19 @@ namespace LemonLib
             if (_fs == null)
             {
                 // create the file
-                _fs = File.OpenWrite(DLPath);
+                _fs = File.OpenWrite(DLPath+".cache");
             }
             if (buffer == IntPtr.Zero)
             {
                 // finished downloading
-                finished?.Invoke();
                 _fs.Flush();
                 _fs.Close();
                 _fs = null;
-                FileInfo fi = new FileInfo(DLPath);
+                FileInfo fi = new FileInfo(DLPath + ".cache");
                 if (fi.Length != len)
                     fi.Delete();
+                else fi.MoveTo(DLPath, true);
+                finished?.Invoke();
             }
             else
             {

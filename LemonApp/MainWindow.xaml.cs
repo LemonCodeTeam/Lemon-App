@@ -1984,19 +1984,10 @@ namespace LemonApp
             }
             else
             {
-                System.IO.FileInfo fi = new System.IO.FileInfo(downloadpath);
-                if (fi.Length < await HttpHelper.GetHTTPFileSize(await MusicLib.GetUrlAsync(data.MusicID)))
-                {
-                    fi.Delete();
-                    LoadMusic(data, doesplay);
-                }
-                else
-                {
-                    mp.Load(downloadpath);
-                    if (doesplay)
-                        mp.Play();
-                    MusicName.Text = data.MusicName;
-                }
+                mp.Load(downloadpath);
+                if (doesplay)
+                    mp.Play();
+                MusicName.Text = data.MusicName;
             }
         }
         public async void PlayMusic(Music data, bool doesplay = true)
