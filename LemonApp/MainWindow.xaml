@@ -9,6 +9,14 @@
         x:Class="LemonApp.MainWindow"
         mc:Ignorable="d"
         Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MinWidth="910" MinHeight="620" Background="{x:Null}">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="MouseEnter" SourceName="LyricPage_AboutGD">
+            <BeginStoryboard Storyboard="{DynamicResource LP_AboutGD_MouseEnter}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MouseLeave" SourceName="LyricPage_AboutGD">
+            <BeginStoryboard Storyboard="{DynamicResource LP_AboutGD_MouseLeave}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Window.Resources>
         <VisualBrush x:Key="LoveIcon">
             <VisualBrush.Visual>
@@ -928,8 +936,8 @@
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MusicImage">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10,0,82,35">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="BottomText">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="10,0,90,35">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1017,13 +1025,13 @@
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}"/>
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="textBlock4">
-                <EasingThicknessKeyFrame KeyTime="0:0:0.1" Value="10,0,285,35">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="BottomText">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.1" Value="10,0,90,35">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="60,0,82,35">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="60,0,90,35">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CircleEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1764,8 +1772,8 @@
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,14,260,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="210,24,260,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,14,50,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="210,24,50,0"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,65,0,0"/>
@@ -1781,6 +1789,114 @@
                 <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,102,55,0"/>
                 <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="210,102,55,0"/>
                 <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="210,112,55,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LP_AboutGD_MouseEnter">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,0,10,100">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="250">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="300">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="12,12,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(TextBlock.FontSize)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="22"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(TextBlock.FontWeight)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000">
+                    <DiscreteObjectKeyFrame.Value>
+                        <FontWeight>Bold</FontWeight>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LP_ag1" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LP_ag1" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LP_ag1" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="12,60,12,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="12,50,12,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LP_ag2" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.6000000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LP_ag2" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.9000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LP_ag2" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="12,140,12,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="12,130,12,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LP_ag3" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.9000000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LP_ag3" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.9000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.2000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LP_ag3" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="12,220,12,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01.2000000" Value="12,210,12,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LP_AboutGD_MouseLeave">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="100">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="25">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,0,-10,100">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(TextBlock.FontSize)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="12"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(TextBlock.FontWeight)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000">
+                    <DiscreteObjectKeyFrame.Value>
+                        <FontWeight>Normal</FontWeight>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="10,5,0,0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
@@ -2052,7 +2168,7 @@
                             </Grid>
                             <Grid x:Name="DataPage_MainInfo" Height="200" VerticalAlignment="Top" Visibility="Visible">
                                 <Border x:Name="TXx" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Margin="20,15,0,15" Background="#FFE4E4E4" CornerRadius="{DynamicResource AppCornerRadius}" Width="170"/>
-                                <TextBlock x:Name="TB" TextWrapping="NoWrap" Text="我喜欢的歌单wwwwwwww" Foreground="{DynamicResource ResuColorBrush}" FontSize="36" Margin="210,24,260,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                                <TextBlock x:Name="TB" TextWrapping="NoWrap" Text="我喜欢的歌单wwwwwwww" Foreground="{DynamicResource ResuColorBrush}" FontSize="36" Margin="210,24,50,0" VerticalAlignment="Top" FontWeight="Bold"/>
                                 <LemonApp:MDButton x:Name="DataDownloadBtn" HorizontalAlignment="Left" Height="32" VerticalAlignment="Bottom" Width="110" MouseDown="DataDownloadBtn_MouseDown" Margin="330,0,0,30" TName="下载" cr="15,15,15,15" pData="M919.724,715.073C918.584,687.719 900.7,672.613 877.105,673.173 853.727,673.728 838.305,689.103 836.111,717.063 834.501,737.603 835.879,758.362 835.434,779.014 834.319,830.843 823.095,842.819 771.284,843.841 721.374,844.826 671.43,844.164 621.502,844.168 506.151,844.178 390.798,844.262 275.446,844.103 196.006,843.993 189.121,837.13 188.742,759.899 188.673,746.129 189.367,732.273 188.102,718.606 185.41,689.518 171.774,674.384 148.687,673.079 123.767,671.667 105.603,688.612 103.697,718.574 101.955,746.016 102.934,773.645 103.115,801.189 103.705,890.359 143.211,930.372 232.409,930.881 325.376,931.413 418.348,931 511.319,931.021 538.865,931.044 566.413,931.053 593.959,931.043 664.549,931.018 735.154,932 805.718,930.65 867.93,929.46 913.424,893.473 918.676,838.893 922.617,797.94 921.441,756.293 919.724,715.073z M197.858,440.866C286.615,529.672 375.384,618.468 464.151,707.264 467.798,710.914 471.513,714.494 475.135,718.167 489.42,732.648 506.083,740.811 526.27,733.163 532.855,730.668 537.75,726.908 541.935,722.64 544.698,720.728 547.405,718.623 549.865,716.232 595.5,671.857 789.967,476.764 834.892,431.658 839.718,426.813 844.356,421.605 848.162,415.948 860.375,397.783 858.702,379.988 844.215,364.093 829.397,347.836 810.735,347.153 792.341,356.199 783.411,360.589 776.055,368.659 768.784,375.872 738.544,405.862 629.173,515.136 555.939,588.482 555.977,473.922 555.989,359.362 555.966,244.802 555.96,210.403 557.057,175.942 555.351,141.626 553.764,109.748 538.293,93.486 513.382,92.669 487.831,91.83 472.327,107.397 468.844,138.827 467.524,150.735 468.221,162.881 468.214,174.919 468.174,250.595 468.194,326.274 468.194,401.953 468.192,458.543 468.194,515.134 468.194,571.726L456.409,576.941C433.659,554.278 410.883,531.637 388.164,508.944 340.711,461.539 293.874,413.499 245.588,366.959 223.788,345.945 198.518,345.6 181.159,362.119 162.449,379.922 163.109,401.119 183.485,426.069 187.819,431.375 192.997,436 197.858,440.866z" RenderTransformOrigin="0.5,0.5"/>
                                 <LemonApp:MDButton x:Name="DataPlayAllBtn" HorizontalAlignment="Left" Height="32" VerticalAlignment="Bottom" Width="110" Margin="210,0,0,30" TName="播放全部" MouseDown="DataPlayAllBtn_MouseDown" cr="15,15,15,15" Theme="2" RenderTransformOrigin="0.5,0.5"/>
                                 <Border x:Name="DataPage_TX" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="28" Height="28" VerticalAlignment="Top" Margin="210,75,0,0" Background="#FFE2E2E2" CornerRadius="28,28,28,28"/>
@@ -2285,6 +2401,23 @@
                 </Border>
                 <TextBlock x:Name="m_Name" Margin="125,33,125,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" Grid.ColumnSpan="2" TextAlignment="Center"/>
                 <TextBlock x:Name="m_Singer" Margin="125,73,125,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Grid.ColumnSpan="2" TextAlignment="Center"/>
+                <Border x:Name="LyricPage_AboutGD" Margin="0,0,-10,100" Grid.Column="1" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Background="#F2FFFFFF" CornerRadius="6,6,6,6">
+                    <Grid>
+                        <TextBlock x:Name="textBlock2" Text="相关的歌单" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" FontWeight="Normal"/>
+                        <Grid x:Name="LP_ag1" HorizontalAlignment="Stretch" Margin="12,50,12,0" VerticalAlignment="Top" Visibility="Collapsed" Background="Transparent">
+                            <Border x:Name="LP_ag1_img" HorizontalAlignment="Left" Width="70" Height="70" VerticalAlignment="Top" Background="#FF1A1A1D" CornerRadius="{DynamicResource AppCornerRadius}"/>
+                            <TextBlock x:Name="LP_ag1_tx" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Center" Margin="80,0,0,0"/>
+                        </Grid>
+                        <Grid x:Name="LP_ag2" Margin="12,130,12,0" VerticalAlignment="Top" Visibility="Collapsed" Background="Transparent">
+                            <Border x:Name="LP_ag2_img" HorizontalAlignment="Left" Width="70" Height="70" VerticalAlignment="Top" Background="#FF1A1A1D" CornerRadius="{DynamicResource AppCornerRadius}"/>
+                            <TextBlock x:Name="LP_ag2_tx" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Center" Margin="80,0,0,0"/>
+                        </Grid>
+                        <Grid x:Name="LP_ag3" Margin="12,210,12,0" VerticalAlignment="Top" Visibility="Collapsed" Background="Transparent">
+                            <Border x:Name="LP_ag3_img" HorizontalAlignment="Left" Width="70" Height="70" VerticalAlignment="Top" Background="#FF1A1A1D" CornerRadius="{DynamicResource AppCornerRadius}"/>
+                            <TextBlock x:Name="LP_ag3_tx" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Center" Margin="80,0,0,0"/>
+                        </Grid>
+                    </Grid>
+                </Border>
             </Grid>
             <Grid x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" >
                 <Grid.ColumnDefinitions>
@@ -2308,7 +2441,7 @@
                         <Path x:Name="path5" Data="M64.2887 526.511505l0-28.009937c0.255827-1.961678 0.521886-3.924379 0.760317-5.886057 2.851954-23.620977 4.167926-47.549969 8.832156-70.811766 14.083763-70.287833 43.99705-133.49848 88.957031-189.413977 48.498574-60.322877 108.580974-105.307418 180.201152-134.699842 42.823318-17.572214 87.363743-28.181853 133.580345-31.546483 7.624654-0.554632 15.242146-1.221828 22.864754-1.837858l25.00858 0c2.300392 0.265036 4.594645 0.680499 6.903224 0.769526 40.860617 1.629103 80.751139 8.746198 119.567189 21.526269 82.522482 27.164686 151.679561 74.249051 206.785623 141.312446 58.518788 71.213925 91.907223 153.003719 100.166327 244.948805 3.841491 42.792619 1.497097 85.23936-6.865361 127.334083-9.788947 49.266054-27.447119 95.578846-53.03796 138.808416-42.437531 71.684646-100.252285 127.659495-173.500543 167.203116-75.265194 40.634466-155.896606 57.843406-241.327324 52.55496-43.023886-2.663666-84.96102-10.900258-125.158535-26.301016-124.022665-47.52848-211.67191-132.775003-262.123976-255.745708-16.795525-40.937364-26.38288-83.73817-29.724998-127.897925C65.613882 541.375028 64.921103 533.944801 64.2887 526.511505L64.2887 526.511505zM512.174474 904.395972c217.750349-0.727571 392.276245-176.013783 392.001999-392.370389-0.274246-217.231533-175.272909-391.646911-391.82599-391.890458-216.513172-0.242524-392.081817 175.197184-392.257825 391.964136C119.921765 728.489636 295.690978 904.360156 512.174474 904.395972L512.174474 904.395972zM512.174474 904.395972 M686.870238 679.803797l-27.979238 0c-7.724938 0-13.990642-6.261611-13.990642-13.988596L644.900358 358.037443c0-7.722892 6.265704-13.990642 13.990642-13.990642l27.979238 0c7.729032 0 13.990642 6.26775 13.990642 13.990642l0 307.777759C700.859857 673.541163 694.598246 679.803797 686.870238 679.803797L686.870238 679.803797z M563.220057 467.950761c-58.490136-37.305651-133.724631-81.001849-191.854563-116.76333-28.942169-17.801435-48.226375-0.38988-48.226375 29.466102l0 260.597203c0 36.308951 19.049868 48.217165 48.402383 30.91715 63.307861-37.300534 146.037051-83.932598 200.252837-124.563994C599.17085 527.083533 591.658759 486.091934 563.220057 467.950761zM509.895571 525.050224c-30.166043 19.407002-85.557608 52.220339-114.964358 68.882833-9.683547 5.483898-15.690354 0.352017-15.690354-13.011338L379.240859 442.562535c0-12.919241 6.167466-17.626449 16.090467-12.010545 29.379121 16.644075 82.205257 49.037856 114.565269 68.653613C522.693038 506.95817 521.426185 517.635347 509.895571 525.050224z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
                     </Border>
                 </Grid>
-                <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" Grid.Column="1" CornerRadius="{DynamicResource AppCornerRadius}" Height="50" Margin="-0.001,12,0,12" MouseRightButtonDown="MusicImage_MouseRightButtonDown">
+                <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" Grid.Column="1" CornerRadius="{DynamicResource AppCornerRadius}" Height="50" Margin="0,12,0,12" MouseRightButtonDown="MusicImage_MouseRightButtonDown">
                     <Border.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF50AEEE" Offset="0"/>
@@ -2316,9 +2449,14 @@
                         </LinearGradientBrush>
                     </Border.Background>
                 </Border>
-                <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" VerticalAlignment="Bottom" Grid.Column="1" Margin="60,0,82,35"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/><InlineUIContainer>
-                        <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" />
-                    </InlineUIContainer></TextBlock>
+                <Grid x:Name="BottomText" Grid.Column="1" VerticalAlignment="Bottom" Margin="60,0,90,35" Height="15.24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="textBlock4" Foreground="{DynamicResource ResuColorBrush}" FontSize="12" Grid.Column="0"><Run x:Name="MusicName" Text="小萌音乐 LemonApp"/><Run Text=" - "/></TextBlock>
+                    <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" Foreground="{DynamicResource ResuColorBrush}" Grid.Column="1"/>
+                </Grid>
                 <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,41,10,21" Grid.Column="1" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="0"/>
                 <WrapPanel Grid.Column="1" Margin="0,0,10,35" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <!--Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">

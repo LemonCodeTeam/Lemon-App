@@ -92,7 +92,7 @@
         <Grid x:Name="mSingerBig" VerticalAlignment="Top" Height="400" Background="#FF494949">
             <Border x:Name="bk" Background="#3F000000"/>
             <Grid x:Name="mSingerX" Margin="40,170,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <TextBlock x:Name="SingerName" TextWrapping="Wrap" Text="Taylor Swift" VerticalAlignment="Top" Foreground="#FFFBFBFB" FontSize="48" FontWeight="Bold"/>
+                <TextBlock x:Name="SingerName" TextWrapping="NoWrap" Text="Taylor Swift" VerticalAlignment="Top" Foreground="#FFFBFBFB" FontSize="48" FontWeight="Bold"/>
                 <TextBlock x:Name="FansCount" Margin="0,70,0,0" TextWrapping="Wrap" Text="粉丝数：999.99万" VerticalAlignment="Top" Foreground="#CCFFFFFF" FontSize="14"/>
                 <local:MDButton x:Name="FanBt" HorizontalAlignment="Left" Height="35" Margin="0,95,0,0" VerticalAlignment="Top" Width="95" TName="关注" pData="M451.318,451.318L87.282,451.318C53.528,451.318 26.548,478.486 26.548,512 26.548,545.747 53.739,572.682 87.282,572.682L451.318,572.682 451.318,936.718C451.318,970.472 478.486,997.452 512,997.452 545.747,997.452 572.682,970.261 572.682,936.718L572.682,572.682 936.718,572.682C970.472,572.682 997.452,545.514 997.452,512 997.452,478.253 970.261,451.318 936.718,451.318L572.682,451.318 572.682,87.282C572.682,53.528 545.514,26.548 512,26.548 478.253,26.548 451.318,53.739 451.318,87.282L451.318,451.318z" Theme="2" MouseDown="FanBt_MouseDown"/>
             </Grid>

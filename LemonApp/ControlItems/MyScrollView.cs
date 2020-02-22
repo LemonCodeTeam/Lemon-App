@@ -1,5 +1,6 @@
 ﻿using LemonLib;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,43 +11,61 @@ namespace LemonApp
     public class MyScrollView : ScrollViewer
     {
         private int lastTimestamp = 0;
-        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        protected override async void OnMouseWheel(MouseWheelEventArgs e)
         {
-            if (Math.Abs(e.Delta) >= 80 && e.Timestamp - lastTimestamp >= 100)
+            await Task.Run(() =>
             {
                 var sc = ScrollDirection.Up;
                 if (e.Delta > 0)
                     sc = ScrollDirection.Down;
-                SmoothScroll(sc);
-                e.Handled = true;
-            }
-            else
-            {
-                var sc = ScrollDirection.Up;
-                if (e.Delta > 0)
-                    sc = ScrollDirection.Down;
-                SmoothScroll(sc, false, e.Delta, e.Timestamp - lastTimestamp);
-                e.Handled = true;
-            }
-            lastTimestamp = e.Timestamp;
+                int time = e.Timestamp - lastTimestamp;
+                int move = Math.Abs(e.Delta);
+                Console.WriteLine(e.Delta + "  ---  " + time);
+                //较缓慢地滚动
+                if (time >= 100)
+                {
+                    Dispatcher.Invoke(() => SmoothScroll(sc, move));
+                }
+                //较快地滚动
+                else if (time >= 30) {
+                    Dispatcher.Invoke(() => SmoothScrollSpeed2x(sc));
+                }
+                //适配超快滚动&触屏滚动(无需动画)
+                else Dispatcher.Invoke(() => SmoothScrollinTouch(e.Delta));
+                lastTimestamp = e.Timestamp;
+            });
         }
-        private void SmoothScroll(ScrollDirection direction, bool needAni = true, int Delta = 0, int time = 0)
+        private void SmoothScroll(ScrollDirection direction,int move)
         {
             DoubleAnimation Animation = new DoubleAnimation();
-            if (needAni)
+            Animation.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+            if (ScrollDirection.Down == direction)
+                Animation.To = VerticalOffset - move;
+            else if (ScrollDirection.Up == direction)
+                Animation.To = VerticalOffset + move;
+            Animation.Duration = TimeSpan.FromMilliseconds(300);
+            BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
+        }
+        bool beginning = false;
+        private void SmoothScrollSpeed2x(ScrollDirection direction)
+        {
+            if (!beginning)
             {
-                Animation.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+                DoubleAnimation Animation = new DoubleAnimation();
                 if (ScrollDirection.Down == direction)
                     Animation.To = VerticalOffset - 200;
                 else if (ScrollDirection.Up == direction)
                     Animation.To = VerticalOffset + 200;
-                Animation.Duration = TimeSpan.FromMilliseconds(500);
+                Animation.Duration = TimeSpan.FromMilliseconds(120);
+                Animation.Completed += delegate { beginning = false; };
+                beginning = true;
+                BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
             }
-            else
-            {
-                Animation.To = VerticalOffset - Delta * 1.5;
-                Animation.Duration = TimeSpan.FromMilliseconds(0);
-            }
+        }
+        private void SmoothScrollinTouch(int Delta) {
+            DoubleAnimation Animation = new DoubleAnimation();
+            Animation.To = VerticalOffset - Delta;
+            Animation.Duration = TimeSpan.FromMilliseconds(0);
             BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
         }
     }
@@ -65,7 +84,7 @@ namespace LemonApp
             {
                 var ani = new ThicknessAnimation(
                       new Thickness(0, 50, 0, -50), new Thickness(0), TimeSpan.FromSeconds(0.3))
-                { EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut } };
+                { EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
                 ui.BeginAnimation(FrameworkElement.MarginProperty, ani);
             }
         }

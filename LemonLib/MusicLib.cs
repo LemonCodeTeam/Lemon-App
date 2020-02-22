@@ -59,6 +59,31 @@ namespace LemonLib
         public static string MusicLikeGDid = null;
         public static string MusicLikeGDdirid = "";
         #endregion
+        #region 播放时 
+        /// <summary>
+        /// 获取歌曲相关的歌单
+        /// </summary>
+        /// <param name="mid"></param>
+        /// <returns></returns>
+        public static async Task<List<MusicGD>> GetSongListAboutSong(string mid) {
+            string songid = await GetMusicIdByMidAsync(mid);
+            JObject o = JObject.Parse(await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?-=getUCGI5445484706088479&g_tk=1162521571&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22song_gedan%22%3A%7B%22module%22%3A%22music.mb_gedan_recommend_svr%22%2C%22method%22%3A%22get_related_gedan%22%2C%22param%22%3A%7B%22song_id%22%3A"+songid+"%2C%22song_type%22%3A1%2C%22sin%22%3A0%2C%22last_id%22%3A0%7D%7D%7D"));
+            List<MusicGD> list = new List<MusicGD>();
+            var data = o["song_gedan"]["data"]["vec_gedan"];
+            foreach (var item in data)
+            {
+                MusicGD d = new MusicGD()
+                {
+                    ID = item["tid"].ToString(),
+                    Name = item["dissname"].ToString(),
+                    Photo = item["imgurl"].ToString().Replace("http://", "https://"),
+                    ListenCount = int.Parse(item["listen_num"].ToString()),
+                };
+                list.Add(d);
+            }
+            return list;
+        }
+        #endregion
         #region 搜索歌曲&搜索智能提示 (似乎不太智能)
         public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
@@ -1371,7 +1396,38 @@ jpg
         /// <returns></returns>
         public static async Task<HomePageData> GetHomePageData()
         {
-            string json = await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?-=recom9439610432420651&g_tk=924717510&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%7D%2C%22category%22%3A%7B%22method%22%3A%22get_hot_category%22%2C%22param%22%3A%7B%22qq%22%3A%22%22%7D%2C%22module%22%3A%22music.web_category_svr%22%7D%2C%22recomPlaylist%22%3A%7B%22method%22%3A%22get_hot_recommend%22%2C%22param%22%3A%7B%22async%22%3A1%2C%22cmd%22%3A2%7D%2C%22module%22%3A%22playlist.HotRecommendServer%22%7D%2C%22playlist%22%3A%7B%22method%22%3A%22get_playlist_by_category%22%2C%22param%22%3A%7B%22id%22%3A8%2C%22curPage%22%3A1%2C%22size%22%3A40%2C%22order%22%3A5%2C%22titleid%22%3A8%7D%2C%22module%22%3A%22playlist.PlayListPlazaServer%22%7D%2C%22new_song%22%3A%7B%22module%22%3A%22newsong.NewSongServer%22%2C%22method%22%3A%22get_new_song_info%22%2C%22param%22%3A%7B%22type%22%3A5%7D%7D%2C%22new_album%22%3A%7B%22module%22%3A%22newalbum.NewAlbumServer%22%2C%22method%22%3A%22get_new_album_info%22%2C%22param%22%3A%7B%22area%22%3A1%2C%22sin%22%3A0%2C%22num%22%3A10%7D%7D%2C%22new_album_tag%22%3A%7B%22module%22%3A%22newalbum.NewAlbumServer%22%2C%22method%22%3A%22get_new_album_area%22%2C%22param%22%3A%7B%7D%7D%2C%22toplist%22%3A%7B%22module%22%3A%22musicToplist.ToplistInfoServer%22%2C%22method%22%3A%22GetAll%22%2C%22param%22%3A%7B%7D%7D%2C%22focus%22%3A%7B%22module%22%3A%22QQMusic.MusichallServer%22%2C%22method%22%3A%22GetFocus%22%2C%22param%22%3A%7B%7D%7D%7D");
+            //---------官方歌单--------(QQ音乐的歌单和电台都是鸡肋)
+            JObject obj = JObject.Parse(await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?cgiKey=GetHomePage&_=1580282140913&data=" + HttpUtility.UrlDecode("{\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":" + Settings.USettings.LemonAreeunIts + ",\"format\":\"json\",\"inCharset\":\"utf-8\",\"outCharset\":\"utf-8\",\"notice\":0,\"platform\":\"h5\",\"needNewCode\":1},\"MusicHallHomePage\":{\"module\":\"music.musicHall.MusicHallPlatform\",\"method\":\"MobileWebHome\",\"param\":{\"ShelfId\":[101,102]}}}")));
+            var data = obj["MusicHallHomePage"]["data"]["v_shelf"];
+            var gf = data[0]["v_niche"][0]["v_card"];
+            List<MusicGD> gdList = new List<MusicGD>();
+            foreach (var ab in gf)
+            {
+                MusicGD d = new MusicGD()
+                {
+                    ID = ab["id"].ToString(),
+                    Name = ab["title"].ToString(),
+                    Photo = ab["cover"].ToString(),
+                    ListenCount = int.Parse(ab["cnt"].ToString()),
+                };
+                gdList.Add(d);
+            }
+            //-------------------i.y.qq.com 达人歌单  客户端 歌单推荐-----
+            var Gdata = new List<MusicGD>();
+            var dr = data[1]["v_niche"][0]["v_card"];
+            foreach (var ab in dr)
+            {
+                MusicGD d = new MusicGD()
+                {
+                    ID = ab["id"].ToString(),
+                    Name = ab["title"].ToString(),
+                    Photo = ab["cover"].ToString(),
+                    ListenCount = int.Parse(ab["cnt"].ToString()),
+                };
+                Gdata.Add(d);
+            }
+            //---------------------------------
+            string json = await HttpHelper.GetWebDataqAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?-=recom9439610432420651&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%7D%2C%22category%22%3A%7B%22method%22%3A%22get_hot_category%22%2C%22param%22%3A%7B%22qq%22%3A%22%22%7D%2C%22module%22%3A%22music.web_category_svr%22%7D%2C%22recomPlaylist%22%3A%7B%22method%22%3A%22get_hot_recommend%22%2C%22param%22%3A%7B%22async%22%3A1%2C%22cmd%22%3A2%7D%2C%22module%22%3A%22playlist.HotRecommendServer%22%7D%2C%22playlist%22%3A%7B%22method%22%3A%22get_playlist_by_category%22%2C%22param%22%3A%7B%22id%22%3A8%2C%22curPage%22%3A1%2C%22size%22%3A40%2C%22order%22%3A5%2C%22titleid%22%3A8%7D%2C%22module%22%3A%22playlist.PlayListPlazaServer%22%7D%2C%22new_song%22%3A%7B%22module%22%3A%22newsong.NewSongServer%22%2C%22method%22%3A%22get_new_song_info%22%2C%22param%22%3A%7B%22type%22%3A5%7D%7D%2C%22new_album%22%3A%7B%22module%22%3A%22newalbum.NewAlbumServer%22%2C%22method%22%3A%22get_new_album_info%22%2C%22param%22%3A%7B%22area%22%3A1%2C%22sin%22%3A0%2C%22num%22%3A10%7D%7D%2C%22new_album_tag%22%3A%7B%22module%22%3A%22newalbum.NewAlbumServer%22%2C%22method%22%3A%22get_new_album_area%22%2C%22param%22%3A%7B%7D%7D%2C%22toplist%22%3A%7B%22module%22%3A%22musicToplist.ToplistInfoServer%22%2C%22method%22%3A%22GetAll%22%2C%22param%22%3A%7B%7D%7D%2C%22focus%22%3A%7B%22module%22%3A%22QQMusic.MusichallServer%22%2C%22method%22%3A%22GetFocus%22%2C%22param%22%3A%7B%7D%7D%7D");
             JObject o = JObject.Parse(json);
             //-----FOCUS---
             List<IFVData> focus = new List<IFVData>();
@@ -1382,7 +1438,6 @@ jpg
                 focus.Add(iv);
             }
             //----歌单推荐---
-            var Gdata = new List<MusicGD>();
             var recomPlaylist_obj = o["recomPlaylist"]["data"]["v_hot"];
             foreach (var rp in recomPlaylist_obj)
             {
@@ -1423,22 +1478,6 @@ jpg
                 }
                 m.SingerText = m.SingerText.Substring(0, m.SingerText.Length - 1);
                 NewMusic.Add(m);
-            }
-            //---------官方歌单--------(QQ音乐的歌单和电台都是鸡肋)
-            JObject obj = JObject.Parse(await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?cgiKey=GetHomePage&_=1580282140913&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1},%22MusicHallHomePage%22:{%22module%22:%22music.musicHall.MusicHallPlatform%22,%22method%22:%22MobileWebHome%22,%22param%22:{%22ShelfId%22:[101]}}}"));
-            var data = obj["MusicHallHomePage"]["data"]["v_shelf"];
-            var gf = data[0]["v_niche"][0]["v_card"];
-            List<MusicGD> gdList = new List<MusicGD>();
-            foreach (var ab in gf)
-            {
-                MusicGD d = new MusicGD()
-                {
-                    ID = ab["id"].ToString(),
-                    Name = ab["title"].ToString(),
-                    Photo = ab["cover"].ToString(),
-                    ListenCount = int.Parse(ab["cnt"].ToString()),
-                };
-                gdList.Add(d);
             }
             return new HomePageData()
             {
