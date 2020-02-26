@@ -93,39 +93,43 @@ namespace LemonLib
             var dsl = o["data"]["song"]["list"];
             while (i < dsl.Count())
             {
-                var dsli = dsl[i];
-                Music m = new Music();
-                m.MusicName = dsli["title"].ToString();
-                m.MusicName_Lyric = dsli["lyric"].ToString();
-                string Singer = "";
-                List<MusicSinger> lm = new List<MusicSinger>();
-                for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
+                try
                 {
-                    Singer += dsli["singer"][osxc]["name"] + "&";
-                    lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid = dsli["singer"][osxc]["mid"].ToString() });
-                }
-                m.Singer = lm;
-                m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
-                m.MusicID = dsli["mid"].ToString();
-                var amid = dsli["album"]["mid"].ToString();
-                if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
-                else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
-                if (amid != "")
-                    m.Album = new MusicGD()
+                    var dsli = dsl[i];
+                    Music m = new Music();
+                    m.MusicName = dsli["title"].ToString();
+                    m.MusicName_Lyric = dsli["lyric"].ToString();
+                    string Singer = "";
+                    List<MusicSinger> lm = new List<MusicSinger>();
+                    for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
                     {
-                        ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                        Name = dsli["album"]["name"].ToString()
-                    };
-                var file = dsli["file"];
-                if (file["size_320"].ToString() != "0")
-                    m.Pz = "HQ";
-                if (file["size_flac"].ToString() != "0")
-                    m.Pz = "SQ";
-                m.Mvmid = dsli["mv"]["vid"].ToString();
-                dt.Add(m);
+                        Singer += dsli["singer"][osxc]["name"] + "&";
+                        lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid = dsli["singer"][osxc]["mid"].ToString() });
+                    }
+                    m.Singer = lm;
+                    m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
+                    m.MusicID = dsli["mid"].ToString();
+                    var amid = dsli["album"]["mid"].ToString();
+                    if (amid == "001ZaCQY2OxVMg")
+                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
+                    if (amid != "")
+                        m.Album = new MusicGD()
+                        {
+                            ID = amid,
+                            Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
+                            Name = dsli["album"]["name"].ToString()
+                        };
+                    var file = dsli["file"];
+                    if (file["size_320"].ToString() != "0")
+                        m.Pz = "HQ";
+                    if (file["size_flac"].ToString() != "0")
+                        m.Pz = "SQ";
+                    m.Mvmid = dsli["mv"]["vid"].ToString();
+                    dt.Add(m);
+                }
+                catch { }
                 i++;
             }
             return dt;

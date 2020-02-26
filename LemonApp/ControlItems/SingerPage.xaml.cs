@@ -46,7 +46,7 @@ namespace LemonApp
 
             if (Data.HasBigPic)
                 mSingerBig.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] { 469, 1000 })) { Stretch = Stretch.UniformToFill };
-            else TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] { 225, 225 }));
+            else TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] {300,300 }));
 
             FansCount.Text = "粉丝数：" + Data.FansCount;
             if (Data.HasGJ)

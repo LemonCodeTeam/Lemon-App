@@ -57,7 +57,9 @@ namespace LemonApp
                 else if (ScrollDirection.Up == direction)
                     Animation.To = VerticalOffset + 400;
                 Animation.Duration = TimeSpan.FromMilliseconds(300);
-                Animation.Completed += delegate { beginning = false; };
+                Animation.Completed += delegate {
+                    beginning = false; 
+                };
                 beginning = true;
                 BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
             }

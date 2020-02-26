@@ -2883,7 +2883,9 @@ namespace LemonApp
                 {
                     Dispatcher.Invoke(async () =>
                     {
-                        DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 36, 36 }));
+                        if(dt.Creater.Name=="QQ音乐官方歌单")
+                            DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
+                        else DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 50,50 }));
                         DataPage_Creater.Text = dt.Creater.Name;
                         DataPage_Sim.Text = dt.desc;
                     });

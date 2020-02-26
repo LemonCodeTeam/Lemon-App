@@ -23,11 +23,11 @@ namespace LemonApp
                 Height = Height = ActualWidth + 45;
                 try
                 {
-                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Photo, new int[2] { 200, 200 }));
+                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Photo, new int[2] {250,250 }));
                 }
                 catch
                 {
-                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000", new int[2] { 200, 200 }));
+                    im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000", new int[2] { 250, 250 }));
                 }
             };
         }
@@ -40,11 +40,11 @@ namespace LemonApp
                 {
                     try
                     {
-                        im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo, new int[2] { 200, 200 }));
+                        im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo, new int[2] { 250, 250 }));
                     }
                     catch
                     {
-                        im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000", new int[2] { 200, 200 }));
+                        im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000", new int[2] { 250, 250 }));
                     }
                 })();
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Un4seen.Bass;
 
 namespace LemonLib
@@ -30,14 +31,14 @@ namespace LemonLib
                 Bassdl.procChanged = proc;
                 Bassdl.finished = finish;
                 stream = Bass.BASS_StreamCreateURL(url + "\r\n"
-                                                   + "Host: musichy.tc.qq.com\r\n"
-                                                   + "Connection: keep-alive\r\n"
-                                                   + "Accept-Encoding: identity;q=1, *;q=0\r\n"
-                                                   + "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40\r\n"
-                                                   + "Accept: */*\r\n"
-                                                   + "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6\r\n"
-                                                   + "Cookie:" + Settings.USettings.Cookie
-             , 0, BASSFlag.BASS_SAMPLE_FLOAT, Bassdl._myDownloadProc, ip);
+                                               + "Host: musichy.tc.qq.com\r\n"
+                                               + "Connection: keep-alive\r\n"
+                                               + "Accept-Encoding: identity;q=1, *;q=0\r\n"
+                                               + "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40\r\n"
+                                               + "Accept: */*\r\n"
+                                               + "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6\r\n"
+                                               + "Cookie:" + Settings.USettings.Cookie
+         , 0, BASSFlag.BASS_SAMPLE_FLOAT, Bassdl._myDownloadProc, ip);
                 Bassdl.stream = stream;
             }
             catch { }
