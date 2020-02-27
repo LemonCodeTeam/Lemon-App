@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Un4seen.Bass;
 
@@ -30,9 +32,11 @@ namespace LemonLib
                 BassdlList.Add(Bassdl);
                 Bassdl.procChanged = proc;
                 Bassdl.finished = finish;
+                Bassdl.downloadfailed += (e) => {
+
+                };
                 stream = Bass.BASS_StreamCreateURL(url + "\r\n"
                                                + "Host: musichy.tc.qq.com\r\n"
-                                               + "Connection: keep-alive\r\n"
                                                + "Accept-Encoding: identity;q=1, *;q=0\r\n"
                                                + "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40\r\n"
                                                + "Accept: */*\r\n"
@@ -101,6 +105,77 @@ namespace LemonLib
             Bass.BASS_StreamFree(stream);
             Bass.BASS_Stop();
             Bass.BASS_Free();
+        }
+    }
+
+    public class BASSDL
+    {
+        public DOWNLOADPROC _myDownloadProc;
+        private FileStream _fs = null;
+        private byte[] _data; // local data buffer
+        private string DLPath;
+        public Action<long, long> procChanged = null;
+        public Action finished = null;
+        public Action<long> downloadfailed = null;
+        public int stream;
+        private bool HasStoped = false;
+        public BASSDL(string path)
+        {
+            _myDownloadProc = new DOWNLOADPROC(DownloadCallBack);
+            DLPath = path;
+        }
+        public void SetClose()
+        {
+            HasStoped = true;
+            procChanged = null;
+            finished = null;
+        }
+        private void DownloadCallBack(IntPtr buffer, int length, IntPtr user)
+        {
+            // file length
+            long len = Bass.BASS_StreamGetFilePosition(stream, BASSStreamFilePosition.BASS_FILEPOS_END);
+            // download progress
+            long down = Bass.BASS_StreamGetFilePosition(stream, BASSStreamFilePosition.BASS_FILEPOS_DOWNLOAD);
+            procChanged?.Invoke(len, down);
+            //finished downloading
+            if (_fs == null)
+            {
+                // create the file
+                _fs = File.OpenWrite(DLPath + ".cache");
+            }
+            if (buffer == IntPtr.Zero)
+            {
+                // finished downloading
+                _fs.Flush();
+                _fs.Close();
+                _fs = null;
+                FileInfo fi = new FileInfo(DLPath + ".cache");
+                if (fi.Length != len)
+                {
+                    fi.Delete();
+                    if (!HasStoped)
+                    {
+                        //没有被停止而是链接下载失败
+                        MainClass.DebugCallBack("DownloadFailed");
+                        downloadfailed(down);
+                    }
+                }
+                else
+                {
+                    fi.MoveTo(DLPath, true);
+                    finished?.Invoke();
+                }
+            }
+            else
+            {
+                // increase the data buffer as needed
+                if (_data == null || _data.Length < length)
+                    _data = new byte[length];
+                // copy from managed to unmanaged memory
+                Marshal.Copy(buffer, _data, 0, length);
+                // write to file
+                _fs.Write(_data, 0, length);
+            }
         }
     }
 }

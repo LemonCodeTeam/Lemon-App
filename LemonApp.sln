@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Blend for Visual Studio Version 16
+# Visual Studio Version 16
 VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp", "LemonApp\LemonApp.csproj", "{46FF122B-202F-4F60-BB4E-2983C3C1221A}"
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp.Theme.TheFirstSnow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp.Theme", "Theme\LemonApp.Theme\LemonApp.Theme.csproj", "{07066390-663B-4F93-92C9-60B3CCFD607A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{605B1655-9FEF-4D20-80CE-F419305C3EC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{CDDBF873-10A1-432B-A148-D37F8CA11CA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,10 @@ Global
 		{07066390-663B-4F93-92C9-60B3CCFD607A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07066390-663B-4F93-92C9-60B3CCFD607A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07066390-663B-4F93-92C9-60B3CCFD607A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{605B1655-9FEF-4D20-80CE-F419305C3EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{605B1655-9FEF-4D20-80CE-F419305C3EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{605B1655-9FEF-4D20-80CE-F419305C3EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{605B1655-9FEF-4D20-80CE-F419305C3EC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
