@@ -1401,9 +1401,11 @@ jpg
         public static async Task<HomePageData> GetHomePageData()
         {
             //---------官方歌单--------(QQ音乐的歌单和电台都是鸡肋)
-            JObject obj = JObject.Parse(await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?cgiKey=GetHomePage&_=1580282140913&data=" + HttpUtility.UrlDecode("{\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":" + Settings.USettings.LemonAreeunIts + ",\"format\":\"json\",\"inCharset\":\"utf-8\",\"outCharset\":\"utf-8\",\"notice\":0,\"platform\":\"h5\",\"needNewCode\":1},\"MusicHallHomePage\":{\"module\":\"music.musicHall.MusicHallPlatform\",\"method\":\"MobileWebHome\",\"param\":{\"ShelfId\":[101,102]}}}")));
-            var data = obj["MusicHallHomePage"]["data"]["v_shelf"];
-            var gf = data[0]["v_niche"][0]["v_card"];
+            JObject obj = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+           "{\"req_0\":{\"module\":\"playlist.HotRecommendServer\",\"method\":\"get_new_hot_recommend\",\"param\":{\"cmd\":0,\"page\":0,\"daily_page\":0,\"size\":1}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1751}}"));
+            
+            var data = obj["req_0"]["data"]["modules"];
+            var gf = data[0]["grids"];
             List<MusicGD> gdList = new List<MusicGD>();
             foreach (var ab in gf)
             {
@@ -1411,22 +1413,23 @@ jpg
                 {
                     ID = ab["id"].ToString(),
                     Name = ab["title"].ToString(),
-                    Photo = ab["cover"].ToString(),
-                    ListenCount = int.Parse(ab["cnt"].ToString()),
+                    Photo = ab["picurl"].ToString()
                 };
+                int lc = int.Parse(ab["listeners"].ToString());
+                d.ListenCount = lc == 0 ? -1 : lc;
                 gdList.Add(d);
             }
             //-------------------i.y.qq.com 达人歌单  客户端 歌单推荐-----
             var Gdata = new List<MusicGD>();
-            var dr = data[1]["v_niche"][0]["v_card"];
+            var dr = data[1]["grids"];
             foreach (var ab in dr)
             {
                 MusicGD d = new MusicGD()
                 {
                     ID = ab["id"].ToString(),
                     Name = ab["title"].ToString(),
-                    Photo = ab["cover"].ToString(),
-                    ListenCount = int.Parse(ab["cnt"].ToString()),
+                    Photo = ab["picurl"].ToString(),
+                    ListenCount = int.Parse(ab["listeners"].ToString()),
                 };
                 Gdata.Add(d);
             }

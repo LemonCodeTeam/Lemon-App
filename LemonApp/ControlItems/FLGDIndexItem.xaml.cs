@@ -37,6 +37,8 @@ namespace LemonApp
             name.Text = nae;
             if (lstCount == 0 && subtitle == "")
                 lstBord.Visibility = Visibility.Collapsed;
+            else if (lstCount == -1)
+                listenCount.Text = "刚刚更新";
             else listenCount.Text = lstCount.IntToWn();
             if (subtitle != "")
                 listenCount.Text = subtitle;

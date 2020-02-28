@@ -1702,6 +1702,7 @@ namespace LemonApp
         int HB = 0;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            Console.WriteLine(Datasv.VerticalOffset);
             if (!DataPage_ControlMod && np != NowPage.Search)
                 if (Datasv.VerticalOffset > 0)
                 {
