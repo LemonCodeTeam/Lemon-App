@@ -1270,23 +1270,23 @@ jpg
         #region 电台
         public static async Task<Dictionary<string, MusicRadioList>> GetRadioList()
         {
-            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_radiolist.fcg?channel=radio&format=json&page=index&tpl=wk&new=1&p=0.8663229811059507&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
+            var o = JObject.Parse(await HttpHelper.GetWebDataqAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data="+HttpUtility.UrlEncode("{\"radiolist\":{\"module\":\"pf.radiosvr\",\"method\":\"GetRadiolist\",\"param\":{\"ct\":\"24\"}},\"comm\":{\"ct\":24,\"cv\":0}}")));
             var data = new Dictionary<string, MusicRadioList>();
-            var ddg = o["data"]["data"]["groupList"];
+            var ddg = o["radiolist"]["data"]["radio_list"];
             try
             {
                 foreach (var list in ddg)
                 {
                     var dt = new MusicRadioList();
-                    string name = list["name"].ToString();
-                    var ax = list["radioList"];
+                    string name = list["title"].ToString();
+                    var ax = list["list"];
                     foreach (var ms in ax)
                     {
                         dt.Items.Add(new MusicRadioListItem
                         {
-                            Name = ms["radioName"].ToString(),
-                            Photo = ms["radioImg"].ToString(),
-                            ID = ms["radioId"].ToString(),
+                            Name = ms["title"].ToString(),
+                            Photo = ms["pic_url"].ToString(),
+                            ID = ms["tjreport"].ToString().Split('_').Last(),
                             lstCount = int.Parse(ms["listenNum"].ToString())
                         });
                     }
@@ -1299,8 +1299,8 @@ jpg
         public static async Task<List<Music>> GetRadioMusicAsync(string id)
         {
             var o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
-    "{\"songlist\":{\"module\":\"pf.radiosvr\",\"method\":\"GetRadiosonglist\",\"param\":{\"id\":" + id + ",\"firstplay\":1,\"num\":10}},\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":0}}"))
-                ["songlist"]["data"]["track_list"];
+    "{\"songlist\":{\"module\":\"mb_track_radio_svr\",\"method\":\"get_radio_track\",\"param\":{\"id\":" + id + ",\"firstplay\":1,\"num\":10}},\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":0}}"))
+                ["songlist"]["data"]["tracks"];
             List<Music> Data = new List<Music>();
             foreach (var e in o)
             {

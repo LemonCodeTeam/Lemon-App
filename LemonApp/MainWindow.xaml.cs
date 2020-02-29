@@ -978,6 +978,7 @@ namespace LemonApp
         public async void IFVCALLBACK_LoadAlbum(string id, bool NeedSave = true)
         {
             np = NowPage.GDItem;
+            DataCollectBtn.Visibility = Visibility.Collapsed;
             NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Album\",\"key\":\"" + id + "\"}" }, NeedSave, false);
             DataItemsList.Items.Clear();
             int count = (int)(DataItemsList.ActualHeight
@@ -1027,6 +1028,7 @@ namespace LemonApp
             OpenLoading();
             if (osx == 1)
             {
+                DataCollectBtn.Visibility = Visibility.Collapsed;
                 NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\"" + g.Data.ID + "\",\"name\":\"" + g.Data.Name + "\",\"img\":\"" + g.Data.Photo + "\"}" }, NeedSave, false);
                 DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
                 DataPage_Creater.Text = "QQ音乐官方";
@@ -1459,6 +1461,7 @@ namespace LemonApp
                 TB.Text = "我喜欢";
                 TXx.Background = Resources["LoveIcon"] as VisualBrush;
                 DataItemsList.Items.Clear();
+                DataCollectBtn.Visibility =Visibility.Collapsed;
                 string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
                 He.MGData_Now = await MusicLib.GetGDAsync(id,
                    (dt) =>
@@ -1587,6 +1590,7 @@ namespace LemonApp
         {
             DataPage_CMType = 1;
             OpenDataControlPage();
+            DataPage_PLCZ_Delete.Visibility = He.MGData_Now.IsOwn ? Visibility.Visible : Visibility.Collapsed;
         }
         private void DataPage_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1822,6 +1826,7 @@ namespace LemonApp
                 if (osx == 0)
                 {
                     TB.Text = key;
+                    DataCollectBtn.Visibility = Visibility.Collapsed;
                     DataItemsList.Items.Clear();
                     if (Datasv != null) Datasv.ScrollToTop();
                     HB = 1;
@@ -2877,8 +2882,6 @@ namespace LemonApp
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.img));
             OpenLoading();
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             He.MGData_Now = await MusicLib.GetGDAsync(dt.id,
                 (dt) =>
                 {
@@ -2889,6 +2892,7 @@ namespace LemonApp
                         else DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 50,50 }));
                         DataPage_Creater.Text = dt.Creater.Name;
                         DataPage_Sim.Text = dt.desc;
+                        DataCollectBtn.Visibility = dt.IsOwn ? Visibility.Collapsed : Visibility.Visible;
                     });
                 },
                 new Action<int, Music, bool>((i, j, b) =>
@@ -2913,8 +2917,6 @@ namespace LemonApp
                 }
             }));
             CloseLoading();
-            sw.Stop();
-            Console.WriteLine("耗时:" + sw.Elapsed.TotalSeconds + "s");
             np = NowPage.GDItem;
         }
         #endregion
@@ -3133,5 +3135,11 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private async void DataCollectBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await MusicLib.AddGDILikeAsync(He.MGData_Now.id);
+            Toast.Send("收藏成功");
+        }
     }
 }
