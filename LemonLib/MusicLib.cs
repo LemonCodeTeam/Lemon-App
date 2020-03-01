@@ -1403,7 +1403,6 @@ jpg
             //---------官方歌单--------(QQ音乐的歌单和电台都是鸡肋)
             JObject obj = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
            "{\"req_0\":{\"module\":\"playlist.HotRecommendServer\",\"method\":\"get_new_hot_recommend\",\"param\":{\"cmd\":0,\"page\":0,\"daily_page\":0,\"size\":1}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1751}}"));
-            
             var data = obj["req_0"]["data"]["modules"];
             var gf = data[0]["grids"];
             List<MusicGD> gdList = new List<MusicGD>();

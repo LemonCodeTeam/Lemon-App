@@ -23,6 +23,7 @@ namespace LemonLib
             public Border Com;
             public Thickness value = default;
             public string cmd = "";
+            public object data = "";
         }
         ////////Music Helper////////
         public class IFVData

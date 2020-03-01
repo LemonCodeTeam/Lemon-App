@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -1109,6 +1110,7 @@ namespace LemonApp
             //-----cmd处理----
             if (Check)
             {
+                //歌曲页 items
                 if (data.cmd.Contains("DataUrl"))
                 {
                     if (data.Page.Uid != data.cmd)
@@ -1145,9 +1147,16 @@ namespace LemonApp
                         }
                     }
                 }
-                if (data.cmd == "SingerBig")
+                //歌手详细页
+                else if (data.cmd.Contains("Singer"))
                 {
-                    SetTopWhite(true);
+                    if(data.cmd=="SingerBig")
+                        SetTopWhite(true);
+                    if (singer_now != data.data)
+                    {
+                        GetSinger(new SingerItem((MusicSinger)data.data),false);
+                        return;
+                    }
                 }
             }
             //------------------
@@ -1250,7 +1259,6 @@ namespace LemonApp
 
         private void Cisv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            Console.WriteLine("ScrollChanged:" + Cisv.VerticalOffset);
             if (SingerDP_Top.Uid == "ok")
             {
                 if (Cisv.VerticalOffset >= 350)
@@ -1285,26 +1293,26 @@ namespace LemonApp
             SingerItem si = sender as SingerItem;
             GetSinger(si);
         }
-        public async void GetSinger(SingerItem si, int osx = 1)
+        public async void GetSinger(SingerItem si, bool NeedSavePage=true)
         {
             np = NowPage.SingerItem;
             singer_now = si.data;
-            ixSinger = osx;
             OpenLoading();
             BtD.LastBt = null;
+            Cisv.Content = null;
             var data = await MusicLib.GetSingerPageAsync(si.data.Mid);
             var cc = new SingerPage(data, this, new Action(async () =>
             {
                 if (data.HasBigPic)
                 {
                     await Task.Delay(100);
-                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { value = new Thickness(0, -50, 0, 0), cmd = "SingerBig" });
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { value = new Thickness(0, -50, 0, 0), cmd = "SingerBig",data= si.data }, NeedSavePage, false);
                 }
                 else
                 {
                     await Task.Delay(100);
-                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom));
-                }
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) {cmd = "Singer", data= si.data },NeedSavePage,false);
+                    }
             }))
             {
                 Width = ContentPage.ActualWidth
@@ -1403,6 +1411,7 @@ namespace LemonApp
         /// </summary>
         private void LikeBtnUp()
         {
+            likeBtn_path.Tag = false;
             if (ind == 1)
                 likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             else
@@ -1413,6 +1422,7 @@ namespace LemonApp
         /// </summary>
         private void LikeBtnDown()
         {
+            likeBtn_path.Tag = true;
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
         }
         /// <summary>
@@ -1499,6 +1509,18 @@ namespace LemonApp
         }
         #endregion
         #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
+        private void DataShareBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetText(np switch
+            {
+                NowPage.GDItem => $"https://y.qq.com/n/yqq/playsquare/{He.MGData_Now.id}.html#stat=y_new.index.playlist.pic",
+                NowPage.Top => $"https://y.qq.com/n/yqq/toplist/{tc_now.Data.ID}.html",
+                NowPage.Search => $"https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w={HttpUtility.HtmlDecode(SearchKey)}",
+                _ => null
+            });
+            Toast.Send("链接已复制到剪切板");
+        }
+
         private async void DataCollectBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             await MusicLib.AddGDILikeAsync(He.MGData_Now.id);
@@ -1698,7 +1720,6 @@ namespace LemonApp
         private string SearchKey = "";
 
         private MusicSinger singer_now;
-        private int ixSinger = 1;
 
         private TopControl tc_now;
         private int ixTop = 1;
@@ -1736,11 +1757,6 @@ namespace LemonApp
                 {
                     ixPlay++;
                     SearchMusic(SearchKey, ixPlay);
-                }
-                else if (np == NowPage.SingerItem)
-                {
-                    ixSinger++;
-                    GetSinger(new SingerItem(singer_now), ixSinger);
                 }
                 else if (np == NowPage.Top)
                 {
@@ -2256,7 +2272,7 @@ namespace LemonApp
             path10.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             App.BaseApp.SetColor("ButtonColorBrush", LastButtonColor);
             if (!Settings.USettings.DoesOpenDeskLyric) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            if (!(bool)likeBtn_path.Tag) likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             var ol = Resources["CloseLyricPage"] as Storyboard;
             ol.Begin();
         }
@@ -2280,7 +2296,7 @@ namespace LemonApp
             path6.Fill = new SolidColorBrush(Colors.White);
             path10.Fill = new SolidColorBrush(Colors.White);
             if (!Settings.USettings.DoesOpenDeskLyric) path7.Fill = new SolidColorBrush(Colors.White);
-            likeBtn_path.Fill = new SolidColorBrush(Colors.White);
+            if(!(bool)likeBtn_path.Tag) likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             var ol = Resources["OpenLyricPage"] as Storyboard;
             ol.Begin();
         }
