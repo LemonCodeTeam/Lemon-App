@@ -1499,7 +1499,11 @@ namespace LemonApp
         }
         #endregion
         #region DataPageBtn 歌曲数据 DataPage 的逻辑处理
-
+        private async void DataCollectBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await MusicLib.AddGDILikeAsync(He.MGData_Now.id);
+            Toast.Send("收藏成功");
+        }
         private async void Md_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _Gdpop.IsOpen = false;
@@ -1698,17 +1702,19 @@ namespace LemonApp
 
         private TopControl tc_now;
         private int ixTop = 1;
-        private ScrollViewer Datasv = null;
+        private MyScrollView Datasv = null;
         private void Datasv_Loaded(object sender, RoutedEventArgs e)
         {
-            Datasv = sender as ScrollViewer;
+            if (Datasv == null)
+                Datasv = sender as MyScrollView;
         }
         int HB = 0;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            Console.WriteLine(Datasv.VerticalOffset);
+            double offset = Datasv.ContentVerticalOffset;
+            Console.WriteLine(offset);
             if (!DataPage_ControlMod && np != NowPage.Search)
-                if (Datasv.VerticalOffset > 0)
+                if (offset > 0)
                 {
                     if (HB == 0)
                     {
@@ -1828,7 +1834,7 @@ namespace LemonApp
                     TB.Text = key;
                     DataCollectBtn.Visibility = Visibility.Collapsed;
                     DataItemsList.Items.Clear();
-                    if (Datasv != null) Datasv.ScrollToTop();
+                    if (Datasv != null) Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
                     HB = 1;
                     (Resources["DataPage_Min"] as Storyboard).Begin();
                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
@@ -3135,11 +3141,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private async void DataCollectBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            await MusicLib.AddGDILikeAsync(He.MGData_Now.id);
-            Toast.Send("收藏成功");
-        }
     }
 }

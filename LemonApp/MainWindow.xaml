@@ -2514,9 +2514,7 @@
                                                 <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" Margin="10" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1">
                                                     <Grid>
                                                         <ListBox x:Name="Add_SLP"  VirtualizingPanel.VirtualizationMode="Recycling"
-                                                            VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" >
-                                                            <ListBoxItem Content="Taylor Swift"/>
-                                                        </ListBox>
+                                                            VirtualizingPanel.IsVirtualizing="True"  Background="{x:Null}" Style="{DynamicResource ListBoxStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" />
                                                     </Grid>
                                                 </Border>
                                             </Popup>
