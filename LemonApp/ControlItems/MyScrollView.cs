@@ -42,6 +42,7 @@ namespace LemonApp
             else if (ScrollDirection.Up == direction)
                 Animation.To = VerticalOffset + move;
             Animation.Duration = TimeSpan.FromMilliseconds(500);
+            Timeline.SetDesiredFrameRate(Animation, 40);
             BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
         }
         bool beginning = false;
@@ -56,6 +57,7 @@ namespace LemonApp
                 else if (ScrollDirection.Up == direction)
                     Animation.To = VerticalOffset + 400;
                 Animation.Duration = TimeSpan.FromMilliseconds(300);
+                Timeline.SetDesiredFrameRate(Animation, 40);
                 Animation.Completed += delegate {
                     beginning = false; 
                 };
@@ -75,20 +77,5 @@ namespace LemonApp
     public enum ScrollDirection
     {
         Up, Down
-    }
-
-    public static class ListBoxInside
-    {
-        public static void Animation(this ListBox listbox, FrameworkElement ui)
-        {
-            int count = (int)(listbox.ActualHeight / 45);
-            if (listbox.Items.IndexOf(ui) <= count)
-            {
-                var ani = new ThicknessAnimation(
-                      new Thickness(0, 50, 0, -50), new Thickness(0), TimeSpan.FromSeconds(0.3))
-                { EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut } };
-                ui.BeginAnimation(FrameworkElement.MarginProperty, ani);
-            }
-        }
     }
 }

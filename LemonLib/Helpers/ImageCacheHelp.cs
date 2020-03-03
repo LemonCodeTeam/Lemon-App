@@ -24,7 +24,6 @@ namespace LemonLib
             try
             {
                 url += DecodePixel != null ? "#" + string.Join(",", DecodePixel) : "";
-                MainClass.DebugCallBack(url);
                 BitmapImage bi = GetImageFormMemory(url, DecodePixel);
                 if (bi != null) { return bi; }
                 bi = GetImageFromFile(url);
@@ -35,9 +34,8 @@ namespace LemonLib
                 }
                 return await GetImageFromInternet(url, DecodePixel);
             }
-            catch (Exception e)
+            catch
             {
-                MainClass.DebugCallBack(e.Message);
                 return null;
             }
         }

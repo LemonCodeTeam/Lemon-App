@@ -156,7 +156,6 @@ namespace LemonLib
                     if (!HasStoped)
                     {
                         //没有被停止而是链接下载失败
-                        MainClass.DebugCallBack("DownloadFailed");
                         downloadfailed(down);
                     }
                 }

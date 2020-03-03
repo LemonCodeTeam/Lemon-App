@@ -26,7 +26,16 @@ namespace LemonApp
         {
             InitializeComponent();
             Image.MouseDown += PartMouseDown;
+            this.IsVisibleChanged += ImageForceView_IsVisibleChanged;
         }
+
+        private void ImageForceView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue)
+                t.Start();
+            else t.Stop();
+        }
+
         public void Updata(List<IFVData> iFVData, MainWindow m)
         {
             iv = iFVData;
@@ -47,20 +56,22 @@ namespace LemonApp
             }
             catch { }
         }
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             CheckAniLeft = Resources["CheckAniLeft"] as Storyboard;
             CheckAniRight = Resources["CheckAniRight"] as Storyboard;
-            while (true)
-            {
-                await Task.Delay(5000);
+            t.Interval = 5000;
+            t.Tick += delegate {
+                t.Interval = 5000;
                 if (HasCheck)
                 {
                     HasCheck = false;
-                    await Task.Delay(10000);
+                    t.Interval = 10000;
                 }
                 TurnRight();
-            }
+            };
+            t.Start();
         }
 
         private void PartMouseDown(object sender, MouseButtonEventArgs e)
@@ -107,7 +118,6 @@ namespace LemonApp
                 index--;
                 SetImageAsync(index);
             }
-            Console.WriteLine("LEFT" + index);
             CheckAniLeft.Begin();
         }
         private void Left_MouseDown(object sender, MouseButtonEventArgs e)
@@ -130,7 +140,6 @@ namespace LemonApp
                     index++;
                     SetImageAsync(index);
                 }
-                Console.WriteLine("RIGHT:" + index);
                 CheckAniRight.Begin();
             }
             catch { }

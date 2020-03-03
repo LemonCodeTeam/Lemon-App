@@ -324,7 +324,6 @@ namespace LemonApp
 
         private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine(music.Album.ID);
             Mainwindow.IFVCALLBACK_LoadAlbum(music.Album.ID);
         }
 

@@ -92,7 +92,6 @@ namespace LemonApp
                 k.Play += K_Play;
                 k.Download += mw.K_Download;
                 HotMusicList.Items.Add(k);
-                HotMusicList.Animation(k);
             }
 
             int i = 0;
@@ -170,7 +169,6 @@ namespace LemonApp
                 var k = new PlayDLItem(ex.music);
                 k.MouseDoubleClick += mw.K_MouseDoubleClick;
                 mw.PlayDL_List.Items.Add(k);
-                mw.PlayDL_List.Animation(k);
             }
             PlayDLItem dk = mw.PlayDL_List.Items[0] as PlayDLItem;
             dk.p(true);

@@ -182,12 +182,15 @@ namespace LemonApp
         public static NamedPipeClientStream pipe = null;
         public static async void Open()
         {
-            p = Process.Start(AppDomain.CurrentDomain.BaseDirectory + "DebugConsole.exe");
+            p = new Process();
+            p.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "DebugConsole.exe";
+            p.Start();
             pipe = new NamedPipeClientStream("localhost", "DebugConsolePipeForLemonApp", PipeDirection.InOut, PipeOptions.None, TokenImpersonationLevel.None);
             await Task.Delay(500);
             await pipe.ConnectAsync();
             sw = new StreamWriter(pipe);
         }
+
         public static async void WriteLine(object text)
         {
             if (sw != null)

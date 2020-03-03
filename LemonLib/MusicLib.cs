@@ -923,7 +923,7 @@ jpg
         /// <param name="TopID"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<Music>> GetToplistAsync(string TopID, Action<Music, bool> callback, Window wx, Action finished, int aniCount, int osx = 1)
+        public async Task<List<Music>> GetToplistAsync(string TopID, Action<Music, bool> callback, Window wx, Action finished, int osx = 1)
         {
             int index = (osx - 1) * 30;
             string json = await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
@@ -971,8 +971,6 @@ jpg
                 m.Mvmid = sid["vid"].ToString();
                 wx.Dispatcher.Invoke(() => { callback(m, false); });
                 dt.Add(m);
-                if (i <= aniCount)
-                    await Task.Delay(10);
                 i++;
             }
             wx.Dispatcher.Invoke(() => { finished(); });
@@ -1383,8 +1381,6 @@ jpg
                     m.Pz = "SQ";
                 m.Mvmid = a["vid"].ToString();
                 wx.Dispatcher.Invoke(() => { callback(m, false); });
-                if (i <= aniCount)
-                    await Task.Delay(10);
                 i++;
                 data.Add(m);
             }

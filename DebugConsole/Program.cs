@@ -9,12 +9,18 @@ namespace DebugConsole
     {
         static void Main(string[] args)
         {
-            Console.Title = "LemonApp Debug Console    [Developer Mode Alt+C]";
-            Console.SetWindowSize(54, 30);
+            Console.Title = "LemonApp Debug Console";
+            Console.SetWindowSize(56, 35);
+            Console.SetBufferSize(56, 40);
             Console.WriteLine("Hello World!");
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("LemonApp Debug Console");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[Developer Mode Alt+C]");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("NamedPipeServerStream Using DebugConsolePipeForLemonApp");
             Console.WriteLine("Powered by TwilightLemon");
+            Console.ForegroundColor = ConsoleColor.White;
             new Thread(Start).Start();
             Console.ReadLine();
         }

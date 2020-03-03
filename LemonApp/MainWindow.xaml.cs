@@ -450,7 +450,6 @@ namespace LemonApp
                         mp.Position = TimeSpan.FromSeconds(0);
                         t.Stop();
                         //-----------播放完成时，判断单曲还是下一首
-                        Console.WriteLine("end");
                         jd.Value = 0;
                         if (xh)//单曲循环
                         {
@@ -465,7 +464,7 @@ namespace LemonApp
             };
             //-----Timer 清理与更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
-            ds.Tick += delegate { GC.Collect(); if (t.Enabled) mp.UpdataDevice(); GC.Collect(); };
+            ds.Tick += delegate { if (t.Enabled) mp.UpdataDevice(); GC.Collect(); };
             ds.Start();
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
@@ -980,6 +979,7 @@ namespace LemonApp
         {
             np = NowPage.GDItem;
             DataCollectBtn.Visibility = Visibility.Collapsed;
+            DataItemsList.Opacity = 0;
             NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Album\",\"key\":\"" + id + "\"}" }, NeedSave, false);
             DataItemsList.Items.Clear();
             int count = (int)(DataItemsList.ActualHeight
@@ -994,7 +994,6 @@ namespace LemonApp
                 k.Download += K_Download;
                 if (k.music.MusicID == MusicData.Data.MusicID)
                     k.ShowDx();
-                DataItemsList.Animation(k);
                 index++;
             }), this, async (md) =>
             {
@@ -1004,6 +1003,7 @@ namespace LemonApp
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.pic));
                 TB.Text = md.name;
             }, count);
+            RunAnimation(DataItemsList,new Thickness(0, 200, 0, 0));
         }
         #endregion
         #region Top 排行榜
@@ -1030,6 +1030,7 @@ namespace LemonApp
             if (osx == 1)
             {
                 DataCollectBtn.Visibility = Visibility.Collapsed;
+                DataItemsList.Opacity = 0;
                 NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\"" + g.Data.ID + "\",\"name\":\"" + g.Data.Name + "\",\"img\":\"" + g.Data.Photo + "\"}" }, NeedSave, false);
                 DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
                 DataPage_Creater.Text = "QQ音乐官方";
@@ -1038,7 +1039,6 @@ namespace LemonApp
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
             }
-            int count = (int)(DataItemsList.ActualHeight / 45);
             int index = 0;
             var dta = await ml.GetToplistAsync(g.Data.ID, new Action<Music, bool>((j, f) =>
             {
@@ -1055,12 +1055,13 @@ namespace LemonApp
                     k.NSDownload(true);
                     k.Check(true);
                 }
-                DataItemsList.Animation(k);
                 index++;
             }), this, new Action(() =>
             {
                 CloseLoading();
-            }), count, osx);
+            }),osx);
+            if (osx == 1)
+                RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
         }
         #endregion
         #region Updata 检测更新
@@ -1495,7 +1496,6 @@ namespace LemonApp
                         {
                             k.ShowDx();
                         }
-                        DataItemsList.Animation(k);
                     }), this, new Action<int>(i =>
                     {
                         while (DataItemsList.Items.Count != i)
@@ -1504,6 +1504,7 @@ namespace LemonApp
                         }
                     }));
                 CloseLoading();
+                RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
                 np = NowPage.GDItem;
             }
         }
@@ -1733,7 +1734,6 @@ namespace LemonApp
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             double offset = Datasv.ContentVerticalOffset;
-            Console.WriteLine(offset);
             if (!DataPage_ControlMod && np != NowPage.Search)
                 if (offset > 0)
                 {
@@ -1848,6 +1848,7 @@ namespace LemonApp
                 if (osx == 0)
                 {
                     TB.Text = key;
+                    DataItemsList.Opacity = 0;
                     DataCollectBtn.Visibility = Visibility.Collapsed;
                     DataItemsList.Items.Clear();
                     if (Datasv != null) Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
@@ -1856,7 +1857,6 @@ namespace LemonApp
                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
                 }
                 if (osx == 0) NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\"" + key + "\"}" }, NeedSave, false);
-                int aniCount = (int)(DataItemsList.ActualHeight / 45);
                 int i = 0;
                 foreach (var j in dt)
                 {
@@ -1875,12 +1875,11 @@ namespace LemonApp
                         k.NSDownload(true);
                         k.Check(true);
                     }
-                    DataItemsList.Animation(k);
-                    if (i <= aniCount)
-                        await Task.Delay(10);
                     i++;
                 }
                 CloseLoading();
+                if (osx == 0) 
+                    RunAnimation(DataItemsList, new Thickness(0, 75, 0, 0));
             }
             catch { }
         }
@@ -2929,7 +2928,6 @@ namespace LemonApp
                     {
                         k.ShowDx();
                     }
-                    DataItemsList.Animation(k);
                 }), this,
             new Action<int>(i =>
             {
@@ -2939,6 +2937,7 @@ namespace LemonApp
                 }
             }));
             CloseLoading();
+            RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
             np = NowPage.GDItem;
         }
         #endregion
@@ -3120,9 +3119,12 @@ namespace LemonApp
                 { PlayControl_PlayNext(null, null); Toast.Send("成功切换到下一曲"); }
                 else if (wParam.ToInt32() == 129)
                 {
-                    if (Console.pipe == null)
+                    IntPtr hx = MsgHelper.FindWindow(null, "LemonApp Debug Console");
+                    if (hx== IntPtr.Zero)
                     {
                         Toast.Send("已进入调试模式🐱‍👤");
+                        if (Console.pipe != null)
+                            Console.Close();
                         Console.Open();
                         Console.WriteLine("调试模式");
                     }
