@@ -27,6 +27,7 @@ namespace LemonApp
         public FLGDIndexItem()
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this,BitmapScalingMode.LowQuality);
         }
         public FLGDIndexItem(string Id, string nae, string pic, int lstCount, bool hasDeleteBtn = false, string subtitle = "")
         {

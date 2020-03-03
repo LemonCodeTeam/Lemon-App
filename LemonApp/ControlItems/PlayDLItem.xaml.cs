@@ -23,6 +23,7 @@ namespace LemonApp
         public PlayDLItem(Music m, bool NeedImg, string imgUrl)
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             Loaded += async delegate
             {
                 if (NeedImg)

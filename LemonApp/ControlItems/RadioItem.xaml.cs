@@ -14,6 +14,7 @@ namespace LemonApp
         public RadioItem(MusicRadioListItem da)
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             data = da;
             this.name.Text = data.Name;
             Loaded += async delegate

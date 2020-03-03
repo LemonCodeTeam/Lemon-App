@@ -15,6 +15,7 @@ namespace LemonApp
         public TopControl(MusicTop mp)
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             Loaded += TopControl_Loaded;
             Data = mp;
         }

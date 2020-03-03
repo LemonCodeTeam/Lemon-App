@@ -11,5 +11,11 @@ namespace LemonApp
         {
             InitializeComponent();
         }
+
+        private void window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+                Close();
+        }
     }
 }

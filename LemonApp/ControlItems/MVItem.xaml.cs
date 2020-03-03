@@ -12,6 +12,7 @@ namespace LemonApp
         public MVItem()
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
         }
         private MVData mData;
         public MVData Data

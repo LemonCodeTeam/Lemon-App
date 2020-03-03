@@ -26,7 +26,7 @@ namespace LemonApp
             else
             {
                 //触屏滚动(无需动画)
-                if (move<20&& time <30)
+                if (move < 20 && time < 30)
                     SmoothScrollinTouch(e.Delta);
                 else
                     SmoothScrollSpeed2x(sc);

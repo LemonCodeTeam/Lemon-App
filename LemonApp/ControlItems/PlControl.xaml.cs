@@ -19,6 +19,7 @@ namespace LemonApp
         public PlControl(MusicPL dt)
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             data = dt;
             Image.Background = new ImageBrush(new BitmapImage(new Uri(dt.img)));
             name.Text = dt.name;

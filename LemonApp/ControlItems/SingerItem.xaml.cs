@@ -16,6 +16,7 @@ namespace LemonApp
         public SingerItem(MusicSinger dt)
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
             data = dt;
             name.Text = dt.Name;
             Loaded += async delegate
