@@ -469,6 +469,15 @@ namespace LemonApp
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
+            //----------------同步"我喜欢"歌单ids
+            Thread tx = new Thread(async ()=> {
+                Dictionary<string, string> dt = new Dictionary<string, string>();
+                MusicLib.GetGDAsync(MusicLib.MusicLikeGDid??await ml.GetMusicLikeGDid(),new Action<string,string>((mid,id) => {
+                    dt.Add(mid,id);
+                }));
+                Settings.USettings.MusicGDataLike.ids = dt;
+            });
+            tx.Start();
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -1435,18 +1444,24 @@ namespace LemonApp
         {
             if (MusicName.Text != "MusicName")
             {
-                if (Settings.USettings.MusicLike.ContainsKey(MusicData.Data.MusicID))
+                if (Settings.USettings.MusicGDataLike.ids.ContainsKey(MusicData.Data.MusicID))
                 {
                     LikeBtnUp();
-                    Settings.USettings.MusicLike.Remove(MusicData.Data.MusicID);
-                    string a = await MusicLib.DeleteMusicFromGDAsync(new string[1] { MusicData.Data.MusicID }, MusicLib.MusicLikeGDdirid);
-                    Toast.Send(a);
+                    foreach (var ac in Settings.USettings.MusicGDataLike.ids)
+                    {
+                        if (ac.Key == MusicData.Data.MusicID)
+                        {
+                            string a = await MusicLib.DeleteMusicFromGDAsync(new string[1] { ac.Value}, MusicLib.MusicLikeGDdirid);
+                            Settings.USettings.MusicGDataLike.ids.Remove(MusicData.Data.MusicID);
+                            Toast.Send(a);
+                        }
+                    }
                 }
                 else
                 {
                     string[] a = await MusicLib.AddMusicToGDAsync(MusicData.Data.MusicID, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a[1] + ": " + a[0]);
-                    Settings.USettings.MusicLike.Add(MusicData.Data.MusicID, MusicData.Data);
+                    Settings.USettings.MusicGDataLike.ids.Add(MusicData.Data.MusicID, MusicData.Data.Littleid);
                     LikeBtnDown();
                 }
                 Settings.SaveSettings();
@@ -1474,6 +1489,7 @@ namespace LemonApp
                 DataItemsList.Items.Clear();
                 DataCollectBtn.Visibility =Visibility.Collapsed;
                 string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
+                Settings.USettings.MusicGDataLike.ids.Clear();
                 He.MGData_Now = await MusicLib.GetGDAsync(id,
                    (dt) =>
                    {
@@ -1496,6 +1512,7 @@ namespace LemonApp
                         {
                             k.ShowDx();
                         }
+                        Settings.USettings.MusicGDataLike.ids.Add(j.MusicID, j.Littleid);
                     }), this, new Action<int>(i =>
                     {
                         while (DataItemsList.Items.Count != i)
@@ -2031,7 +2048,7 @@ namespace LemonApp
             Title = data.MusicName + " - " + data.SingerText;
             Settings.USettings.Playing = MusicData.Data;
             Settings.SaveSettings();
-            if (Settings.USettings.MusicLike.ContainsKey(data.MusicID))
+            if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
                 LikeBtnDown();
             else LikeBtnUp();
 

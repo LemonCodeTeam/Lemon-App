@@ -111,6 +111,11 @@ namespace LemonLib
             public MusicGD Album { set; get; } = new MusicGD();
             public string Mvmid { set; get; } = "";
             public string Pz { set; get; } = "";
+
+            /// <summary>
+            /// 相对于个人歌单里的id   用于“我喜欢”歌单
+            /// </summary>
+            public string Littleid { set; get; } = "";
         }
         public class MusicSinger
         {
@@ -181,6 +186,13 @@ namespace LemonLib
             public bool IsOwn = false;
             public int listenCount { get; set; }
             public List<string> ids = new List<string>();
+        }
+        public class MusicGLikeData
+        {
+            /// <summary>
+            /// MID(000A23nK23dF),ID(10382021)
+            /// </summary>
+            public Dictionary<string, string> ids = new Dictionary<string, string>();
         }
         ////////Weather Helper/////
         public class Weather

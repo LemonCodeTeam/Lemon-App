@@ -38,7 +38,6 @@ namespace LemonLib
             if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
             qq = id;
-            new Action(async () => { await GetMusicLikeGDid(); })();
         }
         public MusicLib()
         {
@@ -468,9 +467,9 @@ jpg
                 Name = c0["nick"].ToString(),
                 Photo = c0["headurl"].ToString()
             };
-            GetInfo(dt);
+            GetInfo?.Invoke(dt);
             var c0s = c0["songlist"];
-            await wx.Dispatcher.BeginInvoke(new Action(() => getAll(c0s.Count())));
+            await wx?.Dispatcher.BeginInvoke(new Action(() => getAll?.Invoke(c0s.Count())));
             Parallel.For(0, c0s.Count(), async (index) =>
                 {
                     try
@@ -511,12 +510,40 @@ jpg
                         if (c0si["sizeflac"].ToString() != "0")
                             m.Pz = "SQ";
                         m.Mvmid = c0si["vid"].ToString();
+                        m.Littleid = dt.ids[index];
                         dt.Data.Add(m);
-                        await wx.Dispatcher.BeginInvoke(new Action(() => { callback(index, m, dt.IsOwn); }));
+                        await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
                     }
                     catch { }
                 });
             return dt;
+        }
+        /// <summary>
+        /// 通过歌单ID 获取歌单Mid 与 id Simple
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="callback"></param>
+        /// <param name="wx"></param>
+        /// <param name="getAll"></param>
+        /// <returns></returns>
+        public static async void GetGDAsync(string id = "2591355982",Action<string,string> callback = null)
+        {
+            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+            JObject o = JObject.Parse(s);
+            var c0 = o["cdlist"][0];
+            List<string> ids = c0["songids"].ToString().Split(',').ToList();
+            var c0s = c0["songlist"];
+            Parallel.For(0, c0s.Count(), (index) =>
+            {
+                try
+                {
+                    var c0si = c0s[index];
+                    var MusicID = c0si["songmid"].ToString();
+                    var Littleid = ids[index];
+                    callback(MusicID, Littleid);
+                }
+                catch { }
+            });
         }
         /// <summary>
         /// 获取 我创建的歌单 列表

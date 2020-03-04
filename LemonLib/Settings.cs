@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -73,32 +74,6 @@ namespace LemonLib
                     Mid = xs["Mid"].ToString()
                 });
             }
-            foreach (var jx in o["MusicLike"].ToArray())
-            {
-                foreach (var jm in jx)
-                {
-                    if (!USettings.MusicLike.ContainsKey(jm["MusicID"].ToString()))
-                    {
-                        List<MusicSinger> lm = new List<MusicSinger>();
-                        foreach (var xs in jm["Singer"])
-                        {
-                            lm.Add(new MusicSinger()
-                            {
-                                Name = xs["Name"].ToString(),
-                                Mid = xs["Mid"].ToString()
-                            });
-                        }
-                        USettings.MusicLike.Add(jm["MusicID"].ToString(), new Music()
-                        {
-                            MusicID = jm["MusicID"].ToString(),
-                            SingerText = jm["SingerText"].ToString(),
-                            Singer = lm,
-                            ImageUrl = jm["ImageUrl"].ToString(),
-                            MusicName = jm["MusicName"].ToString()
-                        });
-                    }
-                }
-            }
             if (data.Contains("LyricAnimationMode"))
                 USettings.LyricAnimationMode = int.Parse(o["LyricAnimationMode"].ToString());
             if (data.Contains("DoesOpenDeskLyric"))
@@ -127,6 +102,11 @@ namespace LemonLib
                 USettings.CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
                 USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
+            if (data.Contains("MusicGDataLike"))
+            {
+                string json=o["MusicGDataLike"]["ids"].ToString();
+                USettings.MusicGDataLike.ids=JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            }
         }
         public class UserSettings
         {
@@ -135,9 +115,6 @@ namespace LemonLib
                 CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\");
                 DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
-            #region 歌单
-            public SortedDictionary<string, Music> MusicLike { get; set; } = new SortedDictionary<string, Music>();
-            #endregion
             #region 用户配置
             public string LemonAreeunIts { get; set; } = "";
             public string UserName { get; set; } = "";
@@ -168,6 +145,8 @@ namespace LemonLib
             public string DownloadName = "[I].  [M] - [S]";
             public bool DownloadWithLyric = true;
             #endregion
+
+            public MusicGLikeData MusicGDataLike = new MusicGLikeData();
         }
         #endregion
 
