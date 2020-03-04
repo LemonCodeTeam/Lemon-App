@@ -43,7 +43,10 @@ namespace LemonApp
         string RadioID = "";
         public static MusicPlayer mp;
         int ind = 0;//歌词页面是否打开
-        bool xh = false;//false: lb true:dq  循环/单曲 播放控制
+        /// <summary>
+        /// 播放模式 0列表循环 1单曲循环 2随机播放
+        /// </summary>
+        int PlayMod = 0;
         bool mod = true;//true : qq false : wy
         LyricView lv;
         bool isLoading = false;
@@ -451,13 +454,13 @@ namespace LemonApp
                         t.Stop();
                         //-----------播放完成时，判断单曲还是下一首
                         jd.Value = 0;
-                        if (xh)//单曲循环
+                        if (PlayMod == 1)//单曲循环
                         {
                             mp.Position = TimeSpan.FromMilliseconds(0);
                             mp.Play();
                             t.Start();
                         }
-                        else PlayControl_PlayNext(null, null);//下一曲
+                        else if (PlayMod == 0 || PlayMod == 2) PlayControl_PlayNext(null, null);//下一曲
                     }
                 }
                 catch { }
@@ -2171,13 +2174,25 @@ namespace LemonApp
         private void PlayControl_PlayLast(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = null;
-            //如果已经到播放队列的第一首，那么上一首就是最后一首歌(列表循环 非电台)
-            //如果已经到播放队列的第一首，没有上一首(电台)
-            if (PlayDL_List.Items.IndexOf(MusicData) == 0)
+
+            if (PlayMod == 0)
             {
-                if (!IsRadio) k = PlayDL_List.Items[PlayDL_List.Items.Count - 1] as PlayDLItem;
+                //如果已经到播放队列的第一首，那么上一首就是最后一首歌(列表循环 非电台)
+                //如果已经到播放队列的第一首，没有上一首(电台)
+                if (PlayDL_List.Items.IndexOf(MusicData) == 0)
+                {
+                    if (!IsRadio) k = PlayDL_List.Items[PlayDL_List.Items.Count - 1] as PlayDLItem;
+                }
+                else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) - 1] as PlayDLItem;
             }
-            else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) - 1] as PlayDLItem;
+            else {
+                int index = RandomIndexes.IndexOf(RandomOffset);
+                if (index == 0)
+                    return;
+                RandomOffset = RandomIndexes[index - 1];
+                k = PlayDL_List.Items[RandomOffset] as PlayDLItem;
+            }
+            
             if (k != null)
             {
                 k.p(true);
@@ -2196,19 +2211,53 @@ namespace LemonApp
                 if (!find) new DataItem(new Music()).ShowDx();
             }
         }
+        private List<int> RandomIndexes = new List<int>();
+        private int RandomOffset = 0;
         private void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = null;
-            //如果已到最后一首歌，那么下一首从头播放(列表循环 非电台)
-            //已经到最后一首歌，下一首需要重新查询电台列表
-            if (PlayDL_List.Items.IndexOf(MusicData) + 1 == PlayDL_List.Items.Count)
+
+            if (PlayMod == 0)
             {
-                if (IsRadio)
-                    GetRadio(new RadioItem(RadioID), null);
-                else
-                    k = PlayDL_List.Items[0] as PlayDLItem;
+                //如果已到最后一首歌，那么下一首从头播放(列表循环 非电台)
+                //已经到最后一首歌，下一首需要重新查询电台列表
+                if (PlayDL_List.Items.IndexOf(MusicData) + 1 == PlayDL_List.Items.Count)
+                {
+                    if (IsRadio)
+                        GetRadio(new RadioItem(RadioID), null);
+                    else
+                        k = PlayDL_List.Items[0] as PlayDLItem;
+                }
+                else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) + 1] as PlayDLItem;
             }
-            else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) + 1] as PlayDLItem;
+            else {
+                //随机播放  TODO 待完善
+                if (RandomIndexes.Count > 0)
+                {
+                    if (RandomOffset != RandomIndexes.Last())
+                    {
+                        //若当前index没到最后一个
+                        RandomOffset = RandomIndexes[RandomIndexes.IndexOf(RandomOffset) + 1];
+                        k = PlayDL_List.Items[RandomOffset] as PlayDLItem;
+                    }
+                    else {
+                        Random r = new Random();
+                        int index = r.Next(0, PlayDL_List.Items.Count - 1);
+                        RandomIndexes.Add(index);
+                        RandomOffset = index;
+                        k = PlayDL_List.Items[index] as PlayDLItem;
+                    }
+                }
+                else
+                {
+                    Random r = new Random();
+                    int index = r.Next(0, PlayDL_List.Items.Count - 1);
+                    RandomIndexes.Add(index);
+                    RandomOffset = index;
+                    k = PlayDL_List.Items[index] as PlayDLItem;
+                }
+            }
+            
             if (k != null)
             {
                 k.p(true);
@@ -2427,15 +2476,35 @@ namespace LemonApp
         }
         private void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (xh)
+            //NOW:列表循环
+            if (PlayMod == 0)
             {
-                xh = false;
-                (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Lbxh);
-            }
-            else
-            {
-                xh = true;
+                //切换为单曲循环
+                PlayMod = 1;
                 (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Dqxh);
+            }
+            else if (PlayMod == 1)
+            {
+                //如果是电台播放则切换为顺序播放
+                if (IsRadio)
+                {
+                    PlayMod = 0;
+                    (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Lbxh);
+                }
+                else
+                {
+                    if (MusicData.Data.MusicID!=string.Empty) {
+                        RandomOffset = PlayDL_List.Items.IndexOf(MusicData);
+                        RandomIndexes.Add(RandomOffset);
+                    }
+                    PlayMod = 2;
+                    (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Random);
+                }
+            }
+            else if (PlayMod == 2)
+            {
+                PlayMod = 0;
+                (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Lbxh);
             }
         }
         bool isOpenPlayDLPage = false;
