@@ -2211,7 +2211,7 @@
                                     </Grid>
                                 </Border>
                             </Grid>
-                            <LemonApp:MyScrollView  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollView x:Name="MusicPlScrollViewer"  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <WrapPanel x:Name="MusicPlList"/>
                             </LemonApp:MyScrollView>
                         </Grid>
@@ -2238,7 +2238,7 @@
                             <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
                         </Grid>
                         <Grid x:Name="MvPage" IsVisibleChanged="MvPage_IsVisibleChanged" Visibility="Collapsed">
-                            <LemonApp:MyScrollView Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollView x:Name="MVScrollViewer" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <WrapPanel>
                                     <Grid MouseEnter="MvPlay_ME_MouseEnter" MouseLeave="MvPlay_ME_MouseLeave" Height="470" Width="{Binding ActualWidth, ElementName=MvPage, Mode=OneWay}">
                                         <MediaElement x:Name="MvPlay_ME" LoadedBehavior ="Manual" MouseDown="Mvplay_plps_MouseDown"/>

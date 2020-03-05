@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace LemonApp.ContentPage
 {
@@ -44,7 +45,7 @@ namespace LemonApp.ContentPage
                 SingerItemsList.Children.Add(sinx);
             }
             mw.WidthUI(SingerItemsList);
-            if (cur_page == 1) SingerPage_sv.ScrollToTop();
+            if (cur_page == 1) SingerPage_sv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             mw.CloseLoading();
             if (cur_page == 1)
             {

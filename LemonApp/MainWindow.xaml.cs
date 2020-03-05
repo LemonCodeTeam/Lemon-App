@@ -1332,7 +1332,7 @@ namespace LemonApp
             };
             Cisv.Content = cc;
             SingerDP_Top.Uid = "gun";
-            Cisv.ScrollToVerticalOffset(0);
+            Cisv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             if (data.HasBigPic)
             {
                 SetTopWhite(true);
@@ -1414,6 +1414,8 @@ namespace LemonApp
             k.p(true);
             MusicData = k;
             IsRadio = true;
+            PlayMod = 0;
+            (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Lbxh);
             PlayMusic(k.Data);
             CloseLoading();
         }
@@ -2622,6 +2624,7 @@ namespace LemonApp
                 data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text);
             }
             MusicPlList.Children.Clear();
+            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0,TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
                 MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
@@ -2641,6 +2644,7 @@ namespace LemonApp
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text);
             MusicPlList.Children.Clear();
+            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
                 MusicPlList.Children.Add(new PlControl(dt) { couldpraise = false, Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
@@ -2661,6 +2665,7 @@ namespace LemonApp
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
             MusicPlList.Children.Clear();
+            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
                 MusicPlList.Children.Add(new PlControl(dt) { Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
@@ -3047,6 +3052,7 @@ namespace LemonApp
             //加载评论
             List<MusicPL> data = await MusicLib.GetMVPL(MvPlay_Tb.Uid);
             MVPlList.Children.Clear();
+            MVScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
                 MVPlList.Children.Add(new PlControl(dt) { Width = MvPage.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });

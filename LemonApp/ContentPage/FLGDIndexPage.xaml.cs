@@ -1,8 +1,10 @@
 ﻿using LemonLib;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace LemonApp.ContentPage
 {
@@ -101,7 +103,7 @@ namespace LemonApp.ContentPage
                 FLGDItemsList.Children.Add(k);
             }
             mw.WidthUI(FLGDItemsList);
-            if (osx == 1) FLGDPage_sv.ScrollToTop();
+            if (osx == 1) FLGDPage_sv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             mw.CloseLoading();
             if (osx == 1)
             {
