@@ -90,7 +90,7 @@ namespace LemonApp
                 }
                 else if (url.Contains("y.qq.com/topic/piaowu"))
                 {
-                    Process.Start(url);
+                    Process.Start("explorer", url);
                 }
             }
             else if (type == "10002")

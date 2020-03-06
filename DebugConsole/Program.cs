@@ -11,7 +11,7 @@ namespace DebugConsole
         {
             Console.Title = "LemonApp Debug Console";
             Console.SetWindowSize(56, 35);
-            Console.SetBufferSize(56, 40);
+            Console.SetBufferSize(56, 100);
             Console.WriteLine("Hello World!");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("LemonApp Debug Console");

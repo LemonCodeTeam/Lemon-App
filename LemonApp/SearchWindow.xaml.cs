@@ -1,9 +1,11 @@
 ﻿using LemonLib;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,7 +24,23 @@ namespace LemonApp
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
         double Tp = 0;
-        string uri = "https://www.baidu.com/s?wd=%2a";
+        private void Search() {
+            string url = "https://www.baidu.com/s?wd=" + HttpUtility.UrlEncode(textBox1.Text);
+            Process p = new Process();
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.UseShellExecute = false;    //是否使用操作系统shell启动
+            p.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
+            p.StartInfo.RedirectStandardOutput = false;
+            p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
+            p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+            p.Start();//启动程序
+
+            //向cmd窗口发送输入信息
+            p.StandardInput.WriteLine("start "+url + "&exit");
+            p.StandardInput.AutoFlush = true;
+            p.WaitForExit();//等待程序执行完退出进程
+            p.Close();
+        }
         private async void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (textBox1.Text != "")
@@ -54,7 +72,7 @@ namespace LemonApp
             if (e.Key == Key.Enter)
                 if (textBox1.Text != "")
                 {
-                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
+                    Search();
                     Close();
                 }
         }
@@ -63,7 +81,7 @@ namespace LemonApp
         {
             if (textBox1.Text != "")
             {
-                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
+                Search();
                 Close();
             }
         }
@@ -109,7 +127,7 @@ namespace LemonApp
                 if (listBox.SelectedIndex != -1)
                 {
                     textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
-                    Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
+                    Search();
                     Close();
                 }
         }
@@ -119,7 +137,7 @@ namespace LemonApp
             if (listBox.SelectedIndex != -1)
             {
                 textBox1.Text = (listBox.SelectedItem as ListBoxItem).Content.ToString();
-                Process.Start(Uri.EscapeUriString(uri.Replace("%2a", textBox1.Text)).Replace("#", "%23"));
+                Search();
                 Close();
             }
         }
