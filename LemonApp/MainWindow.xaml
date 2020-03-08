@@ -8,7 +8,8 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
         x:Class="LemonApp.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MinWidth="930" MinHeight="620" Background="{x:Null}">
+        Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MinWidth="930" MinHeight="620" Background="{x:Null}"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <Window.Triggers>
         <EventTrigger RoutedEvent="MouseEnter" SourceName="LyricPage_AboutGD">
             <BeginStoryboard Storyboard="{DynamicResource LP_AboutGD_MouseEnter}"/>
@@ -1892,6 +1893,61 @@
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="10,5,0,0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
+        <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="ClickMode" Value="Press"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="templateRoot" Background="#14000000" BorderBrush="{x:Null}" SnapsToDevicePixels="true" CornerRadius="10,10,10,10">
+                            <Border x:Name="splitBorder" BorderThickness="1" BorderBrush="Transparent" HorizontalAlignment="Right" Margin="0,0,5,0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+                                <Path x:Name="arrow" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" Fill="{DynamicResource PlayDLPage_Font_Low}" HorizontalAlignment="Center" Margin="0,3,0,0" VerticalAlignment="Center"/>
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="templateRoot" Value="#21000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
+            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                </Grid.ColumnDefinitions>
+                <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
+                    <Border x:Name="dropDownBorder" Background="{DynamicResource PlayDLPage_Bg}" BorderThickness="1" BorderBrush="{DynamicResource PlayDLPage_Border}" CornerRadius="{DynamicResource AppCornerRadius}">
+                        <ScrollViewer x:Name="DropDownScrollViewer" Margin="5,5,5,5" Foreground="{DynamicResource PlayDLPage_Font_Most}">
+                            <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
+                                <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                    <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                </Canvas>
+                                <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+                <ToggleButton x:Name="toggleButton" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true"/>
+                <Trigger Property="HasItems" Value="false"/>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsGrouping" Value="true"/>
+                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="1" GlassFrameThickness="1"/>
@@ -1975,9 +2031,9 @@
                         </Grid>
                         <Grid x:Name="SettingsPage" Visibility="Collapsed">
                             <LemonApp:MyScrollView x:Name="TemplateSv"  Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <WrapPanel x:Name="wrapPanel" VerticalAlignment="Top" Orientation="Vertical" Margin="0,0,15,0">
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="设置" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,0,0,0" FontWeight="Bold"/>
-                                    <Grid VerticalAlignment="Top" Height="172" Margin="20,10,0,0">
+                                <StackPanel Margin="0,0,15,0" Orientation="Vertical" VerticalAlignment="Top" >
+                                    <TextBlock TextWrapping="Wrap" Text="设置" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
+                                    <Grid Margin="0,10,0,0" Height="150">
                                         <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Click="DownloadWithLyric_Click" Style="{DynamicResource CheckBoxStyle1}"/>
                                         <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="181" Height="23" FontWeight="Bold"/>
@@ -1993,7 +2049,19 @@
                                         <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
 
                                     </Grid>
-                                    <Grid VerticalAlignment="Top" Margin="20,0,0,0">
+                                    <Grid Height="100" Margin="0,10,0,0">
+                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
+                                        <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0">
+                                            <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
+                                            <LemonApp:HotKeyChooser Height="25" desc="便捷搜索:" key="S" Margin="0,0,20,10" KeyId="125"/>
+                                            <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="🐱‍💻Debug:" KeyId="129"/>
+                                            <LemonApp:HotKeyChooser Height="25" desc="播放/暂停:" key="Space" Margin="0,0,20,10" KeyId="126"/>
+                                            <LemonApp:HotKeyChooser Height="25" desc="上一曲:" key="Up" Margin="0,0,20,10" KeyId="127"/>
+                                            <LemonApp:HotKeyChooser Height="25" desc="下一曲:" key="Down" Margin="0,0,20,10" KeyId="128"/>
+                                        </WrapPanel>
+                                        <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Bottom" TName="应用" Width="90" pData="{x:Null}" Margin="0,0,20,10" MouseDown="ApplyHotKey_MouseDown"/>
+                                    </Grid>
+                                    <Grid Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
                                         <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle1}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或到开源仓库中提交issues; 拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
                                         <LemonApp:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
@@ -2002,11 +2070,13 @@
                                         <TextBlock x:Name="va" Margin="0,214,95,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF7C7C7C" TextAlignment="Center" HorizontalAlignment="Right" Width="105" Height="18"/>
                                         <LemonApp:MDButton x:Name="UserSend_fj" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Margin="80,0,0,0" TName="添加附件" pData="{x:Null}" cr="12,12,12,12" AllowDrop="True" Drop="UserSend_fj_Drag" MouseDown="UserSend_fj_MouseDown"/>
                                     </Grid>
-                                    <Grid Height="121" VerticalAlignment="Top" Margin="20,0,0,0" Width="{Binding ActualWidth, ElementName=wrapPanel, Mode=OneWay}">
+                                    <Grid Height="121" Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:"/><TextBlock x:Name="SettingsPage_URLink" Text="https://github.com/TwilightLemon/Lemon-App" Foreground="#FF007ACC" TextDecorations="Underline" MouseDown="SettingsPage_URLink_MouseDown" Cursor="Hand"/><Run Text="   请遵循 GPL v3.0 以及 Anti 996 开源协议"/><LineBreak/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
+                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:"/><InlineUIContainer>
+                                                <TextBlock x:Name="SettingsPage_URLink" Text="https://github.com/TwilightLemon/Lemon-App" Foreground="#FF007ACC" TextDecorations="Underline" MouseDown="SettingsPage_URLink_MouseDown" Cursor="Hand"/>
+                                            </InlineUIContainer><Run Text="   请遵循 GPL v3.0 以及 Anti 996 开源协议"/><LineBreak/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
                                     </Grid>
-                                </WrapPanel>
+                                </StackPanel>
                             </LemonApp:MyScrollView>
                         </Grid>
                         <Grid x:Name="SkinPage" IsVisibleChanged="SkinPage_IsVisibleChanged" Visibility="Collapsed">

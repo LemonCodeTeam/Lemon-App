@@ -166,8 +166,8 @@ namespace LemonApp
         {
             if (He.LastItem != null)
             {
-                mss.Opacity = 0.6;
-                ser.Opacity = 0.8;
+                He.LastItem.mss.Opacity = 0.6;
+                He.LastItem.ser.Opacity = 0.8;
                 He.LastItem.bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
                 He.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");

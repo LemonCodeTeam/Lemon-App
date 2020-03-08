@@ -1,11 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace LemonLib
 {
     public class InfoHelper
     {
+        public class HotKeyInfo {
+            public string desc { get; set; }
+            public int KeyID { get; set; }
+            public int MainKeyIndex { get; set; }
+            public int MainKey { get; set; }
+            public Key tKey { get; set; }
+        }
         public enum NowPage
         {
             Search, Top, SingerItem, GDItem

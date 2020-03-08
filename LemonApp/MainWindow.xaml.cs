@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -638,6 +639,16 @@ namespace LemonApp
             DownloadWithLyric.IsChecked = Settings.USettings.DownloadWithLyric;
             DownloadNameTb.Text = Settings.USettings.DownloadName;
 
+            if (Settings.USettings.HotKeys.Count>=0) {
+                for (int i = 0; i < Settings.USettings.HotKeys.Count; i++) {
+                    HotKeyChooser hk = KeysWrap.Children[i] as HotKeyChooser;
+                    HotKeyInfo hi = Settings.USettings.HotKeys[i];
+                    hk.desc = hi.desc;
+                    hk.index = hi.MainKeyIndex;
+                    hk.KeyId = hi.KeyID;
+                    hk.key = hi.tKey;
+                }
+            }
         }
         private void SettingsPage_URLink_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -3124,26 +3135,40 @@ namespace LemonApp
         #endregion
         #endregion
         #region 快捷键
+        private IntPtr UnHotKey()
+        {
+            IntPtr hd = new WindowInteropHelper(this).Handle;
+            UnregisterHotKey(hd, 124);
+            UnregisterHotKey(hd, 125);
+            UnregisterHotKey(hd, 126);
+            UnregisterHotKey(hd, 127);
+            UnregisterHotKey(hd, 128);
+            UnregisterHotKey(hd, 129);
+            return hd;
+        }
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private void LoadHotDog()
         {
             IntPtr handle = new WindowInteropHelper(this).Handle;
-            RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
-            RegisterHotKey(handle, 125, 1, (uint)System.Windows.Forms.Keys.S);
-            RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
-            RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
-            RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
-            RegisterHotKey(handle, 129, 1, (uint)System.Windows.Forms.Keys.C);
-            InstallHotKeyHook(this);
+            if (Settings.USettings.HotKeys.Count == 0)
+            {
+                RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
+                RegisterHotKey(handle, 125, 1, (uint)System.Windows.Forms.Keys.S);
+                RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
+                RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
+                RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
+                RegisterHotKey(handle, 129, 1, (uint)System.Windows.Forms.Keys.C);
+                InstallHotKeyHook(this);
+            }
+            else {
+                foreach (var hk in Settings.USettings.HotKeys) {
+                    RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
+                }
+                InstallHotKeyHook(this);
+            }
             Closed += (s, e) =>
             {
-                IntPtr hd = new WindowInteropHelper(this).Handle;
-                UnregisterHotKey(hd, 124);
-                UnregisterHotKey(hd, 125);
-                UnregisterHotKey(hd, 126);
-                UnregisterHotKey(hd, 127);
-                UnregisterHotKey(hd, 128);
-                UnregisterHotKey(hd, 129);
+                UnHotKey();
             };
             //notifyIcon
             notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -3177,6 +3202,14 @@ namespace LemonApp
             });
         }
 
+        /// <summary>
+        /// 注册热键 None = 0, Alt = 1, Control = 2, Shift = 4, Windows = 8
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="id"></param>
+        /// <param name="controlKey"></param>
+        /// <param name="virtualKey"></param>
+        /// <returns></returns>
         [DllImport("user32")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint controlKey, uint virtualKey);
 
@@ -3251,5 +3284,29 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+        private void ApplyHotKey_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.HotKeys.Clear();
+            var handle = UnHotKey();
+            List<string> list = new List<string>();
+            foreach (HotKeyChooser dt in KeysWrap.Children) {
+                list.Add(dt.MainKey + dt.tKey.ToString());
+            }
+            if (list.GroupBy(i => i).Where(g => g.Count() > 1).Count() > 0) {
+                Toast.Send("居然有重复的热键???");
+                return;
+            }
+            foreach (HotKeyChooser dt in KeysWrap.Children) {
+                HotKeyInfo hk = new HotKeyInfo();
+                hk.desc = dt.desc;
+                hk.KeyID = dt.KeyId;
+                hk.tKey = dt.key;
+                hk.MainKey = dt.MainKey;
+                hk.MainKeyIndex = dt.index;
+                Settings.USettings.HotKeys.Add(hk);
+                RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
+                Toast.Send("设置热键成功！");
+            }
+        }
     }
 }

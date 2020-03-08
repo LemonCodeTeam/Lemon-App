@@ -107,6 +107,10 @@ namespace LemonLib
                 string json=o["MusicGDataLike"]["ids"].ToString();
                 USettings.MusicGDataLike.ids=JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
             }
+            if (data.Contains("HotKeys")) {
+                string json = o["HotKeys"].ToString();
+                USettings.HotKeys = JsonConvert.DeserializeObject<List<HotKeyInfo>>(json);
+            }
         }
         public class UserSettings
         {
@@ -145,7 +149,7 @@ namespace LemonLib
             public string DownloadName = "[I].  [M] - [S]";
             public bool DownloadWithLyric = true;
             #endregion
-
+            public List<HotKeyInfo> HotKeys = new List<HotKeyInfo>();
             public MusicGLikeData MusicGDataLike = new MusicGLikeData();
         }
         #endregion
