@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -632,6 +633,33 @@ namespace LemonApp
         }
         #endregion
         #region 设置
+        private void ApplyHotKey_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.HotKeys.Clear();
+            var handle = UnHotKey();
+            List<string> list = new List<string>();
+            foreach (HotKeyChooser dt in KeysWrap.Children)
+            {
+                list.Add(dt.MainKey + dt.tKey.ToString());
+            }
+            if (list.GroupBy(i => i).Where(g => g.Count() > 1).Count() > 0)
+            {
+                Toast.Send("居然有重复的热键???");
+                return;
+            }
+            foreach (HotKeyChooser dt in KeysWrap.Children)
+            {
+                HotKeyInfo hk = new HotKeyInfo();
+                hk.desc = dt.desc;
+                hk.KeyID = dt.KeyId;
+                hk.tKey = dt.key;
+                hk.MainKey = dt.MainKey;
+                hk.MainKeyIndex = dt.index;
+                Settings.USettings.HotKeys.Add(hk);
+                RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
+                Toast.Send("设置热键成功！");
+            }
+        }
         public void LoadSettings()
         {
             CachePathTb.Text = Settings.USettings.CachePath;
@@ -1758,14 +1786,10 @@ namespace LemonApp
         private TopControl tc_now;
         private int ixTop = 1;
         private MyScrollView Datasv = null;
-        private void Datasv_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (Datasv == null)
-                Datasv = sender as MyScrollView;
-        }
         int HB = 0;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            if(Datasv==null) Datasv = (MyScrollView)DataItemsList.Template.FindName("Datasv", DataItemsList);
             double offset = Datasv.ContentVerticalOffset;
             if (!DataPage_ControlMod && np != NowPage.Search)
                 if (offset > 0)
@@ -2068,7 +2092,8 @@ namespace LemonApp
                 LikeBtnDown();
             else LikeBtnUp();
 
-            var im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl);
+            Console.WriteLine(data.ImageUrl);
+            BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
             MusicImage.Background = new ImageBrush(im);
             var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
             var imb = im.ToBitmap();
@@ -3284,29 +3309,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-        private void ApplyHotKey_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Settings.USettings.HotKeys.Clear();
-            var handle = UnHotKey();
-            List<string> list = new List<string>();
-            foreach (HotKeyChooser dt in KeysWrap.Children) {
-                list.Add(dt.MainKey + dt.tKey.ToString());
-            }
-            if (list.GroupBy(i => i).Where(g => g.Count() > 1).Count() > 0) {
-                Toast.Send("居然有重复的热键???");
-                return;
-            }
-            foreach (HotKeyChooser dt in KeysWrap.Children) {
-                HotKeyInfo hk = new HotKeyInfo();
-                hk.desc = dt.desc;
-                hk.KeyID = dt.KeyId;
-                hk.tKey = dt.key;
-                hk.MainKey = dt.MainKey;
-                hk.MainKeyIndex = dt.index;
-                Settings.USettings.HotKeys.Add(hk);
-                RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
-                Toast.Send("设置热键成功！");
-            }
-        }
     }
 }

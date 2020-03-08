@@ -1234,7 +1234,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBox}">
                         <Themes:ClassicBorderDecorator x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderStyle="Sunken" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <LemonApp:MyScrollView x:Name="Datasv"  Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged"  Focusable="False" Padding="{TemplateBinding Padding}" Loaded="Datasv_Loaded" >
+                            <LemonApp:MyScrollView x:Name="Datasv"  Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged"  Focusable="False" Padding="{TemplateBinding Padding}" >
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </LemonApp:MyScrollView>
                         </Themes:ClassicBorderDecorator>
