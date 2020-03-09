@@ -140,7 +140,7 @@ namespace LemonApp
                 await Settings.LoadUSettings(Settings.LSettings.qq);
             else
             {
-                string qq = "Public";
+                string qq = "0";
                 await Settings.LoadUSettings(qq);
                 Settings.USettings.LemonAreeunIts = qq;
                 Settings.SaveSettings();
@@ -327,7 +327,7 @@ namespace LemonApp
                 Console.WriteLine(s);
             };
             //-------[登录]用户的头像、名称等配置加载
-            if (Settings.USettings.UserName != string.Empty)
+            if (Settings.USettings.LemonAreeunIts != "0")
             {
                 UserName.Text = Settings.USettings.UserName;
                 if (System.IO.File.Exists(Settings.USettings.UserImage))
@@ -474,15 +474,20 @@ namespace LemonApp
             //---------------MVPlayer Timer
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
-            //----------------同步"我喜欢"歌单ids
-            Thread tx = new Thread(async ()=> {
-                Dictionary<string, string> dt = new Dictionary<string, string>();
-                MusicLib.GetGDAsync(MusicLib.MusicLikeGDid??await ml.GetMusicLikeGDid(),new Action<string,string>((mid,id) => {
-                    dt.Add(mid,id);
-                }));
-                Settings.USettings.MusicGDataLike.ids = dt;
-            });
-            tx.Start();
+            //---------------若登陆之后-同步"我喜欢"歌单ids----------
+            if (Settings.USettings.LemonAreeunIts != "0")
+            {
+                Thread tx = new Thread(async () =>
+                {
+                    Dictionary<string, string> dt = new Dictionary<string, string>();
+                    MusicLib.GetGDAsync(MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid(), new Action<string, string>((mid, id) =>
+                    {
+                        dt.Add(mid, id);
+                    }));
+                    Settings.USettings.MusicGDataLike.ids = dt;
+                });
+                tx.Start();
+            }
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -1347,6 +1352,11 @@ namespace LemonApp
         }
         public async void GetSinger(SingerItem si, bool NeedSavePage=true)
         {
+            if (Settings.USettings.LemonAreeunIts == "0")
+            {
+                Toast.Send("请先登录");
+                return;
+            }
             np = NowPage.SingerItem;
             singer_now = si.data;
             OpenLoading();
@@ -1437,8 +1447,12 @@ namespace LemonApp
 
         public async void GetRadio(object sender, MouseEventArgs e)
         {
-            OpenLoading();
             var dt = sender as RadioItem;
+            if (dt.data.Name == "个性电台" && Settings.USettings.LemonAreeunIts == "0") {
+                Toast.Send("请先登录");
+                return;
+            }
+            OpenLoading();
             RadioID = dt.data.ID;
             var data = await MusicLib.GetRadioMusicAsync(dt.data.ID);
             DLMode = false;
@@ -1522,7 +1536,7 @@ namespace LemonApp
         }
         private async void LoadILikeItems(bool NeedSave = true)
         {
-            if (Settings.USettings.LemonAreeunIts == "Public")
+            if (Settings.USettings.LemonAreeunIts == "0")
                 NSPage(new MeumInfo(ILikeBtn, NonePage, ILikeCom), NeedSave, false);
             else
             {
@@ -2957,7 +2971,7 @@ namespace LemonApp
         private List<string> GLikeData_Now = new List<string>();
         private async void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Settings.USettings.LemonAreeunIts == "Public")
+            if (Settings.USettings.LemonAreeunIts == "0")
                 NSPage(new MeumInfo(MYGDBtn, NonePage, MYGDCom));
             else
             {

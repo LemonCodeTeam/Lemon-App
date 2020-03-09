@@ -130,6 +130,11 @@ namespace LemonApp.ContentPage
 
         private void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (Settings.USettings.LemonAreeunIts == "0")
+            {
+                Toast.Send("请先登录");
+                return;
+            }
             GetTo();
         }
     }

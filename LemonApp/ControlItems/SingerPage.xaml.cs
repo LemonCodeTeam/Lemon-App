@@ -179,6 +179,10 @@ namespace LemonApp
 
         private async void FanBt_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (Settings.USettings.LemonAreeunIts == "0") {
+                Toast.Send("请先登录");
+                return;
+            }
             if (Data.HasGJ)
             {
                 Data.HasGJ = false;
