@@ -17,6 +17,11 @@ namespace LemonLib
             BassNet.Registration("lemon.app@qq.com", "2X52325160022");
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, win);
         }
+        public void SetVOL(float value)
+        {
+            if (stream != -1024)
+                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
+        }
         public void Load(string file)
         {
             stream = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_SAMPLE_FLOAT);

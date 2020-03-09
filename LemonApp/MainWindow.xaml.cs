@@ -2190,6 +2190,10 @@ namespace LemonApp
         //    catch { }
         //}
 
+        private void AudioSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            mp?.SetVOL((float)AudioSlider.Value / 100);
+        }
         private void TaskBarBtn_Play_Click(object sender, EventArgs e)
         {
             PlayBtn_MouseDown(null, null);
@@ -2386,6 +2390,7 @@ namespace LemonApp
             path4.SetResourceReference(Path.FillProperty, "ThemeColor");
             path5.SetResourceReference(Path.FillProperty, "ThemeColor");
             path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+            path9.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             path10.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             App.BaseApp.SetColor("ButtonColorBrush", LastButtonColor);
             if (!Settings.USettings.DoesOpenDeskLyric) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
@@ -2411,6 +2416,7 @@ namespace LemonApp
             path4.Fill = new SolidColorBrush(Colors.White);
             path5.Fill = new SolidColorBrush(Colors.White);
             path6.Fill = new SolidColorBrush(Colors.White);
+            path9.Fill = new SolidColorBrush(Colors.White);
             path10.Fill = new SolidColorBrush(Colors.White);
             if (!Settings.USettings.DoesOpenDeskLyric) path7.Fill = new SolidColorBrush(Colors.White);
             if(!(bool)likeBtn_path.Tag) likeBtn_path.Fill = new SolidColorBrush(Colors.White);
