@@ -2073,13 +2073,6 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <Storyboard x:Key="OpenAudioControlAni">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="MusicControl" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,12,200,12">
-                    <EasingThicknessKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseOut"/>
-                    </EasingThicknessKeyFrame.EasingFunction>
-                </EasingThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AudioControl" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
@@ -2087,9 +2080,16 @@
                 <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="AudioControl" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,-5,-83,-5"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="-200,-5,-25,-5">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="AudioControl" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="200">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="MusicControl" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,12,165,12">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -2097,13 +2097,13 @@
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseAudioControlAni">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="AudioControl" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="-34,-5,-25,-5">
-                    <EasingThicknessKeyFrame.EasingFunction>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="AudioControl" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="35">
+                    <EasingDoubleKeyFrame.EasingFunction>
                         <CubicEase EasingMode="EaseOut"/>
-                    </EasingThicknessKeyFrame.EasingFunction>
-                </EasingThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="MusicControl" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,12,0,12">
                     <EasingThicknessKeyFrame.EasingFunction>
@@ -2663,6 +2663,9 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                <Border x:Name="AudioControl" Margin="0,0,175,0" Background="#14000000" CornerRadius="13,13,13,13" Visibility="Collapsed" HorizontalAlignment="Right" Width="0" Grid.Column="1" Grid.ColumnSpan="2" Height="25" VerticalAlignment="Center" Opacity="0" >
+                    <Slider x:Name="AudioSlider" Template="{DynamicResource SliderTemplate1}" VerticalAlignment="Center" Margin="10,0,35,0" Value="100" ValueChanged="AudioSlider_ValueChanged" Maximum="100"/>
+                </Border>
                 <Grid x:Name="LeftControl">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -2698,29 +2701,26 @@
                     </Grid>
                     <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,0,0,10" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="0" VerticalAlignment="Bottom"/>
                     <WrapPanel Margin="0,0,0,24" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                        <!--Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
+                    <Border HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" MouseDown="Border_MouseDown_6" Margin="0,0,10,0">
                     <Grid>
                         <Popup x:Name="Pop_sp" Placement="Top" AllowsTransparency="True" HorizontalOffset="-27" PopupAnimation="Fade" VerticalOffset="7" LostFocus="Pop_sp_LostFocus">
                             <Grid Height="200" Width="90">
                                 <Border Background="White" CornerRadius="10" Margin="20" Effect="{DynamicResource WindowDrop}">
                                     <Grid>
-                                        <Slider x:Name="MusicPlay_sp" Orientation="Vertical" Margin="18,10" HorizontalAlignment="Center" Maximum="2" Minimum="0.5" Value="1" Style="{DynamicResource SliderStyle1}" PreviewMouseUp="MusicPlay_sp_PreviewMouseUp"/>
+                                        <Slider x:Name="MusicPlay_sp" Orientation="Vertical" Margin="18,10" HorizontalAlignment="Center" Maximum="100" Minimum="-80" Value="0" Style="{DynamicResource SliderStyle1}" PreviewMouseUp="MusicPlay_sp_PreviewMouseUp"/>
                                     </Grid>
                                 </Border>
                             </Grid>
                         </Popup>
                         <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="倍速" Margin="5,0"/>
                     </Grid>
-                </Border-->
+                </Border>
                         <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Opacity="0.7"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
                     </WrapPanel>
                 </Grid>
                 <WrapPanel Grid.Column="2" Margin="20,29,20,29" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border x:Name="AudioControl" Margin="0,-5,-25,-5" Background="#14000000" CornerRadius="13,13,13,13" Visibility="Collapsed" >
-                        <Slider x:Name="AudioSlider" Template="{DynamicResource SliderTemplate1}" VerticalAlignment="Center" Margin="10,0,35,0" Value="100" ValueChanged="AudioSlider_ValueChanged" Maximum="100"/>
-                    </Border>
                     <Border x:Name="AudioBtn" HorizontalAlignment="Left" Width="15" Height="15" Background="#00000000">
-                        <Path x:Name="path9" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5" Data="M308.971 657.987l150.28 165.279a16 16 0 0 0 11.838 5.236c8.837 0 16-7.163 16-16v-600.67a16 16 0 0 0-5.236-11.839c-6.538-5.944-16.657-5.463-22.602 1.075l-150.28 165.279A112 112 0 0 1 226.105 403H177c-17.673 0-32 14.327-32 32v154.333c0 17.674 14.327 32 32 32h49.105a112 112 0 0 1 82.866 36.654zM177 701.333c-61.856 0-112-50.144-112-112V435c0-61.856 50.144-112 112-112h49.105a32 32 0 0 0 23.676-10.472l150.28-165.28c35.668-39.227 96.383-42.113 135.61-6.445a96 96 0 0 1 31.418 71.028v600.671c0 53.02-42.98 96-96 96a96 96 0 0 1-71.029-31.417l-150.28-165.28a32 32 0 0 0-23.675-10.472H177z m456.058-348.336c-18.47-12.118-23.621-36.915-11.503-55.386 12.118-18.471 36.916-23.621 55.387-11.503C752.495 335.675 799 419.908 799 512c0 92.093-46.505 176.325-122.058 225.892-18.471 12.118-43.269 6.968-55.387-11.503-12.118-18.471-6.968-43.268 11.503-55.386C686.303 636.07 719 576.848 719 512c0-64.848-32.697-124.07-85.942-159.003z m92.93-137.323c-18.07-12.71-22.415-37.66-9.706-55.73s37.66-22.415 55.73-9.706C888.942 232.478 960 366.298 960 512s-71.058 279.522-187.988 361.762c-18.07 12.71-43.021 8.364-55.73-9.706-12.709-18.07-8.363-43.02 9.706-55.73C821.838 740.912 880 631.38 880 512c0-119.38-58.161-228.912-154.012-296.326z" Margin="-1,-1,-1,-1"/>
+                        <Path x:Name="path9" Stretch="Fill" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5" Data="M308.971 657.987l150.28 165.279a16 16 0 0 0 11.838 5.236c8.837 0 16-7.163 16-16v-600.67a16 16 0 0 0-5.236-11.839c-6.538-5.944-16.657-5.463-22.602 1.075l-150.28 165.279A112 112 0 0 1 226.105 403H177c-17.673 0-32 14.327-32 32v154.333c0 17.674 14.327 32 32 32h49.105a112 112 0 0 1 82.866 36.654zM177 701.333c-61.856 0-112-50.144-112-112V435c0-61.856 50.144-112 112-112h49.105a32 32 0 0 0 23.676-10.472l150.28-165.28c35.668-39.227 96.383-42.113 135.61-6.445a96 96 0 0 1 31.418 71.028v600.671c0 53.02-42.98 96-96 96a96 96 0 0 1-71.029-31.417l-150.28-165.28a32 32 0 0 0-23.675-10.472H177z m456.058-348.336c-18.47-12.118-23.621-36.915-11.503-55.386 12.118-18.471 36.916-23.621 55.387-11.503C752.495 335.675 799 419.908 799 512c0 92.093-46.505 176.325-122.058 225.892-18.471 12.118-43.269 6.968-55.387-11.503-12.118-18.471-6.968-43.268 11.503-55.386C686.303 636.07 719 576.848 719 512c0-64.848-32.697-124.07-85.942-159.003z m92.93-137.323c-18.07-12.71-22.415-37.66-9.706-55.73s37.66-22.415 55.73-9.706C888.942 232.478 960 366.298 960 512s-71.058 279.522-187.988 361.762c-18.07 12.71-43.021 8.364-55.73-9.706-12.709-18.07-8.363-43.02 9.706-55.73C821.838 740.912 880 631.38 880 512c0-119.38-58.161-228.912-154.012-296.326z" Height="15" Margin="-1,0,-1,0"/>
                     </Border>
                     <Border x:Name="GcBtn" HorizontalAlignment="Right" Width="15" Height="15" Background="#00000000" MouseDown="GcBtn_MouseDown" Margin="18,0,0,0">
                         <Path x:Name="path7" Data="M267.31290994,336.0572459L267.31290994,816.61622664C299.13858517,786.97741836,333.16080231,752.98423003,370.45364197,714.57860402L391.29660469,799.05356336C330.94490654,861.59212748,266.21947743,917.55073983,198.19439504,965.82629201L167.48150614,895.6046677C182.83795058,881.34165672,191.62412019,865.98521131,191.62412022,848.422549L191.62412022,411.76538751 32.53445177,411.76538751 32.53445177,336.0572459z M349.56229756,180.26722879L295.80022712,235.13240865C249.73089379,181.36066225,186.09889717,124.30861643,107.11045611,65.07938056L161.98531193,11.30763417C236.60002105,67.26624654,299.13858515,123.21518295,349.6010033,180.26722879z M748.92661841,1002.02569917L729.23514775,926.31755658 858.71503673,928.53345235C894.9144439,928.53345235,913.55118682,908.77424618,913.55118682,869.27518767L913.55118682,121.02831698 389.09038585,121.02831698 389.09038585,46.41360787 991.46554823,46.41360787 991.46554823,892.30501636C991.46554823,964.73285951,951.98584259,1002.02569917,875.18426654,1002.02569917z M837.80433947,250.47917715L837.80433947,326.18731877 414.33610933,326.18731877 414.33610933,250.47917715z M793.94122401,445.77792871L793.94122401,785.88398489 453.83516879,785.88398489 453.83516879,445.77792871z M719.35554467,514.90611955L530.66577271,514.90611955 530.66577271,716.76546999 719.35554467,716.76546999z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>

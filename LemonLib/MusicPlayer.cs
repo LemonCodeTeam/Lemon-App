@@ -4,12 +4,20 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Un4seen.Bass;
+using Un4seen.Bass.AddOn.Fx;
 
 namespace LemonLib
 {
     public class MusicPlayer
     {
+        /// <summary>
+        /// 播放流
+        /// </summary>
         private int stream = -1024;
+        /// <summary>
+        /// 解码流
+        /// </summary>
+        private int decode = -1024;
         private IntPtr wind;
         public MusicPlayer(IntPtr win)
         {
@@ -22,9 +30,26 @@ namespace LemonLib
             if (stream != -1024)
                 Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
         }
+        public float GetVOL() {
+            float value=0;
+            Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL,ref value);
+            return value;
+        }
+        public void SetSpeed(float value)
+        {
+            if (stream != -1024)
+                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, value);
+        }
+        public float GetSpeed()
+        {
+            float value = 0;
+            Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, ref value);
+            return value;
+        }
         public void Load(string file)
         {
-            stream = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_SAMPLE_FLOAT);
+            decode = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_STREAM_DECODE);
+            stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_FX_FREESOURCE );
         }
         public List<BASSDL> BassdlList = new List<BASSDL>();
         IntPtr ip = IntPtr.Zero;
@@ -40,15 +65,17 @@ namespace LemonLib
                 Bassdl.downloadfailed += (e) => {
 
                 };
-                stream = Bass.BASS_StreamCreateURL(url + "\r\n"
+                decode = Bass.BASS_StreamCreateURL(url + "\r\n"
                                                + "Host: musichy.tc.qq.com\r\n"
                                                + "Accept-Encoding: identity;q=1, *;q=0\r\n"
                                                + "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40\r\n"
                                                + "Accept: */*\r\n"
                                                + "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6\r\n"
                                                + "Cookie:" + Settings.USettings.Cookie
-         , 0, BASSFlag.BASS_SAMPLE_FLOAT, Bassdl._myDownloadProc, ip);
-                Bassdl.stream = stream;
+         , 0, BASSFlag.BASS_STREAM_DECODE, Bassdl._myDownloadProc, ip);
+                Bassdl.stream = decode;
+
+                stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_FX_FREESOURCE);
             }
             catch { }
         }

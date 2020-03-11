@@ -488,6 +488,8 @@ namespace LemonApp
                 });
                 tx.Start();
             }
+            //-------------------
+            AudioSlider.Value = mp.GetVOL() * 100;
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -2159,36 +2161,40 @@ namespace LemonApp
         }
         #endregion
         #region PlayControl
-        //private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
-        //{
-        //    Pop_sp.IsOpen = false;
-        //}
-        //private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (e.ClickCount == 2)
-        //    {
-        //        if (MusicPlay_tb.Text == "1.25x")
-        //        {
-        //            MusicLib.mp.SpeedRatio = 1d;
-        //            MusicPlay_tb.Text = "倍速";
-        //        }
-        //        else
-        //        {
-        //            MusicLib.mp.SpeedRatio = 1.25d;
-        //            MusicPlay_tb.Text = "1.25x";
-        //        }
-        //    }
-        //    else Pop_sp.IsOpen = !Pop_sp.IsOpen;
-        //}
-        //private void MusicPlay_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    try
-        //    {
-        //        MusicLib.mp.SpeedRatio = MusicPlay_sp.Value;
-        //        MusicPlay_tb.Text = MusicPlay_sp.Value.ToString("0.00") + "x";
-        //    }
-        //    catch { }
-        //}
+        private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Pop_sp.IsOpen = false;
+        }
+        private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                if (MusicPlay_tb.Text == "1.25x")
+                {
+                    //回到初始速度
+                    mp.SetSpeed(0);
+                    MusicPlay_tb.Text = "倍速";
+                }
+                else
+                {
+                    //1.25倍速
+                    mp.SetSpeed(25);
+                    MusicPlay_tb.Text = "1.25x";
+                }
+            }
+            else Pop_sp.IsOpen = !Pop_sp.IsOpen;
+            MusicPlay_sp.Value = mp.GetSpeed();
+            Console.WriteLine(mp.GetSpeed());
+        }
+        private void MusicPlay_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                mp.SetSpeed((float)MusicPlay_sp.Value);
+                MusicPlay_tb.Text = (MusicPlay_sp.Value/10).ToString("0.00") + "x";
+            }
+            catch { }
+        }
 
         private void AudioSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
