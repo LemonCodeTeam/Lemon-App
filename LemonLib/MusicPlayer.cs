@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Fx;
 
@@ -28,17 +27,33 @@ namespace LemonLib
         public void SetVOL(float value)
         {
             if (stream != -1024)
+            {
                 Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
+                _Vol = value;
+            }
         }
         public float GetVOL() {
             float value=0;
             Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL,ref value);
             return value;
         }
+
+        /// <summary>
+        /// VOL 0~1
+        /// </summary>
+        private float _Vol = 1;
+        /// <summary>
+        /// Speed
+        /// </summary>
+        private float _Speed = 0;
+
         public void SetSpeed(float value)
         {
             if (stream != -1024)
+            {
                 Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, value);
+                _Speed = value;
+            }
         }
         public float GetSpeed()
         {
@@ -50,6 +65,8 @@ namespace LemonLib
         {
             decode = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_STREAM_DECODE);
             stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_FX_FREESOURCE );
+            Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, _Vol);
+            Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
         }
         public List<BASSDL> BassdlList = new List<BASSDL>();
         IntPtr ip = IntPtr.Zero;
@@ -74,8 +91,10 @@ namespace LemonLib
                                                + "Cookie:" + Settings.USettings.Cookie
          , 0, BASSFlag.BASS_STREAM_DECODE, Bassdl._myDownloadProc, ip);
                 Bassdl.stream = decode;
-
                 stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_FX_FREESOURCE);
+
+                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, _Vol);
+                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
             }
             catch { }
         }
