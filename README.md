@@ -15,6 +15,7 @@ Lemon App 是一款开源（遵循GPL以及Anti 996协议）的基于QQ音乐的
 ![暗色亚克力主题](https://raw.githubusercontent.com/TwilightLemon/Data/master/a4.jpg)
 ![排行榜](https://raw.githubusercontent.com/TwilightLemon/Data/master/a6.jpg)
 ![歌词](https://raw.githubusercontent.com/TwilightLemon/Data/master/a5.jpg)
+![歌手](https://raw.githubusercontent.com/TwilightLemon/Data/master/a7.jpg)
 
 ### 运行环境
 win7~win10 .Net Core 3.1框架
