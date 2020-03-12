@@ -9,12 +9,13 @@ Lemon App 是一款开源（遵循GPL以及Anti 996协议）的基于QQ音乐的
 [![Download](https://img.shields.io/badge/Download-Lemon%20App-%23FF4D5B.svg?style=flat-squar)](https://files.cnblogs.com/files/TwilightLemon/win-release.zip)
  
 ### UI界面
-![列表](https://raw.githubusercontent.com/TwilightLemon/Data/master/p1.jpg)
-![排行榜](https://raw.githubusercontent.com/TwilightLemon/Data/master/p2.jpg)
-![主题](https://raw.githubusercontent.com/TwilightLemon/Data/master/p3.jpg)
-![歌单](https://raw.githubusercontent.com/TwilightLemon/Data/master/p4.jpg)
-![主题](https://raw.githubusercontent.com/TwilightLemon/Data/master/p5.jpg)
-![播放](https://raw.githubusercontent.com/TwilightLemon/Data/master/p6.jpg)
+![主页](https://raw.githubusercontent.com/TwilightLemon/Data/master/a1.jpg)
+![歌单](https://raw.githubusercontent.com/TwilightLemon/Data/master/a2.jpg)
+![列表](https://raw.githubusercontent.com/TwilightLemon/Data/master/a3.jpg)
+![暗色亚克力主题](https://raw.githubusercontent.com/TwilightLemon/Data/master/a4.jpg)
+![排行榜](https://raw.githubusercontent.com/TwilightLemon/Data/master/a6.jpg)
+![歌词](https://raw.githubusercontent.com/TwilightLemon/Data/master/a5.jpg)
+![歌手](https://raw.githubusercontent.com/TwilightLemon/Data/master/a7.jpg)
 
 ### 运行环境
 win7~win10 .Net Core 3.1框架
