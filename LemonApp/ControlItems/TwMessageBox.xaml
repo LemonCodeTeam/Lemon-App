@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:LemonApp"
         xmlns:LemonApp="clr-namespace:LemonApp" x:Class="LemonApp.TwMessageBox"
         mc:Ignorable="d"
-        Title="TwMessageBox" Height="160" Width="300" ResizeMode="NoResize" MouseLeftButtonDown="Window_MouseLeftButtonDown" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterOwner" Background="{x:Null}" Loaded="Window_Loaded">
+        Title="TwMessageBox" Height="160" Width="300" ResizeMode="NoResize" MouseLeftButtonDown="Window_MouseLeftButtonDown" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterOwner" Background="#FFFBFBFB" Loaded="Window_Loaded">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" CaptionHeight="1" ResizeBorderThickness="0,1,0,0"/>
     </WindowChrome.WindowChrome>
-    <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FF31C27C" Background="Transparent">
+    <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFF0F0F0" Background="Transparent">
         <Grid>
             <TextBlock x:Name="title" Margin="85,35,10,55" TextWrapping="Wrap" Text="确定要删除这首歌吗？" Foreground="#FF4B4B4B"/>
             <Path Margin="20,30,0,0" Stretch="Fill" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50" Data="M512,32C246.912,32 32,246.912 32,512 32,777.088 246.912,992 512,992 777.088,992 992,777.088 992,512 992,246.912 777.088,32 512,32z M512,928C282.24,928 96,741.76 96,512 96,282.24 282.24,96 512,96 741.76,96 928,282.24 928,512 928,741.76 741.76,928 512,928z M512 384a32 32 0 0 0-32 32v352a32 32 0 0 0 64 0V416a32 32 0 0 0-32-32z M512 272m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" Fill="#FFFFC937"/>

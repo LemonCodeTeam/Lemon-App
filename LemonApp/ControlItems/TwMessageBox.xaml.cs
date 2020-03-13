@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -39,30 +40,36 @@ namespace LemonApp
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await Task.Delay(100);
-            if (App.BaseApp.ThemeColor == 0)
+            var osVersion = Environment.OSVersion.Version;
+            var windows10_1809 = new Version(10, 0, 17763);
+            if (osVersion >= windows10_1809)
             {
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
-                title.Foreground = new SolidColorBrush(Color.FromRgb(75, 75, 75));
-                candle.Theme = 0;
-                WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
+                await Task.Delay(100);
+                Background = null;
+                if (App.BaseApp.ThemeColor == 0)
                 {
-                    Background = new SolidColorBrush(c);
-                });
-                wac.Color = Color.FromArgb(200, 255, 255, 255);
-                wac.IsEnabled = true;
-            }
-            else
-            {
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
-                title.Foreground = new SolidColorBrush(Color.FromRgb(234, 234, 234));
-                candle.Theme = 1;
-                WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
+                    WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
+                    title.Foreground = new SolidColorBrush(Color.FromRgb(75, 75, 75));
+                    candle.Theme = 0;
+                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
+                    {
+                        Background = new SolidColorBrush(c);
+                    });
+                    wac.Color = Color.FromArgb(200, 255, 255, 255);
+                    wac.IsEnabled = true;
+                }
+                else
                 {
-                    Background = new SolidColorBrush(c);
-                });
-                wac.Color = Color.FromArgb(220, 0, 0, 0);
-                wac.IsEnabled = true;
+                    WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+                    title.Foreground = new SolidColorBrush(Color.FromRgb(234, 234, 234));
+                    candle.Theme = 1;
+                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
+                    {
+                        Background = new SolidColorBrush(c);
+                    });
+                    wac.Color = Color.FromArgb(220, 0, 0, 0);
+                    wac.IsEnabled = true;
+                }
             }
         }
     }

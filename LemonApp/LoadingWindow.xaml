@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LemonApp"
         mc:Ignorable="d"
-        Title="LoadingWindow" Height="100" Width="180" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True" ShowInTaskbar="False" MouseDown="window_MouseDown">
+        Title="LoadingWindow" Height="100" Width="180" Background="{x:Null}" ShowInTaskbar="False" MouseDown="window_MouseDown" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="-1" />
+    </WindowChrome.WindowChrome>
     <Window.Effect>
         <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
     </Window.Effect>
