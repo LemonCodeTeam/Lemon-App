@@ -45,7 +45,7 @@ namespace LemonLib
         /// <summary>
         /// Speed
         /// </summary>
-        private float _Speed = 0;
+        private float _Speed = -1024;
 
         public void SetSpeed(float value)
         {
@@ -66,7 +66,7 @@ namespace LemonLib
             decode = Bass.BASS_StreamCreateFile(file, 0L, 0L, BASSFlag.BASS_STREAM_DECODE);
             stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_FX_FREESOURCE );
             Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, _Vol);
-            Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
+            if(_Speed!=-1024) Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
         }
         public List<BASSDL> BassdlList = new List<BASSDL>();
         IntPtr ip = IntPtr.Zero;
@@ -94,7 +94,7 @@ namespace LemonLib
                 stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_FX_FREESOURCE);
 
                 Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, _Vol);
-                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
+                if (_Speed != -1024) Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
             }
             catch { }
         }

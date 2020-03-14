@@ -12,9 +12,9 @@ namespace LemonLib
 {
     public class Settings
     {
-        private static string ReadEncode(string qq)
+        private static async Task<string> ReadEncodeAsync(string qq)
         {
-            string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(File.ReadAllText(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
+            string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(await File.ReadAllTextAsync(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
             Console.WriteLine(data);
             return data;
         }
@@ -22,26 +22,23 @@ namespace LemonLib
         public static UserSettings USettings = new UserSettings();
         public static async void SaveSettings(string id = "id")
         {
-            await Task.Run(() =>
+            try
             {
-                try
-                {
-                    if (id == "id") id = USettings.LemonAreeunIts;
-                    File.WriteAllText(USettings.CachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
-                }
-                catch { }
-            });
+                if (id == "id") id = USettings.LemonAreeunIts;
+                await File.WriteAllTextAsync(USettings.CachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
+            }
+            catch { }
         }
         public static async Task LoadUSettings(string qq)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 try
                 {
                     USettings = new UserSettings();
                     if (File.Exists(USettings.CachePath + qq + ".st"))
                     {
-                        string data = File.ReadAllText(USettings.CachePath + qq + ".st");
+                        string data =await File.ReadAllTextAsync(USettings.CachePath + qq + ".st");
                         Console.WriteLine(data);
                         XDUsettings(data);
                     }
@@ -49,7 +46,7 @@ namespace LemonLib
                 }
                 catch
                 {
-                    XDUsettings(ReadEncode(qq));
+                    XDUsettings(await ReadEncodeAsync(qq));
                     SaveSettings(qq);
                 }
             });
@@ -156,13 +153,13 @@ namespace LemonLib
 
         #region LSettings
         public static LocaSettings LSettings = new LocaSettings();
-        public static void LoadLocaSettings()
+        public static async void LoadLocaSettings()
         {
             try
             {
                 if (File.Exists(USettings.CachePath + "Data.st"))
                 {
-                    string data = File.ReadAllText(USettings.CachePath + "Data.st");
+                    string data = await File.ReadAllTextAsync(USettings.CachePath + "Data.st");
                     JObject o = JObject.Parse(data);
                     LSettings.qq = o["qq"].ToString();
                 }
@@ -170,15 +167,15 @@ namespace LemonLib
             }
             catch
             {
-                string data = ReadEncode("Data");
+                string data =await ReadEncodeAsync("Data");
                 JObject o = JObject.Parse(data);
                 LSettings.qq = o["qq"].ToString();
                 SaveLocaSettings();
             }
         }
-        public static void SaveLocaSettings()
+        public async static void SaveLocaSettings()
         {
-            File.WriteAllText(USettings.CachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
+            await File.WriteAllTextAsync(USettings.CachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
         }
         public class LocaSettings
         {
@@ -188,13 +185,13 @@ namespace LemonLib
 
         #region WINDOW_HANDLE
         public static HANDLE Handle = new HANDLE();
-        public static void SaveHandle()
+        public async static void SaveHandle()
         {
-            File.WriteAllText(USettings.CachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
+             await File.WriteAllTextAsync(USettings.CachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
         }
-        public static HANDLE ReadHandle()
+        public static async Task<HANDLE> ReadHandleAsync()
         {
-            JObject o = JObject.Parse(File.ReadAllText(USettings.CachePath + "HANDLE.st"));
+            JObject o = JObject.Parse(await File.ReadAllTextAsync(USettings.CachePath + "HANDLE.st"));
             Handle.ProcessId = int.Parse(o["ProcessId"].ToString());
             Handle.WINDOW_HANDLE = int.Parse(o["WINDOW_HANDLE"].ToString());
             return Handle;

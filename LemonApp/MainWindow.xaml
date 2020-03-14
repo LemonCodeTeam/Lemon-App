@@ -8,8 +8,9 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="window" 
         x:Class="LemonApp.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged" MinWidth="930" MinHeight="620" Background="{x:Null}"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+        Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen"
+    MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged"
+    MinWidth="930" MinHeight="620" Background="{x:Null}">
     <Window.Triggers>
         <EventTrigger RoutedEvent="MouseEnter" SourceName="LyricPage_AboutGD">
             <BeginStoryboard Storyboard="{DynamicResource LP_AboutGD_MouseEnter}"/>
