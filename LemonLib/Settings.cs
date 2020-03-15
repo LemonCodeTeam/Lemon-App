@@ -108,6 +108,13 @@ namespace LemonLib
                 string json = o["HotKeys"].ToString();
                 USettings.HotKeys = JsonConvert.DeserializeObject<List<HotKeyInfo>>(json);
             }
+            if (data.Contains("MusicGDataPlayList"))
+            {
+                string json = o["MusicGDataPlayList"].ToString();
+                USettings.MusicGDataPlayList = JsonConvert.DeserializeObject<List<Music>>(json);
+            }
+            if (data.Contains("PlayingIndex"))
+                USettings.PlayingIndex = int.Parse(o["PlayingIndex"].ToString());
         }
         public class UserSettings
         {
@@ -125,6 +132,8 @@ namespace LemonLib
             #endregion
             #region 上一次播放
             public Music Playing { get; set; } = new Music();
+            public int PlayingIndex = -1;
+            public List<Music> MusicGDataPlayList = new List<Music>();
             #endregion
             #region 主题配置
             //启用圆的MusicImage?

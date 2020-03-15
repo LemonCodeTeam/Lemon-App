@@ -134,7 +134,7 @@ namespace LemonApp
             {
                 Page.Background = new SolidColorBrush(c);
             });
-            //--------登录------
+            //--------读取登录数据------
             Settings.LoadLocaSettings();
             if (Settings.LSettings.qq != "")
                 await Settings.LoadUSettings(Settings.LSettings.qq);
@@ -321,7 +321,6 @@ namespace LemonApp
         private Toast lyricTa = null;
         private void LoadMusicData()
         {
-            LoadSettings();
             MainClass.DebugCallBack = (s) =>
             {
                 Console.WriteLine(s);
@@ -386,8 +385,27 @@ namespace LemonApp
                 lyricTa = new Toast("", true);
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
-            //---------加载上一次播放
-            if (Settings.USettings.Playing.MusicName != "")
+            //---------加载上一次播放-------与播放列表
+            //如果已经保存过播放列表
+            if (Settings.USettings.PlayingIndex != -1)
+            {
+                np = NowPage.GDItem;
+                ListBox list = new ListBox();
+                foreach (var a in Settings.USettings.MusicGDataPlayList)
+                {
+                    if (a.MusicID != "str.Null")
+                    {
+                        list.Items.Add(new DataItem(a));
+                    }
+                    else
+                    {
+                        list.Items.Add("str.Null");
+                    }
+                }
+                PushPlayMusic((DataItem)list.Items[Settings.USettings.PlayingIndex], list, false);
+            }
+            //没有的话就交给这位先生处理吧
+            else if (Settings.USettings.Playing.MusicName != "")
             {
                 MusicData = new PlayDLItem(Settings.USettings.Playing);
                 PlayMusic(Settings.USettings.Playing, false);
@@ -1123,15 +1141,20 @@ namespace LemonApp
         }
         #endregion
         #region Updata 检测更新
-        private async void Updata()
+        private void Updata()
         {
-            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
-            string v = o["version"].ToString();
-            string dt = o["description"].ToString().Replace("@32", "\n");
-            if (int.Parse(v) > int.Parse(App.EM))
-            {
-                new UpdataBox(v, dt).ShowDialog();
-            }
+            //新开个线程，不需要占用加载时
+            Thread t = new Thread(async ()=> {
+                var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
+                string v = o["version"].ToString();
+                string dt = o["description"].ToString().Replace("@32", "\n");
+                if (int.Parse(v) > int.Parse(App.EM))
+                {
+                    new UpdataBox(v, dt).ShowDialog();
+                }
+            });
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
         #endregion
         #region N/S Page 切换页面
@@ -1972,11 +1995,11 @@ namespace LemonApp
             dt.ShowDx();
             PlayMusic(dt.music);
         }
-        public void PushPlayMusic(DataItem dt, ListBox DataSource)
+        public void PushPlayMusic(DataItem dt, ListBox DataSource,bool doesplay=true)
         {
             AddPlayDL(dt, DataSource);
             dt.ShowDx();
-            PlayMusic(dt.music);
+            PlayMusic(dt.music,doesplay);
         }
         public void PlayMusic(DataItem dt)
         {
@@ -1991,12 +2014,17 @@ namespace LemonApp
             PlayDL_List.Items.Clear();
             foreach (Object e in source.Items)
             {
+                //如果项目中有没有解析成功的数据
+                //就用假数据填充,保证index一致
                 if (e is DataItem)
                 {
                     var ae = e as DataItem;
                     var k = new PlayDLItem(ae.music);
                     k.MouseDoubleClick += K_MouseDoubleClick;
                     PlayDL_List.Items.Add(k);
+                }
+                else {
+                    PlayDL_List.Items.Add(e);
                 }
             }
             if (index == -1)
@@ -2039,13 +2067,17 @@ namespace LemonApp
             MusicData = k;
             PlayMusic(k.Data);
             bool find = false;
-            foreach (DataItem a in DataItemsList.Items)
+            foreach (object ab in DataItemsList.Items)
             {
-                if (a.music.MusicID.Equals(k.Data.MusicID))
+                if (ab is DataItem)
                 {
-                    find = true;
-                    a.ShowDx();
-                    break;
+                    var a = ab as DataItem;
+                    if (a.music.MusicID.Equals(k.Data.MusicID))
+                    {
+                        find = true;
+                        a.ShowDx();
+                        break;
+                    }
                 }
             }
             if (!find) new DataItem(new Music()).ShowDx();
@@ -3239,6 +3271,18 @@ namespace LemonApp
                     notifyIcon.Dispose();
                 }
                 catch { }
+                Settings.USettings.MusicGDataPlayList.Clear();
+                foreach (object a in PlayDL_List.Items) {
+                    if (a is PlayDLItem)
+                    {
+                        var ab = a as PlayDLItem;
+                        Settings.USettings.MusicGDataPlayList.Add(ab.Data);
+                    }
+                    else {
+                        Settings.USettings.MusicGDataPlayList.Add(new Music() { MusicID = "str.Null" });
+                    }
+                }
+                Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
                 Settings.SaveSettings();
                 Environment.Exit(0);
             };
