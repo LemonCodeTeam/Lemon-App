@@ -298,6 +298,14 @@
                     </DoubleAnimationUsingKeyFrames>
                 </Storyboard>
             </ControlTemplate.Resources>
+            <ControlTemplate.Triggers>
+                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                    <BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                    <BeginStoryboard x:Name="OnMouseLeave1_BeginStoryboard" Storyboard="{StaticResource OnMouseLeave1}"/>
+                </EventTrigger>
+            </ControlTemplate.Triggers>
             <Grid x:Name="Grid" Background="{TemplateBinding Background}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -312,14 +320,6 @@
                 <ScrollBar x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyle}" Width="10" MinWidth="0" Margin="0,0,2,0" Opacity="0"/>
                 <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
             </Grid>
-            <ControlTemplate.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseEnter">
-                    <BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="UIElement.MouseLeave">
-                    <BeginStoryboard x:Name="OnMouseLeave1_BeginStoryboard" Storyboard="{StaticResource OnMouseLeave1}"/>
-                </EventTrigger>
-            </ControlTemplate.Triggers>
         </ControlTemplate>
         <SolidColorBrush x:Key="ScrollBar.Static.Background" Color="#F0F0F0"/>
         <SolidColorBrush x:Key="ScrollBar.Static.Border" Color="#F0F0F0"/>
@@ -2474,27 +2474,6 @@
                                 </Border.Background>
                             </Border>
                             <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
-                        </Grid>
-                        <Grid x:Name="MvPage" IsVisibleChanged="MvPage_IsVisibleChanged" Visibility="Collapsed">
-                            <LemonApp:MyScrollView x:Name="MVScrollViewer" Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <WrapPanel>
-                                    <Grid MouseEnter="MvPlay_ME_MouseEnter" MouseLeave="MvPlay_ME_MouseLeave" Height="470" Width="{Binding ActualWidth, ElementName=MvPage, Mode=OneWay}">
-                                        <MediaElement x:Name="MvPlay_ME" LoadedBehavior ="Manual" MouseDown="Mvplay_plps_MouseDown"/>
-                                        <Grid x:Name="mvct" Height="30" VerticalAlignment="Bottom" Background="#66000000">
-                                            <Border x:Name="Mvplay_plps"  HorizontalAlignment="Left" Margin="25,0,0,0" Width="25" Height="25" MouseDown="Mvplay_plps_MouseDown" Background="#00000000">
-                                                <Path x:Name="mvpath" Fill="White" Data="M766.464,448.170667L301.226667,146.944C244.394667,110.08,213.333333,126.293333,213.333333,191.146667L213.333333,832.853333C213.333333,897.706666,244.394666,913.834666,301.312,876.970667L766.378667,575.744C825.429334,537.514667,825.429334,486.314667,766.378667,448.085333z M347.733333,948.650667C234.666667,1021.781333,128,966.314667,128,832.938667L128,191.146667C128,57.6,234.752,2.218667,347.733333,75.349333L812.8,376.576C923.733333,448.426667,923.733333,575.658667,812.8,647.424L347.733333,948.650667z" Stretch="Uniform" Margin="4"/>
-                                            </Border>
-                                            <TextBlock x:Name="Mvplay_jdtb" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="White" Margin="70,0,0,0"><Run x:Name="Mvplay_jdtb_now" Text="00:00"/><Run Text=" / "/><Run x:Name="Mvplay_jdtb_all" Text="00:00"/></TextBlock>
-                                            <Slider x:Name="Mvplay_jd" Value="3" Height="12" Style="{DynamicResource SliderStyle}" PreviewMouseUp="MvJd_PreviewMouseUp" PreviewMouseDown="MvJd_PreviewMouseDown" ValueChanged="MvJd_ValueChanged" VerticalAlignment="Top" Margin="0,-5,0,0"/>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=MvPage, Mode=OneWay}">
-                                        <TextBlock x:Name="MvPlay_Tb" Margin="10,5,55,0" TextWrapping="Wrap" Text="Love Story - Taylor Swift" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}" FontSize="20" Height="25" FontWeight="Bold"/>
-                                        <TextBlock x:Name="MvPlay_Desc" Margin="10,30,55,0" TextWrapping="Wrap" Text="xxxxxxxxxxxxxxx" Foreground="{DynamicResource PlayDLPage_Font_Most}" VerticalAlignment="Top"/>
-                                    </Grid>
-                                    <WrapPanel x:Name="MVPlList"/>
-                                </WrapPanel>
-                            </LemonApp:MyScrollView>
                         </Grid>
                     </Grid>
                     <Grid x:Name="TitlePage" VerticalAlignment="Top" Height="50" Background="#00000000">
