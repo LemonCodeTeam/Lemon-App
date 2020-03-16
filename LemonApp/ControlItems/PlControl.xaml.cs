@@ -48,5 +48,10 @@ namespace LemonApp
                     Console.WriteLine(await MusicLib.PraiseMusicPLAsync(Settings.USettings.Playing.MusicID, data));
                 }
         }
+
+        private void UserControl_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            Height = cons.ActualHeight + 72;
+        }
     }
 }

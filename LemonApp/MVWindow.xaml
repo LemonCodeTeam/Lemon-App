@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LemonApp"
         mc:Ignorable="d"
-        Title="MV 播放" Topmost="true" Height="550" Width="741" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="window_MouseLeftButtonDown" SizeChanged="window_SizeChanged">
+        Title="MV 播放" Topmost="true" Height="550" Width="740" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="window_MouseLeftButtonDown" SizeChanged="window_SizeChanged" MinWidth="300" MinHeight="270">
     <Window.Resources>
         <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -425,11 +425,11 @@
         <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
     </WindowChrome.WindowChrome>
     <Grid>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="35" Background="#FF252526">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="35" Background="#FF252526" MouseDown="Grid_MouseDown">
             <Border x:Name="CloseBtn" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" MouseDown="CloseBtn_MouseDown" Background="#00000000" Margin="0,0,8,0">
                 <Path Data="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Stretch="Uniform" Fill="#FFEEEEEE" Width="10"/>
             </Border>
-            <TextBlock Text="{Binding Title, ElementName=window}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="25,10,25,0" TextAlignment="Center" Foreground="#FFEEEEEE"/>
+            <TextBlock Text="{Binding Title, ElementName=window}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="100,10,100,0" TextAlignment="Center" Foreground="#FFEEEEEE"/>
             <Border x:Name="MaxBtn" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" Background="#00000000" Margin="0,0,38,0" MouseDown="MaxBtn_MouseDown">
                 <Border BorderThickness="1" BorderBrush="#FFEEEEEE" Width="10" Height="10"/>
             </Border>

@@ -36,7 +36,7 @@ namespace LemonApp
             mvt.Interval = 1000;
             mvt.Tick += Mvt_Tick;
             MVplaying = true;
-            Title = "Mv播放 - " + mVData.name;
+            Title = mVData.name;
             MvPlay_Tb.Text = mVData.name;
             MvPlay_Tb.Uid = mVData.id;
             MvPlay_Desc.Text = await MusicLib.GetMVDesc(mVData.id);
@@ -49,7 +49,7 @@ namespace LemonApp
             MVPlList.Children.Clear();
             foreach (var dt in data)
             {
-                MVPlList.Children.Add(new PlControl(dt) { Margin = new Thickness(10, 0, 0, 20) });
+                MVPlList.Children.Add(new PlControl(dt) {Margin = new Thickness(10, 0, 0, 20) });
             }
             Activate();
             Topmost = false;
@@ -143,6 +143,14 @@ namespace LemonApp
         {
             double ps = ActualWidth / MvPlay_ME.NaturalVideoWidth;
             MV.Height = MvPlay_ME.NaturalVideoHeight * ps;
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2) {
+                Topmost = !Topmost;
+                Toast.Send(Topmost ? "已置顶":"已取消置顶");
+            }
         }
     }
 }

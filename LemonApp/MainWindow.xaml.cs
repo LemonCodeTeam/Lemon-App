@@ -2190,37 +2190,82 @@ namespace LemonApp
         }
         #endregion
         #region PlayControl
-        private void Pop_sp_LostFocus(object sender, RoutedEventArgs e)
+        private void FxDec_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Pop_sp.IsOpen = false;
+            //if (e.ClickCount == 2)
+            //{
+            //    SaveFileDialog sf = new SaveFileDialog();
+            //    sf.FileName = MusicData.Data.MusicName+"-"+MusicData.Data.SingerText+".mp3";
+            //    sf.Filter = "Mp3音频文件(*.mp3)|*.mp3";
+            //    if ((bool)sf.ShowDialog())
+            //    {
+            //        string filename = sf.FileName;
+            //        mp.SaveToFile(filename);
+            //        Toast.Send("成功保存音频文件！");
+            //    }
+            //}
+            //else
+            {
+                Pop_sp.Visibility = Pop_sp.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                MusicPlay_sp.Value = mp.GetSpeed();
+                MusicPlay_pitch_sp.Value = mp.Pitch;
+                Tempo_value.Text = (MusicPlay_sp.Value / 10).ToString("0.00") + "x";
+                Pitch_value.Text = MusicPlay_pitch_sp.Value.ToString("0.00") + "F";
+            }
         }
-        private void Border_MouseDown_6(object sender, MouseButtonEventArgs e)
+        private void MusicPlay_pitch_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                mp.Pitch = (float)MusicPlay_pitch_sp.Value;
+                Pitch_value.Text = MusicPlay_pitch_sp.Value.ToString("0.00") + "F";
+            }
+            catch { }
+        }
+        private void HzTitle_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
-                if (MusicPlay_tb.Text == "1.25x")
+                if (Pitch_value.Text == "-2.5F")
+                {
+                    mp.Pitch = 0;
+                    MusicPlay_pitch_sp.Value = 0;
+                    Pitch_value.Text = "0F";
+                }
+                else
+                {
+                    mp.Pitch = -2.5F;
+                    MusicPlay_pitch_sp.Value = -2.5;
+                    Pitch_value.Text = "-2.5F";
+                }
+            }
+        }
+        private void Tempo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                if (Tempo_value.Text == "1.25x")
                 {
                     //回到初始速度
                     mp.SetSpeed(0);
-                    MusicPlay_tb.Text = "倍速";
+                    MusicPlay_sp.Value = 0;
+                    Tempo_value.Text = "0x";
                 }
                 else
                 {
                     //1.25倍速
                     mp.SetSpeed(25);
-                    MusicPlay_tb.Text = "1.25x";
+                    MusicPlay_sp.Value = 1.25;
+                    Tempo_value.Text = "1.25x";
                 }
             }
-            else Pop_sp.IsOpen = !Pop_sp.IsOpen;
-            MusicPlay_sp.Value = mp.GetSpeed();
-            Console.WriteLine(mp.GetSpeed());
         }
         private void MusicPlay_sp_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
                 mp.SetSpeed((float)MusicPlay_sp.Value);
-                MusicPlay_tb.Text = (MusicPlay_sp.Value/10).ToString("0.00") + "x";
+                Tempo_value.Text = (MusicPlay_sp.Value/10).ToString("0.00") + "x";
             }
             catch { }
         }
@@ -2489,6 +2534,8 @@ namespace LemonApp
             foreach (var a in o["list"])
             {
                 string name = a["dirname"].ToString();
+                if (MoreBtn_Meum_Add_List.ContainsKey(name))
+                    return;
                 MoreBtn_Meum_Add_List.Add(name, a["dirid"].ToString());
                 var mdb = new ListBoxItem
                 {
