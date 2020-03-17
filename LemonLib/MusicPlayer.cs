@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Fx;
 using Un4seen.Bass.AddOn.Mix;
@@ -69,43 +70,55 @@ namespace LemonLib
             get {
                 float value = 0;
                 Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO_PITCH, ref value);
-                _Speed = value;
+                _Pitch = value;
                 return value;
             }
             set {
                 if (stream != -1024)
                 {
                     Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO_PITCH, value);
-                    _Speed = value;
+                    _Pitch = value;
                 }
             }
         }
 
-        public void SaveToFile(string file) {
-            int decode = Bass.BASS_StreamCreateFile(_file, 0L, 0L, BASSFlag.BASS_STREAM_DECODE);
-            int stream = BassFx.BASS_FX_TempoCreate(decode, BASSFlag.BASS_SAMPLE_FLOAT);
-            Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, 0);
-            if (_Pitch != -1024) Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO_PITCH, _Pitch);
-            if (_Speed != -1024) Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
-            EncoderLAME l = new EncoderLAME(stream);
-            l.InputFile = null; //STDIN
-            l.OutputFile = file;
-            l.LAME_Bitrate = (int)EncoderLAME.BITRATE.kbps_64;
-            l.LAME_Mode = EncoderLAME.LAMEMode.Default;
-            l.LAME_Quality = EncoderLAME.LAMEQuality.Q5;
-            Bass.BASS_ChannelPlay(stream, false);
-            if (l.Start(null, IntPtr.Zero,false))
+        public async void SaveToFile(string file,Action finished)
+        {
+            await Task.Factory.StartNew(() =>
             {
-                // encode the data
-                byte[] encBuffer = new byte[65536]; // our dummy encoder buffer (32KB x 16-bit - size it as you like)
-                while (Bass.BASS_ChannelIsActive(stream) == BASSActive.BASS_ACTIVE_PLAYING)
+                //从文件中读取解码流
+                int strm = Bass.BASS_StreamCreateFile(_file, 0, 0, BASSFlag.BASS_STREAM_DECODE);
+                //从strm解码流中创建FX效果器
+                strm = BassFx.BASS_FX_TempoCreate(strm, BASSFlag.BASS_STREAM_DECODE);
+
+                //为效果器设置参数  Pitch&Speed
+                if (_Pitch != -1024) Bass.BASS_ChannelSetAttribute(strm, BASSAttribute.BASS_ATTRIB_TEMPO_PITCH, _Pitch);
+                if (_Speed != -1024) Bass.BASS_ChannelSetAttribute(strm, BASSAttribute.BASS_ATTRIB_TEMPO, _Speed);
+
+                //初始化编码器
+                EncoderLAME l = new EncoderLAME(strm);
+                l.InputFile = null; //STDIN
+                l.OutputFile = file;//输出文件路径
+                l.LAME_Bitrate = (int)EncoderLAME.BITRATE.kbps_128;//比特率
+                l.LAME_Mode = EncoderLAME.LAMEMode.Default;//默认模式
+                l.LAME_Quality = EncoderLAME.LAMEQuality.Quality;//高品质
+                l.LAME_TargetSampleRate = (int)EncoderLAME.SAMPLERATE.Hz_44100;//44100码率
+
+                //解码流开始(并不是播放，也不会有声音输出)
+                Bass.BASS_ChannelPlay(strm, false);
+                //开始编码
+                l.Start(null, IntPtr.Zero, false);
+
+                byte[] encBuffer = new byte[65536]; // our dummy encoder buffer
+                while (Bass.BASS_ChannelIsActive(strm) == BASSActive.BASS_ACTIVE_PLAYING)
                 {
                     // getting sample data will automatically feed the encoder
-                    int len = Bass.BASS_ChannelGetData(stream, encBuffer, encBuffer.Length);
+                    int len = Bass.BASS_ChannelGetData(strm, encBuffer, encBuffer.Length);
                 }
-                // finish
-                l.Stop();
-            }
+                l.Stop();  // finish
+                Bass.BASS_StreamFree(strm);
+                finished();
+            });
         }
 
         private string _file;

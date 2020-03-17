@@ -2695,7 +2695,7 @@
                         </Grid>
                     </Border>
                     <WrapPanel Margin="0,0,0,24" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                        <Border x:Name="FxDec" HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" Margin="0,0,10,0" MouseDown="FxDec_MouseDown">
+                        <Border x:Name="FxDec" HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" Margin="0,0,10,0" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3">
                             <Grid>
                                 <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0"/>
                             </Grid>

@@ -2192,19 +2192,19 @@ namespace LemonApp
         #region PlayControl
         private void FxDec_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //if (e.ClickCount == 2)
-            //{
-            //    SaveFileDialog sf = new SaveFileDialog();
-            //    sf.FileName = MusicData.Data.MusicName+"-"+MusicData.Data.SingerText+".mp3";
-            //    sf.Filter = "Mp3音频文件(*.mp3)|*.mp3";
-            //    if ((bool)sf.ShowDialog())
-            //    {
-            //        string filename = sf.FileName;
-            //        mp.SaveToFile(filename);
-            //        Toast.Send("成功保存音频文件！");
-            //    }
-            //}
-            //else
+            if (e.ClickCount == 2)
+            {
+                SaveFileDialog sf = new SaveFileDialog();
+                sf.FileName = MusicData.Data.MusicName+"-"+MusicData.Data.SingerText+".mp3";
+                sf.Filter = "Mp3音频文件(*.mp3)|*.mp3";
+                if ((bool)sf.ShowDialog())
+                {
+                    Toast.Send("保存中...");
+                    string filename = sf.FileName;
+                    mp.SaveToFile(filename,()=>Dispatcher.Invoke(()=> Toast.Send("成功保存音频文件！")));
+                }
+            }
+            else
             {
                 Pop_sp.Visibility = Pop_sp.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
                 MusicPlay_sp.Value = mp.GetSpeed();
@@ -2311,7 +2311,7 @@ namespace LemonApp
         {
             PlayDLItem k = null;
 
-            if (PlayMod == 0)
+            if (PlayMod == 0|| PlayMod == 1)
             {
                 //如果已经到播放队列的第一首，那么上一首就是最后一首歌(列表循环 非电台)
                 //如果已经到播放队列的第一首，没有上一首(电台)
@@ -2353,7 +2353,7 @@ namespace LemonApp
         {
             PlayDLItem k = null;
 
-            if (PlayMod == 0)
+            if (PlayMod == 0 || PlayMod == 1)
             {
                 //如果已到最后一首歌，那么下一首从头播放(列表循环 非电台)
                 //已经到最后一首歌，下一首需要重新查询电台列表
