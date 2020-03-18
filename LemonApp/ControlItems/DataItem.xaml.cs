@@ -247,9 +247,8 @@ namespace LemonApp
                 string Gdpopxaml = "<Popup " + He.XAMLUSINGS + @" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
                 <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
                     <Grid>
-                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling""
-                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" Style=""{DynamicResource ListBoxStyle1}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyle1}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
-                            <ListBoxItem Content=""我喜欢的歌单""/>
+                        <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling"" BorderThickness=""0""
+                            VirtualizingPanel.IsVirtualizing=""True""  Background=""{x:Null}"" ScrollViewer.HorizontalScrollBarVisibility=""Disabled"" ItemContainerStyle=""{DynamicResource ListBoxItemStyleForMeum}"" Margin=""5"" Foreground=""{DynamicResource PlayDLPage_Font_Most}"" >
                         </ListBox>
                     </Grid>
                 </Border>
@@ -315,12 +314,6 @@ namespace LemonApp
                 wpl.Margin = new Thickness(60, 10, 10, 10);
             else wpl.Margin = new Thickness(10, 10, 10, 10);
         }
-        /// <summary>
-        /// 没啥用，留着懒得改模板了
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e) { }
 
         private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
         {
