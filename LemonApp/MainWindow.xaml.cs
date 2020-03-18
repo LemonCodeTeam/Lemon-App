@@ -567,7 +567,7 @@ namespace LemonApp
                 foreach (UserControl dx in MusicPlList.Children)
                     dx.Width = ContentPage.ActualWidth;
             if (Data.Visibility == Visibility.Visible)
-                foreach (DataItem dx in DataItemsList.Items)
+                foreach (FrameworkElement dx in DataItemsList.Items)
                     dx.Width = ContentPage.ActualWidth;
             if (SingerDataPage.Visibility == Visibility.Visible)
                 (Cisv.Content as FrameworkElement).Width = SingerDataPage.ActualWidth;
@@ -1582,18 +1582,25 @@ namespace LemonApp
                    },
                     new Action<int, Music, bool>((i, j, b) =>
                     {
-                        var k = new DataItem(j, this, i, b);
-                        DataItemsList.Items[i] = k;
-                        k.Play += PlayMusic;
-                        k.Width = DataItemsList.ActualWidth;
-                        k.Download += K_Download;
-                        k.GetToSingerPage += K_GetToSingerPage;
-                        if (j.MusicID == MusicData.Data.MusicID)
+                        if (j != null)
                         {
-                            k.ShowDx();
+                            var k = new DataItem(j, this, i, b);
+                            DataItemsList.Items[i] = k;
+                            k.Play += PlayMusic;
+                            k.Width = DataItemsList.ActualWidth;
+                            k.Download += K_Download;
+                            k.GetToSingerPage += K_GetToSingerPage;
+                            if (j.MusicID == MusicData.Data.MusicID)
+                            {
+                                k.ShowDx();
+                            }
+                            Settings.USettings.MusicGDataLike.ids.Add(j.MusicID, j.Littleid);
                         }
-                        Settings.USettings.MusicGDataLike.ids.Add(j.MusicID, j.Littleid);
-                    }), this, new Action<int>(i =>
+                        else {
+                            DataItemsList.Items[i] = new ListBoxItem() { Visibility = Visibility.Collapsed };
+                        }
+                    }
+                    ), this, new Action<int>(i =>
                     {
                         while (DataItemsList.Items.Count != i)
                         {
@@ -1631,12 +1638,16 @@ namespace LemonApp
             string id = _ListData[name];
             string Musicid = "";
             string types = "";
-            foreach (DataItem d in DataItemsList.Items)
+            foreach (object ax in DataItemsList.Items)
             {
-                if (d.isChecked)
+                if (ax is DataItem)
                 {
-                    types += "3,";
-                    Musicid += d.music.MusicID + ",";
+                    var d = ax as DataItem;
+                    if (d.isChecked)
+                    {
+                        types += "3,";
+                        Musicid += d.music.MusicID + ",";
+                    }
                 }
             }
             Musicid = Musicid[0..^1];
@@ -1747,7 +1758,16 @@ namespace LemonApp
 
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PlayMusic(DataItemsList.Items[0] as DataItem, null);
+            //查找第一个可用的数据
+            foreach(object a in DataItemsList.Items)
+            {
+                if (a is DataItem)
+                {
+                    var ab = a as DataItem;
+                    PlayMusic(ab, null);
+                    break;
+                }
+            }
         }
         bool DataPage_ControlMod = false;
         int DataPage_CMType = 0;//0:Download 1:批量操作
@@ -2335,13 +2355,17 @@ namespace LemonApp
                 MusicData = k;
                 PlayMusic(k.Data);
                 bool find = false;
-                foreach (DataItem a in DataItemsList.Items)
+                foreach (object ac in DataItemsList.Items)
                 {
-                    if (a.music.MusicID.Equals(k.Data.MusicID))
+                    if (ac is DataItem)
                     {
-                        find = true;
-                        a.ShowDx();
-                        break;
+                        var a = ac as DataItem;
+                        if (a.music.MusicID.Equals(k.Data.MusicID))
+                        {
+                            find = true;
+                            a.ShowDx();
+                            break;
+                        }
                     }
                 }
                 if (!find) new DataItem(new Music()).ShowDx();
@@ -2400,13 +2424,17 @@ namespace LemonApp
                 MusicData = k;
                 PlayMusic(k.Data);
                 bool find = false;
-                foreach (DataItem a in DataItemsList.Items)
+                foreach (object ab in DataItemsList.Items)
                 {
-                    if (a.music.MusicID.Equals(k.Data.MusicID))
+                    if (ab is DataItem)
                     {
-                        find = true;
-                        a.ShowDx();
-                        break;
+                        var a = ab as DataItem;
+                        if (a.music.MusicID.Equals(k.Data.MusicID))
+                        {
+                            find = true;
+                            a.ShowDx();
+                            break;
+                        }
                     }
                 }
                 if (!find) new DataItem(new Music()).ShowDx();
@@ -2709,7 +2737,14 @@ namespace LemonApp
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var k = AddPlayDL_All(null, 0);
-            (DataItemsList.Items[0] as DataItem).ShowDx();
+            foreach (object a in DataItemsList.Items)
+            {
+                if (a is DataItem)
+                {
+                    (a as DataItem).ShowDx();
+                    break;
+                }
+            }
             PlayMusic(k.Data);
         }
         #endregion
@@ -3147,15 +3182,21 @@ namespace LemonApp
                 },
                 new Action<int, Music, bool>((i, j, b) =>
                 {
-                    var k = new DataItem(j, this, i, b);
-                    DataItemsList.Items[i] = k;
-                    k.Play += PlayMusic;
-                    k.GetToSingerPage += K_GetToSingerPage;
-                    k.Download += K_Download;
-                    k.Width = DataItemsList.ActualWidth;
-                    if (j.MusicID == MusicData.Data.MusicID)
+                    if (j != null)
                     {
-                        k.ShowDx();
+                        var k = new DataItem(j, this, i, b);
+                        DataItemsList.Items[i] = k;
+                        k.Play += PlayMusic;
+                        k.GetToSingerPage += K_GetToSingerPage;
+                        k.Download += K_Download;
+                        k.Width = DataItemsList.ActualWidth;
+                        if (j.MusicID == MusicData.Data.MusicID)
+                        {
+                            k.ShowDx();
+                        }
+                    }
+                    else {
+                        DataItemsList.Items[i] = new ListBoxItem() { Visibility=Visibility.Collapsed};
                     }
                 }), this,
             new Action<int>(i =>
