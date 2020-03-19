@@ -562,15 +562,6 @@ namespace LemonApp
             WidthUI(GDItemsList);
             WidthUI(GDILikeItemsList);
             WidthUI(SkinIndexList);
-
-            if (MusicPlList.Visibility == Visibility.Visible)
-                foreach (UserControl dx in MusicPlList.Children)
-                    dx.Width = ContentPage.ActualWidth;
-            if (Data.Visibility == Visibility.Visible)
-                foreach (FrameworkElement dx in DataItemsList.Items)
-                    dx.Width = ContentPage.ActualWidth;
-            if (SingerDataPage.Visibility == Visibility.Visible)
-                (Cisv.Content as FrameworkElement).Width = SingerDataPage.ActualWidth;
         }
         /// <summary>
         /// 遍历调整宽度
@@ -1060,7 +1051,7 @@ namespace LemonApp
             int index = 0;
             var dta = await MusicLib.GetAlbumSongListByIDAsync(id, new Action<Music, bool>((j, f) =>
             {
-                var k = new DataItem(j, this, index) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j, this, index);
                 DataItemsList.Items.Add(k);
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
@@ -1115,7 +1106,7 @@ namespace LemonApp
             int index = 0;
             var dta = await ml.GetToplistAsync(g.Data.ID, new Action<Music, bool>((j, f) =>
             {
-                var k = new DataItem(j, this, index) { Width = ContentPage.ActualWidth };
+                var k = new DataItem(j, this, index);
                 DataItemsList.Items.Add(k);
                 k.GetToSingerPage += K_GetToSingerPage;
                 k.Play += PlayMusic;
@@ -1390,17 +1381,14 @@ namespace LemonApp
                 if (data.HasBigPic)
                 {
                     await Task.Delay(100);
-                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { value = new Thickness(0, -50, 0, 0), cmd = "SingerBig",data= si.data }, NeedSavePage, false);
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { value = new Thickness(0, -50, 0, 0), cmd = "SingerBig", data = si.data }, NeedSavePage, false);
                 }
                 else
                 {
                     await Task.Delay(100);
-                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) {cmd = "Singer", data= si.data },NeedSavePage,false);
-                    }
-            }))
-            {
-                Width = ContentPage.ActualWidth
-            };
+                    NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { cmd = "Singer", data = si.data }, NeedSavePage, false);
+                }
+            }));
             Cisv.Content = cc;
             SingerDP_Top.Uid = "gun";
             Cisv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
@@ -1587,7 +1575,6 @@ namespace LemonApp
                             var k = new DataItem(j, this, i, b);
                             DataItemsList.Items[i] = k;
                             k.Play += PlayMusic;
-                            k.Width = DataItemsList.ActualWidth;
                             k.Download += K_Download;
                             k.GetToSingerPage += K_GetToSingerPage;
                             if (j.MusicID == MusicData.Data.MusicID)
@@ -1973,7 +1960,7 @@ namespace LemonApp
                 int i = 0;
                 foreach (var j in dt)
                 {
-                    var k = new DataItem(j, this, i) { Width = ContentPage.ActualWidth };
+                    var k = new DataItem(j, this, i);
                     DataItemsList.Items.Add(k);
                     if (k.music.MusicID == MusicData.Data.MusicID)
                     {
@@ -2809,7 +2796,7 @@ namespace LemonApp
             MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0,TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
-                MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+                MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp,  Margin = new Thickness(10, 0, 0, 20) });
             }
             CloseLoading();
         }
@@ -2829,7 +2816,7 @@ namespace LemonApp
             MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
-                MusicPlList.Children.Add(new PlControl(dt) { couldpraise = false, Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+                MusicPlList.Children.Add(new PlControl(dt) { couldpraise = false, Margin = new Thickness(10, 0, 0, 20) });
             }
             CloseLoading();
         }
@@ -2850,7 +2837,7 @@ namespace LemonApp
             MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
-                MusicPlList.Children.Add(new PlControl(dt) { Width = MusicPlList.ActualWidth - 10, Margin = new Thickness(10, 0, 0, 20) });
+                MusicPlList.Children.Add(new PlControl(dt) {  Margin = new Thickness(10, 0, 0, 20) });
             }
             CloseLoading();
         }
@@ -3198,7 +3185,6 @@ namespace LemonApp
                         k.Play += PlayMusic;
                         k.GetToSingerPage += K_GetToSingerPage;
                         k.Download += K_Download;
-                        k.Width = DataItemsList.ActualWidth;
                         if (j.MusicID == MusicData.Data.MusicID)
                         {
                             k.ShowDx();

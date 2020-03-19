@@ -31,7 +31,78 @@
         </Setter>
     </Style>
     <!--#endregion -->
-
+    <!--#region CheckBox 模板-->
+    <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="checkBoxBorder" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Width="14" Height="14" Background="Transparent" CornerRadius="2,2,2,2">
+                            <Grid x:Name="markGrid">
+                                <Border x:Name="optionMark" Margin="1" Opacity="0">
+                                    <Border.Background>
+                                        <VisualBrush Stretch="Uniform">
+                                            <VisualBrush.Visual>
+                                                <Grid>
+                                                    <Path Data="M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909L64.698182,554.821818A59.578182,59.578182,0,0,1,64.698182,469.178182A61.905455,61.905455,0,0,1,151.738182,469.178182L418.909091,734.021818A60.043636,60.043636,0,0,1,418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z" Fill="{DynamicResource ResuColorBrush}"/>
+                                                    <Path Data="M377.483636,837.818182A63.301818,63.301818,0,0,1,333.730909,820.130909A60.043636,60.043636,0,0,1,333.730909,734.021818L872.261818,203.869091A61.905455,61.905455,0,0,1,959.301818,203.869091A60.043636,60.043636,0,0,1,959.301818,289.978182L418.909091,820.130909A61.44,61.44,0,0,1,377.483636,837.818182z" Fill="{DynamicResource ResuColorBrush}"/>
+                                                </Grid>
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Border.Background>
+                                </Border>
+                                <Rectangle x:Name="indeterminateMark" Fill="{DynamicResource ThemeColor}" Margin="2" Opacity="0"/>
+                            </Grid>
+                        </Border>
+                        <Border x:Name="border" Width="14" Height="14" Margin="1" BorderThickness="1" BorderBrush="{DynamicResource ResuColorBrush}" CornerRadius="2,2,2,2" Opacity="0"/>
+                        <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                            <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
+                            <Setter Property="Opacity" TargetName="border" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
+                            <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+    <!--#region DataItemList 音乐列表使用的 Item模板-->
+    <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Padding" Value="4,1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Background" Value="#0C000000"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="#19000000"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
     <!--#region ScrollViewer 模板-->
     <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
         <ControlTemplate.Resources>

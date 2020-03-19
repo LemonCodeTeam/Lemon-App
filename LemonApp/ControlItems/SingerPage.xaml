@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LemonApp" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" 
              x:Class="LemonApp.SingerPage" 
-             mc:Ignorable="d" Width="889" SizeChanged="UserControl_SizeChanged" >
+             mc:Ignorable="d"  SizeChanged="UserControl_SizeChanged" d:DesignWidth="557.612" >
     <UserControl.Resources>
         <Storyboard x:Key="mSingerTX">
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="mSingerBig">
@@ -27,38 +27,7 @@
                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
-        <Style x:Key="ListBoxItemStyle1" TargetType="{x:Type ListBoxItem}">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Padding" Value="4,1"/>
-            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="{DynamicResource AppCornerRadius}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsMouseOver" Value="True"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Background" TargetName="Bd" Value="#07000000"/>
-                            </MultiTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="#00000000"/>
-            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
@@ -68,21 +37,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBox}">
-                        <Themes:ClassicBorderDecorator x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderStyle="Sunken" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Themes:ClassicBorderDecorator>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsGrouping" Value="True"/>
-                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-                            </MultiTrigger>
-                        </ControlTemplate.Triggers>
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -120,7 +75,7 @@
             <Border x:Name="TX" HorizontalAlignment="Left" Height="225" VerticalAlignment="Center" Width="225" CornerRadius="250" Background="Black" Margin="40,0,0,30" Visibility="Collapsed"/>
         </Grid>
         <Grid x:Name="grid" Margin="0,400,0,0">
-            <WrapPanel x:Name="TuiJianPage" VerticalAlignment="Top">
+            <WrapPanel x:Name="TuiJianPage" VerticalAlignment="Top" Orientation="Vertical">
                 <Grid x:Name="LiangxiaPi" Height="100" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -141,9 +96,11 @@
                         </Grid>
                     </Border>
                 </Grid>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="热门歌曲" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,10,0,0" FontWeight="Bold"/>
-                <local:MDButton x:Name="HotSong_PaBtn" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="100" TName="播放全部" Margin="20,10,0,0" MouseDown="HotSong_PaBtn_MouseDown"/>
-                <ListBox x:Name="HotMusicList" Margin="0,10,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" VirtualizingPanel.VirtualizationMode="Recycling" Style="{DynamicResource ListBoxStyle1}" ItemContainerStyle="{DynamicResource ListBoxItemStyle1}" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="{x:Null}"/>
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,20,0,0">
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="热门歌曲" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" FontWeight="Bold"/>
+                    <local:MDButton x:Name="HotSong_PaBtn" HorizontalAlignment="Left" Height="35" VerticalAlignment="Center" Width="100" TName="播放全部" MouseDown="HotSong_PaBtn_MouseDown" Margin="10,0,0,0"/>
+                </WrapPanel>
+                <ListBox x:Name="HotMusicList" Margin="0,10,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" VirtualizingPanel.VirtualizationMode="Recycling" Style="{DynamicResource ListBoxStyle1}" ItemContainerStyle="{DynamicResource ListBoxItemStyle}" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="{x:Null}"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="最新专辑" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" Margin="20,20,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}" FontWeight="Bold"/>
                 <Grid x:Name="NewAlbumList" Margin="0,10,0,0" Width="{Binding ActualWidth, ElementName=mSingerBig, Mode=OneWay}">
                     <Grid.ColumnDefinitions>
