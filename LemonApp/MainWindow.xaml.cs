@@ -399,7 +399,7 @@ namespace LemonApp
                     }
                     else
                     {
-                        list.Items.Add("str.Null");
+                        list.Items.Add(new ListBoxItem() { Visibility = Visibility.Collapsed });
                     }
                 }
                 PushPlayMusic((DataItem)list.Items[Settings.USettings.PlayingIndex], list, false);
@@ -2041,12 +2041,21 @@ namespace LemonApp
                     PlayDL_List.Items.Add(k);
                 }
                 else {
-                    PlayDL_List.Items.Add(e);
+                    PlayDL_List.Items.Add(new ListBoxItem() {Visibility=Visibility.Collapsed});
                 }
             }
             if (index == -1)
                 index = source.Items.IndexOf(dt);
-            PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
+            PlayDLItem dk;
+            for (; ; ) {
+                object o = PlayDL_List.Items[index];
+                if (o is PlayDLItem)
+                {
+                    dk = PlayDL_List.Items[index] as PlayDLItem;
+                    break;
+                }
+                else index++;
+            }
             dk.p(true);
             MusicData = dk;
             return dk;
