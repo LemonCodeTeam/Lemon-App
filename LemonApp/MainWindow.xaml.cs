@@ -1570,7 +1570,7 @@ namespace LemonApp
                    },
                     new Action<int, Music, bool>((i, j, b) =>
                     {
-                        if (j != null)
+                        if (j.MusicID != null)
                         {
                             var k = new DataItem(j, this, i, b);
                             DataItemsList.Items[i] = k;
@@ -1583,15 +1583,19 @@ namespace LemonApp
                             }
                             Settings.USettings.MusicGDataLike.ids.Add(j.MusicID, j.Littleid);
                         }
-                        else {
-                            DataItemsList.Items[i] = new ListBoxItem() { Visibility = Visibility.Collapsed };
+                        else
+                        {
+                            //不可用的资源
+                            var k = new DataItem(j, this, i, b);
+                            k.Visibility = Visibility.Collapsed;
+                            DataItemsList.Items[i] = k;
                         }
                     }
                     ), this, new Action<int>(i =>
                     {
                         while (DataItemsList.Items.Count != i)
                         {
-                            DataItemsList.Items.Add("");
+                            DataItemsList.Items.Add(new ListBoxItem() { Visibility=Visibility.Collapsed});
                         }
                     }));
                 CloseLoading();
@@ -1625,16 +1629,12 @@ namespace LemonApp
             string id = _ListData[name];
             string Musicid = "";
             string types = "";
-            foreach (object ax in DataItemsList.Items)
+            foreach (DataItem d in DataItemsList.Items)
             {
-                if (ax is DataItem)
+                if (d.music.MusicID!=null&&d.isChecked)
                 {
-                    var d = ax as DataItem;
-                    if (d.isChecked)
-                    {
-                        types += "3,";
-                        Musicid += d.music.MusicID + ",";
-                    }
+                    types += "3,";
+                    Musicid += d.music.MusicID + ",";
                 }
             }
             Musicid = Musicid[0..^1];
@@ -1686,16 +1686,12 @@ namespace LemonApp
             {
                 List<DataItem> ReadytoDelete = new List<DataItem>();
                 List<string> Musicid = new List<string>();
-                foreach (var dx in DataItemsList.Items)
+                foreach (DataItem d in DataItemsList.Items)
                 {
-                    if (dx is DataItem)
+                    if (d.music.MusicID!=null&&d.isChecked)
                     {
-                        var d = dx as DataItem;
-                        if (d.isChecked)
-                        {
-                            ReadytoDelete.Add(d);
-                            Musicid.Add(He.MGData_Now.ids[d.index]);
-                        }
+                        ReadytoDelete.Add(d);
+                        Musicid.Add(He.MGData_Now.ids[d.index]);
                     }
                 }
                 string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
@@ -1745,16 +1741,7 @@ namespace LemonApp
 
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //查找第一个可用的数据
-            foreach(object a in DataItemsList.Items)
-            {
-                if (a is DataItem)
-                {
-                    var ab = a as DataItem;
-                    PlayMusic(ab, null);
-                    break;
-                }
-            }
+            PlayMusic(DataItemsList.Items[0] as DataItem, null);
         }
         bool DataPage_ControlMod = false;
         int DataPage_CMType = 0;//0:Download 1:批量操作
@@ -1784,11 +1771,10 @@ namespace LemonApp
                 DataPage_PLCZChoose.Content = "全不选";
             }
             DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 50, 0, 0), TimeSpan.FromSeconds(0)));
-            foreach (var xs in DataItemsList.Items)
+            foreach (DataItem x in DataItemsList.Items)
             {
-                if (xs is DataItem)
+                if (x.music.MusicID!=null)
                 {
-                    var x = xs as DataItem;
                     x.MouseDown -= PlayMusic;
                     x.NSDownload(true);
                     x.Check(true);
@@ -1803,11 +1789,10 @@ namespace LemonApp
                 DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 80, 0, 0), TimeSpan.FromSeconds(0)));
             else DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 200, 0, 0), TimeSpan.FromSeconds(0)));
             DataControlPage.Visibility = Visibility.Collapsed;
-            foreach (var xs in DataItemsList.Items)
+            foreach (DataItem x in DataItemsList.Items)
             {
-                if (xs is DataItem)
+                if (x.music.MusicID!=null)
                 {
-                    var x = xs as DataItem;
                     x.MouseDown += PlayMusic;
                     x.NSDownload(false);
                     x.Check(false);
@@ -2016,33 +2001,23 @@ namespace LemonApp
             if (source == null) source = DataItemsList;
             DLMode = false;
             PlayDL_List.Items.Clear();
-            foreach (Object e in source.Items)
+            foreach (DataItem e in source.Items)
             {
                 //如果项目中有没有解析成功的数据
                 //就用假数据填充,保证index一致
-                if (e is DataItem)
+                if (e.music.MusicID!=null)
                 {
-                    var ae = e as DataItem;
-                    var k = new PlayDLItem(ae.music);
+                    var k = new PlayDLItem(e.music);
                     k.MouseDoubleClick += K_MouseDoubleClick;
                     PlayDL_List.Items.Add(k);
                 }
                 else {
-                    PlayDL_List.Items.Add(new ListBoxItem() {Visibility=Visibility.Collapsed});
+                    PlayDL_List.Items.Add(new PlayDLItem(new Music() { MusicID=null}) {Visibility=Visibility.Collapsed});
                 }
             }
             if (index == -1)
                 index = source.Items.IndexOf(dt);
-            PlayDLItem dk;
-            for (; ; ) {
-                object o = PlayDL_List.Items[index];
-                if (o is PlayDLItem)
-                {
-                    dk = PlayDL_List.Items[index] as PlayDLItem;
-                    break;
-                }
-                else index++;
-            }
+            PlayDLItem dk = PlayDL_List.Items[index] as PlayDLItem;
             dk.p(true);
             MusicData = dk;
             return dk;
@@ -2080,17 +2055,14 @@ namespace LemonApp
             MusicData = k;
             PlayMusic(k.Data);
             bool find = false;
-            foreach (object ab in DataItemsList.Items)
+            foreach (DataItem a in DataItemsList.Items)
             {
-                if (ab is DataItem)
+                if(a.music.MusicID != null)
+                if (a.music.MusicID.Equals(k.Data.MusicID))
                 {
-                    var a = ab as DataItem;
-                    if (a.music.MusicID.Equals(k.Data.MusicID))
-                    {
-                        find = true;
-                        a.ShowDx();
-                        break;
-                    }
+                    find = true;
+                    a.ShowDx();
+                    break;
                 }
             }
             if (!find) new DataItem(new Music()).ShowDx();
@@ -2137,6 +2109,10 @@ namespace LemonApp
         }
         public async void PlayMusic(Music data, bool doesplay = true)
         {
+            if (data.MusicID == null) {
+                PlayControl_PlayNext(null, null);
+                return;
+            }
             t.Stop();
             if (mp.BassdlList.Count > 0)
                 mp.BassdlList.Last().SetClose();
@@ -2344,18 +2320,17 @@ namespace LemonApp
                 RandomOffset = RandomIndexes[index - 1];
                 k = PlayDL_List.Items[RandomOffset] as PlayDLItem;
             }
-            
-            if (k != null)
+
+            if (k.Data.MusicID != null)
             {
                 k.p(true);
                 MusicData = k;
                 PlayMusic(k.Data);
                 bool find = false;
-                foreach (object ac in DataItemsList.Items)
+                foreach (DataItem a in DataItemsList.Items)
                 {
-                    if (ac is DataItem)
+                    if (a.music.MusicID != null)
                     {
-                        var a = ac as DataItem;
                         if (a.music.MusicID.Equals(k.Data.MusicID))
                         {
                             find = true;
@@ -2366,13 +2341,16 @@ namespace LemonApp
                 }
                 if (!find) new DataItem(new Music()).ShowDx();
             }
+            else {
+                MusicData = k;
+                PlayControl_PlayLast(null,null);
+            }
         }
         private List<int> RandomIndexes = new List<int>();
         private int RandomOffset = 0;
         private void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = null;
-
             if (PlayMod == 0 || PlayMod == 1)
             {
                 //如果已到最后一首歌，那么下一首从头播放(列表循环 非电台)
@@ -2386,7 +2364,8 @@ namespace LemonApp
                 }
                 else k = PlayDL_List.Items[PlayDL_List.Items.IndexOf(MusicData) + 1] as PlayDLItem;
             }
-            else {
+            else
+            {
                 //随机播放  TODO 待完善
                 if (RandomIndexes.Count > 0)
                 {
@@ -2396,7 +2375,8 @@ namespace LemonApp
                         RandomOffset = RandomIndexes[RandomIndexes.IndexOf(RandomOffset) + 1];
                         k = PlayDL_List.Items[RandomOffset] as PlayDLItem;
                     }
-                    else {
+                    else
+                    {
                         Random r = new Random();
                         int index = r.Next(0, PlayDL_List.Items.Count - 1);
                         RandomIndexes.Add(index);
@@ -2413,18 +2393,17 @@ namespace LemonApp
                     k = PlayDL_List.Items[index] as PlayDLItem;
                 }
             }
-            
-            if (k != null)
+
+            if (k.Data.MusicID != null)
             {
                 k.p(true);
                 MusicData = k;
                 PlayMusic(k.Data);
                 bool find = false;
-                foreach (object ab in DataItemsList.Items)
+                foreach (DataItem a in DataItemsList.Items)
                 {
-                    if (ab is DataItem)
+                    if (a.music.MusicID != null)
                     {
-                        var a = ab as DataItem;
                         if (a.music.MusicID.Equals(k.Data.MusicID))
                         {
                             find = true;
@@ -2434,6 +2413,10 @@ namespace LemonApp
                     }
                 }
                 if (!find) new DataItem(new Music()).ShowDx();
+            }
+            else {
+                MusicData = k;
+                PlayControl_PlayNext(null,null);
             }
         }
         private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2733,14 +2716,7 @@ namespace LemonApp
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var k = AddPlayDL_All(null, 0);
-            foreach (object a in DataItemsList.Items)
-            {
-                if (a is DataItem)
-                {
-                    (a as DataItem).ShowDx();
-                    break;
-                }
-            }
+            (DataItemsList.Items[0] as DataItem).ShowDx();
             PlayMusic(k.Data);
         }
         #endregion
@@ -2994,14 +2970,14 @@ namespace LemonApp
             if (d.IsChecked == true)
             {
                 d.Content = "全不选";
-                foreach (var x in DataItemsList.Items)
-                    if (x is DataItem) (x as DataItem).Check(true);
+                foreach (DataItem x in DataItemsList.Items)
+                    if (x.music.MusicID!=null) (x as DataItem).Check(true);
             }
             else
             {
                 d.Content = "全选";
-                foreach (var x in DataItemsList.Items)
-                    if (x is DataItem) (x as DataItem).Check(false);
+                foreach (DataItem x in DataItemsList.Items)
+                    if (x.music.MusicID != null) (x as DataItem).Check(false);
             }
         }
         private void Download_Btn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3065,9 +3041,9 @@ namespace LemonApp
             var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)
                 cc.Begin();
-            foreach (var x in DataItemsList.Items)
+            foreach (DataItem f in DataItemsList.Items)
             {
-                var f = x as DataItem;
+                if(f.music.MusicID!=null)
                 if (f.isChecked == true)
                 {
                     AddDownloadTask(f.music);
@@ -3178,7 +3154,7 @@ namespace LemonApp
                 },
                 new Action<int, Music, bool>((i, j, b) =>
                 {
-                    if (j != null)
+                    if (j.MusicID != null)
                     {
                         var k = new DataItem(j, this, i, b);
                         DataItemsList.Items[i] = k;
@@ -3191,14 +3167,17 @@ namespace LemonApp
                         }
                     }
                     else {
-                        DataItemsList.Items[i] = new ListBoxItem() { Visibility=Visibility.Collapsed};
+                        //不可用的资源
+                        var k = new DataItem(j, this, i, b);
+                        k.Visibility = Visibility.Collapsed;
+                        DataItemsList.Items[i] = k;
                     }
                 }), this,
             new Action<int>(i =>
             {
                 while (DataItemsList.Items.Count != i)
                 {
-                    DataItemsList.Items.Add("");
+                    DataItemsList.Items.Add(new ListBoxItem() { Visibility = Visibility.Collapsed });
                 }
             }));
             CloseLoading();

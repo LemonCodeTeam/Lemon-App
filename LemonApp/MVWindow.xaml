@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LemonApp"
         mc:Ignorable="d"
-        Title="MV 播放" Topmost="true" Height="550" Width="740" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="window_MouseLeftButtonDown" SizeChanged="window_SizeChanged" MinWidth="300" MinHeight="270">
+        Title="MV 播放" Topmost="true" Height="550" Width="740" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="window_MouseLeftButtonDown" SizeChanged="window_SizeChanged" MinWidth="300" MinHeight="270" Background="{DynamicResource PlayDLPage_Bg}">
     <Window.Resources>
         <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>

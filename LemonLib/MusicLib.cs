@@ -452,7 +452,6 @@ jpg
         public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<MusicGData> GetInfo = null, Action<int, Music, bool> callback = null, Window wx = null, Action<int> getAll = null)
         {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
-            Console.WriteLine(s);
             JObject o = JObject.Parse(s);
             var dt = new MusicGData();
             var c0 = o["cdlist"][0];
@@ -472,10 +471,11 @@ jpg
             await wx?.Dispatcher.BeginInvoke(new Action(() => getAll?.Invoke(c0s.Count())));
             Parallel.For(0, c0s.Count(), async (index) =>
                 {
-                    try
+                    string singer = "";
+                    var c0si = c0s[index];
+                    string songtype = c0si["songtype"].ToString();
+                    if (songtype == "0")
                     {
-                        string singer = "";
-                        var c0si = c0s[index];
                         var c0sis = c0si["singer"];
                         List<MusicSinger> lm = new List<MusicSinger>();
                         foreach (var cc in c0sis)
@@ -514,7 +514,24 @@ jpg
                         dt.Data.Add(m);
                         await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
                     }
-                    catch { }
+                    else {
+                        var c0sis = c0si["singer"];
+                        List<MusicSinger> lm = new List<MusicSinger>();
+                        foreach (var cc in c0sis)
+                        {
+                            singer += cc["name"].ToString() + "&";
+                            lm.Add(new MusicSinger()
+                            {
+                                Name = cc["name"].ToString()
+                            });
+                        }
+                        Music m = new Music();
+                        m.MusicID = null;
+                        m.MusicName = c0si["songname"].ToString();
+                        m.Singer = lm;
+                        m.SingerText = singer.Substring(0, singer.Length - 1);
+                        await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
+                    }
                 });
             return dt;
         }
