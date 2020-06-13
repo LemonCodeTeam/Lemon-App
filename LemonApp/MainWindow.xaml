@@ -315,7 +315,7 @@
                     <ControlTemplate TargetType="{x:Type ListBox}">
                         <LemonApp:MyScrollView x:Name="PlayDLDatasv"  Template="{DynamicResource ScrollViewerControlTemplate}"  Focusable="False" Padding="{TemplateBinding Padding}" Loaded="PlayDLDatasv_Loaded" >
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </LemonApp:MyScrollView>
+                        </LemonApp:MyScrollView>
                         <ControlTemplate.Triggers>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -1441,6 +1441,10 @@
                             <Border x:Name="MYGDCom" HorizontalAlignment="Left" Margin="0,2" Width="5" Background="{DynamicResource ThemeColor}" Visibility="Collapsed"/>
                         </Grid>
                     </StackPanel>
+                    <WrapPanel x:Name="LikesHit" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="20" Background="Transparent" MouseDown="LikesHit_MouseDown">
+                        <Path x:Name="LikesHicon" HorizontalAlignment="Left" Width="13" Stretch="Uniform" StrokeThickness="0" Height="20" Fill="#FFFF4C4C" Data="M689.066667 170.666667c-40.533333 0-132.266667 19.2-177.066667 119.466666C467.2 189.866667 377.6 170.666667 334.933333 170.666667 211.2 170.666667 128 266.666667 128 373.333333 128 631.466667 512 853.333333 512 853.333333s384-221.866667 384-480c0-106.666667-83.2-202.666667-206.933333-202.666666z" Margin="0,0,3,0"/>
+                        <TextBlock x:Name="LikesNum" Text="Likes" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource TextX1ColorBrush}" Opacity="0.5" FontSize="12"/>
+                    </WrapPanel>
                 </Grid>
                 <Border x:Name="Search_SmartBox" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,38,0,0" Grid.Column="1" MinWidth="175" MouseLeave="Search_SmartBox_MouseLeave" CornerRadius="{DynamicResource AppCornerRadius}" Effect="{DynamicResource WindowDrop}" Visibility="Collapsed">
                     <ListBox x:Name="Search_SmartBoxList" VirtualizingPanel.VirtualizationMode="Recycling"
