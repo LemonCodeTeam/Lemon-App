@@ -504,7 +504,7 @@ namespace LemonApp
                 tx.Start();
             }
             //-------------------
-            AudioSlider.Value = mp.GetVOL() * 100;
+            AudioSlider.Value = 100;
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
