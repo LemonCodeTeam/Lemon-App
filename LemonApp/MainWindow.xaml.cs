@@ -1135,13 +1135,12 @@ namespace LemonApp
             Thread t = new Thread(async ()=> {
                 var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
                 string v = o["version"].ToString();
-                string dt = o["description"].ToString().Replace("@32", "\n");
+                string dt = o["description"].ToString().Replace("#", "\n");
                 if (int.Parse(v) > int.Parse(App.EM))
                 {
-                    new UpdateBox(v, dt).ShowDialog();
+                    Dispatcher.Invoke(() => { new UpdateBox(v, dt).Show(); });
                 }
             });
-            t.SetApartmentState(ApartmentState.STA);
             t.Start();
         }
         #endregion

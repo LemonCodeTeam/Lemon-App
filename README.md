@@ -6,7 +6,7 @@ Lemon App 是一款开源（遵循GPL以及Anti 996协议）的基于QQ音乐的
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/TwilightLemon/Lemon-App/blob/master/LICENSE)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
-[![Download](https://img.shields.io/badge/Download-Lemon%20App-%23FF4D5B.svg?style=flat-squar)](https://files.cnblogs.com/files/TwilightLemon/win-release.zip)
+[![Download](https://img.shields.io/badge/Download-Lemon%20App-%23FF4D5B.svg?style=flat-squar)](https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip)
 [![HitCount](http://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg)](http://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App)
  
 ### UI界面

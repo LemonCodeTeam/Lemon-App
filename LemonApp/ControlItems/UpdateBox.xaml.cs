@@ -33,8 +33,19 @@ namespace LemonApp
             btn.Visibility = Visibility.Collapsed;
             pro.Visibility = Visibility.Visible;
             tb.Text = "下载升级包中...";
+            Height = 210;
             var xpath = Settings.USettings.CachePath + "win-release.zip";
             WebClient wb = new WebClient();
+            wb.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+            wb.Headers.Add("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+            wb.Headers.Add("cache-control", "no-cache");
+            wb.Headers.Add("pragma", "no-cache");
+            wb.Headers.Add("sec-fetch-dest", "document");
+            wb.Headers.Add("sec-fetch-mode", "navigate");
+            wb.Headers.Add("sec-fetch-site", "none");
+            wb.Headers.Add("sec-fetch-user", "?1");
+            wb.Headers.Add("upgrade-insecure-requests", "1");
+            wb.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
             wb.DownloadProgressChanged += (o, ex) =>
             {
                 pro.Value = ex.ProgressPercentage;
@@ -50,7 +61,7 @@ namespace LemonApp
                 tb.Text = "完成";
                 Process.Start("explorer.exe", Settings.USettings.CachePath + "win-release.exe");
             };
-            wb.DownloadFileAsync(new Uri("https://files.cnblogs.com/files/TwilightLemon/win-release.zip"), xpath);
+            wb.DownloadFileAsync(new Uri("https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip"), xpath);
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
