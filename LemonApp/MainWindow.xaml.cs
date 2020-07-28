@@ -321,9 +321,9 @@ namespace LemonApp
         private Toast lyricTa = null;
         private void LoadMusicData()
         {
-            MainClass.DebugCallBack = (s) =>
+            MainClass.DebugCallBack = (a,b) =>
             {
-                Console.WriteLine(s);
+                Console.WriteLine(a + ":  " + b);
             };
             //-------[登录]用户的头像、名称等配置加载
             if (Settings.USettings.LemonAreeunIts != "0")
@@ -1138,7 +1138,7 @@ namespace LemonApp
                 string dt = o["description"].ToString().Replace("@32", "\n");
                 if (int.Parse(v) > int.Parse(App.EM))
                 {
-                    new UpdataBox(v, dt).ShowDialog();
+                    new UpdateBox(v, dt).ShowDialog();
                 }
             });
             t.SetApartmentState(ApartmentState.STA);
@@ -2182,7 +2182,7 @@ namespace LemonApp
         }
         #endregion
         #region PlayControl
-        private void FxDec_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void FxDec_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
@@ -2198,7 +2198,8 @@ namespace LemonApp
             }
             else
             {
-                Pop_sp.Visibility = Pop_sp.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                await Task.Yield();
+                Pop_sp.IsOpen = !Pop_sp.IsOpen;
                 MusicPlay_sp.Value = mp.GetSpeed();
                 MusicPlay_pitch_sp.Value = mp.Pitch;
                 Tempo_value.Text = (MusicPlay_sp.Value / 10).ToString("0.00") + "x";
@@ -2218,7 +2219,7 @@ namespace LemonApp
         {
             if (e.ClickCount == 2)
             {
-                if (Pitch_value.Text == "-2.5F")
+                if (Pitch_value.Text == "-2.50F")
                 {
                     mp.Pitch = 0;
                     MusicPlay_pitch_sp.Value = 0;
@@ -2228,7 +2229,7 @@ namespace LemonApp
                 {
                     mp.Pitch = -2.5F;
                     MusicPlay_pitch_sp.Value = -2.5;
-                    Pitch_value.Text = "-2.5F";
+                    Pitch_value.Text = "-2.50F";
                 }
             }
         }
@@ -2523,8 +2524,9 @@ namespace LemonApp
                 Settings.USettings.IsRoundMusicImage = 5;
             }
         }
-        private void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            await Task.Yield();
             MoreBtn_Meum.IsOpen = !MoreBtn_Meum.IsOpen;
         }
         private void MoreBtn_Meum_DL_MouseDown(object sender, MouseButtonEventArgs e)

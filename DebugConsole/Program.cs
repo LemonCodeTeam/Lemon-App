@@ -3,6 +3,9 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 
+/// <summary>
+/// 调试模式 Alt+C
+/// </summary>
 namespace DebugConsole
 {
     class Program
@@ -31,7 +34,7 @@ namespace DebugConsole
             try
             {
                 pipe.WaitForConnection();
-                Console.WriteLine("Connect Successfully!");
+                Console.WriteLine("Connect Successfully!\r\n");
                 pipe.ReadMode = PipeTransmissionMode.Byte;
                 sr = new StreamReader(pipe);
                 while (true)

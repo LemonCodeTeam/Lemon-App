@@ -255,7 +255,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Border Height="Auto" CornerRadius="1" Margin="0,0,0,-2" Background="#FFEAEAEA" Width="2"/>
+                        <Border Height="Auto" CornerRadius="1" Margin="0,0,0,-2" Background="#66DEDEDE" Width="2"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -1545,6 +1545,22 @@
                     </Border>
                 </Grid>
                 <Grid x:Name="MusicControl" Grid.Column="1" HorizontalAlignment="Stretch" Height="Auto" Margin="0,12,0,12">
+                    <Border Margin="0,0,65,24"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="17" Width="70">
+                        <lemonlib:MyPopup x:Name="Pop_sp" PopupAnimation="Fade" StaysOpen="False" Placement="Top" AllowsTransparency="True" HorizontalOffset="-25" VerticalOffset="10">
+                            <Border  Height="200" Width="120">
+                                <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="10" Margin="10,20,10,20" Effect="{DynamicResource WindowDrop}">
+                                    <Grid>
+                                        <Slider x:Name="MusicPlay_sp" Orientation="Vertical" Margin="0,30,20,30" HorizontalAlignment="Right" Maximum="100" Minimum="-80" Value="0" Style="{DynamicResource SliderStyle}" PreviewMouseUp="MusicPlay_sp_PreviewMouseUp"/>
+                                        <Slider x:Name="MusicPlay_pitch_sp" Orientation="Vertical" Margin="19,30,0,30" HorizontalAlignment="Left" Maximum="8" Minimum="-5" Value="0" Style="{DynamicResource SliderStyle}" PreviewMouseUp="MusicPlay_pitch_sp_PreviewMouseUp"/>
+                                        <TextBlock x:Name="HzTitle" HorizontalAlignment="Left" Margin="18,10,0,0" Text="Hz" TextWrapping="Wrap" VerticalAlignment="Top" Width="16" ToolTip="音高 PITCH  双击恢复" MouseDown="HzTitle_MouseDown" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                                        <TextBlock x:Name="Pitch_value" HorizontalAlignment="Center" Margin="0,0,40,10" Text="0F" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                                        <TextBlock HorizontalAlignment="Right" Margin="0,10,18,0" Text="Tp" TextWrapping="Wrap" VerticalAlignment="Top" Width="16" ToolTip="速度 Tempo 双击恢复" MouseDown="Tempo_MouseDown" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                                        <TextBlock x:Name="Tempo_value" HorizontalAlignment="Center" Margin="40,0,0,10" Text="0F" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </lemonlib:MyPopup>
+                    </Border>
                     <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" CornerRadius="{DynamicResource AppCornerRadius}" Height="50" MouseRightButtonDown="MusicImage_MouseRightButtonDown" VerticalAlignment="Center">
                         <Border.Background>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -1562,20 +1578,6 @@
                         <TextBlock x:Name="Singer" Opacity="0.8" Text="音乐每一天!" Foreground="{DynamicResource ResuColorBrush}" Grid.Column="1"/>
                     </Grid>
                     <Slider x:Name="jd" Height="12" Style="{DynamicResource SliderStyle}" Margin="60,0,0,10" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="0" VerticalAlignment="Bottom"/>
-                    <Border x:Name="Pop_sp" HorizontalAlignment="Right" Margin="0,-220,40,0" Visibility="Collapsed" >
-                        <Grid Height="200" Width="120">
-                            <Border Background="White" CornerRadius="10" Margin="10,20,10,20" Effect="{DynamicResource WindowDrop}">
-                                <Grid>
-                                    <Slider x:Name="MusicPlay_sp" Orientation="Vertical" Margin="0,30,20,30" HorizontalAlignment="Right" Maximum="100" Minimum="-80" Value="0" Style="{DynamicResource SliderStyle}" PreviewMouseUp="MusicPlay_sp_PreviewMouseUp"/>
-                                    <Slider x:Name="MusicPlay_pitch_sp" Orientation="Vertical" Margin="19,30,0,30" HorizontalAlignment="Left" Maximum="8" Minimum="-5" Value="0" Style="{DynamicResource SliderStyle}" PreviewMouseUp="MusicPlay_pitch_sp_PreviewMouseUp"/>
-                                    <TextBlock x:Name="HzTitle" HorizontalAlignment="Left" Margin="18,10,0,0" Text="Hz" TextWrapping="Wrap" VerticalAlignment="Top" Width="16" ToolTip="音高 PITCH  双击恢复" MouseDown="HzTitle_MouseDown"/>
-                                    <TextBlock x:Name="Pitch_value" HorizontalAlignment="Center" Margin="0,0,40,10" Text="0F" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Right" Margin="0,10,18,0" Text="Tp" TextWrapping="Wrap" VerticalAlignment="Top" Width="16" ToolTip="速度 Tempo 双击恢复" MouseDown="Tempo_MouseDown"/>
-                                    <TextBlock x:Name="Tempo_value" HorizontalAlignment="Center" Margin="40,0,0,10" Text="0F" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </Border>
                     <WrapPanel Margin="0,0,0,24" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                         <Border x:Name="FxDec" HorizontalAlignment="Right" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Top" Margin="0,0,10,0" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3">
                             <Grid>
@@ -1600,7 +1602,7 @@
                     </Border>
                     <Border x:Name="MoreBtn" HorizontalAlignment="Right" Width="15" Height="15" Background="#00000000" Margin="18,0,0,0" MouseDown="MoreBtn_MouseDown">
                         <Grid>
-                            <Popup x:Name="MoreBtn_Meum"  Placement="Top" HorizontalOffset="-65" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="5">
+                            <Popup x:Name="MoreBtn_Meum"  Placement="Top" HorizontalOffset="-65" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="5" StaysOpen="False">
                                 <Border Height="166" Width="140">
                                     <Border Height="126" Width="100" BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" Effect="{DynamicResource WindowDrop}">
                                         <Grid>

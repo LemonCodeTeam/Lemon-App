@@ -16,7 +16,9 @@ namespace LemonLib
             Console.WriteLine(_);
             Console.ReadLine();
         }
-        public static Action<string> DebugCallBack;
+        public static Action<string,string> DebugCallBack = new Action<string,string>((a,b) => {
+            Console.WriteLine(a+":  "+b);
+        });
         #region #DEBUG 评论获取/点赞测试:
         /*
             await Settings.LoadUSettings("2728578956");

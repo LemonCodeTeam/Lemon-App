@@ -13,9 +13,9 @@ namespace LemonApp
     /// <summary>
     /// MyMessageBox.xaml 的交互逻辑
     /// </summary>
-    public partial class UpdataBox : Window
+    public partial class UpdateBox : Window
     {
-        public UpdataBox(string ver, string des)
+        public UpdateBox(string ver, string des)
         {
             InitializeComponent();
             con.Text = "最新版:" + ver + "\r\n" +

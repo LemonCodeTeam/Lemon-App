@@ -191,7 +191,7 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string[]> AddMusicToGDAsync(string id, string dirid)
         {
-            Console.WriteLine(Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
+            MainClass.DebugCallBack("User Cookies",Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
@@ -209,7 +209,7 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string[]> AddMusicToGDPLAsync(string ids, string dirid, string typelist)
         {
-            Console.WriteLine(Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
+            MainClass.DebugCallBack("User Cookies",Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={ids}&typelist={typelist}&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
@@ -247,12 +247,12 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> GetGDdiridByNameAsync(string name)
         {
-            Console.WriteLine(Settings.USettings.LemonAreeunIts);
+            MainClass.DebugCallBack("User ID", Settings.USettings.LemonAreeunIts);
             JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
             foreach (var a in o["list"])
             {
                 string st = HttpUtility.HtmlDecode(a["dirname"].ToString());
-                Console.WriteLine(st);
+                MainClass.DebugCallBack("GetGDdirid Data", st);
                 if (name == st)
                     return a["dirid"].ToString();
             }
@@ -572,7 +572,7 @@ jpg
                 return new SortedDictionary<string, MusicGData>();
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
             var o = JObject.Parse(dt);
-            Console.WriteLine(o.ToString());
+            MainClass.DebugCallBack("Get Gd Data",o.ToString());
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["mydiss"]["list"];
             foreach (var ex in dx)
@@ -596,7 +596,7 @@ jpg
         {
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&ct=20&cid=205360956&userid={Settings.USettings.LemonAreeunIts}&reqtype=3&sin=0&ein=25");
             var o = JObject.Parse(dt);
-            Console.WriteLine(o.ToString());
+            MainClass.DebugCallBack("Result",o.ToString());
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["cdlist"];
             foreach (var ex in dx)
@@ -627,7 +627,7 @@ jpg
             int start = (osx - 1) * 30;
             int end = start + 29;
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId={sortId}&sin={start}&ein={end}", Encoding.UTF8));
-            Console.WriteLine(o.ToString());
+            MainClass.DebugCallBack("FLGD Data",o.ToString());
             var data = new List<MusicGD>();
             int i = 0;
             var dl = o["data"]["list"];
@@ -758,13 +758,10 @@ jpg
             }
             ids = ids.Substring(0, ids.LastIndexOf(","));
             typelist = typelist.Substring(0, typelist.LastIndexOf(","));
-            Console.WriteLine("ids:" + ids);
             await AddNewGdAsync(dt.name);
             await Task.Delay(500);
             string dir = await GetGDdiridByNameAsync(dt.name);
-            Console.WriteLine("dirId" + dir);
             var amt = await AddMusicToGDPLAsync(ids, dir, typelist);
-            Console.WriteLine(amt[0] + amt[1]);
             x.Dispatcher.Invoke(() =>
             {
                 Finished();
@@ -800,7 +797,6 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            Console.WriteLine(st);
             string vk = TextHelper.XtoYGetTo(st, "http://apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/C400000By9MX0yKL2c.m4a", "&fromtag=38", 0);
             var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
             return $"http://musichy.tc.qq.com/amobile.music.tc.qq.com/C400{mid}.m4a" + vk + "&fromtag=98";
@@ -972,7 +968,7 @@ jpg
             int index = (osx - 1) * 30;
             string json = await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
             JObject o = JObject.Parse(json);
-            Console.WriteLine(json);
+            MainClass.DebugCallBack("TopList",json);
             List<Music> dt = new List<Music>();
             int i = 0;
             var s = o["songlist"];
@@ -1215,7 +1211,6 @@ jpg
             int size = 30;
             int from = 30 * (index - 1);
             string str = await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=" + Settings.USettings.LemonAreeunIts + "&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22music.concern.RelationList%22%2C%22method%22%3A%22GetFollowSingerList%22%2C%22param%22%3A%7B%22From%22%3A" + from + "%2C%22Size%22%3A" + size + "%7D%7D%7D");
-            Console.WriteLine(str);
             JToken obj = JObject.Parse(str)
                 ["singerList"]["data"]["List"];
 
@@ -1594,9 +1589,9 @@ jpg
         {
             string Page = ((page - 1) * 20).ToString();
             string id = await GetWYIdByName(name);
-            Console.WriteLine(id);
+            MainClass.DebugCallBack("WyyGDid",id);
             var data = await HttpHelper.GetWebAsync($"https://music.163.com/api/v1/resource/comments/R_SO_4_{id}?offset={Page}");
-            Console.WriteLine(data);
+            MainClass.DebugCallBack("result",data);
             JObject o = JObject.Parse(data);
             var d = new List<MusicPL>();
             var hc = o["hotComments"];
@@ -1659,7 +1654,7 @@ jpg
         {
             string st = (await HttpHelper.GetWebAsync($"https://y.qq.com/n/yqq/song/{mid}.html")).Replace(" ", "").Replace("\r\n", "");
             string json = TextHelper.XtoYGetTo(st, "<script>varg_SongData=", ";</script>", 0);
-            Console.WriteLine(json);
+            MainClass.DebugCallBack("GetMusicIdData",json);
 
             JObject o = JObject.Parse(json);
             return o["songid"].ToString(); ;
@@ -1673,7 +1668,7 @@ jpg
         public static async Task<string> PraiseMusicPLAsync(string mid, MusicPL mp)
         {
             string id = await GetMusicIdByMidAsync(mid);
-            Console.WriteLine(id + " - " + mp.commentid);
+            MainClass.DebugCallBack("Praise",id + " - " + mp.commentid);
             string get;
             if (mp.ispraise)
                 get = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_praise_h5.fcg?g_tk={Settings.USettings.LemonAreeunIts}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&cid=205360774&cmd=2&reqtype=2&biztype=1&topid={id}&commentid={mp.commentid}&qq={Settings.USettings.LemonAreeunIts}&domain=qq.com&ct=24&cv=101010");

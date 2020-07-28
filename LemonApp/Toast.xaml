@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LemonApp"
         mc:Ignorable="d"
         Title="Toast" Height="45" Width="500" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Topmost="True" Background="{x:Null}" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" MouseDoubleClick="Window_MouseDoubleClick" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <Border Background="#B2333337" CornerRadius="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Border x:Name="backg" Background="#B2333337" CornerRadius="20" HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock x:Name="tb" Foreground="#E5FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center" Text="TextBlock" FontSize="22" Margin="20,8.5" TextAlignment="Center"/>
     </Border>
 </Window>
