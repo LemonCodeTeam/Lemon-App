@@ -24,7 +24,7 @@ namespace LemonApp
             else if (imgurl == "-3")
                 img.Background = new SolidColorBrush(Color.FromArgb(255, 240, 240, 240));
             else if (imgurl != "-1")
-                img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.CachePath + "Skin\\" + imgurl + ".jpg", UriKind.Absolute)));
+                img.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.MusicCachePath + "Skin\\" + imgurl + ".jpg", UriKind.Absolute)));
             this.name.Text = name;
         }
         public SkinControl(string name, Brush image, Color themecolor)

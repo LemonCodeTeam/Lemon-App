@@ -14,7 +14,7 @@ namespace LemonLib
     {
         private static async Task<string> ReadEncodeAsync(string qq)
         {
-            string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(await File.ReadAllTextAsync(USettings.CachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
+            string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
             Console.WriteLine(data);
             return data;
         }
@@ -25,7 +25,7 @@ namespace LemonLib
             try
             {
                 if (id == "id") id = USettings.LemonAreeunIts;
-                await File.WriteAllTextAsync(USettings.CachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
+                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
             }
             catch { }
         }
@@ -36,9 +36,9 @@ namespace LemonLib
                 try
                 {
                     USettings = new UserSettings();
-                    if (File.Exists(USettings.CachePath + qq + ".st"))
+                    if (File.Exists(USettings.DataCachePath + qq + ".st"))
                     {
-                        string data =await File.ReadAllTextAsync(USettings.CachePath + qq + ".st");
+                        string data =await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st");
                         Console.WriteLine(data);
                         XDUsettings(data);
                     }
@@ -89,14 +89,24 @@ namespace LemonLib
                 USettings.Skin_Theme_G = o["Skin_Theme_G"].ToString();
                 USettings.Skin_Theme_B = o["Skin_Theme_B"].ToString();
             }
-            if (data.Contains("CachePath"))
+            if (data.Contains("MusicCachePath"))
             {
-                USettings.CachePath = o["CachePath"].ToString();
+                USettings.MusicCachePath = o["MusicCachePath"].ToString();
                 USettings.DownloadPath = o["DownloadPath"].ToString();
             }
             else
             {
-                USettings.CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\Cache\");
+                DriveInfo[] allDirves = DriveInfo.GetDrives();
+                string dir = "C:\\";
+                foreach (DriveInfo item in allDirves)
+                {
+                    if (item.DriveType == DriveType.Fixed && item.Name != "C:\\")
+                    {
+                        dir = item.Name;
+                        return;
+                    }
+                }
+                USettings.MusicCachePath = dir + "LemonAppCache\\";
                 USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
             if (data.Contains("MusicGDataLike"))
@@ -124,7 +134,16 @@ namespace LemonLib
         {
             public UserSettings()
             {
-                CachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\");
+                DriveInfo[] allDirves = DriveInfo.GetDrives();
+                string dir = "C:\\";
+                foreach (DriveInfo item in allDirves) {
+                    if (item.DriveType == DriveType.Fixed&& item.Name!= "C:\\") {
+                        dir = item.Name;
+                        break;
+                    }
+                }
+                MusicCachePath = dir + "LemonAppCache\\";
+                DataCachePath = Environment.ExpandEnvironmentVariables(@"%AppData%\LemonApp\");
                 DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
             #region 用户配置
@@ -158,7 +177,8 @@ namespace LemonLib
             public string Skin_Theme_B { get; set; } = "";
             #endregion
             #region 缓存/下载路径
-            public string CachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\";
+            public string DataCachePath = "";
+            public string MusicCachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\";
             public string DownloadPath = "";
             public string DownloadName = "[I].  [M] - [S]";
             public bool DownloadWithLyric = true;
@@ -174,9 +194,9 @@ namespace LemonLib
         {
             try
             {
-                if (File.Exists(USettings.CachePath + "Data.st"))
+                if (File.Exists(USettings.DataCachePath + "Data.st"))
                 {
-                    string data = await File.ReadAllTextAsync(USettings.CachePath + "Data.st");
+                    string data = await File.ReadAllTextAsync(USettings.DataCachePath + "Data.st");
                     JObject o = JObject.Parse(data);
                     LSettings.qq = o["qq"].ToString();
                 }
@@ -192,7 +212,7 @@ namespace LemonLib
         }
         public async static void SaveLocaSettings()
         {
-            await File.WriteAllTextAsync(USettings.CachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
+            await File.WriteAllTextAsync(USettings.DataCachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
         }
         public class LocaSettings
         {
@@ -204,11 +224,11 @@ namespace LemonLib
         public static HANDLE Handle = new HANDLE();
         public async static void SaveHandle()
         {
-             await File.WriteAllTextAsync(USettings.CachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
+             await File.WriteAllTextAsync(USettings.DataCachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
         }
         public static async Task<HANDLE> ReadHandleAsync()
         {
-            JObject o = JObject.Parse(await File.ReadAllTextAsync(USettings.CachePath + "HANDLE.st"));
+            JObject o = JObject.Parse(await File.ReadAllTextAsync(USettings.DataCachePath + "HANDLE.st"));
             Handle.ProcessId = int.Parse(o["ProcessId"].ToString());
             Handle.WINDOW_HANDLE = int.Parse(o["WINDOW_HANDLE"].ToString());
             return Handle;

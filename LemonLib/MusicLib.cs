@@ -29,28 +29,28 @@ namespace LemonLib
         {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
-            if (!Directory.Exists(Settings.USettings.CachePath))
-                Directory.CreateDirectory(Settings.USettings.CachePath);
-            if (!Directory.Exists(Settings.USettings.CachePath + "Music\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "Music\\");
-            if (!Directory.Exists(Settings.USettings.CachePath + "Lyric\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
-            if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
+            if (!Directory.Exists(Settings.USettings.MusicCachePath))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath);
+            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Music\\"))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Music\\");
+            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Lyric\\"))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Lyric\\");
+            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Image\\"))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Image\\");
             qq = id;
         }
         public MusicLib()
         {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
-            if (!Directory.Exists(Settings.USettings.CachePath))
-                Directory.CreateDirectory(Settings.USettings.CachePath);
-            if (!Directory.Exists(Settings.USettings.CachePath + "Music\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "Music\\");
-            if (!Directory.Exists(Settings.USettings.CachePath + "Lyric\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "Lyric\\");
-            if (!Directory.Exists(Settings.USettings.CachePath + "Image\\"))
-                Directory.CreateDirectory(Settings.USettings.CachePath + "Image\\");
+            if (!Directory.Exists(Settings.USettings.MusicCachePath))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath);
+            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Music\\"))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Music\\");
+            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Lyric\\"))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Lyric\\");
+            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Image\\"))
+                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Image\\");
         }
         #endregion
         #region 一些字段
@@ -907,7 +907,7 @@ jpg
         /// <returns></returns>
         public static async Task<string> GetLyric(string McMind, string file = "")
         {
-            if (file == "") file = Settings.USettings.CachePath + "Lyric\\" + McMind + ".lrc";
+            if (file == "") file = Settings.USettings.MusicCachePath + "Lyric\\" + McMind + ".lrc";
             if (!File.Exists(file))
             {
                 WebClient c = new WebClient();

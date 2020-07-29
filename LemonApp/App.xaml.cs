@@ -35,10 +35,12 @@ namespace LemonApp
             }
             else
             {
-                if (!Directory.Exists(Settings.USettings.CachePath))
-                    Directory.CreateDirectory(Settings.USettings.CachePath);
-                if (!Directory.Exists(Settings.USettings.CachePath + "Skin"))
-                    Directory.CreateDirectory(Settings.USettings.CachePath + "Skin");
+                if (!Directory.Exists(Settings.USettings.DataCachePath))
+                    Directory.CreateDirectory(Settings.USettings.DataCachePath);
+                if (!Directory.Exists(Settings.USettings.MusicCachePath))
+                    Directory.CreateDirectory(Settings.USettings.MusicCachePath);
+                if (!Directory.Exists(Settings.USettings.MusicCachePath + "Skin"))
+                    Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Skin");
                 new MainWindow().Show();
             }
         }
@@ -140,7 +142,7 @@ namespace LemonApp
                 + "\r\n  帮助链接:" + e.HelpLink
                 + "\r\n 调用堆:" + e.StackTrace;
                 Console.WriteLine(i);
-                FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
+                FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
                 StreamWriter sw = new StreamWriter(fs);
                 sw.Write(i);
                 sw.Flush();
@@ -153,7 +155,7 @@ namespace LemonApp
         {
             string i = "\n小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:" + EM + "\r\n" + ((Exception)e.ExceptionObject).Message + "\r\n 导致错误的对象名称:" + ((Exception)e.ExceptionObject).Source + "\r\n 引发异常的方法:" + ((Exception)e.ExceptionObject).TargetSite + "\r\n  帮助链接:" + ((Exception)e.ExceptionObject).HelpLink + "\r\n 调用堆:" + ((Exception)e.ExceptionObject).StackTrace;
             Console.WriteLine(i);
-            FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
+            FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(i);
             sw.Flush();
@@ -165,7 +167,7 @@ namespace LemonApp
             e.Handled = true;
             string i = "\n(Dispatcher)小萌账号:" + Settings.USettings.LemonAreeunIts + "\r\n小萌版本:" + EM + "\r\n" + e.Exception.Message + "\r\n 导致错误的对象名称:" + e.Exception.Source + "\r\n 引发异常的方法:" + e.Exception.TargetSite + "\r\n  帮助链接:" + e.Exception.HelpLink + "\r\n 调用堆:" + e.Exception.StackTrace;
             Console.WriteLine(i);
-            FileStream fs = new FileStream(Settings.USettings.CachePath + "Log.log", FileMode.Append);
+            FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(i);
             sw.Flush();

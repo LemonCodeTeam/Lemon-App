@@ -34,7 +34,7 @@ namespace LemonApp
             pro.Visibility = Visibility.Visible;
             tb.Text = "下载升级包中...";
             Height = 210;
-            var xpath = Settings.USettings.CachePath + "win-release.zip";
+            var xpath = Settings.USettings.DataCachePath + "win-release.zip";
             WebClient wb = new WebClient();
             wb.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             wb.Headers.Add("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
@@ -53,13 +53,13 @@ namespace LemonApp
             wb.DownloadFileCompleted += async delegate
             {
                 tb.Text = "下载完成，解压升级包...";
-                string file = Settings.USettings.CachePath + "win-release.exe";
+                string file = Settings.USettings.DataCachePath + "win-release.exe";
                 await Task.Run(() =>
                 {
-                    ZipFile.ExtractToDirectory(xpath, Settings.USettings.CachePath, true);
+                    ZipFile.ExtractToDirectory(xpath, Settings.USettings.DataCachePath, true);
                 });
                 tb.Text = "完成";
-                Process.Start("explorer.exe", Settings.USettings.CachePath + "win-release.exe");
+                Process.Start("explorer.exe", Settings.USettings.DataCachePath + "win-release.exe");
             };
             wb.DownloadFileAsync(new Uri("https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip"), xpath);
         }

@@ -350,7 +350,7 @@ namespace LemonApp
                     if (j["code"].ToString() == "0")
                     {
                         var sdc = JObject.Parse(sl)["data"]["creator"];
-                        await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.CachePath + Settings.USettings.LemonAreeunIts + ".jpg");
+                        await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.DataCachePath + Settings.USettings.LemonAreeunIts + ".jpg");
                         string name = sdc["nick"].ToString();
                         Settings.USettings.UserName = name;
                         var image = new System.Drawing.Bitmap(Settings.USettings.UserImage);
@@ -663,7 +663,7 @@ namespace LemonApp
                     var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
                     Console.WriteLine(sl);
                     var sdc = JObject.Parse(sl)["data"]["creator"];
-                    await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.CachePath + qq + ".jpg");
+                    await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.DataCachePath + qq + ".jpg");
                     string name = sdc["nick"].ToString();
                     await Task.Run(async () =>
                     {
@@ -674,7 +674,7 @@ namespace LemonApp
                             Settings.USettings.Cookie = TextHelper.XtoYGetTo(cdata, "Cookie[", "]END", 0);
                         }
                         Settings.USettings.UserName = name;
-                        Settings.USettings.UserImage = Settings.USettings.CachePath + qq + ".jpg";
+                        Settings.USettings.UserImage = Settings.USettings.DataCachePath + qq + ".jpg";
                         Settings.USettings.LemonAreeunIts = qq;
                         Settings.SaveSettings();
                         Settings.LSettings.qq = qq;
@@ -717,7 +717,7 @@ namespace LemonApp
         }
         public void LoadSettings()
         {
-            CachePathTb.Text = Settings.USettings.CachePath;
+            CachePathTb.Text = Settings.USettings.MusicCachePath;
             DownloadPathTb.Text = Settings.USettings.DownloadPath;
             DownloadWithLyric.IsChecked = Settings.USettings.DownloadWithLyric;
             DownloadNameTb.Text = Settings.USettings.DownloadName;
@@ -813,7 +813,7 @@ namespace LemonApp
             if (g.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 CachePathTb.Text = g.SelectedPath;
-                Settings.USettings.CachePath = g.SelectedPath;
+                Settings.USettings.MusicCachePath = g.SelectedPath;
             }
         }
 
@@ -919,7 +919,7 @@ namespace LemonApp
                 Task.Run(new Action(() =>
                 {
                     string strFileName = ofd.FileName;
-                    string file = Settings.USettings.CachePath + "Skin\\" + TextHelper.MD5.EncryptToMD5string(System.IO.File.ReadAllText(strFileName)) + System.IO.Path.GetExtension(strFileName);
+                    string file = Settings.USettings.MusicCachePath + "Skin\\" + TextHelper.MD5.EncryptToMD5string(System.IO.File.ReadAllText(strFileName)) + System.IO.Path.GetExtension(strFileName);
                     System.IO.File.Copy(strFileName, file, true);
                     Dispatcher.Invoke(new Action(() =>
                     Page.Background = new ImageBrush(new System.Drawing.Bitmap(file).ToImageSource())));
@@ -1038,16 +1038,16 @@ namespace LemonApp
                 Color color = Color.FromRgb(byte.Parse(dx["ThemeColor"]["R"].ToString()),
                     byte.Parse(dx["ThemeColor"]["G"].ToString()),
                     byte.Parse(dx["ThemeColor"]["B"].ToString()));
-                if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + uri + ".jpg"))
-                    await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{uri}.jpg", Settings.USettings.CachePath + "Skin\\" + uri + ".jpg");
+                if (!System.IO.File.Exists(Settings.USettings.MusicCachePath + "Skin\\" + uri + ".jpg"))
+                    await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/w{uri}.jpg", Settings.USettings.MusicCachePath + "Skin\\" + uri + ".jpg");
                 SkinControl sc = new SkinControl(uri, name, color);
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) =>
                 {
                     if (wac.IsEnabled) wac.IsEnabled = false;
-                    if (!System.IO.File.Exists(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png"))
-                        await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png");
-                    Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
+                    if (!System.IO.File.Exists(Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png"))
+                        await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png");
+                    Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
                     DThemePage.Child = null;
                     Color co;
                     if (sc.txtColor == "Black")
@@ -1064,7 +1064,7 @@ namespace LemonApp
                     App.BaseApp.SetColor("ResuColorBrush", co);
                     App.BaseApp.SetColor("ButtonColorBrush", co);
                     App.BaseApp.SetColor("TextX1ColorBrush", co);
-                    Settings.USettings.Skin_Path = Settings.USettings.CachePath + "Skin\\" + sc.imgurl + ".png";
+                    Settings.USettings.Skin_Path = Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png";
                     Settings.USettings.Skin_txt = sc.txtColor;
                     Settings.USettings.Skin_Theme_R = sc.theme.R.ToString();
                     Settings.USettings.Skin_Theme_G = sc.theme.G.ToString();
@@ -2121,7 +2121,7 @@ namespace LemonApp
         }
         public async void LoadMusic(Music data, bool doesplay)
         {
-            string downloadpath = Settings.USettings.CachePath + "Music\\" + data.MusicID + ".mp3";
+            string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + ".mp3";
             MusicPlay_LoadProc.Value = 0;
             if (!System.IO.File.Exists(downloadpath))
             {
