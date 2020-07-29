@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
@@ -85,10 +86,12 @@ namespace LemonApp
                 Close();
             }
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            await Task.Yield();
             Focus();
             textBox1.Focus();
+            Keyboard.Focus(textBox1);
             Tp = Top;
         }
 

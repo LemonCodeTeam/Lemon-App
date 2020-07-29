@@ -115,6 +115,10 @@ namespace LemonLib
             }
             if (data.Contains("PlayingIndex"))
                 USettings.PlayingIndex = int.Parse(o["PlayingIndex"].ToString());
+            if (data.Contains("IsLyricImm"))
+                USettings.IsLyricImm = bool.Parse(o["IsLyricImm"].ToString());
+            if (data.Contains("IsMiniOpen"))
+                USettings.IsMiniOpen = bool.Parse(o["IsMiniOpen"].ToString());
         }
         public class UserSettings
         {
@@ -141,6 +145,10 @@ namespace LemonLib
             //启动歌词页动效
             //0=波澜 1=无 2=转动
             public int LyricAnimationMode { get; set; } = 0;
+            //是否打开了沉浸歌词
+            public bool IsLyricImm { get; set; } = false;
+            //是否打开了mini小窗
+            public bool IsMiniOpen { get; set; } = true;
             //是否打开桌面歌词
             public bool DoesOpenDeskLyric { get; set; } = true;
             public string Skin_Path { get; set; } = "";

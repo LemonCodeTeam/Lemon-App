@@ -37,6 +37,8 @@ namespace LemonApp
     public partial class MainWindow : Window
     {
         #region 一些字段
+        //-------Mini--------
+        private MiniPlayer mini;
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
         public MusicLib ml;
         public PlayDLItem MusicData = new PlayDLItem(new Music());
@@ -123,6 +125,10 @@ namespace LemonApp
             Updata();
             //----播放组件-----------
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
+            //----Load Mini-----------------
+            mini = new MiniPlayer(this);
+            if (Settings.USettings.IsMiniOpen)
+                mini.Show();
             //--------应用程序配置 热键和消息回调--------
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
@@ -372,10 +378,15 @@ namespace LemonApp
             lv.NextLyric += (text) =>
             {
                 //主要用于桌面歌词的显示
-                if (Settings.USettings.DoesOpenDeskLyric)
-                {
-                    if (lastlyric != text) if (text != "")
-                            lyricTa.Updata(text);
+                if (text != "" && lastlyric != text) {
+                    //有歌词更新
+
+                    if (Settings.USettings.DoesOpenDeskLyric)
+                        lyricTa.Updata(text);
+                    if (Settings.USettings.IsLyricImm)
+                        LyricImm_tb.Text = text;
+                    mini.lyric.Text = text;
+
                     lastlyric = text;
                 }
             };
@@ -420,12 +431,14 @@ namespace LemonApp
                     if (CanJd)
                     {
                         jd.Value = now;
+                        mini.jd.Value = now;
                         Play_Now.Text = TimeSpan.FromMilliseconds(now).ToString(@"mm\:ss");
                     }
                     all = mp.GetLength.TotalMilliseconds;
                     string alls = TimeSpan.FromMilliseconds(all).ToString(@"mm\:ss");
                     Play_All.Text = alls;
                     jd.Maximum = all;
+                    mini.jd.Maximum = all;
                     if (ind == 1)
                     {
                         if (Settings.USettings.LyricAnimationMode == 0)
@@ -440,27 +453,34 @@ namespace LemonApp
                                 }
                             if (sv != 0)
                             {
-                                Border b = new Border();
-                                b.BorderThickness = new Thickness(1);
-                                b.BorderBrush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
-                                b.Height = LyricBig.ActualHeight;
-                                b.Width = LyricBig.ActualWidth;
-                                b.CornerRadius = LyricBig.CornerRadius;
-                                b.HorizontalAlignment = HorizontalAlignment.Center;
-                                b.VerticalAlignment = VerticalAlignment.Center;
-                                var v = b.Height + sv * 500;
-                                Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
-                                var f = s.Children[0] as DoubleAnimationUsingKeyFrames;
-                                (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
-                                Storyboard.SetTarget(f, b);
-                                var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
-                                (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
-                                Storyboard.SetTarget(f1, b);
-                                var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
-                                Storyboard.SetTarget(f2, b);
-                                s.Completed += delegate { LyricAni.Children.Remove(b); };
-                                LyricAni.Children.Add(b);
-                                s.Begin();
+                                if (Settings.USettings.IsLyricImm &&sv>0.25)
+                                {
+                                    (Resources["LyricImm_High"] as Storyboard).Begin();
+                                }
+                                else
+                                {
+                                    Border b = new Border();
+                                    b.BorderThickness = new Thickness(1);
+                                    b.BorderBrush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
+                                    b.Height = LyricBig.ActualHeight;
+                                    b.Width = LyricBig.ActualWidth;
+                                    b.CornerRadius = LyricBig.CornerRadius;
+                                    b.HorizontalAlignment = HorizontalAlignment.Center;
+                                    b.VerticalAlignment = VerticalAlignment.Center;
+                                    var v = b.Height + sv * 500;
+                                    Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
+                                    var f = s.Children[0] as DoubleAnimationUsingKeyFrames;
+                                    (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
+                                    Storyboard.SetTarget(f, b);
+                                    var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
+                                    (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
+                                    Storyboard.SetTarget(f1, b);
+                                    var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
+                                    Storyboard.SetTarget(f2, b);
+                                    s.Completed += delegate { LyricAni.Children.Remove(b); };
+                                    LyricAni.Children.Add(b);
+                                    s.Begin();
+                                }
                             }
                         }
                         lv.LrcRoll(now, true);
@@ -505,6 +525,11 @@ namespace LemonApp
             }
             //-------------------
             AudioSlider.Value = 100;
+            //---------载入沉浸歌词------
+            if (Settings.USettings.IsLyricImm) {
+                LyricNor.Visibility = Visibility.Collapsed;
+                LyricImm.Visibility = Visibility.Visible;
+            }
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -1489,6 +1514,7 @@ namespace LemonApp
         private void LikeBtnUp()
         {
             likeBtn_path.Tag = false;
+            mini.likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
             if (ind == 1)
                 likeBtn_path.Fill = new SolidColorBrush(Colors.White);
             else
@@ -1501,13 +1527,14 @@ namespace LemonApp
         {
             likeBtn_path.Tag = true;
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
+            mini.likeBtn_path.Fill = likeBtn_path.Fill;
         }
         /// <summary>
         /// 添加/删除 我喜欢的歌曲
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        public async void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (MusicName.Text != "MusicName")
             {
@@ -1852,7 +1879,8 @@ namespace LemonApp
 
         private async void SearchBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Search_SmartBox.Visibility = Visibility.Visible;
+            await Task.Yield();
+            Search_SmartBox.IsOpen = true;
             Search_SmartBoxList.Items.Clear();
             var data = await MusicLib.SearchHotKey();
             var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜", Margin = new Thickness(10, 0, 10, 0) };
@@ -1871,12 +1899,12 @@ namespace LemonApp
         {
             if (SearchBox.Text.Trim() != string.Empty)
             {
-                if (Search_SmartBox.Visibility != Visibility.Visible)
-                    Search_SmartBox.Visibility = Visibility.Visible;
+                if (!Search_SmartBox.IsOpen)
+                    Search_SmartBox.IsOpen = true;
                 var data = await ml.Search_SmartBoxAsync(SearchBox.Text);
                 Search_SmartBoxList.Items.Clear();
                 if (data.Count == 0)
-                    Search_SmartBox.Visibility = Visibility.Collapsed;
+                    Search_SmartBox.IsOpen = false;
                 else foreach (var dt in data)
                     {
                         var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(10, 10, 10, 0) };
@@ -1885,12 +1913,12 @@ namespace LemonApp
                         Search_SmartBoxList.Items.Add(mdb);
                     }
             }
-            else Search_SmartBox.Visibility = Visibility.Collapsed;
+            else Search_SmartBox.IsOpen = false;
         }
         private void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && SearchBox.Text.Trim() != string.Empty)
-            { SearchMusic(SearchBox.Text); ixPlay = 1; Search_SmartBox.Visibility = Visibility.Collapsed; }
+            { SearchMusic(SearchBox.Text); ixPlay = 1; Search_SmartBox.IsOpen = false; }
         }
         private void SearchBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -1903,7 +1931,7 @@ namespace LemonApp
             if (e.Key == Key.Enter)
             {
                 SearchBox.Text = (Search_SmartBoxList.SelectedItem as ListBoxItem).Content.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
-                Search_SmartBox.Visibility = Visibility.Collapsed;
+                Search_SmartBox.IsOpen = false;
                 SearchMusic(SearchBox.Text); ixPlay = 1;
             }
         }
@@ -1911,13 +1939,8 @@ namespace LemonApp
         private void Bd_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SearchBox.Text = (sender as ListBoxItem).Content.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
-            Search_SmartBox.Visibility = Visibility.Collapsed;
+            Search_SmartBox.IsOpen = false;
             SearchMusic(SearchBox.Text); ixPlay = 1;
-        }
-
-        private void Search_SmartBox_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Search_SmartBox.Visibility = Visibility.Collapsed;
         }
         public async void SearchMusic(string key, int osx = 0, bool NeedSave = true)
         {
@@ -2047,6 +2070,14 @@ namespace LemonApp
                 else AddPlayDl_CR(dt);
             }
         }
+        private void MiniBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!Settings.USettings.IsMiniOpen)
+            {
+                Settings.USettings.IsMiniOpen = true;
+                mini.Show();
+            }
+        }
         public void K_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = sender as PlayDLItem;
@@ -2121,9 +2152,12 @@ namespace LemonApp
 
             LoadMusic(data, doesplay);
 
-            Title = data.MusicName + " - " + data.SingerText;
+            Title ="Lemon App:"+ data.MusicName + " - " + data.SingerText;
             Settings.USettings.Playing = MusicData.Data;
             Settings.SaveSettings();
+            mini.title.Text = data.MusicName + " - " + data.SingerText;
+            mini.MusicName.Text = data.MusicName;
+            mini.SingerText.Text = data.SingerText;
             if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
                 LikeBtnDown();
             else LikeBtnUp();
@@ -2131,6 +2165,7 @@ namespace LemonApp
             Console.WriteLine(data.ImageUrl);
             BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
             MusicImage.Background = new ImageBrush(im);
+            mini.img.Background = MusicImage.Background;
             var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
             var imb = im.ToBitmap();
             imb.GaussianBlur(ref rect, 20);
@@ -2142,8 +2177,10 @@ namespace LemonApp
 
             if (doesplay)
             {
+                //开始播放
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
+                mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
                 t.Start();
                 isplay = true;
                 if (Settings.USettings.LyricAnimationMode == 2)
@@ -2270,17 +2307,18 @@ namespace LemonApp
         {
             PlayBtn_MouseDown(null, null);
         }
-        private void Jd_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {//若使用ValueChanged事件，在value改变时也会触发，而不单是拖动jd.
-            mp.Position = TimeSpan.FromMilliseconds(jd.Value);
+        public void Jd_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            //若使用ValueChanged事件，在value改变时也会触发，而不单是拖动jd.
+            mp.Position = TimeSpan.FromMilliseconds((sender as Slider).Value);
             CanJd = true;
         }
         bool CanJd = true;
-        private void Jd_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        public void Jd_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             CanJd = false;
         }
-        private void Jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        public void Jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             try
             {
@@ -2299,7 +2337,7 @@ namespace LemonApp
             PlayControl_PlayNext(null, null);
         }
 
-        private void PlayControl_PlayLast(object sender, MouseButtonEventArgs e)
+        public void PlayControl_PlayLast(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = null;
 
@@ -2348,7 +2386,7 @@ namespace LemonApp
         }
         private List<int> RandomIndexes = new List<int>();
         private int RandomOffset = 0;
-        private void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
+        public void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
         {
             PlayDLItem k = null;
             if (PlayMod == 0 || PlayMod == 1)
@@ -2419,7 +2457,7 @@ namespace LemonApp
                 PlayControl_PlayNext(null,null);
             }
         }
-        private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        public void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (isplay)
             {
@@ -2429,6 +2467,7 @@ namespace LemonApp
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
                 t.Stop();
+                mini.play.Data = Geometry.Parse(Properties.Resources.MiniPlay);
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Play);
             }
             else
@@ -2439,6 +2478,7 @@ namespace LemonApp
                     LyricBigAniRound.Begin();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                 t.Start();
+                mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
                 (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
             }
         }
@@ -2622,14 +2662,14 @@ namespace LemonApp
             SingerListPop.IsOpen = false;
             K_GetToSingerPage(MusicData.Data.Singer[(int)((sender as ListBoxItem).Tag)]);
         }
-        private void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        public void XHBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //NOW:列表循环
             if (PlayMod == 0)
             {
                 //切换为单曲循环
                 PlayMod = 1;
-                (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Dqxh);
+                path6.Data = Geometry.Parse(Properties.Resources.Dqxh);
             }
             else if (PlayMod == 1)
             {
@@ -2637,7 +2677,7 @@ namespace LemonApp
                 if (IsRadio)
                 {
                     PlayMod = 0;
-                    (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Lbxh);
+                    path6.Data = Geometry.Parse(Properties.Resources.Lbxh);
                 }
                 else
                 {
@@ -2646,14 +2686,16 @@ namespace LemonApp
                         RandomIndexes.Add(RandomOffset);
                     }
                     PlayMod = 2;
-                    (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Random);
+                    path6.Data = Geometry.Parse(Properties.Resources.Random);
                 }
             }
             else if (PlayMod == 2)
             {
                 PlayMod = 0;
-                (XHBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Lbxh);
+                path6.Data = Geometry.Parse(Properties.Resources.Lbxh);
             }
+
+            mini.XHPath.Data = path6.Data;
         }
         bool isOpenPlayDLPage = false;
         private void PlayLbBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2722,7 +2764,44 @@ namespace LemonApp
         }
         #endregion
         #region Lyric & 评论加载
-
+        private async void LikesHit_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            LikesHit.MouseDown -= LikesHit_MouseDown;
+            LikesHicon.Visibility = Visibility.Collapsed;
+            LikesNum.Text = "Likes +1 ing...";
+            string data = await HttpHelper.GetWebWithHeaderAsync("https://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg");
+            string hits = TextHelper.XtoYGetTo(data, @"<text x=""54"" y=""14"">", "</text>", 0);
+            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
+            await Task.Delay(300);
+            LikesNum.Text = "Likes: " + hits;
+            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
+            await Task.Delay(1000);
+            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
+            await Task.Delay(300);
+            LikesNum.Text = "Thanks!";
+            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
+            await Task.Delay(1000);
+            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
+            await Task.Delay(300);
+            LikesHicon.Visibility = Visibility.Visible;
+            LikesNum.Text = "Likes";
+            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.3)));
+            LikesHit.MouseDown += LikesHit_MouseDown;
+        }
+        private void NorImm_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.IsLyricImm = !Settings.USettings.IsLyricImm;
+            if (LyricNor.Visibility == Visibility.Visible)
+            {
+                LyricNor.Visibility = Visibility.Collapsed;
+                LyricImm.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LyricNor.Visibility = Visibility.Visible;
+                LyricImm.Visibility = Visibility.Collapsed;
+            }
+        }
         private void LyricBig_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (Settings.USettings.LyricAnimationMode == 0)
@@ -3356,30 +3435,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private async void LikesHit_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            LikesHit.MouseDown -= LikesHit_MouseDown;
-            LikesHicon.Visibility = Visibility.Collapsed;
-            LikesNum.Text = "Likes +1 ing...";
-            string data = await HttpHelper.GetWebWithHeaderAsync("https://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg");
-            string hits = TextHelper.XtoYGetTo(data, @"<text x=""54"" y=""14"">", "</text>", 0);
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
-            await Task.Delay(300);
-            LikesNum.Text = "Likes: "+hits;
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
-            await Task.Delay(1000);
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
-            await Task.Delay(300);
-            LikesNum.Text = "Thanks!";
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
-            await Task.Delay(1000);
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
-            await Task.Delay(300);
-            LikesHicon.Visibility = Visibility.Visible;
-            LikesNum.Text = "Likes";
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.3)));
-            LikesHit.MouseDown += LikesHit_MouseDown;
-        }
     }
 }
