@@ -1620,35 +1620,58 @@ jpg
         /// </summary>
         /// <param name="mid"></param>
         /// <returns></returns>
-        public static async Task<List<MusicPL>> GetPLByQQAsync(string mid)
+        public static async Task<List<List<MusicPL>>> GetPLByQQAsync(string mid)
         {
             string id = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={mid}&tpl=yqq_song_detail&format=json&g_tk=268405378&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"))["data"][0]["id"].ToString();
-            string dt = await HttpHelper.GetWebAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_global_comment_h5.fcg?g_tk=642290724&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq&needNewCode=0&cid=205360772&reqtype=2&biztype=1&topid={id}&cmd=8&needmusiccrit=0&pagenum=0&pagesize=25&lasthotcommentid=&domain=qq.com&ct=24&cv=101010");
-            JObject ds = JObject.Parse(dt.Replace("\n", ""));
-            List<MusicPL> data = new List<MusicPL>();
-            JToken hcc = ds["hot_comment"]["commentlist"];
-            for (int i = 0; i != hcc.Count(); i++)
+            var da = await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+"{\"req_0\":{\"method\":\"GetNewCommentList\",\"module\":\"music.globalComment.CommentReadServer\",\"param\":{\"BizType\":1,\"BizId\":\"" + id + "\",\"PageSize\":20,\"PageNum\":0,\"WithHot\":1}},\"req_1\":{\"method\":\"GetHotCommentList\",\"module\":\"music.globalComment.CommentReadServer\",\"param\":{\"BizType\":1,\"BizId\":\"" + id + "\",\"LastCommentSeqNo\":null,\"" +
+"PageSize\":10,\"PageNum\":0,\"HotType\":2,\"WithAirborne\":1}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1773,\"platform\":\"wk_v17\"}}");
+            Console.WriteLine(da);
+            JObject ds = JObject.Parse(da);
+            List<List<MusicPL>> data = new List<List<MusicPL>>();
+            var main = ds["req_0"]["data"];
+            //---------最近热评-----
+            List<MusicPL> Present = new List<MusicPL>();
+            foreach (var a in main["CommentList3"]["Comments"])
             {
-                JToken hcc_i = ds["hot_comment"]["commentlist"][i];
-                MusicPL mpl = new MusicPL()
-                {
-                    img = hcc_i["avatarurl"].ToString(),
-                    like = hcc_i["praisenum"].ToString(),
-                    name = hcc_i["nick"].ToString(),
-                    text = TextHelper.Exem(hcc_i["rootcommentcontent"].ToString().Replace(@"\n", "\n")),
-                    commentid = hcc_i["commentid"].ToString()
-                };
-                DateTime dtStart = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
-                long lTime = long.Parse(hcc_i["time"].ToString() + "0000000");
-                TimeSpan toNow = new TimeSpan(lTime);
-                DateTime daTime = dtStart.Add(toNow);
-                mpl.time = daTime.ToString("yyyy-MM-dd  HH:mm");
-                if (hcc_i["ispraise"].ToString() == "1")
-                    mpl.ispraise = true;
-                else mpl.ispraise = false;
-                data.Add(mpl);
+                Present.Add(BuildMusicPl(a));
             }
+            data.Add(Present);
+            //---------精彩评论-----
+            List<MusicPL> Hot = new List<MusicPL>();
+            foreach (var a in main["CommentList2"]["Comments"])
+            {
+                Hot.Add(BuildMusicPl(a));
+            }
+            data.Add(Hot);
+            //---------最新评论-----
+            List<MusicPL> Now = new List<MusicPL>();
+            foreach (var a in main["CommentList"]["Comments"])
+            {
+                Now.Add(BuildMusicPl(a));
+            }
+            data.Add(Now);
             return data;
+        }
+
+        private static MusicPL BuildMusicPl(JToken a) {
+            MusicPL mpl = new MusicPL()
+            {
+                img = a["Avatar"].ToString(),
+                like = a["PraiseNum"].ToString(),
+                name = a["Nick"].ToString(),
+                text = TextHelper.Exem(a["Content"].ToString().Replace(@"\n", "\n")),
+                commentid = a["CmId"].ToString()
+            };
+            DateTime dtStart = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+            long lTime = long.Parse(a["PubTime"].ToString() + "0000000");
+            TimeSpan toNow = new TimeSpan(lTime);
+            DateTime daTime = dtStart.Add(toNow);
+            mpl.time = daTime.ToString("yyyy-MM-dd  HH:mm");
+            if (a["IsPraised"].ToString() == "1")
+                mpl.ispraise = true;
+            else mpl.ispraise = false;
+            return mpl;
         }
 
         /// <summary>

@@ -125,10 +125,6 @@ namespace LemonApp
             Updata();
             //----播放组件-----------
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
-            //----Load Mini-----------------
-            mini = new MiniPlayer(this);
-            if (Settings.USettings.IsMiniOpen)
-                mini.Show();
             //--------应用程序配置 热键和消息回调--------
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
@@ -153,6 +149,11 @@ namespace LemonApp
                 Settings.LSettings.qq = qq;
                 Settings.SaveLocaSettings();
             }
+            //----Load Mini-----------------
+            mini = new MiniPlayer(this);
+            if (Settings.USettings.IsMiniOpen)
+                mini.Show();
+
             Load_Theme();
             //---------Popup的移动事件
             LocationChanged += delegate
@@ -375,19 +376,35 @@ namespace LemonApp
             lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             lv.TextAlignment = TextAlignment.Center;
             ly.Child = lv;
-            lv.NextLyric += (text) =>
+            lv.NextLyric += async (text) =>
             {
                 //主要用于桌面歌词的显示
                 if (text != "" && lastlyric != text) {
                     //有歌词更新
-
+                    mini.lyric.Text = text;
+                    lastlyric = text;
                     if (Settings.USettings.DoesOpenDeskLyric)
                         lyricTa.Updata(text);
                     if (Settings.USettings.IsLyricImm)
-                        LyricImm_tb.Text = text;
-                    mini.lyric.Text = text;
-
-                    lastlyric = text;
+                    {
+                        ImmTb_Lyric.Text = "";
+                        ImmTb_Trans.Text = "";
+                        Console.WriteLine(text);
+                        string dt = text;
+                        if (text.Contains("\r\n"))
+                        {
+                            //去除翻译
+                            var cc = text.Split("\r\n");
+                            dt = cc[0];
+                            ImmTb_Trans.Text = cc[1];
+                        }
+                        //分割划词
+                        string[] dta = dt.Split(' ');
+                        foreach (string a in dta) {
+                            ImmTb_Lyric.Text += a+" ";
+                            await Task.Delay(150);
+                        }
+                    }
                 }
             };
             ml = new MusicLib(Settings.USettings.LemonAreeunIts);
@@ -2839,20 +2856,59 @@ namespace LemonApp
             NSPage(new MeumInfo(null, MusicPLPage, null));
             OpenLoading();
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
-            List<MusicPL> data;
             bool cp = true;
+            MusicPlList.Children.Clear();
             if (MusicPLPage_QQ.Visibility == Visibility.Visible)
-                data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+            {
+                MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
+                var data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+                if (data[0].Count > 0)
+                {
+                    MusicPlList.Children.Add(new TextBlock()
+                    {
+                        Text = "最近热评",
+                        FontSize = 20,
+                        FontWeight = FontWeights.Bold,
+                        Margin = new Thickness(5, 5, 0, 0)
+                    });
+                    foreach (var dt in data[0])
+                    {
+                        MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Margin = new Thickness(10, 0, 0, 20) });
+                    }
+                }
+                MusicPlList.Children.Add(new TextBlock()
+                {
+                    Text = "精彩评论",
+                    FontSize = 20,
+                    FontWeight = FontWeights.Bold,
+                    Margin = new Thickness(5, 5, 0, 0)
+                });
+                foreach (var dt in data[1])
+                {
+                    MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Margin = new Thickness(10, 0, 0, 20) });
+                }
+
+                MusicPlList.Children.Add(new TextBlock()
+                {
+                    Text = "最新评论",
+                    FontSize = 20,
+                    FontWeight = FontWeights.Bold,
+                    Margin = new Thickness(5, 5, 0, 0)
+                });
+                foreach (var dt in data[2])
+                {
+                    MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Margin = new Thickness(10, 0, 0, 20) });
+                }
+            }
             else
             {
                 cp = false;
-                data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text);
-            }
-            MusicPlList.Children.Clear();
-            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0,TimeSpan.FromSeconds(0)));
-            foreach (var dt in data)
-            {
-                MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp,  Margin = new Thickness(10, 0, 0, 20) });
+                List<MusicPL> data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text);
+                MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
+                foreach (var dt in data)
+                {
+                    MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Margin = new Thickness(10, 0, 0, 20) });
+                }
             }
             CloseLoading();
         }
@@ -2888,12 +2944,43 @@ namespace LemonApp
             MusicPLPage_QQ.Visibility = Visibility.Visible;
             OpenLoading();
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
-            List<MusicPL> data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
-            MusicPlList.Children.Clear();
-            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
-            foreach (var dt in data)
+            var data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
+            if (data[0].Count > 0)
             {
-                MusicPlList.Children.Add(new PlControl(dt) {  Margin = new Thickness(10, 0, 0, 20) });
+                MusicPlList.Children.Add(new TextBlock()
+                {
+                    Text = "最近热评",
+                    FontSize = 20,
+                    FontWeight = FontWeights.Bold,
+                    Margin = new Thickness(5, 5, 0, 0)
+                });
+                foreach (var dt in data[0])
+                {
+                    MusicPlList.Children.Add(new PlControl(dt) { Margin = new Thickness(10, 0, 0, 20) });
+                }
+            }
+            MusicPlList.Children.Add(new TextBlock()
+            {
+                Text = "精彩评论",
+                FontSize = 20,
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(5, 5, 0, 0)
+            });
+            foreach (var dt in data[1])
+            {
+                MusicPlList.Children.Add(new PlControl(dt) { Margin = new Thickness(10, 0, 0, 20) });
+            }
+
+            MusicPlList.Children.Add(new TextBlock()
+            {
+                Text = "最新评论",
+                FontSize = 20,
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(5, 5, 0, 0)
+            });
+            foreach (var dt in data[2])
+            {
+                MusicPlList.Children.Add(new PlControl(dt) { Margin = new Thickness(10, 0, 0, 20) });
             }
             CloseLoading();
         }

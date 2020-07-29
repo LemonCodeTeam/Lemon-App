@@ -1505,7 +1505,7 @@
                     <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="0,150,150,200" Grid.Column="1" MinWidth="300" MaxWidth="500"/>
                 </Grid>
                 <Grid x:Name="LyricImm" Visibility="Collapsed">
-                    <TextBlock x:Name="LyricImm_tb" Text="You don't have to try so hard" TextWrapping="Wrap" Foreground="#FFFBFBFB" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0,50,0" FontSize="72" FontWeight="Bold" TextAlignment="Center" Visibility="Visible"/>
+                    <TextBlock x:Name="LyricImm_tb" TextWrapping="Wrap" Foreground="#FFFBFBFB" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0,50,0" FontSize="72" FontWeight="Bold" TextAlignment="Center" Visibility="Visible"><Run x:Name="ImmTb_Lyric" Text="You don't have to try so hard"/><LineBreak/><Run x:Name="ImmTb_Trans" Text="Translation" FontSize="36" FontWeight="Normal" Foreground="#B2FBFBFB"/></TextBlock>
                 </Grid>
                 <Border HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="Border_MouseDown_2">
                     <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="18" Width="18"/>
