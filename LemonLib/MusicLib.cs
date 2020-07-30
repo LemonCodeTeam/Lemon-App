@@ -918,7 +918,7 @@ jpg
                 c.Headers.Add("Cookie", Settings.USettings.Cookie);
                 c.Headers.Add("Host", "c.y.qq.com");
                 string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&pcachetime=1563410858607&songmid={McMind}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
-                string td = c.DownloadString(url);
+                string td = WebUtility.HtmlDecode( c.DownloadString(url));
                 JObject o = JObject.Parse(td);
                 string t = Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())).Replace("&apos;", "\'");
                 if (o["trans"].ToString() == "") { await Task.Run(() => { File.WriteAllText(file, t); }); return t; }
@@ -929,7 +929,7 @@ jpg
                 }
             }
             else
-                return File.ReadAllText(file);
+                return WebUtility.HtmlDecode(File.ReadAllText(file));
         }
         #endregion
         #region 排行榜

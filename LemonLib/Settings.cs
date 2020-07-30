@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static LemonLib.InfoHelper;
+using System.Windows.Media;
 
 namespace LemonLib
 {
@@ -81,13 +82,14 @@ namespace LemonLib
                 USettings.DownloadName = o["DownloadName"].ToString();
             if (data.Contains("DownloadWithLyric"))
                 USettings.DownloadWithLyric = bool.Parse(o["DownloadWithLyric"].ToString());
-            if (data.Contains("Skin_Path"))
+            if (data.Contains("Skin_Type"))
             {
-                USettings.Skin_Path = o["Skin_Path"].ToString();
-                USettings.Skin_txt = o["Skin_txt"].ToString();
-                USettings.Skin_Theme_R = o["Skin_Theme_R"].ToString();
-                USettings.Skin_Theme_G = o["Skin_Theme_G"].ToString();
-                USettings.Skin_Theme_B = o["Skin_Theme_B"].ToString();
+                USettings.Skin_Type =int.Parse( o["Skin_Type"].ToString());
+                USettings.Skin_ThemeColor_R = byte.Parse(o["Skin_ThemeColor_R"].ToString());
+                USettings.Skin_ThemeColor_G = byte.Parse(o["Skin_ThemeColor_G"].ToString());
+                USettings.Skin_ThemeColor_B = byte.Parse(o["Skin_ThemeColor_B"].ToString());
+                USettings.Skin_ImagePath = o["Skin_ImagePath"].ToString();
+                USettings.Skin_FontColor = o["Skin_FontColor"].ToString();
             }
             if (data.Contains("MusicCachePath"))
             {
@@ -170,11 +172,24 @@ namespace LemonLib
             public bool IsMiniOpen { get; set; } = true;
             //是否打开桌面歌词
             public bool DoesOpenDeskLyric { get; set; } = true;
-            public string Skin_Path { get; set; } = "";
-            public string Skin_txt { get; set; } = "";
-            public string Skin_Theme_R { get; set; } = "";
-            public string Skin_Theme_G { get; set; } = "";
-            public string Skin_Theme_B { get; set; } = "";
+
+            /// <summary>
+            /// 主题类型 0:Normal 1:Picture Theme 2.Blur For Win10 3:live theme
+            /// </summary>
+            public int Skin_Type = -1;
+            /// <summary>
+            /// 主题字体颜色 Black:黑字白底 White:白字黑底
+            /// </summary>
+            public string Skin_FontColor = "Black";
+            /// <summary>
+            /// 主题颜色
+            /// </summary>
+            public byte Skin_ThemeColor_R = 49, Skin_ThemeColor_G = 194, Skin_ThemeColor_B = 124;
+
+            /// <summary>
+            /// (如果有) 主题背景图/动态主题dll路径
+            /// </summary>
+            public string Skin_ImagePath = "";
             #endregion
             #region 缓存/下载路径
             public string DataCachePath = "";
