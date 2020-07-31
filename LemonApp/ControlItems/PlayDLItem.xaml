@@ -3,13 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             Width="350" Height="60" Background="{DynamicResource Touched}" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave">
+             mc:Ignorable="d" Height="60" Background="{DynamicResource Touched}" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave">
     <UserControl.Resources>
         <SolidColorBrush x:Key="Touched" Color="#00000000"/>
     </UserControl.Resources>
     <Border x:Name="Borderbg" CornerRadius="{DynamicResource AppCornerRadius}">
-        <Grid>
+        <Grid x:Name="grid">
             <Border x:Name="img" Margin="5,3,0,3" Width="54" HorizontalAlignment="Left" CornerRadius="{DynamicResource AppCornerRadius}" Visibility="Collapsed"/>
             <TextBlock x:Name="MusicName" TextWrapping="NoWrap" Text="Just Dance" VerticalAlignment="Top" Margin="20,12,10,0" Foreground="{DynamicResource PlayDLPage_Font_Most}"/>
             <TextBlock x:Name="SingerName" TextWrapping="NoWrap" Text="Lady Gaga" VerticalAlignment="Top" Margin="20,32,10,0" Foreground="{DynamicResource PlayDLPage_Font_Low}"/>

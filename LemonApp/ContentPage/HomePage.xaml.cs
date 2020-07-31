@@ -68,7 +68,7 @@ namespace LemonApp.ContentPage
             HomePage_Nm.Children.Clear();
             foreach (var a in data.NewMusic)
             {
-                var k = new PlayDLItem(a, true, a.ImageUrl) { Margin = new Thickness(10, 0, 10, 20),Width= HomePage_Nm.ActualWidth };
+                var k = new PlayDLItem(a, true, a.ImageUrl) { Margin = new Thickness(10, 0, 10, 20)};
                 k.Tag = a;
                 k.MouseDown += (object s, MouseButtonEventArgs es) =>
                 {

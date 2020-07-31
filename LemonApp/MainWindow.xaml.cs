@@ -572,6 +572,8 @@ namespace LemonApp
             LP_ag1.MouseDown += LP_ag_MouseDown;
             LP_ag2.MouseDown += LP_ag_MouseDown;
             LP_ag3.MouseDown += LP_ag_MouseDown;
+            //-------------------------
+            PlayDLItem.Delete = new Action<PlayDLItem>((e) => this.PlayDL_List.Items.Remove(e));
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
