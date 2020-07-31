@@ -23,6 +23,7 @@
     <ProjectReference Include="..\LemonLib\LemonLib.csproj" />
     <ProjectReference Include="..\Theme\LemonApp.Theme.Dtpp\LemonApp.Theme.Dtpp.csproj" />
     <ProjectReference Include="..\Theme\LemonApp.Theme.TheFirstSnow\LemonApp.Theme.TheFirstSnow.csproj" />
+    <ProjectReference Include="..\Theme\LemonApp.Theme.YeStarLight\LemonApp.Theme.YeStarLight.csproj" />
     <ProjectReference Include="..\Theme\LemonApp.Theme\LemonApp.Theme.csproj" />
   </ItemGroup>
 

@@ -29,14 +29,14 @@ namespace LemonApp.Theme.Dtpp
     /// </summary>
     public partial class Drawer : ThemeBase
     {
-        public Drawer()
+        public Drawer(bool needDraw=true)
         {
             ThemeName = "泡泡";
             ThemeColor = Color.FromArgb(255, 32, 143, 255);
             FontColor = "White";
             InitializeComponent();
             RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
-            Draw();
+            if(needDraw)Draw();
         }
         public static new string NameSpace = "LemonApp.Theme.Dtpp.Drawer";
         public override ThemeBase GetPage()
@@ -44,7 +44,7 @@ namespace LemonApp.Theme.Dtpp
             return new Drawer();
         }
 
-        public async void Draw()
+        public override async void Draw()
         {
             await Task.Delay(1000);
             for (int i = 0; i < 10; i++)

@@ -1,0 +1,44 @@
+﻿<theme:ThemeBase
+    xmlns:theme="clr-namespace:LemonApp.Theme;assembly=LemonApp.Theme" x:Class="LemonApp.Theme.YeStarLight.Drawer"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LemonApp.Theme.YeStarLight"
+      mc:Ignorable="d"
+      d:DesignWidth="1070" d:DesignHeight="690">
+    <theme:ThemeBase.Resources>
+        <Storyboard x:Key="StarLight" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="star1" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.000000" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="rainstar" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ls1" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.5000000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ls1" Storyboard.TargetProperty="(Canvas.Left)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="302"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.5000000" Value="102"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ls1" Storyboard.TargetProperty="(Canvas.Top)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="174"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:01.5000000" Value="374"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+    </theme:ThemeBase.Resources>
+    <Grid x:Name="page">
+        <Image x:Name="cat"  HorizontalAlignment="Left" Height="207" Margin="120,0,0,0" VerticalAlignment="Bottom" Width="128" Stretch="None"/>
+        <Image x:Name="moon"  HorizontalAlignment="Left" Height="100" Margin="85,85,0,0" VerticalAlignment="Top" Width="85" Stretch="Uniform"/>
+        <Canvas x:Name="canvas" Height="434" VerticalAlignment="Top">
+            <local:star x:Name="star1" Canvas.Left="870" Canvas.Top="184"/>
+            <local:rainstar x:Name="ls1" Canvas.Left="302" Canvas.Top="174"/>
+        </Canvas>
+    </Grid>
+</theme:ThemeBase>

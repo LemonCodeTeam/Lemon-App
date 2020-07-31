@@ -29,7 +29,7 @@ namespace LemonApp.Theme.TheFirstSnow
     /// </summary>
     public partial class Drawer : ThemeBase
     {
-        public Drawer()
+        public Drawer(bool needDraw=true)
         {
             ThemeName = "第一场雪";
             ThemeColor = Color.FromArgb(255, 158, 194, 248);
@@ -39,7 +39,7 @@ namespace LemonApp.Theme.TheFirstSnow
             border.Source = Properties.Resources.motionelement.ToBitmapImage();
             Resources["snow"] = new ImageBrush(Properties.Resources.a.ToBitmapImage());
             canvas.Background = new ImageBrush(Properties.Resources.thefirstsnow.ToBitmapImage());
-            Draw();
+            if(needDraw)Draw();
             var ani = Resources["Ani"] as Storyboard;
             ani.Begin();
         }
@@ -48,7 +48,7 @@ namespace LemonApp.Theme.TheFirstSnow
             return new Drawer();
         }
         public static new string NameSpace = "LemonApp.Theme.TheFirstSnow.Drawer";
-        public async void Draw()
+        public override async void Draw()
         {
             await Task.Delay(1000);
             for (int i = 0; i < 20; i++)

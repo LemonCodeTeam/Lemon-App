@@ -10,5 +10,6 @@ namespace LemonApp.Theme
         public Color ThemeColor { get; set; }
         public string FontColor { get; set; }
         public abstract ThemeBase GetPage();
+        public abstract void Draw();
     }
 }

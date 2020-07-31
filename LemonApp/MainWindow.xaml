@@ -1027,7 +1027,7 @@
                         <Grid x:Name="DownloadPage" Visibility="Collapsed">
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
                             <LemonApp:MyScrollView x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <WrapPanel x:Name="DownloadItemsList" Orientation="Vertical"/>
+                                <StackPanel x:Name="DownloadItemsList" Orientation="Vertical"/>
                             </LemonApp:MyScrollView>
                             <LemonApp:MDButton x:Name="Download_pause" HorizontalAlignment="Left" Height="25" Margin="140,14,0,0" Width="70" TName="暂停" MouseDown="Download_pause_MouseDown" VerticalAlignment="Top" pData="{x:Null}" cr="13"/>
                             <LemonApp:MDButton x:Name="Download_clear" HorizontalAlignment="Left" Height="25" Margin="225,14,0,0" Width="70" TName="取消全部" MouseDown="Download_clear_MouseDown" VerticalAlignment="Top" cr="13" pData="{x:Null}"/>
@@ -1163,7 +1163,7 @@
                                     </Border.Background>
                                 </Border>
                             </Border>
-                            <Border x:Name="ChooseText" Background="White" Width="320" Height="200" BorderThickness="20,20,20,20" Visibility="Collapsed">
+                            <Border x:Name="ChooseText" Background="{DynamicResource PlayDLPage_Bg}" Width="320" Height="200" BorderThickness="20,20,20,20" Visibility="Collapsed">
                                 <Border.BorderBrush>
                                     <VisualBrush Stretch="None">
                                         <VisualBrush.Visual>
@@ -1172,7 +1172,7 @@
                                     </VisualBrush>
                                 </Border.BorderBrush>
                                 <Grid>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="自定义主题颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="#FF474747" FontSize="16"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="自定义主题颜色:" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="{DynamicResource ResuColorBrush}" FontSize="16"/>
                                     <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="170,40,0,0" Background="White" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Border_MouseDown_4">
                                         <TextBlock TextWrapping="Wrap" Text="白色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
                                     </Border>
@@ -1180,13 +1180,16 @@
                                         <TextBlock TextWrapping="Wrap" Text="黑色" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFDEDEDE"/>
                                     </Border>
                                     <LemonApp:MDButton pData="{x:Null}" Height="30" VerticalAlignment="Bottom" Width="85" Margin="0,0,0,10"  MouseDown="MDButton_MouseDown" cr="13,13,13,13" Theme="2" TName="确定"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="字体颜色:" VerticalAlignment="Top" Margin="10,45,0,0"/>
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="主题颜色:" VerticalAlignment="Top" Margin="10,85,0,0"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="字体颜色:" VerticalAlignment="Top" Margin="10,45,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="主题颜色:" VerticalAlignment="Top" Margin="10,85,0,0" Foreground="{DynamicResource ResuColorBrush}"/>
                                     <Border x:Name="Skin_ChooseBox_Theme" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Margin="76,85,0,0" Background="{DynamicResource ThemeColor}"/>
-                                    <Border BorderBrush="#FFDADADA" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,80,0,0" Background="White" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Border_MouseDown">
-                                        <TextBlock TextWrapping="Wrap" Text="选择" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF858585"/>
+                                    <Border BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="50" Margin="106,80,0,0" Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" MouseDown="Border_MouseDown">
+                                        <TextBlock TextWrapping="Wrap" Text="选择" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource PlayDLPage_Font_Low}"/>
                                     </Border>
                                     <Border x:Name="Skin_ChooseBox_Font" HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="15" Margin="76,45,0,0" Background="Black"/>
+                                    <Border Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" MouseDown="ThemeChooseCloseBtn_MouseDown" Background="#00000000" Margin="0,5,5,0">
+                                        <Path Data="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Stretch="Uniform" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="10"/>
+                                    </Border>
                                 </Grid>
                             </Border>
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="个性主题" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>

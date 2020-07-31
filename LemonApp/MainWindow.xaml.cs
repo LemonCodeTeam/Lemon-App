@@ -289,9 +289,11 @@ namespace LemonApp
                 string NameSpace = TextHelper.XtoYGetTo(Settings.USettings.Skin_ImagePath, "DTheme[", "]", 0);
                 ThemeBase tb = null;
                 if (NameSpace == Theme.Dtpp.Drawer.NameSpace)
-                    tb = new Theme.Dtpp.Drawer();
+                    tb = new Theme.Dtpp.Drawer(false);
                 else if (NameSpace == Theme.TheFirstSnow.Drawer.NameSpace)
-                    tb = new Theme.TheFirstSnow.Drawer();
+                    tb = new Theme.TheFirstSnow.Drawer(false);
+                else if (NameSpace == Theme.YeStarLight.Drawer.NameSpace)
+                    tb = new Theme.YeStarLight.Drawer(false);
                 DThemePage.Child = tb;
                 //字体颜色
                 Color col;
@@ -310,6 +312,7 @@ namespace LemonApp
                 App.BaseApp.SetColor("ResuColorBrush", col);
                 App.BaseApp.SetColor("ButtonColorBrush", col);
                 App.BaseApp.SetColor("TextX1ColorBrush", col);
+                tb.Draw();
             }
 
             //---------------歌词页专辑图转动
@@ -880,6 +883,16 @@ namespace LemonApp
         {
             ChooseText.Visibility = Visibility.Visible;
             Theme_Choose_Color = (Skin_ChooseBox_Theme.Background as SolidColorBrush).Color;
+            if (TextColor_byChoosing == "Black")
+            {
+                TextColor_byChoosing = "Black";
+                Skin_ChooseBox_Font.Background = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                TextColor_byChoosing = "White";
+                Skin_ChooseBox_Font.Background = new SolidColorBrush(Color.FromRgb(218,218,218));
+            }
         }
         private void Border_MouseDown_4(object sender, MouseButtonEventArgs e)
         {
@@ -1001,6 +1014,7 @@ namespace LemonApp
             #region 动态皮肤
             LoadDTheme(new Theme.Dtpp.Drawer());
             LoadDTheme(new Theme.TheFirstSnow.Drawer());
+            LoadDTheme(new Theme.YeStarLight.Drawer());
             #endregion
             #region 默认主题
             SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
@@ -3137,10 +3151,7 @@ namespace LemonApp
                 .Replace("[M]", data.MusicName)
                 .Replace("[S]", data.SingerText));
             string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
-            DownloadItem di = new DownloadItem(data, file, DownloadDL.Count())
-            {
-                Width = ContentPage.ActualWidth
-            };
+            DownloadItem di = new DownloadItem(data, file, DownloadDL.Count());
             di.Delete += (s) =>
             {
                 s.d.Stop();
