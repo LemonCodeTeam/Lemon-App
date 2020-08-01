@@ -1276,9 +1276,8 @@ namespace LemonApp
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
             if (LastPage == null) LastPage = ClHomePage;
-            if (LastCom == null) LastCom = MusicKuCom;
 
-            if (data.Com != null)
+            if (data.Com != null&&LastCom!=null)
             {
                 //COM动画------------
                 GeneralTransform generalTransform = LastCom.TransformToAncestor(ControlPage);
@@ -1310,6 +1309,8 @@ namespace LemonApp
                     ani.Begin();
                 }
             }
+
+            if (LastCom == null) LastCom = new Border();
             LastCom.Visibility = Visibility.Hidden;
             LastPage.Visibility = Visibility.Collapsed;
 
@@ -1366,11 +1367,12 @@ namespace LemonApp
                 }
             }
             //------------------
-            RunAnimation(data.Page, data.value);
-            await Task.Delay(600);
             data.Page.Uid = data.cmd;
-            if (data.Com != null) data.Com.Visibility = Visibility.Visible;
             data.Page.Visibility = Visibility.Visible;
+            RunAnimation(data.Page, data.value);
+
+            await Task.Delay(600);
+            if (data.Com != null) data.Com.Visibility = Visibility.Visible;
             if (data.tb != null) LastClickLabel = data.tb;
             LastPage = data.Page;
             LastCom = data.Com;
