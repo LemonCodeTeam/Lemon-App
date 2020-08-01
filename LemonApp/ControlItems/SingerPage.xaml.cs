@@ -98,7 +98,8 @@ namespace LemonApp
             NewAlbumList.Children.Clear();
             foreach (var c in Data.Album)
             {
-                FLGDIndexItem f = new FLGDIndexItem(c.ID, c.Name, c.Photo, 0);
+                c.ListenCount = 0;
+                FLGDIndexItem f = new FLGDIndexItem(c);
                 f.Margin = new Thickness(5, 0, 5, 0);
                 f.ImMouseDown += F_MouseDown;
                 Grid.SetColumn(f, i);
@@ -147,7 +148,7 @@ namespace LemonApp
 
         private void F_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            mw.IFVCALLBACK_LoadAlbum((sender as FLGDIndexItem).id);
+            mw.IFVCALLBACK_LoadAlbum((sender as FLGDIndexItem).data.ID);
         }
 
         private void Lx1_MouseDown(object sender, MouseButtonEventArgs e)
@@ -284,10 +285,11 @@ namespace LemonApp
             var data = await MusicLib.GetSingerAlbumById(Data.mSinger.Mid, AlbumIndex);
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo, 0) { Margin = new Thickness(12, 0, 12, 20) };
+                d.ListenCount = 0;
+                var k = new FLGDIndexItem(d) { Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += async (sx) =>
                  {
-                     await MusicLib.AddGDILikeAsync(sx.id);
+                     await MusicLib.AddGDILikeAsync(sx.data.ID);
                      Toast.Send("收藏成功");
                  };
                 k.Width = 200;
@@ -319,7 +321,7 @@ namespace LemonApp
         }
         private void K_ImMouseDown(object sender, MouseButtonEventArgs e)
         {
-            mw.IFVCALLBACK_LoadAlbum((sender as FLGDIndexItem).id);
+            mw.IFVCALLBACK_LoadAlbum((sender as FLGDIndexItem).data.ID);
         }
 
         private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)

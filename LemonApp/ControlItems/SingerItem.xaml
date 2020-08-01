@@ -8,5 +8,8 @@
     <Grid>
         <Border x:Name="im" Background="#FF007ACC" VerticalAlignment="Top" CornerRadius="100" Height="{Binding ActualWidth, ElementName=im, Mode=OneWay}" Margin="0,15,0,0" Width="{Binding ActualWidth, ElementName=userControl, Mode=OneWay}"/>
         <TextBlock x:Name="name" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Height="20" VerticalAlignment="Bottom" Width="{Binding ActualWidth, ElementName=userControl, Mode=OneWay}" TextTrimming="None"/>
+        <Border x:Name="AddToQGT" HorizontalAlignment="Right" VerticalAlignment="Top" Width="20" Height="20" Background="#99000000" Margin="0,15,15,0" CornerRadius="20,20,20,20" Visibility="Collapsed" ToolTip="添加到快速启动栏">
+            <Path Fill="#FFF0F0F0" Data="{DynamicResource QuickGoToIcon}" Stretch="Uniform" Width="10" Height="10"/>
+        </Border>
     </Grid>
 </UserControl>

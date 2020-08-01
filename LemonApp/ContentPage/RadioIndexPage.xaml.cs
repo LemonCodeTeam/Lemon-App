@@ -54,7 +54,7 @@ namespace LemonApp.ContentPage
                 foreach (var d in dat)
                 {
                     RadioItem a = new RadioItem(d) { Margin = new Thickness(12, 0, 12, 20) };
-                    a.MouseDown += mw.GetRadio;
+                    a.im.MouseDown += mw.GetRadio;
                     a.Width = RadioItemsList.ActualWidth / 5;
                     RadioItemsList.Children.Add(a);
                 }

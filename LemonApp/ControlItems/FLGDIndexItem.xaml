@@ -15,5 +15,8 @@
             </Border>
         </Border>
         <TextBlock x:Name="name" Margin="10,0,10,10" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Justify" Height="35" VerticalAlignment="Bottom" TextTrimming="None"/>
+        <Border x:Name="AddToQGT" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Height="20" Background="#99000000" Margin="5,5,0,0" CornerRadius="20,20,20,20" Visibility="Collapsed" ToolTip="添加到快速启动栏">
+            <Path Fill="#FFF0F0F0" Data="{DynamicResource QuickGoToIcon}" Stretch="Uniform" Width="10" Height="10"/>
+        </Border>
     </Grid>
 </UserControl>

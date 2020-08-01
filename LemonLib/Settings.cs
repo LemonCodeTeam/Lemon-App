@@ -120,6 +120,11 @@ namespace LemonLib
                 string json = o["HotKeys"].ToString();
                 USettings.HotKeys = JsonConvert.DeserializeObject<List<HotKeyInfo>>(json);
             }
+            if (data.Contains("QuickGoToData"))
+            {
+                string json = o["QuickGoToData"].ToString();
+                USettings.QuickGoToData= JsonConvert.DeserializeObject<Dictionary<string,QuickGoToData>>(json);
+            }
             if (data.Contains("MusicGDataPlayList"))
             {
                 string json = o["MusicGDataPlayList"].ToString();
@@ -198,6 +203,8 @@ namespace LemonLib
             public string DownloadName = "[I].  [M] - [S]";
             public bool DownloadWithLyric = true;
             #endregion
+
+            public Dictionary<string, QuickGoToData> QuickGoToData = new Dictionary<string, QuickGoToData>();
             public List<HotKeyInfo> HotKeys = new List<HotKeyInfo>();
             public MusicGLikeData MusicGDataLike = new MusicGLikeData();
         }

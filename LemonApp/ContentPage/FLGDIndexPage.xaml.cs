@@ -93,10 +93,10 @@ namespace LemonApp.ContentPage
             if (osx == 1) FLGDItemsList.Children.Clear();
             foreach (var d in data)
             {
-                var k = new FLGDIndexItem(d.ID, d.Name, d.Photo, d.ListenCount) { Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(d) { Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += async (sx) =>
                  {
-                     await MusicLib.AddGDILikeAsync(sx.id);
+                     await MusicLib.AddGDILikeAsync(sx.data.ID);
                      Toast.Send("收藏成功");
                  };
                 k.ImMouseDown += mw.FxGDMouseDown;

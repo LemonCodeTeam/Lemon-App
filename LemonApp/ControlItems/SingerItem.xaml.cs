@@ -31,6 +31,22 @@ namespace LemonApp
                     im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000", new int[2] { 250, 250 }));
                 }
             };
+            MouseEnter += delegate {
+                AddToQGT.Visibility = Visibility.Visible;
+            };
+            MouseLeave+= delegate {
+                AddToQGT.Visibility = Visibility.Collapsed;
+            };
+            AddToQGT.MouseDown += delegate {
+                UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
+                {
+                    type = "Singer",
+                    id = data.Mid,
+                    name=data.Name,
+                    imgurl = data.Photo,
+                    data=data
+                });
+            };
         }
         public MusicSinger mData
         {

@@ -1,4 +1,5 @@
 ﻿using LemonLib;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static LemonLib.InfoHelper;
@@ -22,6 +23,22 @@ namespace LemonApp
                 Height = ActualWidth + 40;
                 listenCount.Text = data.lstCount.IntToWn();
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo, new int[2] { 200, 200 }));
+            };
+            MouseEnter += delegate {
+                AddToQGT.Visibility = Visibility.Visible;
+            };
+            MouseLeave += delegate {
+                AddToQGT.Visibility = Visibility.Collapsed;
+            };
+            AddToQGT.MouseDown += delegate {
+                UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
+                {
+                    type = "Radio",
+                    id = data.ID,
+                    name=data.Name,
+                    imgurl = data.Photo,
+                    data=data
+                });
             };
         }
         public RadioItem(string ID)

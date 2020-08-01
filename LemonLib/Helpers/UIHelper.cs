@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace LemonLib
 {
@@ -17,7 +18,24 @@ namespace LemonLib
             public static double GetVerticalOffset(FrameworkElement target) => (double)target.GetValue(VerticalOffsetProperty);
             private static void OnVerticalOffsetChanged(DependencyObject target, DependencyPropertyChangedEventArgs e) => (target as ScrollViewer)?.ScrollToVerticalOffset((double)e.NewValue);
         }
-
+        /// <summary>
+        /// 子页面获取父类窗体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reference"></param>
+        /// <returns></returns>
+        public static T GetAncestor<T>(DependencyObject reference) where T : DependencyObject
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(reference);
+            while (!(parent is T) && parent != null)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            if (parent != null)
+                return (T)parent;
+            else
+                return null;
+        }
         public static void G(FrameworkElement d)
         {
             try

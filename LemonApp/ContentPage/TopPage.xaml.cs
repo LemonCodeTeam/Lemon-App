@@ -29,7 +29,7 @@ namespace LemonApp.ContentPage
             foreach (var d in dt)
             {
                 var top = new TopControl(d);
-                top.MouseDown += mw.Top_MouseDown;
+                top.t.MouseDown += mw.Top_MouseDown;
                 top.Margin = new Thickness(12, 0, 12, 20);
                 topIndexList.Children.Add(top);
             }

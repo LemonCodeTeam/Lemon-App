@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,6 +8,16 @@ namespace LemonLib
 {
     public class InfoHelper
     {
+        public class QuickGoToData {
+            /// <summary>
+            /// 主要支持四类: Singer  GD  TopList  Radio
+            /// </summary>
+            public string type;
+            public string id;
+            public string name;
+            public string imgurl;
+            public object data;
+        }
         public class HotKeyInfo {
             public string desc { get; set; }
             public int KeyID { get; set; }

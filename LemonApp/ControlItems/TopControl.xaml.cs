@@ -27,6 +27,22 @@ namespace LemonApp
             c1.Text = Data.content[0];
             c2.Text = Data.content[1];
             c3.Text = Data.content[2];
+            MouseEnter += delegate {
+                AddToQGT.Visibility = Visibility.Visible;
+            };
+            MouseLeave += delegate {
+                AddToQGT.Visibility = Visibility.Collapsed;
+            };
+            AddToQGT.MouseDown += delegate {
+                UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
+                {
+                    type = "TopList",
+                    id = Data.ID,
+                    name=Data.Name,
+                    imgurl = Data.Photo,
+                    data=Data
+                });
+            };
         }
     }
 }

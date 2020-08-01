@@ -40,10 +40,10 @@ namespace LemonApp.ContentPage
             //--官方歌单----------
             foreach (var a in data.GFdata)
             {
-                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(a) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += async (sx) =>
                  {
-                     await MusicLib.AddGDILikeAsync(sx.id);
+                     await MusicLib.AddGDILikeAsync(sx.data.ID);
                      Toast.Send("收藏成功");
                  };
                 k.ImMouseDown += mw.FxGDMouseDown;
@@ -54,10 +54,10 @@ namespace LemonApp.ContentPage
             HomePage_Gdtj.Children.Clear();
             foreach (var a in data.Gdata)
             {
-                var k = new FLGDIndexItem(a.ID, a.Name, a.Photo, a.ListenCount) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(a) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
                 k.StarEvent += async (sx) =>
                 {
-                    await MusicLib.AddGDILikeAsync(sx.id);
+                    await MusicLib.AddGDILikeAsync(sx.data.ID);
                     Toast.Send("收藏成功");
                 };
                 k.ImMouseDown += mw.FxGDMouseDown;

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using static LemonLib.InfoHelper;
 
 namespace LemonApp
 {
@@ -15,10 +16,6 @@ namespace LemonApp
         private Border StarBtn;
         private Border DeleteBtn;
 
-        public string id { get; set; }
-        public string sname { get; set; }
-        public string img { get; set; }
-
         public delegate void Del(FLGDIndexItem fl);
         public event Del DeleteEvent;
         public event Del StarEvent;
@@ -27,20 +24,18 @@ namespace LemonApp
         public FLGDIndexItem()
         {
             InitializeComponent();
-            RenderOptions.SetBitmapScalingMode(this,BitmapScalingMode.LowQuality);
         }
-        public FLGDIndexItem(string Id, string nae, string pic, int lstCount, bool hasDeleteBtn = false, string subtitle = "")
+        public MusicGD data = new MusicGD();
+        public FLGDIndexItem(MusicGD dat, bool hasDeleteBtn = false, string subtitle = "")
         {
             InitializeComponent();
-            id = Id;
-            sname = nae;
-            img = pic;
-            name.Text = nae;
-            if (lstCount == 0 && subtitle == "")
+            data = dat;
+            name.Text = dat.Name;
+            if (dat.ListenCount == 0 && subtitle == "")
                 lstBord.Visibility = Visibility.Collapsed;
-            else if (lstCount == -1)
+            else if (dat.ListenCount == -1)
                 listenCount.Text = "刚刚更新";
-            else listenCount.Text = lstCount.IntToWn();
+            else listenCount.Text = dat.ListenCount.IntToWn();
             if (subtitle != "")
                 listenCount.Text = subtitle;
             if (!hasDeleteBtn)
@@ -68,8 +63,24 @@ namespace LemonApp
             Loaded += async delegate
             {
                 Height = Height = ActualWidth + 50;
-                var ims = await ImageCacheHelp.GetImageByUrl(img, new int[2] { 300, 300 });
+                var ims = await ImageCacheHelp.GetImageByUrl(dat.Photo, new int[2] { 300, 300 });
                 im.Background = new ImageBrush(ims);
+            };
+            MouseEnter += delegate {
+                AddToQGT.Visibility = Visibility.Visible;
+            };
+            MouseLeave += delegate {
+                AddToQGT.Visibility = Visibility.Collapsed;
+            };
+            AddToQGT.MouseDown += delegate {
+                UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
+                {
+                    type = "GD",
+                    id = data.ID,
+                    name=data.Name,
+                    imgurl = data.Photo,
+                    data=data
+                });
             };
         }
 
