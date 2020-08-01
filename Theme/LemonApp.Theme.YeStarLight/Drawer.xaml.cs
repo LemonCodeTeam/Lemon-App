@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -39,7 +40,8 @@ namespace LemonApp.Theme.YeStarLight
             cat.Source = Properties.Resources.cat.ToBitmapImage();
             moon.Source = Properties.Resources.moon.ToBitmapImage();
             page.Background = new ImageBrush(Properties.Resources.staticImage.ToBitmapImage());
-            if(needDraw)Draw();
+            (Resources["Cat"] as Storyboard).Begin();
+            if (needDraw)Draw();
         }
         public override ThemeBase GetPage()
         {

@@ -31,6 +31,25 @@
                 <EasingDoubleKeyFrame KeyTime="00:00:01.5000000" Value="374"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="Cat" SlipBehavior="Grow" RepeatBehavior="Forever">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="cat" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <SplineThicknessKeyFrame KeyTime="00:00:10" Value="420,0,0,0">
+                    <SplineThicknessKeyFrame.KeySpline>
+                        <KeySpline ControlPoint1="0.2,0" ControlPoint2="0.8,1"/>
+                    </SplineThicknessKeyFrame.KeySpline>
+                </SplineThicknessKeyFrame>
+                <SplineThicknessKeyFrame KeyTime="00:00:12" Value="420,0,0,0">
+                    <SplineThicknessKeyFrame.KeySpline>
+                        <KeySpline ControlPoint1="0.2,0" ControlPoint2="0.8,1"/>
+                    </SplineThicknessKeyFrame.KeySpline>
+                </SplineThicknessKeyFrame>
+                <SplineThicknessKeyFrame KeyTime="00:00:22" Value="120,0,0,0">
+                    <SplineThicknessKeyFrame.KeySpline>
+                        <KeySpline ControlPoint1="0.2,0" ControlPoint2="0.8,1"/>
+                    </SplineThicknessKeyFrame.KeySpline>
+                </SplineThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
 
     </theme:ThemeBase.Resources>
     <Grid x:Name="page">

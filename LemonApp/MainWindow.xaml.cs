@@ -299,14 +299,15 @@ namespace LemonApp
                 Color col;
                 if (tb.FontColor == "Black")
                 {
-                    col = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+                    col = Color.FromRgb(64, 64, 64);
+                    App.BaseApp.Skin_Black();
                 }
                 else
                 {
-                    col = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
+                    col = Color.FromRgb(255, 255, 255); 
+                    App.BaseApp.Skin();
                 }
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                 Color theme = Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B);
                 App.BaseApp.SetColor("ThemeColor", theme);
                 App.BaseApp.SetColor("ResuColorBrush", col);
@@ -987,14 +988,15 @@ namespace LemonApp
                 Color co;
                 if (sc.txtColor == "Black")
                 {
-                    co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+                    co = Color.FromRgb(64, 64, 64); 
+                    App.BaseApp.Skin_Black();
                 }
                 else
                 {
-                    co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                    ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+                    co = Color.FromRgb(255, 255, 255); 
+                    App.BaseApp.Skin();
                 }
+                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                 App.BaseApp.SetColor("ThemeColor", sc.theme);
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 App.BaseApp.SetColor("ButtonColorBrush", co);
@@ -1265,7 +1267,7 @@ namespace LemonApp
         private TextBlock LastClickLabel = null;
         private UIElement LastPage = null;
         private Border LastCom = null;
-        public void NSPage(MeumInfo data, bool needSave = true, bool Check = true)
+        public async void NSPage(MeumInfo data, bool needSave = true, bool Check = true)
         {
             if (data.Page == Data)
                 if (DataPage_ControlMod)
@@ -1275,8 +1277,42 @@ namespace LemonApp
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
             if (LastPage == null) LastPage = ClHomePage;
             if (LastCom == null) LastCom = MusicKuCom;
-            LastCom.Visibility = Visibility.Collapsed;
+
+            if (data.Com != null)
+            {
+                //COM动画------------
+                GeneralTransform generalTransform = LastCom.TransformToAncestor(ControlPage);
+                Point point = generalTransform.Transform(new Point(0, 0));
+                Console.WriteLine(point.X + "     " + point.Y);
+                //上一次com的相对位置: point.Y
+                AniCom.Margin = new Thickness(0, point.Y, 0, 0);
+                //准备动画:
+                GeneralTransform gT = data.Com.TransformToAncestor(ControlPage);
+                Point p = gT.Transform(new Point(0, 0));
+                //动画相对位置 
+                double op = p.Y - point.Y;
+                Console.WriteLine(op);
+                if (op > 0)
+                {
+                    var ani = Resources["ControlsAniDown"] as Storyboard;
+                    (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 21 + op;
+                    var tau = ani.Children[1] as ThicknessAnimationUsingKeyFrames;
+                    tau.KeyFrames[0].Value = new Thickness(0, point.Y, 0, 0);
+                    tau.KeyFrames[1].Value = new Thickness(0, point.Y + op, 0, 0);
+                    ani.Begin();
+                }
+                else
+                {
+                    var ani = Resources["ControlsAniUp"] as Storyboard;
+                    (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 21 - op;
+                    var tau = ani.Children[1] as ThicknessAnimationUsingKeyFrames;
+                    tau.KeyFrames[0].Value = new Thickness(0, point.Y + op, 0, 0);
+                    ani.Begin();
+                }
+            }
+            LastCom.Visibility = Visibility.Hidden;
             LastPage.Visibility = Visibility.Collapsed;
+
             //-----cmd处理----
             if (Check)
             {
@@ -1330,10 +1366,11 @@ namespace LemonApp
                 }
             }
             //------------------
+            RunAnimation(data.Page, data.value);
+            await Task.Delay(600);
             data.Page.Uid = data.cmd;
             if (data.Com != null) data.Com.Visibility = Visibility.Visible;
             data.Page.Visibility = Visibility.Visible;
-            RunAnimation(data.Page, data.value);
             if (data.tb != null) LastClickLabel = data.tb;
             LastPage = data.Page;
             LastCom = data.Com;
@@ -2230,7 +2267,7 @@ namespace LemonApp
 
             LoadMusic(data, doesplay);
 
-            Title ="Lemon App:"+ data.MusicName + " - " + data.SingerText;
+            Title ="Lemon App  Playing:"+ data.MusicName + " - " + data.SingerText;
             Settings.USettings.Playing = MusicData.Data;
             Settings.SaveSettings();
             mini.title.Text = data.MusicName + " - " + data.SingerText;
