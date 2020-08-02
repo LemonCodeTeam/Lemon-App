@@ -1152,6 +1152,8 @@ namespace LemonApp
         #region QuickGoTo 快速启动栏   preview
         public async void AddToQGT(QuickGoToData data,bool needSave=true)
         {
+            if (needSave && Settings.USettings.QuickGoToData.ContainsKey(data.type + data.id))
+                return;
             Border b = new Border() { Height = 25, Width = 25, CornerRadius = new CornerRadius(25), Margin = new Thickness(10, 0, 0, 0), Background = QGT_AddBtn.Background };
             b.MouseLeftButtonDown += QGTMouseDown;
             b.MouseRightButtonDown += QGTDelete;
@@ -1218,20 +1220,11 @@ namespace LemonApp
         #endregion
         #region Top 排行榜
         /// <summary>
-        /// 选择了TOP项
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Top_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            GetTopItems(sender as TopControl);
-        }
-        /// <summary>
         /// 加载TOP项
         /// </summary>
         /// <param name="g">Top ID</param>
         /// <param name="osx">页数</param>
-        private async void GetTopItems(TopControl g, int osx = 1, bool NeedSave = true)
+        public async void GetTopItems(TopControl g, int osx = 1, bool NeedSave = true)
         {
             np = NowPage.Top;
             tc_now = g;
@@ -1241,7 +1234,7 @@ namespace LemonApp
             {
                 DataCollectBtn.Visibility = Visibility.Collapsed;
                 DataItemsList.Opacity = 0;
-                NSPage(new MeumInfo(null, Data, null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\"" + g.Data.ID + "\",\"name\":\"" + g.Data.Name + "\",\"img\":\"" + g.Data.Photo + "\"}" }, NeedSave, false);
+                NSPage(new MeumInfo(null,Data, null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\"" + g.Data.ID + "\",\"name\":\"" + g.Data.Name + "\",\"img\":\"" + g.Data.Photo + "\"}" }, NeedSave, false);
                 DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
                 DataPage_Creater.Text = "QQ音乐官方";
                 DataPage_Sim.Text = g.Data.desc;
@@ -1539,12 +1532,7 @@ namespace LemonApp
         {
             var msx = ms;
             msx.Photo = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{msx.Mid}.jpg?max_age=2592000";
-            GetSinger(new SingerItem(msx), null);
-        }
-        public void GetSinger(object sender, MouseEventArgs e)
-        {
-            SingerItem si = sender as SingerItem;
-            GetSinger(si);
+            GetSinger(new SingerItem(msx));
         }
         public async void GetSinger(SingerItem si, bool NeedSavePage = true)
         {
@@ -1574,6 +1562,7 @@ namespace LemonApp
             }));
             Cisv.Content = cc;
             SingerDP_Top.Uid = "gun";
+            Cisv.LastLocation = 0;
             Cisv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             if (data.HasBigPic)
             {
@@ -1913,7 +1902,8 @@ namespace LemonApp
                 double os = p - (DataItemsList.ActualHeight / 2) + 10;
                 Console.WriteLine(os);
                 var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-                da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+                da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+                Datasv.LastLocation = os;
                 Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
             }
         }
@@ -1921,7 +1911,8 @@ namespace LemonApp
         private void DataPage_Top_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+            da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+            Datasv.LastLocation = 0;
             Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
 
@@ -2118,7 +2109,8 @@ namespace LemonApp
                     DataItemsList.Opacity = 0;
                     DataCollectBtn.Visibility = Visibility.Collapsed;
                     DataItemsList.Items.Clear();
-                    if (Datasv != null) Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
+                    Datasv.LastLocation = 0;
+                    Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
                     HB = 1;
                     (Resources["DataPage_Min"] as Storyboard).Begin();
                     TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
@@ -2904,7 +2896,8 @@ namespace LemonApp
                 double os = p - (PlayDL_List.ActualHeight / 2) + 10;
                 Console.WriteLine(os);
                 var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-                da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+                da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+                PlayDLSV.LastLocation = os;
                 PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
             }
         }
@@ -2912,13 +2905,14 @@ namespace LemonApp
         private void PlayDL_Top_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
-            PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+            PlayDLSV.LastLocation = 0;
+             PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
-        ScrollViewer PlayDLSV = null;
+        MyScrollView PlayDLSV = null;
         private void PlayDLDatasv_Loaded(object sender, RoutedEventArgs e)
         {
-            PlayDLSV = sender as ScrollViewer;
+            PlayDLSV = sender as MyScrollView;
         }
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -3063,6 +3057,8 @@ namespace LemonApp
                     MusicPlList.Children.Add(new PlControl(dt) { couldpraise = cp, Margin = new Thickness(10, 0, 0, 20) });
                 }
             }
+            MusicPlScrollViewer.LastLocation = 0;
+            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             CloseLoading();
         }
         /// <summary>
@@ -3078,6 +3074,7 @@ namespace LemonApp
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             List<MusicPL> data = await MusicLib.GetPLByWyyAsync(MusicPL_tb.Text);
             MusicPlList.Children.Clear();
+            MusicPlScrollViewer.LastLocation = 0;
             MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             foreach (var dt in data)
             {
@@ -3141,6 +3138,8 @@ namespace LemonApp
             {
                 MusicPlList.Children.Add(new PlControl(dt) { Margin = new Thickness(10, 0, 0, 20) });
             }
+            MusicPlScrollViewer.LastLocation = 0;
+            MusicPlScrollViewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, new DoubleAnimation(0, TimeSpan.FromSeconds(0)));
             CloseLoading();
         }
         private void ly_SizeChanged(object sender, SizeChangedEventArgs e)

@@ -12,7 +12,7 @@ namespace LemonApp
     /// </summary>
     public class MyScrollView : ScrollViewer
     {
-        private double LastLocation = 0;
+        public double LastLocation = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             double WheelChange = e.Delta;

@@ -138,7 +138,9 @@ namespace LemonApp
                     Width = 150,
                     Margin = new Thickness(20, 0, 0, 0)
                 };
-                m.MouseDown += mw.GetSinger;
+                m.im.MouseDown += delegate {
+                    mw.GetSinger(m);
+                };
                 SimilarSingerList.Children.Add(m);
             }
             Finished();
