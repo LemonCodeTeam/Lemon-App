@@ -19,12 +19,21 @@ namespace LemonApp
         public SingerPageData Data;
         private MainWindow mw;
         private Action Finished;
-        public SingerPage(SingerPageData spd, MainWindow m, Action ac)
+        public SingerPage(MusicSinger ms,SingerPageData spd, MainWindow m, Action ac)
         {
             InitializeComponent();
             Data = spd;
             mw = m;
             Finished = ac;
+            AddToQGT.MouseDown += delegate {
+                UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
+                {
+                    type = "Singer",
+                    id = ms.Mid,
+                    name = ms.Name,
+                    imgurl = ms.Photo
+                });
+            };
             if (!spd.HasBigPic)
             {
                 (Resources["mSingerTX"] as Storyboard).Begin();

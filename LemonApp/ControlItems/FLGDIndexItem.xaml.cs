@@ -78,8 +78,7 @@ namespace LemonApp
                     type = "GD",
                     id = data.ID,
                     name=data.Name,
-                    imgurl = data.Photo,
-                    data=data
+                    imgurl = data.Photo
                 });
             };
         }

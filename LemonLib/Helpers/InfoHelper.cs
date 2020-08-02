@@ -16,7 +16,6 @@ namespace LemonLib
             public string id;
             public string name;
             public string imgurl;
-            public object data;
         }
         public class HotKeyInfo {
             public string desc { get; set; }

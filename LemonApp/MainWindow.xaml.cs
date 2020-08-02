@@ -1168,13 +1168,13 @@ namespace LemonApp
         {
             var data = (sender as Border).Tag as QuickGoToData;
             if (data.type == "Singer")
-                K_GetToSingerPage(data.data as MusicSinger);
+                K_GetToSingerPage(new MusicSinger() { Mid=data.id,Name=data.name,Photo=data.imgurl});
             else if (data.type == "GD")
-                LoadFxGDItems(new FLGDIndexItem() { data = data.data as MusicGD });
+                LoadFxGDItems(new FLGDIndexItem() { data = new MusicGD() { ID=data.id,Name=data.name,Photo=data.imgurl,ListenCount=0} });
             else if (data.type == "TopList")
-                GetTopItems(new TopControl(data.data as MusicTop));
+                GetTopItems(new TopControl(new MusicTop() {ID=data.id,Name=data.name,Photo=data.imgurl}));
             else if (data.type == "Radio")
-                GetRadio(new RadioItem(data.data as MusicRadioListItem), null);
+                GetRadio(new RadioItem(new MusicRadioListItem() {ID=data.id,lstCount=0,Name=data.name,Photo=data.imgurl}), null);
         }
         private void QGTDelete(object sender, MouseEventArgs e) {
             var b = sender as Border;
@@ -1538,7 +1538,6 @@ namespace LemonApp
         public void K_GetToSingerPage(MusicSinger ms)
         {
             var msx = ms;
-            Console.WriteLine(ms.Mid);
             msx.Photo = $"https://y.gtimg.cn/music/photo_new/T001R300x300M000{msx.Mid}.jpg?max_age=2592000";
             GetSinger(new SingerItem(msx), null);
         }
@@ -1560,7 +1559,7 @@ namespace LemonApp
             BtD.LastBt = null;
             Cisv.Content = null;
             var data = await MusicLib.GetSingerPageAsync(si.data.Mid);
-            var cc = new SingerPage(data, this, new Action(async () =>
+            var cc = new SingerPage(si.data,data, this, new Action(async () =>
             {
                 if (data.HasBigPic)
                 {

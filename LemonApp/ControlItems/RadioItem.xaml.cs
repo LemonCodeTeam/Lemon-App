@@ -36,8 +36,7 @@ namespace LemonApp
                     type = "Radio",
                     id = data.ID,
                     name=data.Name,
-                    imgurl = data.Photo,
-                    data=data
+                    imgurl = data.Photo
                 });
             };
         }

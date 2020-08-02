@@ -7,7 +7,7 @@
         xmlns:LemonApp="clr-namespace:LemonApp"
         x:Class="LemonApp.MainWindow"
         mc:Ignorable="d"
-        Title="小萌音乐" Height="690" Width="1080" WindowStartupLocation="CenterScreen"
+        Title="Lemon App" Height="690" Width="1080" WindowStartupLocation="CenterScreen"
     MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged"
     MinWidth="930" MinHeight="620" Background="{x:Null}">
     <Window.Triggers>

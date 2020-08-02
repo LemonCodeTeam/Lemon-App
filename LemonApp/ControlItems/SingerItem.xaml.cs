@@ -43,8 +43,7 @@ namespace LemonApp
                     type = "Singer",
                     id = data.Mid,
                     name=data.Name,
-                    imgurl = data.Photo,
-                    data=data
+                    imgurl = data.Photo
                 });
             };
         }

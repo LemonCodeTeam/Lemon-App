@@ -39,8 +39,7 @@ namespace LemonApp
                     type = "TopList",
                     id = Data.ID,
                     name=Data.Name,
-                    imgurl = Data.Photo,
-                    data=Data
+                    imgurl = Data.Photo
                 });
             };
         }
