@@ -1144,7 +1144,7 @@
                                         </WrapPanel>
                                         <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Bottom" TName="应用" Width="90" pData="{x:Null}" Margin="0,0,20,10" MouseDown="ApplyHotKey_MouseDown"/>
                                     </Grid>
-                                    <Grid Margin="0,10,0,0">
+                                    <Grid Margin="0,10,0,0" Visibility="Visible">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
                                         <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle}" BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或到开源仓库中提交issues; 拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
                                         <LemonApp:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
@@ -1153,11 +1153,11 @@
                                         <TextBlock x:Name="va" Margin="0,214,95,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF7C7C7C" TextAlignment="Center" HorizontalAlignment="Right" Width="105" Height="18"/>
                                         <LemonApp:MDButton x:Name="UserSend_fj" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Margin="80,0,0,0" TName="添加附件" pData="{x:Null}" cr="12,12,12,12" AllowDrop="True" Drop="UserSend_fj_Drag" MouseDown="UserSend_fj_MouseDown"/>
                                     </Grid>
-                                    <Grid Height="121" Margin="0,10,0,0">
+                                    <Grid Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="88" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:"/><InlineUIContainer>
+                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:"/><InlineUIContainer>
                                                 <TextBlock x:Name="SettingsPage_URLink" Text="https://github.com/TwilightLemon/Lemon-App" Foreground="#FF007ACC" TextDecorations="Underline" MouseDown="SettingsPage_URLink_MouseDown" Cursor="Hand"/>
-                                            </InlineUIContainer><Run Text="   请遵循 GPL v3.0 以及 Anti 996 开源协议"/><LineBreak/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/></TextBlock>
+                                            </InlineUIContainer><Run Text="   请遵循 GPL v3.0 以及 Anti 996 开源协议"/><LineBreak/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/><LineBreak/><LineBreak/><Run Text="Powered by .Net Core 3.1 on WPF"/></TextBlock>
                                     </Grid>
                                 </StackPanel>
                             </LemonApp:MyScrollView>
