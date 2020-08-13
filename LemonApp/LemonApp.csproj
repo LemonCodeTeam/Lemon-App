@@ -21,14 +21,11 @@
   <ItemGroup>
     <ProjectReference Include="..\DebugConsole\DebugConsole.csproj" />
     <ProjectReference Include="..\LemonLib\LemonLib.csproj" />
-    <ProjectReference Include="..\Theme\LemonApp.Theme.Dtpp\LemonApp.Theme.Dtpp.csproj" />
-    <ProjectReference Include="..\Theme\LemonApp.Theme.TheFirstSnow\LemonApp.Theme.TheFirstSnow.csproj" />
-    <ProjectReference Include="..\Theme\LemonApp.Theme.YeStarLight\LemonApp.Theme.YeStarLight.csproj" />
-    <ProjectReference Include="..\Theme\LemonApp.Theme\LemonApp.Theme.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Dll\" />
+    <Folder Include="Theme\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +33,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="LemonApp.Theme">
+      <HintPath>Theme\LemonApp.Theme.dll</HintPath>
+    </Reference>
+    <Reference Include="LemonApp.Theme.Dtpp">
+      <HintPath>Theme\LemonApp.Theme.Dtpp.dll</HintPath>
+    </Reference>
+    <Reference Include="LemonApp.Theme.TechDMusic">
+      <HintPath>Theme\LemonApp.Theme.TechDMusic.dll</HintPath>
+    </Reference>
+    <Reference Include="LemonApp.Theme.TheFirstSnow">
+      <HintPath>Theme\LemonApp.Theme.TheFirstSnow.dll</HintPath>
+    </Reference>
+    <Reference Include="LemonApp.Theme.YeStarLight">
+      <HintPath>Theme\LemonApp.Theme.YeStarLight.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack">
       <HintPath>Dll\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>

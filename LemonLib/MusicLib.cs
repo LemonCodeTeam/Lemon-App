@@ -797,7 +797,12 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            string vk = TextHelper.XtoYGetTo(st, "http://apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/C400000By9MX0yKL2c.m4a", "&fromtag=38", 0);
+            /*
+             两种地址类型:
+            aqqmusic.tc.qq.com/amobile.music.tc.qq.com/
+            apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/
+             */
+            string vk = TextHelper.XtoYGetTo(st, "amobile.music.tc.qq.com/C400000By9MX0yKL2c.m4a", "&fromtag=38", 0);
             if (string.IsNullOrEmpty(vk)) {
                 MainClass.DebugCallBack("MusicUrlGet","Vkey被吃掉了!!");
                 await Task.Delay(500);

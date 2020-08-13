@@ -7,17 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp", "LemonApp\LemonA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonLib", "LemonLib\LemonLib.csproj", "{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Theme", "Theme", "{B60949B2-5B2C-4743-94E4-8E4513CC6A57}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp.Theme.Dtpp", "Theme\LemonApp.Theme.Dtpp\LemonApp.Theme.Dtpp.csproj", "{0F30C29B-F0CA-45D7-92C3-8D5E0F7F7EFE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp.Theme.TheFirstSnow", "Theme\LemonApp.Theme.TheFirstSnow\LemonApp.Theme.TheFirstSnow.csproj", "{07E0586A-AC91-4AE2-A982-F0A675F622C4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp.Theme", "Theme\LemonApp.Theme\LemonApp.Theme.csproj", "{07066390-663B-4F93-92C9-60B3CCFD607A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{CDDBF873-10A1-432B-A148-D37F8CA11CA0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LemonApp.Theme.YeStarLight", "Theme\LemonApp.Theme.YeStarLight\LemonApp.Theme.YeStarLight.csproj", "{173C0D8E-7C54-423E-BD09-592B1277B6C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,35 +23,13 @@ Global
 		{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9E28A60-192E-4F24-A676-C23DEAFC0BB5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F30C29B-F0CA-45D7-92C3-8D5E0F7F7EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F30C29B-F0CA-45D7-92C3-8D5E0F7F7EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F30C29B-F0CA-45D7-92C3-8D5E0F7F7EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F30C29B-F0CA-45D7-92C3-8D5E0F7F7EFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07E0586A-AC91-4AE2-A982-F0A675F622C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07E0586A-AC91-4AE2-A982-F0A675F622C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07E0586A-AC91-4AE2-A982-F0A675F622C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07E0586A-AC91-4AE2-A982-F0A675F622C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07066390-663B-4F93-92C9-60B3CCFD607A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07066390-663B-4F93-92C9-60B3CCFD607A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07066390-663B-4F93-92C9-60B3CCFD607A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07066390-663B-4F93-92C9-60B3CCFD607A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDBF873-10A1-432B-A148-D37F8CA11CA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{173C0D8E-7C54-423E-BD09-592B1277B6C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{173C0D8E-7C54-423E-BD09-592B1277B6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{173C0D8E-7C54-423E-BD09-592B1277B6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{173C0D8E-7C54-423E-BD09-592B1277B6C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0F30C29B-F0CA-45D7-92C3-8D5E0F7F7EFE} = {B60949B2-5B2C-4743-94E4-8E4513CC6A57}
-		{07E0586A-AC91-4AE2-A982-F0A675F622C4} = {B60949B2-5B2C-4743-94E4-8E4513CC6A57}
-		{07066390-663B-4F93-92C9-60B3CCFD607A} = {B60949B2-5B2C-4743-94E4-8E4513CC6A57}
-		{173C0D8E-7C54-423E-BD09-592B1277B6C8} = {B60949B2-5B2C-4743-94E4-8E4513CC6A57}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9B6CCAEA-DF18-43CB-8AEA-DFFBE0331C9F}
