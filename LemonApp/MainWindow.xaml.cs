@@ -297,6 +297,8 @@ namespace LemonApp
                     tb = new Theme.YeStarLight.Drawer(false);
                 else if (NameSpace == Theme.TechDMusic.Drawer.NameSpace)
                     tb = new Theme.TechDMusic.Drawer(false);
+                else if (NameSpace == Theme.FerrisWheel.Drawer.NameSpace)
+                    tb = new Theme.FerrisWheel.Drawer(false);
                 DThemePage.Child = tb;
                 //字体颜色
                 Color col;
@@ -1028,6 +1030,7 @@ namespace LemonApp
             NSPage(new MeumInfo(null, SkinPage, null));
             SkinIndexList.Children.Clear();
             #region 动态皮肤
+            LoadDTheme(new Theme.FerrisWheel.Drawer());
             LoadDTheme(new Theme.TechDMusic.Drawer());
             LoadDTheme(new Theme.Dtpp.Drawer());
             LoadDTheme(new Theme.TheFirstSnow.Drawer());

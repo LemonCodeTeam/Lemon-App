@@ -39,6 +39,9 @@
     <Reference Include="LemonApp.Theme.Dtpp">
       <HintPath>Theme\LemonApp.Theme.Dtpp.dll</HintPath>
     </Reference>
+    <Reference Include="LemonApp.Theme.FerrisWheel">
+      <HintPath>Theme\LemonApp.Theme.FerrisWheel.dll</HintPath>
+    </Reference>
     <Reference Include="LemonApp.Theme.TechDMusic">
       <HintPath>Theme\LemonApp.Theme.TechDMusic.dll</HintPath>
     </Reference>
