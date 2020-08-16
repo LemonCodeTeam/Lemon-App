@@ -91,8 +91,9 @@ namespace LemonApp
                     BtnCount++;
                 }
                 BtnWidth = 32 * BtnCount + 5;
-                if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
-                    namss.Width = wpl.ActualWidth - 101;
+                if (wpl.ActualWidth != 0)
+                    if (namss.ActualWidth > wpl.ActualWidth - BtnWidth)
+                        namss.Width = wpl.ActualWidth - 101;
                 LoadUI();
             }
         }
@@ -299,6 +300,7 @@ namespace LemonApp
 
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
+            if (Buttons == null) LoadUI();
             Buttons.Visibility = Visibility.Visible;
             if (ns)
                 wpl.Margin = new Thickness(60, 10, 80, 10);

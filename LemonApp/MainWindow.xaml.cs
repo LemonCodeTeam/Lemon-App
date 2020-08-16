@@ -2358,14 +2358,24 @@ namespace LemonApp
 
             //-------加载歌曲相关歌单功能-------
             var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
-            LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
-            LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
-            LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
-
-            LP_ag1_tx.Text = gd[0].Name; LP_ag2_tx.Text = gd[1].Name; LP_ag3_tx.Text = gd[2].Name;
-            LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
-            LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
-            LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
+            if (gd.Count >= 1)
+            {
+                LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
+                LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
+                LP_ag1_tx.Text = gd[0].Name;
+            }
+            if (gd.Count >= 2)
+            {
+                LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
+                LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
+                LP_ag2_tx.Text = gd[1].Name;
+            }
+            if (gd.Count >= 3)
+            {
+                LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
+                LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
+                LP_ag3_tx.Text = gd[2].Name;
+            }
         }
 
         private void LP_ag_MouseDown(object sender, MouseButtonEventArgs e)
