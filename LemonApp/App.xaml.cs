@@ -23,11 +23,12 @@ namespace LemonApp
         /// </summary>
         public static string EM = "1173";
         #region 启动时 进程检测 配置 登录
+        //放在全局变量  防止GC回收  导致失效
+        private System.Threading.Mutex mutex;
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            bool requestInitialOwnership = true;
-            new System.Threading.Mutex(requestInitialOwnership, "Lemon App", out bool mutexWasCreated);
-            if (!(requestInitialOwnership && mutexWasCreated))
+            mutex = new System.Threading.Mutex(true, "LemonApp", out bool mutexWasCreated);
+            if (!mutexWasCreated)
             {
                 MsgHelper.SendMsg(MsgHelper.SEND_SHOW);
                 Current.Shutdown();
