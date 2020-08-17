@@ -21,7 +21,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1169";
+        public static string EM = "1173";
         #region 启动时 进程检测 配置 登录
         private void Application_Startup(object sender, StartupEventArgs e)
         {
