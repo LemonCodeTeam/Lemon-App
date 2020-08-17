@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LemonApp"
         mc:Ignorable="d"
-        Title="MiniPlayer" Height="110" Width="350" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" ShowInTaskbar="False" Topmost="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="MiniPlayer" Height="110" Width="350" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" ShowInTaskbar="False" Topmost="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" Effect="{DynamicResource WindowDrop}">
     <Window.Resources>
         <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -132,9 +132,6 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-    <Window.Effect>
-        <DropShadowEffect BlurRadius="10" Opacity="0.4" ShadowDepth="0"/>
-    </Window.Effect>
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="-1" />
     </WindowChrome.WindowChrome>

@@ -32,13 +32,13 @@ namespace LemonApp.ContentPage
                 top.t.MouseDown += delegate {
                     mw.GetTopItems(top);
                 };
-                top.Margin = new Thickness(12, 0, 12, 20);
+                top.Margin = new Thickness(10, 0, 10, 20);
                 topIndexList.Children.Add(top);
             }
-            mw.WidthUI(topIndexList);
             await Task.Delay(50);
             mw.CloseLoading();
             topIndexList.Visibility = Visibility.Visible;
+            mw.WidthUI(topIndexList);
             mw.RunAnimation(topIndexList);
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

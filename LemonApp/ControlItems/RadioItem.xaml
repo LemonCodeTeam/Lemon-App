@@ -15,7 +15,7 @@
             </Border>
         </Border>
         <Border Height="40" VerticalAlignment="Bottom" d:IsHidden="True">
-            <TextBlock x:Name="name" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource TextX1ColorBrush}" FontSize="14" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center" TextTrimming="None"/>
+            <TextBlock x:Name="name" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource ResuColorBrush}" FontSize="14" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" HorizontalAlignment="Center" TextTrimming="None"/>
         </Border>
         <Border x:Name="AddToQGT" HorizontalAlignment="Right" VerticalAlignment="Top" Width="20" Height="20" Background="#99000000" Margin="0,5,5,0" CornerRadius="20,20,20,20" Visibility="Collapsed" ToolTip="添加到快速启动栏">
             <Path Fill="#FFF0F0F0" Data="{DynamicResource QuickGoToIcon}" Stretch="Uniform" Width="10" Height="10"/>

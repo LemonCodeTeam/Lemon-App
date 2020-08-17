@@ -14,6 +14,6 @@
             <ComboBoxItem Content="Win" Uid="8"/>
         </ComboBox>
         <TextBlock x:Name="des" HorizontalAlignment="Left" TextWrapping="Wrap" Text="🐱‍💻Debug:" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Width="60"/>
-        <TextBox Style="{DynamicResource TextBoxStyleSimple}" x:Name="tKey" TextWrapping="NoWrap" Text="C" Foreground="{DynamicResource ResuColorBrush}" Background="#14000000" Height="25" Margin="125,0,0,0"  BorderBrush="{DynamicResource BorderColorBrush}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Center" SelectionTextBrush="#FF1B1B1C" HorizontalAlignment="Left" PreviewKeyDown="TextBox_KeyDown" TextAlignment="Center" MinWidth="25" IsReadOnly="True"/>
+        <TextBox Style="{DynamicResource TextBoxStyleSimple}" x:Name="tKey" TextWrapping="NoWrap" Text="Space" Foreground="{DynamicResource ResuColorBrush}" Background="#14000000" Height="25" Margin="125,0,0,0" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Center" SelectionTextBrush="#FF1B1B1C" HorizontalAlignment="Left" PreviewKeyDown="TextBox_KeyDown" TextAlignment="Center" MinWidth="25" IsReadOnly="True"/>
     </Grid>
 </UserControl>

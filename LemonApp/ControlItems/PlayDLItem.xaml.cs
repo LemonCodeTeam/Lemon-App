@@ -76,16 +76,6 @@ namespace LemonApp
             }
             PD.LastPD = this;
         }
-
-        private void UserControl_MouseEnter(object sender, MouseEventArgs e)
-        {
-            Borderbg.Background = Resources["Touched"] as SolidColorBrush;
-        }
-
-        private void UserControl_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Borderbg.Background = null;
-        }
     }
 
     public class PD

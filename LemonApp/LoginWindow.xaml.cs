@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using static LemonLib.InfoHelper;
 
 namespace LemonApp
 {
@@ -34,7 +35,10 @@ namespace LemonApp
                 await Task.Delay(100);
                 string cookie = wb.Document.Cookie;
                 string qq = TextHelper.XtoYGetTo(cookie, "p_luin=o", ";", 0);
-                string send = "Login:" + qq + "### 呱呱呱 Cookie[" + cookie + "]END";
+                LoginData send = new LoginData(){
+                    qq = qq,
+                    cookie = cookie
+                };
                 if (cookie.Contains("p_skey="))
                 {
                     string p_skey = TextHelper.XtoYGetTo(cookie + ";", "p_skey=", ";", 0);
@@ -44,7 +48,7 @@ namespace LemonApp
                         hash += (hash << 5) + p_skey[i];
                     }
                     long g_tk = hash & 0x7fffffff;
-                    send = "Login:" + qq + "### 呱呱呱 Cookie[" + cookie + "]END  叽里咕噜 g_tk[" + g_tk + "]sk";
+                    send.g_tk = g_tk.ToString();
                 }
                 mw.Dispatcher.Invoke(delegate { mw.Login(send); });
                 wb.DocumentCompleted -= Wb_Dc_Login;

@@ -4,11 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LemonApp"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="30" Width="50" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" MouseDown="UserControl_MouseDown">
+             mc:Ignorable="d" Height="30" Width="50" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" MouseDown="UserControl_MouseDown">
     <Grid>
-        <TextBlock x:Name="tb" HorizontalAlignment="Center" TextWrapping="Wrap" Text="推荐" VerticalAlignment="Center" FontSize="14" Foreground="{DynamicResource ResuColorBrush}"/>
+        <TextBlock x:Name="tb" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="14" Foreground="{DynamicResource ResuColorBrush}"/>
         <Border x:Name="bt" Height="3" VerticalAlignment="Bottom" Background="{DynamicResource ThemeColor}" Width="35" Visibility="Collapsed"/>
-
     </Grid>
 </UserControl>

@@ -118,6 +118,11 @@ namespace LemonLib
             public string img { set; get; } = "";
             public string lstCount { get; set; } = "";
         }
+        public class LoginData {
+            public string qq;
+            public string cookie;
+            public string g_tk = null;
+        }
         public class Music
         {
             public string MusicName { set; get; } = "";

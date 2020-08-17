@@ -20,8 +20,8 @@ namespace LemonApp.ContentPage
             sv.Template = ct;
             SizeChanged += delegate
             {
-                mw.WidthUI(HomePage_GFGD, wrapPanel.ActualWidth - 12);
-                mw.WidthUI(HomePage_Gdtj, wrapPanel.ActualWidth - 12);
+                mw.WidthUI(HomePage_GFGD, HomePage_GFGD.ActualWidth - 12);
+                mw.WidthUI(HomePage_Gdtj, HomePage_Gdtj.ActualWidth - 12);
             };
         }
 
@@ -40,7 +40,7 @@ namespace LemonApp.ContentPage
             //--官方歌单----------
             foreach (var a in data.GFdata)
             {
-                var k = new FLGDIndexItem(a) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(a) { Width = 175, Height = 175, Margin = new Thickness(10, 0, 10, 20) };
                 k.StarEvent += async (sx) =>
                  {
                      await MusicLib.AddGDILikeAsync(sx.data.ID);
@@ -49,12 +49,12 @@ namespace LemonApp.ContentPage
                 k.ImMouseDown += mw.FxGDMouseDown;
                 HomePage_GFGD.Children.Add(k);
             }
-            mw.WidthUI(HomePage_GFGD, wrapPanel.ActualWidth - 12);
+            mw.WidthUI(HomePage_GFGD, HomePage_GFGD.ActualWidth - 12);
             //--歌单推荐----------
             HomePage_Gdtj.Children.Clear();
             foreach (var a in data.Gdata)
             {
-                var k = new FLGDIndexItem(a) { Width = 175, Height = 175, Margin = new Thickness(12, 0, 12, 20) };
+                var k = new FLGDIndexItem(a) { Width = 175, Height = 175, Margin = new Thickness(10, 0, 10, 20) };
                 k.StarEvent += async (sx) =>
                 {
                     await MusicLib.AddGDILikeAsync(sx.data.ID);
@@ -63,7 +63,7 @@ namespace LemonApp.ContentPage
                 k.ImMouseDown += mw.FxGDMouseDown;
                 HomePage_Gdtj.Children.Add(k);
             }
-            mw.WidthUI(HomePage_Gdtj, wrapPanel.ActualWidth - 12);
+            mw.WidthUI(HomePage_Gdtj, HomePage_Gdtj.ActualWidth - 12);
             //--新歌首发----------
             HomePage_Nm.Children.Clear();
             foreach (var a in data.NewMusic)

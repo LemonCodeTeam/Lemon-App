@@ -127,7 +127,7 @@ namespace LemonApp
         }
         private void LoadCheckView()
         {
-            string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource TextX1ColorBrush}"" Visibility=""Collapsed""/>";
+            string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource ResuColorBrush}"" Visibility=""Collapsed""/>";
             CheckView = (Border)XamlReader.Parse(CheckViewxaml);
             grid.Children.Add(CheckView);
         }
@@ -232,7 +232,7 @@ namespace LemonApp
             else
             {
                 GO.Visibility = Visibility.Collapsed;
-                CheckView.SetResourceReference(BorderBrushProperty, "TextX1ColorBrush");
+                CheckView.SetResourceReference(BorderBrushProperty, "ResuColorBrush");
             }
         }
 

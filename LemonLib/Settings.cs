@@ -136,6 +136,8 @@ namespace LemonLib
                 USettings.IsLyricImm = bool.Parse(o["IsLyricImm"].ToString());
             if (data.Contains("IsMiniOpen"))
                 USettings.IsMiniOpen = bool.Parse(o["IsMiniOpen"].ToString());
+            if (data.Contains("PlayXHMode"))
+                USettings.PlayXHMode = int.Parse(o["PlayXHMode"].ToString());
         }
         public class UserSettings
         {
@@ -164,6 +166,10 @@ namespace LemonLib
             public Music Playing { get; set; } = new Music();
             public int PlayingIndex = -1;
             public List<Music> MusicGDataPlayList = new List<Music>();
+            /// <summary>
+            /// 播放模式 0列表循环 1单曲循环 2随机播放
+            /// </summary>
+            public int PlayXHMode = 0;
             #endregion
             #region 主题配置
             //启用圆的MusicImage?

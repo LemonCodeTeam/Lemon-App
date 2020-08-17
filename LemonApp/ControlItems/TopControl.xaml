@@ -6,9 +6,9 @@
         <Border x:Name="t" Background="{DynamicResource ControlPageBrush}" CornerRadius="{DynamicResource AppCornerRadius}">
             <Grid>
                 <Border x:Name="im" Width="150" HorizontalAlignment="Left" CornerRadius="{DynamicResource AppCornerRadius}" Background="#FFF1F1F1"/>
-                <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,58,0,0" Foreground="{DynamicResource TextX1ColorBrush}"><Run Text="1  "/><Run x:Name="c1" Text="TextBlock"/></TextBlock>
-                <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,80,10,0" Foreground="{DynamicResource TextX1ColorBrush}"><Run Text="2  "/><Run x:Name="c2" Text="TextBlock"/></TextBlock>
-                <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,100,10,0" Foreground="{DynamicResource TextX1ColorBrush}"><Run Text="3  "/><Run x:Name="c3" Text="TextBlock"/></TextBlock>
+                <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,58,0,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="1  "/><Run x:Name="c1" Text="TextBlock"/></TextBlock>
+                <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,80,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="2  "/><Run x:Name="c2" Text="TextBlock"/></TextBlock>
+                <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,100,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="3  "/><Run x:Name="c3" Text="TextBlock"/></TextBlock>
                 <TextBlock x:Name="title" Margin="163,20,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="流行指数" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ResuColorBrush}"/>
             </Grid>
         </Border>

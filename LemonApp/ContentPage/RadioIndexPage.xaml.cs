@@ -20,7 +20,7 @@ namespace LemonApp.ContentPage
             sv.Template = ct;
             SizeChanged += delegate
             {
-                mw.WidthUI(RadioIndexList);
+                mw.WidthUI(RadioItemsList);
             };
         }
         Dictionary<string, MusicRadioList> Radiodata;

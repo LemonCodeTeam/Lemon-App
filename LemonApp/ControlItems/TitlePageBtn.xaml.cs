@@ -20,23 +20,30 @@ namespace LemonApp
             get => path.Fill; set
             {
                 path.Fill = value;
+                IsPathFillBinding = false;
                 if (value == null)
-                    path.SetResourceReference(Shape.FillProperty, "ButtonColorBrush");
+                {
+                    IsPathFillBinding = true;
+                    path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
+                }
             }
         }
         public Geometry PathData { get => path.Data; set => path.Data = value; }
-        public double MinOp { get => min.Opacity; set => min.Opacity = value; }
         public Thickness Pathness { get => path.Margin; set => path.Margin = value; }
+
+        private bool IsPathFillBinding = true;
+        private Brush LastPathBrush;
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
-            path.Visibility = Visibility.Collapsed;
-            spath.Visibility = Visibility.Visible;
+            LastPathBrush = path.Fill;
+            path.SetResourceReference(Shape.FillProperty, "ThemeColor");
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
-            path.Visibility = Visibility.Visible;
-            spath.Visibility = Visibility.Collapsed;
+            if (IsPathFillBinding)
+                path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
+            else path.Fill = LastPathBrush;
         }
     }
 }

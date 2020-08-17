@@ -6,9 +6,6 @@
              xmlns:local="clr-namespace:LemonApp"
              mc:Ignorable="d" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" Cursor="Hand">
     <Grid Background="#00000000">
-        <Path x:Name="path" Stretch="Uniform" Fill="{DynamicResource ButtonColorBrush}" Margin="5"/>
-        <Path x:Name="spath" Stretch="Uniform" Fill="{DynamicResource ThemeColor}" Margin="{Binding Margin, ElementName=path}" Visibility="Collapsed" Data="{Binding Data, ElementName=path}"/>
-        <Border x:Name="min" Width="10" Height="1" Background="{Binding Fill, ElementName=path}" Margin="5,0,5,5" VerticalAlignment="Bottom" Opacity="0" Visibility="{Binding Visibility, ElementName=path}"/>
-        <Border x:Name="xmin" Width="10" Height="1" Background="{DynamicResource ThemeColor}" Margin="5,0,5,5" VerticalAlignment="Bottom" Opacity="{Binding Opacity, ElementName=min}" Visibility="{Binding Visibility, ElementName=spath}"/>
+        <Path x:Name="path" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" Margin="5"/>
     </Grid>
 </UserControl>

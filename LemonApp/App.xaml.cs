@@ -23,11 +23,10 @@ namespace LemonApp
         /// </summary>
         public static string EM = "1169";
         #region 启动时 进程检测 配置 登录
-        System.Threading.Mutex mut;
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             bool requestInitialOwnership = true;
-            mut = new System.Threading.Mutex(requestInitialOwnership, "Lemon App", out bool mutexWasCreated);
+            new System.Threading.Mutex(requestInitialOwnership, "Lemon App", out bool mutexWasCreated);
             if (!(requestInitialOwnership && mutexWasCreated))
             {
                 MsgHelper.SendMsg(MsgHelper.SEND_SHOW);
@@ -63,11 +62,8 @@ namespace LemonApp
             ThemeColor = 1;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#4C000000"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-
+   
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("#FF3E3E42"));
             SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FF252526"));
@@ -82,11 +78,8 @@ namespace LemonApp
             ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#33FFFFFF"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#00FFFFFF"));
-            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-
+ 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
@@ -101,20 +94,13 @@ namespace LemonApp
             ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
-            SetColor("ButtonColorBrush", (Color)ColorConverter.ConvertFromString("#FF7D7D7D"));
-            SetColor("BorderColorBrush", (Color)ColorConverter.ConvertFromString("#FFF0F0F0"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
-            SetColor("TextX1ColorBrush", (Color)ColorConverter.ConvertFromString("#FF535353"));
-
+ 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
             SetColor("PlayDLPage_Font_Most", (Color)ColorConverter.ConvertFromString("#FF232323"));
             SetColor("PlayDLPage_Font_Low", (Color)ColorConverter.ConvertFromString("#FF707070"));
-        }
-        public SolidColorBrush GetButtonColorBrush()
-        {
-            return (SolidColorBrush)Resources["ButtonColorBrush"];
         }
         #endregion
         #region lierda.WPFHelper 内存管控

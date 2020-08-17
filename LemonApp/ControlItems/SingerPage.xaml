@@ -69,7 +69,7 @@
                         <GradientStop Color="#00000000"/>
                     </LinearGradientBrush>
                 </WrapPanel.Background>
-                <local:BottomTick x:Name="TuiJianBtn" HorizontalAlignment="Left" Width="50" IsChecked="True" HasBg="True" Height="40" Margin="25,0,0,0" MouseDown="TuiJianBtn_MouseDown"/>
+                <local:BottomTick x:Name="TuiJianBtn" HorizontalAlignment="Left" Width="50" IsChecked="True" HasBg="True" Height="40" Text="推荐" Margin="25,0,0,0" MouseDown="TuiJianBtn_MouseDown"/>
                 <local:BottomTick x:Name="SongsBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="歌曲" MouseDown="SongsBtn_MouseDown"/>
                 <local:BottomTick x:Name="AlbumBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="专辑" MouseDown="AlbumBtn_MouseDown"/>
                 <local:BottomTick x:Name="MVBtn" HorizontalAlignment="Left" Width="50" HasBg="True" Height="40" Margin="40,0,0,0" Text="MV" MouseDown="MVBtn_MouseDown"/>
