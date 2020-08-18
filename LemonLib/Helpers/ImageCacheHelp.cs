@@ -90,7 +90,7 @@ namespace LemonLib
             }
             else
             {
-                await HttpHelper.HttpDownloadAsync(url, file);
+                await HttpHelper.HttpDownloadFileAsync(url, file);
             }
             BitmapImage bi = GetBitMapImageFromFile(file);
             AddImageToMemory(url, bi);

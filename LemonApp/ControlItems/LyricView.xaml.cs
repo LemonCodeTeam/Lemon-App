@@ -41,6 +41,10 @@ namespace LemonApp
         }
 
         #region 
+        public void SetFontSize(int size) {
+            foreach (TextBlock tb in c_lrc_items.Children)
+                tb.FontSize = size;
+        }
         public void RestWidth(double width)
         {
             foreach (TextBlock tb in c_lrc_items.Children)
@@ -85,7 +89,7 @@ namespace LemonApp
                     }
 
                     TextBlock c_lrcbk = new TextBlock();
-                    c_lrcbk.FontSize = 18;
+                    c_lrcbk.FontSize = Settings.USettings.LyricFontSize;
                     c_lrcbk.Foreground = NoramlLrcColor;
                     c_lrcbk.TextWrapping = TextWrapping.Wrap;
                     c_lrcbk.TextAlignment = TextAlignment;
@@ -105,7 +109,17 @@ namespace LemonApp
                 }
             }
         }
-        public bool CanSolve(string str) => str.Length > 0 && str.IndexOf(":") != -1 && !str.StartsWith("[ti:") && !str.StartsWith("[ar:") && !str.StartsWith("[al:") && !str.StartsWith("[by:") && !str.StartsWith("[offset:");
+        public bool CanSolve(string str)
+        {
+            if (str.Length > 0)
+            {
+                //直接判断是否为数字...
+                var key = TextHelper.XtoYGetTo(str, "[", ":", 0);
+                return int.TryParse(key, out _);
+            }
+            else return false;
+        }
+
         public TimeSpan GetTime(string str)
         {
             Regex reg = new Regex(@"\[(?<time>.*)\]", RegexOptions.IgnoreCase);

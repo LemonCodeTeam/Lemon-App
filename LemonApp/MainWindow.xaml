@@ -1473,6 +1473,12 @@
                           8.937-16.727 49.583-28.707 103.211-35.365 160.222-35.553 296.529 211.662 425.273 476.241 425.273 263.022 0 511.794-128.745 476.242-425.273zM915.598 84.822c3.152 0 5.194 0.234 6.446 0.442 14.098 15.438 23.305 124.386-0.51 245.71-42.23-86.992-101.805-156.754-175.766-203.572 61.354-20.795 137.622-42.579 169.83-42.579zM104.767 85.263c1.253-0.207 3.294-0.442 6.446-0.442 31.742 0 106.245 21.163 167.124 41.678-73.011 45.818-131.969 113.843-174.104 198.781-22.423-119.009-13.341-224.824 0.533-240.017zM871.766 808.628c-72.657 82.313-203.895 129.518-360.061
                           129.518-158.747 0-286.553-47.208-359.21-129.518-53.728-60.867-74.289-140.349-62.792-236.238 33.012-282.697 183.881-458.212 422.003-458.212 228.343 0 390.692 175.513 423.704 458.212 11.498 95.888-9.915 175.371-63.643 236.238z" Stretch="Uniform" Fill="White" Margin="5,5,5,5"/>
                 </Border>
+                <Border x:Name="LyricFontSize_UpBtn" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="80,0,0,100" Background="Transparent" ToolTip="歌词字号加" MouseDown="LyricFontSize_UpBtn_MouseDown">
+                    <Path Data="M631.1 266.9h152.2v41H631.1zM824.3 266.9h152.2v41H824.3zM783.3 307.8h41V460h-41zM783.3 114.6h41v152.2h-41z M783.3 266.9h41v41h-41zM368.5 150.5L57.2 855.2h73.2l101.3-236.8h346.7l98.9 236.8h78.1L444.2 150.5h-75.7zM559 572H251.3l54.9-127.6c35.4-82.2 65.9-156.6 96.4-241.7h4.9c31.7 85.1 61 159.5 97.7 241.7L559 572z" Stretch="Uniform" Fill="White" Margin="5,5,5,5"/>
+                </Border>
+                <Border x:Name="LyricFontSize_DownBtn" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="128,0,0,100" Background="Transparent" ToolTip="歌词字号减" MouseDown="LyricFontSize_DownBtn_MouseDown">
+                    <Path Data="M631.1 266.9h345.4v41H631.1zM368.5 150.5L57.2 855.2h73.2l101.3-236.8h346.7l98.9 236.8h78.1L444.2 150.5h-75.7zM559 572H251.3l54.9-127.6c35.4-82.2 65.9-156.6 96.4-241.7h4.9c31.7 85.1 61 159.5 97.7 241.7L559 572z" Stretch="Uniform" Fill="White" Margin="5,5,5,5"/>
+                </Border>
             </Grid>
             <Grid x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" >
                 <Grid.ColumnDefinitions>

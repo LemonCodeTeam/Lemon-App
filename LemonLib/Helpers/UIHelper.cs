@@ -40,17 +40,20 @@ namespace LemonLib
         {
             try
             {
-                d.FocusVisualStyle = null;
-                if (d is Panel)
+                if (d != null)
                 {
-                    foreach (var s in (d as Panel).Children)
+                    d.FocusVisualStyle = null;
+                    if (d is Panel)
                     {
-                        G(s as FrameworkElement);
+                        foreach (var s in (d as Panel).Children)
+                        {
+                            G(s as FrameworkElement);
+                        }
                     }
-                }
-                if (d is ScrollViewer)
-                {
-                    G((d as ScrollViewer).Content as FrameworkElement);
+                    if (d is ScrollViewer)
+                    {
+                        G((d as ScrollViewer).Content as FrameworkElement);
+                    }
                 }
             }
             catch { }

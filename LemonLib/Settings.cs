@@ -138,6 +138,8 @@ namespace LemonLib
                 USettings.IsMiniOpen = bool.Parse(o["IsMiniOpen"].ToString());
             if (data.Contains("PlayXHMode"))
                 USettings.PlayXHMode = int.Parse(o["PlayXHMode"].ToString());
+            if (data.Contains("LyricFontSize"))
+                USettings.LyricFontSize = int.Parse(o["LyricFontSize"].ToString());
         }
         public class UserSettings
         {
@@ -162,7 +164,7 @@ namespace LemonLib
             public string Cookie { get; set; } = "pgv_info=ssid=s8469992130; pgv_pvid=7657244050; pgv_pvi=1902315520; pgv_si=s2246959104";
             public string g_tk { get; set; } = "5381";
             #endregion
-            #region 上一次播放
+            #region 播放
             public Music Playing { get; set; } = new Music();
             public int PlayingIndex = -1;
             public List<Music> MusicGDataPlayList = new List<Music>();
@@ -170,6 +172,10 @@ namespace LemonLib
             /// 播放模式 0列表循环 1单曲循环 2随机播放
             /// </summary>
             public int PlayXHMode = 0;
+            /// <summary>
+            /// 歌词字体大小..
+            /// </summary>
+            public int LyricFontSize = 18;
             #endregion
             #region 主题配置
             //启用圆的MusicImage?

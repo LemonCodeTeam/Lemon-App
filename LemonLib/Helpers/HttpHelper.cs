@@ -25,6 +25,12 @@ namespace LemonLib
             }
             return size;
         }
+        /// <summary>
+        /// 不带Header直接发送Get请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public static async Task<string> GetWebAsync(string url, Encoding e = null)
         {
             if (e == null)
@@ -35,6 +41,11 @@ namespace LemonLib
             var st = await sr.ReadToEndAsync();
             return st;
         }
+        /// <summary>
+        /// 带上简单Header的Get请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public static async Task<string> GetWebWithHeaderAsync(string url)
         {
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
@@ -54,16 +65,6 @@ namespace LemonLib
             var st = await sr.ReadToEndAsync();
             return st;
         }
-        public static WebHeaderCollection GetWebHeader_Yeie() => new WebHeaderCollection
-            {
-                { "Accept", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
-                { "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8" },
-                { "Cookie", "Hm_lvt_f2ab64b4338dae3e26502b1fe7be3b5b=1581997330; Hm_lpvt_f2ab64b4338dae3e26502b1fe7be3b5b=1581997406" },
-                { "Host", "music.yeie.net" },
-                { "Origin", "https://music.yeie.net" },
-                { "Referer", "https://music.yeie.net" },
-                { "User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" }
-            };
         public static WebHeaderCollection GetWebHeader_YQQCOM() => new WebHeaderCollection
             {
                 { HttpRequestHeader.Accept, "*/*" },
@@ -74,6 +75,13 @@ namespace LemonLib
                 { HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36" },
                 { HttpRequestHeader.Host, "c.y.qq.com" }
             };
+        /// <summary>
+        /// 发送一个简单的POST请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <param name="Header"></param>
+        /// <returns></returns>
         public static async Task<string> PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
             byte[] postData = Encoding.UTF8.GetBytes(data);
@@ -84,6 +92,12 @@ namespace LemonLib
 
             return Encoding.UTF8.GetString(responseData);
         }
+        /// <summary>
+        /// 针对wk_v17 y.qq.com的反防盗链 发送POST请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task<string> PostInycAsync(string url, string data)
         {
             var r = (HttpWebRequest)WebRequest.Create(url);
@@ -108,32 +122,12 @@ namespace LemonLib
             string dt = await stream.ReadToEndAsync();
             return dt;
         }
-        public static async Task HttpDownloadAsync(string url, string path)
-        {
-            HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
-            hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
-            hwr.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-            hwr.Headers.Add("Cache-Control", "max-age=0");
-            hwr.KeepAlive = true;
-            hwr.Referer = url;
-            hwr.Headers.Add("Upgrade-Insecure-Requests", "1");
-            hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
-            using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
-            using Stream responseStream = response.GetResponseStream();
-            using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
-            {
-                byte[] bArr = new byte[1024];
-                int size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
-                while (size > 0)
-                {
-                    await stream.WriteAsync(bArr, 0, size);
-                    size = await responseStream.ReadAsync(bArr, 0, bArr.Length);
-                }
-                stream.Close();
-            }
-            responseStream.Close();
-        }
-
+        /// <summary>
+        /// 模拟Chrome请求 下载文件
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static async Task HttpDownloadFileAsync(string url, string path)
         {
             HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
@@ -159,6 +153,12 @@ namespace LemonLib
             }
             responseStream.Close();
         }
+        /// <summary>
+        /// y.qq.com fcg客户端 Get请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static async Task<string> GetWebDatacAsync(string url, Encoding c = null)
         {
             Console.WriteLine(Settings.USettings.Cookie + "\r\n" + Settings.USettings.g_tk);
@@ -179,6 +179,12 @@ namespace LemonLib
             sr.Dispose();
             return st;
         }
+        /// <summary>
+        /// y.qq.com musicu.fcg客户端 Get请求
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static async Task<string> GetWebDataqAsync(string url, Encoding c = null)
         {
             Console.WriteLine(Settings.USettings.Cookie + "\r\n" + Settings.USettings.g_tk);

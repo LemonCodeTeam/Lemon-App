@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
@@ -174,10 +176,9 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> GetWYIdByName(string name)
         {
-            string data = await HttpHelper.PostWeb("https://music.yeie.net/api.php", "types=search&count=20&source=netease&pages=1&name=" + Uri.EscapeDataString(name), HttpHelper.GetWebHeader_Yeie());
-            var ds = "{\"data\":" + data + "}";
-            var s = JObject.Parse(ds);
-            return s["data"][0]["id"].ToString();
+            string data = await HttpHelper.GetWebWithHeaderAsync($"https://music.163.com/api/cloudsearch/pc?s={HttpUtility.UrlEncode(name)}&type=1&limit=1&total=true&offset=0");
+            var s = JObject.Parse(data);
+            return s["result"]["songs"][0]["id"].ToString();
         }
         #endregion
         #region 歌单相关 我的歌单(歌单操作 删除|添加)|分类歌单
@@ -1575,7 +1576,7 @@ jpg
         {
             string Page = ((page - 1) * 20).ToString();
             string id = await GetWYIdByName(name);
-            MainClass.DebugCallBack("WyyGDid",id);
+            MainClass.DebugCallBack("WyyPLid",id);
             var data = await HttpHelper.GetWebAsync($"https://music.163.com/api/v1/resource/comments/R_SO_4_{id}?offset={Page}");
             MainClass.DebugCallBack("result",data);
             JObject o = JObject.Parse(data);

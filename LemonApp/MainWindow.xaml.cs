@@ -2331,7 +2331,7 @@ namespace LemonApp
             LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
             Singer.Text = data.SingerText;
 
-            LyricData dt = await MusicLib.GetLyric(data.MusicID);
+            LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
             lv.LoadLrc(dt);
 
             if (doesplay)
@@ -3080,7 +3080,7 @@ namespace LemonApp
             CloseLoading();
         }
         /// <summary>
-        /// 加载QQ音乐评论
+        /// 加载网易云音乐评论
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3102,7 +3102,7 @@ namespace LemonApp
         }
 
         /// <summary>
-        /// 加载网易云音乐的评论
+        /// 加载QQ音乐的评论
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3112,6 +3112,7 @@ namespace LemonApp
             MusicPLPage_QQ.Visibility = Visibility.Visible;
             OpenLoading();
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
+            MusicPlList.Children.Clear();
             var data = await MusicLib.GetPLByQQAsync(Settings.USettings.Playing.MusicID);
             if (data[0].Count > 0)
             {
@@ -3701,5 +3702,22 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void LyricFontSize_UpBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LyricFontSize <= 28) {
+                Settings.USettings.LyricFontSize += 2;
+                lv.SetFontSize(Settings.USettings.LyricFontSize);
+            }
+        }
+
+        private void LyricFontSize_DownBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LyricFontSize>=14)
+            {
+                Settings.USettings.LyricFontSize -= 2;
+                lv.SetFontSize(Settings.USettings.LyricFontSize);
+            }
+        }
     }
 }
