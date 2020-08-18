@@ -34,5 +34,11 @@ namespace LemonApp
             img.Background = image;
             theme = themecolor;
         }
+
+        private void UserControl_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            Height = Width - 50;
+            img.Height = Height - 30;
+        }
     }
 }

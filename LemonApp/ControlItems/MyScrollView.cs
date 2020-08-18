@@ -12,6 +12,16 @@ namespace LemonApp
     /// </summary>
     public class MyScrollView : ScrollViewer
     {
+        public MyScrollView() {
+            this.PreviewMouseUp += MyScrollView_PreviewMouseUp;
+        }
+
+        private void MyScrollView_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            //响应鼠标操作:  手动滑动滚动条的时候更新位置
+            LastLocation = VerticalOffset;
+        }
+
         public double LastLocation = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
@@ -27,6 +37,7 @@ namespace LemonApp
             LastLocation = newOffset;
             e.Handled = true;
         }
+
         private void AnimateScroll(double ToValue)
         {
             BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, null);

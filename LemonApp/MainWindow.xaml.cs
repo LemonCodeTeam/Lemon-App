@@ -202,28 +202,25 @@ namespace LemonApp
             lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             lv.TextAlignment = TextAlignment.Center;
             ly.Child = lv;
-            lv.NextLyric += async (text) =>
+            lv.NextLyric += async (lrc,trans) =>
             {
                 //主要用于桌面歌词的显示
-                if (text != "" && lastlyric != text)
+                if (lrc != "" && lastlyric != lrc)
                 {
                     //有歌词更新
-                    mini.lyric.Text = text;
-                    lastlyric = text;
+                    mini.lyric.Text = lrc;
                     if (Settings.USettings.DoesOpenDeskLyric)
-                        lyricTa.Updata(text);
+                    {
+                        lyricTa.Updata(lrc + (trans == null ? "" : ("\r\n" + trans)));
+                        lastlyric = lrc;
+                    }
                     if (Settings.USettings.IsLyricImm)
                     {
+                        lastlyric = lrc;
                         ImmTb_Lyric.Text = "";
                         ImmTb_Trans.Text = "";
-                        string dt = text;
-                        if (text.Contains("\r\n"))
-                        {
-                            //去除翻译
-                            var cc = text.Split("\r\n");
-                            dt = cc[0];
-                            ImmTb_Trans.Text = cc[1];
-                        }
+                        string dt = lrc;
+                        ImmTb_Trans.Text = trans ?? "";
                         //分割划词
                         string[] dta = dt.Split(' ');
                         if (dta.Count() >= 3)
@@ -2334,7 +2331,7 @@ namespace LemonApp
             LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
             Singer.Text = data.SingerText;
 
-            string dt = await MusicLib.GetLyric(data.MusicID);
+            LyricData dt = await MusicLib.GetLyric(data.MusicID);
             lv.LoadLrc(dt);
 
             if (doesplay)
@@ -3016,6 +3013,7 @@ namespace LemonApp
         {
             NSPage(new MeumInfo(null, MusicPLPage, null));
             OpenLoading();
+            MusicPL_tx.Background = MusicImage.Background;
             MusicPL_tb.Text = MusicName.Text + " - " + Singer.Text;
             bool cp = true;
             MusicPlList.Children.Clear();

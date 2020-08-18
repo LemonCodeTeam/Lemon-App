@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LemonApp"
+             xmlns:local="clr-namespace:LemonApp" MinWidth="170" MaxWidth="240"
              mc:Ignorable="d" RenderOptions.BitmapScalingMode="LowQuality"
-             Height="129" Width="176">
+             Height="126" Width="176" SizeChanged="UserControl_SizeChanged">
     <Grid>
-        <Border x:Name="img" Height="99" VerticalAlignment="Top" Background="{DynamicResource ThemeColor}" CornerRadius="{DynamicResource AppCornerRadius}"/>
+        <Border x:Name="img" Height="100" VerticalAlignment="Top" Background="{DynamicResource ThemeColor}" CornerRadius="{DynamicResource AppCornerRadius}"/>
         <TextBlock x:Name="name" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom" Margin="0,0,0,7" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center"/>
 
     </Grid>

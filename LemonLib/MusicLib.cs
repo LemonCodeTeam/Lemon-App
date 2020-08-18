@@ -846,73 +846,16 @@ jpg
         #endregion
         #region 歌词 获取|处理
         /// <summary>
-        /// 处理歌词 将歌词写入文件里
-        /// </summary>
-        /// <param name="t"></param>
-        /// <param name="x"></param>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        private static string PushLyric(string t, string x, string file)
-        {
-            List<string> datatime = new List<string>();
-            List<string> datatext = new List<string>();
-            Dictionary<string, string> gcdata = new Dictionary<string, string>();
-            string[] dta = t.Split('\n');
-            foreach (var dt in dta)
-                try
-                {
-                    LyricHelper.parserLine(dt, datatime, datatext, gcdata);
-                }
-                catch { }
-            List<String> dataatimes = new List<String>();
-            List<String> dataatexs = new List<String>();
-            Dictionary<String, String> fydata = new Dictionary<String, String>();
-            String[] dtaa = x.Split('\n');
-            foreach (var dt in dtaa)
-                try
-                {
-                    LyricHelper.parserLine(dt, dataatimes, dataatexs, fydata);
-                }
-                catch { }
-            List<String> KEY = new List<String>();
-            Dictionary<String, String> gcfydata = new Dictionary<String, String>();
-            Dictionary<String, String> list = new Dictionary<String, String>();
-            foreach (var dt in datatime)
-            {
-                KEY.Add(dt);
-                gcfydata.Add(dt, "");
-            }
-            for (int i = 0; i != gcfydata.Count; i++)
-            {
-                if (fydata.ContainsKey(KEY[i]))
-                    gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[KEY[i]]).Replace("\n", "").Replace("\r", "");
-                else
-                {
-                    string dt = LyricHelper.YwY(KEY[i], 1);
-                    if (fydata.ContainsKey(dt))
-                        gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^" + fydata[dt]).Replace("\n", "").Replace("\r", "");
-                    else gcfydata[KEY[i]] = (gcdata[KEY[i]] + "^").Replace("\n", "").Replace("\r", "");
-                }
-            }
-            string LyricData = "";
-            for (int i = 0; i != KEY.Count; i++)
-            {
-                String value = gcfydata[KEY[i]].Replace("[", "").Replace("]", "");
-                String key = KEY[i];
-                LyricData += $"[{key}]{value}\r\n";
-            }
-            File.WriteAllText(file, LyricData);
-            return LyricData;
-        }
-        /// <summary>
         /// 获取歌词
         /// </summary>
         /// <param name="McMind"></param>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static async Task<string> GetLyric(string McMind, string file = "")
+        public static async Task<LyricData> GetLyric(string McMind, string file = "")
         {
-            if (file == "") file = Settings.USettings.MusicCachePath + "Lyric\\" + McMind + ".lrc";
+            string split = "\n<LemonApp TransLyric/>\n";//分隔符
+            if (file == "") 
+                file = Settings.USettings.MusicCachePath + "Lyric\\" + McMind + ".lmrc";
             if (!File.Exists(file))
             {
                 WebClient c = new WebClient();
@@ -923,18 +866,50 @@ jpg
                 c.Headers.Add("Cookie", Settings.USettings.Cookie);
                 c.Headers.Add("Host", "c.y.qq.com");
                 string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&pcachetime=1563410858607&songmid={McMind}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
-                string td = WebUtility.HtmlDecode( c.DownloadString(url));
+                string td = c.DownloadString(url);
                 JObject o = JObject.Parse(td);
-                string t = Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())).Replace("&apos;", "\'");
-                if (o["trans"].ToString() == "") { await Task.Run(() => { File.WriteAllText(file, t); }); return t; }
+
+                LyricData data = new LyricData();
+
+                string lyric = WebUtility.HtmlDecode( Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())));
+                if (o["trans"].ToString() == "")
+                {
+                    //没有翻译  直接返回歌词
+                    await Task.Run(() => { File.WriteAllText(file, lyric); });//保存歌词
+                    data.lyric = lyric;
+                    data.HasTrans = false;
+                    return data;
+                }
                 else
                 {
-                    string x = Encoding.UTF8.GetString(Convert.FromBase64String(o["trans"].ToString())).Replace("&apos;", "\'");
-                    return PushLyric(t, x, file);
+                    string trans = WebUtility.HtmlDecode( Encoding.UTF8.GetString(Convert.FromBase64String(o["trans"].ToString())));
+                    await Task.Run(() => { File.WriteAllText(file, lyric+split+trans); });
+                    data.lyric = lyric;
+                    data.trans = trans;
+                    data.HasTrans = true;
+                    return data;
                 }
             }
             else
-                return WebUtility.HtmlDecode(File.ReadAllText(file));
+            {
+                string filedata = await File.ReadAllTextAsync(file);
+                LyricData data = new LyricData();
+                if (filedata.Contains(split))
+                {
+                    //有翻译歌词
+                    var dta = filedata.Split(split);
+                    data.lyric = dta[0];
+                    data.trans = dta[1];
+                    data.HasTrans = true;
+                    return data;
+                }
+                else {
+                    //没有翻译歌词
+                    data.lyric = filedata;
+                    data.HasTrans = false;
+                    return data;
+                }
+            }
         }
         #endregion
         #region 排行榜

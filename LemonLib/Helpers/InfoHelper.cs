@@ -8,6 +8,11 @@ namespace LemonLib
 {
     public class InfoHelper
     {
+        public class LyricData {
+            public string lyric;
+            public string trans;
+            public bool HasTrans;
+        }
         public class QuickGoToData {
             /// <summary>
             /// 主要支持四类: Singer  GD  TopList  Radio
