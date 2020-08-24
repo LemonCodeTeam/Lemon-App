@@ -80,10 +80,13 @@ namespace LemonApp
                     //以歌词Lyric内的时间为准....
                     TimeSpan time = GetTime(str);
 
+                    //歌词翻译的  解析和适配
+                    //1.正常对应
+                    //2.翻译与歌词之间有+-2ms的误差
                     string lrc = str.Split(']')[1];
                     string trans = null;
                     if (data.HasTrans){
-                        IEnumerable<KeyValuePair<double, string>> s = transDic.Where(m => m.Key >= time.TotalMilliseconds);
+                        IEnumerable<KeyValuePair<double, string>> s = transDic.Where(m => m.Key >=( time.TotalMilliseconds-1));
                         string a = s.First().Value;
                         trans = a == "//" ? null : a;
                     }
