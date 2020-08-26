@@ -777,16 +777,12 @@ namespace LemonApp
                 }
             }
         }
-        private void SettingsPage_URLink_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Process.Start("explorer", SettingsPage_URLink.Text);
-        }
         private void UserSendButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //⚠警告!!!: 以下key仅供本开发者(TwilightLemon)使用,
             //               若发现滥用现象，将走法律程序解决!!!
             //KEY: xfttsuxaeivzdefd
-            if (UserSendText.Text != "在此处输入你的建议或问题")
+            if (UserSendText.Text != "在此处输入你的建议或问题，或拖动附件到上方"&&knowb.Text!=string.Empty)
             {
                 va.Text = "发送中...";
                 string body = "Lemon App 版本号:" + App.EM +
@@ -2037,12 +2033,12 @@ namespace LemonApp
             Search_SmartBox.IsOpen = true;
             Search_SmartBoxList.Items.Clear();
             var data = await MusicLib.SearchHotKey();
-            var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜", Margin = new Thickness(10, 0, 10, 0) };
+            var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜",Margin=new Thickness(0,10,0,0) };
             Search_SmartBoxList.Items.Add(mdb);
             for (int i = 0; i < 5; i++)
             {
                 var dt = data[i];
-                var bd = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(10, 10, 10, 0) };
+                var bd = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(0, 10, 0, 0) };
                 bd.PreviewMouseDown += Bd_MouseDown;
                 bd.PreviewKeyDown += Search_SmartBoxList_KeyDown;
                 Search_SmartBoxList.Items.Add(bd);
@@ -2053,6 +2049,7 @@ namespace LemonApp
         {
             if (SearchBox.Text.Trim() != string.Empty)
             {
+                await Task.Yield();
                 if (!Search_SmartBox.IsOpen)
                     Search_SmartBox.IsOpen = true;
                 var data = await ml.Search_SmartBoxAsync(SearchBox.Text);
@@ -2061,7 +2058,7 @@ namespace LemonApp
                     Search_SmartBox.IsOpen = false;
                 else foreach (var dt in data)
                     {
-                        var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(10, 10, 10, 0) };
+                        var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = dt, Margin = new Thickness(0, 10, 0, 0) };
                         mdb.PreviewMouseDown += Bd_MouseDown;
                         mdb.PreviewKeyDown += Search_SmartBoxList_KeyDown;
                         Search_SmartBoxList.Items.Add(mdb);

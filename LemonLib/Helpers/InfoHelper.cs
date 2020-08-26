@@ -222,23 +222,5 @@ namespace LemonLib
             /// </summary>
             public Dictionary<string, string> ids = new Dictionary<string, string>();
         }
-        ////////Weather Helper/////
-        public class Weather
-        {
-            public string Qiwen { get; set; }
-            public string KongQiZhiLiang { get; set; }
-            public string MiaoShu { get; set; }
-            public string TiGan { get; set; }
-            public string FenSu { get; set; }
-            public string NenJianDu { get; set; }
-            public List<WeatherByDay> Data { get; set; }
-
-        }
-        public class WeatherByDay
-        {
-            public string Date { set; get; }
-            public string Icon { set; get; }
-            public string QiWen { set; get; }
-        }
     }
 }

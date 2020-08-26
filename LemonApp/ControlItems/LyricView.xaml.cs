@@ -88,7 +88,7 @@ namespace LemonApp
                     if (data.HasTrans){
                         IEnumerable<KeyValuePair<double, string>> s = transDic.Where(m => m.Key >=( time.TotalMilliseconds-1));
                         string a = s.First().Value;
-                        trans = a == "//" ? null : a;
+                        trans = lrc != string.Empty && a != "//" ? a : null;
                     }
 
                     TextBlock c_lrcbk = new TextBlock();

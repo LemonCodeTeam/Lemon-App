@@ -8,7 +8,10 @@
     <Grid Margin="10,0">
         <Grid x:Name="a" VerticalAlignment="Top" Margin="0,0,0,35">
             <Border x:Name="Image" BorderThickness="0" HorizontalAlignment="Left" Width="40" CornerRadius="50" Height="40" VerticalAlignment="Top" Background="#FF8F8F8F" Margin="10,12,0,0"/>
-            <TextBlock x:Name="cons" Margin="57,23,10,0" TextWrapping="Wrap" Foreground="#FF007ACC" HorizontalAlignment="Left" VerticalAlignment="Top" TextTrimming="None"><Run x:Name="name" Text="xxx"/><Run Text=": "/><Run x:Name="Te" Text="90uyh8t7i7hgyium00000000000000000000000000000000" Foreground="{DynamicResource PlayDLPage_Font_Most}"/></TextBlock>
+            <TextBlock x:Name="cons" Margin="57,23,10,0" TextWrapping="Wrap" Foreground="#FF007ACC" HorizontalAlignment="Left" VerticalAlignment="Top" TextTrimming="None" FontSize="16">
+                <Run x:Name="name" Text="xxx"/><Run Text=":"/>
+                <LineBreak/>
+                <Run x:Name="Te" Text="90uyh8t7i7hgyium00000000000000000000000000000000" Foreground="{DynamicResource PlayDLPage_Font_Most}"/></TextBlock>
         </Grid>
         <TextBlock x:Name="time" HorizontalAlignment="Left" TextWrapping="Wrap" Text="hhhh-MM-dd   HH-mm" VerticalAlignment="Bottom" Foreground="{DynamicResource PlayDLPage_Font_Low}" Margin="12,0,0,7"/>
         <WrapPanel Margin="0,0,20,7" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Vertical" Background="#00000000" MouseDown="Border_MouseDown">
@@ -17,6 +20,5 @@
             </Border>
             <TextBlock x:Name="ztb" Foreground="{DynamicResource PlayDLPage_Font_Low}" Text="999" Margin="2,3.5,0,0"/>
         </WrapPanel>
-        <Border BorderBrush="{DynamicResource PlayDLPage_Border}" BorderThickness="1" Height="1" VerticalAlignment="Bottom" Margin="20,0"/>
     </Grid>
 </UserControl>

@@ -1044,7 +1044,7 @@
                                     </Grid>
                                     <Grid Margin="0,10,0,0" Visibility="Visible">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
-                                        <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或到开源仓库中提交issues; 拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
+                                        <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
                                         <LemonApp:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
                                         <TextBlock Margin="0,214,0,0" TextWrapping="Wrap" Text="联系方式:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Left" Width="60"/>
                                         <TextBox x:Name="knowb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="65,210,205,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
@@ -1053,10 +1053,20 @@
                                     </Grid>
                                     <Grid Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="编码: Twilight./Lemon(QQ:2728578956)、Light(QQ:3545039435)、Starlight(QQ:3474980436)"/><LineBreak/><Run Text="源代码:"/><InlineUIContainer>
-                                                <TextBlock x:Name="SettingsPage_URLink" Text="https://github.com/TwilightLemon/Lemon-App" Foreground="#FF007ACC" TextDecorations="Underline" MouseDown="SettingsPage_URLink_MouseDown" Cursor="Hand"/>
-                                            </InlineUIContainer><Run Text="   请遵循 GPL v3.0 以及 Anti 996 开源协议"/><LineBreak/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/><LineBreak/><LineBreak/><Run Text="Powered by .Net Core 3.1 on WPF"/></TextBlock>
+                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}">
+                                            <Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/>
+                                            <LineBreak/><LineBreak/>
+                                            <Run Text="免责申明:"/>
+                                            <LineBreak/>
+                                            <Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/>
+                                            <LineBreak/><Run Text="请支持正版音乐."/><LineBreak/>
+                                            <LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/>
+                                            <LineBreak/><Run Text="Powered by .Net Core 3.1 on WPF"/>
+                                            <LineBreak/><Run Text="© Twilight./Lemon 2016-2020 all rights reserved"/>
+                                        </TextBlock>
                                     </Grid>
+                                    <!--留下一点空白行-->
+                                        <Border Height="200"/>
                                 </VirtualizingStackPanel>
                             </LemonApp:MyScrollView>
                         </Grid>
