@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
@@ -771,7 +772,7 @@ jpg
 
         #endregion
         #endregion
-        #region 播放相关 获取链接|播放音乐
+        #region 播放相关 获取链接
         /// <summary>
         /// 获取歌曲播放链接
         /// </summary>
@@ -803,7 +804,8 @@ jpg
             aqqmusic.tc.qq.com/amobile.music.tc.qq.com/
             apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/
              */
-            string vk = TextHelper.XtoYGetTo(st, "amobile.music.tc.qq.com/C400000By9MX0yKL2c.m4a", "&fromtag=38", 0);
+            string val = Regex.Match(st, "amobile.music.tc.qq.com/.*?.m4a.*?&fromtag=38").Value;
+            string vk = TextHelper.XtoYGetTo(st, "m4a", "&fromtag=38", 0);
             if (string.IsNullOrEmpty(vk)) {
                 MainClass.DebugCallBack("MusicUrlGet","Vkey被吃掉了!!");
                 await Task.Delay(500);
