@@ -4,6 +4,9 @@ using System.Text;
 
 namespace LemonLib
 {
+    /// <summary>
+    /// 使用WinAPI SENDMESSAGE 实现单实例呼唤
+    /// </summary>
     public class MsgHelper
     {
         public const int WM_COPYDATA = 0x004A;

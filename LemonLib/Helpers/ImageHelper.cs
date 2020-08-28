@@ -13,6 +13,7 @@ namespace LemonLib
 {
     public static class ImageHelper
     {
+        #region Image类互转的拓展方法
         [DllImport("gdi32.dll", SetLastError = true)]
         private static extern bool DeleteObject(IntPtr hObject);
         public static ImageSource ToImageSource(this Bitmap bitmap)
@@ -71,7 +72,8 @@ namespace LemonLib
                 return image;
             }
         }
-
+        #endregion
+        #region 处理模糊图像
         [DllImport("gdiplus.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         private static extern int GdipBitmapApplyEffect(IntPtr bitmap, IntPtr effect, ref Rectangle rectOfInterest, bool useAuxData, IntPtr auxData, int auxDataSize);
         /// <summary>
@@ -138,5 +140,6 @@ namespace LemonLib
                 throw new ExternalException("不支持的GDI+版本，必须为GDI+1.1及以上版本，且操作系统要求为Win Vista及之后版本.");
             }
         }
+        #endregion
     }
 }

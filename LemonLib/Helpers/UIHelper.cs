@@ -36,6 +36,10 @@ namespace LemonLib
             else
                 return null;
         }
+        /// <summary>
+        /// 去除可恶的焦点边框虚线
+        /// </summary>
+        /// <param name="d"></param>
         public static void G(FrameworkElement d)
         {
             try
@@ -58,6 +62,11 @@ namespace LemonLib
             }
             catch { }
         }
+        /// <summary>
+        /// ScrollViewer拉到底了吗?
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
         public static bool IsVerticalScrollBarAtButtom(this ScrollViewer ex)
         {
             try

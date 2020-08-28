@@ -8,11 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 using static LemonLib.InfoHelper;
 using System.Windows.Media;
+/*
+ USettings的使用:
+     1.在程序启动时载入数据
+     2.使用时直接对USettings对象读取和赋值
+     3.在程序退出时保存
 
+更改和添加USettings:
+     1.在 class UserSettings中编辑需要的类型(及默认值) 在构造函数中更新默认值等(例如检索磁盘目录)
+     2.在 方法 XDUsettings(string data) 中从json中读取
+ */
 namespace LemonLib
 {
+    /// <summary>
+    /// Settings 保存和读取用户配置、实例信息
+    /// </summary>
     public class Settings
     {
+        /// <summary>
+        /// 兼容旧版本(加密过的settings配置文件)
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <returns></returns>
         private static async Task<string> ReadEncodeAsync(string qq)
         {
             string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
@@ -21,11 +38,11 @@ namespace LemonLib
         }
         #region USettings
         public static UserSettings USettings = new UserSettings();
-        public static async void SaveSettings(string id = "id")
+        public static async void SaveSettings(string id =null)
         {
             try
             {
-                if (id == "id") id = USettings.LemonAreeunIts;
+               id ??=USettings.LemonAreeunIts;
                 await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
             }
             catch { }
@@ -52,6 +69,10 @@ namespace LemonLib
                 }
             });
         }
+        /// <summary>
+        /// 从json中解析出Settings项
+        /// </summary>
+        /// <param name="data"></param>
         private static void XDUsettings(string data)
         {
             JObject o = JObject.Parse(data);
@@ -145,6 +166,11 @@ namespace LemonLib
         {
             public UserSettings()
             {
+                //加载默认的缓存和下载文件夹
+                //1. Settings配置文件放在用户目录 %AppData% (C:\User\xxx\AppData\Roaming\LemonApp)
+                //2. 音乐、歌词、图片等缓存目录放在 第二个盘符(如果存在)\LemonAppCache\ 
+                //3. 下载目录放在用户目录 我的音乐 文件夹下
+                //以上2、3项的目录可在应用中设置..
                 DriveInfo[] allDirves = DriveInfo.GetDrives();
                 string dir = "C:\\";
                 foreach (DriveInfo item in allDirves) {
@@ -222,7 +248,7 @@ namespace LemonLib
         }
         #endregion
 
-        #region LSettings
+        #region LSettings 用于保存上次登录的qq 在启动时读取
         public static LocaSettings LSettings = new LocaSettings();
         public static async void LoadLocaSettings()
         {
@@ -255,6 +281,9 @@ namespace LemonLib
         #endregion
 
         #region WINDOW_HANDLE
+        //用于储存当前应用实例的 主窗口句柄 和 进程pid
+        //便于当打开2个实例时退出并呼唤主窗口
+
         public static HANDLE Handle = new HANDLE();
         public async static void SaveHandle()
         {

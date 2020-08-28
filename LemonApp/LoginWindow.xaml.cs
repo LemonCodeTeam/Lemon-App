@@ -34,14 +34,14 @@ namespace LemonApp
                 Topmost = false;
                 await Task.Delay(100);
                 string cookie = wb.Document.Cookie;
-                string qq = TextHelper.XtoYGetTo(cookie, "p_luin=o", ";", 0);
+                string qq = TextHelper.FindTextByAB(cookie, "p_luin=o", ";", 0);
                 LoginData send = new LoginData(){
                     qq = qq,
                     cookie = cookie
                 };
                 if (cookie.Contains("p_skey="))
                 {
-                    string p_skey = TextHelper.XtoYGetTo(cookie + ";", "p_skey=", ";", 0);
+                    string p_skey = TextHelper.FindTextByAB(cookie + ";", "p_skey=", ";", 0);
                     long hash = 5381;
                     for (int i = 0; i < p_skey.Length; i++)
                     {

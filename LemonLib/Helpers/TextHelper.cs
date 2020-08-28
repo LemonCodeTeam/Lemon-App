@@ -10,6 +10,11 @@ namespace LemonLib
 {
     public static class TextHelper
     {
+        /// <summary>
+        /// 将数字转换为 "xx.x万"
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public static string IntToWn(this int num)
         {
             if (num < 10000)
@@ -20,6 +25,12 @@ namespace LemonLib
                 return Math.Round(d, 2, MidpointRounding.AwayFromZero) + "万";
             }
         }
+        /// <summary>
+        /// 过滤掉路径文件名中的非法字符
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="replacement">替换的字符</param>
+        /// <returns></returns>
         public static string MakeValidFileName(string text, string replacement = "_")
         {
             StringBuilder str = new StringBuilder();
@@ -34,18 +45,31 @@ namespace LemonLib
 
             return str.ToString();
         }
+        /// <summary>
+        /// 去除emoji表情信息
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static string Exem(string str)
         {
             string s = str;
             while (s.Contains("[em]"))
             {
-                string em = "[em]" + XtoYGetTo(s, "[em]", "[/em]", 0) + "[/em]";
+                string em = "[em]" + FindTextByAB(s, "[em]", "[/em]", 0) + "[/em]";
                 s = s.Replace(em, "");
             }
             return s;
         }
 
-        public static string XtoYGetTo(string all, string r, string l, int t)
+        /// <summary>
+        /// 查找中间文本
+        /// </summary>
+        /// <param name="all"></param>
+        /// <param name="r">前面的文本</param>
+        /// <param name="l">后面的文本</param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static string FindTextByAB(string all, string r, string l, int t)
         {
 
             int A = all.IndexOf(r, t);
@@ -56,8 +80,8 @@ namespace LemonLib
             }
             else
             {
-                A = A + r.Length;
-                B = B - A;
+                A += r.Length;
+                B -= A;
                 if (A < 0 || B < 0)
                 {
                     return null;
@@ -79,7 +103,7 @@ namespace LemonLib
         }
         public static string TextDecrypt(string decryptStr, string key)
         {
-            byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
+            byte[] keyArray = Encoding.UTF8.GetBytes(key);
             byte[] toEncryptArray = Convert.FromBase64String(decryptStr);
             RijndaelManaged rDel = new RijndaelManaged();
             rDel.Key = keyArray;
@@ -87,7 +111,7 @@ namespace LemonLib
             rDel.Padding = PaddingMode.PKCS7;
             ICryptoTransform cTransform = rDel.CreateDecryptor();
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return UTF8Encoding.UTF8.GetString(resultArray);
+            return Encoding.UTF8.GetString(resultArray);
         }
         public class JSON
         {
@@ -107,7 +131,7 @@ namespace LemonLib
             public static byte[] EncryptToMD5(string str)
             {
                 MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-                byte[] str1 = System.Text.Encoding.UTF8.GetBytes(str);
+                byte[] str1 = Encoding.UTF8.GetBytes(str);
                 byte[] str2 = md5.ComputeHash(str1, 0, str1.Length);
                 md5.Clear();
                 (md5 as IDisposable).Dispose();

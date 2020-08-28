@@ -10,7 +10,9 @@ using System.Windows.Media.Imaging;
 
 namespace LemonLib
 {
-    //三级缓存        By:Starlight
+    /// <summary>
+    /// 图像的三级缓存 网络-内存-储存
+    /// </summary>
     public class ImageCacheHelp
     {
         /// <summary>

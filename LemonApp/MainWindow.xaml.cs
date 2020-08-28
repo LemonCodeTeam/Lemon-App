@@ -191,7 +191,7 @@ namespace LemonApp
             LyricBigAniRound.Children.Add(us);
             //-----Timer 清理与更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
-            ds.Tick += delegate { if (t.Enabled) mp.UpdataDevice(); GC.Collect(); };
+            ds.Tick += delegate { if (t.Enabled) mp.UpdateDevice(); GC.Collect(); };
             ds.Start();
             #endregion
             #region Part2
@@ -448,7 +448,7 @@ namespace LemonApp
             else if (Settings.USettings.Skin_Type == 3)
             {
                 //动态主题
-                string NameSpace = TextHelper.XtoYGetTo(Settings.USettings.Skin_ImagePath, "DTheme[", "]", 0);
+                string NameSpace = TextHelper.FindTextByAB(Settings.USettings.Skin_ImagePath, "DTheme[", "]", 0);
                 ThemeBase tb = null;
                 if (NameSpace == Theme.Dtpp.Drawer.NameSpace)
                     tb = new Theme.Dtpp.Drawer(false);
@@ -1350,7 +1350,7 @@ namespace LemonApp
             LastCom.Visibility = Visibility.Hidden;
             LastPage.Visibility = Visibility.Collapsed;
 
-            //-----cmd处理----
+            //-----cmd跳转处理----
             if (Check)
             {
                 //歌曲页 items
@@ -1433,7 +1433,7 @@ namespace LemonApp
             NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom));
             ClHomePage.LoadHomePage();
         }
-        //前后导航仪
+        //前后导航
         int QHNowPageIndex = 0;
         List<MeumInfo> PageData = new List<MeumInfo>();
         public void AddPage(MeumInfo data)
@@ -1951,7 +1951,6 @@ namespace LemonApp
             {
                 if (x.music.MusicID != null)
                 {
-                    x.MouseDown -= PlayMusic;
                     x.NSDownload(true);
                     x.Check(true);
                 }
@@ -1969,7 +1968,6 @@ namespace LemonApp
             {
                 if (x.music.MusicID != null)
                 {
-                    x.MouseDown += PlayMusic;
                     x.NSDownload(false);
                     x.Check(false);
                 }
@@ -2398,7 +2396,7 @@ namespace LemonApp
             {
                 await Task.Yield();
                 Pop_sp.IsOpen = !Pop_sp.IsOpen;
-                MusicPlay_sp.Value = mp.GetSpeed();
+                MusicPlay_sp.Value = mp.Speed;
                 MusicPlay_pitch_sp.Value = mp.Pitch;
                 Tempo_value.Text = (MusicPlay_sp.Value / 10).ToString("0.00") + "x";
                 Pitch_value.Text = MusicPlay_pitch_sp.Value.ToString("0.00") + "F";
@@ -2438,14 +2436,14 @@ namespace LemonApp
                 if (Tempo_value.Text == "1.25x")
                 {
                     //回到初始速度
-                    mp.SetSpeed(0);
+                    mp.Speed = 0;
                     MusicPlay_sp.Value = 0;
                     Tempo_value.Text = "0x";
                 }
                 else
                 {
                     //1.25倍速
-                    mp.SetSpeed(25);
+                    mp.Speed = 25;
                     MusicPlay_sp.Value = 1.25;
                     Tempo_value.Text = "1.25x";
                 }
@@ -2455,7 +2453,7 @@ namespace LemonApp
         {
             try
             {
-                mp.SetSpeed((float)MusicPlay_sp.Value);
+                mp.Speed = (float)MusicPlay_sp.Value;
                 Tempo_value.Text = (MusicPlay_sp.Value / 10).ToString("0.00") + "x";
             }
             catch { }
@@ -2463,7 +2461,8 @@ namespace LemonApp
 
         private void AudioSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            mp?.SetVOL((float)AudioSlider.Value / 100);
+            if (mp != null)
+                mp.VOL = (float)AudioSlider.Value / 100;
         }
         private void TaskBarBtn_Play_Click(object sender, EventArgs e)
         {
@@ -2936,13 +2935,30 @@ namespace LemonApp
         }
         #endregion
         #region Lyric & 评论加载
+        private void LyricFontSize_UpBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LyricFontSize <= 28)
+            {
+                Settings.USettings.LyricFontSize += 2;
+                lv.SetFontSize(Settings.USettings.LyricFontSize);
+            }
+        }
+
+        private void LyricFontSize_DownBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LyricFontSize >= 14)
+            {
+                Settings.USettings.LyricFontSize -= 2;
+                lv.SetFontSize(Settings.USettings.LyricFontSize);
+            }
+        }
         private async void LikesHit_MouseDown(object sender, MouseButtonEventArgs e)
         {
             LikesHit.MouseDown -= LikesHit_MouseDown;
             LikesHicon.Visibility = Visibility.Collapsed;
             LikesNum.Text = "Likes +1 ing...";
             string data = await HttpHelper.GetWebWithHeaderAsync("https://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg");
-            string hits = TextHelper.XtoYGetTo(data, @"<text x=""54"" y=""14"">", "</text>", 0);
+            string hits = TextHelper.FindTextByAB(data, @"<text x=""54"" y=""14"">", "</text>", 0);
             LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
             await Task.Delay(300);
             LikesNum.Text = "Likes: " + hits;
@@ -3699,22 +3715,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void LyricFontSize_UpBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Settings.USettings.LyricFontSize <= 28) {
-                Settings.USettings.LyricFontSize += 2;
-                lv.SetFontSize(Settings.USettings.LyricFontSize);
-            }
-        }
-
-        private void LyricFontSize_DownBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Settings.USettings.LyricFontSize>=14)
-            {
-                Settings.USettings.LyricFontSize -= 2;
-                lv.SetFontSize(Settings.USettings.LyricFontSize);
-            }
-        }
     }
 }

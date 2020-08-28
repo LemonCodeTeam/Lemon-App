@@ -9,7 +9,7 @@ using System.Windows.Media.Effects;
 namespace LemonApp
 {
     /// <summary>
-    /// Toast.xaml 的交互逻辑
+    /// 发送一个Toast通知   或作为桌面歌词
     /// </summary>
     public partial class Toast : Window
     {

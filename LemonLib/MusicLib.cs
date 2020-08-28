@@ -414,7 +414,7 @@ jpg
             string retString = await myStreamReader.ReadToEndAsync();
             myRequestStream.Close();
             myStreamReader.Close();
-            var json = TextHelper.XtoYGetTo(retString, "frameElement.callback)(", ");</script></body></html>", 0);
+            var json = TextHelper.FindTextByAB(retString, "frameElement.callback)(", ");</script></body></html>", 0);
             return JObject.Parse(json)["imageurl"].ToString().Replace("http://", "https://");
         }
         #endregion
@@ -446,10 +446,10 @@ jpg
         /// <summary>
         /// 通过歌单ID 获取其中的歌曲和歌单信息
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="callback"></param>
-        /// <param name="wx"></param>
-        /// <param name="getAll"></param>
+        /// <param name="id">歌单id号</param>
+        /// <param name="GetInfo">获取到歌单信息时回调通知</param>
+        /// <param name="wx">当前window</param>
+        /// <param name="getAll">获取歌单 歌曲总数</param>
         /// <returns></returns>
         public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<MusicGData> GetInfo = null, Action<int, Music, bool> callback = null, Window wx = null, Action<int> getAll = null)
         {
@@ -471,6 +471,7 @@ jpg
             GetInfo?.Invoke(dt);
             var c0s = c0["songlist"];
             await wx?.Dispatcher.BeginInvoke(new Action(() => getAll?.Invoke(c0s.Count())));
+			//使用多线程并发 但是会打乱歌曲顺序
             Parallel.For(0, c0s.Count(), async (index) =>
                 {
                     string singer = "";
@@ -805,7 +806,7 @@ jpg
             apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/
              */
             string val = Regex.Match(st, "amobile.music.tc.qq.com/.*?.m4a.*?&fromtag=38").Value;
-            string vk = TextHelper.XtoYGetTo(st, "m4a", "&fromtag=38", 0);
+            string vk = TextHelper.FindTextByAB(st, "m4a", "&fromtag=38", 0);
             if (string.IsNullOrEmpty(vk)) {
                 MainClass.DebugCallBack("MusicUrlGet","Vkey被吃掉了!!");
                 await Task.Delay(500);
@@ -1665,7 +1666,7 @@ jpg
         public static async Task<string> GetMusicIdByMidAsync(string mid)
         {
             string st = (await HttpHelper.GetWebAsync($"https://y.qq.com/n/yqq/song/{mid}.html")).Replace(" ", "").Replace("\r\n", "");
-            string json = TextHelper.XtoYGetTo(st, "<script>varg_SongData=", ";</script>", 0);
+            string json = TextHelper.FindTextByAB(st, "<script>varg_SongData=", ";</script>", 0);
             MainClass.DebugCallBack("GetMusicIdData",json);
 
             JObject o = JObject.Parse(json);

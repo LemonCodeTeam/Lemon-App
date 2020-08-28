@@ -85,7 +85,7 @@ namespace LemonApp
                 if (url.Contains("y.qq.com/m/digitalbum/gold/index.html"))
                 {
                     //专辑售卖
-                    string mid = TextHelper.XtoYGetTo(url, "&mid=", "&g_f=yqqjiaodian", 0);
+                    string mid = TextHelper.FindTextByAB(url, "&mid=", "&g_f=yqqjiaodian", 0);
                     mw.IFVCALLBACK_LoadAlbum(mid);
                 }
                 else if (url.Contains("y.qq.com/topic/piaowu"))

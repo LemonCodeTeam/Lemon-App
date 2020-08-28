@@ -970,16 +970,22 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="1" GlassFrameThickness="1"/>
     </WindowChrome.WindowChrome>
+    <!--窗口边框-->
     <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFB7AEB8">
         <Grid x:Name="Page" Background="White" Margin="-1">
+            <!--主题背景或动态皮肤放置于此-->
             <Border x:Name="DThemePage"/>
+
+            <!--主页面-->
             <Grid x:Name="grid" Margin="0,0,0,75">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100*" MinWidth="200" MaxWidth="245"/>
                     <ColumnDefinition Width="402*"/>
                 </Grid.ColumnDefinitions>
+                <!--主页-->
                 <Grid Grid.Column="1">
                     <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,0">
+                        <!--保留必要的页面  其他的页面存放于/ContentPage/ 按需舍取-->
                         <Grid x:Name="DownloadPage" Visibility="Collapsed">
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
                             <LemonApp:MyScrollView x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
@@ -1297,6 +1303,7 @@
                             <TextBlock HorizontalAlignment="Left" Margin="268,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞(/▽＼)" VerticalAlignment="Top" Width="300" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center"/>
                         </Grid>
                     </Grid>
+                    <!--Title部分-->
                     <Grid x:Name="TitlePage" VerticalAlignment="Top" Height="50" Background="#00000000">
                         <WrapPanel x:Name="QuickGoTo" Margin="330,0,210,0" Height="25">
                             <WrapPanel x:Name="QuickGoToList"/>
@@ -1331,6 +1338,7 @@
                         <LemonApp:TitlePageBtn x:Name="MiniBtn" PathData="M312.17664 393.09312a20.48 20.48 0 1 0 0-40.96h-77.2096a20.48 20.48 0 0 0-20.48 20.48v449.55648a20.48 20.48 0 0 0 20.48 20.48h449.55648a20.48 20.48 0 0 0 20.48-20.48V745.0624a20.48 20.48 0 1 0-40.96 0v56.6272h-408.576V393.09312h56.70912z M849.38752 187.31008H399.81056a20.48 20.48 0 0 0-20.48 20.48v449.55648a20.48 20.48 0 0 0 20.48 20.48h449.55648a20.48 20.48 0 0 0 20.48-20.48V207.79008a20.43904 20.43904 0 0 0-20.45952-20.48z m-20.48 449.55648H420.29056V228.27008h408.59648v408.59648z" Width="20" Height="20" HorizontalAlignment="Right" Pathness="4,4,4,4" Margin="0,0,180,0" MouseDown="MiniBtn_MouseDown"/>
                     </Grid>
                 </Grid>
+                <!--左边的菜单-->
                 <Grid x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" >
                     <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="55" Width="55" Margin="0,35,0,0" MouseDown="UserTX_MouseDown" Background="#FFE0E0E0" Cursor="Hand"/>
                     <TextBlock x:Name="UserName" Margin="10,105,10,0" TextWrapping="NoWrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown" Cursor="Hand"/>
@@ -1401,6 +1409,7 @@
                     <Border x:Name="AniCom" HorizontalAlignment="Left" Margin="0,225,0,0" Background="{DynamicResource ThemeColor}" Width="5" Height="21" VerticalAlignment="Top" Visibility="Collapsed"/>
                 </Grid>
             </Grid>
+            <!--歌词页面-->
             <Grid x:Name="LyricPage" Visibility="Collapsed">
                 <Border x:Name="ThemeColor" Background="Black"  Grid.ColumnSpan="2">
                     <Border x:Name="LyricPage_Background" RenderOptions.BitmapScalingMode="Fant">
@@ -1490,6 +1499,7 @@
                     <Path Data="M631.1 266.9h345.4v41H631.1zM368.5 150.5L57.2 855.2h73.2l101.3-236.8h346.7l98.9 236.8h78.1L444.2 150.5h-75.7zM559 572H251.3l54.9-127.6c35.4-82.2 65.9-156.6 96.4-241.7h4.9c31.7 85.1 61 159.5 97.7 241.7L559 572z" Stretch="Uniform" Fill="White" Margin="5,5,5,5"/>
                 </Border>
             </Grid>
+            <!--底部的控制栏-->
             <Grid x:Name="ControlDownPage" Height="75" VerticalAlignment="Bottom" Background="#4CFFFFFF" Grid.ColumnSpan="2" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding ActualWidth, ElementName=ControlPage, Mode=OneWay}"/>
@@ -1614,9 +1624,13 @@
                     </Border>
                 </WrapPanel>
             </Grid>
+
+            <!--Window Base 最小/大化 关闭 按钮-->
             <LemonApp:TitlePageBtn x:Name="CloseBtn" Margin="0,15,20,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown"/>
             <LemonApp:TitlePageBtn x:Name="MaxBtn" Margin="0,15,50,0" Width="20" Height="20" HorizontalAlignment="Right" PathData="M0 0h1024v1024H0V0z m84.707556 85.447111v853.333333H937.528889v-853.333333H84.707556z" MouseDown="MaxBtn_MouseDown" VerticalAlignment="Top"/>
             <LemonApp:TitlePageBtn x:Name="MinBtn" PathData="M98.23 451.003l829.685-1.992 0.154 64-829.685 1.992z" Margin="0,15,80,0" Width="20" Height="20" HorizontalAlignment="Right" MouseDown="MinBtn_MouseDown" VerticalAlignment="Top" Pathness="5,12,5,5"/>
+
+            <!--播放列表-->
             <Grid x:Name="PlayDLPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Right" Width="0" Visibility="Visible" Effect="{DynamicResource WindowDrop}">
                 <Grid Height="100" VerticalAlignment="Top" Background="{DynamicResource PlayDLPage_Top}">
                     <Border Height="1" VerticalAlignment="Bottom" Background="{DynamicResource PlayDLPage_Border}"/>
@@ -1636,6 +1650,7 @@
                 </Border>
             </Grid>
             <Border x:Name="PlayDLPage_ClosePage" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed"/>
+      
         </Grid>
     </Border>
 </Window>

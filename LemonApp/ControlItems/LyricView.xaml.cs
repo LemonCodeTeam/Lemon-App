@@ -117,7 +117,7 @@ namespace LemonApp
             if (str.Length > 0)
             {
                 //直接判断是否为数字...
-                var key = TextHelper.XtoYGetTo(str, "[", ":", 0);
+                var key = TextHelper.FindTextByAB(str, "[", ":", 0);
                 return int.TryParse(key, out _);
             }
             else return false;

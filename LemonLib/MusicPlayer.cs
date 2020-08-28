@@ -10,6 +10,9 @@ using Un4seen.Bass.Misc;
 
 namespace LemonLib
 {
+    /// <summary>
+    /// 封装bass.dll 的音乐播放器
+    /// </summary>
     public class MusicPlayer
     {
         /// <summary>
@@ -24,21 +27,27 @@ namespace LemonLib
         public MusicPlayer(IntPtr win)
         {
             wind = win;
+            //注册的邮箱和Key
             BassNet.Registration("lemon.app@qq.com", "2X52325160022");
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, win);
         }
-        public void SetVOL(float value)
+        /// <summary>
+        /// 音量 value:0~1
+        /// </summary>
+        public float VOL
         {
-            if (stream != -1024)
-            {
-                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
-                _Vol = value;
+            get {
+                float value = 0;
+                Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, ref value);
+                return value;
             }
-        }
-        public float GetVOL() {
-            float value = 0;
-            Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, ref value);
-            return value;
+            set {
+                if (stream != -1024)
+                {
+                    Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
+                    _Vol = value;
+                }
+            }
         }
 
         /// <summary>
@@ -51,21 +60,28 @@ namespace LemonLib
         private float _Speed = -1024;
         private float _Pitch = -1024;
 
-        public void SetSpeed(float value)
-        {
-            if (stream != -1024)
+        /// <summary>
+        /// 播放速度 
+        /// </summary>
+        public float Speed {
+            get {
+                float value = 0;
+                Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, ref value);
+                return value;
+            }
+            set
             {
-                Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, value);
-                _Speed = value;
+                if (stream != -1024)
+                {
+                    Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, value);
+                    _Speed = value;
+                }
             }
         }
-        public float GetSpeed()
-        {
-            float value = 0;
-            Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_TEMPO, ref value);
-            return value;
-        }
 
+        /// <summary>
+        /// 播放频度 (音调高低) 
+        /// </summary>
         public float Pitch {
             get {
                 float value = 0;
@@ -82,6 +98,11 @@ namespace LemonLib
             }
         }
 
+        /// <summary>
+        /// 保存当前的音频文件 包括Fx效果器
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="finished"></param>
         public async void SaveToFile(string file,Action finished)
         {
             await Task.Factory.StartNew(() =>
@@ -122,6 +143,10 @@ namespace LemonLib
         }
 
         private string _file;
+        /// <summary>
+        /// 从文件中加载
+        /// </summary>
+        /// <param name="file"></param>
         public void Load(string file)
         {
             _file = file;
@@ -133,6 +158,13 @@ namespace LemonLib
         }
         public List<BASSDL> BassdlList = new List<BASSDL>();
         IntPtr ip = IntPtr.Zero;
+        /// <summary>
+        /// 从URL中加载
+        /// </summary>
+        /// <param name="path">缓存文件保存目录</param>
+        /// <param name="url"></param>
+        /// <param name="proc">下载进度回调 all/now</param>
+        /// <param name="finish">下载结束回调</param>
         public void LoadUrl(string path, string url, Action<long, long> proc, Action finish)
         {
             try
@@ -188,14 +220,20 @@ namespace LemonLib
             }
             set => Bass.BASS_ChannelSetPosition(stream, value.TotalSeconds);
         }
-
+        /// <summary>
+        /// 获取FFT数据   可以用来做频谱
+        /// </summary>
+        /// <returns></returns>
         public float[] GetFFTData()
         {
             float[] fft = new float[256];
             Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT256);
             return fft;
         }
-        public void UpdataDevice()
+        /// <summary>
+        /// 更新设备
+        /// </summary>
+        public void UpdateDevice()
         {
             var data = Bass.BASS_GetDeviceInfos();
             int index = -1;
@@ -214,6 +252,9 @@ namespace LemonLib
                 Bass.BASS_SetDevice(index);
             }
         }
+        /// <summary>
+        /// 释放Bass解码器
+        /// </summary>
         public void Free()
         {
             Bass.BASS_ChannelStop(stream);
@@ -223,6 +264,9 @@ namespace LemonLib
         }
     }
 
+    /// <summary>
+    /// Bass 从URL中加载并缓存的辅助类
+    /// </summary>
     public class BASSDL
     {
         public DOWNLOADPROC _myDownloadProc;
@@ -239,12 +283,22 @@ namespace LemonLib
             _myDownloadProc = new DOWNLOADPROC(DownloadCallBack);
             DLPath = path;
         }
+        /// <summary>
+        /// 指示关闭此下载任务
+        /// bass官网申明  不可停止下载   故切断下载回调 (若强制关闭则抛异常)
+        /// </summary>
         public void SetClose()
         {
             HasStoped = true;
             procChanged = null;
             finished = null;
         }
+        /// <summary>
+        /// 由Bass调用   传来下载数据时 讲数据保存到缓存文件中
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="length"></param>
+        /// <param name="user"></param>
         private void DownloadCallBack(IntPtr buffer, int length, IntPtr user)
         {
             // file length
