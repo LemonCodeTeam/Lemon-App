@@ -1,5 +1,5 @@
 # Lemon App
-Lemon App 是一款开源（遵循GPL以及Anti 996协议）的基于QQ音乐的在线音乐播放器。
+Lemon App 是一款基于QQ音乐的在线音乐播放器。
 支持同步QQ音乐歌单及喜欢，更有排行版、分类歌单、歌手、电台等功能 发现好音乐！
 
 [![Build status](https://github.com/LemonCodeTeam/Lemon-App/workflows/.NET%20Core/badge.svg)](https://github.com/LemonCodeTeam/Lemon-App/actions)
@@ -19,11 +19,12 @@ Lemon App 是一款开源（遵循GPL以及Anti 996协议）的基于QQ音乐的
 ![歌手](https://raw.githubusercontent.com/TwilightLemon/Data/master/a7.jpg)
 
 ### 运行环境
-win7~win10 .Net Core 3.1框架
+win7~win10 x64 .Net Core 3.1框架
 
 #### 版权
 本应用由 [Twilight./Lemon(https://lemonapp.tk)(QQ:2728578956)](https://lemonapp.tk) 开发，转载和使用请保留原网址和版权信息
 使用请遵守GPL以及Anti 996协议
 
 #### 免责声明
-本应用中的歌曲和部分API来自QQ音乐(y.qq.com),音乐及歌词翻译版权归QQ音乐所有。本软件仅用于学习交流，禁止用于商业用途。
+本应用中的歌曲和部分API来自QQ音乐(y.qq.com),音乐及歌词翻译版权归QQ音乐所有。
+本软件仅用于学习交流，禁止用于商业用途。
