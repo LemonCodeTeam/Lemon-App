@@ -704,6 +704,12 @@ namespace LemonApp
             }
             else
             {
+                //临时使用
+                if (data.g_tk != null)
+                {
+                    Settings.USettings.g_tk = data.g_tk;
+                    Settings.USettings.Cookie = data.cookie;
+                }
                 var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
                 Console.WriteLine(sl);
                 var sdc = JObject.Parse(sl)["data"]["creator"];

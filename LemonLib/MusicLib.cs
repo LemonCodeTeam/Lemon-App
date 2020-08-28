@@ -548,22 +548,27 @@ jpg
         /// <returns></returns>
         public static async void GetGDAsync(string id = "2591355982",Action<string,string> callback = null)
         {
-            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
-            JObject o = JObject.Parse(s);
-            var c0 = o["cdlist"][0];
-            List<string> ids = c0["songids"].ToString().Split(',').ToList();
-            var c0s = c0["songlist"];
-            Parallel.For(0, c0s.Count(), (index) =>
+            try
             {
-                try
+                var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+                MainClass.DebugCallBack("GetGD", s);
+                JObject o = JObject.Parse(s);
+                var c0 = o["cdlist"][0];
+                List<string> ids = c0["songids"].ToString().Split(',').ToList();
+                var c0s = c0["songlist"];
+                Parallel.For(0, c0s.Count(), (index) =>
                 {
-                    var c0si = c0s[index];
-                    var MusicID = c0si["songmid"].ToString();
-                    var Littleid = ids[index];
-                    callback(MusicID, Littleid);
-                }
-                catch { }
-            });
+                    try
+                    {
+                        var c0si = c0s[index];
+                        var MusicID = c0si["songmid"].ToString();
+                        var Littleid = ids[index];
+                        callback(MusicID, Littleid);
+                    }
+                    catch { }
+                });
+            }
+            catch { }
         }
         /// <summary>
         /// 获取 我创建的歌单 列表
