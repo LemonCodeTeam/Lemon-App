@@ -189,6 +189,11 @@ namespace LemonApp
             Storyboard.SetTargetProperty(us, new PropertyPath("(0).(1)", propertyChain));
             us.KeyFrames.Add(edf);
             LyricBigAniRound.Children.Add(us);
+            RotateTransform rtf = new RotateTransform();
+            LyricBig.RenderTransform = rtf;
+            DoubleAnimation dbAscending = new DoubleAnimation(0, new Duration
+            (TimeSpan.FromSeconds(2)));
+            rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
             //-----Timer 清理与更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
             ds.Tick += delegate { if (t.Enabled) mp.UpdateDevice(); GC.Collect(); };
@@ -2347,7 +2352,10 @@ namespace LemonApp
                 t.Start();
                 isplay = true;
                 if (Settings.USettings.LyricAnimationMode == 2)
-                    LyricBigAniRound.Begin();
+                {
+                    LyricBigAniRound.Seek(TimeSpan.FromSeconds(0));
+                    LyricBigAniRound.Resume();
+                }
             }
             try
             {
@@ -2648,7 +2656,17 @@ namespace LemonApp
                 isplay = true;
                 mp.Play();
                 if (Settings.USettings.LyricAnimationMode == 2)
-                    LyricBigAniRound.Begin();
+                {
+                    if (!IsBigAniRunning)
+                    {
+                        LyricBigAniRound.Begin();
+                        IsBigAniRunning = true;
+                    }
+                    else
+                    {
+                        LyricBigAniRound.Resume();
+                    }
+                }
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                 t.Start();
                 mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
@@ -3010,20 +3028,18 @@ namespace LemonApp
             CheckLyricAnimation(Settings.USettings.LyricAnimationMode);
         }
         private Storyboard LyricBigAniRound = null;
+        private bool IsBigAniRunning = false;
         private void CheckLyricAnimation(int mode)
         {
             if (mode == 0)
             {
                 LyricBigAniRound.Stop();
-                RotateTransform rtf = new RotateTransform();
-                LyricBig.RenderTransform = rtf;
-                DoubleAnimation dbAscending = new DoubleAnimation(0, new Duration
-                (TimeSpan.FromSeconds(2)));
-                rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
+                IsBigAniRunning = false;
             }
             else if (mode == 2)
             {
                 LyricBigAniRound.Begin();
+                IsBigAniRunning = true;
             }
         }
         private void Border_MouseDown_3(object sender, MouseButtonEventArgs e)
