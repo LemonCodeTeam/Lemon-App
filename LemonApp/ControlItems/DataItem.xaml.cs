@@ -172,14 +172,14 @@ namespace LemonApp
                 He.LastItem.bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
                 He.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
                 He.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                He.LastItem.color.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                He.LastItem.color.Visibility = Visibility.Collapsed;
                 He.LastItem.pv = false;
             }
             pv = true;
             bg.Background = new SolidColorBrush(Color.FromArgb(10, 0, 0, 0));
             ser.SetResourceReference(ForegroundProperty, "ThemeColor");
             namss.SetResourceReference(ForegroundProperty, "ThemeColor");
-            color.SetResourceReference(BackgroundProperty, "ThemeColor");
+            color.Visibility = Visibility.Visible;
             mss.Opacity = 1;
             ser.Opacity = 1;
 
@@ -203,7 +203,7 @@ namespace LemonApp
             }
             else
             {
-                wpl.Margin = new Thickness(10, 0, 10, 0);
+                wpl.Margin = new Thickness(15, 0, 10, 0);
                 CheckView.Visibility = Visibility.Collapsed;
                 MouseDown -= CheckView_MouseDown;
             }
@@ -304,7 +304,7 @@ namespace LemonApp
             Buttons.Visibility = Visibility.Visible;
             if (ns)
                 wpl.Margin = new Thickness(60, 10, 80, 10);
-            else wpl.Margin = new Thickness(10, 10, 80, 10);
+            else wpl.Margin = new Thickness(15, 10, 80, 10);
             if (needb) DeleteBtn.Visibility = Visibility.Visible;
         }
 
@@ -314,7 +314,7 @@ namespace LemonApp
             DeleteBtn.Visibility = Visibility.Collapsed;
             if (ns)
                 wpl.Margin = new Thickness(60, 10, 10, 10);
-            else wpl.Margin = new Thickness(10, 10, 10, 10);
+            else wpl.Margin = new Thickness(15, 10, 10, 10);
         }
 
         private void Ab_MouseDown(object sender, MouseButtonEventArgs e)

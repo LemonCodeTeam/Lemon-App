@@ -69,7 +69,8 @@ namespace LemonApp
                     {
                         TimeSpan time = GetTime(str);
                         string tran = str.Split(']')[1];
-                        transDic.Add(time.TotalMilliseconds, tran);
+                        if (!transDic.ContainsKey(time.TotalMilliseconds))
+                            transDic.Add(time.TotalMilliseconds, tran);
                     }
                 }
             }

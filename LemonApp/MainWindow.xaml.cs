@@ -364,7 +364,7 @@ namespace LemonApp
             //--------加载主页---------
             ClHomePage = new HomePage(this, TemplateSv.Template);
             ContentPage.Children.Add(ClHomePage);
-            NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom), true, false);
+            NSPage(new MeumInfo(Meum_MusicKu.titBtn, ClHomePage, Meum_MusicKu.ComBlock), true, false);
         }
         private void RUNPopup(Popup pp)
         {
@@ -664,11 +664,14 @@ namespace LemonApp
         {
             if (wp.Visibility == Visibility.Visible && wp.Children.Count > 0)
             {
+                //每一行的元素数量
                 int lineCount = int.Parse(wp.Uid);
                 var uc = wp.Children[0] as UserControl;
                 double max = uc.MaxWidth;
                 double min = uc.MinWidth;
                 ContentWidth ??= ContentPage.ActualWidth;
+                //控制边距
+                ContentWidth -= 5;
                 if (ContentWidth > (24 + max) * lineCount)
                     lineCount++;
                 else if (ContentWidth < (24 + min) * lineCount)
@@ -1314,7 +1317,7 @@ namespace LemonApp
             if (data.Page == Data)
                 if (DataPage_ControlMod)
                     CloseDataControlPage();
-            if (LastClickLabel == null) LastClickLabel = MusicKuBtn;
+            if (LastClickLabel == null) LastClickLabel = Meum_MusicKu.titBtn;
             LastClickLabel.SetResourceReference(ForegroundProperty, "ResuColorBrush");
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
             if (LastPage == null) LastPage = ClHomePage;
@@ -1326,7 +1329,7 @@ namespace LemonApp
                 Point point = generalTransform.Transform(new Point(0, 0));
                 Console.WriteLine(point.X + "     " + point.Y);
                 //上一次com的相对位置: point.Y
-                AniCom.Margin = new Thickness(0, point.Y, 0, 0);
+                AniCom.Margin = new Thickness(2, point.Y, 0, 0);
                 //准备动画:
                 GeneralTransform gT = data.Com.TransformToAncestor(ControlPage);
                 Point p = gT.Transform(new Point(0, 0));
@@ -1336,18 +1339,18 @@ namespace LemonApp
                 if (op > 0)
                 {
                     var ani = Resources["ControlsAniDown"] as Storyboard;
-                    (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 21 + op;
+                    (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 20 + op;
                     var tau = ani.Children[1] as ThicknessAnimationUsingKeyFrames;
-                    tau.KeyFrames[0].Value = new Thickness(0, point.Y, 0, 0);
-                    tau.KeyFrames[1].Value = new Thickness(0, point.Y + op, 0, 0);
+                    tau.KeyFrames[0].Value = new Thickness(2, point.Y, 0, 0);
+                    tau.KeyFrames[1].Value = new Thickness(2, point.Y + op, 0, 0);
                     ani.Begin();
                 }
                 else
                 {
                     var ani = Resources["ControlsAniUp"] as Storyboard;
-                    (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 21 - op;
+                    (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 20 - op;
                     var tau = ani.Children[1] as ThicknessAnimationUsingKeyFrames;
-                    tau.KeyFrames[0].Value = new Thickness(0, point.Y + op, 0, 0);
+                    tau.KeyFrames[0].Value = new Thickness(2, point.Y + op, 0, 0);
                     ani.Begin();
                 }
             }
@@ -1432,11 +1435,11 @@ namespace LemonApp
                 ContentPage.Children.Add(ClTopPage);
             }
             else { ClTopPage.LoadTopData(); }
-            NSPage(new MeumInfo(TopBtn, ClTopPage, TopCom), true, false);
+            NSPage(new MeumInfo(Meum_Top.titBtn, ClTopPage, Meum_Top.ComBlock), true, false);
         }
         private void MusicKuBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(MusicKuBtn, ClHomePage, MusicKuCom));
+            NSPage(new MeumInfo(Meum_MusicKu.titBtn, ClHomePage, Meum_MusicKu.ComBlock));
             ClHomePage.LoadHomePage();
         }
         //前后导航
@@ -1557,12 +1560,12 @@ namespace LemonApp
                  if (data.HasBigPic)
                  {
                      await Task.Delay(100);
-                     NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { value = new Thickness(0, -50, 0, 0), cmd = "SingerBig", data = si.data }, NeedSavePage, false);
+                     NSPage(new MeumInfo(Meum_Singer.titBtn, SingerDataPage, Meum_Singer.ComBlock) { value = new Thickness(0, -50, 0, 0), cmd = "SingerBig", data = si.data }, NeedSavePage, false);
                  }
                  else
                  {
                      await Task.Delay(100);
-                     NSPage(new MeumInfo(SingerBtn, SingerDataPage, SingerCom) { cmd = "Singer", data = si.data }, NeedSavePage, false);
+                     NSPage(new MeumInfo(Meum_Singer.titBtn, SingerDataPage, Meum_Singer.ComBlock) { cmd = "Singer", data = si.data }, NeedSavePage, false);
                  }
              }));
             Cisv.Content = cc;
@@ -1597,7 +1600,7 @@ namespace LemonApp
                 ClSingerIndexPage = new SingerIndexPage(this, TemplateSv.Template, SingerGetToIFollow);
                 ContentPage.Children.Add(ClSingerIndexPage);
             }
-            NSPage(new MeumInfo(SingerBtn, ClSingerIndexPage, SingerCom), true, false);
+            NSPage(new MeumInfo(Meum_Singer.titBtn, ClSingerIndexPage, Meum_Singer.ComBlock), true, false);
         }
         private void SingerGetToIFollow()
         {
@@ -1607,7 +1610,7 @@ namespace LemonApp
                 ContentPage.Children.Add(ClMyFollowSingerList);
             }
             else ClMyFollowSingerList.GetSingerList();
-            NSPage(new MeumInfo(SingerBtn, ClMyFollowSingerList, SingerCom), true, false);
+            NSPage(new MeumInfo(Meum_Singer.titBtn, ClMyFollowSingerList, Meum_Singer.ComBlock), true, false);
         }
         #endregion
         #region FLGD 分类歌单
@@ -1618,7 +1621,7 @@ namespace LemonApp
                 ClFLGDIndexPage = new FLGDIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClFLGDIndexPage);
             }
-            NSPage(new MeumInfo(ZJBtn, ClFLGDIndexPage, GDCom), true, false);
+            NSPage(new MeumInfo(Meum_GD.titBtn, ClFLGDIndexPage,Meum_GD.ComBlock), true, false);
         }
         #endregion
         #region Radio 电台
@@ -1629,7 +1632,7 @@ namespace LemonApp
                 ClRadioIndexPage = new RadioIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClRadioIndexPage);
             }
-            NSPage(new MeumInfo(RadioBtn, ClRadioIndexPage, RadioCom), true, false);
+            NSPage(new MeumInfo(Meum_Radio.titBtn, ClRadioIndexPage, Meum_Radio.ComBlock), true, false);
         }
 
         public async void GetRadio(object sender, MouseEventArgs e)
@@ -1727,10 +1730,10 @@ namespace LemonApp
         private async void LoadILikeItems(bool NeedSave = true)
         {
             if (Settings.USettings.LemonAreeunIts == "0")
-                NSPage(new MeumInfo(ILikeBtn, NonePage, ILikeCom), NeedSave, false);
+                NSPage(new MeumInfo(Meum_ILike.titBtn, NonePage, Meum_ILike.ComBlock), NeedSave, false);
             else
             {
-                NSPage(new MeumInfo(ILikeBtn, Data, ILikeCom) { cmd = "DataUrl[ILike]" }, NeedSave, false);
+                NSPage(new MeumInfo(Meum_ILike.titBtn, Data, Meum_ILike.ComBlock) { cmd = "DataUrl[ILike]" }, NeedSave, false);
                 OpenLoading();
                 TB.Text = "我喜欢";
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg"));
@@ -3342,7 +3345,7 @@ namespace LemonApp
         }
         private void Download_Btn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            NSPage(new MeumInfo(DownloadMGBtn, DownloadPage, DownloadMGCom));
+            NSPage(new MeumInfo(Meum_Download.titBtn, DownloadPage, Meum_Download.ComBlock));
             if (DownloadItemsList.Children.Count == 0)
                 NonePage_Copy.Visibility = Visibility.Visible;
             else NonePage_Copy.Visibility = Visibility.Collapsed;
@@ -3427,10 +3430,10 @@ namespace LemonApp
         private async void GDBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (Settings.USettings.LemonAreeunIts == "0")
-                NSPage(new MeumInfo(MYGDBtn, NonePage, MYGDCom));
+                NSPage(new MeumInfo(Meum_MYGD.titBtn, NonePage, Meum_MYGD.ComBlock));
             else
             {
-                NSPage(new MeumInfo(MYGDBtn, MyGDIndexPage, MYGDCom));
+                NSPage(new MeumInfo(Meum_MYGD.titBtn, MyGDIndexPage, Meum_MYGD.ComBlock));
                 OpenLoading();
                 var GdData = await ml.GetGdListAsync();
                 if (GdData.Count != GDItemsList.Children.Count)
@@ -3480,7 +3483,7 @@ namespace LemonApp
                 }
                 WidthUI(GDILikeItemsList);
                 if (GdData.Count == 0 && GdLikeData.Count == 0)
-                    NSPage(new MeumInfo(MYGDBtn, MyGDIndexPage, MYGDCom));
+                    NSPage(new MeumInfo(Meum_MYGD.titBtn, MyGDIndexPage, Meum_MYGD.ComBlock));
                 CloseLoading();
             }
         }

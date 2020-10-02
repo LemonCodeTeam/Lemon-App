@@ -13,13 +13,13 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <WrapPanel x:Name="wpl" Margin="10,0" Height="16" SizeChanged="UserControl_SizeChanged">
+            <WrapPanel x:Name="wpl" Margin="15,0,10,0" Height="16" SizeChanged="UserControl_SizeChanged">
                 <TextBlock x:Name="namss" TextWrapping="NoWrap" Foreground="{DynamicResource ResuColorBrush}" VerticalAlignment="Center" TextTrimming="None"><Run  x:Name="name" Text="Tb00000"/><Run Text="  "/><InlineUIContainer>
                         <TextBlock  x:Name="mss"  Text="mss" Opacity="0.6"/>
                     </InlineUIContainer></TextBlock>
             </WrapPanel>
             <TextBlock x:Name="ser" Margin="10,0" TextWrapping="NoWrap" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Grid.Column="1" Opacity="0.8" Cursor="Hand"/>
-            <Border x:Name="color" HorizontalAlignment="Left" Width="5" Background="#00000000" Margin="0,5"/>
+            <Border x:Name="color" HorizontalAlignment="Left" Width="5" Background="{DynamicResource ThemeColor}" Margin="2,0,0,0" CornerRadius="2.5,2.5,2.5,2.5" Visibility="Collapsed" Height="30"/>
             <!-- 搬迁通知  为提高加载速度 原此处的控件移至cs中创建-->
             <TextBlock x:Name="ab" Margin="10,15,45,15" TextWrapping="NoWrap" VerticalAlignment="Center" Foreground="{Binding Foreground, ElementName=ser}" Grid.Column="2" Opacity="0.8" Cursor="Hand" MouseDown="Ab_MouseDown"/>
         </Grid>
