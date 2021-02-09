@@ -4,7 +4,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Net;
+using System.Net.Sockets;
 using System.Security.Principal;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -21,7 +24,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1177";
+        public static string EM = "1178";
         #region 启动时 进程检测 配置 登录
         //放在全局变量  防止GC回收  导致失效
         private System.Threading.Mutex mutex;
@@ -36,6 +39,10 @@ namespace LemonApp
             }
             else
             {
+                //To solve: HttpWebRequest The SSL connection could not be established
+                ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+              
                 if (!Directory.Exists(Settings.USettings.DataCachePath))
                     Directory.CreateDirectory(Settings.USettings.DataCachePath);
                 if (!Directory.Exists(Settings.USettings.MusicCachePath))
@@ -129,7 +136,7 @@ namespace LemonApp
                 + "\r\n 引发异常的方法:" + e.TargetSite
                 + "\r\n  帮助链接:" + e.HelpLink
                 + "\r\n 调用堆:" + e.StackTrace;
-                Console.WriteLine(i);
+                Console.WriteLine(i,"ERROR","red");
                 FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
                 StreamWriter sw = new StreamWriter(fs);
                 sw.Write(i);
@@ -142,7 +149,7 @@ namespace LemonApp
         public void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             string i = "\nLemonApp账号:" + Settings.USettings.LemonAreeunIts + "\r\nLemonApp版本:" + EM + "\r\n" + ((Exception)e.ExceptionObject).Message + "\r\n 导致错误的对象名称:" + ((Exception)e.ExceptionObject).Source + "\r\n 引发异常的方法:" + ((Exception)e.ExceptionObject).TargetSite + "\r\n  帮助链接:" + ((Exception)e.ExceptionObject).HelpLink + "\r\n 调用堆:" + ((Exception)e.ExceptionObject).StackTrace;
-            Console.WriteLine(i);
+            Console.WriteLine(i, "ERROR", "red");
             FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(i);
@@ -154,7 +161,7 @@ namespace LemonApp
         {
             e.Handled = true;
             string i = "\n(Dispatcher)LemonApp账号:" + Settings.USettings.LemonAreeunIts + "\r\nLemonApp版本:" + EM + "\r\n" + e.Exception.Message + "\r\n 导致错误的对象名称:" + e.Exception.Source + "\r\n 引发异常的方法:" + e.Exception.TargetSite + "\r\n  帮助链接:" + e.Exception.HelpLink + "\r\n 调用堆:" + e.Exception.StackTrace;
-            Console.WriteLine(i);
+            Console.WriteLine(i, "ERROR", "red");
             FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(i);
@@ -168,44 +175,44 @@ namespace LemonApp
     public class Console
     {
         private static Process p = null;
-        private static StreamWriter sw = null;
-        public static NamedPipeClientStream pipe = null;
-        public static async void Open()
+
+        public static void Open()
         {
             p = new Process();
             p.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "DebugConsole.exe";
             p.Start();
-            pipe = new NamedPipeClientStream("localhost", "DebugConsolePipeForLemonApp", PipeDirection.InOut, PipeOptions.None, TokenImpersonationLevel.None);
-            await Task.Delay(500);
-            await pipe.ConnectAsync();
-            sw = new StreamWriter(pipe);
         }
 
-        public static async void WriteLine(object text)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="title"></param>
+        /// <param name="color">blue white red yellow</param>
+        public static async void WriteLine(object text,string title="",string color="blue")
         {
-            if (sw != null)
+            if (p != null)
             {
                 try
                 {
-                    await sw.WriteLineAsync(text.ToString());
-                    sw.Flush();
+                    string json = TextHelper.JSON.ToJSON(new DebugConsole.DebugData()
+                    {
+                        title = title,
+                        data = text.ToString(),
+                        color = color
+                    });
+                    Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    await clientSocket.ConnectAsync("127.0.0.1", 3239);
+                    await clientSocket.SendAsync(Encoding.UTF8.GetBytes(json), SocketFlags.None);
                 }
                 catch
                 {
-                    Close();
-                    Toast.Send("已退出调试模式🐱‍👤");
                 }
             }
         }
         public static void Close()
         {
             p.Kill();
-            sw.Close();
-            sw.Dispose();
-            pipe.Close();
-            pipe.Dispose();
-            sw = null;
-            pipe = null;
         }
     }
     #endregion

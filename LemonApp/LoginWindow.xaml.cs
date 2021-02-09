@@ -1,4 +1,5 @@
 ﻿using LemonLib;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -20,21 +21,20 @@ namespace LemonApp
         }
         public void Api_Login()
         {
-            wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=40&hide_border=1&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fsong%2F000edOaL1WZOWq.html%23stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=");
+            wb.Navigate("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?proxy_url=https%3A//qzs.qq.com&daid=5&&hide_title_bar=1&low_login=0&qlogin_auto_login=1&no_verifyimg=1&link_target=blank&appid=549000912&style=33&theme=2&target=self&s_url=https%3A%2F%2Fqzs.qq.com%2Fqzone%2Fv5%2Floginsucc.html%3Fpara%3Dizone&hide_border=1");
             Topmost = true;
             Activate();
-            wb.DocumentCompleted += Wb_Dc_Login;
+            wb.Navigated+= Wb_Dc_Login;
         }
 
-        private async void Wb_Dc_Login(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void Wb_Dc_Login(object sender, EventArgs e)
         {
-            if (wb.DocumentTitle.Contains("QQ音乐"))
+            if (wb.Url.ToString().Contains("user.qzone.qq.com"))
             {
-
                 Topmost = false;
-                await Task.Delay(100);
+                wb.Stop();
                 string cookie = wb.Document.Cookie;
-                string qq = TextHelper.FindTextByAB(cookie, "p_luin=o", ";", 0);
+                string qq = TextHelper.FindTextByAB(cookie, " p_uin=o", ";", 0);
                 LoginData send = new LoginData(){
                     qq = qq,
                     cookie = cookie
@@ -55,9 +55,9 @@ namespace LemonApp
             }
             else
             {
+                wb.Document.GetElementById("title_0").InnerText = "登录到 Lemon App";
                 loading.Visibility = Visibility.Collapsed;
                 wf.Visibility = Visibility.Visible;
-                wb.Document.GetElementById("title_0").InnerText = "登录到 Lemon App";
             }
         }
 

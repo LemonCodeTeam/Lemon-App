@@ -175,7 +175,7 @@ namespace LemonApp
             //-----------注册Debug回调-------
             MainClass.DebugCallBack = (a, b) =>
             {
-                Console.WriteLine(a + ":  " + b);
+                Console.WriteLine(b,a);
             };
             //---------------歌词页专辑图转动
             LyricBigAniRound = new Storyboard();
@@ -713,6 +713,7 @@ namespace LemonApp
             else
             {
                 //临时使用
+                Console.WriteLine("Login:" + data.g_tk + "\r\n Cookie:" + data.cookie,"LoginData");
                 if (data.g_tk != null)
                 {
                     Settings.USettings.g_tk = data.g_tk;
@@ -2773,7 +2774,9 @@ namespace LemonApp
         {
             Add_Gdlist.Items.Clear();
             MoreBtn_Meum_Add_List.Clear();
-            JObject o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0"));
+            string json = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/songlist_list.fcg?utf8=1&-=MusicJsonCallBack&uin={Settings.USettings.LemonAreeunIts}&rnd=0.693477705380313&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0");
+            Console.WriteLine(json);
+            JObject o = JObject.Parse(json);
             foreach (var a in o["list"])
             {
                 string name = a["dirname"].ToString();
@@ -3704,8 +3707,6 @@ namespace LemonApp
                     if (hx == IntPtr.Zero)
                     {
                         Toast.Send("已进入调试模式🐱‍👤");
-                        if (Console.pipe != null)
-                            Console.Close();
                         Console.Open();
                         Console.WriteLine("调试模式");
                     }

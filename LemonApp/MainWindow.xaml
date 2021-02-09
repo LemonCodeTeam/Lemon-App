@@ -1063,8 +1063,8 @@
                                             <Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/>
                                             <LineBreak/><Run Text="请支持正版音乐."/><LineBreak/>
                                             <LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/>
-                                            <LineBreak/><Run Text="Powered by .Net Core 3.1 on WPF"/>
-                                            <LineBreak/><Run Text="© Twilight./Lemon 2016-2020 all rights reserved"/>
+                                            <LineBreak/><Run Text="Powered by .Net 5 on WPF"/>
+                                            <LineBreak/><Run Text="© Twilight./Lemon 2016-2021 all rights reserved"/>
                                         </TextBlock>
                                     </Grid>
                                     <!--留下一点空白行-->

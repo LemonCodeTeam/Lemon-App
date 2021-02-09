@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
@@ -10,7 +10,7 @@
     <StartupObject>LemonApp.App</StartupObject>
     <AssemblyName>LemonApp</AssemblyName>
     <RootNamespace>LemonApp</RootNamespace>
-    <Version>1.1.7.7</Version>
+    <Version>1.1.7.8</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
 
