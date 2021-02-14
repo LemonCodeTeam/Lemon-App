@@ -263,6 +263,7 @@ namespace LemonApp
                     {
                         jd.Value = now;
                         mini.jd.Value = now;
+                        lyric_jd.Value = now;
                         Play_Now.Text = TimeSpan.FromMilliseconds(now).ToString(@"mm\:ss");
                     }
                     all = mp.GetLength.TotalMilliseconds;
@@ -270,6 +271,7 @@ namespace LemonApp
                     Play_All.Text = alls;
                     jd.Maximum = all;
                     mini.jd.Maximum = all;
+                    lyric_jd.Maximum = all;
                     if (IsLyricPageOpen == 1)
                     {
                         if (Settings.USettings.LyricAnimationMode == 0)
@@ -391,7 +393,6 @@ namespace LemonApp
             {
                 //默认主题  （主要考虑到切换登录）
                 if (wac.IsEnabled) wac.IsEnabled = false;
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 App.BaseApp.unSkin();
                 App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
@@ -404,6 +405,9 @@ namespace LemonApp
                 //    主题背景图片
                 if (Settings.USettings.Skin_ImagePath != "" && System.IO.File.Exists(Settings.USettings.Skin_ImagePath))
                     Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_ImagePath, UriKind.Absolute)));
+                else if (Settings.USettings.Skin_ImagePath == "[Dark]") {
+                    Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF2D2D30"));
+                }
 
                 //字体颜色
                 Color co;
@@ -417,7 +421,6 @@ namespace LemonApp
                     co = Color.FromRgb(255, 255, 255);
                     App.BaseApp.Skin();
                 }
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
                 App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
                 App.BaseApp.SetColor("ResuColorBrush", co);
             }
@@ -431,7 +434,6 @@ namespace LemonApp
                     DThemePage.Child = null;
                     App.BaseApp.Skin();
                     App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
-                    ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                     wac.Color = Color.FromArgb(200, 0, 0, 0);
                     wac.IsEnabled = true;
                 }
@@ -444,7 +446,6 @@ namespace LemonApp
                     App.BaseApp.Skin_Black();
                     Color co = Color.FromRgb(64, 64, 64);
                     App.BaseApp.SetColor("ResuColorBrush", co);
-                    ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                     wac.Color = (Color.FromArgb(200, 255, 255, 255));
                     wac.IsEnabled = true;
                 }
@@ -478,7 +479,6 @@ namespace LemonApp
                     col = Color.FromRgb(255, 255, 255);
                     App.BaseApp.Skin();
                 }
-                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                 Color theme = Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B);
                 App.BaseApp.SetColor("ThemeColor", theme);
                 App.BaseApp.SetColor("ResuColorBrush", col);
@@ -698,9 +698,10 @@ namespace LemonApp
             lw.Close();
             GC.Collect();
             //----------切换登录前先保存当前账号-------
-            if (Settings.USettings.LemonAreeunIts != "0")
+            if (Settings.USettings.LemonAreeunIts != "0" && Settings.USettings.LemonAreeunIts!=data.qq)
                 Settings.SaveSettings();
             string qq = data.qq;
+            Console.WriteLine("Login:" + data.g_tk + "\r\n Cookie:" + data.cookie, "LoginData");
             if (Settings.USettings.LemonAreeunIts == qq)
             {
                 if (data.g_tk != null)
@@ -713,7 +714,6 @@ namespace LemonApp
             else
             {
                 //临时使用
-                Console.WriteLine("Login:" + data.g_tk + "\r\n Cookie:" + data.cookie,"LoginData");
                 if (data.g_tk != null)
                 {
                     Settings.USettings.g_tk = data.g_tk;
@@ -1022,7 +1022,6 @@ namespace LemonApp
                     co = Color.FromRgb(255, 255, 255);
                     App.BaseApp.Skin();
                 }
-                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                 App.BaseApp.SetColor("ThemeColor", sc.theme);
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 Settings.USettings.Skin_Type = 3;
@@ -1047,11 +1046,28 @@ namespace LemonApp
             LoadDTheme(new Theme.YeStarLight.Drawer());
             #endregion
             #region 默认主题
-            SkinControl sxc = new SkinControl("-1", "默认主题", Color.FromArgb(0, 0, 0, 0));
+            SkinControl sxc_black = new SkinControl("暗黑",new SolidColorBrush(Color.FromRgb(60,60,60)),Color.FromRgb(0,0,0));
+            sxc_black.MouseDown += (s, n) =>
+            {
+                if (wac.IsEnabled) wac.IsEnabled = false;
+                DThemePage.Child = null;
+                App.BaseApp.Skin();
+                Page.Background = new SolidColorBrush(Color.FromRgb(45,45,48));
+                Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
+                Settings.USettings.Skin_ThemeColor_R = theme.R;
+                Settings.USettings.Skin_ThemeColor_G = theme.G;
+                Settings.USettings.Skin_ThemeColor_B = theme.B;
+                Settings.USettings.Skin_Type = 1;
+                Settings.USettings.Skin_FontColor = "White";
+                Settings.USettings.Skin_ImagePath = "[Dark]";
+                Settings.SaveSettings();
+            };
+            sxc_black.Margin = new Thickness(12, 0, 12, 20);
+            SkinIndexList.Children.Add(sxc_black);
+            SkinControl sxc = new SkinControl("-1", "素白", Color.FromArgb(0, 0, 0, 0));
             sxc.MouseDown += (s, n) =>
             {
                 if (wac.IsEnabled) wac.IsEnabled = false;
-                ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CFFFFFF"));
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 DThemePage.Child = null;
                 App.BaseApp.unSkin();
@@ -1075,7 +1091,6 @@ namespace LemonApp
                 WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
-                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                 wac.Color = Color.FromArgb(200, 0, 0, 0);
                 wac.IsEnabled = true;
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
@@ -1098,7 +1113,6 @@ namespace LemonApp
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
                 App.BaseApp.SetColor("ResuColorBrush", co);
-                ControlDownPage.Background = new SolidColorBrush(Colors.Transparent);
                 wac.Color = (Color.FromArgb(200, 255, 255, 255));
                 wac.IsEnabled = true;
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
@@ -1137,12 +1151,10 @@ namespace LemonApp
                     if (sc.txtColor == "Black")
                     {
                         co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
                     }
                     else
                     {
                         co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                        ControlDownPage.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF"));
                     }
                     App.BaseApp.SetColor("ThemeColor", sc.theme);
                     App.BaseApp.SetColor("ResuColorBrush", co);
@@ -1678,10 +1690,7 @@ namespace LemonApp
         {
             likeBtn_path.Tag = false;
             mini.likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
-            if (IsLyricPageOpen == 1)
-                likeBtn_path.Fill = new SolidColorBrush(Colors.White);
-            else
-                likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
+            likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
         }
         /// <summary>
         /// 添加喜欢 变红色
@@ -1690,7 +1699,7 @@ namespace LemonApp
         {
             likeBtn_path.Tag = true;
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
-            mini.likeBtn_path.Fill = likeBtn_path.Fill;
+            lyric_like.Fill=mini.likeBtn_path.Fill = likeBtn_path.Fill;
         }
         /// <summary>
         /// 添加/删除 我喜欢的歌曲
@@ -2321,7 +2330,7 @@ namespace LemonApp
 
             LoadMusic(data, doesplay);
 
-            Title = "Lemon App  Playing:" + data.MusicName + " - " + data.SingerText;
+            Title = "Lemon App  " + data.MusicName + " - " + data.SingerText;
             Settings.USettings.Playing = MusicData.Data;
             Settings.SaveSettings();
             mini.title.Text = data.MusicName + " - " + data.SingerText;
@@ -2347,9 +2356,9 @@ namespace LemonApp
             if (doesplay)
             {
                 //开始播放
-                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.MiniPause);
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
+                lyric_playcontrol.Data= mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
                 t.Start();
                 isplay = true;
                 if (Settings.USettings.LyricAnimationMode == 2)
@@ -2413,6 +2422,7 @@ namespace LemonApp
             else
             {
                 await Task.Yield();
+                Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -170 : 80;
                 Pop_sp.IsOpen = !Pop_sp.IsOpen;
                 MusicPlay_sp.Value = mp.Speed;
                 MusicPlay_pitch_sp.Value = mp.Pitch;
@@ -2477,6 +2487,11 @@ namespace LemonApp
             catch { }
         }
 
+        private async void AudioBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await Task.Yield();
+            Pop_voice.IsOpen = true;
+        }
         private void AudioSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (mp != null)
@@ -2502,7 +2517,7 @@ namespace LemonApp
             try
             {
                 if (!CanJd)
-                    Play_Now.Text = TimeSpan.FromMilliseconds(jd.Value).ToString(@"mm\:ss");
+                    Play_Now.Text = TimeSpan.FromMilliseconds((sender as Slider).Value).ToString(@"mm\:ss");
             }
             catch { }
         }
@@ -2649,8 +2664,7 @@ namespace LemonApp
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
                 t.Stop();
-                mini.play.Data = Geometry.Parse(Properties.Resources.MiniPlay);
-                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Play);
+                (PlayBtn.Child as Path).Data = lyric_playcontrol.Data=mini.play.Data = Geometry.Parse(Properties.Resources.MiniPlay);
             }
             else
             {
@@ -2670,8 +2684,7 @@ namespace LemonApp
                 }
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                 t.Start();
-                mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
-                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.Pause);
+                (PlayBtn.Child as Path).Data = lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
             }
         }
 
@@ -2682,15 +2695,14 @@ namespace LemonApp
             {
                 Settings.USettings.DoesOpenDeskLyric = false;
                 lyricTa.Close();
-                if (IsLyricPageOpen == 1)
-                    path7.Fill = new SolidColorBrush(Colors.White);
-                else
-                    path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
+                lyric_opengc.Fill = new SolidColorBrush(Colors.White);
+                path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             }
             else
             {
                 Settings.USettings.DoesOpenDeskLyric = true;
                 lyricTa = new Toast("", true);
+                lyric_opengc.SetResourceReference(Path.FillProperty, "ThemeColor");
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
         }
@@ -2700,22 +2712,6 @@ namespace LemonApp
             CloseBtn.ColorDx = null;
             MaxBtn.ColorDx = null;
             MinBtn.ColorDx = null;
-            MusicName.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            Singer.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            Play_All.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            Play_Now.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            timetb.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            textBlock4.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-            path1.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            path2.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            path3.SetResourceReference(Path.FillProperty, "ThemeColor");
-            path4.SetResourceReference(Path.FillProperty, "ThemeColor");
-            path5.SetResourceReference(Path.FillProperty, "ThemeColor");
-            path6.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            path9.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            path10.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            if (!Settings.USettings.DoesOpenDeskLyric) path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
-            if (!(bool)likeBtn_path.Tag) likeBtn_path.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             var ol = Resources["CloseLyricPage"] as Storyboard;
             ol.Begin();
         }
@@ -2727,22 +2723,6 @@ namespace LemonApp
             CloseBtn.ColorDx = WhiteColorBrush;
             MaxBtn.ColorDx = WhiteColorBrush;
 
-            MusicName.Foreground = WhiteColorBrush;
-            Singer.Foreground = WhiteColorBrush;
-            Play_All.Foreground = WhiteColorBrush;
-            Play_Now.Foreground = WhiteColorBrush;
-            timetb.Foreground = WhiteColorBrush;
-            textBlock4.Foreground = WhiteColorBrush;
-            path1.Fill = WhiteColorBrush;
-            path2.Fill = WhiteColorBrush;
-            path3.Fill = WhiteColorBrush;
-            path4.Fill = WhiteColorBrush;
-            path5.Fill = WhiteColorBrush;
-            path6.Fill = WhiteColorBrush;
-            path9.Fill = WhiteColorBrush;
-            path10.Fill = WhiteColorBrush;
-            if (!Settings.USettings.DoesOpenDeskLyric) path7.Fill = WhiteColorBrush;
-            if (!(bool)likeBtn_path.Tag) likeBtn_path.Fill = WhiteColorBrush;
             var ol = Resources["OpenLyricPage"] as Storyboard;
             ol.Begin();
         }
@@ -3454,7 +3434,7 @@ namespace LemonApp
             {
                 NSPage(new MeumInfo(Meum_MYGD.titBtn, MyGDIndexPage, Meum_MYGD.ComBlock));
                 OpenLoading();
-                var GdData = await ml.GetGdListAsync();
+                var GdData = await MusicLib.GetGdListAsync();
                 if (GdData.Count != GDItemsList.Children.Count)
                 { GDItemsList.Children.Clear(); GData_Now.Clear(); }
                 foreach (var jm in GdData)

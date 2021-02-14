@@ -194,7 +194,7 @@ namespace LemonLib
         public static async Task<string[]> AddMusicToGDAsync(string id, string dirid)
         {
             MainClass.DebugCallBack("User Cookies",Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
-            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk+ "&g_tk_new_20200303="+Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
             JObject o = JObject.Parse(result);
@@ -574,7 +574,7 @@ jpg
         /// 获取 我创建的歌单 列表
         /// </summary>
         /// <returns></returns>
-        public async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()
+        public static async Task<SortedDictionary<string, MusicGData>> GetGdListAsync()
         {
             if (Settings.USettings.LemonAreeunIts == "")
                 return new SortedDictionary<string, MusicGData>();
@@ -874,7 +874,7 @@ jpg
                 c.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
                 c.Headers.Add("Cookie", Settings.USettings.Cookie);
                 c.Headers.Add("Host", "c.y.qq.com");
-                string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&pcachetime=1563410858607&songmid={McMind}&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
+                string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid={McMind}&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
                 string td = c.DownloadString(url);
                 JObject o = JObject.Parse(td);
 
@@ -895,6 +895,7 @@ jpg
                     await Task.Run(() => { File.WriteAllText(file, lyric+split+trans); });
                     data.lyric = lyric;
                     data.trans = trans;
+                    MainClass.DebugCallBack("LyricData Trans", trans);
                     data.HasTrans = true;
                     return data;
                 }

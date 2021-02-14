@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Web.WebView2;
 using static LemonLib.InfoHelper;
+using System.Collections.Generic;
 
 namespace LemonApp
 {
@@ -42,25 +44,22 @@ namespace LemonApp
             if (wb.Source.ToString().Contains("y.qq.com/portal/profile.html"))
             {
                 Topmost = false;
-                wb.Stop();
-                var cookies =(await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://graph.qq.com/oauth2.0/authorize"));
+                await Task.Delay(500);
+                //--------------暴露g_skey Cookies----------------------
+                var cookies =await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://graph.qq.com/oauth2.0/authorize");
                 string cookie = "";
                 foreach (var i in cookies) {
                     cookie += i.Name + "=" + i.Value + "; ";
                 }
-                var ycookies = (await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://y.qq.com/portal/profile.html"));
-                string ycookie = "";
-                foreach (var i in ycookies)
-                {
-                    ycookie += i.Name + "=" + i.Value + "; ";
-                }
+                //-------------------------------------------------
                 Console.WriteLine(cookie, "LoginData");
                 string qq = TextHelper.FindTextByAB(cookie + ";", "ptui_loginuin=", ";", 0);
                 LoginData send = new LoginData()
                 {
                     qq = qq,
-                    cookie = ycookie
+                    cookie = cookie
                 };
+                //-------------------------------------------------
                 if (cookie.Contains("p_skey="))
                 {
                     string p_skey = TextHelper.FindTextByAB(cookie + ";", "p_skey=", ";", 0);
@@ -73,7 +72,8 @@ namespace LemonApp
                     send.g_tk = g_tk.ToString();
                 }
                 Console.WriteLine(send.g_tk, "LOGIN G_TK");
-                   mw.Dispatcher.Invoke(delegate { mw.Login(send); });
+                //---------------------------------------------------------
+                mw.Dispatcher.Invoke(delegate { mw.Login(send); });
                 wb.ContentLoading -= Wb_Dc_Login;
             }
         }

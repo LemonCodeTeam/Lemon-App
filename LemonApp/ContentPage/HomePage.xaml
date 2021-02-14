@@ -16,7 +16,7 @@
             <WrapPanel x:Name="wrapPanel" HorizontalAlignment="Stretch" Orientation="Vertical" VerticalAlignment="Top" Margin="0,0,10,0">
                 <Grid x:Name="JCTJ" Width="{Binding ActualWidth, ElementName=wrapPanel, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="精彩推荐" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" FontWeight="Bold" Margin="20,0,0,0"/>
-                    <LemonApp:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Margin="0,40,0,0"/>
+                    <LemonApp:ImageForceView x:Name="HomePage_IFV" Height="250" VerticalAlignment="Top" Margin="10,40,0,0"/>
                 </Grid>
                 <Grid x:Name="GFGD" VerticalAlignment="Top" Margin="0,0,0,0">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="官方歌单" VerticalAlignment="Top" FontSize="24" Foreground="{DynamicResource ResuColorBrush}" Margin="20,10,0,0" FontWeight="Bold"/>

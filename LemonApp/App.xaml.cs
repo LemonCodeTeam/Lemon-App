@@ -71,7 +71,7 @@ namespace LemonApp
             ThemeColor = 1;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19000000"));
    
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("#FF3E3E42"));
@@ -87,7 +87,7 @@ namespace LemonApp
             ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#00FFFFFF"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FFFFFF"));
  
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
@@ -103,7 +103,7 @@ namespace LemonApp
             ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#FFFDFDFD"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#05000000"));
  
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));

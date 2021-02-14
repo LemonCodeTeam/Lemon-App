@@ -173,6 +173,9 @@ namespace LemonLib
             hwr.Host = "c.y.qq.com";
             hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
             hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
+            hwr.Headers.Add("sec-fetch-dest", "empty");
+            hwr.Headers.Add("sec-fetch-mode", "cors");
+            hwr.Headers.Add("sec-fetch-site", "same-site");
             using WebResponse o = await hwr.GetResponseAsync();
             using StreamReader sr = new StreamReader(o.GetResponseStream(), c);
             var st = await sr.ReadToEndAsync();
