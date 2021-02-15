@@ -29,6 +29,9 @@ namespace DebugConsole
             Console.ForegroundColor = ConsoleColor.White;
 
 
+            Start();
+        }
+        private static void Start() {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3239));
             socket.Listen(100);
@@ -48,7 +51,20 @@ namespace DebugConsole
         {
             var serverSocket = async.AsyncState as Socket;
             //获取到客户端的socket
-            var clientSocket = serverSocket.EndAccept(async);
+            Socket clientSocket = null;
+            try
+            {
+                clientSocket = serverSocket.EndAccept(async);
+            }
+            catch {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Service Shutdown and restarting.");
+                Console.ForegroundColor = ConsoleColor.White;
+                socket.Close();
+                socket.Dispose();
+                Start();
+                return;
+            }
             var bytes = new byte[10000];
             //获取socket的内容
             var len = clientSocket.Receive(bytes);

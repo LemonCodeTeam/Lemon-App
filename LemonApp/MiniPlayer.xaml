@@ -160,7 +160,7 @@
                     <TextBlock x:Name="SingerText" TextWrapping="NoWrap" Foreground="{DynamicResource PlayDLPage_Font_Low}" TextAlignment="Center" Text="Lyric" VerticalAlignment="Top" Margin="90,38,20,0"/>
                 </Grid>
             </Grid>
-            <Grid x:Name="Control" Visibility="Visible">
+            <Grid x:Name="Control" Visibility="Collapsed">
                 <Border Height="25" MouseDown="LastBtnDown" Background="#00000000" Width="25" Margin="130,0,0,0" HorizontalAlignment="Left">
                     <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="15" Height="15"/>
                 </Border>

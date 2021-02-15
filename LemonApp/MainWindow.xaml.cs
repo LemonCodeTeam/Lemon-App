@@ -1330,7 +1330,7 @@ namespace LemonApp
         private TextBlock LastClickLabel = null;
         private UIElement LastPage = null;
         private Border LastCom = null;
-        public async void NSPage(MeumInfo data, bool needSave = true, bool Check = true)
+        public void NSPage(MeumInfo data, bool needSave = true, bool Check = true)
         {
             if (data.Page == Data)
                 if (DataPage_ControlMod)
@@ -1340,14 +1340,21 @@ namespace LemonApp
             if (data.tb != null) data.tb.SetResourceReference(ForegroundProperty, "ThemeColor");
             if (LastPage == null) LastPage = ClHomePage;
 
-            if (data.Com != null && LastCom != null)
+            //从其他页面跳转过来的没有COM
+            if (data.Com != null&& LastCom == null)
             {
-                //COM动画------------
+                GeneralTransform generalTransform = data.Com.TransformToAncestor(ControlPage);
+                Point point = generalTransform.Transform(new Point(0, 0));
+                AniCom.BeginAnimation(MarginProperty,null);
+                AniCom.Margin = new Thickness(2, point.Y, 0, 0);
+            }
+            //COM动画------------
+            AniCom.Visibility = data.Com == null ? Visibility.Hidden : Visibility.Visible;
+            if (data.Com != null&&LastCom!=null)
+            {
+                Storyboard ani = null;
                 GeneralTransform generalTransform = LastCom.TransformToAncestor(ControlPage);
                 Point point = generalTransform.Transform(new Point(0, 0));
-                Console.WriteLine(point.X + "     " + point.Y);
-                //上一次com的相对位置: point.Y
-                AniCom.Margin = new Thickness(2, point.Y, 0, 0);
                 //准备动画:
                 GeneralTransform gT = data.Com.TransformToAncestor(ControlPage);
                 Point p = gT.Transform(new Point(0, 0));
@@ -1356,25 +1363,21 @@ namespace LemonApp
                 Console.WriteLine(op);
                 if (op > 0)
                 {
-                    var ani = Resources["ControlsAniDown"] as Storyboard;
+                    ani = Resources["ControlsAniDown"] as Storyboard;
                     (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 20 + op;
                     var tau = ani.Children[1] as ThicknessAnimationUsingKeyFrames;
                     tau.KeyFrames[0].Value = new Thickness(2, point.Y, 0, 0);
                     tau.KeyFrames[1].Value = new Thickness(2, point.Y + op, 0, 0);
-                    ani.Begin();
                 }
                 else
                 {
-                    var ani = Resources["ControlsAniUp"] as Storyboard;
+                    ani = Resources["ControlsAniUp"] as Storyboard;
                     (ani.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 20 - op;
                     var tau = ani.Children[1] as ThicknessAnimationUsingKeyFrames;
                     tau.KeyFrames[0].Value = new Thickness(2, point.Y + op, 0, 0);
-                    ani.Begin();
                 }
+                ani.Begin();
             }
-
-            if (LastCom == null) LastCom = new Border();
-            LastCom.Visibility = Visibility.Hidden;
             LastPage.Visibility = Visibility.Collapsed;
 
             //-----cmd跳转处理----
@@ -1435,8 +1438,6 @@ namespace LemonApp
             data.Page.Visibility = Visibility.Visible;
             RunAnimation(data.Page, data.value);
 
-            await Task.Delay(600);
-            if (data.Com != null) data.Com.Visibility = Visibility.Visible;
             if (data.tb != null) LastClickLabel = data.tb;
             LastPage = data.Page;
             LastCom = data.Com;

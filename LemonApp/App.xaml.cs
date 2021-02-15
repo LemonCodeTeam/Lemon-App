@@ -205,9 +205,7 @@ namespace LemonApp
                     await clientSocket.ConnectAsync("127.0.0.1", 3239);
                     await clientSocket.SendAsync(Encoding.UTF8.GetBytes(json), SocketFlags.None);
                 }
-                catch
-                {
-                }
+                catch { }
             }
         }
         public static void Close()

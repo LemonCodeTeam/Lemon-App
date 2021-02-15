@@ -22,18 +22,7 @@ namespace LemonApp.ControlItems
         {
             InitializeComponent();
         }
-        bool _tbhasChecked = false;
-        public bool TBHasChecked
-        {
-            get => _tbhasChecked;
-            set
-            {
-                _tbhasChecked = value;
-                if (value)
-                    ComBlock.Visibility = Visibility.Visible;
-                else ComBlock.Visibility = Visibility.Hidden;
-            }
-        }
+
         bool _hasChecked = false;
         public bool HasChecked {
             get => _hasChecked;
