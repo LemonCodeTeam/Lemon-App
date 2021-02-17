@@ -912,9 +912,9 @@
                                 <Path x:Name="path7" Data="M267.31290994,336.0572459L267.31290994,816.61622664C299.13858517,786.97741836,333.16080231,752.98423003,370.45364197,714.57860402L391.29660469,799.05356336C330.94490654,861.59212748,266.21947743,917.55073983,198.19439504,965.82629201L167.48150614,895.6046677C182.83795058,881.34165672,191.62412019,865.98521131,191.62412022,848.422549L191.62412022,411.76538751 32.53445177,411.76538751 32.53445177,336.0572459z M349.56229756,180.26722879L295.80022712,235.13240865C249.73089379,181.36066225,186.09889717,124.30861643,107.11045611,65.07938056L161.98531193,11.30763417C236.60002105,67.26624654,299.13858515,123.21518295,349.6010033,180.26722879z M748.92661841,1002.02569917L729.23514775,926.31755658 858.71503673,928.53345235C894.9144439,928.53345235,913.55118682,908.77424618,913.55118682,869.27518767L913.55118682,121.02831698 389.09038585,121.02831698 389.09038585,46.41360787 991.46554823,46.41360787 991.46554823,892.30501636C991.46554823,964.73285951,951.98584259,1002.02569917,875.18426654,1002.02569917z M837.80433947,250.47917715L837.80433947,326.18731877 414.33610933,326.18731877 414.33610933,250.47917715z M793.94122401,445.77792871L793.94122401,785.88398489 453.83516879,785.88398489 453.83516879,445.77792871z M719.35554467,514.90611955L530.66577271,514.90611955 530.66577271,716.76546999 719.35554467,716.76546999z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
                             </Border>
                         </Grid>
-                        <Grid x:Name="MusicControl" Grid.Column="1" HorizontalAlignment="Left" Height="Auto" Margin="12,12,0,12">
+                        <Grid x:Name="MusicControl" Height="Auto" Margin="12,12,550,12">
                             <Border Margin="0,0,65,24"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="17" Width="70">
-                                <lemonlib:MyPopup x:Name="Pop_sp" PopupAnimation="Fade" StaysOpen="False" Placement="Left" HorizontalOffset="80" AllowsTransparency="True">
+                                <lemonlib:MyPopup x:Name="Pop_sp" PopupAnimation="Fade" StaysOpen="False" Placement="Left" HorizontalOffset="40" AllowsTransparency="True">
                                     <Border  Height="200" Width="120">
                                         <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="10" Margin="10,20,10,20" Effect="{DynamicResource WindowDrop}">
                                             <Grid>
@@ -937,7 +937,7 @@
                                     </LinearGradientBrush>
                                 </Border.Background>
                             </Border>
-                            <Grid x:Name="BottomText" VerticalAlignment="Bottom" Margin="60,0,80,28" Height="15.24">
+                            <Grid VerticalAlignment="Bottom" Margin="60,0,0,28" Height="15.24">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>

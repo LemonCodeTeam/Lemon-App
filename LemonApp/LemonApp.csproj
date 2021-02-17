@@ -10,7 +10,7 @@
     <StartupObject>LemonApp.App</StartupObject>
     <AssemblyName>LemonApp</AssemblyName>
     <RootNamespace>LemonApp</RootNamespace>
-    <Version>1.1.7.8</Version>
+    <Version>1.2.1.2</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
 

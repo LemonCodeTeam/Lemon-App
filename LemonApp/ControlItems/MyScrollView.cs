@@ -14,6 +14,7 @@ namespace LemonApp
     {
         public MyScrollView() {
             this.PreviewMouseUp += MyScrollView_PreviewMouseUp;
+            this.SnapsToDevicePixels = true;
         }
 
         private void MyScrollView_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -25,7 +26,7 @@ namespace LemonApp
         public double LastLocation = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            double WheelChange = e.Delta;
+            double WheelChange = e.Delta*0.5;
             double newOffset = LastLocation - (WheelChange * 2);
             ScrollToVerticalOffset(LastLocation);
             if (newOffset < 0)
@@ -45,7 +46,7 @@ namespace LemonApp
             Animation.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
             Animation.From = VerticalOffset;
             Animation.To = ToValue;
-            Animation.Duration = TimeSpan.FromMilliseconds(800);
+            Animation.Duration = TimeSpan.FromMilliseconds(300);
             //Timeline.SetDesiredFrameRate(Animation, 40);
             BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, Animation);
         }

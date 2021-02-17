@@ -142,6 +142,7 @@ namespace LemonApp
             //---------Popup的移动事件
             LocationChanged += delegate
             {
+                RUNPopup(Search_SmartBox);
                 RUNPopup(SingerListPop);
                 RUNPopup(MoreBtn_Meum);
                 RUNPopup(Gdpop);
@@ -2423,7 +2424,7 @@ namespace LemonApp
             else
             {
                 await Task.Yield();
-                Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -170 : 80;
+                Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -220 : 40;
                 Pop_sp.IsOpen = !Pop_sp.IsOpen;
                 MusicPlay_sp.Value = mp.Speed;
                 MusicPlay_pitch_sp.Value = mp.Pitch;
