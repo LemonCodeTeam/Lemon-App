@@ -178,7 +178,6 @@ namespace LemonLib
 
                 };
                 decode = Bass.BASS_StreamCreateURL(url + "\r\n"
-                                               + "Host: musichy.tc.qq.com\r\n"
                                                + "Accept-Encoding: identity;q=1, *;q=0\r\n"
                                                + "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40\r\n"
                                                + "Accept: */*\r\n"

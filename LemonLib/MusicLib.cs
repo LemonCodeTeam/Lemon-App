@@ -786,7 +786,53 @@ jpg
         /// <returns></returns>
         public static async Task<string> GetUrlAsync(string Musicid)
         {
+            string url =await GetUrlCacheLine(Musicid,true);
+            url= await HttpHelper.GetHTTPFileSize(url) > 0 ? url : await GetUrlCacheLine(Musicid, false);
+            return await HttpHelper.GetHTTPFileSize(url) > 0 ? url : await GetUrlwsLine(Musicid);
+        }
+
+        private static async Task<string> GetUrlCacheLine(string Musicid,bool usemid){
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://i.y.qq.com/v8/playsong.html?songmid=000edOaL1WZOWq");
+            hwr.Timeout = 20000;
+            hwr.KeepAlive = true;
+            hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
+            hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
+            hwr.UserAgent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3854.3 Mobile Safari/537.36";
+            hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+            hwr.Referer = "https://i.y.qq.com/n2/m/share/details/album.html?albummid=003bBofB3UzHxS&ADTAG=myqq&from=myqq&channel=10007100";
+            hwr.Host = "i.y.qq.com";
+            hwr.Headers.Add("sec-fetch-mode", "navigate");
+            hwr.Headers.Add("sec-fetch-site", "same - origin");
+            hwr.Headers.Add("sec-fetch-user", "?1");
+            hwr.Headers.Add("upgrade-insecure-requests", "1");
+            hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
+            hwr.Headers.Add(HttpRequestHeader.Cookie, "");
+            var o = await hwr.GetResponseAsync();
+            StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
+            var st = await sr.ReadToEndAsync();
+            sr.Dispose();
+            /*
+             两种地址类型:
+            aqqmusic.tc.qq.com/amobile.music.tc.qq.com/
+            apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/
+             */
+            string val = Regex.Match(st, "amobile.music.tc.qq.com/.*?.m4a.*?&fromtag=38").Value;
+            string vk = TextHelper.FindTextByAB(st, "m4a", "&fromtag=38", 0);
+            if (string.IsNullOrEmpty(vk))
+            {
+                MainClass.DebugCallBack("MusicUrlGet", "Vkey被吃掉了!!");
+                await Task.Delay(500);
+                MainClass.DebugCallBack("MusicUrlGet", "重连...");
+                return await GetUrlAsync(Musicid);
+            }
+            var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
+            var id = usemid ? mid : Musicid;
+            var url = $"http://musichy.tc.qq.com/amobile.music.tc.qq.com/C400{id}.m4a" + vk + "&fromtag=98";
+            MainClass.DebugCallBack("MusicUrlGet", mid);
+            return url;
+        }
+        private static async Task<string> GetUrlwsLine(string Musicid) {
+           HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://i.y.qq.com/v8/playsong.html?songmid="+Musicid);
             hwr.Timeout = 20000;
             hwr.KeepAlive = true;
             hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
@@ -805,53 +851,10 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            /*
-             两种地址类型:
-            aqqmusic.tc.qq.com/amobile.music.tc.qq.com/
-            apd-vlive.apdcdn.tc.qq.com/amobile.music.tc.qq.com/
-             */
             string val = Regex.Match(st, "amobile.music.tc.qq.com/.*?.m4a.*?&fromtag=38").Value;
-            string vk = TextHelper.FindTextByAB(st, "m4a", "&fromtag=38", 0);
-            if (string.IsNullOrEmpty(vk)) {
-                MainClass.DebugCallBack("MusicUrlGet","Vkey被吃掉了!!");
-                await Task.Delay(500);
-                MainClass.DebugCallBack("MusicUrlGet", "重连...");
-                return await GetUrlAsync(Musicid);
-            }
-            var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
-            return $"http://musichy.tc.qq.com/amobile.music.tc.qq.com/C400{mid}.m4a" + vk + "&fromtag=98";
-
-            /*  能用 但无法播放受限的歌曲
-            var guid = "82800236CAC506A09113040688E3F47F";
-            var vkey = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin={Settings.USettings.LemonAreeunIts}&songmid={Musicid}&filename=M500{Musicid}.mp3&guid={guid}"))["data"]["items"][0]["vkey"].ToString();
-            if (vkey != "")
-                return $"https://dl.stream.qqmusic.qq.com/M500{Musicid}.mp3?vkey={vkey}&guid={guid}&uin={Settings.USettings.LemonAreeunIts}&fromtag=66";
-            else return null;
-            */
-
-            /*   已失效 CODE403
-            List<String[]> MData = new List<String[]>();
-            MData.Add(new String[] { "M800", "mp3" });
-            MData.Add(new String[] { "C600", "m4a" });
-            MData.Add(new String[] { "M500", "mp3" });
-            MData.Add(new String[] { "C400", "m4a" });
-            MData.Add(new String[] { "M200", "mp3" });
-            MData.Add(new String[] { "M100", "mp3" });
-
-            var guid = "82800236CAC506A09113040688E3F47F";
-            var mid = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_play_single_song.fcg?songmid={Musicid}&platform=yqq&format=json"))["data"][0]["file"]["media_mid"].ToString();
-            for (int i = 0; i < MData.Count; i++)
-            {
-                String[] datakey = MData[i];
-                var key = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid={guid}&format=json"))["key"].ToString();
-                string uri = $"https://dl.stream.qqmusic.qq.com/{datakey[0]}{mid}.{datakey[1]}?vkey={key}&guid={guid}&uid=0&fromtag=30";
-                if (await HttpHelper.GetWebCode(uri) == 200)
-                    return uri;
-            }
-            return "http://ws.stream.qqmusic.qq.com/C100" + mid + ".m4a?fromtag=0&guid=" + guid;
-        */
+            var url = "https://ws.stream.qqmusic.qq.com/" + val;
+            return url;
         }
-
         #endregion
         #region 歌词 获取|处理
         /// <summary>
