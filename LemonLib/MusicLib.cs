@@ -829,6 +829,7 @@ jpg
             var id = usemid ? mid : Musicid;
             var url = $"http://musichy.tc.qq.com/amobile.music.tc.qq.com/C400{id}.m4a" + vk + "&fromtag=98";
             MainClass.DebugCallBack("MusicUrlGet", mid);
+            MainClass.DebugCallBack("MusicUrlGet", url);
             return url;
         }
         private static async Task<string> GetUrlwsLine(string Musicid) {
@@ -851,8 +852,8 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            string val = Regex.Match(st, "amobile.music.tc.qq.com/.*?.m4a.*?&fromtag=38").Value;
-            var url = "https://ws.stream.qqmusic.qq.com/" + val;
+            string val = Regex.Match(st, "C400.*?.m4a.*?&fromtag=38").Value;
+            var url = "https://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/" + val;
             return url;
         }
         #endregion
