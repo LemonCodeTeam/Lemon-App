@@ -78,6 +78,8 @@ namespace LemonLib
             if (DecodePixel != null)
             {
                 HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
+                hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
+                hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62";
                 using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
                 using Stream responseStream = response.GetResponseStream();
                 Image img = Image.FromStream(responseStream);

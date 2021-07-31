@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Microsoft.Web.WebView2;
 using static LemonLib.InfoHelper;
 using System.Collections.Generic;
 
@@ -17,40 +16,35 @@ namespace LemonApp
     public partial class LoginWindow : Window
     {
         private MainWindow mw;
+        private WebBrowser wb;
         public LoginWindow(MainWindow m)
         {
             InitializeComponent();
             mw = m;
+            wb = new WebBrowser();
+            wf.Child = wb;
+            Topmost = true;
         }
-        public async void Api_Login()
+        public void Api_Login()
         {
-            wb.NavigationCompleted +=async delegate {
+            wb.Navigated += delegate {
                 Console.WriteLine("", "Arrive");
-                await wb.ExecuteScriptAsync("document.getElementsByClassName(\"lay_top\")[0].remove();");
-                await wb.ExecuteScriptAsync("document.getElementsByClassName(\"page_accredit combine_page_children align\")[0].remove();");
-                await wb.ExecuteScriptAsync("document.getElementById(\"title_0\").innerText=\"登录到Lemon App\";");
+                wb.Document.GetElementById("title_0").InnerText = "登录到 Lemon App";
                 loading.Visibility = Visibility.Collapsed;
                 wf.Visibility = Visibility.Visible;
             };
-            wb.Source=new Uri("https://graph.qq.com/oauth2.0/show?which=Login&display=pc&response_type=code&client_id=100497308&redirect_uri=https%3A%2F%2Fy.qq.com%2Fportal%2Fwx_redirect.html%3Flogin_type%3D1%26surl%3Dhttps%253A%252F%252Fy.qq.com%252Fportal%252Fprofile.html%26use_customer_cb%3D0&state=state&display=pc");
-            Topmost = true;
+            wb.Navigate(new Uri("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=8000201&hide_border=1&style=33&theme=2&s_url=https%3A%2F%2Fvip.qq.com&daid=18&low_login=1&hln_autologin=e=2&login_text=%E6%8E%88%E6%9D%83%E5%B9%B6%E7%99%BB%E5%BD%95"));
             Activate();
-            wb.ContentLoading+= Wb_Dc_Login;
-            await wb.EnsureCoreWebView2Async();
+            wb.DocumentTitleChanged+= Wb_Dc_Login;
         }
 
         private async void Wb_Dc_Login(object sender, EventArgs e)
         {
-            if (wb.Source.ToString().Contains("y.qq.com/portal/profile.html"))
+            if (wb.Url.Host== "vip.qq.com")
             {
-                Topmost = false;
                 await Task.Delay(500);
                 //--------------暴露g_skey Cookies----------------------
-                var cookies =await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://graph.qq.com/oauth2.0/authorize");
-                string cookie = "";
-                foreach (var i in cookies) {
-                    cookie += i.Name + "=" + i.Value + "; ";
-                }
+                var cookie = wb.Document.Cookie;
                 //-------------------------------------------------
                 Console.WriteLine(cookie, "LoginData");
                 string qq = TextHelper.FindTextByAB(cookie + ";", "ptui_loginuin=", ";", 0);
@@ -74,7 +68,7 @@ namespace LemonApp
                 Console.WriteLine(send.g_tk, "LOGIN G_TK");
                 //---------------------------------------------------------
                 mw.Dispatcher.Invoke(delegate { mw.Login(send); });
-                wb.ContentLoading -= Wb_Dc_Login;
+                wb.DocumentCompleted -= Wb_Dc_Login;
             }
         }
 
