@@ -36,8 +36,6 @@ namespace LemonLib
                 Myrq.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
                 Myrq.Headers.Add("Cache-Control", "max-age=0");
                 Myrq.KeepAlive = true;
-                Myrq.Headers.Add("Cookie", Settings.USettings.Cookie);
-                Myrq.Host = "aqqmusic.tc.qq.com";
                 Myrq.Headers.Add("Upgrade-Insecure-Requests", "1");
                 Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40";
                 var myrp = (HttpWebResponse)Myrq.GetResponse();

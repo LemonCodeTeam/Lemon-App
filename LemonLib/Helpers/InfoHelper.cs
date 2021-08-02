@@ -35,15 +35,13 @@ namespace LemonLib
         }
         public class MeumInfo
         {
-            public MeumInfo(TextBlock t, UIElement p, Border c)
+            public MeumInfo(UIElement p, UIElement meum)
             {
-                tb = t;
                 Page = p;
-                Com = c;
+                MeumItem = meum;
             }
-            public TextBlock tb;
             public UIElement Page;
-            public Border Com;
+            public UIElement MeumItem;
             public Thickness value = default;
             public string cmd = "";
             public object data = "";

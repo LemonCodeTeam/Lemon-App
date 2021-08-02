@@ -26,34 +26,16 @@ namespace LemonLib
             try
             {
                 url += DecodePixel != null ? "#" + string.Join(",", DecodePixel) : "";
-                BitmapImage bi = GetImageFormMemory(url, DecodePixel);
-                if (bi != null) { return bi; }
-                bi = GetImageFromFile(url);
-                if (bi != null)
-                {
-                    AddImageToMemory(url, bi);
-                    return bi;
-                }
+                MainClass.DebugCallBack("IMAGE GETER",url);
+                BitmapImage bi = GetImageFromFile(url);
                 return await GetImageFromInternet(url, DecodePixel);
             }
-            catch
+            catch(Exception e)
             {
+                MainClass.DebugCallBack("IMAGE ERROR",e.StackTrace+"\r\n"+e.ToString());
                 return null;
             }
         }
-        private static ConditionalWeakTable<string, BitmapImage> MemoryData = new ConditionalWeakTable<string, BitmapImage>();
-        private static BitmapImage GetImageFormMemory(string url, int[] Decode)
-        {
-            string key = TextHelper.MD5.EncryptToMD5string(url);
-            BitmapImage bi;
-            return MemoryData.TryGetValue(key, out bi) ? bi : null;
-        }
-        private static void AddImageToMemory(string url, BitmapImage data)
-        {
-            string key = TextHelper.MD5.EncryptToMD5string(url);
-            MemoryData.AddOrUpdate(key, data);
-        }
-
         private static BitmapImage GetImageFromFile(string url)
         {
             string file = Settings.USettings.MusicCachePath + "\\Image\\" + TextHelper.MD5.EncryptToMD5string(url) + ".jpg";
@@ -78,8 +60,6 @@ namespace LemonLib
             if (DecodePixel != null)
             {
                 HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
-                hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-                hwr.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62";
                 using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
                 using Stream responseStream = response.GetResponseStream();
                 Image img = Image.FromStream(responseStream);
@@ -97,7 +77,6 @@ namespace LemonLib
                 await HttpHelper.HttpDownloadFileAsync(url, file);
             }
             BitmapImage bi = GetBitMapImageFromFile(file);
-            AddImageToMemory(url, bi);
             return bi;
         }
     }

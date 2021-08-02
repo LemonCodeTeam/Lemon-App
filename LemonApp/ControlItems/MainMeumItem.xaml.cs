@@ -21,6 +21,13 @@ namespace LemonApp.ControlItems
         public MainMeumItem()
         {
             InitializeComponent();
+            MouseEnter += delegate {
+                FocusMask.Visibility = Visibility.Visible;
+            };
+            MouseLeave += delegate {
+                if (!_hasChecked)
+                    FocusMask.Visibility = Visibility.Collapsed;
+            };
         }
 
         bool _hasChecked = false;
@@ -29,8 +36,15 @@ namespace LemonApp.ControlItems
             set {
                 _hasChecked = value;
                 if (value)
-                    titBtn.SetResourceReference(ForegroundProperty, "ThemeColor");
-                else titBtn.SetResourceReference(ForegroundProperty, "ResuTextColor");
+                {
+                    FocusMask.Visibility = Visibility.Visible;
+                    //titBtn.SetResourceReference(ForegroundProperty, "ThemeColor");
+                }
+                else
+                {
+                    FocusMask.Visibility = Visibility.Collapsed;
+                    // titBtn.SetResourceReference(ForegroundProperty, "ResuTextColor");
+                }
             }
         }
         public Geometry PathData { get => path.Data; set => path.Data = value; }
