@@ -2341,9 +2341,17 @@ namespace LemonApp
             mini.title.Text = data.MusicName + " - " + data.SingerText;
             mini.MusicName.Text = data.MusicName;
             mini.SingerText.Text = data.SingerText;
-            if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
-                LikeBtnDown();
-            else LikeBtnUp();
+
+            try
+            {
+                //Expection: Operations that change non-concurrent collections must have exclusive access. 
+                //A concurrent update was performed on this collection and
+                //corrupted its state. The collection's state is no longer correct.
+                if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
+                    LikeBtnDown();
+                else LikeBtnUp();
+            }
+            catch { }
 
             Console.WriteLine(data.ImageUrl);
             BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
