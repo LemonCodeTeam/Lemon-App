@@ -83,15 +83,15 @@ namespace LemonApp.ContentPage
             }
             //------------------
             mw.CloseLoading();
-            await Task.Delay(50);
+            await Task.Yield();
             JCTJ.Visibility = Visibility.Visible;
-            mw.RunAnimation(JCTJ);
+            mw.ContentAnimation(JCTJ);
             await Task.Delay(200);
             GFGD.Visibility = Visibility.Visible;
-            mw.RunAnimation(GFGD);
+            mw.ContentAnimation(GFGD);
             await Task.Delay(200);
             GDTJ.Visibility = Visibility.Visible;
-            mw.RunAnimation(GDTJ);
+            mw.ContentAnimation(GDTJ);
             await Task.Delay(200);
             NewSongs.Visibility = Visibility.Visible;
             mw.RunAnimation(NewSongs);

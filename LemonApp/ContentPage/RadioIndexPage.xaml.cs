@@ -60,8 +60,8 @@ namespace LemonApp.ContentPage
                 }
                 mw.WidthUI(RadioItemsList);
                 mw.CloseLoading();
-                await Task.Delay(10);
-                mw.RunAnimation(RadioItemsList);
+                await Task.Yield();
+                mw.ContentAnimation(RadioItemsList);
             }
         }
 

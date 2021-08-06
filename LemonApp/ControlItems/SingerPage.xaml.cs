@@ -223,7 +223,7 @@ namespace LemonApp
             if (LastPage != null)
                 LastPage.Visibility = Visibility.Collapsed;
             fm.Visibility = Visibility.Visible;
-            mw.RunAnimation(fm);
+            mw.ContentAnimation(fm);
             LastPage = fm;
         }
         private void TuiJianBtn_MouseDown(object sender, MouseButtonEventArgs e)

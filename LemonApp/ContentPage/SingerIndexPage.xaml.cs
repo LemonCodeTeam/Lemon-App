@@ -51,8 +51,8 @@ namespace LemonApp.ContentPage
             mw.CloseLoading();
             if (cur_page == 1)
             {
-                await Task.Delay(10);
-                mw.RunAnimation(SingerItemsList);
+                await Task.Yield();
+                mw.ContentAnimation(SingerItemsList);
             }
         }
         private int ixSingerList = 1;

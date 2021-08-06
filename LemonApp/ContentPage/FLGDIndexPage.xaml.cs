@@ -107,8 +107,8 @@ namespace LemonApp.ContentPage
             mw.CloseLoading();
             if (osx == 1)
             {
-                await Task.Delay(10);
-                mw.RunAnimation(FLGDItemsList);
+                await Task.Yield();
+                mw.ContentAnimation(FLGDItemsList);
             }
         }
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)

@@ -37,15 +37,15 @@ namespace LemonApp
             else t.Stop();
         }
 
-        public void Updata(List<IFVData> iFVData, MainWindow m)
+        public async void Updata(List<IFVData> iFVData, MainWindow m)
         {
             iv = iFVData;
             index = 0;
             lastindex = iv.Count - 1;
             mw = m;
-            SetImageAsync(0);
+            await SetImageAsync(0);
         }
-        private async void SetImageAsync(int index)
+        private async Task SetImageAsync(int index)
         {
             try
             {
@@ -107,17 +107,17 @@ namespace LemonApp
 
         private Storyboard CheckAniLeft;
         private Storyboard CheckAniRight;
-        private void TurnLeft()
+        private async void TurnLeft()
         {
             if (index.Equals(0))
             {
-                SetImageAsync(lastindex);
+                await SetImageAsync(lastindex);
                 index = lastindex;
             }
             else
             {
                 index--;
-                SetImageAsync(index);
+                await SetImageAsync(index);
             }
             CheckAniLeft.Begin();
         }
@@ -127,20 +127,21 @@ namespace LemonApp
             HasCheck = true;
         }
 
-        public void TurnRight()
+        public async void TurnRight()
         {
             try
             {
                 if (index.Equals(lastindex))
                 {
-                    SetImageAsync(0);
+                    await SetImageAsync(0);
                     index = 0;
                 }
                 else
                 {
                     index++;
-                    SetImageAsync(index);
+                    await SetImageAsync(index);
                 }
+                
                 CheckAniRight.Begin();
             }
             catch { }

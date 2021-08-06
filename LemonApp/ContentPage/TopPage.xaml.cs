@@ -35,11 +35,11 @@ namespace LemonApp.ContentPage
                 top.Margin = new Thickness(10, 0, 10, 20);
                 topIndexList.Children.Add(top);
             }
-            await Task.Delay(50);
+            await Task.Yield();
             mw.CloseLoading();
             topIndexList.Visibility = Visibility.Visible;
             mw.WidthUI(topIndexList);
-            mw.RunAnimation(topIndexList);
+            mw.ContentAnimation(topIndexList);
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

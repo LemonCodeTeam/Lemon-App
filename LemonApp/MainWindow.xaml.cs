@@ -1243,7 +1243,8 @@ namespace LemonApp
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.pic));
                 TB.Text = md.name;
             }, count);
-            RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+            await Task.Yield();
+            ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
         }
         #endregion
         #region Top 排行榜
@@ -1292,7 +1293,7 @@ namespace LemonApp
                 CloseLoading();
             }), osx);
             if (osx == 1)
-                RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+                ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
         }
         #endregion
         #region Updata 检测更新
@@ -1313,6 +1314,22 @@ namespace LemonApp
         }
         #endregion
         #region N/S Page 切换页面
+
+        public void ContentAnimation(DependencyObject TPage, Thickness value = new Thickness())
+        {
+            var sb = Resources["LoadContentAnimation"] as Storyboard;
+            foreach (Timeline ac in sb.Children)
+            {
+                Storyboard.SetTarget(ac, TPage);
+                if (ac is ThicknessAnimationUsingKeyFrames)
+                {
+                    var ta = ac as ThicknessAnimationUsingKeyFrames;
+                    ta.KeyFrames[0].Value = new Thickness(0,200+value.Top,0,-200+value.Bottom);
+                    ta.KeyFrames[1].Value = value;
+                }
+            }
+            sb.Begin();
+        }
         public void RunAnimation(DependencyObject TPage, Thickness value = new Thickness())
         {
             var sb = Resources["NSPageAnimation"] as Storyboard;
@@ -1802,7 +1819,7 @@ namespace LemonApp
                         }
                     }));
                 CloseLoading();
-                RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+                ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
                 np = NowPage.GDItem;
             }
         }
@@ -2167,7 +2184,7 @@ namespace LemonApp
             }
             CloseLoading();
             if (osx == 0)
-                RunAnimation(DataItemsList, new Thickness(0, 75, 0, 0));
+                ContentAnimation(DataItemsList, new Thickness(0, 75, 0, 0));
         }
         #endregion
         #region PlayMusic 播放时的逻辑处理
@@ -3448,8 +3465,13 @@ namespace LemonApp
                 NSPage(new MeumInfo(MyGDIndexPage, Meum_MYGD));
                 OpenLoading();
                 var GdData = await MusicLib.GetGdListAsync();
+                bool renew_ = false;
                 if (GdData.Count != GDItemsList.Children.Count)
-                { GDItemsList.Children.Clear(); GData_Now.Clear(); }
+                {
+                    renew_ = true;
+                    GDItemsList.Children.Clear();
+                    GData_Now.Clear();
+                }
                 foreach (var jm in GdData)
                 {
                     if (!GData_Now.Contains(jm.Key))
@@ -3471,9 +3493,20 @@ namespace LemonApp
                     }
                 }
                 WidthUI(GDItemsList);
+                if (renew_)
+                {
+                    await Task.Yield();
+                    ContentAnimation(GDItemsList, GDItemsList.Margin);
+                }
+
                 var GdLikeData = await ml.GetGdILikeListAsync();
+                renew_ = false;
                 if (GdLikeData.Count != GDILikeItemsList.Children.Count)
-                { GDILikeItemsList.Children.Clear(); GLikeData_Now.Clear(); }
+                {
+                    renew_ = true;
+                    GDILikeItemsList.Children.Clear(); 
+                    GLikeData_Now.Clear(); 
+                }
                 foreach (var jm in GdLikeData)
                 {
                     if (!GLikeData_Now.Contains(jm.Key))
@@ -3496,6 +3529,11 @@ namespace LemonApp
                 WidthUI(GDILikeItemsList);
                 if (GdData.Count == 0 && GdLikeData.Count == 0)
                     NSPage(new MeumInfo(MyGDIndexPage, Meum_MYGD));
+                if (renew_) {
+                    await Task.Yield();
+                    ContentAnimation(GDILikeItemsList, GDILikeItemsList.Margin);
+                }
+
                 CloseLoading();
             }
         }
@@ -3557,7 +3595,8 @@ namespace LemonApp
                 }
             }));
             CloseLoading();
-            RunAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+            await Task.Yield();
+            ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
             np = NowPage.GDItem;
         }
         #endregion
