@@ -1537,6 +1537,7 @@ namespace LemonApp
                 CloseBtn.ColorDx = SearchBox.Foreground;
                 MaxBtn.ColorDx = SearchBox.Foreground;
                 MinBtn.ColorDx = SearchBox.Foreground;
+                MiniBtn.ColorDx = SearchBox.Foreground;
             }
             else
             {
@@ -1549,6 +1550,7 @@ namespace LemonApp
                 CloseBtn.ColorDx = null;
                 MaxBtn.ColorDx = null;
                 MinBtn.ColorDx = null;
+                MiniBtn.ColorDx = null;
             }
         }
 
@@ -2344,6 +2346,7 @@ namespace LemonApp
             t.Stop();
             if (mp.BassdlList.Count > 0)
                 mp.BassdlList.Last().SetClose();
+            mp.Stop();
 
             MusicName.Text = "连接资源中...";
             ImmTb_Lyric.Text = "";

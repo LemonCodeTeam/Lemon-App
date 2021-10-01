@@ -1018,8 +1018,10 @@ jpg
         /// <returns></returns>
         public static async Task<SingerPageData> GetSingerPageAsync(string id)
         {
-            JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
-                "{\"req_0\":{\"module\":\"musichall.singer_info_server\",\"method\":\"GetSingerDetail\",\"param\":{\"singer_mids\":[\"" + id + "\"],\"pic\":1,\"group_singer\":1,\"wiki_singer\":1,\"ex_singer\":1}},\"req_1\":{\"module\":\"musichall.song_list_server\",\"method\":\"GetSingerSongList\",\"param\":{\"singerMid\":\"" + id + "\",\"begin\":0,\"num\":10,\"order\":1}},\"req_2\":{\"module\":\"Concern.ConcernSystemServer\",\"method\":\"cgi_qry_concern_status\",\"param\":{\"vec_userinfo\":[{\"usertype\":1,\"userid\":\"" + id + "\"}],\"opertype\":5,\"encrypt_singerid\":1}},\"req_3\":{\"module\":\"music.musichallAlbum.SelectedAlbumServer\",\"method\":\"SelectedAlbumList\",\"param\":{\"singerMid\":\"" + id + "\"}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
+            var json = await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
+                "{\"req_0\":{\"module\":\"musichall.singer_info_server\",\"method\":\"GetSingerDetail\",\"param\":{\"singer_mids\":[\"" + id + "\"],\"pic\":1,\"group_singer\":1,\"wiki_singer\":1,\"ex_singer\":1}},\"req_1\":{\"module\":\"musichall.song_list_server\",\"method\":\"GetSingerSongList\",\"param\":{\"singerMid\":\"" + id + "\",\"begin\":0,\"num\":10,\"order\":1}},\"req_2\":{\"module\":\"Concern.ConcernSystemServer\",\"method\":\"cgi_qry_concern_status\",\"param\":{\"vec_userinfo\":[{\"usertype\":1,\"userid\":\"" + id + "\"}],\"opertype\":5,\"encrypt_singerid\":1}},\"req_3\":{\"module\":\"music.musichallAlbum.SelectedAlbumServer\",\"method\":\"SelectedAlbumList\",\"param\":{\"singerMid\":\"" + id + "\"}},\"comm\":{\"g_tk\":" + Settings.USettings.g_tk + ",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}");
+            MainClass.DebugCallBack("Singer",json);
+            JObject o = JObject.Parse(json);
             //Part 1 歌手信息
             var req0 = o["req_0"]["data"]["singer_list"][0];
             MusicSinger mSinger = new MusicSinger();
@@ -1036,38 +1038,42 @@ jpg
             //Part 2 热门歌曲
             var req1 = o["req_1"]["data"]["songList"];
             List<Music> HotSongs = new List<Music>();
-            foreach (var c in req1)
+            try
             {
-                Debug.Print(c.ToString());
-                var data = c["songInfo"];
-                Music m = new Music();
-                m.MusicName = data["name"].ToString();
-                m.MusicName_Lyric = data["subtitle"].ToString();
-                m.MusicID = data["mid"].ToString();
-                string Singer = "";
-                List<MusicSinger> lm = new List<MusicSinger>();
-                foreach (var s in data["singer"])
+                foreach (var c in req1)
                 {
-                    Singer += s["name"] + "&";
-                    lm.Add(new MusicSinger() { Name = s["name"].ToString(), Mid = s["mid"].ToString() });
+                    Debug.Print(c.ToString());
+                    var data = c["songInfo"];
+                    Music m = new Music();
+                    m.MusicName = data["name"].ToString();
+                    m.MusicName_Lyric = data["subtitle"].ToString();
+                    m.MusicID = data["mid"].ToString();
+                    string Singer = "";
+                    List<MusicSinger> lm = new List<MusicSinger>();
+                    foreach (var s in data["singer"])
+                    {
+                        Singer += s["name"] + "&";
+                        lm.Add(new MusicSinger() { Name = s["name"].ToString(), Mid = s["mid"].ToString() });
+                    }
+                    m.Singer = lm;
+                    m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
+                    string amid = data["album"]["mid"].ToString();
+                    if (amid == "001ZaCQY2OxVMg")
+                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{data["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
+                    if (amid != "")
+                        m.Album = new MusicGD() { Name = data["album"]["name"].ToString(), ID = amid, Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000" };
+                    var file = data["file"];
+                    if (file["size_320mp3"].ToString() != "0")
+                        m.Pz = "HQ";
+                    if (file["size_flac"].ToString() != "0")
+                        m.Pz = "SQ";
+                    m.Mvmid = data["mv"]["vid"].ToString();
+                    HotSongs.Add(m);
                 }
-                m.Singer = lm;
-                m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
-                string amid = data["album"]["mid"].ToString();
-                if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{data["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
-                else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
-                if (amid != "")
-                    m.Album = new MusicGD() { Name = data["album"]["name"].ToString(), ID = amid, Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000" };
-                var file = data["file"];
-                if (file["size_320mp3"].ToString() != "0")
-                    m.Pz = "HQ";
-                if (file["size_flac"].ToString() != "0")
-                    m.Pz = "SQ";
-                m.Mvmid = data["mv"]["vid"].ToString();
-                HotSongs.Add(m);
             }
+            catch { }
             //Part 3 是否关注此歌手
             bool HasGJ;
             if (o["req_2"]["data"]["map_singer_status"][id].ToString() == "0")

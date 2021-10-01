@@ -37,16 +37,11 @@ namespace LemonLib
         public float VOL
         {
             get {
-                float value = 0;
-                Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, ref value);
-                return value;
+                return Bass.BASS_GetVolume();
             }
             set {
-                if (stream != -1024)
-                {
-                    Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
-                    _Vol = value;
-                }
+                Bass.BASS_SetVolume(value);
+                _Vol = value;
             }
         }
 
@@ -199,7 +194,7 @@ namespace LemonLib
         public void Pause()
         {
             if (stream != -1024)
-                Bass.BASS_ChannelPause(stream);
+                Bass.BASS_Pause();
         }
         public TimeSpan GetLength
         {
@@ -227,6 +222,13 @@ namespace LemonLib
             float[] fft = new float[256];
             Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT256);
             return fft;
+        }
+        /// <summary>
+        /// 停止所有的音频输出
+        /// </summary>
+        public void Stop()
+        {
+            //Bass.BASS_Stop();
         }
         /// <summary>
         /// 更新设备
