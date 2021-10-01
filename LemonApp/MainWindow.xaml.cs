@@ -3007,30 +3007,7 @@ namespace LemonApp
                 lv.SetFontSize(Settings.USettings.LyricFontSize);
             }
         }
-        private async void LikesHit_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            LikesHit.MouseDown -= LikesHit_MouseDown;
-            LikesHicon.Visibility = Visibility.Collapsed;
-            LikesNum.Text = "Likes +1 ing...";
-            string data = await HttpHelper.GetWebWithHeaderAsync("https://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg");
-            string hits = TextHelper.FindTextByAB(data, @"<text x=""54"" y=""14"">", "</text>", 0);
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
-            await Task.Delay(300);
-            LikesNum.Text = "Likes: " + hits;
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
-            await Task.Delay(1000);
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
-            await Task.Delay(300);
-            LikesNum.Text = "Thanks!";
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
-            await Task.Delay(1000);
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.8, 0, TimeSpan.FromSeconds(0.3)));
-            await Task.Delay(300);
-            LikesHicon.Visibility = Visibility.Visible;
-            LikesNum.Text = "Likes";
-            LikesNum.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.3)));
-            LikesHit.MouseDown += LikesHit_MouseDown;
-        }
+     
         private void NorImm_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Settings.USettings.IsLyricImm = !Settings.USettings.IsLyricImm;
