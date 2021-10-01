@@ -2301,7 +2301,7 @@ namespace LemonApp
         {
             MusicPlay_LoadProc = sender as ProgressBar;
         }
-        public async void LoadMusic(Music data, bool doesplay)
+        public async Task LoadMusic(Music data, bool doesplay)
         {
             string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + ".mp3";
             MusicPlay_LoadProc.Value = 0;
@@ -2336,8 +2336,17 @@ namespace LemonApp
                 MusicName.Text = data.MusicName;
             }
         }
-        public async void PlayMusic(Music data, bool doesplay = true)
+        bool AbleToClick = true;
+        Music ToPlayData = null;
+        public async void PlayMusic(Music data, bool doesplay = true,bool force=false)
         {
+            if (!force)
+                ToPlayData = data;
+            if (!AbleToClick&&!force) {
+                //操作频繁..
+                return;
+            }
+            AbleToClick = false;
             if (data.MusicID == null)
             {
                 PlayControl_PlayNext(null, null);
@@ -2346,33 +2355,22 @@ namespace LemonApp
             t.Stop();
             if (mp.BassdlList.Count > 0)
                 mp.BassdlList.Last().SetClose();
-            mp.Stop();
 
             MusicName.Text = "连接资源中...";
             ImmTb_Lyric.Text = "";
             ImmTb_Trans.Text = "";
             mp.Pause();
 
-            LoadMusic(data, doesplay);
+            await LoadMusic(data, doesplay);
 
             Title = "Lemon App  " + data.MusicName + " - " + data.SingerText;
             Settings.USettings.Playing = MusicData.Data;
-            Settings.SaveSettings();
+            Singer.Text = data.SingerText;
             mini.title.Text = data.MusicName + " - " + data.SingerText;
             mini.MusicName.Text = data.MusicName;
             mini.SingerText.Text = data.SingerText;
 
-            try
-            {
-                //Expection: Operations that change non-concurrent collections must have exclusive access. 
-                //A concurrent update was performed on this collection and
-                //corrupted its state. The collection's state is no longer correct.
-                if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
-                    LikeBtnDown();
-                else LikeBtnUp();
-            }
-            catch { }
-
+            #region 专辑图
             Console.WriteLine(data.ImageUrl);
             BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
             MusicImage.Background = new ImageBrush(im);
@@ -2381,7 +2379,7 @@ namespace LemonApp
             var imb = im.ToBitmap();
             imb.GaussianBlur(ref rect, 20);
             LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
-            Singer.Text = data.SingerText;
+            #endregion
 
             LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
             lv.LoadLrc(dt);
@@ -2400,33 +2398,47 @@ namespace LemonApp
                     LyricBigAniRound.Resume();
                 }
             }
+
+            try
+            {
+                //Expection: Operations that change non-concurrent collections must have exclusive access. 
+                //A concurrent update was performed on this collection and
+                //corrupted its state. The collection's state is no longer correct.
+                if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
+                    LikeBtnDown();
+                else LikeBtnUp();
+            }
+            catch { }
             try
             {
                 TaskBarImg.SetImage(im);
                 TaskBarImg.Title = data.MusicName + " - " + data.SingerText;
             }
             catch { }
-
+            Console.WriteLine(ToPlayData.MusicName+"\r\n"+data.MusicName,"ToPlayData");
+            if (ToPlayData!=null&&ToPlayData != data)
+                PlayMusic(ToPlayData,true,true);
+            AbleToClick = true;
             //-------加载歌曲相关歌单功能-------
-            var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
-            if (gd.Count >= 1)
-            {
-                LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
-                LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
-                LP_ag1_tx.Text = gd[0].Name;
-            }
-            if (gd.Count >= 2)
-            {
-                LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
-                LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
-                LP_ag2_tx.Text = gd[1].Name;
-            }
-            if (gd.Count >= 3)
-            {
-                LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
-                LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
-                LP_ag3_tx.Text = gd[2].Name;
-            }
+            //var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
+            //if (gd.Count >= 1)
+            //{
+            //    LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
+            //    LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
+            //    LP_ag1_tx.Text = gd[0].Name;
+            //}
+            //if (gd.Count >= 2)
+            //{
+            //    LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
+            //    LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
+            //    LP_ag2_tx.Text = gd[1].Name;
+            //}
+            //if (gd.Count >= 3)
+            //{
+            //    LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
+            //    LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
+            //    LP_ag3_tx.Text = gd[2].Name;
+            //}
         }
 
         private void LP_ag_MouseDown(object sender, MouseButtonEventArgs e)

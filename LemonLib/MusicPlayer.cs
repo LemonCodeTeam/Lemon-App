@@ -37,11 +37,16 @@ namespace LemonLib
         public float VOL
         {
             get {
-                return Bass.BASS_GetVolume();
+                float value = 0;
+                Bass.BASS_ChannelGetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, ref value);
+                return value;
             }
             set {
-                Bass.BASS_SetVolume(value);
-                _Vol = value;
+                if (stream != -1024)
+                {
+                    Bass.BASS_ChannelSetAttribute(stream, BASSAttribute.BASS_ATTRIB_VOL, value);
+                    _Vol = value;
+                }
             }
         }
 
@@ -194,7 +199,7 @@ namespace LemonLib
         public void Pause()
         {
             if (stream != -1024)
-                Bass.BASS_Pause();
+                Bass.BASS_ChannelPause(stream);
         }
         public TimeSpan GetLength
         {
@@ -222,13 +227,6 @@ namespace LemonLib
             float[] fft = new float[256];
             Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT256);
             return fft;
-        }
-        /// <summary>
-        /// 停止所有的音频输出
-        /// </summary>
-        public void Stop()
-        {
-            //Bass.BASS_Stop();
         }
         /// <summary>
         /// 更新设备
@@ -292,9 +290,10 @@ namespace LemonLib
             HasStoped = true;
             procChanged = null;
             finished = null;
+
         }
         /// <summary>
-        /// 由Bass调用   传来下载数据时 讲数据保存到缓存文件中
+        /// 由Bass调用   传来下载数据时 将数据保存到缓存文件中
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="length"></param>

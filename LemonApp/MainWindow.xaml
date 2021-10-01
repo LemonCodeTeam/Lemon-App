@@ -925,7 +925,7 @@
                             </Border>
                         </WrapPanel>
                     </Grid>
-                    <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,75">
+                    <Grid x:Name="ContentPage" Background="#00000000" Margin="0,50,0,85">
                         <!--保留必要的页面  其他的页面存放于/ContentPage/ 按需舍取-->
                         <Grid x:Name="DownloadPage" Visibility="Collapsed">
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
