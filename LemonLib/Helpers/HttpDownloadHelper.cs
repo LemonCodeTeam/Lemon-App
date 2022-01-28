@@ -4,12 +4,13 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Un4seen.Bass;
+using static LemonLib.InfoHelper;
 
 namespace LemonLib
 {
     public class HttpDownloadHelper
     {
-        private string Id = "";
+        private Music mData;
         private string Path = "";
         public bool Downloading = true;
         private int Progress = 0;
@@ -20,16 +21,16 @@ namespace LemonLib
         public event finish Finished;
         public delegate void x(string z);
         public event x GetSize;
-        public HttpDownloadHelper(string id, string pa)
+        public HttpDownloadHelper(Music data, string pa)
         {
-            Id = id;
+            mData = data;
             Path = pa;
         }
         public async void Download()
         {
             await Task.Run(async () =>
             {
-                string Url = await MusicLib.GetUrlAsync(Id);
+                string Url = (await MusicLib.GetUrlAsync(mData.MusicID,mData.Mvmid))[0];
                 Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
                 HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url);
                 Myrq.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";

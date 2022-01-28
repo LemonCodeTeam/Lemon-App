@@ -68,8 +68,12 @@ namespace LemonLib
         /// <param name="mid"></param>
         /// <returns></returns>
         public static async Task<List<MusicGD>> GetSongListAboutSong(string mid) {
+            MainClass.DebugCallBack("GETSL", mid);
             string songid = await GetMusicIdByMidAsync(mid);
-            JObject o = JObject.Parse(await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?-=getUCGI5445484706088479&g_tk=1162521571&loginUin=2728578956&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22song_gedan%22%3A%7B%22module%22%3A%22music.mb_gedan_recommend_svr%22%2C%22method%22%3A%22get_related_gedan%22%2C%22param%22%3A%7B%22song_id%22%3A"+songid+"%2C%22song_type%22%3A1%2C%22sin%22%3A0%2C%22last_id%22%3A0%7D%7D%7D"));
+            MainClass.DebugCallBack("GETSL", songid);
+            string json = await HttpHelper.GetWebDataqAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22song_gedan%22%3A%7B%22module%22%3A%22music.mb_gedan_recommend_svr%22%2C%22method%22%3A%22get_related_gedan%22%2C%22param%22%3A%7B%22song_id%22%3A"+songid+"%2C%22song_type%22%3A1%2C%22sin%22%3A0%2C%22last_id%22%3A0%7D%7D%7D");
+            MainClass.DebugCallBack("GETSL", json);
+            JObject o = JObject.Parse(json);
             List<MusicGD> list = new List<MusicGD>();
             var data = o["song_gedan"]["data"]["vec_gedan"];
             foreach (var item in data)
@@ -193,8 +197,8 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string[]> AddMusicToGDAsync(string id, string dirid)
         {
-            MainClass.DebugCallBack("User Cookies",Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
-            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk+ "&g_tk_new_20200303="+Settings.USettings.g_tk,
+            MainClass.DebugCallBack("User Cookies", Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
+            string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk + "&g_tk_new_20200303=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
             JObject o = JObject.Parse(result);
@@ -211,7 +215,7 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string[]> AddMusicToGDPLAsync(string ids, string dirid, string typelist)
         {
-            MainClass.DebugCallBack("User Cookies",Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
+            MainClass.DebugCallBack("User Cookies", Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
                 $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={ids}&typelist={typelist}&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
             //添加本地缓存
@@ -471,7 +475,7 @@ jpg
             GetInfo?.Invoke(dt);
             var c0s = c0["songlist"];
             await wx?.Dispatcher.BeginInvoke(new Action(() => getAll?.Invoke(c0s.Count())));
-			//使用多线程并发 但是会打乱歌曲顺序
+            //使用多线程并发 但是会打乱歌曲顺序
             Parallel.For(0, c0s.Count(), async (index) =>
                 {
                     string singer = "";
@@ -546,7 +550,7 @@ jpg
         /// <param name="wx"></param>
         /// <param name="getAll"></param>
         /// <returns></returns>
-        public static async void GetGDAsync(string id = "2591355982",Action<string,string> callback = null)
+        public static async void GetGDAsync(string id = "2591355982", Action<string, string> callback = null)
         {
             try
             {
@@ -580,7 +584,7 @@ jpg
                 return new SortedDictionary<string, MusicGData>();
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
             var o = JObject.Parse(dt);
-            MainClass.DebugCallBack("Get Gd Data",o.ToString());
+            MainClass.DebugCallBack("Get Gd Data", o.ToString());
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["mydiss"]["list"];
             foreach (var ex in dx)
@@ -604,7 +608,7 @@ jpg
         {
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&ct=20&cid=205360956&userid={Settings.USettings.LemonAreeunIts}&reqtype=3&sin=0&ein=25");
             var o = JObject.Parse(dt);
-            MainClass.DebugCallBack("Result",o.ToString());
+            MainClass.DebugCallBack("Result", o.ToString());
             var data = new SortedDictionary<string, MusicGData>();
             var dx = o["data"]["cdlist"];
             foreach (var ex in dx)
@@ -635,7 +639,7 @@ jpg
             int start = (osx - 1) * 30;
             int end = start + 29;
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId={sortId}&sin={start}&ein={end}", Encoding.UTF8));
-            MainClass.DebugCallBack("FLGD Data",o.ToString());
+            MainClass.DebugCallBack("FLGD Data", o.ToString());
             var data = new List<MusicGD>();
             int i = 0;
             var dl = o["data"]["list"];
@@ -783,12 +787,16 @@ jpg
         /// 获取歌曲播放链接
         /// </summary>
         /// <param name="Musicid"></param>
-        /// <returns></returns>
-        public static async Task<string> GetUrlAsync(string Musicid)
+        /// <returns>string[] 0:url 1:From where</returns>
+        public static async Task<string[]> GetUrlAsync(string Musicid, string mvid)
         {
-            var data =await GetUrlOfficialLine(Musicid);
-            string url= await HttpHelper.GetHTTPFileSize(data[0]) > 0 ? data[0] : await GetUrlOutLine(data[1]);
-            return url;
+            var data = await GetUrlOfficialLine(Musicid);
+            if (await HttpHelper.GetHTTPFileSize(data[0]) > 0)
+                return new string[2] { data[0], "QQ" };
+
+            return !string.IsNullOrEmpty(mvid)
+                ? (new string[2] { await GetMVUrl(mvid, false),"QMV"})
+                : (new string[2] {await GetUrlOutLine(data),"MIGU"});
         }
 
         /// <summary>
@@ -818,12 +826,14 @@ jpg
             sr.Dispose();
             string val = Regex.Match(st, "C400.*?.m4a.*?&fromtag=38").Value;
             var url = "https://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/" + val;
-            string songtitle = TextHelper.FindTextByAB(st, "<title>", "_在线试听_QQ音乐", 0);
-            return new string[2]{url,songtitle};
+            string songtitle = TextHelper.FindTextByAB(st, "content=\"歌曲：", "，", 0);
+            string singer = TextHelper.FindTextByAB(st, "歌手：", "。", 0);
+            MainClass.DebugCallBack("GETURL", "Failed to get url from y.qq.com :"+songtitle+" "+singer);
+            return new string[3]{url,songtitle,singer};
         }
 
-        private static async Task<string> GetUrlOutLine(string songtitle) {
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pd.musicapp.migu.cn/MIGUM2.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text="+HttpUtility.UrlEncode(songtitle)+"&pageNo=1&pageSize=10&searchSwitch={%22song%22:1,%22album%22:0,%22singer%22:0,%22tagSong%22:0,%22mvSong%22:0,%22songlist%22:0,%22bestShow%22:0}");
+        private static async Task<string> GetUrlOutLine(string[] songdata) {
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pd.musicapp.migu.cn/MIGUM2.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text="+HttpUtility.UrlEncode(songdata[1]+" "+songdata[2])+"&pageNo=1&pageSize=10&searchSwitch={%22song%22:1,%22album%22:0,%22singer%22:0,%22tagSong%22:0,%22mvSong%22:0,%22songlist%22:0,%22bestShow%22:0}");
             hwr.Timeout = 20000;
             hwr.KeepAlive = true;
             hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
@@ -837,8 +847,14 @@ jpg
             sr.Dispose();
 
             JObject obj = JObject.Parse(st);
-            var data = obj["songResultData"]["result"][0]["rateFormats"];
+            var ab = obj["songResultData"]["result"][0];
+            if (ab["name"].ToString() != songdata[0]) {
+                MainClass.DebugCallBack("GETURL", "Failed to get url from migu:"+ songdata[1] + " " + songdata[2]);
+             //   return null;
+            }
+            var data = ab["rateFormats"];
             string url = null;
+
             for (int i = data.Count() - 1; i >= 0; i--) {
                 if (data[i]["formatType"].ToString() != "SQ")
                 {
@@ -1563,7 +1579,7 @@ jpg
                 "{\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710},\"mvinfo\":{\"module\":\"video.VideoDataServer\",\"method\":\"get_video_info_batch\",\"param\":{\"vidlist\":[\"" + id + "\"],\"required\":[\"vid\",\"type\",\"sid\",\"cover_pic\",\"duration\",\"singers\",\"video_switch\",\"msg\",\"name\",\"desc\",\"playcnt\",\"pubdate\",\"isfav\",\"gmid\"]}}}"));
             return o["mvinfo"]["data"][id]["desc"].ToString();
         }
-        public static async Task<string> GetMVUrl(string id)
+        public static async Task<string> GetMVUrl(string id,bool HighQuality=true)
         {
             JObject o = JObject.Parse(await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",
                 "{\"getMvUrl\":{\"module\":\"gosrf.Stream.MvUrlProxy\",\"method\":\"GetMvUrls\",\"param\":{\"vids\":[\"" + id + "\"],\"request_typet\":10001}},\"comm\":{\"g_tk\":\"" + Settings.USettings.g_tk + "\",\"uin\":\"" + Settings.USettings.LemonAreeunIts + "\",\"format\":\"json\",\"ct\":20,\"cv\":1710}}"));
@@ -1574,7 +1590,7 @@ jpg
                 if (c["freeflow_url"].Count() > 0)
                     sList.Add(c["freeflow_url"][0].ToString());
             }
-            return sList.Last();
+            return HighQuality ? sList.Last() : sList.First();
         }
         #endregion
         #region 评论 网易云|QQ音乐
@@ -1674,12 +1690,9 @@ jpg
         /// <returns></returns>
         public static async Task<string> GetMusicIdByMidAsync(string mid)
         {
-            string st = (await HttpHelper.GetWebAsync($"https://y.qq.com/n/yqq/song/{mid}.html")).Replace(" ", "").Replace("\r\n", "");
-            string json = TextHelper.FindTextByAB(st, "<script>varg_SongData=", ";</script>", 0);
-            MainClass.DebugCallBack("GetMusicIdData",json);
-
-            JObject o = JObject.Parse(json);
-            return o["songid"].ToString(); ;
+            string st = (await HttpHelper.GetWebWithHeaderAsync("https://y.qq.com/n/ryqq/songDetail/"+mid)).Replace(" ", "").Replace("\r\n", "");
+            string a = Regex.Match(st, "window.__INITIAL_DATA.*?detail.*?id.*?ctime").Value;
+            return TextHelper.FindTextByAB(a, "\"id\":", ",\"ctime", 0);
         }
         /// <summary>
         /// 给评论点赞(或取消)

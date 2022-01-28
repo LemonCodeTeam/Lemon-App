@@ -393,27 +393,6 @@
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Creater" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Creater" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Sim" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TXx" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="30,10,0,10">
                     <EasingThicknessKeyFrame.EasingFunction>
@@ -470,14 +449,18 @@
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.1000000" Value="210,14,260,0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.1000000" Value="210,65,0,0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Creater" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.1000000" Value="245,72,20,0"/>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_ContentInfo" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_ContentInfo" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2000000" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_ContentInfo" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.2000000" Value="100,0,20,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DataPage_Max">
@@ -488,37 +471,6 @@
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.6" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Creater" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="0.7"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Sim" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.9000000" Value="0.7"/>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.0" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.0" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Creater" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.0" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Sim" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.0" Value="{x:Static Visibility.Visible}"/>
-            </ObjectAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TXx" Storyboard.TargetProperty="(FrameworkElement.Margin)">
                 <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="20,15,0,15">
                     <EasingThicknessKeyFrame.EasingFunction>
@@ -575,25 +527,20 @@
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TB" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,14,50,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="210,24,50,0"/>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_ContentInfo" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="180,24,20,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="210,24,20,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_TX" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,65,0,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="210,65,0,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="210,75,0,0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Creater" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="245,72,20,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3" Value="245,72,20,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.6" Value="245,82,20,0"/>
-            </ThicknessAnimationUsingKeyFrames>
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="DataPage_Sim" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="210,102,55,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="210,102,55,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="210,112,55,0"/>
-            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="DataPage_ContentInfo" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DataPage_ContentInfo" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="LP_AboutGD_MouseEnter">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(FrameworkElement.Margin)">
@@ -624,7 +571,7 @@
                 <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="22"/>
             </DoubleAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(TextBlock.FontWeight)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2000000">
                     <DiscreteObjectKeyFrame.Value>
                         <FontWeight>Bold</FontWeight>
                     </DiscreteObjectKeyFrame.Value>
@@ -632,39 +579,63 @@
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LP_ag1" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.1500000" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LP_ag1" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.1500000" Value="0.5"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LP_ag1" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="12,60,12,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="12,50,12,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.1500000" Value="50,60,-26,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.4000000" Value="12,50,12,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LP_ag2" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.6000000" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2000000" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LP_ag2" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.9000000" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.5"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LP_ag2" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="12,140,12,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="12,130,12,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.2000000" Value="50,140,-26,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="12,130,12,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LP_ag3" Storyboard.TargetProperty="(UIElement.Visibility)">
                 <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
-                <DiscreteObjectKeyFrame KeyTime="00:00:00.9000000" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LP_ag3" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.9000000" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:01.2000000" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0.5"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.7000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LP_ag3" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="12,220,12,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:01.2000000" Value="12,210,12,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="50,220,-26,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.7000000" Value="12,210,12,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="LP_AboutGD_MouseLeave">
@@ -914,6 +885,9 @@
                             <Border x:Name="FxDec" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="120,0,0,4">
                                 <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0"/>
                             </Border>
+                            <Border x:Name="SongSource" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="170,0,0,4">
+                                <TextBlock x:Name="SongSource_tb" HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="{DynamicResource ResuColorBrush}" Text="QQ" Margin="5,0,5,0"/>
+                            </Border>
                         </Grid>
                         <WrapPanel Grid.Column="2" Margin="20,0,20,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                             <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Opacity="0.7" Margin="0,0,20,0"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
@@ -1162,12 +1136,14 @@
                             </Grid>
                             <Grid x:Name="DataPage_MainInfo" Height="200" VerticalAlignment="Top" Visibility="Visible">
                                 <Border x:Name="TXx" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Margin="20,15,0,15" Background="#FFE4E4E4" CornerRadius="{DynamicResource AppCornerRadius}" Width="170"/>
-                                <TextBlock x:Name="TB" TextWrapping="NoWrap" Text="我喜欢的歌单wwwwwwww" Foreground="{DynamicResource ResuColorBrush}" FontSize="36" Margin="210,24,50,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                                <Grid x:Name="DataPage_ContentInfo" Height="105" Margin="210,24,20,0" VerticalAlignment="Top">
+                                    <TextBlock x:Name="TB" TextWrapping="NoWrap" Text="我喜欢的歌单wwwwwwww" Foreground="{DynamicResource ResuColorBrush}" FontSize="36" Margin="0,0,30,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                                    <Border x:Name="DataPage_TX" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="28" Height="28" VerticalAlignment="Top" Margin="0,50,0,0" Background="#FFE2E2E2" CornerRadius="28,28,28,28"/>
+                                    <TextBlock x:Name="DataPage_Creater" Margin="35,58,0,0" Text="Twilight./Lemon" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7"/>
+                                    <TextBlock x:Name="DataPage_Sim" Margin="0,88,35,0" Text="懒得没有简介" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" ToolTip="{Binding Text, ElementName=DataPage_Sim}"/>
+                                </Grid>
                                 <LemonApp:MDButton x:Name="DataDownloadBtn" HorizontalAlignment="Left" Height="32" VerticalAlignment="Bottom" Width="110" MouseDown="DataDownloadBtn_MouseDown" Margin="330,0,0,30" TName="下载" cr="15,15,15,15" pData="M919.724,715.073C918.584,687.719 900.7,672.613 877.105,673.173 853.727,673.728 838.305,689.103 836.111,717.063 834.501,737.603 835.879,758.362 835.434,779.014 834.319,830.843 823.095,842.819 771.284,843.841 721.374,844.826 671.43,844.164 621.502,844.168 506.151,844.178 390.798,844.262 275.446,844.103 196.006,843.993 189.121,837.13 188.742,759.899 188.673,746.129 189.367,732.273 188.102,718.606 185.41,689.518 171.774,674.384 148.687,673.079 123.767,671.667 105.603,688.612 103.697,718.574 101.955,746.016 102.934,773.645 103.115,801.189 103.705,890.359 143.211,930.372 232.409,930.881 325.376,931.413 418.348,931 511.319,931.021 538.865,931.044 566.413,931.053 593.959,931.043 664.549,931.018 735.154,932 805.718,930.65 867.93,929.46 913.424,893.473 918.676,838.893 922.617,797.94 921.441,756.293 919.724,715.073z M197.858,440.866C286.615,529.672 375.384,618.468 464.151,707.264 467.798,710.914 471.513,714.494 475.135,718.167 489.42,732.648 506.083,740.811 526.27,733.163 532.855,730.668 537.75,726.908 541.935,722.64 544.698,720.728 547.405,718.623 549.865,716.232 595.5,671.857 789.967,476.764 834.892,431.658 839.718,426.813 844.356,421.605 848.162,415.948 860.375,397.783 858.702,379.988 844.215,364.093 829.397,347.836 810.735,347.153 792.341,356.199 783.411,360.589 776.055,368.659 768.784,375.872 738.544,405.862 629.173,515.136 555.939,588.482 555.977,473.922 555.989,359.362 555.966,244.802 555.96,210.403 557.057,175.942 555.351,141.626 553.764,109.748 538.293,93.486 513.382,92.669 487.831,91.83 472.327,107.397 468.844,138.827 467.524,150.735 468.221,162.881 468.214,174.919 468.174,250.595 468.194,326.274 468.194,401.953 468.192,458.543 468.194,515.134 468.194,571.726L456.409,576.941C433.659,554.278 410.883,531.637 388.164,508.944 340.711,461.539 293.874,413.499 245.588,366.959 223.788,345.945 198.518,345.6 181.159,362.119 162.449,379.922 163.109,401.119 183.485,426.069 187.819,431.375 192.997,436 197.858,440.866z" RenderTransformOrigin="0.5,0.5"/>
                                 <LemonApp:MDButton x:Name="DataPlayAllBtn" HorizontalAlignment="Left" Height="32" VerticalAlignment="Bottom" Width="110" Margin="210,0,0,30" TName="播放全部" MouseDown="DataPlayAllBtn_MouseDown" cr="15,15,15,15" Theme="2" RenderTransformOrigin="0.5,0.5"/>
-                                <Border x:Name="DataPage_TX" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="28" Height="28" VerticalAlignment="Top" Margin="210,75,0,0" Background="#FFE2E2E2" CornerRadius="28,28,28,28"/>
-                                <TextBlock x:Name="DataPage_Creater" Margin="245,82,20,0" Text="Twilight./Lemon" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7"/>
-                                <TextBlock x:Name="DataPage_Sim" Margin="210,112,55,0" Text="懒得没有简介" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.7" ToolTip="{Binding Text, ElementName=DataPage_Sim}"/>
                                 <LemonApp:MDButton x:Name="DataPLCZBtn" pData="M488.986 60.243c-6.307-5.402-14.118-7.95-21.979-7.198-6.625 0.484-16.121 3.726-27.068 16.516l-231.39 270.248L59.633 210.722c-22.157-19.21-42.529-7.538-50.2 1.312-9.853 11.36-14.02 31.02 6.641 48.932L182.273 405.04c3.266 2.831 6.554 4.767 9.825 6.325 11.443 9.702 31.03 13.647 48.748-7.048l250.523-292.589c17.783-20.772 7.976-42.612-2.383-51.485zM411.22 549.487H59.559c-31.927 0-57.811 25.88-57.811 57.804V958.95c0 31.926 25.884 57.81 57.81 57.81h351.657c31.926 0 57.81-25.879 57.81-57.81V607.29c0-31.925-25.879-57.804-57.805-57.804z m5.887 370.393c0 24.834-20.134 44.96-44.96 44.96H98.633c-24.834 0-44.96-20.128-44.96-44.96V646.366c0-24.833 20.132-44.96 44.96-44.96h273.512c24.832 0 44.96 20.132 44.96 44.96V919.88z m548.566-916H614.02c-31.927 0-57.806 25.884-57.806 57.81v351.658c0 31.925 25.88 57.81 57.806 57.81h351.656c31.926 0 57.81-25.885 57.81-57.81V61.69c0-31.927-25.88-57.811-57.812-57.811z m5.892 370.392c0 24.833-20.125 44.96-44.96 44.96H653.092c-24.832 0-44.96-20.132-44.96-44.96V100.763c0-24.832 20.133-44.96 44.96-44.96h273.514c24.834 0 44.96 20.133 44.96 44.96v273.508z m-5.892 178.032H614.02c-31.927 0-57.806 25.878-57.806 57.81V961.77c0 31.926 25.88 57.804 57.806 57.804h351.656c31.926 0 57.81-25.88 57.81-57.804V610.113c0-31.932-25.88-57.81-57.812-57.81z m5.892 370.39c0 24.834-20.125 44.961-44.96 44.961H653.092c-24.832 0-44.96-20.132-44.96-44.96V649.18c0-24.832 20.133-44.959 44.96-44.959h273.514c24.834 0 44.96 20.132 44.96 44.96v273.512z"
                                                    HorizontalAlignment="Left" Height="32" VerticalAlignment="Bottom" Width="110" Margin="450,0,0,30" TName="批量操作" cr="15,15,15,15" RenderTransformOrigin="0.5,0.5" MouseDown="DataPLCZBtn_MouseDown"/>
                                 <Border x:Name="DataCollectBtn"
@@ -1287,7 +1263,7 @@
                     </StackPanel>
                     <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="20" Background="Transparent" Margin="0,0,0,15">
                         <Path HorizontalAlignment="Left" Data="M321.828571 226.742857c-14.628571-14.628571-36.571429-14.628571-51.2 0L7.314286 482.742857c-14.628571 14.628571-14.628571 36.571429 0 51.2l256 256c14.628571 14.628571 36.571429 14.628571 51.2 0 14.628571-14.628571 14.628571-36.571429 0-51.2L87.771429 512l234.057142-234.057143c7.314286-14.628571 7.314286-36.571429 0-51.2z m263.314286 0c-14.628571 0-36.571429 7.314286-43.885714 29.257143l-131.657143 497.371429c-7.314286 21.942857 7.314286 36.571429 29.257143 43.885714s36.571429-7.314286 43.885714-29.257143l131.657143-497.371429c7.314286-14.628571-7.314286-36.571429-29.257143-43.885714z m431.542857 256l-256-256c-14.628571-14.628571-36.571429-14.628571-51.2 0-14.628571 14.628571-14.628571 36.571429 0 51.2L936.228571 512l-234.057142 234.057143c-14.628571 14.628571-14.628571 36.571429 0 51.2 14.628571 14.628571 36.571429 14.628571 51.2 0l256-256c14.628571-14.628571 14.628571-43.885714 7.314285-58.514286z" Width="13" Stretch="Uniform" StrokeThickness="0" Height="20" Fill="#FF3399FF" Margin="0,0,3,0"/>
-                        <TextBlock Text="Powered by .NET 5" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.3" FontSize="12"/>
+                        <TextBlock Text="Powered by .NET 6" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.3" FontSize="12"/>
                     </WrapPanel>
                     <Border x:Name="AniCom" HorizontalAlignment="Left" Margin="3,209,0,0" Background="{DynamicResource ThemeColor}" Width="5" Height="20" VerticalAlignment="Top" Visibility="Visible" CornerRadius="2.5,2.5,2.5,2.5"/>
                     <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="0,20,0,0">
@@ -1327,10 +1303,10 @@
                         <Border>
                             <Border.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#B2000000"/>
-                                    <GradientStop Color="#B2000000" Offset="1"/>
-                                    <GradientStop Color="#99000000" Offset="0.8"/>
-                                    <GradientStop Color="#99000000" Offset="0.209"/>
+                                    <GradientStop Color="#CC000000"/>
+                                    <GradientStop Color="#CC000000" Offset="1"/>
+                                    <GradientStop Color="#B2000000" Offset="0.8"/>
+                                    <GradientStop Color="#B2000000" Offset="0.209"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
@@ -1470,7 +1446,10 @@
                                 </Grid>
                             </Border>
                             <Border HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Center" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="80,0,0,0">
-                                <TextBlock x:Name="MusicPlay_tb1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0"/>
+                                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0"/>
+                            </Border>
+                            <Border HorizontalAlignment="Left" BorderBrush="White" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="135,0,0,0">
+                                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="White" Text="{Binding Text, ElementName=SongSource_tb}" Margin="5,0,5,0"/>
                             </Border>
                         </Grid>
                         <WrapPanel Grid.Column="2" Margin="20,0,20,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">

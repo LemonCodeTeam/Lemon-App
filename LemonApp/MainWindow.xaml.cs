@@ -353,17 +353,17 @@ namespace LemonApp
             #endregion
             #region Part3
             //--------读取登录数据------
-            Settings.LoadLocaSettings();
-            if (Settings.LSettings.qq != "")
+            await Settings.LoadLocaSettings();
+            if (!string.IsNullOrEmpty(Settings.LSettings.qq))
                 await Settings.LoadUSettings(Settings.LSettings.qq);
             else
             {
                 string qq = "0";
                 await Settings.LoadUSettings(qq);
                 Settings.USettings.LemonAreeunIts = qq;
-                Settings.SaveSettings();
+                Settings.SaveSettingsAsync();
                 Settings.LSettings.qq = qq;
-                Settings.SaveLocaSettings();
+                await Settings.SaveLocaSettings();
             }
             LoadHotDog();
             Load_Theme();
@@ -701,7 +701,7 @@ namespace LemonApp
             GC.Collect();
             //----------切换登录前先保存当前账号-------
             if (Settings.USettings.LemonAreeunIts != "0" && Settings.USettings.LemonAreeunIts!=data.qq)
-                Settings.SaveSettings();
+                await Settings.SaveSettingsTaskAsync();
             string qq = data.qq;
             Console.WriteLine("Login:" + data.g_tk + "\r\n Cookie:" + data.cookie, "LoginData");
             if (Settings.USettings.LemonAreeunIts == qq)
@@ -710,7 +710,7 @@ namespace LemonApp
                 {
                     Settings.USettings.g_tk = data.g_tk;
                     Settings.USettings.Cookie = data.cookie;
-                    Settings.SaveSettings();
+                    await Settings.SaveSettingsTaskAsync();
                 }
             }
             else
@@ -735,9 +735,9 @@ namespace LemonApp
                 Settings.USettings.UserName = name;
                 Settings.USettings.UserImage = Settings.USettings.DataCachePath + qq + ".jpg";
                 Settings.USettings.LemonAreeunIts = qq;
-                Settings.SaveSettings();
+                await Settings.SaveSettingsTaskAsync();
                 Settings.LSettings.qq = qq;
-                Settings.SaveLocaSettings();
+                await Settings.SaveLocaSettings();
                 await ml.GetMusicLikeGDid();
                 Toast.Send("登陆成功! o(*￣▽￣*)ブ  欢迎回来" + name);
                 Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
@@ -956,7 +956,7 @@ namespace LemonApp
             Settings.USettings.Skin_ThemeColor_R = Theme_Choose_Color.R;
             Settings.USettings.Skin_ThemeColor_G = Theme_Choose_Color.G;
             Settings.USettings.Skin_ThemeColor_B = Theme_Choose_Color.B;
-            Settings.SaveSettings();
+            Settings.SaveSettingsAsync();
             ChooseText.Visibility = Visibility.Collapsed;
         }
         private void ThemeChooseCloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1032,7 +1032,7 @@ namespace LemonApp
                 Settings.USettings.Skin_ThemeColor_B = sc.theme.B;
                 Settings.USettings.Skin_ImagePath = "DTheme[" + bg + "]";
                 Settings.USettings.Skin_FontColor = ThemeName;
-                Settings.SaveSettings();
+                Settings.SaveSettingsAsync();
             };
             SkinIndexList.Children.Add(sc);
         }
@@ -1062,7 +1062,7 @@ namespace LemonApp
                 Settings.USettings.Skin_Type = 1;
                 Settings.USettings.Skin_FontColor = "White";
                 Settings.USettings.Skin_ImagePath = "[Dark]";
-                Settings.SaveSettings();
+                Settings.SaveSettingsAsync();
             };
             sxc_black.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(sxc_black);
@@ -1080,7 +1080,7 @@ namespace LemonApp
                 Settings.USettings.Skin_Type = 0;
                 Settings.USettings.Skin_FontColor = "";
                 Settings.USettings.Skin_ImagePath = "";
-                Settings.SaveSettings();
+                Settings.SaveSettingsAsync();
             };
             sxc.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(sxc);
@@ -1102,7 +1102,7 @@ namespace LemonApp
                 Settings.USettings.Skin_Type = 2;
                 Settings.USettings.Skin_FontColor = "White";
                 Settings.USettings.Skin_ImagePath = "";
-                Settings.SaveSettings();
+                Settings.SaveSettingsAsync();
             };
             blur.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blur);
@@ -1124,7 +1124,7 @@ namespace LemonApp
                 Settings.USettings.Skin_Type = 2;
                 Settings.USettings.Skin_FontColor = "Black";
                 Settings.USettings.Skin_ImagePath = "";
-                Settings.SaveSettings();
+                Settings.SaveSettingsAsync();
             };
             blurWhite.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blurWhite);
@@ -1166,7 +1166,7 @@ namespace LemonApp
                     Settings.USettings.Skin_ThemeColor_R = sc.theme.R;
                     Settings.USettings.Skin_ThemeColor_G = sc.theme.G;
                     Settings.USettings.Skin_ThemeColor_B = sc.theme.B;
-                    Settings.SaveSettings();
+                    Settings.SaveSettingsAsync();
                 };
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 SkinIndexList.Children.Add(sc);
@@ -1754,7 +1754,6 @@ namespace LemonApp
                     Settings.USettings.MusicGDataLike.ids.Add(MusicData.Data.MusicID, MusicData.Data.Littleid);
                     LikeBtnDown();
                 }
-                Settings.SaveSettings();
             }
         }
         /// <summary>
@@ -2308,9 +2307,9 @@ namespace LemonApp
             if (!System.IO.File.Exists(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
-                var musicurl = await MusicLib.GetUrlAsync(data.MusicID);
-                Console.WriteLine(musicurl);
-                mp.LoadUrl(downloadpath, musicurl, (max, value) =>
+                var musicurl = await MusicLib.GetUrlAsync(data.MusicID,data.Mvmid);
+                Console.WriteLine("FROM:"+musicurl[1]+"\r\n"+musicurl[0]);
+                mp.LoadUrl(downloadpath, musicurl[0], (max, value) =>
                 {
                     Dispatcher.Invoke(() =>
                     {
@@ -2326,7 +2325,11 @@ namespace LemonApp
                 });
                 if (doesplay)
                     mp.Play();
-                MusicName.Text = data.MusicName;
+                Dispatcher.Invoke(() =>
+                {
+                    MusicName.Text = data.MusicName;
+                    SongSource_tb.Text = musicurl[1];
+                });
             }
             else
             {
@@ -2420,25 +2423,25 @@ namespace LemonApp
                 PlayMusic(ToPlayData,true,true);
             AbleToClick = true;
             //-------加载歌曲相关歌单功能-------
-            //var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
-            //if (gd.Count >= 1)
-            //{
-            //    LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
-            //    LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
-            //    LP_ag1_tx.Text = gd[0].Name;
-            //}
-            //if (gd.Count >= 2)
-            //{
-            //    LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
-            //    LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
-            //    LP_ag2_tx.Text = gd[1].Name;
-            //}
-            //if (gd.Count >= 3)
-            //{
-            //    LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
-            //    LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
-            //    LP_ag3_tx.Text = gd[2].Name;
-            //}
+            var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
+            if (gd.Count >= 1)
+            {
+                LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
+                LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
+                LP_ag1_tx.Text = gd[0].Name;
+            }
+            if (gd.Count >= 2)
+            {
+                LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
+                LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
+                LP_ag2_tx.Text = gd[1].Name;
+            }
+            if (gd.Count >= 3)
+            {
+                LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
+                LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
+                LP_ag3_tx.Text = gd[2].Name;
+            }
         }
 
         private void LP_ag_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3649,7 +3652,7 @@ namespace LemonApp
             open.Click += delegate { exShow(); };
             //退出菜单项
             System.Windows.Forms.ToolStripMenuItem exit = new System.Windows.Forms.ToolStripMenuItem("关闭");
-            exit.Click += delegate
+            exit.Click +=async delegate
             {
                 try
                 {
@@ -3671,7 +3674,7 @@ namespace LemonApp
                     }
                 }
                 Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
-                Settings.SaveSettings();
+                await Settings.SaveSettingsTaskAsync();
                 Environment.Exit(0);
             };
             //关联托盘控件

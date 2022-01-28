@@ -27,7 +27,13 @@ namespace LemonApp
             InitializeComponent();
             Image.MouseDown += PartMouseDown;
             this.IsVisibleChanged += ImageForceView_IsVisibleChanged;
+            SizeChanged += ImageForceView_SizeChanged;
             RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
+        }
+
+        private void ImageForceView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Height = ActualWidth / 2;
         }
 
         private void ImageForceView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

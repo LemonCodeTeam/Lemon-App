@@ -38,11 +38,20 @@ namespace LemonLib
         }
         #region USettings
         public static UserSettings USettings = new UserSettings();
-        public static async void SaveSettings(string id =null)
+        public static async Task SaveSettingsTaskAsync(string id =null)
         {
             try
             {
                id ??=USettings.LemonAreeunIts;
+                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
+            }
+            catch { }
+        }
+        public static async void SaveSettingsAsync(string id = null)
+        {
+            try
+            {
+                id ??= USettings.LemonAreeunIts;
                 await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
             }
             catch { }
@@ -60,12 +69,12 @@ namespace LemonLib
                         Console.WriteLine(data);
                         XDUsettings(data);
                     }
-                    else SaveSettings(qq);
+                    else SaveSettingsAsync(qq);
                 }
                 catch
                 {
                     XDUsettings(await ReadEncodeAsync(qq));
-                    SaveSettings(qq);
+                    SaveSettingsAsync(qq);
                 }
             });
         }
@@ -250,7 +259,7 @@ namespace LemonLib
 
         #region LSettings 用于保存上次登录的qq 在启动时读取
         public static LocaSettings LSettings = new LocaSettings();
-        public static async void LoadLocaSettings()
+        public static async Task LoadLocaSettings()
         {
             try
             {
@@ -260,17 +269,17 @@ namespace LemonLib
                     JObject o = JObject.Parse(data);
                     LSettings.qq = o["qq"].ToString();
                 }
-                else SaveLocaSettings();
+                else await SaveLocaSettings();
             }
             catch
             {
                 string data =await ReadEncodeAsync("Data");
                 JObject o = JObject.Parse(data);
                 LSettings.qq = o["qq"].ToString();
-                SaveLocaSettings();
+                await SaveLocaSettings();
             }
         }
-        public async static void SaveLocaSettings()
+        public async static Task SaveLocaSettings()
         {
             await File.WriteAllTextAsync(USettings.DataCachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
         }
@@ -291,10 +300,14 @@ namespace LemonLib
         }
         public static async Task<HANDLE> ReadHandleAsync()
         {
-            JObject o = JObject.Parse(await File.ReadAllTextAsync(USettings.DataCachePath + "HANDLE.st"));
-            Handle.ProcessId = int.Parse(o["ProcessId"].ToString());
-            Handle.WINDOW_HANDLE = int.Parse(o["WINDOW_HANDLE"].ToString());
-            return Handle;
+            if (File.Exists(USettings.DataCachePath + "HANDLE.st"))
+            {
+                JObject o = JObject.Parse(await File.ReadAllTextAsync(USettings.DataCachePath + "HANDLE.st"));
+                Handle.ProcessId = int.Parse(o["ProcessId"].ToString());
+                Handle.WINDOW_HANDLE = int.Parse(o["WINDOW_HANDLE"].ToString());
+                return Handle;
+            }
+            return null;
         }
         public class HANDLE
         {

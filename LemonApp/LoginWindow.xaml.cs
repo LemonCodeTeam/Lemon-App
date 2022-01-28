@@ -86,20 +86,5 @@ namespace LemonApp
         {
             Api_Login();
         }
-
-        bool downloading = false;
-        private async void Border_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!downloading)
-            {
-                Toast.Send("正在下载WebView2运行时...");
-                downloading = true;
-                string url = "https://go.microsoft.com/fwlink/p/?LinkId=2124703";
-                string path = System.IO.Path.Combine(Settings.USettings.DownloadPath, "WebViewRuntimeSetup.exe");
-                await HttpHelper.HttpDownloadFileAsync(url, path);
-                Toast.Send("完成.");
-                Process.Start(path);
-            }
-        }
     }
 }

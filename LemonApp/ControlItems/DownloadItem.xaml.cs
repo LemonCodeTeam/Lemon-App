@@ -28,7 +28,7 @@ namespace LemonApp
         private void Load()
         {
             tb.Text = MData.MusicName + " - " + MData.SingerText;
-            d = new HttpDownloadHelper(MData.MusicID, path);
+            d = new HttpDownloadHelper(MData, path);
             d.ProgressChanged += (pro) =>
             {
                 Dispatcher.Invoke(() =>
