@@ -752,6 +752,107 @@
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="LyricPage_TimeSetOpen">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSet" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="110">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSetbor" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.1000000" Value="0,-10,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.4000000" Value="0,-20,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSetbor" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.1000000" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricTimeSet_Up" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.0000000" Value="25,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.4000000" Value="40,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricTimeSet_Down" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.0000000" Value="60,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.5000000" Value="75,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSetbor" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.005"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSet" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#B2000000"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LyricPage_TimeSetClose">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricTimeSet_Up" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="25,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricTimeSet_Down" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="60,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSet" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="30">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSetbor" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.1000000" Value="0,-20,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="0,-10,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSetbor" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.1000000" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSetbor" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_TimeSet" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00.3000000" Value="#00000000"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
         <!--#endregion-->
     </Window.Resources>
     <WindowChrome.WindowChrome>
@@ -885,7 +986,7 @@
                             <Border x:Name="FxDec" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="120,0,0,4">
                                 <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0"/>
                             </Border>
-                            <Border x:Name="SongSource" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="170,0,0,4">
+                            <Border x:Name="SongSource" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" Height="18" Margin="170,0,0,4">
                                 <TextBlock x:Name="SongSource_tb" HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="{DynamicResource ResuColorBrush}" Text="QQ" Margin="5,0,5,0"/>
                             </Border>
                         </Grid>
@@ -1353,7 +1454,7 @@
                     </Border>
                     <TextBlock x:Name="m_Name" Margin="125,33,135,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" TextAlignment="Center"/>
                     <TextBlock x:Name="m_Singer" Margin="125,73,135,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" TextAlignment="Center"/>
-                    <Border x:Name="LyricPage_AboutGD" Margin="0,0,0,100" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Background="#F2FFFFFF" CornerRadius="6,6,6,6">
+                    <Border x:Name="LyricPage_AboutGD" Margin="0,0,-20,100" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Background="#F2FFFFFF" CornerRadius="6,6,6,6">
                         <Grid>
                             <TextBlock x:Name="textBlock2" Text="相关的歌单" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" FontWeight="Normal"/>
                             <Grid x:Name="LP_ag1" HorizontalAlignment="Stretch" Margin="12,50,12,0" VerticalAlignment="Top" Visibility="Collapsed" Background="Transparent">
@@ -1378,6 +1479,22 @@
                     </Border>
                     <Border x:Name="LyricFontSize_DownBtn" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="128,0,0,100" Background="Transparent" ToolTip="歌词字号减" MouseDown="LyricFontSize_DownBtn_MouseDown">
                         <Path Data="M631.1 266.9h345.4v41H631.1zM368.5 150.5L57.2 855.2h73.2l101.3-236.8h346.7l98.9 236.8h78.1L444.2 150.5h-75.7zM559 572H251.3l54.9-127.6c35.4-82.2 65.9-156.6 96.4-241.7h4.9c31.7 85.1 61 159.5 97.7 241.7L559 572z" Stretch="Uniform" Fill="White" Margin="5,5,5,5"/>
+                    </Border>
+                    <Border x:Name="LyricPage_TimeSet" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="176,0,0,100" Width="30" Background="Transparent" CornerRadius="15,15,15,15">
+                        <Grid>
+                            <Border x:Name="LyricTimeSet" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="Transparent" MouseDown="LyricPage_TimeSet_MouseDown">
+                                <Path Data="M509.3 952.1c-247.3 0-441-189.4-441-431.2 0-244.4 202-450.9 441-450.9 243.2 0 441.1 197.9 441.1 441.1s-197.9 441-441.1 441z m0-832.8c-212.4 0-391.8 183.9-391.8 401.6 0 214.1 172.1 381.9 391.8 381.9 216 0 391.7-175.7 391.7-391.8 0.1-216-175.7-391.7-391.7-391.7z                               M736.4 617.1c-2 0-3.9-0.2-5.9-0.5l-233.6-42.7c-15.6-2.9-27-16.5-27-32.3V318.1c0-18.2 14.7-32.9 32.9-32.9s32.9 14.7 32.9 32.9v196l206.6 37.7c17.9 3.3 29.7 20.4 26.4 38.3-2.9 15.9-16.7 27-32.3 27z"  Stretch="Uniform" Fill="White" Margin="5,5,5,5"/>
+                            </Border>
+                            <Border x:Name="LyricTimeSet_Up" Width="30" Height="30" HorizontalAlignment="Left" Background="Transparent" Margin="40,0,0,0" MouseDown="LyricTimeSet_Up_MouseDown" BorderThickness="0,0,0,0">
+                                <Path Data="M863.328262 481.340895l-317.344013 0.099772L545.984249 162.816826c0-17.664722-14.336138-32.00086-32.00086-32.00086s-31.99914 14.336138-31.99914 32.00086l0 318.400215-322.368714-0.17718c-0.032684 0-0.063647 0-0.096331 0-17.632039 0-31.935493 14.239806-32.00086 31.904529-0.096331 17.664722 14.208843 32.031824 31.871845 32.095471l322.59234 0.17718 0 319.167424c0 17.695686 14.336138 32.00086 31.99914 32.00086s32.00086-14.303454 32.00086-32.00086L545.982529 545.440667l317.087703-0.099772c0.063647 0 0.096331 0 0.127295 0 17.632039 0 31.935493-14.239806 32.00086-31.904529S880.960301 481.404542 863.328262 481.340895z" Stretch="Uniform" Fill="White" Margin="8,8,8,8"/>
+                            </Border>
+                            <Border x:Name="LyricTimeSet_Down" Width="30" Height="30" HorizontalAlignment="Left" Background="Transparent" Margin="80,0,0,0" MouseDown="LyricTimeSet_Down_MouseDown">
+                                <Path Data="M863.74455 544.00086 163.424056 544.00086c-17.664722 0-32.00086-14.336138-32.00086-32.00086s14.336138-32.00086 32.00086-32.00086l700.320495 0c17.695686 0 31.99914 14.336138 31.99914 32.00086S881.440237 544.00086 863.74455 544.00086z" Stretch="Uniform" Fill="White" Margin="8,8,8,8"/>
+                            </Border>
+                            <Border x:Name="LyricPage_TimeSetbor" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="40" CornerRadius="8,8,8,8" Background="#B2000000" Margin="0,-20,-20,0" Visibility="Collapsed" Opacity="0">
+                                <TextBlock x:Name="LyricPage_TimeSetter" TextWrapping="Wrap" Text="+0.0s" Foreground="#FFFBFBFB" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                            </Border>
+                        </Grid>
                     </Border>
                     <Grid Height="75" VerticalAlignment="Bottom" Margin="0,0,10,0" >
                         <Slider x:Name="lyric_jd" Height="12" Style="{DynamicResource SliderStyle}" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="0" VerticalAlignment="Top" Margin="0,-6,0,0"/>
@@ -1448,7 +1565,7 @@
                             <Border HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Center" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="80,0,0,0">
                                 <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0"/>
                             </Border>
-                            <Border HorizontalAlignment="Left" BorderBrush="White" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" ToolTip="Fx效果器 双击可以保存mp3" Height="18" Margin="135,0,0,0">
+                            <Border HorizontalAlignment="Left" BorderBrush="White" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" MouseDown="FxDec_MouseDown" Height="18" Margin="135,0,0,0">
                                 <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="White" Text="{Binding Text, ElementName=SongSource_tb}" Margin="5,0,5,0"/>
                             </Border>
                         </Grid>

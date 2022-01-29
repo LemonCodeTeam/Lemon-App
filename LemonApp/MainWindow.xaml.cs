@@ -318,9 +318,9 @@ namespace LemonApp
                                 }
                             }
                         }
-                        lv.LrcRoll(now, true);
+                        lv.LrcRoll(now+lyrictime_offset*1000, true);
                     }
-                    else lv.LrcRoll(now, false);
+                    else lv.LrcRoll(now+lyrictime_offset*1000, false);
                     if (now == all && now > 2000 && all != 0)
                     {
                         now = 0;
@@ -2337,6 +2337,7 @@ namespace LemonApp
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
+                SongSource_tb.Text = "Local";
             }
         }
         bool AbleToClick = true;
@@ -2372,6 +2373,8 @@ namespace LemonApp
             mini.title.Text = data.MusicName + " - " + data.SingerText;
             mini.MusicName.Text = data.MusicName;
             mini.SingerText.Text = data.SingerText;
+            lyrictime_offset =0;
+            LyricPage_TimeSetter.Text = "0.0s";
 
             #region 专辑图
             Console.WriteLine(data.ImageUrl);
@@ -3768,5 +3771,24 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+        private double lyrictime_offset = 0;
+        private void LyricTimeSet_Up_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            lyrictime_offset += 0.1;
+            LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
+        }
+
+        private void LyricTimeSet_Down_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            lyrictime_offset -= 0.1;
+            LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
+            Console.WriteLine(lyrictime_offset+"s","LYRIC_OFFSET");
+        }
+        private bool isLyricPage_TimeSet_Open = false;
+        private void LyricPage_TimeSet_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (Resources[isLyricPage_TimeSet_Open? "LyricPage_TimeSetClose" : "LyricPage_TimeSetOpen"] as Storyboard).Begin();
+            isLyricPage_TimeSet_Open = !isLyricPage_TimeSet_Open;
+        }
     }
 }

@@ -19,7 +19,7 @@ Lemon App 是一款基于QQ音乐的在线音乐播放器。
 ![歌手](https://raw.githubusercontent.com/TwilightLemon/Data/master/a7.jpg)
 
 ### 运行环境
-win7~win10 x64 .Net 5 & WebView2 Runtime
+win7~win10 x64 .Net 6
 
 #### 版权
 本应用由 [Twilight./Lemon(https://lemonapp.tk)(QQ:2728578956)](https://lemonapp.tk) 开发，转载和使用请保留原网址和版权信息
