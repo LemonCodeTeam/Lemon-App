@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -141,5 +142,52 @@ namespace LemonLib
             }
         }
         #endregion
+        #region Main Color of Image
+        public static System.Windows.Media.Color get_major_color(this Bitmap bitmap,int threshold = 30)
+        {
+            //色调的总和
+            var sum_hue = 0d;
+            //色差的阈值
+            //计算色调总和
+            for (int h = 0; h < bitmap.Height; h++)
+            {
+                for (int w = 0; w < bitmap.Width; w++)
+                {
+                    var hue = bitmap.GetPixel(w, h).GetHue();
+                    sum_hue += hue;
+                }
+            }
+            var avg_hue = sum_hue / (bitmap.Width * bitmap.Height);
+
+            //色差大于阈值的颜色值
+            var rgbs = new List<System.Drawing.Color>();
+            for (int h = 0; h < bitmap.Height; h++)
+            {
+                for (int w = 0; w < bitmap.Width; w++)
+                {
+                    var color = bitmap.GetPixel(w, h);
+                    var hue = color.GetHue();
+                    //如果色差大于阈值，则加入列表
+                    if (Math.Abs(hue - avg_hue) > threshold)
+                    {
+                        rgbs.Add(color);
+                    }
+                }
+            }
+            if (rgbs.Count == 0)
+                return System.Windows.Media.Colors.Black;
+            //计算列表中的颜色均值，结果即为该图片的主色调
+            int sum_r = 0, sum_g = 0, sum_b = 0;
+            foreach (var rgb in rgbs)
+            {
+                sum_r += rgb.R;
+                sum_g += rgb.G;
+                sum_b += rgb.B;
+            }
+            return System.Windows.Media.Color.FromRgb((byte)(sum_r / rgbs.Count),
+                (byte)(sum_g / rgbs.Count),
+                (byte)(sum_b / rgbs.Count));
+        }
+        #endregion 
     }
 }

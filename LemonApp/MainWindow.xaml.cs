@@ -206,7 +206,7 @@ namespace LemonApp
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
-            lv.NoramlLrcColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) {Opacity=0.4};
             lv.TextAlignment = TextAlignment.Center;
             ly.Child = lv;
             lv.NextLyric += async (lrc,trans) =>
@@ -2342,6 +2342,8 @@ namespace LemonApp
         }
         bool AbleToClick = true;
         Music ToPlayData = null;
+        Color ThemeColor_ORD;
+        Color AlbumColor;
         public async void PlayMusic(Music data, bool doesplay = true,bool force=false)
         {
             if (!force)
@@ -2377,13 +2379,36 @@ namespace LemonApp
             LyricPage_TimeSetter.Text = "0.0s";
 
             #region 专辑图
-            Console.WriteLine(data.ImageUrl);
             BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
             MusicImage.Background = new ImageBrush(im);
             mini.img.Background = MusicImage.Background;
+            //模糊处理
             var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
             var imb = im.ToBitmap();
-            imb.GaussianBlur(ref rect, 20);
+            imb.GaussianBlur(ref rect, 50);
+            //在模糊的基础上取主题色
+            var col = imb.get_major_color();
+
+            int high = 230;
+            int low = 40;
+            int dark = 80;
+            bool nsc = true;
+            if (col.R >= high && col.G >= high && col.B >= high)
+            {
+                //基本上就是全白了 没啥颜色
+                nsc = false;
+            }
+            else if (col.R <= low && col.G <= low && col.B <= low)
+                //基本全黑 直接换白色调
+                col = Color.FromRgb(230,230,230);
+            if (col.R <= dark && col.G <= dark && col.B <= dark) {
+                //过暗 在原色调上加亮
+                col.R += 40; col.G += 40; col.B += 40;
+            }
+            LyricPage_AlbumColor.Background = nsc ? new SolidColorBrush(col) : null;
+            AlbumColor = col;
+            if(IsLyricPageOpen==1) App.BaseApp.SetColor("ThemeColor", AlbumColor);
+            Console.WriteLine(col.R + " " + col.G + " " + col.B, "ThemeColor of image");
             LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
             #endregion
 
@@ -2456,6 +2481,25 @@ namespace LemonApp
         }
         #endregion
         #region PlayControl
+        private double lyrictime_offset = 0;
+        private void LyricTimeSet_Up_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            lyrictime_offset += 0.1;
+            LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
+        }
+
+        private void LyricTimeSet_Down_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            lyrictime_offset -= 0.1;
+            LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
+            Console.WriteLine(lyrictime_offset + "s", "LYRIC_OFFSET");
+        }
+        private bool isLyricPage_TimeSet_Open = false;
+        private void LyricPage_TimeSet_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (Resources[isLyricPage_TimeSet_Open ? "LyricPage_TimeSetClose" : "LyricPage_TimeSetOpen"] as Storyboard).Begin();
+            isLyricPage_TimeSet_Open = !isLyricPage_TimeSet_Open;
+        }
         private async void FxDec_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -2757,7 +2801,7 @@ namespace LemonApp
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
         }
-        private void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
+        private async void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
         {
             IsLyricPageOpen = 0;
             CloseBtn.ColorDx = null;
@@ -2765,17 +2809,21 @@ namespace LemonApp
             MinBtn.ColorDx = null;
             var ol = Resources["CloseLyricPage"] as Storyboard;
             ol.Begin();
+            await Task.Delay(300);
+            App.BaseApp.SetColor("ThemeColor", ThemeColor_ORD);
         }
-        private void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
             IsLyricPageOpen = 1;
+            ThemeColor_ORD = (App.BaseApp.Resources["ThemeColor"] as SolidColorBrush).Color;
             var WhiteColorBrush = new SolidColorBrush(Colors.White);
             MinBtn.ColorDx = WhiteColorBrush;
             CloseBtn.ColorDx = WhiteColorBrush;
             MaxBtn.ColorDx = WhiteColorBrush;
-
             var ol = Resources["OpenLyricPage"] as Storyboard;
             ol.Begin();
+            await Task.Delay(200);
+            App.BaseApp.SetColor("ThemeColor", AlbumColor);
         }
         private void MusicImage_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -3771,24 +3819,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-        private double lyrictime_offset = 0;
-        private void LyricTimeSet_Up_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            lyrictime_offset += 0.1;
-            LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
-        }
-
-        private void LyricTimeSet_Down_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            lyrictime_offset -= 0.1;
-            LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
-            Console.WriteLine(lyrictime_offset+"s","LYRIC_OFFSET");
-        }
-        private bool isLyricPage_TimeSet_Open = false;
-        private void LyricPage_TimeSet_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            (Resources[isLyricPage_TimeSet_Open? "LyricPage_TimeSetClose" : "LyricPage_TimeSetOpen"] as Storyboard).Begin();
-            isLyricPage_TimeSet_Open = !isLyricPage_TimeSet_Open;
-        }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static LemonLib.InfoHelper;
@@ -43,7 +44,12 @@ namespace LemonApp
         #region 
         public void SetFontSize(int size) {
             foreach (TextBlock tb in c_lrc_items.Children)
+            {
                 tb.FontSize = size;
+                if (tb.Inlines.Count > 1) {
+                    ((Run)tb.Inlines.Last()).FontSize = tb.FontSize - 4;
+                }
+            }
         }
         public void RestWidth(double width)
         {
@@ -97,7 +103,17 @@ namespace LemonApp
                     c_lrcbk.Foreground = NoramlLrcColor;
                     c_lrcbk.TextWrapping = TextWrapping.Wrap;
                     c_lrcbk.TextAlignment = TextAlignment;
-                    c_lrcbk.Text = lrc + (trans == null ? "" : ("\r\n" + trans));
+                    c_lrcbk.Inlines.Add(new Run() { Text=lrc});
+                    if (trans != null) {
+                        c_lrcbk.Inlines.Add(new LineBreak());
+                        c_lrcbk.Inlines.Add(new Run()
+                        {
+                            Text = trans,
+                            FontWeight=FontWeights.Regular,
+                            FontSize = c_lrcbk.FontSize-4,
+                            Foreground = NoramlLrcColor
+                        });
+                    }
 
                     if (c_lrc_items.Children.Count > 0)
                         c_lrcbk.Margin = new Thickness(0, 15, 0, 15);
@@ -149,6 +165,7 @@ namespace LemonApp
             {
                 foucslrc = Lrcs.Values.First();
                 foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
+                foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
             }
             else
             {
@@ -157,12 +174,16 @@ namespace LemonApp
                 {
                     LrcModel lm = s.Last().Value;
                     if (needScrol)
+                    {
                         foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
+                        foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
+                    }
 
                     foucslrc = lm;
                     if (needScrol)
                     {
                         foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
+                        foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
                         ResetLrcviewScroll();
                     }
                     NextLyric(foucslrc.LrcText,foucslrc.LrcTransText);
@@ -175,7 +196,7 @@ namespace LemonApp
         {
             GeneralTransform gf = foucslrc.c_LrcTb.TransformToVisual(c_lrc_items);
             Point p = gf.Transform(new Point(0, 0));
-            double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 10;
+            double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 60;
             var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
             da.EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut };
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
