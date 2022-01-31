@@ -860,6 +860,17 @@
                 <EasingColorKeyFrame KeyTime="00:00:00.3000000" Value="#00000000"/>
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="LoadingAni" RepeatBehavior="Forever">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LoadingBar" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,0,880,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.3000000" Value="110,0,440,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="220,0,220,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.9000000" Value="880,0,0,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.9000001" Value="0,0,880,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01.4000000" Value="0,0,0,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:01.7000000" Value="880,0,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
         <!--#endregion-->
     </Window.Resources>
     <WindowChrome.WindowChrome>
@@ -1351,6 +1362,7 @@
                             </Path>
                         </Border>
                         <LemonApp:TitlePageBtn x:Name="MiniBtn" PathData="M312.17664 393.09312a20.48 20.48 0 1 0 0-40.96h-77.2096a20.48 20.48 0 0 0-20.48 20.48v449.55648a20.48 20.48 0 0 0 20.48 20.48h449.55648a20.48 20.48 0 0 0 20.48-20.48V745.0624a20.48 20.48 0 1 0-40.96 0v56.6272h-408.576V393.09312h56.70912z M849.38752 187.31008H399.81056a20.48 20.48 0 0 0-20.48 20.48v449.55648a20.48 20.48 0 0 0 20.48 20.48h449.55648a20.48 20.48 0 0 0 20.48-20.48V207.79008a20.43904 20.43904 0 0 0-20.45952-20.48z m-20.48 449.55648H420.29056V228.27008h408.59648v408.59648z" Width="20" Height="20" HorizontalAlignment="Right" Pathness="4,4,4,4" Margin="0,0,180,0" MouseDown="MiniBtn_MouseDown"/>
+                        <Border x:Name="LoadingBar" VerticalAlignment="Bottom" Height="2" Background="{DynamicResource ThemeColor}" Margin="0,0,0,0" Visibility="Collapsed"/>
                     </Grid>
                 </Grid>
                 <!--左边的菜单-->

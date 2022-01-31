@@ -71,7 +71,8 @@ namespace LemonApp
         private MyFollowSingerList ClMyFollowSingerList = null;
         #endregion
         #region 等待动画
-        Thread tOL = null;
+        private Storyboard LoadingAni=null;
+   /*     Thread tOL = null;
         LoadingWindow aw = null;
         public void RunThread()
         {
@@ -86,15 +87,19 @@ namespace LemonApp
             }
             catch { }
         }
-
+   */
         public void OpenLoading()
         {
             if (!isLoading)
             {
                 isLoading = true;
+                LoadingBar.Visibility = Visibility.Visible;
+                LoadingAni.Begin();
+                /*
                 tOL = new Thread(RunThread);
                 tOL.SetApartmentState(ApartmentState.STA);
                 tOL.Start();
+                */
             }
         }
         public async void CloseLoading()
@@ -103,12 +108,16 @@ namespace LemonApp
             {
                 await Task.Delay(100);
                 isLoading = false;
+                LoadingAni.Stop();
+                LoadingBar.Visibility = Visibility.Collapsed;
+                /*
                 aw.Dispatcher.Invoke(() =>
                 {
                     var da = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
                     da.Completed += delegate { aw.Close(); };
                     aw.BeginAnimation(OpacityProperty, da);
                 });
+                */
             }
         }
         #endregion
@@ -196,6 +205,8 @@ namespace LemonApp
             DoubleAnimation dbAscending = new DoubleAnimation(0, new Duration
             (TimeSpan.FromSeconds(2)));
             rtf.BeginAnimation(RotateTransform.AngleProperty, dbAscending);
+            //-----加载动画LoadingAnimation
+            LoadingAni = Resources["LoadingAni"] as Storyboard;
             //-----Timer 清理与更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
             ds.Tick += delegate { if (t.Enabled) mp.UpdateDevice(); GC.Collect(); };
