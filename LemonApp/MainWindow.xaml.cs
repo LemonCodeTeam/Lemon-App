@@ -93,6 +93,8 @@ namespace LemonApp
             if (!isLoading)
             {
                 isLoading = true;
+                LoadingAni.Stop();
+                LoadingBar.BeginAnimation(OpacityProperty, null);
                 LoadingBar.Visibility = Visibility.Visible;
                 LoadingAni.Begin();
                 /*
@@ -108,8 +110,11 @@ namespace LemonApp
             {
                 await Task.Delay(100);
                 isLoading = false;
-                LoadingAni.Stop();
-                LoadingBar.Visibility = Visibility.Collapsed;
+                LoadingAni.Pause();
+                LoadingAni.RepeatBehavior = new RepeatBehavior(1);
+                LoadingAni.Begin();
+                LoadingAni.Completed += LoadingAni_Completed;
+                
                 /*
                 aw.Dispatcher.Invoke(() =>
                 {
@@ -119,6 +124,13 @@ namespace LemonApp
                 });
                 */
             }
+        }
+
+        private void LoadingAni_Completed(object sender, EventArgs e)
+        {
+            var don = new DoubleAnimation(0.3, TimeSpan.FromMilliseconds(300));
+            don.Completed += delegate { LoadingAni.Stop(); LoadingBar.Visibility = Visibility.Collapsed; };
+            LoadingBar.BeginAnimation(OpacityProperty, don);
         }
         #endregion
         #region 窗口加载时
