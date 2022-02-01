@@ -94,7 +94,7 @@
             </ControlTemplate.Resources>
             <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                 <Grid>
-                    <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="{DynamicResource ResuColorBrush}" CornerRadius="0,0,0,0" Opacity="0.1" Margin="0,0,0,0"/>
+                    <Border x:Name="TrackBackground" Height="2" Grid.Row="1" VerticalAlignment="center" Visibility="Visible" Background="#33000000" CornerRadius="0,0,0,0" Margin="0,0,0,0"/>
                     <ProgressBar x:Name="MusicPlay_LoadProc" Height="2" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Background="{x:Null}" Foreground="#19000000" Value="3" Loaded="MusicPlay_LoadProc_Loaded"/>
                     <Track x:Name="PART_Track" Grid.Row="1" Margin="0,0,-12,0">
                         <Track.DecreaseRepeatButton>
@@ -1093,7 +1093,7 @@
                                     </Grid>
                                     <Grid Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="请支持正版音乐."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 5 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2021 all rights reserved"/></TextBlock>
+                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有. 部分来自咪咕音乐"/><LineBreak/><Run Text="请支持正版音乐."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 6 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2022 all rights reserved"/></TextBlock>
                                     </Grid>
                                     <!--留下一点空白行-->
                                     <Border Height="200"/>
@@ -1421,7 +1421,7 @@
                 <Border x:Name="ThemeColor" Background="Black"  Grid.ColumnSpan="2">
                     <Grid x:Name="LyricPage_Background" RenderOptions.BitmapScalingMode="Fant">
                         <Border x:Name="LyricPage_AlbumColor" Opacity="0.2"/>
-                        <Border Background="#B2000000"/>
+                        <Border Background="#99000000"/>
                     </Grid>
                 </Border>
                 <Grid x:Name="Lyric_Content" Margin="0,0,0,0">
@@ -1436,7 +1436,7 @@
                                 <RowDefinition Height="340*"/>
                                 <RowDefinition Height="200*"/>
                             </Grid.RowDefinitions>
-                            <Grid x:Name="LyricBigGrid"  Grid.Row="1" Margin="0,0,80,0" MaxWidth="350" MaxHeight="350" Width="{Binding ActualHeight, ElementName=LyricBig}" HorizontalAlignment="Right">
+                            <Grid x:Name="LyricBigGrid"  Grid.Row="1" Margin="0,0,80,0" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=LyricBig}" HorizontalAlignment="Right">
                                 <Border x:Name="LyricBig" RenderOptions.BitmapScalingMode="Fant"   Background="{Binding Background, ElementName=MusicImage}" CornerRadius="{Binding ActualHeight, ElementName=LyricBig, Mode=OneWay}" BorderThickness="10" BorderBrush="#33FFFFFF" MouseDown="LyricBig_MouseDown" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
                                     <Border.RenderTransform>
                                         <TransformGroup>
@@ -1507,7 +1507,7 @@
                             </Border>
                         </Grid>
                     </Border>
-                    <Grid Height="75" VerticalAlignment="Bottom" Margin="0,0,10,0" >
+                    <Grid Height="75" VerticalAlignment="Bottom" >
                         <Slider x:Name="lyric_jd" Height="12" Style="{DynamicResource SliderStyle}" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="2" VerticalAlignment="Top" Margin="0,-6,0,0"/>
                         <Grid Width="200">
                             <Grid.ColumnDefinitions>

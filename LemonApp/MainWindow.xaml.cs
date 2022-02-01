@@ -2373,6 +2373,7 @@ namespace LemonApp
                 ToPlayData = data;
             if (!AbleToClick&&!force) {
                 //操作频繁..
+                Console.WriteLine("Dealed.","PlayMusic");
                 return;
             }
             AbleToClick = false;
@@ -2472,6 +2473,7 @@ namespace LemonApp
             Console.WriteLine(ToPlayData.MusicName+"\r\n"+data.MusicName,"ToPlayData");
             if (ToPlayData!=null&&ToPlayData != data)
                 PlayMusic(ToPlayData,true,true);
+
             AbleToClick = true;
             //-------加载歌曲相关歌单功能-------
             var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
@@ -2729,7 +2731,7 @@ namespace LemonApp
                     }
                     else
                     {
-                        Random r = new Random();
+                        Random r = new Random(new Guid().GetHashCode());
                         int index = r.Next(0, PlayDL_List.Items.Count - 1);
                         RandomIndexes.Add(index);
                         RandomOffset = index;

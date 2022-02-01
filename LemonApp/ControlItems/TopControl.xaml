@@ -5,7 +5,7 @@
     <Grid>
         <Border x:Name="t" Background="{DynamicResource ControlPageBrush}" CornerRadius="{DynamicResource AppCornerRadius}">
             <Grid>
-                <Border x:Name="im" Width="150" HorizontalAlignment="Left" CornerRadius="{DynamicResource AppCornerRadius}" Background="#FFF1F1F1"/>
+                <Border x:Name="im" Width="150" HorizontalAlignment="Left" CornerRadius="{DynamicResource AppCornerRadius}" Background="#33000000"/>
                 <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,58,0,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="1  "/><Run x:Name="c1" Text="TextBlock"/></TextBlock>
                 <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,80,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="2  "/><Run x:Name="c2" Text="TextBlock"/></TextBlock>
                 <TextBlock TextWrapping="NoWrap" VerticalAlignment="Top" Margin="163,100,10,0" Foreground="{DynamicResource ResuColorBrush}"><Run Text="3  "/><Run x:Name="c3" Text="TextBlock"/></TextBlock>
