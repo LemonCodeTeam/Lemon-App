@@ -2087,10 +2087,15 @@ namespace LemonApp
             }
         }
 
-        private async void SearchBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        [DllImport("user32")]
+        public static extern IntPtr SetFocus(IntPtr hWnd);
+        private async void SearchBox_LeftMouseUp(object sender, MouseButtonEventArgs e)
         {
             await Task.Yield();
             Search_SmartBox.IsOpen = true;
+            await Task.Yield();
+            var source = (HwndSource)PresentationSource.FromVisual(Search_SmartBox);
+            SetFocus(source.Handle);
             Search_SmartBoxList.Items.Clear();
             var data = await MusicLib.SearchHotKey();
             var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜",Margin=new Thickness(0,10,0,0) };
