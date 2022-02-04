@@ -27,9 +27,30 @@ namespace LemonLib
         public MusicPlayer(IntPtr win)
         {
             wind = win;
-            //注册的邮箱和Key
             BassNet.Registration("lemon.app@qq.com", "2X52325160022");
             Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, win);
+        }
+        public static async Task PrepareDll() 
+        {
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\bass.dll") || !File.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\bass_fx.dll"))
+            {
+                if (Environment.Is64BitProcess)
+                    await ReleaseDLLFiles(Properties.Resources.bass, Properties.Resources.bass_fx);
+                else await ReleaseDLLFiles(Properties.Resources.bass_x86, Properties.Resources.bass_fx_x86);
+            }
+        }
+        private static async Task ReleaseDLLFiles(byte[] maindll,byte[] fxdll) {
+            FileStream fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\bass.dll", FileMode.Create);
+            byte[] datas = maindll;
+            await fs.WriteAsync(datas, 0, datas.Length);
+            await fs.FlushAsync();
+            fs.Close();
+
+            FileStream fss = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\bass_fx.dll", FileMode.Create);
+            byte[] datas2 = fxdll;
+            await fss.WriteAsync(datas2, 0, datas2.Length);
+            await fss.FlushAsync();
+            fss.Close();
         }
         /// <summary>
         /// 音量 value:0~1

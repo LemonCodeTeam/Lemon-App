@@ -218,6 +218,7 @@ namespace LemonApp
             #endregion
             #region Part2
             //----播放组件-----------
+            await MusicPlayer.PrepareDll();
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
