@@ -2730,7 +2730,7 @@ namespace LemonApp
                     }
                     else
                     {
-                        Random r = new Random(new Guid().GetHashCode());
+                        Random r = new Random(Guid.NewGuid().GetHashCode());
                         int index = r.Next(0, PlayDL_List.Items.Count - 1);
                         RandomIndexes.Add(index);
                         RandomOffset = index;
