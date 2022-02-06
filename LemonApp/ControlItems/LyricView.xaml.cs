@@ -82,51 +82,57 @@ namespace LemonApp
             }
             foreach (string str in lrcdata)
             {
-                if (CanSolve(str))
+                try
                 {
-                    //以歌词Lyric内的时间为准....
-                    TimeSpan time = GetTime(str);
+                    if (CanSolve(str))
+                    {
+                        //以歌词Lyric内的时间为准....
+                        TimeSpan time = GetTime(str);
 
-                    //歌词翻译的  解析和适配
-                    //1.正常对应
-                    //2.翻译与歌词之间有+-2ms的误差
-                    string lrc = str.Split(']')[1].Replace("\r","").Replace("\n","");
-                    string trans = null;
-                    if (data.HasTrans){
-                        IEnumerable<KeyValuePair<double, string>> s = transDic.Where(m => m.Key >=( time.TotalMilliseconds-2));
-                        string a = s.First().Value;
-                        trans = lrc != string.Empty && !a.Contains("//") ? a : null;
-                    }
-
-                    TextBlock c_lrcbk = new TextBlock();
-                    c_lrcbk.FontSize = Settings.USettings.LyricFontSize;
-                    c_lrcbk.Foreground = NoramlLrcColor;
-                    c_lrcbk.TextWrapping = TextWrapping.Wrap;
-                    c_lrcbk.TextAlignment = TextAlignment;
-                    c_lrcbk.Inlines.Add(new Run() { Text=lrc});
-                    if (trans != null) {
-                        c_lrcbk.Inlines.Add(new LineBreak());
-                        c_lrcbk.Inlines.Add(new Run()
+                        //歌词翻译的  解析和适配
+                        //1.正常对应
+                        //2.翻译与歌词之间有+-2ms的误差
+                        string lrc = str.Split(']')[1].Replace("\r", "").Replace("\n", "");
+                        string trans = null;
+                        if (data.HasTrans)
                         {
-                            Text = trans,
-                            FontWeight=FontWeights.Regular,
-                            FontSize = c_lrcbk.FontSize-4,
-                            Foreground = NoramlLrcColor
-                        });
-                    }
+                            IEnumerable<KeyValuePair<double, string>> s = transDic.Where(m => m.Key >= (time.TotalMilliseconds - 2));
+                            string a = s.First().Value;
+                            trans = lrc != string.Empty && !a.Contains("//") ? a : null;
+                        }
 
-                    if (c_lrc_items.Children.Count > 0)
-                        c_lrcbk.Margin = new Thickness(0, 15, 0, 15);
-                    if (!Lrcs.ContainsKey(time.TotalMilliseconds))
-                        Lrcs.Add(time.TotalMilliseconds, new LrcModel()
+                        TextBlock c_lrcbk = new TextBlock();
+                        c_lrcbk.FontSize = Settings.USettings.LyricFontSize;
+                        c_lrcbk.Foreground = NoramlLrcColor;
+                        c_lrcbk.TextWrapping = TextWrapping.Wrap;
+                        c_lrcbk.TextAlignment = TextAlignment;
+                        c_lrcbk.Inlines.Add(new Run() { Text = lrc });
+                        if (trans != null)
                         {
-                            c_LrcTb = c_lrcbk,
-                            LrcText = lrc,
-                            Time = time.TotalMilliseconds,
-                            LrcTransText = trans
-                        });
-                    c_lrc_items.Children.Add(c_lrcbk);
+                            c_lrcbk.Inlines.Add(new LineBreak());
+                            c_lrcbk.Inlines.Add(new Run()
+                            {
+                                Text = trans,
+                                FontWeight = FontWeights.Regular,
+                                FontSize = c_lrcbk.FontSize - 4,
+                                Foreground = NoramlLrcColor
+                            });
+                        }
+
+                        if (c_lrc_items.Children.Count > 0)
+                            c_lrcbk.Margin = new Thickness(0, 15, 0, 15);
+                        if (!Lrcs.ContainsKey(time.TotalMilliseconds))
+                            Lrcs.Add(time.TotalMilliseconds, new LrcModel()
+                            {
+                                c_LrcTb = c_lrcbk,
+                                LrcText = lrc,
+                                Time = time.TotalMilliseconds,
+                                LrcTransText = trans
+                            });
+                        c_lrc_items.Children.Add(c_lrcbk);
+                    }
                 }
+                catch { }
             }
         }
         public bool CanSolve(string str)
@@ -149,12 +155,11 @@ namespace LemonApp
             int s = 0, f = 0;
             if (sp[1].IndexOf(".") != -1)
             {
-                s = Convert.ToInt32(sp[1].Split('.')[0]);
-                f = Convert.ToInt32(sp[1].Split('.')[1]);
+                    s = int.Parse(sp[1].Split('.')[0]);
+                    f = int.Parse(sp[1].Split('.')[1]);
             }
             else
                 s = Convert.ToInt32(sp[1]);
-            Debug.WriteLine(m + "-" + s + "-" + f + "->" + new TimeSpan(0, 0, m, s, f).TotalMilliseconds);
             return new TimeSpan(0, 0, m, s, f);
         }
         #endregion

@@ -337,7 +337,8 @@ namespace LemonApp
                         lv.LrcRoll(now+lyrictime_offset*1000, true);
                     }
                     else lv.LrcRoll(now+lyrictime_offset*1000, false);
-                    if (now == all && now > 2000 && all != 0)
+                    //now does not necessarily equal to total...
+                    if (Play_Now.Text.Equals(alls) && now > 2000 && all != 0)
                     {
                         now = 0;
                         all = 0;
