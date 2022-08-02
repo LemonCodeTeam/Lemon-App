@@ -91,33 +91,30 @@ namespace LemonLib
         }
         #endregion
         #region 搜索歌曲&搜索智能提示 (似乎不太智能)
-        public async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
+        public static async Task<List<Music>> SearchMusicAsync(string Content, int osx = 1)
         {
-            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"http://59.37.96.220/soso/fcgi-bin/client_search_cp?format=json&t=0&inCharset=GB2312&outCharset=utf-8&qqmusic_ver=1302&catZhida=0&p={osx}&n=20&w={HttpUtility.UrlDecode(Content)}&flag_qc=0&remoteplace=sizer.newclient.song&new_json=1&lossless=0&aggr=1&cr=1&sem=0&force_zonghe=0"));
+            var o = JObject.Parse(await HttpHelper.GetWebDataqAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=" +
+                HttpUtility.UrlEncode("{\"req_0\":{\"method\":\"DoSearchForQQMusicDesktop\",\"module\":\"music.search.SearchCgiService\",\"param\":{\"remoteplace\":\"txt.mqq.all\",\"searchid\":\"54355611513934060\",\"search_type\":0,\"query\":\""+Content+"\",\"page_num\":"+osx+",\"num_per_page\":20}},\"comm\":{\"ct\":24,\"cv\":0}}")));
             List<Music> dt = new List<Music>();
-            int i = 0;
-            var dsl = o["data"]["song"]["list"];
-            while (i < dsl.Count())
+            var dsl = o["req_0"]["data"]["body"]["song"]["list"];
+            foreach(var dsli in dsl)
             {
-                try
-                {
-                    var dsli = dsl[i];
                     Music m = new Music();
                     m.MusicName = dsli["title"].ToString();
-                    m.MusicName_Lyric = dsli["lyric"].ToString();
+                    m.MusicName_Lyric = dsli["desc"].ToString();
                     string Singer = "";
                     List<MusicSinger> lm = new List<MusicSinger>();
-                    for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
+                    foreach (var d in dsli["singer"])
                     {
-                        Singer += dsli["singer"][osxc]["name"] + "&";
-                        lm.Add(new MusicSinger() { Name = dsli["singer"][osxc]["name"].ToString(), Mid = dsli["singer"][osxc]["mid"].ToString() });
+                        Singer += d["name"] + "&";
+                        lm.Add(new MusicSinger() { Name = d["name"].ToString(), Mid = d["mid"].ToString() });
                     }
                     m.Singer = lm;
                     m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
                     m.MusicID = dsli["mid"].ToString();
                     var amid = dsli["album"]["mid"].ToString();
                     if (amid == "001ZaCQY2OxVMg")
-                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"]}.jpg?max_age=2592000";
                     else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                     else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                     if (amid != "")
@@ -128,15 +125,12 @@ namespace LemonLib
                             Name = dsli["album"]["name"].ToString()
                         };
                     var file = dsli["file"];
-                    if (file["size_320"].ToString() != "0")
+                    if (file["size_320mp3"].ToString() != "0")
                         m.Pz = "HQ";
                     if (file["size_flac"].ToString() != "0")
                         m.Pz = "SQ";
                     m.Mvmid = dsli["mv"]["vid"].ToString();
                     dt.Add(m);
-                }
-                catch { }
-                i++;
             }
             return dt;
         }
@@ -790,6 +784,7 @@ jpg
         /// <returns>string[] 0:url 1:From where</returns>
         public static async Task<string[]> GetUrlAsync(string Musicid, string mvid)
         {
+            MainClass.DebugCallBack(Musicid, mvid);
             var data = await GetUrlOfficialLine(Musicid);
             if (await HttpHelper.GetHTTPFileSize(data[0]) > 0)
                 return new string[2] { data[0], "QQ" };
@@ -824,11 +819,14 @@ jpg
             StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
             var st = await sr.ReadToEndAsync();
             sr.Dispose();
-            string val = Regex.Match(st, "C400.*?.m4a.*?&fromtag=38").Value;
-            var url = "https://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/" + val;
-            string songtitle = TextHelper.FindTextByAB(st, "content=\"歌曲：", "，", 0);
-            string singer = TextHelper.FindTextByAB(st, "歌手：", "。", 0);
-            MainClass.DebugCallBack("GETURL", "Failed to get url from y.qq.com :"+songtitle+" "+singer);
+            var jsondata=TextHelper.FindTextByAB(st, "window.__ssrFirstPageData__ =", "</script>", 0);
+            var obj = JObject.Parse(jsondata);
+            string url = obj["songList"][0]["url"].ToString();
+            MainClass.DebugCallBack("GETURL", jsondata);
+            string des = obj["metaData"]["description"].ToString();
+            string songtitle = TextHelper.FindTextByAB(des, "歌曲：", "，", 0);
+            string singer = TextHelper.FindTextByAB(des, "歌手：", "。", 0);
+            MainClass.DebugCallBack("GETURL", "Succeeded to get url from y.qq.com :"+songtitle+" "+singer);
             return new string[3]{url,songtitle,singer};
         }
 

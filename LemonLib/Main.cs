@@ -12,9 +12,10 @@ namespace LemonLib
         static async Task Main()
         {
             await Settings.LoadUSettings("2728578956");
-            var _ = await MusicLib.GetSongListAboutSong("003EmYuE2ZeENO");
-            
-            Console.WriteLine(_.Count);
+            var _ = await MusicLib.SearchMusicAsync("怪物");
+
+
+            Console.WriteLine(_[0]);
             Console.ReadLine();
         }
         public static Action<string,string> DebugCallBack = new Action<string,string>((a,b) => {

@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -138,6 +139,17 @@ namespace LemonApp
             2.播放组件
             3.登录后的用户数据
          */
+        public static void FixPopupBug()
+        {
+            var ifLeft = SystemParameters.MenuDropAlignment;
+            if (ifLeft)
+            {
+                var t = typeof(SystemParameters);
+                var field = t.GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
+                field.SetValue(null, false);
+            }
+
+        }
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
             #region Part1
@@ -163,6 +175,7 @@ namespace LemonApp
                 RUNPopup(IntoGDPop);
                 RUNPopup(AddGDPop);
             };
+            FixPopupBug();//a disgusting & stupid thing...
             //---------任务栏 TASKBAR-----------
             //任务栏 缩略图 按钮
             TaskBarImg = new TabbedThumbnail(this, this, new Vector());
@@ -2167,8 +2180,8 @@ namespace LemonApp
             SearchKey = key;
             OpenLoading();
             List<Music> dt = null;
-            if (osx == 0) dt = await ml.SearchMusicAsync(key);
-            else dt = await ml.SearchMusicAsync(key, osx);
+            if (osx == 0) dt = await MusicLib.SearchMusicAsync(key);
+            else dt = await MusicLib.SearchMusicAsync(key, osx);
             if (osx == 0)
             {
                 TB.Text = key;
@@ -2376,104 +2389,114 @@ namespace LemonApp
                 return;
             }
             AbleToClick = false;
-            if (data.MusicID == null)
+            try
             {
-                PlayControl_PlayNext(null, null);
-                return;
-            }
-            t.Stop();
-            if (mp.BassdlList.Count > 0)
-                mp.BassdlList.Last().SetClose();
-
-            MusicName.Text = "连接资源中...";
-            ImmTb_Lyric.Text = "";
-            ImmTb_Trans.Text = "";
-            mp.Pause();
-
-            await LoadMusic(data, doesplay);
-
-            Title = "Lemon App  " + data.MusicName + " - " + data.SingerText;
-            Settings.USettings.Playing = MusicData.Data;
-            Singer.Text = data.SingerText;
-            mini.title.Text = data.MusicName + " - " + data.SingerText;
-            mini.MusicName.Text = data.MusicName;
-            mini.SingerText.Text = data.SingerText;
-            lyrictime_offset =0;
-            LyricPage_TimeSetter.Text = "0.0s";
-
-            #region 专辑图
-            BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
-            MusicImage.Background = new ImageBrush(im);
-            mini.img.Background = MusicImage.Background;
-            //模糊处理
-            var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
-            var imb = im.ToBitmap();
-            imb.GaussianBlur(ref rect, 50);
-            //在模糊的基础上取主题色
-            var col = imb.get_major_color();
-
-            int high = 230;
-            int low = 40;
-            int dark = 80;
-            bool nsc = true;
-            if (col.R >= high && col.G >= high && col.B >= high)
-            {
-                //基本上就是全白了 没啥颜色
-                nsc = false;
-            }
-            else if (col.R <= low && col.G <= low && col.B <= low)
-                //基本全黑 直接换白色调
-                col = Color.FromRgb(230,230,230);
-            if (col.R <= dark && col.G <= dark && col.B <= dark) {
-                //过暗 在原色调上加亮
-                col.R += 40; col.G += 40; col.B += 40;
-            }
-            LyricPage_AlbumColor.Background = nsc ? new SolidColorBrush(col) : null;
-            AlbumColor = col;
-            if(IsLyricPageOpen==1) App.BaseApp.SetColor("ThemeColor", AlbumColor);
-            Console.WriteLine(col.R + " " + col.G + " " + col.B, "ThemeColor of image");
-            LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
-            #endregion
-
-            LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
-            lv.LoadLrc(dt);
-
-            if (doesplay)
-            {
-                //开始播放
-                (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.MiniPause);
-                TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                lyric_playcontrol.Data= mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
-                t.Start();
-                isplay = true;
-                if (Settings.USettings.LyricAnimationMode == 2)
+                if (data.MusicID == null)
                 {
-                    LyricBigAniRound.Seek(TimeSpan.FromSeconds(0));
-                    LyricBigAniRound.Resume();
+                    PlayControl_PlayNext(null, null);
+                    return;
                 }
-            }
+                t.Stop();
+                if (mp.BassdlList.Count > 0)
+                    mp.BassdlList.Last().SetClose();
 
-            try
-            {
-                //Expection: Operations that change non-concurrent collections must have exclusive access. 
-                //A concurrent update was performed on this collection and
-                //corrupted its state. The collection's state is no longer correct.
-                if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
-                    LikeBtnDown();
-                else LikeBtnUp();
-            }
-            catch { }
-            try
-            {
-                TaskBarImg.SetImage(im);
-                TaskBarImg.Title = data.MusicName + " - " + data.SingerText;
-            }
-            catch { }
-            Console.WriteLine(ToPlayData.MusicName+"\r\n"+data.MusicName,"ToPlayData");
-            if (ToPlayData!=null&&ToPlayData != data)
-                PlayMusic(ToPlayData,true,true);
+                MusicName.Text = "连接资源中...";
+                ImmTb_Lyric.Text = "";
+                ImmTb_Trans.Text = "";
+                mp.Pause();
 
-            AbleToClick = true;
+                await LoadMusic(data, doesplay);
+
+                Title = "Lemon App  " + data.MusicName + " - " + data.SingerText;
+                Settings.USettings.Playing = MusicData.Data;
+                Singer.Text = data.SingerText;
+                mini.title.Text = data.MusicName + " - " + data.SingerText;
+                mini.MusicName.Text = data.MusicName;
+                mini.SingerText.Text = data.SingerText;
+                lyrictime_offset = 0;
+                LyricPage_TimeSetter.Text = "0.0s";
+
+                #region 专辑图
+                BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
+                MusicImage.Background = new ImageBrush(im);
+                mini.img.Background = MusicImage.Background;
+                //模糊处理
+                var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
+                var imb = im.ToBitmap();
+                imb.GaussianBlur(ref rect, 50);
+                //在模糊的基础上取主题色
+                var col = imb.get_major_color();
+
+                int high = 230;
+                int dark = 100;
+                if (col.R >= high && col.G >= high && col.B >= high)
+                {
+                    col.R = (byte)(col.R * 0.6);
+                    col.G = (byte)(col.G * 0.6);
+                    col.B = (byte)(col.B * 0.6);
+                }
+                else if (col.R <= dark && col.G <= dark && col.B <= dark)
+                {
+                    col.R = (byte)(col.R * 1.8);
+                    col.G = (byte)(col.G * 1.8);
+                    col.B = (byte)(col.B * 1.8);
+                }
+                if (col.R >= high && col.G >= high && col.B >= high)
+                {
+                    col.R -= 90; col.G -= 90; col.B -= 90;
+                }
+                else if (col.R <= dark && col.G <= dark && col.B <= dark)
+                {
+                    col.R += 80; col.G += 80; col.B += 80;
+                }
+                AlbumColor = col;
+                if (IsLyricPageOpen == 1) App.BaseApp.SetColor("ThemeColor", AlbumColor);
+                Console.WriteLine(col.R + " " + col.G + " " + col.B, "ThemeColor of image");
+                LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
+                #endregion
+
+                LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
+                lv.LoadLrc(dt);
+
+                if (doesplay)
+                {
+                    //开始播放
+                    (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.MiniPause);
+                    TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
+                    lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
+                    t.Start();
+                    isplay = true;
+                    if (Settings.USettings.LyricAnimationMode == 2)
+                    {
+                        LyricBigAniRound.Seek(TimeSpan.FromSeconds(0));
+                        LyricBigAniRound.Resume();
+                    }
+                }
+
+                try
+                {
+                    //Expection: Operations that change non-concurrent collections must have exclusive access. 
+                    //A concurrent update was performed on this collection and
+                    //corrupted its state. The collection's state is no longer correct.
+                    if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
+                        LikeBtnDown();
+                    else LikeBtnUp();
+                }
+                catch { }
+                try
+                {
+                    TaskBarImg.SetImage(im);
+                    TaskBarImg.Title = data.MusicName + " - " + data.SingerText;
+                }
+                catch { }
+                Console.WriteLine(ToPlayData.MusicName + "\r\n" + data.MusicName, "ToPlayData");
+                if (ToPlayData != null && ToPlayData != data)
+                    PlayMusic(ToPlayData, true, true);
+            }
+            finally
+            {
+                AbleToClick = true;
+            }
             //-------加载歌曲相关歌单功能-------
             var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
             if (gd.Count >= 1)
@@ -2542,7 +2565,7 @@ namespace LemonApp
             {
                 await Task.Yield();
                 Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -220 : 40;
-                Pop_sp.IsOpen = !Pop_sp.IsOpen;
+                Pop_sp.IsOpen = true;
                 MusicPlay_sp.Value = mp.Speed;
                 MusicPlay_pitch_sp.Value = mp.Pitch;
                 Tempo_value.Text = (MusicPlay_sp.Value / 10).ToString("0.00") + "x";
@@ -2865,6 +2888,7 @@ namespace LemonApp
         private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             await Task.Yield();
+            MoreBtn_Meum.HorizontalOffset = IsLyricPageOpen == 1 ? -230 : 50;
             MoreBtn_Meum.IsOpen = !MoreBtn_Meum.IsOpen;
         }
         private void MoreBtn_Meum_DL_MouseDown(object sender, MouseButtonEventArgs e)
