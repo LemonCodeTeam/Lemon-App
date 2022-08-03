@@ -51,7 +51,7 @@ namespace LemonApp
             };
             Show();
         }
-        public void Updata(string Text)
+        public void Update(string Text)
         {
             tb.Text = Text;
             if (tb.Text.Contains("\r\n"))

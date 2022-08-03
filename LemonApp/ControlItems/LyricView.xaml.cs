@@ -30,10 +30,11 @@ namespace LemonApp
         }
         #endregion
         #region 
-        public Dictionary<double, LrcModel> Lrcs = new Dictionary<double, LrcModel>();
+        public Dictionary<double, LrcModel> Lrcs = new();
+        private List<Run> TransRunReference = new();
         public LrcModel foucslrc { get; set; }
 
-        public SolidColorBrush NoramlLrcColor;
+        public SolidColorBrush NormalLrcColor;
         public TextAlignment TextAlignment = TextAlignment.Center;
         #endregion
         public LyricView()
@@ -51,6 +52,24 @@ namespace LemonApp
                 }
             }
         }
+        public void SetTransLyric(bool open=true) {
+            if (!open)
+            {
+                foreach (Run r in TransRunReference)
+                {
+                    r.Foreground = null;
+                    r.FontSize = 0.01;
+                }
+            }
+            else {
+                int size = Settings.USettings.LyricFontSize - 4;
+                foreach (Run r in TransRunReference)
+                {
+                    r.Foreground = NormalLrcColor;
+                    r.FontSize = size;
+                }
+            }
+        }
         public void RestWidth(double width)
         {
             foreach (TextBlock tb in c_lrc_items.Children)
@@ -60,6 +79,8 @@ namespace LemonApp
         {
             Lrcs.Clear();
             c_lrc_items.Children.Clear();
+            TransRunReference.Clear();
+
             foucslrc = null;
 
             string[] lrcdata = data.lyric.Split('\n');
@@ -103,20 +124,23 @@ namespace LemonApp
 
                         TextBlock c_lrcbk = new TextBlock();
                         c_lrcbk.FontSize = Settings.USettings.LyricFontSize;
-                        c_lrcbk.Foreground = NoramlLrcColor;
+                        c_lrcbk.Foreground = NormalLrcColor;
                         c_lrcbk.TextWrapping = TextWrapping.Wrap;
                         c_lrcbk.TextAlignment = TextAlignment;
                         c_lrcbk.Inlines.Add(new Run() { Text = lrc });
                         if (trans != null)
                         {
-                            c_lrcbk.Inlines.Add(new LineBreak());
-                            c_lrcbk.Inlines.Add(new Run()
+                            var bl = new LineBreak();
+                            c_lrcbk.Inlines.Add(bl);
+                            var ts = new Run()
                             {
                                 Text = trans,
                                 FontWeight = FontWeights.Regular,
                                 FontSize = c_lrcbk.FontSize - 4,
-                                Foreground = NoramlLrcColor
-                            });
+                                Foreground = Settings.USettings.TransLyric? NormalLrcColor:null
+                            };
+                            c_lrcbk.Inlines.Add(ts);
+                            TransRunReference.Add(ts);
                         }
 
                         if (c_lrc_items.Children.Count > 0)
@@ -180,7 +204,7 @@ namespace LemonApp
                     LrcModel lm = s.Last().Value;
                     if (needScrol)
                     {
-                        foucslrc.c_LrcTb.Foreground = NoramlLrcColor;
+                        foucslrc.c_LrcTb.Foreground = NormalLrcColor;
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
                     }
 

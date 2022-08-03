@@ -6,7 +6,6 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +14,6 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -72,23 +70,23 @@ namespace LemonApp
         private MyFollowSingerList ClMyFollowSingerList = null;
         #endregion
         #region 等待动画
-        private Storyboard LoadingAni=null;
-   /*     Thread tOL = null;
-        LoadingWindow aw = null;
-        public void RunThread()
-        {
-            try
-            {
-                aw = new LoadingWindow();
-                aw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                aw.Topmost = true;
-                aw.Show();
-                aw.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2)));
-                System.Windows.Threading.Dispatcher.Run();
-            }
-            catch { }
-        }
-   */
+        private Storyboard LoadingAni = null;
+        /*     Thread tOL = null;
+             LoadingWindow aw = null;
+             public void RunThread()
+             {
+                 try
+                 {
+                     aw = new LoadingWindow();
+                     aw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                     aw.Topmost = true;
+                     aw.Show();
+                     aw.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2)));
+                     System.Windows.Threading.Dispatcher.Run();
+                 }
+                 catch { }
+             }
+        */
         public void OpenLoading()
         {
             if (!isLoading)
@@ -154,7 +152,7 @@ namespace LemonApp
         {
             #region Part1
             //--------检测更新-------
-            Updata();
+            Update();
             //--------应用程序配置 热键和消息回调--------
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
@@ -203,7 +201,7 @@ namespace LemonApp
             //-----------注册Debug回调-------
             MainClass.DebugCallBack = (a, b) =>
             {
-                Console.WriteLine(b,a);
+                Console.WriteLine(b, a);
             };
             //---------------歌词页专辑图转动
             LyricBigAniRound = new Storyboard();
@@ -235,10 +233,10 @@ namespace LemonApp
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
-            lv.NoramlLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) {Opacity=0.4};
+            lv.NormalLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) { Opacity = 0.4 };
             lv.TextAlignment = TextAlignment.Center;
             ly.Child = lv;
-            lv.NextLyric += async (lrc,trans) =>
+            lv.NextLyric += async (lrc, trans) =>
             {
                 //主要用于桌面歌词的显示
                 if (lrc != "" && lastlyric != lrc)
@@ -247,7 +245,7 @@ namespace LemonApp
                     mini.lyric.Text = lrc;
                     if (Settings.USettings.DoesOpenDeskLyric)
                     {
-                        lyricTa.Updata(lrc + (trans == null ? "" : ("\r\n" + trans)));
+                        lyricTa.Update(lrc + (Settings.USettings.TransLyric?(trans == null ? "" : ("\r\n" + trans)):""));
                         lastlyric = lrc;
                     }
                     if (Settings.USettings.IsLyricImm)
@@ -256,7 +254,7 @@ namespace LemonApp
                         ImmTb_Lyric.Text = "";
                         ImmTb_Trans.Text = "";
                         string dt = lrc;
-                        ImmTb_Trans.Text = trans ?? "";
+                        ImmTb_Trans.Text = Settings.USettings.TransLyric ? (trans ?? ""):"";
                         //分割划词
                         string[] dta = dt.Split(' ');
                         if (dta.Count() >= 3)
@@ -347,9 +345,9 @@ namespace LemonApp
                                 }
                             }
                         }
-                        lv.LrcRoll(now+lyrictime_offset*1000, true);
+                        lv.LrcRoll(now + lyrictime_offset * 1000, true);
                     }
-                    else lv.LrcRoll(now+lyrictime_offset*1000, false);
+                    else lv.LrcRoll(now + lyrictime_offset * 1000, false);
                     //now does not necessarily equal to total...
                     if (Play_Now.Text.Equals(alls) && now > 2000 && all != 0)
                     {
@@ -437,7 +435,8 @@ namespace LemonApp
                 //    主题背景图片
                 if (Settings.USettings.Skin_ImagePath != "" && System.IO.File.Exists(Settings.USettings.Skin_ImagePath))
                     Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_ImagePath, UriKind.Absolute)));
-                else if (Settings.USettings.Skin_ImagePath == "[Dark]") {
+                else if (Settings.USettings.Skin_ImagePath == "[Dark]")
+                {
                     Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF2D2D30"));
                 }
 
@@ -551,7 +550,8 @@ namespace LemonApp
                             UserName.Text = name;
                             UserTX.Background = new ImageBrush(image.ToImageSource());
                         });
-                        Dispatcher.Invoke(()=> {
+                        Dispatcher.Invoke(() =>
+                        {
                             Toast.Send("登陆成功! o(*￣▽￣*)ブ  欢迎回来" + name);
                         });
                     }
@@ -572,6 +572,12 @@ namespace LemonApp
                 lyricTa = new Toast("", true);
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
+            //------TransLyric Icon----------------
+            if (Settings.USettings.TransLyric)
+            {
+                TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+            else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
             //---------加载上一次播放-------与播放列表
             //如果已经保存过播放列表
             if (Settings.USettings.PlayingIndex != -1)
@@ -629,7 +635,8 @@ namespace LemonApp
             foreach (var a in Settings.USettings.QuickGoToData)
                 AddToQGT(a.Value, false);
             //----------播放循环模式------------------------
-            mini.XHPath.Data = path6.Data = Geometry.Parse(Settings.USettings.PlayXHMode switch{
+            mini.XHPath.Data = path6.Data = Geometry.Parse(Settings.USettings.PlayXHMode switch
+            {
                 0 => Properties.Resources.Lbxh,
                 1 => Properties.Resources.Dqxh,
                 2 => Properties.Resources.Random,
@@ -730,7 +737,7 @@ namespace LemonApp
             lw.Close();
             GC.Collect();
             //----------切换登录前先保存当前账号-------
-            if (Settings.USettings.LemonAreeunIts != "0" && Settings.USettings.LemonAreeunIts!=data.qq)
+            if (Settings.USettings.LemonAreeunIts != "0" && Settings.USettings.LemonAreeunIts != data.qq)
                 await Settings.SaveSettingsTaskAsync();
             string qq = data.qq;
             Console.WriteLine("Login:" + data.g_tk + "\r\n Cookie:" + data.cookie, "LoginData");
@@ -829,7 +836,7 @@ namespace LemonApp
             //⚠警告!!!: 以下key仅供本开发者(TwilightLemon)使用,
             //               若发现滥用现象，将走法律程序解决!!!
             //KEY: xfttsuxaeivzdefd
-            if (UserSendText.Text != "在此处输入你的建议或问题，或拖动附件到上方"&&knowb.Text!=string.Empty)
+            if (UserSendText.Text != "在此处输入你的建议或问题，或拖动附件到上方" && knowb.Text != string.Empty)
             {
                 va.Text = "发送中...";
                 string body = "Lemon App 版本号:" + App.EM +
@@ -1078,13 +1085,13 @@ namespace LemonApp
             LoadDTheme(new Theme.YeStarLight.Drawer());
             #endregion
             #region 默认主题
-            SkinControl sxc_black = new SkinControl("暗黑",new SolidColorBrush(Color.FromRgb(60,60,60)),Color.FromRgb(0,0,0));
+            SkinControl sxc_black = new SkinControl("暗黑", new SolidColorBrush(Color.FromRgb(60, 60, 60)), Color.FromRgb(0, 0, 0));
             sxc_black.MouseDown += (s, n) =>
             {
                 if (wac.IsEnabled) wac.IsEnabled = false;
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
-                Page.Background = new SolidColorBrush(Color.FromRgb(45,45,48));
+                Page.Background = new SolidColorBrush(Color.FromRgb(45, 45, 48));
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
@@ -1326,8 +1333,8 @@ namespace LemonApp
                 ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
         }
         #endregion
-        #region Updata 检测更新
-        private void Updata()
+        #region Update 检测更新
+        private void Update()
         {
             //新开个线程，不需要占用加载时
             Thread t = new Thread(async () =>
@@ -1354,7 +1361,7 @@ namespace LemonApp
                 if (ac is ThicknessAnimationUsingKeyFrames)
                 {
                     var ta = ac as ThicknessAnimationUsingKeyFrames;
-                    ta.KeyFrames[0].Value = new Thickness(0,200+value.Top,0,-200+value.Bottom);
+                    ta.KeyFrames[0].Value = new Thickness(0, 200 + value.Top, 0, -200 + value.Bottom);
                     ta.KeyFrames[1].Value = value;
                 }
             }
@@ -1388,20 +1395,20 @@ namespace LemonApp
             LastClickLabel.HasChecked = false;
             if (data.MeumItem != null) (data.MeumItem as MainMeumItem).HasChecked = true;
             if (LastPage == null) LastPage = ClHomePage;
-            Border com = (Border)(data.MeumItem is MainMeumItem ?(data.MeumItem as MainMeumItem).ComBlock:null);
+            Border com = (Border)(data.MeumItem is MainMeumItem ? (data.MeumItem as MainMeumItem).ComBlock : null);
 
             //从其他页面跳转过来的没有COM
             double mar_left = 5;
-            if (com != null&& LastCom == null)
+            if (com != null && LastCom == null)
             {
                 GeneralTransform generalTransform = com.TransformToAncestor(ControlPage);
                 Point point = generalTransform.Transform(new Point(0, 0));
-                AniCom.BeginAnimation(MarginProperty,null);
+                AniCom.BeginAnimation(MarginProperty, null);
                 AniCom.Margin = new Thickness(mar_left, point.Y, 0, 0);
             }
             //COM动画------------
             AniCom.Visibility = com == null ? Visibility.Hidden : Visibility.Visible;
-            if (com != null&&LastCom!=null)
+            if (com != null && LastCom != null)
             {
                 Storyboard ani = null;
                 GeneralTransform generalTransform = LastCom.TransformToAncestor(ControlPage);
@@ -1672,7 +1679,7 @@ namespace LemonApp
                 ClSingerIndexPage = new SingerIndexPage(this, TemplateSv.Template, SingerGetToIFollow);
                 ContentPage.Children.Add(ClSingerIndexPage);
             }
-            NSPage(new MeumInfo( ClSingerIndexPage, Meum_Singer), true, false);
+            NSPage(new MeumInfo(ClSingerIndexPage, Meum_Singer), true, false);
         }
         private void SingerGetToIFollow()
         {
@@ -1693,7 +1700,7 @@ namespace LemonApp
                 ClFLGDIndexPage = new FLGDIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClFLGDIndexPage);
             }
-            NSPage(new MeumInfo(ClFLGDIndexPage,Meum_GD), true, false);
+            NSPage(new MeumInfo(ClFLGDIndexPage, Meum_GD), true, false);
         }
         #endregion
         #region Radio 电台
@@ -1704,7 +1711,7 @@ namespace LemonApp
                 ClRadioIndexPage = new RadioIndexPage(this, TemplateSv.Template);
                 ContentPage.Children.Add(ClRadioIndexPage);
             }
-            NSPage(new MeumInfo( ClRadioIndexPage, Meum_Radio), true, false);
+            NSPage(new MeumInfo(ClRadioIndexPage, Meum_Radio), true, false);
         }
 
         public async void GetRadio(object sender, MouseEventArgs e)
@@ -1753,7 +1760,7 @@ namespace LemonApp
         {
             likeBtn_path.Tag = true;
             likeBtn_path.Fill = new SolidColorBrush(Color.FromRgb(216, 30, 30));
-            lyric_like.Fill=mini.likeBtn_path.Fill = likeBtn_path.Fill;
+            lyric_like.Fill = mini.likeBtn_path.Fill = likeBtn_path.Fill;
         }
         /// <summary>
         /// 添加/删除 我喜欢的歌曲
@@ -2113,7 +2120,7 @@ namespace LemonApp
             SetFocus(source.Handle);
             Search_SmartBoxList.Items.Clear();
             var data = await MusicLib.SearchHotKey();
-            var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜",Margin=new Thickness(0,10,0,0) };
+            var mdb = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "热搜", Margin = new Thickness(0, 10, 0, 0) };
             Search_SmartBoxList.Items.Add(mdb);
             for (int i = 0; i < 5; i++)
             {
@@ -2342,8 +2349,8 @@ namespace LemonApp
             if (!System.IO.File.Exists(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
-                var musicurl = await MusicLib.GetUrlAsync(data.MusicID,data.Mvmid);
-                Console.WriteLine("FROM:"+musicurl[1]+"\r\n"+musicurl[0]);
+                var musicurl = await MusicLib.GetUrlAsync(data.MusicID, data.Mvmid);
+                Console.WriteLine("FROM:" + musicurl[1] + "\r\n" + musicurl[0]);
                 mp.LoadUrl(downloadpath, musicurl[0], (max, value) =>
                 {
                     Dispatcher.Invoke(() =>
@@ -2379,13 +2386,14 @@ namespace LemonApp
         Music ToPlayData = null;
         Color ThemeColor_ORD;
         Color AlbumColor;
-        public async void PlayMusic(Music data, bool doesplay = true,bool force=false)
+        public async void PlayMusic(Music data, bool doesplay = true, bool force = false)
         {
             if (!force)
                 ToPlayData = data;
-            if (!AbleToClick&&!force) {
+            if (!AbleToClick && !force)
+            {
                 //操作频繁..
-                Console.WriteLine("Dealed.","PlayMusic");
+                Console.WriteLine("Dealed.", "PlayMusic");
                 return;
             }
             AbleToClick = false;
@@ -2457,7 +2465,7 @@ namespace LemonApp
 
                 LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
                 lv.LoadLrc(dt);
-
+                TransLyric.Visibility = dt.HasTrans ? Visibility.Visible : Visibility.Collapsed;
                 if (doesplay)
                 {
                     //开始播放
@@ -2806,7 +2814,7 @@ namespace LemonApp
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
                 t.Stop();
-                (PlayBtn.Child as Path).Data = lyric_playcontrol.Data=mini.play.Data = Geometry.Parse(Properties.Resources.MiniPlay);
+                (PlayBtn.Child as Path).Data = lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPlay);
             }
             else
             {
@@ -3109,7 +3117,7 @@ namespace LemonApp
                 lv.SetFontSize(Settings.USettings.LyricFontSize);
             }
         }
-     
+
         private void NorImm_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Settings.USettings.IsLyricImm = !Settings.USettings.IsLyricImm;
@@ -3310,6 +3318,17 @@ namespace LemonApp
         {
             if (lv != null)
                 lv.RestWidth(e.NewSize.Width);
+        }
+        private void TransLyric_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.TransLyric = !Settings.USettings.TransLyric;
+            lv.SetTransLyric(Settings.USettings.TransLyric);
+            if (Settings.USettings.TransLyric)
+            {
+                TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+            else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+
         }
         #endregion
         #region IntoGD 导入歌单
@@ -3598,8 +3617,8 @@ namespace LemonApp
                 if (GdLikeData.Count != GDILikeItemsList.Children.Count)
                 {
                     renew_ = true;
-                    GDILikeItemsList.Children.Clear(); 
-                    GLikeData_Now.Clear(); 
+                    GDILikeItemsList.Children.Clear();
+                    GLikeData_Now.Clear();
                 }
                 foreach (var jm in GdLikeData)
                 {
@@ -3623,7 +3642,8 @@ namespace LemonApp
                 WidthUI(GDILikeItemsList);
                 if (GdData.Count == 0 && GdLikeData.Count == 0)
                     NSPage(new MeumInfo(MyGDIndexPage, Meum_MYGD));
-                if (renew_) {
+                if (renew_)
+                {
                     await Task.Yield();
                     ContentAnimation(GDILikeItemsList, GDILikeItemsList.Margin);
                 }
@@ -3751,31 +3771,31 @@ namespace LemonApp
             open.Click += delegate { exShow(); };
             //退出菜单项
             System.Windows.Forms.ToolStripMenuItem exit = new System.Windows.Forms.ToolStripMenuItem("关闭");
-            exit.Click +=async delegate
-            {
-                try
-                {
-                    mp.Free();
-                    notifyIcon.Dispose();
-                }
-                catch { }
-                Settings.USettings.MusicGDataPlayList.Clear();
-                foreach (object a in PlayDL_List.Items)
-                {
-                    if (a is PlayDLItem)
-                    {
-                        var ab = a as PlayDLItem;
-                        Settings.USettings.MusicGDataPlayList.Add(ab.Data);
-                    }
-                    else
-                    {
-                        Settings.USettings.MusicGDataPlayList.Add(new Music() { MusicID = "str.Null" });
-                    }
-                }
-                Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
-                await Settings.SaveSettingsTaskAsync();
-                Environment.Exit(0);
-            };
+            exit.Click += async delegate
+             {
+                 try
+                 {
+                     mp.Free();
+                     notifyIcon.Dispose();
+                 }
+                 catch { }
+                 Settings.USettings.MusicGDataPlayList.Clear();
+                 foreach (object a in PlayDL_List.Items)
+                 {
+                     if (a is PlayDLItem)
+                     {
+                         var ab = a as PlayDLItem;
+                         Settings.USettings.MusicGDataPlayList.Add(ab.Data);
+                     }
+                     else
+                     {
+                         Settings.USettings.MusicGDataPlayList.Add(new Music() { MusicID = "str.Null" });
+                     }
+                 }
+                 Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
+                 await Settings.SaveSettingsTaskAsync();
+                 Environment.Exit(0);
+             };
             //关联托盘控件
             var a = new System.Windows.Forms.ContextMenuStrip();
             a.Items.Add(open);

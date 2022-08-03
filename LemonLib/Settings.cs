@@ -170,6 +170,8 @@ namespace LemonLib
                 USettings.PlayXHMode = int.Parse(o["PlayXHMode"].ToString());
             if (data.Contains("LyricFontSize"))
                 USettings.LyricFontSize = int.Parse(o["LyricFontSize"].ToString());
+            if (data.Contains("TransLyric"))
+                USettings.TransLyric = bool.Parse(o["TransLyric"].ToString());
         }
         public class UserSettings
         {
@@ -211,6 +213,11 @@ namespace LemonLib
             /// 歌词字体大小..
             /// </summary>
             public int LyricFontSize = 18;
+
+            /// <summary>
+            /// 开启歌词翻译
+            /// </summary>
+            public bool TransLyric = true;
             #endregion
             #region 主题配置
             //启用圆的MusicImage?
