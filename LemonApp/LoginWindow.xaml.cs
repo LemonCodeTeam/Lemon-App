@@ -47,7 +47,7 @@ namespace LemonApp
                 var cookie = wb.Document.Cookie;
                 //-------------------------------------------------
                 Console.WriteLine(cookie, "LoginData");
-                string qq = TextHelper.FindTextByAB(cookie + ";", "ptui_loginuin=", ";", 0);
+                string qq = TextHelper.FindTextByAB(cookie, "uin=o", ";", 0);
                 LoginData send = new LoginData()
                 {
                     qq = qq,

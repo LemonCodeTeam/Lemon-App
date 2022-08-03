@@ -2564,7 +2564,7 @@ namespace LemonApp
             else
             {
                 await Task.Yield();
-                Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -220 : 40;
+                Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -285 : -40;
                 Pop_sp.IsOpen = true;
                 MusicPlay_sp.Value = mp.Speed;
                 MusicPlay_pitch_sp.Value = mp.Pitch;

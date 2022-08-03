@@ -996,7 +996,7 @@
                         <WrapPanel Grid.Column="2" Margin="20,0,20,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                             <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Opacity="0.7" Margin="0,0,20,0"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
                             <Grid x:Name="AudioBtn" HorizontalAlignment="Center" Background="#00000000" VerticalAlignment="Top" MouseDown="AudioBtn_MouseDown" Height="15" Width="15">
-                                <lemonlib:MyPopup  VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="Pop_voice" AllowsTransparency="True" StaysOpen="False" Placement="Top" PopupAnimation="Fade" VerticalOffset="0" HorizontalOffset="25">
+                                <lemonlib:MyPopup  VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="Pop_voice" AllowsTransparency="True" StaysOpen="False" Placement="Top" PopupAnimation="Fade" VerticalOffset="0" HorizontalOffset="-25">
                                     <Grid>
                                         <Border  Height="245" Width="70">
                                             <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="10" Margin="10,20,10,20" Effect="{DynamicResource WindowDrop}">
