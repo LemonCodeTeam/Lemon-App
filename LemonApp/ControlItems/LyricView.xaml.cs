@@ -29,6 +29,7 @@ namespace LemonApp
             public TextBlock c_LrcTb { get; set; }
             public string LrcText { get; set; }
             public string LrcTransText { get; set; }
+            public string LrcRomajiText { get; set; }
             public double Time { get; set; }
         }
         #endregion
@@ -155,16 +156,18 @@ namespace LemonApp
                         c_lrcbk.TextWrapping = TextWrapping.Wrap;
                         c_lrcbk.TextAlignment = TextAlignment;
 
-                        var rm = new Run()
+                        if (LoadRomaji)
                         {
-                            FontWeight = FontWeights.Regular,
-                            FontSize = c_lrcbk.FontSize - 5,
-                            Foreground = Settings.USettings.RomajiLyric ? NormalLrcColor : null
-                        };
-                        c_lrcbk.Inlines.Add(rm);
-                        RomajiRunReference.Add(rm);
-                        c_lrcbk.Inlines.Add(new LineBreak());
-
+                            var rm = new Run()
+                            {
+                                FontWeight = FontWeights.Regular,
+                                FontSize = c_lrcbk.FontSize - 5,
+                                Foreground = Settings.USettings.RomajiLyric ? NormalLrcColor : null
+                            };
+                            c_lrcbk.Inlines.Add(rm);
+                            RomajiRunReference.Add(rm);
+                            c_lrcbk.Inlines.Add(new LineBreak());
+                        }
                         c_lrcbk.Inlines.Add(new Run() { Text = lrc });
                         if (trans != null)
                         {

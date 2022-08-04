@@ -2432,7 +2432,7 @@ namespace LemonApp
                 //模糊处理
                 var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
                 var imb = im.ToBitmap();
-                imb.GaussianBlur(ref rect, 50);
+                imb.GaussianBlur(ref rect, 70);
                 //在模糊的基础上取主题色
                 var col = imb.get_major_color();
 
@@ -2465,9 +2465,11 @@ namespace LemonApp
                 #endregion
 
                 LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
-                bool ldrm = Regex.Match(dt.lyric, @"[\u0800-\u4e00]*").Success;
+                //用日语平假名来判断 基本避开中文字符干扰
+                bool ldrm = Regex.Match(dt.lyric, @"[\u3040-\u309f]").Length > 0&&dt.HasTrans;
                 Console.WriteLine(ldrm, "ISJAPANESE");
-                lv.LoadLrc(dt,false);
+                lv.LoadLrc(dt,ldrm);
+                RomajiLyric.Visibility = ldrm ? Visibility.Visible : Visibility.Collapsed;
                 TransLyric.Visibility = dt.HasTrans ? Visibility.Visible : Visibility.Collapsed;
                 if (doesplay)
                 {

@@ -915,6 +915,7 @@ jpg
             {
                 string filedata = await File.ReadAllTextAsync(file);
                 LyricData data = new LyricData();
+                data.id = McMind;
                 if (filedata.Contains(split))
                 {
                     //有翻译歌词

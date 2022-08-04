@@ -1431,7 +1431,7 @@
                 <Border x:Name="ThemeColor" Background="White"  Grid.ColumnSpan="2">
                     <Grid x:Name="LyricPage_Background" RenderOptions.BitmapScalingMode="Fant">
                         <Border x:Name="LyricPage_AlbumColor" Opacity="0.2"/>
-                        <Border Background="#99000000"/>
+                        <Border Background="#B2000000"/>
                     </Grid>
                 </Border>
                 <Grid x:Name="Lyric_Content" Margin="0,0,0,0">
