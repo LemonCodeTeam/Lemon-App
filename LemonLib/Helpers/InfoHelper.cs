@@ -10,6 +10,7 @@ namespace LemonLib
     {
         public class LyricData {
             public string lyric;
+            public string id;
             public string trans;
             public bool HasTrans;
         }

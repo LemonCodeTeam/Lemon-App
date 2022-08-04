@@ -172,6 +172,8 @@ namespace LemonLib
                 USettings.LyricFontSize = int.Parse(o["LyricFontSize"].ToString());
             if (data.Contains("TransLyric"))
                 USettings.TransLyric = bool.Parse(o["TransLyric"].ToString());
+            if (data.Contains("RomajiLyric"))
+                USettings.RomajiLyric = bool.Parse(o["RomajiLyric"].ToString());
         }
         public class UserSettings
         {
@@ -218,6 +220,10 @@ namespace LemonLib
             /// 开启歌词翻译
             /// </summary>
             public bool TransLyric = true;
+            /// <summary>
+            /// 开启罗马音译
+            /// </summary>
+            public bool RomajiLyric = true;
             #endregion
             #region 主题配置
             //启用圆的MusicImage?

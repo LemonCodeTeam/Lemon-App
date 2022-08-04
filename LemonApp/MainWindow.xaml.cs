@@ -14,6 +14,7 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -2464,7 +2465,9 @@ namespace LemonApp
                 #endregion
 
                 LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
-                lv.LoadLrc(dt);
+                bool ldrm = Regex.Match(dt.lyric, @"[\u0800-\u4e00]*").Success;
+                Console.WriteLine(ldrm, "ISJAPANESE");
+                lv.LoadLrc(dt,false);
                 TransLyric.Visibility = dt.HasTrans ? Visibility.Visible : Visibility.Collapsed;
                 if (doesplay)
                 {
@@ -3887,5 +3890,16 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void RomajiLyric_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.RomajiLyric = !Settings.USettings.RomajiLyric;
+            lv.SetRomajiLyric(Settings.USettings.RomajiLyric);
+            if (Settings.USettings.RomajiLyric)
+            {
+                RomajiLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+            else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+        }
     }
 }

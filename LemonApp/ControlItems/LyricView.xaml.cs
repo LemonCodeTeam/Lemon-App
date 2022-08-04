@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -32,6 +35,7 @@ namespace LemonApp
         #region 
         public Dictionary<double, LrcModel> Lrcs = new();
         private List<Run> TransRunReference = new();
+        private List<Run> RomajiRunReference = new();
         public LrcModel foucslrc { get; set; }
 
         public SolidColorBrush NormalLrcColor;
@@ -70,22 +74,44 @@ namespace LemonApp
                 }
             }
         }
+
+        public void SetRomajiLyric(bool open = true)
+        {
+            if (!open)
+            {
+                foreach (Run r in RomajiRunReference)
+                {
+                    r.Foreground = null;
+                    r.FontSize = 0.01;
+                }
+            }
+            else
+            {
+                int size = Settings.USettings.LyricFontSize - 5;
+                foreach (Run r in RomajiRunReference)
+                {
+                    r.Foreground = NormalLrcColor;
+                    r.FontSize = size;
+                }
+            }
+        }
         public void RestWidth(double width)
         {
             foreach (TextBlock tb in c_lrc_items.Children)
                 tb.Width = width;
         }
-        public void LoadLrc(LyricData data)
+        public async void LoadLrc(LyricData data,bool LoadRomaji)
         {
             Lrcs.Clear();
             c_lrc_items.Children.Clear();
             TransRunReference.Clear();
-
+            RomajiRunReference.Clear();
             foucslrc = null;
 
             string[] lrcdata = data.lyric.Split('\n');
             string[] transdata = null;
             Dictionary<double, string> transDic = null;
+            List<string> sb = new();
             if (data.HasTrans)
             {
                 transdata = data.trans.Split('\n');
@@ -114,6 +140,7 @@ namespace LemonApp
                         //1.正常对应
                         //2.翻译与歌词之间有+-2ms的误差
                         string lrc = str.Split(']')[1].Replace("\r", "").Replace("\n", "");
+                        sb.Add(lrc.Contains('：')?" ":lrc);
                         string trans = null;
                         if (data.HasTrans)
                         {
@@ -127,6 +154,17 @@ namespace LemonApp
                         c_lrcbk.Foreground = NormalLrcColor;
                         c_lrcbk.TextWrapping = TextWrapping.Wrap;
                         c_lrcbk.TextAlignment = TextAlignment;
+
+                        var rm = new Run()
+                        {
+                            FontWeight = FontWeights.Regular,
+                            FontSize = c_lrcbk.FontSize - 5,
+                            Foreground = Settings.USettings.RomajiLyric ? NormalLrcColor : null
+                        };
+                        c_lrcbk.Inlines.Add(rm);
+                        RomajiRunReference.Add(rm);
+                        c_lrcbk.Inlines.Add(new LineBreak());
+
                         c_lrcbk.Inlines.Add(new Run() { Text = lrc });
                         if (trans != null)
                         {
@@ -158,6 +196,47 @@ namespace LemonApp
                 }
                 catch { }
             }
+            if (LoadRomaji)
+            {
+                string file = Settings.USettings.MusicCachePath + "Lyric\\" + data.id + ".rm.lmrc";
+                if (File.Exists(file))
+                {
+                    var listu = await LoadRomajiLrcFromFile(data.id);
+                    int ind = 0;
+                    foreach (var tx in listu)
+                    {
+                        RomajiRunReference[ind].Text = tx;
+                        ind++;
+                    }
+                }
+                else
+                {
+                    sb[0] = " ";
+                    StringBuilder s = new();
+                    foreach (var i in sb) s.AppendLine(i);
+                    string lc = s.ToString();
+                    Console.WriteLine(lc);
+                    var list = await RomajiHelper.GetRomaji(lc);
+                    int index = 0;
+                    s = new();
+                    foreach (var tx in list)
+                    {
+                        s.AppendLine(tx);
+                        RomajiRunReference[index].Text = tx;
+                        index++;
+                    }
+                    SaveRomajiLrc(data.id, s.ToString());
+                }
+            }
+        }
+        private async void SaveRomajiLrc(string id,string data) {
+            string file = Settings.USettings.MusicCachePath + "Lyric\\" + id + ".rm.lmrc";
+            await File.WriteAllTextAsync(file, data);
+        }
+        private async Task<List<string>> LoadRomajiLrcFromFile(string id)
+        {
+            string file = Settings.USettings.MusicCachePath + "Lyric\\" + id + ".rm.lmrc";
+            return (await File.ReadAllLinesAsync(file)).ToList();
         }
         public bool CanSolve(string str)
         {

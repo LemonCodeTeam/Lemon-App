@@ -890,7 +890,7 @@ jpg
                 JObject o = JObject.Parse(td);
 
                 LyricData data = new LyricData();
-
+                data.id = McMind;
                 string lyric = WebUtility.HtmlDecode( Encoding.UTF8.GetString(Convert.FromBase64String(o["lyric"].ToString())));
                 if (o["trans"].ToString() == "")
                 {

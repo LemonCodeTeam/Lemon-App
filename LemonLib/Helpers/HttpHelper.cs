@@ -201,5 +201,31 @@ namespace LemonLib
             sr.Dispose();
             return st;
         }
+
+        public static async Task<string> PostWebSiteEzlang(string url, string content) {
+            var r = (HttpWebRequest)WebRequest.Create(url);
+            r.Method = "POST";
+            r.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+            r.Host = "www.ezlang.net";
+            r.KeepAlive = true;
+            r.Accept = "*/*";
+            r.Headers.Add("Origin", "https://www.ezlang.net");
+            r.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 Core/1.77.119.400 QQBrowser/10.9.4817.400";
+            r.Referer = "https://www.ezlang.net/zh-Hans/tool/romaji";
+            r.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            r.Headers.Add("sec-fetch-mode", "cors");
+            r.Headers.Add("sec-fetch-site", "same-origin");
+            r.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            var byteData = Encoding.UTF8.GetBytes(content);
+            var length = byteData.Length;
+            r.ContentLength = length;
+            var writer = await r.GetRequestStreamAsync();
+            await writer.WriteAsync(byteData, 0, length);
+            writer.Close();
+            using HttpWebResponse response = (HttpWebResponse)await r.GetResponseAsync();
+            using var stream = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string dt = await stream.ReadToEndAsync();
+            return dt;
+        }
     }
 }
