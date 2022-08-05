@@ -8,6 +8,21 @@ namespace LemonLib
 {
     public class HttpHelper
     {
+        public static async Task<string> GetRedirectUrl(string url) {
+            try
+            {
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+                req.Method = "HEAD";
+                req.AllowAutoRedirect = false;
+                WebResponse response = req.GetResponse();
+                return response.Headers["Location"];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static async Task<long> GetHTTPFileSize(string sURL)
         {
             long size = 0L;

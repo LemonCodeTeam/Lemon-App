@@ -2350,7 +2350,7 @@ namespace LemonApp
             if (!System.IO.File.Exists(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
-                var musicurl = await MusicLib.GetUrlAsync(data.MusicID, data.Mvmid);
+                var musicurl = await MusicLib.GetUrlAsync(data);
                 Console.WriteLine("FROM:" + musicurl[1] + "\r\n" + musicurl[0]);
                 mp.LoadUrl(downloadpath, musicurl[0], (max, value) =>
                 {

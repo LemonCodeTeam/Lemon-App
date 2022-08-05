@@ -30,7 +30,7 @@ namespace LemonLib
         {
             await Task.Run(async () =>
             {
-                string Url = (await MusicLib.GetUrlAsync(mData.MusicID,mData.Mvmid))[0];
+                string Url = (await MusicLib.GetUrlAsync(mData))[0];
                 Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
                 HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url);
                 Myrq.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";

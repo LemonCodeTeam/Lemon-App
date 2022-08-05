@@ -782,16 +782,18 @@ jpg
         /// </summary>
         /// <param name="Musicid"></param>
         /// <returns>string[] 0:url 1:From where</returns>
-        public static async Task<string[]> GetUrlAsync(string Musicid, string mvid)
+        public static async Task<string[]> GetUrlAsync(Music d)
         {
-            MainClass.DebugCallBack(Musicid, mvid);
-            var data = await GetUrlOfficialLine(Musicid);
+            MainClass.DebugCallBack(d.MusicID, d.Mvmid);
+            var data = await GetUrlOfficialLine(d.MusicID);
             if (await HttpHelper.GetHTTPFileSize(data[0]) > 0)
                 return new string[2] { data[0], "QQ" };
-
-            return !string.IsNullOrEmpty(mvid)
-                ? (new string[2] { await GetMVUrl(mvid, false),"QMV"})
-                : (new string[2] {await GetUrlOutLine(data),"MIGU"});
+            var data_2 = await HttpHelper.GetRedirectUrl(await GetUrlOutLine(d));
+            if (await HttpHelper.GetHTTPFileSize(data_2) > 0)
+                return new string[2] { data_2, "MIGU" };
+            else if (!string.IsNullOrEmpty(d.Mvmid))
+                return new string[2] { await GetMVUrl(d.Mvmid, false), "QMV" };
+            else return null;
         }
 
         /// <summary>
@@ -830,8 +832,8 @@ jpg
             return new string[3]{url,songtitle,singer};
         }
 
-        private static async Task<string> GetUrlOutLine(string[] songdata) {
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pd.musicapp.migu.cn/MIGUM2.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text="+HttpUtility.UrlEncode(songdata[1]+" "+songdata[2])+"&pageNo=1&pageSize=10&searchSwitch={%22song%22:1,%22album%22:0,%22singer%22:0,%22tagSong%22:0,%22mvSong%22:0,%22songlist%22:0,%22bestShow%22:0}");
+        private static async Task<string> GetUrlOutLine(Music songdata) {
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pd.musicapp.migu.cn/MIGUM2.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text="+HttpUtility.UrlEncode(songdata.MusicName+" "+songdata.SingerText)+"&pageNo=1&pageSize=10&searchSwitch={%22song%22:1,%22album%22:0,%22singer%22:0,%22tagSong%22:0,%22mvSong%22:0,%22songlist%22:0,%22bestShow%22:0}");
             hwr.Timeout = 20000;
             hwr.KeepAlive = true;
             hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
@@ -845,22 +847,26 @@ jpg
             sr.Dispose();
 
             JObject obj = JObject.Parse(st);
-            var ab = obj["songResultData"]["result"][0];
-            if (ab["name"].ToString() != songdata[0]) {
-                MainClass.DebugCallBack("GETURL", "Failed to get url from migu:"+ songdata[1] + " " + songdata[2]);
-             //   return null;
-            }
-            var data = ab["rateFormats"];
-            string url = null;
-
-            for (int i = data.Count() - 1; i >= 0; i--) {
-                if (data[i]["formatType"].ToString() != "SQ")
+            var list = obj["songResultData"]["result"];
+            string MatchedId = null;
+            foreach (var a in list) {
+                var nameEx = a["name"].ToString().Equals(songdata.MusicName);
+                if (!nameEx) continue;
+                string singers = "";
+                foreach (var b in a["singers"])
+                    singers += b["name"];
+                bool singerEx = true;
+                foreach (var aa in songdata.Singer) {
+                    singerEx &= singers.Contains(aa.Name);
+                }
+                bool albumEx = a["albums"][0]["name"].ToString().Contains(songdata.Album.Name);
+                if (nameEx && singerEx && albumEx)
                 {
-                    url = data[i]["url"].ToString();
+                    MatchedId = a["contentId"].ToString();
                     break;
                 }
             }
-            return "https://freetyst.nf.migu.cn/"+HttpUtility.UrlEncode(url.Replace("ftp://218.200.160.122:21/", ""));
+            return "https://app.pd.nf.migu.cn/MIGUM2.0/v1.0/content/sub/listenSong.do?toneFlag=HQ&netType=00&userId=15548614588710179085069&ua=Android_migu&version=5.1&copyrightId=0&contentId=" +MatchedId+"&resourceType=2&channel=0";
         }
         
         #endregion
