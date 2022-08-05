@@ -786,14 +786,23 @@ jpg
         {
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
             var data = await GetUrlOfficialLine(d.MusicID);
+            MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
             if (await HttpHelper.GetHTTPFileSize(data[0]) > 0)
                 return new string[2] { data[0], "QQ" };
             var data_2 = await HttpHelper.GetRedirectUrl(await GetUrlOutLine(d));
+            MainClass.DebugCallBack(data_2, "Fetching Url From MIGU------------------");
             if (await HttpHelper.GetHTTPFileSize(data_2) > 0)
                 return new string[2] { data_2, "MIGU" };
             else if (!string.IsNullOrEmpty(d.Mvmid))
+            {
+                MainClass.DebugCallBack(d.Mvmid, "Fetching Url From QMV------------------");
                 return new string[2] { await GetMVUrl(d.Mvmid, false), "QMV" };
-            else return null;
+            }
+            else
+            {
+                MainClass.DebugCallBack(d.Mvmid, "Noting is gotten..------------------");
+                return null;
+            }
         }
 
         /// <summary>
