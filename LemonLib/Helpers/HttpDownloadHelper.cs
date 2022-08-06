@@ -19,6 +19,7 @@ namespace LemonLib
         public event Pr ProgressChanged;
         public delegate void finish();
         public event finish Finished;
+        public event finish Fail;
         public delegate void x(string z);
         public event x GetSize;
         public HttpDownloadHelper(Music data, string pa)
@@ -30,41 +31,45 @@ namespace LemonLib
         {
             await Task.Run(async () =>
             {
-                string Url = (await MusicLib.GetUrlAsync(mData))[0];
-                Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
-                HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url);
-                Myrq.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-                Myrq.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-                Myrq.Headers.Add("Cache-Control", "max-age=0");
-                Myrq.KeepAlive = true;
-                Myrq.Headers.Add("Upgrade-Insecure-Requests", "1");
-                Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40";
-                var myrp = (HttpWebResponse)Myrq.GetResponse();
-                Console.WriteLine(myrp.StatusCode.ToString());
-                var totalBytes = myrp.ContentLength;
-                GetSize(Getsize(totalBytes));
-                Stream st = myrp.GetResponseStream();
-                Stream so = new FileStream(Path, FileMode.Create);
-                long totalDownloadedByte = 0;
-                byte[] by = new byte[1048576];
-                int osize = await st.ReadAsync(by, 0, (int)by.Length);
-                while (osize > 0)
+                string[] Url = await MusicLib.GetUrlAsync(mData);
+                if (Url != null)
                 {
-                    if (stop) break;
-                    if (Downloading)
+                    Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
+                    HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url[0]);
+                    Myrq.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
+                    Myrq.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+                    Myrq.Headers.Add("Cache-Control", "max-age=0");
+                    Myrq.KeepAlive = true;
+                    Myrq.Headers.Add("Upgrade-Insecure-Requests", "1");
+                    Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40";
+                    var myrp = (HttpWebResponse)Myrq.GetResponse();
+                    Console.WriteLine(myrp.StatusCode.ToString());
+                    var totalBytes = myrp.ContentLength;
+                    GetSize(Getsize(totalBytes));
+                    Stream st = myrp.GetResponseStream();
+                    Stream so = new FileStream(Path, FileMode.Create);
+                    long totalDownloadedByte = 0;
+                    byte[] by = new byte[1048576];
+                    int osize = await st.ReadAsync(by, 0, by.Length);
+                    while (osize > 0)
                     {
-                        totalDownloadedByte = osize + totalDownloadedByte;
-                        await so.WriteAsync(by, 0, osize);
-                        osize = await st.ReadAsync(by, 0, (int)by.Length);
-                        Progress = (int)((float)totalDownloadedByte / (float)totalBytes * 100);
-                        ProgressChanged(Progress);
-                        Console.WriteLine("downloading:" + Progress);
+                        if (stop) break;
+                        if (Downloading)
+                        {
+                            totalDownloadedByte = osize + totalDownloadedByte;
+                            await so.WriteAsync(by, 0, osize);
+                            osize = await st.ReadAsync(by, 0, by.Length);
+                            Progress = (int)(totalDownloadedByte / totalBytes * 100);
+                            ProgressChanged(Progress);
+                            Console.WriteLine("downloading:" + Progress);
+                        }
                     }
+                    st.Close();
+                    so.Close();
+                    myrp.Close();
+                    if (!stop) Finished();
                 }
-                st.Close();
-                so.Close();
-                myrp.Close();
-                if (!stop) Finished();
+                else Fail();
             });
         }
         public void Pause()

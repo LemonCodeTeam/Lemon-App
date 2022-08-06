@@ -2901,7 +2901,7 @@ namespace LemonApp
         private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             await Task.Yield();
-            MoreBtn_Meum.HorizontalOffset = IsLyricPageOpen == 1 ? -230 : 50;
+            MoreBtn_Meum.HorizontalOffset = IsLyricPageOpen == 1 ? -320 : -70;
             MoreBtn_Meum.IsOpen = !MoreBtn_Meum.IsOpen;
         }
         private void MoreBtn_Meum_DL_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3335,6 +3335,16 @@ namespace LemonApp
             else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
 
         }
+        private void RomajiLyric_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.RomajiLyric = !Settings.USettings.RomajiLyric;
+            lv.SetRomajiLyric(Settings.USettings.RomajiLyric);
+            if (Settings.USettings.RomajiLyric)
+            {
+                RomajiLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+            else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+        }
         #endregion
         #region IntoGD 导入歌单
         private void IntoGDPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3442,8 +3452,12 @@ namespace LemonApp
                 DownloadDL.Remove(s.MData);
                 if (DownloadDL.Count != 0)
                 {
-                    DownloadItem d = DownloadItemsList.Children[DownloadItemsList.Children.IndexOf(s) + 1] as DownloadItem;
-                    if (!d.finished) d.d.Download();
+                    int next = DownloadItemsList.Children.IndexOf(s) + 1;
+                    if (DownloadItemsList.Children.Count != next)
+                    {
+                        DownloadItem d = DownloadItemsList.Children[next] as DownloadItem;
+                        if (!d.finished) d.d.Download();
+                    }
                 }
                 else
                 {
@@ -3892,16 +3906,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void RomajiLyric_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Settings.USettings.RomajiLyric = !Settings.USettings.RomajiLyric;
-            lv.SetRomajiLyric(Settings.USettings.RomajiLyric);
-            if (Settings.USettings.RomajiLyric)
-            {
-                RomajiLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
-            }
-            else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
-        }
     }
 }

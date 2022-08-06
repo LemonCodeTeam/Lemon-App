@@ -55,6 +55,13 @@ namespace LemonApp
                     size.Text = s;
                 });
             };
+            d.Fail += () =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    DeleteBtn_MouseDown(null, null);
+                });
+            };
             if (index == 0)
                 d.Download();
         }
