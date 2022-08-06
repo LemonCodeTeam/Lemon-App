@@ -69,7 +69,8 @@ namespace LemonApp
             CheckAniLeft = Resources["CheckAniLeft"] as Storyboard;
             CheckAniRight = Resources["CheckAniRight"] as Storyboard;
             t.Interval = 5000;
-            t.Tick += delegate {
+            t.Tick += delegate
+            {
                 t.Interval = 5000;
                 if (HasCheck)
                 {
@@ -147,7 +148,7 @@ namespace LemonApp
                     index++;
                     await SetImageAsync(index);
                 }
-                
+
                 CheckAniRight.Begin();
             }
             catch { }

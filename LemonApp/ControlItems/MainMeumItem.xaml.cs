@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LemonApp.ControlItems
 {
@@ -21,19 +12,23 @@ namespace LemonApp.ControlItems
         public MainMeumItem()
         {
             InitializeComponent();
-            MouseEnter += delegate {
+            MouseEnter += delegate
+            {
                 FocusMask.Visibility = Visibility.Visible;
             };
-            MouseLeave += delegate {
+            MouseLeave += delegate
+            {
                 if (!_hasChecked)
                     FocusMask.Visibility = Visibility.Collapsed;
             };
         }
 
         bool _hasChecked = false;
-        public bool HasChecked {
+        public bool HasChecked
+        {
             get => _hasChecked;
-            set {
+            set
+            {
                 _hasChecked = value;
                 if (value)
                 {

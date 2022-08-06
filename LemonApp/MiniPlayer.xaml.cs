@@ -1,15 +1,7 @@
 ﻿using LemonLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LemonApp
 {
@@ -31,7 +23,7 @@ namespace LemonApp
 
         private void likeBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            mw.likeBtn_MouseDown(sender,e);
+            mw.likeBtn_MouseDown(sender, e);
         }
 
         private void LastBtnDown(object sender, MouseButtonEventArgs e)
@@ -86,7 +78,8 @@ namespace LemonApp
                 Simple.Visibility = Visibility.Collapsed;
                 WithLyric.Visibility = Visibility.Visible;
             }
-            else {
+            else
+            {
                 //关闭歌词
                 Simple.Visibility = Visibility.Visible;
                 WithLyric.Visibility = Visibility.Collapsed;

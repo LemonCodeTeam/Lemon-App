@@ -29,7 +29,8 @@ namespace LemonApp.ContentPage
             foreach (var d in dt)
             {
                 var top = new TopControl(d);
-                top.t.MouseDown += delegate {
+                top.t.MouseDown += delegate
+                {
                     mw.GetTopItems(top);
                 };
                 top.Margin = new Thickness(10, 0, 10, 20);

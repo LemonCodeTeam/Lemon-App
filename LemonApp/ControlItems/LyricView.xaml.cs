@@ -1,7 +1,6 @@
 ﻿using LemonLib;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,7 +20,7 @@ namespace LemonApp
     /// </summary>
     public partial class LyricView : UserControl
     {
-        public delegate void NextData(string lyric,string trans);
+        public delegate void NextData(string lyric, string trans);
         public event NextData NextLyric;
         #region 
         public class LrcModel
@@ -48,16 +47,19 @@ namespace LemonApp
         }
 
         #region 
-        public void SetFontSize(int size) {
+        public void SetFontSize(int size)
+        {
             foreach (TextBlock tb in c_lrc_items.Children)
             {
                 tb.FontSize = size;
-                if (tb.Inlines.Count > 1) {
+                if (tb.Inlines.Count > 1)
+                {
                     ((Run)tb.Inlines.Last()).FontSize = tb.FontSize - 4;
                 }
             }
         }
-        public void SetTransLyric(bool open=true) {
+        public void SetTransLyric(bool open = true)
+        {
             if (!open)
             {
                 foreach (Run r in TransRunReference)
@@ -66,7 +68,8 @@ namespace LemonApp
                     r.FontSize = 0.01;
                 }
             }
-            else {
+            else
+            {
                 int size = Settings.USettings.LyricFontSize - 4;
                 foreach (Run r in TransRunReference)
                 {
@@ -101,7 +104,7 @@ namespace LemonApp
             foreach (TextBlock tb in c_lrc_items.Children)
                 tb.Width = width;
         }
-        public async void LoadLrc(LyricData data,bool LoadRomaji)
+        public async void LoadLrc(LyricData data, bool LoadRomaji)
         {
             Lrcs.Clear();
             c_lrc_items.Children.Clear();
@@ -141,7 +144,7 @@ namespace LemonApp
                         //1.正常对应
                         //2.翻译与歌词之间有+-2ms的误差
                         string lrc = str.Split(']')[1].Replace("\r", "").Replace("\n", "");
-                        sb.Add(lrc.Contains('：')?" ":lrc);
+                        sb.Add(lrc.Contains('：') ? " " : lrc);
                         string trans = null;
                         if (data.HasTrans)
                         {
@@ -178,7 +181,7 @@ namespace LemonApp
                                 Text = trans,
                                 FontWeight = FontWeights.Regular,
                                 FontSize = c_lrcbk.FontSize - 4,
-                                Foreground = Settings.USettings.TransLyric? NormalLrcColor:null
+                                Foreground = Settings.USettings.TransLyric ? NormalLrcColor : null
                             };
                             c_lrcbk.Inlines.Add(ts);
                             TransRunReference.Add(ts);
@@ -232,7 +235,8 @@ namespace LemonApp
                 }
             }
         }
-        private async void SaveRomajiLrc(string id,string data) {
+        private async void SaveRomajiLrc(string id, string data)
+        {
             string file = Settings.USettings.MusicCachePath + "Lyric\\" + id + ".rm.lmrc";
             await File.WriteAllTextAsync(file, data);
         }
@@ -261,8 +265,8 @@ namespace LemonApp
             int s = 0, f = 0;
             if (sp[1].IndexOf(".") != -1)
             {
-                    s = int.Parse(sp[1].Split('.')[0]);
-                    f = int.Parse(sp[1].Split('.')[1]);
+                s = int.Parse(sp[1].Split('.')[0]);
+                f = int.Parse(sp[1].Split('.')[1]);
             }
             else
                 s = Convert.ToInt32(sp[1]);
@@ -297,7 +301,7 @@ namespace LemonApp
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
                         ResetLrcviewScroll();
                     }
-                    NextLyric(foucslrc.LrcText,foucslrc.LrcTransText);
+                    NextLyric(foucslrc.LrcText, foucslrc.LrcTransText);
                 }
             }
         }

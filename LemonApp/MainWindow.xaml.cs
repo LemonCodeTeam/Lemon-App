@@ -246,7 +246,7 @@ namespace LemonApp
                     mini.lyric.Text = lrc;
                     if (Settings.USettings.DoesOpenDeskLyric)
                     {
-                        lyricTa.Update(lrc + (Settings.USettings.TransLyric?(trans == null ? "" : ("\r\n" + trans)):""));
+                        lyricTa.Update(lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : ""));
                         lastlyric = lrc;
                     }
                     if (Settings.USettings.IsLyricImm)
@@ -255,7 +255,7 @@ namespace LemonApp
                         ImmTb_Lyric.Text = "";
                         ImmTb_Trans.Text = "";
                         string dt = lrc;
-                        ImmTb_Trans.Text = Settings.USettings.TransLyric ? (trans ?? ""):"";
+                        ImmTb_Trans.Text = Settings.USettings.TransLyric ? (trans ?? "") : "";
                         //分割划词
                         string[] dta = dt.Split(' ');
                         if (dta.Count() >= 3)
@@ -2466,9 +2466,9 @@ namespace LemonApp
 
                 LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
                 //用日语平假名来判断 基本避开中文字符干扰
-                bool ldrm = Regex.Match(dt.lyric, @"[\u3040-\u309f]").Length > 0&&dt.HasTrans;
+                bool ldrm = Regex.Match(dt.lyric, @"[\u3040-\u309f]").Length > 0 && dt.HasTrans;
                 Console.WriteLine(ldrm, "ISJAPANESE");
-                lv.LoadLrc(dt,ldrm);
+                lv.LoadLrc(dt, ldrm);
                 RomajiLyric.Visibility = ldrm ? Visibility.Visible : Visibility.Collapsed;
                 TransLyric.Visibility = dt.HasTrans ? Visibility.Visible : Visibility.Collapsed;
                 if (doesplay)

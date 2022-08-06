@@ -24,18 +24,21 @@ namespace LemonApp
                 listenCount.Text = data.lstCount.IntToWn();
                 im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo, new int[2] { 200, 200 }));
             };
-            MouseEnter += delegate {
+            MouseEnter += delegate
+            {
                 AddToQGT.Visibility = Visibility.Visible;
             };
-            MouseLeave += delegate {
+            MouseLeave += delegate
+            {
                 AddToQGT.Visibility = Visibility.Collapsed;
             };
-            AddToQGT.MouseDown += delegate {
+            AddToQGT.MouseDown += delegate
+            {
                 UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
                 {
                     type = "Radio",
                     id = data.ID,
-                    name=data.Name,
+                    name = data.Name,
                     imgurl = data.Photo
                 });
             };

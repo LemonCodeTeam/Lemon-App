@@ -1,5 +1,4 @@
 ﻿using LemonLib;
-using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
@@ -25,7 +24,8 @@ namespace LemonApp
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
         double Tp = 0;
-        private void Search() {
+        private void Search()
+        {
             string url = "https://www.baidu.com/s?wd=" + HttpUtility.UrlEncode(textBox1.Text);
             Process p = new Process();
             p.StartInfo.FileName = "cmd.exe";
@@ -37,7 +37,7 @@ namespace LemonApp
             p.Start();//启动程序
 
             //向cmd窗口发送输入信息
-            p.StandardInput.WriteLine("start "+url + "&exit");
+            p.StandardInput.WriteLine("start " + url + "&exit");
             p.StandardInput.AutoFlush = true;
             p.WaitForExit();//等待程序执行完退出进程
             p.Close();

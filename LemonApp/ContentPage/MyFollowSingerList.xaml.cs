@@ -39,7 +39,8 @@ namespace LemonApp
             foreach (var d in data)
             {
                 var sinx = new SingerItem(d) { Margin = new Thickness(12, 0, 12, 20) };
-                sinx.im.MouseDown += delegate {
+                sinx.im.MouseDown += delegate
+                {
                     mw.GetSinger(sinx);
                 };
                 ItemsList.Children.Add(sinx);

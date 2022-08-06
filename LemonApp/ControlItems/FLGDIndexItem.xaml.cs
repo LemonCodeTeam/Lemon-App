@@ -66,18 +66,21 @@ namespace LemonApp
                 var ims = await ImageCacheHelp.GetImageByUrl(dat.Photo, new int[2] { 300, 300 });
                 im.Background = new ImageBrush(ims);
             };
-            MouseEnter += delegate {
+            MouseEnter += delegate
+            {
                 AddToQGT.Visibility = Visibility.Visible;
             };
-            MouseLeave += delegate {
+            MouseLeave += delegate
+            {
                 AddToQGT.Visibility = Visibility.Collapsed;
             };
-            AddToQGT.MouseDown += delegate {
+            AddToQGT.MouseDown += delegate
+            {
                 UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
                 {
                     type = "GD",
                     id = data.ID,
-                    name=data.Name,
+                    name = data.Name,
                     imgurl = data.Photo
                 });
             };

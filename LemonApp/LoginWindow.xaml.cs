@@ -1,12 +1,10 @@
 ﻿using LemonLib;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using static LemonLib.InfoHelper;
-using System.Collections.Generic;
 
 namespace LemonApp
 {
@@ -27,7 +25,8 @@ namespace LemonApp
         }
         public void Api_Login()
         {
-            wb.Navigated += delegate {
+            wb.Navigated += delegate
+            {
                 Console.WriteLine("", "Arrive");
                 wb.Document.GetElementById("title_0").InnerText = "登录到 Lemon App";
                 loading.Visibility = Visibility.Collapsed;
@@ -35,12 +34,12 @@ namespace LemonApp
             };
             wb.Navigate(new Uri("https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=8000201&hide_border=1&style=33&theme=2&s_url=https%3A%2F%2Fvip.qq.com&daid=18&low_login=1&hln_autologin=e=2&login_text=%E6%8E%88%E6%9D%83%E5%B9%B6%E7%99%BB%E5%BD%95"));
             Activate();
-            wb.DocumentTitleChanged+= Wb_Dc_Login;
+            wb.DocumentTitleChanged += Wb_Dc_Login;
         }
 
         private async void Wb_Dc_Login(object sender, EventArgs e)
         {
-            if (wb.Url.Host== "vip.qq.com")
+            if (wb.Url.Host == "vip.qq.com")
             {
                 await Task.Delay(500);
                 //--------------暴露g_skey Cookies----------------------

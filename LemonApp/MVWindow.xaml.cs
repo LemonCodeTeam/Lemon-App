@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using static LemonLib.InfoHelper;
@@ -49,11 +48,11 @@ namespace LemonApp
             MVPlList.Children.Clear();
             foreach (var dt in data)
             {
-                MVPlList.Children.Add(new PlControl(dt) {Margin = new Thickness(10, 0, 0, 20) });
+                MVPlList.Children.Add(new PlControl(dt) { Margin = new Thickness(10, 0, 0, 20) });
             }
             Activate();
             Topmost = false;
-            double ps=ActualWidth/MvPlay_ME.NaturalVideoWidth;
+            double ps = ActualWidth / MvPlay_ME.NaturalVideoWidth;
             MV.Height = MvPlay_ME.NaturalVideoHeight * ps;
         }
         private void Mvt_Tick(object sender, EventArgs e)
@@ -147,9 +146,10 @@ namespace LemonApp
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 2) {
+            if (e.ClickCount == 2)
+            {
                 Topmost = !Topmost;
-                Toast.Send(Topmost ? "已置顶":"已取消置顶");
+                Toast.Send(Topmost ? "已置顶" : "已取消置顶");
             }
         }
     }

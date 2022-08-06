@@ -19,13 +19,14 @@ namespace LemonApp
         public SingerPageData Data;
         private MainWindow mw;
         private Action Finished;
-        public SingerPage(MusicSinger ms,SingerPageData spd, MainWindow m, Action ac)
+        public SingerPage(MusicSinger ms, SingerPageData spd, MainWindow m, Action ac)
         {
             InitializeComponent();
             Data = spd;
             mw = m;
             Finished = ac;
-            AddToQGT.MouseDown += delegate {
+            AddToQGT.MouseDown += delegate
+            {
                 UIHelper.GetAncestor<MainWindow>(this).AddToQGT(new InfoHelper.QuickGoToData()
                 {
                     type = "Singer",
@@ -55,7 +56,7 @@ namespace LemonApp
 
             if (Data.HasBigPic)
                 mSingerBig.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] { 469, 1000 })) { Stretch = Stretch.UniformToFill };
-            else TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] {300,300 }));
+            else TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.mSinger.Photo, new int[2] { 300, 300 }));
 
             FansCount.Text = "粉丝数：" + Data.FansCount;
             if (Data.HasGJ)
@@ -138,7 +139,8 @@ namespace LemonApp
                     Width = 150,
                     Margin = new Thickness(20, 0, 0, 0)
                 };
-                m.im.MouseDown += delegate {
+                m.im.MouseDown += delegate
+                {
                     mw.GetSinger(m);
                 };
                 SimilarSingerList.Children.Add(m);
@@ -191,7 +193,8 @@ namespace LemonApp
 
         private async void FanBt_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Settings.USettings.LemonAreeunIts == "0") {
+            if (Settings.USettings.LemonAreeunIts == "0")
+            {
                 Toast.Send("请先登录");
                 return;
             }

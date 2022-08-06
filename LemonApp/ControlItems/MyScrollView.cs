@@ -1,6 +1,5 @@
 ﻿using LemonLib;
 using System;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -12,7 +11,8 @@ namespace LemonApp
     /// </summary>
     public class MyScrollView : ScrollViewer
     {
-        public MyScrollView() {
+        public MyScrollView()
+        {
             this.PreviewMouseUp += MyScrollView_PreviewMouseUp;
             this.SnapsToDevicePixels = true;
         }
@@ -26,7 +26,7 @@ namespace LemonApp
         public double LastLocation = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            double WheelChange = e.Delta*0.5;
+            double WheelChange = e.Delta * 0.5;
             double newOffset = LastLocation - (WheelChange * 2);
             ScrollToVerticalOffset(LastLocation);
             if (newOffset < 0)

@@ -3,10 +3,8 @@ using Lierda.WPFHelper;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Pipes;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -42,7 +40,7 @@ namespace LemonApp
                 //To solve: HttpWebRequest The SSL connection could not be established
                 ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-              
+
                 if (!Directory.Exists(Settings.USettings.DataCachePath))
                     Directory.CreateDirectory(Settings.USettings.DataCachePath);
                 if (!Directory.Exists(Settings.USettings.MusicCachePath))
@@ -72,7 +70,7 @@ namespace LemonApp
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19000000"));
-   
+
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("#FF3E3E42"));
             SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FF252526"));
@@ -88,7 +86,7 @@ namespace LemonApp
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FFFFFF"));
- 
+
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
@@ -104,7 +102,7 @@ namespace LemonApp
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FF31C27C"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#05000000"));
- 
+
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
@@ -136,7 +134,7 @@ namespace LemonApp
                 + "\r\n 引发异常的方法:" + e.TargetSite
                 + "\r\n  帮助链接:" + e.HelpLink
                 + "\r\n 调用堆:" + e.StackTrace;
-                Console.WriteLine(i,"ERROR","red");
+                Console.WriteLine(i, "ERROR", "red");
                 FileStream fs = new FileStream(Settings.USettings.DataCachePath + "Log.log", FileMode.Append);
                 StreamWriter sw = new StreamWriter(fs);
                 sw.Write(i);
@@ -189,7 +187,7 @@ namespace LemonApp
         /// <param name="text"></param>
         /// <param name="title"></param>
         /// <param name="color">blue white red yellow</param>
-        public static async void WriteLine(object text,string title="",string color="blue")
+        public static async void WriteLine(object text, string title = "", string color = "blue")
         {
             if (p != null)
             {
