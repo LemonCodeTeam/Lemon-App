@@ -1292,15 +1292,16 @@ jpg
         public static async Task<List<Music>> GetSingerMusicByIdAsync(string mid, int osx = 1)
         {
             int begin = (osx - 1) * 30;
-            JObject o = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=24&singermid={mid}&order=listen&begin={begin}&num=30&songstatus=1"));
+            var o = JObject.Parse(await HttpHelper.GetWebDataqAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=" +
+            HttpUtility.UrlEncode("{\"req_0\":{\"method\":\"GetSingerSongList\",\"param\":{\"singerMid\":\""+mid+"\",\"order\":1,\"begin\":"+begin+",\"num\":30},\"module\":\"musichall.song_list_server\"},\"comm\":{\"ct\":24,\"cv\":0}}")));
             List<Music> dt = new List<Music>();
-            JToken dtl = o["data"]["list"];
+            JToken dtl = o["req_0"]["data"]["songList"];
             foreach (JToken dtli in dtl)
             {
-                var dsli = dtli["musicData"];
+                var dsli = dtli["songInfo"];
                 Music m = new Music();
-                m.MusicName = dsli["songname"].ToString();
-                m.MusicName_Lyric = dsli["albumdesc"].ToString();
+                m.MusicName = dsli["name"].ToString();
+                m.MusicName_Lyric = dsli["subtitle"].ToString();
                 string Singer = "";
                 List<MusicSinger> lm = new List<MusicSinger>();
                 for (int osxc = 0; osxc != dsli["singer"].Count(); osxc++)
@@ -1310,10 +1311,10 @@ jpg
                 }
                 m.Singer = lm;
                 m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
-                m.MusicID = dsli["songmid"].ToString();
-                var amid = dsli["albummid"].ToString();
+                m.MusicID = dsli["mid"].ToString();
+                var amid = dsli["album"]["mid"].ToString();
                 if (amid == "001ZaCQY2OxVMg")
-                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{dsli["singer"][0]["mid"]}.jpg?max_age=2592000";
                 else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
                 else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
                 if (amid != "")
@@ -1321,13 +1322,13 @@ jpg
                     {
                         ID = amid,
                         Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                        Name = dsli["albumname"].ToString()
+                        Name = dsli["album"]["name"].ToString()
                     };
-                if (dsli["size320"].ToString() != "0")
+                if (dsli["file"]["size_320mp3"].ToString() != "0")
                     m.Pz = "HQ";
-                if (dsli["sizeflac"].ToString() != "0")
+                if (dsli["file"]["size_flac"].ToString() != "0")
                     m.Pz = "SQ";
-                m.Mvmid = dsli["vid"].ToString();
+                m.Mvmid = dsli["mv"]["vid"].ToString();
                 dt.Add(m);
             }
             return dt;
