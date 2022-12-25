@@ -3342,22 +3342,13 @@ namespace LemonApp
         TranslationAir ta = null;
         private void TransLyric_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 1)
+            Settings.USettings.TransLyric = !Settings.USettings.TransLyric;
+            lv.SetTransLyric(Settings.USettings.TransLyric);
+            if (Settings.USettings.TransLyric)
             {
-                Settings.USettings.TransLyric = !Settings.USettings.TransLyric;
-                lv.SetTransLyric(Settings.USettings.TransLyric);
-                if (Settings.USettings.TransLyric)
-                {
-                    TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
-                }
-                else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+                TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
-            else {
-                if (ta == null) {
-                    ta = new TranslationAir();
-                    ta.Show();
-                }
-            }
+            else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
         }
         private void RomajiLyric_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -3368,6 +3359,11 @@ namespace LemonApp
                 RomajiLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
             else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+        }
+        private void TransAir_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ta = new TranslationAir();
+            ta.Show();
         }
         #endregion
         #region IntoGD 导入歌单
