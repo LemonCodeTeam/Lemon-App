@@ -2447,9 +2447,11 @@ namespace LemonApp
                 //模糊处理
                 var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
                 var imb = im.ToBitmap();
-                imb.GaussianBlur(ref rect, 70);
-                //在模糊的基础上取主题色
                 var col = imb.get_major_color();
+                imb.GaussianBlur(ref rect, 70);
+                //下面的做法会让取到的颜色灰化..
+                //在模糊的基础上取主题色
+                //var col = imb.get_major_color();
 
                 int high = 230;
                 int dark = 100;
