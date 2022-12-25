@@ -90,6 +90,20 @@ namespace LemonLib
                 { HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36" },
                 { HttpRequestHeader.Host, "c.y.qq.com" }
             };
+
+        public static WebHeaderCollection GetWebHeader_BaiduFY() => new WebHeaderCollection {
+            {"Accept","*/*"},
+            { "Accept-Language","zh-CN,zh;q=0.9"},
+            { "Content-Type","application/x-www-form-urlencoded; charset=UTF-8"},
+            { "Host","fanyi.baidu.com"},
+            { "Origin","https://fanyi.baidu.com"},
+            { "Referer","https://fanyi.baidu.com/"},
+            { "Sec-Fetch-Dest","empty"},
+            { "Sec-Fetch-Mode","cors"},
+            { "Sec-Fetch-Site","same-origin"},
+            { "User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36"},
+            { "X-Requested-With","XMLHttpRequest"},
+        };
         /// <summary>
         /// 发送一个简单的POST请求
         /// </summary>

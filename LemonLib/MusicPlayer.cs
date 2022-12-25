@@ -213,6 +213,7 @@ namespace LemonLib
             }
             catch { }
         }
+
         public void Play()
         {
             Bass.BASS_ChannelPlay(stream, false);

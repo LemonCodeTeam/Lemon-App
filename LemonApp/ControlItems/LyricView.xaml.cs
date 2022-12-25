@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static LemonLib.InfoHelper;
@@ -104,6 +105,7 @@ namespace LemonApp
             foreach (TextBlock tb in c_lrc_items.Children)
                 tb.Width = width;
         }
+        public event MouseButtonEventHandler ClickLyric;
         public async void LoadLrc(LyricData data, bool LoadRomaji)
         {
             Lrcs.Clear();
@@ -158,6 +160,7 @@ namespace LemonApp
                         c_lrcbk.Foreground = NormalLrcColor;
                         c_lrcbk.TextWrapping = TextWrapping.Wrap;
                         c_lrcbk.TextAlignment = TextAlignment;
+                        c_lrcbk.MouseDown += ClickLyric;
 
                         if (LoadRomaji)
                         {
@@ -171,7 +174,7 @@ namespace LemonApp
                             RomajiRunReference.Add(rm);
                             c_lrcbk.Inlines.Add(new LineBreak());
                         }
-                        c_lrcbk.Inlines.Add(new Run() { Text = lrc });
+                        c_lrcbk.Inlines.Add(new Run() {Name="main", Text = lrc });
                         if (trans != null)
                         {
                             var bl = new LineBreak();

@@ -21,6 +21,7 @@ using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Markup;
@@ -234,6 +235,7 @@ namespace LemonApp
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
+            lv.ClickLyric += Lv_ClickLyric;
             lv.NormalLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) { Opacity = 0.4 };
             lv.TextAlignment = TextAlignment.Center;
             ly.Child = lv;
@@ -404,6 +406,19 @@ namespace LemonApp
             ContentPage.Children.Add(ClHomePage);
             NSPage(new MeumInfo(ClHomePage, Meum_MusicKu), true, false);
         }
+
+        private void Lv_ClickLyric(object sender, MouseButtonEventArgs e)
+        {
+            if (ta != null) {
+                var tb = sender as TextBlock;
+                foreach (var i in tb.Inlines)
+                    if (i.Name.Equals("main")) {
+                        ta.UpdateText((i as Run).Text);
+                        return;
+                    }
+            }
+        }
+
         private void RUNPopup(Popup pp)
         {
             if (pp.IsOpen)
@@ -3324,16 +3339,25 @@ namespace LemonApp
             if (lv != null)
                 lv.RestWidth(e.NewSize.Width);
         }
+        TranslationAir ta = null;
         private void TransLyric_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Settings.USettings.TransLyric = !Settings.USettings.TransLyric;
-            lv.SetTransLyric(Settings.USettings.TransLyric);
-            if (Settings.USettings.TransLyric)
+            if (e.ClickCount == 1)
             {
-                TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+                Settings.USettings.TransLyric = !Settings.USettings.TransLyric;
+                lv.SetTransLyric(Settings.USettings.TransLyric);
+                if (Settings.USettings.TransLyric)
+                {
+                    TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+                }
+                else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
             }
-            else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
-
+            else {
+                if (ta == null) {
+                    ta = new TranslationAir();
+                    ta.Show();
+                }
+            }
         }
         private void RomajiLyric_MouseDown(object sender, MouseButtonEventArgs e)
         {
