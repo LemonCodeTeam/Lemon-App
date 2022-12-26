@@ -2461,7 +2461,7 @@ namespace LemonApp
                     col.G = (byte)(col.G * 0.6);
                     col.B = (byte)(col.B * 0.6);
                 }
-                else if (col.R <= dark && col.G <= dark && col.B <= dark)
+                else if ((col.R+col.G+col.B)/3<dark)
                 {
                     col.R = (byte)(col.R * 1.8);
                     col.G = (byte)(col.G * 1.8);
@@ -2471,7 +2471,7 @@ namespace LemonApp
                 {
                     col.R -= 90; col.G -= 90; col.B -= 90;
                 }
-                else if (col.R <= dark && col.G <= dark && col.B <= dark)
+                else if ((col.R + col.G + col.B) / 3 < dark)
                 {
                     col.R += 80; col.G += 80; col.B += 80;
                 }
