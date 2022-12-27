@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -193,7 +194,7 @@ namespace LemonLib
         {
             MainClass.DebugCallBack("User Cookies", Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk + "&g_tk_new_20200303=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={id}&typelist=13&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM);
             //添加本地缓存
             JObject o = JObject.Parse(result);
             string msg = o["msg"].ToString();
@@ -211,7 +212,7 @@ namespace LemonLib
         {
             MainClass.DebugCallBack("User Cookies", Settings.USettings.Cookie + "   " + Settings.USettings.g_tk);
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={ids}&typelist={typelist}&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&midlist={ids}&typelist={typelist}&dirid={dirid}&addtype=&formsender=4&source=153&r2=0&r3=1&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM);
             //添加本地缓存
             JObject o = JObject.Parse(result);
             string msg = o["msg"].ToString();
@@ -235,7 +236,7 @@ namespace LemonLib
             Musicid = string.Join(",", Musicids);
             types = types[0..^1];
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types={types}&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types={types}&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM);
             string ok = JObject.Parse(result)["msg"].ToString();
             return ok;
         }
@@ -267,7 +268,7 @@ namespace LemonLib
         public static async Task<string> AddGDILikeAsync(string dissid)
         {
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&dissid={dissid}&from=1&optype=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fplaysquare%2F{dissid}.html%23stat%3Dy_new.playlist.pic_click", HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&dissid={dissid}&from=1&optype=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fn%2Fyqq%2Fplaysquare%2F{dissid}.html%23stat%3Dy_new.playlist.pic_click", HttpHelper.GetWebHeader_YQQCOM);
             return result;
         }
         /// <summary>
@@ -278,7 +279,7 @@ namespace LemonLib
         public static async Task<string> DelGDILikeAsync(string dissid)
         {
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&ordertype=0&optype=2&dissid={dissid}&from=1", HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&ordertype=0&optype=2&dissid={dissid}&from=1", HttpHelper.GetWebHeader_YQQCOM);
             return result;
         }
         /// <summary>
@@ -289,7 +290,7 @@ namespace LemonLib
         public static async Task<string> AddNewGdAsync(string name, string imgurl = "")
         {
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/create_playlist.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url={imgurl}&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=utf8&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&name={HttpUtility.UrlEncode(name)}&description=&show=1&pic_url={imgurl}&tags=&tagids=&formsender=1&utf8=1&qzreferrer=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dother%26tab%3Dcreate%26stat%3Dy_new.top.user_pic", HttpHelper.GetWebHeader_YQQCOM);
             return result;
         }
         /// <summary>
@@ -300,7 +301,7 @@ namespace LemonLib
         public static async Task<string> DeleteGdByIdAsync(string dirid)
         {
             string result = await HttpHelper.PostWeb("https://c.y.qq.com/splcloud/fcgi-bin/fcg_fav_modsongdir.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&delnum=1&deldirids={dirid}&forcedel=1&formsender=1&source=103", HttpHelper.GetWebHeader_YQQCOM());
+                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=fs&inCharset=GB2312&outCharset=gb2312&notice=0&platform=yqq&needNewCode=0&g_tk={Settings.USettings.g_tk}&uin={Settings.USettings.LemonAreeunIts}&delnum=1&deldirids={dirid}&forcedel=1&formsender=1&source=103", HttpHelper.GetWebHeader_YQQCOM);
             return result;
         }
 
@@ -451,7 +452,7 @@ jpg
         /// <returns></returns>
         public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<MusicGData> GetInfo = null, Action<int, Music, bool> callback = null, Window wx = null, Action<int> getAll = null)
         {
-            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+            var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
             JObject o = JObject.Parse(s);
             var dt = new MusicGData();
             var c0 = o["cdlist"][0];
@@ -548,7 +549,7 @@ jpg
         {
             try
             {
-                var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8);
+                var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
                 MainClass.DebugCallBack("GetGD", s);
                 JObject o = JObject.Parse(s);
                 var c0 = o["cdlist"][0];
@@ -632,7 +633,7 @@ jpg
         {
             int start = (osx - 1) * 30;
             int end = start + 29;
-            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId={sortId}&sin={start}&ein={end}", Encoding.UTF8));
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&rnd=0.38615680484561965&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&categoryId={id}&sortId={sortId}&sin={start}&ein={end}"));
             MainClass.DebugCallBack("FLGD Data", o.ToString());
             var data = new List<MusicGD>();
             int i = 0;
@@ -657,7 +658,7 @@ jpg
         /// <returns></returns>
         public async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync()
         {
-            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0", Encoding.UTF8));
+            var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             var data = new MusicFLGDIndexItemsList();
             data.Hot.Add(new MusicFLGDIndexItems { id = "10000000", name = "全部" });
             int i = 0;
@@ -811,26 +812,22 @@ jpg
         /// <param name="Musicid"></param>
         /// <returns></returns>
         private static async Task<string[]> GetUrlOfficialLine(string Musicid) {
-           HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://i.y.qq.com/v8/playsong.html?songmid="+Musicid);
-            hwr.Timeout = 20000;
-            hwr.KeepAlive = true;
-            hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
-            hwr.Headers.Add(HttpRequestHeader.Upgrade, "1");
-            hwr.UserAgent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3854.3 Mobile Safari/537.36";
-            hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
-            hwr.Referer = "https://i.y.qq.com/n2/m/share/details/album.html?albummid=003bBofB3UzHxS&ADTAG=myqq&from=myqq&channel=10007100";
-            hwr.Host = "i.y.qq.com";
-            hwr.Headers.Add("sec-fetch-mode", "navigate");
-            hwr.Headers.Add("sec-fetch-site", "same - origin");
-            hwr.Headers.Add("sec-fetch-user", "?1");
-            hwr.Headers.Add("upgrade-insecure-requests", "1");
-            hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9");
-            hwr.Headers.Add(HttpRequestHeader.Cookie, Settings.USettings.Cookie);
-            var o = await hwr.GetResponseAsync();
-            StreamReader sr = new StreamReader(o.GetResponseStream(), Encoding.UTF8);
-            var st = await sr.ReadToEndAsync();
-            sr.Dispose();
-            var jsondata=TextHelper.FindTextByAB(st, "window.__ssrFirstPageData__ =", "</script>", 0);
+           string surl="https://i.y.qq.com/v8/playsong.html?songmid="+Musicid;
+           using var hc=new HttpClient(HttpHelper.GetSta());
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("CacheControl", "max-age=0");
+             hc.DefaultRequestHeaders.Add("Upgrade", "1");
+            hc.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3854.3 Mobile Safari/537.36");
+           hc.DefaultRequestHeaders.Add("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+           hc.DefaultRequestHeaders.Add("Referer","https://i.y.qq.com/n2/m/share/details/album.html?albummid=003bBofB3UzHxS&ADTAG=myqq&from=myqq&channel=10007100");
+            hc.DefaultRequestHeaders.Host = "i.y.qq.com";
+             hc.DefaultRequestHeaders.Add("sec-fetch-mode", "navigate");
+             hc.DefaultRequestHeaders.Add("sec-fetch-site", "same - origin");
+             hc.DefaultRequestHeaders.Add("sec-fetch-user", "?1");
+             hc.DefaultRequestHeaders.Add("upgrade-insecure-requests", "1");
+             hc.DefaultRequestHeaders.Add("AcceptLanguage", "zh-CN,zh;q=0.9");
+             hc.DefaultRequestHeaders.Add("Cookie", Settings.USettings.Cookie);
+             string data=await hc.GetStringAsync(surl);
+            var jsondata=TextHelper.FindTextByAB(data, "window.__ssrFirstPageData__ =", "</script>", 0);
             var obj = JObject.Parse(jsondata);
             string url = obj["songList"][0]["url"].ToString();
             MainClass.DebugCallBack("GETURL", jsondata);
@@ -842,20 +839,14 @@ jpg
         }
 
         private static async Task<string> GetUrlOutLine(Music songdata) {
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pd.musicapp.migu.cn/MIGUM2.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text="+HttpUtility.UrlEncode(songdata.MusicName+" "+songdata.SingerText)+"&pageNo=1&pageSize=10&searchSwitch={%22song%22:1,%22album%22:0,%22singer%22:0,%22tagSong%22:0,%22mvSong%22:0,%22songlist%22:0,%22bestShow%22:0}");
-            hwr.Timeout = 20000;
-            hwr.KeepAlive = true;
-            hwr.Headers.Add(HttpRequestHeader.CacheControl, "max-age=0");
-            hwr.UserAgent = " Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62";
-            hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-            hwr.Host = "pd.musicapp.migu.cn";
-            hwr.Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-            var o = await hwr.GetResponseAsync();
-            StreamReader sr = new StreamReader(o.GetResponseStream());
-            var st = await sr.ReadToEndAsync();
-            sr.Dispose();
-
-            JObject obj = JObject.Parse(st);
+            string surl="http://pd.musicapp.migu.cn/MIGUM2.0/v1.0/content/search_all.do?&ua=Android_migu&version=5.0.1&text="+HttpUtility.UrlEncode(songdata.MusicName+" "+songdata.SingerText)+"&pageNo=1&pageSize=10&searchSwitch={%22song%22:1,%22album%22:0,%22singer%22:0,%22tagSong%22:0,%22mvSong%22:0,%22songlist%22:0,%22bestShow%22:0}";
+             using var hc=new HttpClient(HttpHelper.GetSta());
+             hc.DefaultRequestHeaders.Add("CacheControl", "max-age=0");
+            hc.DefaultRequestHeaders.UserAgent.ParseAdd(" Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36 Edg/92.0.902.62");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+            hc.DefaultRequestHeaders.Host = "pd.musicapp.migu.cn";
+             hc.DefaultRequestHeaders.Add("AcceptLanguage", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+            JObject obj = JObject.Parse(await hc.GetStringAsync(surl));
             var list = obj["songResultData"]["result"];
             string MatchedId = null;
             foreach (var a in list) {
@@ -893,15 +884,15 @@ jpg
                 file = Settings.USettings.MusicCachePath + "Lyric\\" + McMind + ".lmrc";
             if (!File.Exists(file))
             {
-                WebClient c = new WebClient();
-                c.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36");
-                c.Headers.Add("Accept", "*/*");
-                c.Headers.Add("Referer", "https://y.qq.com/portal/player.html");
-                c.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
-                c.Headers.Add("Cookie", Settings.USettings.Cookie);
-                c.Headers.Add("Host", "c.y.qq.com");
+                using var hc=new HttpClient(HttpHelper.GetSta());
+                 hc.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36");
+                 hc.DefaultRequestHeaders.Add("Accept", "*/*");
+                 hc.DefaultRequestHeaders.Add("Referer", "https://y.qq.com/portal/player.html");
+                 hc.DefaultRequestHeaders.Add("Accept-Language", "zh-CN,zh;q=0.8");
+                 hc.DefaultRequestHeaders.Add("Cookie", Settings.USettings.Cookie);
+                 hc.DefaultRequestHeaders.Add("Host", "c.y.qq.com");
                 string url = $"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid={McMind}&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
-                string td = c.DownloadString(url);
+                string td = await hc.GetStringAsync(url);
                 JObject o = JObject.Parse(td);
 
                 LyricData data = new LyricData();

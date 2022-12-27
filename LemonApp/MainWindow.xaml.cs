@@ -551,7 +551,7 @@ namespace LemonApp
                 //检测登录是否已失效
                 Thread t = new Thread(async () =>
                 {
-                    var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                    var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
                     Debug.WriteLine(sl);
                     JObject j = JObject.Parse(sl);
                     if (j["code"].ToString() == "0")
@@ -774,7 +774,7 @@ namespace LemonApp
                     Settings.USettings.g_tk = data.g_tk;
                     Settings.USettings.Cookie = data.cookie;
                 }
-                var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0", Encoding.UTF8);
+                var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0");
                 Console.WriteLine(sl);
                 var sdc = JObject.Parse(sl)["data"]["creator"];
                 await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.DataCachePath + qq + ".jpg");
@@ -3783,7 +3783,6 @@ namespace LemonApp
             if (Settings.USettings.HotKeys.Count == 0)
             {
                 RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
-                RegisterHotKey(handle, 125, 1, (uint)System.Windows.Forms.Keys.S);
                 RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
                 RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
                 RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
@@ -3880,8 +3879,6 @@ namespace LemonApp
             {
                 if (wParam.ToInt32() == 124)
                     exShow();
-                else if (wParam.ToInt32() == 125)
-                    new SearchWindow().Show();
                 else if (wParam.ToInt32() == 126)
                 { PlayBtn_MouseDown(null, null); Toast.Send("已暂停/播放"); }
                 else if (wParam.ToInt32() == 127)

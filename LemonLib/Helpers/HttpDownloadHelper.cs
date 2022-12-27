@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Un4seen.Bass;
@@ -35,18 +36,18 @@ namespace LemonLib
                 if (Url != null)
                 {
                     Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
-                    HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(Url[0]);
-                    Myrq.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
-                    Myrq.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-                    Myrq.Headers.Add("Cache-Control", "max-age=0");
-                    Myrq.KeepAlive = true;
-                    Myrq.Headers.Add("Upgrade-Insecure-Requests", "1");
-                    Myrq.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40";
-                    var myrp = (HttpWebResponse)Myrq.GetResponse();
+                    using var hc=new HttpClient(new SocketsHttpHandler(){KeepAlivePingPolicy=HttpKeepAlivePingPolicy.WithActiveRequests});
+                   
+                    hc.DefaultRequestHeaders.Accept.TryParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+                    hc.DefaultRequestHeaders.AcceptLanguage.TryParseAdd("zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+                    hc.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
+                    hc.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40");
+                   
+                    var myrp = await hc.GetAsync(Url[0],HttpCompletionOption.ResponseHeadersRead);
                     Console.WriteLine(myrp.StatusCode.ToString());
-                    var totalBytes = myrp.ContentLength;
+                    var totalBytes = (long)myrp.Content.Headers.ContentLength;
                     GetSize(Getsize(totalBytes));
-                    Stream st = myrp.GetResponseStream();
+                    Stream st = await myrp.Content.ReadAsStreamAsync();
                     Stream so = new FileStream(Path, FileMode.Create);
                     long totalDownloadedByte = 0;
                     byte[] by = new byte[1048576];
@@ -66,7 +67,6 @@ namespace LemonLib
                     }
                     st.Close();
                     so.Close();
-                    myrp.Close();
                     if (!stop) Finished();
                 }
                 else Fail();

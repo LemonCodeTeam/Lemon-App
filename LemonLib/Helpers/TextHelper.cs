@@ -89,30 +89,7 @@ namespace LemonLib
                 return all.Substring(A, B);
             }
         }
-        public static string TextEncrypt(string encryptStr, string key)
-        {
-            byte[] keyArray = Encoding.UTF8.GetBytes(key);
-            byte[] toEncryptArray = Encoding.UTF8.GetBytes(encryptStr);
-            RijndaelManaged rDel = new RijndaelManaged();
-            rDel.Key = keyArray;
-            rDel.Mode = CipherMode.ECB;
-            rDel.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = rDel.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        }
-        public static string TextDecrypt(string decryptStr, string key)
-        {
-            byte[] keyArray = Encoding.UTF8.GetBytes(key);
-            byte[] toEncryptArray = Convert.FromBase64String(decryptStr);
-            RijndaelManaged rDel = new RijndaelManaged();
-            rDel.Key = keyArray;
-            rDel.Mode = CipherMode.ECB;
-            rDel.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = rDel.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return Encoding.UTF8.GetString(resultArray);
-        }
+      
         public class JSON
         {
             public static object JsonToObject(string jsonString, object obj)
@@ -148,5 +125,6 @@ namespace LemonLib
                 return sTemp.ToLower();
             }
         }
+   
     }
 }

@@ -1082,7 +1082,6 @@
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
                                         <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0">
                                             <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
-                                            <LemonApp:HotKeyChooser Height="25" desc="便捷搜索:" key="S" Margin="0,0,20,10" KeyId="125"/>
                                             <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="🐱‍💻Debug:" KeyId="129"/>
                                             <LemonApp:HotKeyChooser Height="25" desc="播放/暂停:" key="Space" Margin="0,0,20,10" KeyId="126"/>
                                             <LemonApp:HotKeyChooser Height="25" desc="上一曲:" key="Up" Margin="0,0,20,10" KeyId="127"/>

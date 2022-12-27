@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -59,10 +60,7 @@ namespace LemonLib
             string file = Settings.USettings.MusicCachePath + "\\Image\\" + TextHelper.MD5.EncryptToMD5string(url) + ".jpg";
             if (DecodePixel != null)
             {
-                HttpWebRequest hwr = WebRequest.Create(url) as HttpWebRequest;
-                using HttpWebResponse response = await hwr.GetResponseAsync() as HttpWebResponse;
-                using Stream responseStream = response.GetResponseStream();
-                Image img = Image.FromStream(responseStream);
+                Image img = Image.FromStream(await(await new HttpClient().GetAsync(url)).Content.ReadAsStreamAsync());
                 Bitmap bitmap = new Bitmap(DecodePixel[1], DecodePixel[0]);
                 Graphics g = Graphics.FromImage(bitmap);
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;

@@ -25,17 +25,6 @@ namespace LemonLib
     /// </summary>
     public class Settings
     {
-        /// <summary>
-        /// 兼容旧版本(加密过的settings配置文件)
-        /// </summary>
-        /// <param name="qq"></param>
-        /// <returns></returns>
-        private static async Task<string> ReadEncodeAsync(string qq)
-        {
-            string data = Encoding.UTF8.GetString(Convert.FromBase64String(TextHelper.TextDecrypt(await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st"), TextHelper.MD5.EncryptToMD5string(qq + ".st"))));
-            Console.WriteLine(data);
-            return data;
-        }
         #region USettings
         public static UserSettings USettings = new UserSettings();
         public static async Task SaveSettingsTaskAsync(string id =null)
@@ -71,11 +60,7 @@ namespace LemonLib
                     }
                     else SaveSettingsAsync(qq);
                 }
-                catch
-                {
-                    XDUsettings(await ReadEncodeAsync(qq));
-                    SaveSettingsAsync(qq);
-                }
+                catch{}
             });
         }
         /// <summary>
@@ -284,13 +269,7 @@ namespace LemonLib
                 }
                 else await SaveLocaSettings();
             }
-            catch
-            {
-                string data =await ReadEncodeAsync("Data");
-                JObject o = JObject.Parse(data);
-                LSettings.qq = o["qq"].ToString();
-                await SaveLocaSettings();
-            }
+            catch{}
         }
         public async static Task SaveLocaSettings()
         {

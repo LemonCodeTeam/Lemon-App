@@ -37,6 +37,8 @@ namespace LemonApp
             }
             else
             {
+                EncodingProvider provider = CodePagesEncodingProvider.Instance;
+                Encoding.RegisterProvider(provider);
                 //To solve: HttpWebRequest The SSL connection could not be established
                 ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
