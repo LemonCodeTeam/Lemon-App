@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +12,9 @@ namespace LemonLib
         public static async Task<string> GetRedirectUrl(string url) {
             try
             {
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-                req.Method = "HEAD";
-                req.AllowAutoRedirect = false;
-                WebResponse response = req.GetResponse();
-                return response.Headers["Location"];
+                using var hc = new HttpClient(new SocketsHttpHandler() { AllowAutoRedirect = false });
+                var headers=await hc.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+                return headers.Headers.Location.ToString();
             }
             catch
             {
@@ -23,16 +22,14 @@ namespace LemonLib
             }
         }
 
-        public static async Task<long> GetHTTPFileSize(string sURL)
+        public static async Task<long> GetHTTPFileSize(string url)
         {
             long size = 0L;
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create(sURL);
-                request.Method = "HEAD";
-                using var response = (HttpWebResponse)await request.GetResponseAsync();
-                size = response.ContentLength;
-                response.Close();
+                using var hc = new HttpClient();
+                var headers = await hc.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+                return (long)headers.Content.Headers.ContentLength;
             }
             catch
             {
@@ -46,15 +43,11 @@ namespace LemonLib
         /// <param name="url"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        public static async Task<string> GetWebAsync(string url, Encoding e = null)
+        public static async Task<string> GetWebAsync(string url)
         {
-            if (e == null)
-                e = Encoding.UTF8;
-            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
-            using WebResponse res = await hwr.GetResponseAsync();
-            using StreamReader sr = new StreamReader(res.GetResponseStream(), e);
-            var st = await sr.ReadToEndAsync();
-            return st;
+            using var hc=new HttpClient(new SocketsHttpHandler() { AutomaticDecompression=DecompressionMethods.GZip});
+            var a = await hc.GetAsync(url);
+            return await a.Content.ReadAsStringAsync();
         }
         /// <summary>
         /// 带上简单Header的Get请求
@@ -63,6 +56,8 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> GetWebWithHeaderAsync(string url)
         {
+           // using var hc = new HttpClient(new SocketsHttpHandler() { AutomaticDecompression = DecompressionMethods.GZip });
+            
             HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(url);
             hwr.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
             hwr.Headers.Add("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");

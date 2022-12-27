@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:LemonApp"
              mc:Ignorable="d" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" Cursor="Hand">
     <Grid Background="#00000000">
+        <Border x:Name="Mask" Background="#0C000000" CornerRadius="5,5,5,5" Visibility="Collapsed" Margin="-5,-5,-5,-5" />
         <Path x:Name="path" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" Margin="5"/>
     </Grid>
 </UserControl>

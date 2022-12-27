@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LemonApp.ControlItems"
-             mc:Ignorable="d" Height="30">
+             mc:Ignorable="d" Height="30" Cursor="Hand">
     <Grid Background="#00000000">
         <Border x:Name="FocusMask" Margin="5,-5,5,-5" Background="#0C000000" CornerRadius="5,5,5,5" Visibility="Collapsed"/>
         <Grid Margin="0,0,15,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80">
