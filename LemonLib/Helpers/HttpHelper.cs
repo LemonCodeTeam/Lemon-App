@@ -11,7 +11,8 @@ namespace LemonLib
     {
         public static SocketsHttpHandler GetSta()=> new SocketsHttpHandler()
         {
-            AutomaticDecompression = DecompressionMethods.GZip
+            AutomaticDecompression = DecompressionMethods.GZip,
+            KeepAlivePingPolicy = HttpKeepAlivePingPolicy.Always
         };
         public static async Task<string> GetRedirectUrl(string url)
         {
@@ -85,19 +86,28 @@ namespace LemonLib
             hc.DefaultRequestHeaders.TryAddWithoutValidation("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Host", "c.y.qq.com");
         }
-        public static void GetWebHeader_BaiduFY(HttpClient hc)
+        public static WebHeaderCollection GetWebHeader_BaiduFY() => new WebHeaderCollection {
+            {"Accept","*/*"},
+            { "Accept-Language","zh-CN,zh;q=0.9"},
+            { "Content-Type","application/x-www-form-urlencoded; charset=UTF-8"},
+            { "Host","fanyi.baidu.com"},
+            { "Origin","https://fanyi.baidu.com"},
+            { "Referer","https://fanyi.baidu.com/"},
+            { "Sec-Fetch-Dest","empty"},
+            { "Sec-Fetch-Mode","cors"},
+            { "Sec-Fetch-Site","same-origin"},
+            { "User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36"},
+            { "X-Requested-With","XMLHttpRequest"},
+        };
+        public static async Task<string> PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "zh-CN,zh;q=0.9");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Host", "fanyi.baidu.com");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Origin", "https://fanyi.baidu.com");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Referer", "https://fanyi.baidu.com/");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Dest", "empty");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Mode", "cors");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Sec-Fetch-Site", "same-origin");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("X-Requested-With", "XMLHttpRequest");
+            byte[] postData = Encoding.UTF8.GetBytes(data);
+            using WebClient webClient = new WebClient();
+            if (Header != null)
+                webClient.Headers = Header;
+            byte[] responseData = await webClient.UploadDataTaskAsync(new Uri(url), "POST", postData);
+
+            return Encoding.UTF8.GetString(responseData);
         }
         /// <summary>
         /// 发送一个简单的POST请求
@@ -106,15 +116,17 @@ namespace LemonLib
         /// <param name="data"></param>
         /// <param name="Header"></param>
         /// <returns></returns>
-        public static async Task<string> PostWeb(string url, string data, Action<HttpClient> headers = null)
+        public static async Task<string> PostWeb(string url, string data, Action<HttpClient> headers = null,string mediatype=null)
         {
-            byte[] postData = Encoding.UTF8.GetBytes(data);
-            using var hc = new HttpClient();
+            using var hc = new HttpClient(GetSta());
             if (headers != null)
                 headers(hc);
-            var result = await hc.PostAsync(url, new ByteArrayContent(postData));
+            var result = await hc.PostAsync(url, new StringContent(data,Encoding.UTF8,mediatype));
             return await result.Content.ReadAsStringAsync();
         }
+
+
+
         /// <summary>
         /// 针对wk_v17 y.qq.com的反防盗链 发送POST请求
         /// </summary>
@@ -204,7 +216,6 @@ namespace LemonLib
         public static async Task<string> PostWebSiteEzlang(string url, string content)
         {
             using var hc = new HttpClient(GetSta());
-            hc.DefaultRequestHeaders.Add("ContentType", "application/x-www-form-urlencoded; charset=UTF-8");
             hc.DefaultRequestHeaders.Host = "www.ezlang.net";
             hc.DefaultRequestHeaders.Add("Origin", "https://www.ezlang.net");
             hc.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 Core/1.77.119.400 QQBrowser/10.9.4817.400");
@@ -213,8 +224,7 @@ namespace LemonLib
             hc.DefaultRequestHeaders.Add("sec-fetch-mode", "cors");
             hc.DefaultRequestHeaders.Add("sec-fetch-site", "same-origin");
             hc.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-            var byteData = Encoding.UTF8.GetBytes(content);
-            var result = await hc.PostAsync(url, new ByteArrayContent(byteData));
+            var result = await hc.PostAsync(url, new StringContent(content,Encoding.UTF8,"application/x-www-form-urlencoded"));
             return await result.Content.ReadAsStringAsync();
         }
     }
