@@ -18,24 +18,15 @@ namespace LemonApp
     /// <summary>
     /// TranslationAir.xaml 的交互逻辑
     /// </summary>
-    public partial class TranslationAir : Window
+    public partial class TranslationAir : UserControl
     {
         public TranslationAir()
         {
             InitializeComponent();
+            this.Loaded += delegate {
+                mp.MediaEnded += delegate{ mp.Close(); };
+            };
         }
-
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                DragMove();
-        }
-
-        private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
-
         private async void MDButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!String.IsNullOrEmpty(text.Text))
@@ -55,41 +46,6 @@ namespace LemonApp
         }
         public void UpdateText(string tx) {
             text.Text = tx;
-        }
-
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            mp.MediaEnded += delegate {
-                mp.Close();
-            };
-
-            var osVersion = Environment.OSVersion.Version;
-            var windows10_1809 = new Version(10, 0, 17763);
-            if (osVersion >= windows10_1809)
-            {
-                await Task.Delay(100);
-                Background = null;
-                if (App.BaseApp.ThemeColor == 0)
-                {
-                    WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
-                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
-                    {
-                        Background = new SolidColorBrush(c);
-                    });
-                    wac.Color = Color.FromArgb(200, 255, 255, 255);
-                    wac.IsEnabled = true;
-                }
-                else
-                {
-                    WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
-                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
-                    {
-                        Background = new SolidColorBrush(c);
-                    });
-                    wac.Color = Color.FromArgb(220, 0, 0, 0);
-                    wac.IsEnabled = true;
-                }
-            }
         }
     }
 }

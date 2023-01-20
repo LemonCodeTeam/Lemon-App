@@ -883,6 +883,35 @@
                 <EasingThicknessKeyFrame KeyTime="00:00:01.7000000" Value="880,0,0,0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="OpenTranslationPage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TranslationPage" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TranslationPage" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="-300,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseTranslationPage">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="TranslationPage" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00.2000000" Value="-300,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TranslationPage" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00.2000000" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
         <!--#endregion-->
     </Window.Resources>
     <WindowChrome.WindowChrome>
@@ -1643,7 +1672,12 @@
                 </Border>
             </Grid>
             <Border x:Name="PlayDLPage_ClosePage" Background="#00000000" MouseDown="PlayDLPage_ClosePage_MouseDown" Visibility="Collapsed" Margin="0,0,0,0"/>
-
+            <Grid x:Name="TranslationPage" Background="{DynamicResource PlayDLPage_Bg}" HorizontalAlignment="Left" Width="300" Visibility="Collapsed" Effect="{DynamicResource WindowDrop}" Margin="-300,0,0,0">
+                <LemonApp:TranslationAir x:Name="Translation_ta" Margin="0,13,0,0"/>
+                <Border x:Name="TranslationPage_CloseBtn" HorizontalAlignment="Left" Height="30" Margin="20,20,0,0" VerticalAlignment="Top" Width="30" Background="#00000000" MouseDown="TranslationPage_CloseBtn_MouseDown">
+                    <Path Data="M532.526499 904.817574L139.506311 511.797385 532.526499 118.777197c12.258185-12.258185 12.432147-32.892131-0.187265-45.51052-12.707416-12.707416-32.995485-12.703323-45.511543-0.187265L75.166957 484.739123c-7.120165 7.120165-10.163477 17.065677-8.990768 26.624381-1.500167 9.755178 1.5104 20.010753 8.990768 27.491121l411.660734 411.660734c12.258185 12.258185 32.892131 12.432147 45.511543-0.187265 12.707416-12.707416 12.7023-32.995485 0.187265-45.51052z"  Fill="{DynamicResource PlayDLPage_Font_Low}" Stretch="Uniform" Height="18" Width="18" RenderTransformOrigin="0.5,0.5"/>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </Window>
