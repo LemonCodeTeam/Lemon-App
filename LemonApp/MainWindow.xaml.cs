@@ -3365,24 +3365,23 @@ namespace LemonApp
         TransAirWindow ta = null;
         private void TransAir_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            HasOpenLranslationPage = true;
-            ta = new TransAirWindow();
-            ta.Owner = this;
-            ta.Top = ta.Owner.Top;
-            ta.Left = ta.Owner.Left;
-            ta.Height = ta.Owner.ActualHeight;
-            ta.Owner.LocationChanged += delegate {
+            if (!HasOpenLranslationPage)
+            {
+                HasOpenLranslationPage = true;
+                ta = new TransAirWindow();
+                ta.Owner = this;
                 ta.Top = ta.Owner.Top;
                 ta.Left = ta.Owner.Left;
                 ta.Height = ta.Owner.ActualHeight;
-            };
-            ta.Show();
-
-        }
-
-        private void TranslationPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            HasOpenLranslationPage = false;
+                ta.Closed += delegate { HasOpenLranslationPage = false; };
+                ta.Owner.LocationChanged += delegate
+                {
+                    ta.Top = ta.Owner.Top;
+                    ta.Left = ta.Owner.Left;
+                    ta.Height = ta.Owner.ActualHeight;
+                };
+                ta.Show();
+            }
         }
         #endregion
         #region IntoGD 导入歌单

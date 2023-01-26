@@ -50,9 +50,8 @@ namespace LemonApp
                     wac.Color = Color.FromArgb(220, 0, 0, 0);
                     wac.IsEnabled = true;
                 }
-               // await Task.Delay(200);
-            //    bg.BeginAnimation(OpacityProperty,new DoubleAnimation(1,0,TimeSpan.FromMilliseconds(200)));
             }
+            else bg.Visibility = Visibility.Visible;
         }
 
         private void TranslationPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
