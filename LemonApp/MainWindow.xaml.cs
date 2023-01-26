@@ -413,7 +413,7 @@ namespace LemonApp
                 var tb = sender as TextBlock;
                 foreach (var i in tb.Inlines)
                     if (i.Name.Equals("main")) {
-                        Translation_ta.UpdateText((i as Run).Text);
+                        ta.Translation_ta.UpdateText((i as Run).Text);
                         return;
                     }
             }
@@ -3362,16 +3362,27 @@ namespace LemonApp
             else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
         }
         bool HasOpenLranslationPage = false;
+        TransAirWindow ta = null;
         private void TransAir_MouseDown(object sender, MouseButtonEventArgs e)
         {
             HasOpenLranslationPage = true;
-            (Resources["OpenTranslationPage"] as Storyboard).Begin();
+            ta = new TransAirWindow();
+            ta.Owner = this;
+            ta.Top = ta.Owner.Top;
+            ta.Left = ta.Owner.Left;
+            ta.Height = ta.Owner.ActualHeight;
+            ta.Owner.LocationChanged += delegate {
+                ta.Top = ta.Owner.Top;
+                ta.Left = ta.Owner.Left;
+                ta.Height = ta.Owner.ActualHeight;
+            };
+            ta.Show();
+
         }
 
         private void TranslationPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             HasOpenLranslationPage = false;
-            (Resources["CloseTranslationPage"] as Storyboard).Begin();
         }
         #endregion
         #region IntoGD 导入歌单
