@@ -758,7 +758,7 @@ jpg
                     dt.Data.Add(dtv);
                     ids += dtv.MusicID + ",";
                     typelist += "13,";
-                    x.Dispatcher.Invoke(() => { pb.Value = i; tb.Text = dtv.MusicName + " - " + dtv.Singer; });
+                    x.Dispatcher.Invoke(() => { pb.Value = i; tb.Text = dtv.MusicName + " - " + dtv.SingerText; });
                 }
                 else x.Dispatcher.Invoke(() => { pb.Value--; });
                 i++;
@@ -1598,6 +1598,12 @@ jpg
             }
             return HighQuality ? sList.Last() : sList.First();
         }
+        #endregion
+        #region 已购
+        //public static async Task<List<MusicGD>> GetMyHasBought_Albums() 
+        //{
+        //    string data =await HttpHelper.GetWebDatacAsync("");
+        //}
         #endregion
         #region 评论 网易云|QQ音乐
         /// <summary>

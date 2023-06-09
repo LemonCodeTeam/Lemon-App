@@ -1,0 +1,15 @@
+﻿<Window x:Class="LemonApp.LyricBar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:LemonLib;assembly=LemonLib"
+        mc:Ignorable="d"
+        ui:DesktopAppBar.AppBar="Top"
+        Title="LyricBar" Height="40" Width="800" WindowStyle="None" Background="{x:Null}" Loaded="Window_Loaded" AllowsTransparency="True" ShowInTaskbar="False">
+    <Grid Background="{DynamicResource ControlPageBrush}">
+        <Border x:Name="bg" Background="{DynamicResource PlayDLPage_Bg}" Visibility="Collapsed"/>
+        <TextBlock x:Name="text" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+
+    </Grid>
+</Window>

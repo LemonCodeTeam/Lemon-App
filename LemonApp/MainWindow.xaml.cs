@@ -535,7 +535,7 @@ namespace LemonApp
         private double now = 0;
         private double all = 0;
         private string lastlyric = "";
-        private Toast lyricTa = null;
+        private LyricBar lyricTa = null;
         private void LoadMusicData()
         {
             //-------[登录]用户的头像、名称等配置加载
@@ -583,9 +583,10 @@ namespace LemonApp
                 t.Start();
             }
             //-------是否打开了桌面歌词-----------
-            if (Settings.USettings.DoesOpenDeskLyric == true)
+            if (Settings.USettings.DoesOpenDeskLyric)
             {
-                lyricTa = new Toast("", true);
+                lyricTa = new LyricBar();
+                lyricTa.Show();
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
             //------TransLyric Icon----------------
@@ -2873,7 +2874,8 @@ namespace LemonApp
             else
             {
                 Settings.USettings.DoesOpenDeskLyric = true;
-                lyricTa = new Toast("", true);
+                lyricTa = new LyricBar();
+                lyricTa.Show();
                 lyric_opengc.SetResourceReference(Path.FillProperty, "ThemeColor");
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
@@ -3829,6 +3831,8 @@ namespace LemonApp
             System.Windows.Forms.ToolStripMenuItem exit = new System.Windows.Forms.ToolStripMenuItem("关闭");
             exit.Click += async delegate
              {
+                 if (Settings.USettings.DoesOpenDeskLyric)
+                     lyricTa.Close();
                  try
                  {
                      mp.Free();
@@ -3941,5 +3945,10 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
