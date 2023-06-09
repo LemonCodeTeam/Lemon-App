@@ -1078,7 +1078,7 @@
                                         <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
 
                                     </Grid>
-                                    <Grid Height="100" Margin="0,10,0,0">
+                                    <Grid Height="120" Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
                                         <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0">
                                             <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
@@ -1087,7 +1087,8 @@
                                             <LemonApp:HotKeyChooser Height="25" desc="上一曲:" key="Up" Margin="0,0,20,10" KeyId="127"/>
                                             <LemonApp:HotKeyChooser Height="25" desc="下一曲:" key="Down" Margin="0,0,20,10" KeyId="128"/>
                                         </WrapPanel>
-                                        <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Bottom" TName="应用" Width="90" pData="{x:Null}" Margin="0,0,20,10" MouseDown="ApplyHotKey_MouseDown"/>
+                                        <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" TName="应用" Width="90" pData="{x:Null}" Margin="0,50,20,0" MouseDown="ApplyHotKey_MouseDown"/>
+                                        <CheckBox x:Name="OpenLyricAppBar" Content="使用LyricAppBar" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,100,0,0" Click="OpenLyricAppBar_Click"/>
                                     </Grid>
                                     <Grid Margin="0,10,0,0" Visibility="Visible">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>

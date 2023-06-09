@@ -248,7 +248,10 @@ namespace LemonApp
                     mini.lyric.Text = lrc;
                     if (Settings.USettings.DoesOpenDeskLyric)
                     {
-                        lyricTa.Update(lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : ""));
+                        var str = lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : "");
+                        if (Settings.USettings.LyricAppBarOpen)
+                            lyricTa.Update(str);
+                        else lyricToast.Update(str);
                         lastlyric = lrc;
                     }
                     if (Settings.USettings.IsLyricImm)
@@ -536,6 +539,7 @@ namespace LemonApp
         private double all = 0;
         private string lastlyric = "";
         private LyricBar lyricTa = null;
+        private Toast lyricToast = null;
         private void LoadMusicData()
         {
             //-------[登录]用户的头像、名称等配置加载
@@ -583,10 +587,20 @@ namespace LemonApp
                 t.Start();
             }
             //-------是否打开了桌面歌词-----------
+            OpenLyricAppBar.IsChecked= Settings.USettings.LyricAppBarOpen;
             if (Settings.USettings.DoesOpenDeskLyric)
             {
-                lyricTa = new LyricBar();
-                lyricTa.Show();
+                if (Settings.USettings.LyricAppBarOpen)
+                {
+                    lyricTa = new LyricBar();
+                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
+                    lyricTa.Show();
+                }
+                else
+                {
+                    lyricToast = new Toast("", true);
+                    lyricToast.Show();
+                }
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
             //------TransLyric Icon----------------
@@ -659,6 +673,13 @@ namespace LemonApp
                 2 => Properties.Resources.Random,
                 _ => null
             });
+        }
+
+        private void PopOut_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            OpenLyricAppBar.IsChecked = Settings.USettings.LyricAppBarOpen = false;
+            lyricTa.Close();
+            lyricToast = new Toast("", true);
         }
         #endregion
         #region 窗口控制 最大化/最小化/显示/拖动
@@ -2867,15 +2888,25 @@ namespace LemonApp
             if (Settings.USettings.DoesOpenDeskLyric)
             {
                 Settings.USettings.DoesOpenDeskLyric = false;
-                lyricTa.Close();
+                if (Settings.USettings.LyricAppBarOpen)
+                    lyricTa.Close();
+                else lyricToast.Close();
                 lyric_opengc.Fill = new SolidColorBrush(Colors.White);
                 path7.SetResourceReference(Path.FillProperty, "ResuColorBrush");
             }
             else
             {
                 Settings.USettings.DoesOpenDeskLyric = true;
-                lyricTa = new LyricBar();
-                lyricTa.Show();
+                if (Settings.USettings.LyricAppBarOpen)
+                {
+                    lyricTa = new LyricBar();
+                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
+                    lyricTa.Show();
+                }
+                else {
+                    lyricToast = new Toast("", true);
+                    lyricToast.Show();
+                }
                 lyric_opengc.SetResourceReference(Path.FillProperty, "ThemeColor");
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
@@ -3832,7 +3863,9 @@ namespace LemonApp
             exit.Click += async delegate
              {
                  if (Settings.USettings.DoesOpenDeskLyric)
-                     lyricTa.Close();
+                     if (Settings.USettings.LyricAppBarOpen)
+                         lyricTa.Close();
+                     else lyricToast.Close();
                  try
                  {
                      mp.Free();
@@ -3949,6 +3982,25 @@ namespace LemonApp
         private void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void OpenLyricAppBar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Settings.USettings.DoesOpenDeskLyric) {
+                if (Settings.USettings.LyricAppBarOpen)
+                {
+                    lyricTa.Close();
+                    lyricToast = new Toast("", true);
+                    lyricToast.Show();
+                }
+                else {
+                    lyricToast.Close();
+                    lyricTa = new LyricBar();
+                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
+                    lyricTa.Show();
+                }
+            }
+            Settings.USettings.LyricAppBarOpen = (bool)OpenLyricAppBar.IsChecked;
         }
     }
 }
