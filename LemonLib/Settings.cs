@@ -225,7 +225,7 @@ namespace LemonLib
             //是否打开桌面歌词
             public bool DoesOpenDeskLyric { get; set; } = true;
             //是否打开歌词AppBar
-            public bool LyricAppBarOpen { get; set; } = true;
+            public bool LyricAppBarOpen { get; set; } = false;
             /// <summary>
             /// 主题类型 0:Normal 1:Picture Theme 2.Blur For Win10 3:live theme
             /// </summary>

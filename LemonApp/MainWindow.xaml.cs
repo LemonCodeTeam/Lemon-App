@@ -1663,7 +1663,8 @@ namespace LemonApp
         {
             if (Settings.USettings.LemonAreeunIts == "0")
             {
-                Toast.Send("请先登录");
+                if (TwMessageBox.Show("官方限制需要登录才能访问\r\n是否现在登录？"))
+                    UserTX_MouseDown(null, null);
                 return;
             }
             np = NowPage.SingerItem;
@@ -1757,7 +1758,8 @@ namespace LemonApp
             var dt = sender as RadioItem;
             if (dt.data.Name == "个性电台" && Settings.USettings.LemonAreeunIts == "0")
             {
-                Toast.Send("请先登录");
+                if (TwMessageBox.Show("官方限制需要登录才能访问\r\n是否现在登录？"))
+                    UserTX_MouseDown(null, null);
                 return;
             }
             OpenLoading();
@@ -2221,6 +2223,12 @@ namespace LemonApp
         }
         public async void SearchMusic(string key, int osx = 0, bool NeedSave = true)
         {
+            if (Settings.USettings.LemonAreeunIts == "0")
+            {
+                if (TwMessageBox.Show("官方限制需要登录才能搜索\r\n是否现在登录？"))
+                    UserTX_MouseDown(null, null);
+                return;
+            }
             np = NowPage.Search;
             SearchKey = key;
             OpenLoading();
