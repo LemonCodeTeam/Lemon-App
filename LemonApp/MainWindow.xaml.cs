@@ -2388,7 +2388,7 @@ namespace LemonApp
         {
             MusicPlay_LoadProc = sender as ProgressBar;
         }
-        public async Task LoadMusic(Music data, bool doesplay)
+        public async void LoadMusic(Music data, bool doesplay)
         {
             string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + ".mp3";
             MusicPlay_LoadProc.Value = 0;
@@ -2396,6 +2396,11 @@ namespace LemonApp
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
                 var musicurl = await MusicLib.GetUrlAsync(data);
+                if (musicurl == null)
+                {
+                    SongSource_tb.Text = "No Source";
+                    return;
+                }
                 Console.WriteLine("FROM:" + musicurl[1] + "\r\n" + musicurl[0]);
                 mp.LoadUrl(downloadpath, musicurl[0], (max, value) =>
                 {
@@ -2406,18 +2411,12 @@ namespace LemonApp
                     });
                 }, () =>
                 {
-                    Dispatcher.Invoke(() =>
-                    {
-                        MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
-                    });
+                    MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
                 });
                 if (doesplay)
                     mp.Play();
-                Dispatcher.Invoke(() =>
-                {
-                    MusicName.Text = data.MusicName;
-                    SongSource_tb.Text = musicurl[1];
-                });
+                MusicName.Text = data.MusicName;
+                SongSource_tb.Text = musicurl[1];
             }
             else
             {
@@ -2459,7 +2458,7 @@ namespace LemonApp
                 ImmTb_Trans.Text = "";
                 mp.Pause();
 
-                await LoadMusic(data, doesplay);
+                 LoadMusic(data, doesplay);
 
                 Title = "Lemon App  " + data.MusicName + " - " + data.SingerText;
                 Settings.USettings.Playing = MusicData.Data;

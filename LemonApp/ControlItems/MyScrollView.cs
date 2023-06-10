@@ -14,6 +14,7 @@ namespace LemonApp
         public MyScrollView()
         {
             this.PreviewMouseUp += MyScrollView_PreviewMouseUp;
+            this.PanningMode= PanningMode.VerticalOnly;
             this.SnapsToDevicePixels = true;
         }
 

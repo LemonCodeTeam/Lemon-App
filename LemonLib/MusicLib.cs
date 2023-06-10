@@ -834,7 +834,7 @@ jpg
             string des = obj["metaData"]["description"].ToString();
             string songtitle = TextHelper.FindTextByAB(des, "歌曲：", "，", 0);
             string singer = TextHelper.FindTextByAB(des, "歌手：", "。", 0);
-            MainClass.DebugCallBack("GETURL", "Succeeded to get url from y.qq.com :"+songtitle+" "+singer);
+            MainClass.DebugCallBack("GETURL", "Succeeded to get url from y.qq.com :"+songtitle+" "+singer+"\r\n"+url);
             return new string[3]{url,songtitle,singer};
         }
 
@@ -859,8 +859,7 @@ jpg
                 foreach (var aa in songdata.Singer) {
                     singerEx &= singers.Contains(aa.Name);
                 }
-                bool albumEx = a["albums"][0]["name"].ToString().Contains(songdata.Album.Name);
-                if (nameEx && singerEx && albumEx)
+                if (nameEx && singerEx)
                 {
                     MatchedId = a["contentId"].ToString();
                     break;
