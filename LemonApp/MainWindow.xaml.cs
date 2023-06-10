@@ -2411,7 +2411,10 @@ namespace LemonApp
                     });
                 }, () =>
                 {
-                    MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
+                    Dispatcher.Invoke(() =>
+                    {
+                        MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
+                    });
                 });
                 if (doesplay)
                     mp.Play();
@@ -3159,6 +3162,43 @@ namespace LemonApp
             var k = AddPlayDL_All(null, 0);
             (DataItemsList.Items[0] as DataItem).ShowDx();
             PlayMusic(k.Data);
+        }
+
+        private void OpenLyricAppBar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Settings.USettings.DoesOpenDeskLyric)
+            {
+                if (Settings.USettings.LyricAppBarOpen)
+                {
+                    lyricTa.Close();
+                    lyricToast = new Toast("", true);
+                    lyricToast.Show();
+                }
+                else
+                {
+                    lyricToast.Close();
+                    lyricTa = new LyricBar();
+                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
+                    lyricTa.Show();
+                }
+            }
+            Settings.USettings.LyricAppBarOpen = (bool)OpenLyricAppBar.IsChecked;
+        }
+
+        private async void SongSource_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await Task.Yield();
+            Pop_dl.HorizontalOffset = IsLyricPageOpen == 1 ? -310 : -40;
+            Pop_dl.IsOpen = true;
+        }
+
+        private async void DeleteLocalCacheButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
+            System.IO.File.Delete(file);
+            DeleteLocalCacheButton.TName = "删除成功";
+            await Task.Delay(1000);
+            DeleteLocalCacheButton.TName = "删除本地";
         }
         #endregion
         #region Lyric & 评论加载
@@ -3985,29 +4025,11 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+        //想写新功能来着...
 
         private void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
-        }
-
-        private void OpenLyricAppBar_Click(object sender, RoutedEventArgs e)
-        {
-            if (Settings.USettings.DoesOpenDeskLyric) {
-                if (Settings.USettings.LyricAppBarOpen)
-                {
-                    lyricTa.Close();
-                    lyricToast = new Toast("", true);
-                    lyricToast.Show();
-                }
-                else {
-                    lyricToast.Close();
-                    lyricTa = new LyricBar();
-                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
-                    lyricTa.Show();
-                }
-            }
-            Settings.USettings.LyricAppBarOpen = (bool)OpenLyricAppBar.IsChecked;
         }
     }
 }

@@ -1001,8 +1001,21 @@
                                     <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0" FontWeight="Bold" Background="Transparent" MouseDown="FxDec_MouseDown"/>
                                 </Grid>
                             </Border>
-                            <Border x:Name="SongSource" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" Height="18" Margin="170,0,0,4">
-                                <TextBlock x:Name="SongSource_tb" HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="{DynamicResource ResuColorBrush}" Text="QQ" Margin="5,0,5,0" FontWeight="Bold"/>
+                            <Border x:Name="SongSource" HorizontalAlignment="Left" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" Margin="170,0,0,4" Height="18">
+                                <Grid Margin="4,0,4,0">
+                                    <TextBlock x:Name="SongSource_tb" Foreground="{DynamicResource ResuColorBrush}" Text="QQ" FontWeight="Bold" MouseDown="SongSource_MouseDown"/>
+                                    <lemonlib:MyPopup x:Name="Pop_dl" PopupAnimation="Fade" StaysOpen="False" Placement="Top" AllowsTransparency="True">
+                                        <Border Width="120" Height="150">
+                                            <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="10" Margin="10,20,10,20" Effect="{DynamicResource WindowDrop}">
+                                                <Grid>
+                                                    <TextBlock HorizontalAlignment="Center" Text="当前音乐源" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="速度 Tempo 双击恢复" MouseDown="Tempo_MouseDown" Foreground="{DynamicResource PlayDLPage_Font_Most}" Margin="0,10,0,0" FontSize="14" FontWeight="Bold"/>
+                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="{DynamicResource ThemeColor}" Text="{Binding Text, ElementName=SongSource_tb}" Margin="0,33,0,0" FontWeight="Bold" Background="Transparent" MouseDown="FxDec_MouseDown"/>
+                                                    <LemonApp:MDButton x:Name="DeleteLocalCacheButton" Width="70" TName="删除本地" VerticalAlignment="Bottom" pData="{x:Null}" Margin="0,0,0,15" MouseDown="DeleteLocalCacheButton_MouseDown"/>
+                                                </Grid>
+                                            </Border>
+                                        </Border>
+                                    </lemonlib:MyPopup>
+                                </Grid>
                             </Border>
                         </Grid>
                         <WrapPanel Grid.Column="2" Margin="20,0,20,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
@@ -1101,7 +1114,7 @@
                                     </Grid>
                                     <Grid Margin="0,10,0,0">
                                         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有. 部分来自咪咕音乐"/><LineBreak/><Run Text="正在使用官方音乐源."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 6 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2023 all rights reserved"/></TextBlock>
+                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="正在使用官方音乐源."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 6 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2023 all rights reserved"/></TextBlock>
                                     </Grid>
                                     <!--留下一点空白行-->
                                     <Border Height="200"/>
@@ -1603,7 +1616,7 @@
                                 <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0" FontWeight="Bold" Background="Transparent" MouseDown="FxDec_MouseDown"/>
                             </Border>
                             <Border HorizontalAlignment="Left" BorderBrush="White" BorderThickness="1" CornerRadius="7" VerticalAlignment="Bottom" Height="18" Margin="135,0,0,0">
-                                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="White" Text="{Binding Text, ElementName=SongSource_tb}" Margin="5,0,5,0" FontWeight="Bold"/>
+                                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="White" Text="{Binding Text, ElementName=SongSource_tb}" Margin="5,0,5,0" FontWeight="Bold" MouseDown="SongSource_MouseDown"/>
                             </Border>
                         </Grid>
                         <WrapPanel Grid.Column="2" Margin="20,0,20,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">

@@ -35,12 +35,13 @@ namespace LemonLib
             {
                 using var hc = new HttpClient();
                 var headers = await hc.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-                return (long)headers.Content.Headers.ContentLength;
+                return headers.StatusCode == HttpStatusCode.OK?(long)headers.Content.Headers.ContentLength:0;
             }
             catch
             {
                 size = 0L;
             }
+            MainClass.DebugCallBack(url, "SIZE:"+size);
             return size;
         }
         /// <summary>

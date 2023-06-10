@@ -788,12 +788,8 @@ jpg
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
             var data = await GetUrlOfficialLine(d.MusicID);
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
-            if (await HttpHelper.GetHTTPFileSize(data[0]) > 0)
+            if (await HttpHelper.GetHTTPFileSize(data[0]) > 1024)
                 return new string[2] { data[0], "QQ" };
-            var data_2 = await HttpHelper.GetRedirectUrl(await GetUrlOutLine(d));
-            MainClass.DebugCallBack(data_2, "Fetching Url From MIGU------------------");
-            if (await HttpHelper.GetHTTPFileSize(data_2) > 0)
-                return new string[2] { data_2, "MIGU" };
             else if (!string.IsNullOrEmpty(d.Mvmid))
             {
                 MainClass.DebugCallBack(d.Mvmid, "Fetching Url From QMV------------------");
@@ -834,7 +830,6 @@ jpg
             string des = obj["metaData"]["description"].ToString();
             string songtitle = TextHelper.FindTextByAB(des, "歌曲：", "，", 0);
             string singer = TextHelper.FindTextByAB(des, "歌手：", "。", 0);
-            MainClass.DebugCallBack("GETURL", "Succeeded to get url from y.qq.com :"+songtitle+" "+singer+"\r\n"+url);
             return new string[3]{url,songtitle,singer};
         }
 
