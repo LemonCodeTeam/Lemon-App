@@ -1071,7 +1071,7 @@
                                 <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞，快去找点东西吧ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center" HorizontalAlignment="Center"/>
                             </Grid>
                         </Grid>
-                        <Grid x:Name="SettingsPage">
+                        <Grid x:Name="SettingsPage" Visibility="Collapsed">
                             <VirtualizingStackPanel Margin="15,0,15,0" Orientation="Vertical" VerticalAlignment="Top" >
                                 <TextBlock TextWrapping="Wrap" Text="设置" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
                                 <WrapPanel x:Name="SettingsPage_Banna" Height="40" VerticalAlignment="Center" Margin="0,0,0,8">
