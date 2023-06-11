@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="Lemon App" Height="760" Width="1188" WindowStartupLocation="CenterScreen"
     MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged"
-    MinWidth="930" MinHeight="655" Background="{x:Null}">
+    MinWidth="930" MinHeight="655" Background="{x:Null}" WindowStyle="None">
     <Window.Triggers>
         <!--#region 歌词页   相关的歌单-->
         <EventTrigger RoutedEvent="MouseEnter" SourceName="LyricPage_AboutGD">
@@ -886,7 +886,7 @@
         <!--#endregion-->
     </Window.Resources>
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="1" GlassFrameThickness="1"/>
+        <WindowChrome CaptionHeight="1" GlassFrameThickness="-1"/>
     </WindowChrome.WindowChrome>
     <!--窗口边框-->
     <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFB7AEB8">
@@ -927,7 +927,7 @@
                             </Border>
                         </Grid>
                         <Grid x:Name="MusicControl" Height="Auto" Margin="12,12,550,12">
-                            <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="{Binding ActualHeight, ElementName=MusicImage, Mode=OneWay}" MouseLeftButtonDown="MusicImage_MouseDown" CornerRadius="{DynamicResource AppCornerRadius}" Height="50" MouseRightButtonDown="MusicImage_MouseRightButtonDown" VerticalAlignment="Center" Cursor="Hand">
+                            <Border x:Name="MusicImage" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" MouseLeftButtonDown="MusicImage_MouseDown" CornerRadius="{DynamicResource AppCornerRadius}" Height="52" MouseRightButtonDown="MusicImage_MouseRightButtonDown" VerticalAlignment="Center" Cursor="Hand" Width="52" BorderBrush="{DynamicResource ImageBorderColor}" BorderThickness="{DynamicResource ImageBorder}">
                                 <Border.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#FF50AEEE" Offset="0"/>
@@ -1076,6 +1076,7 @@
                                 <TextBlock TextWrapping="Wrap" Text="设置" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
                                 <WrapPanel x:Name="SettingsPage_Banna" Height="40" VerticalAlignment="Center" Margin="0,0,0,8">
                                     <LemonApp:BottomTick x:Name="SettingsPage_Storage" HorizontalAlignment="Left" Width="50" IsChecked="True" HasBg="True" Height="40" Text="储存" MouseDown="SettingsPage_Storage_MouseDown"/>
+                                    <LemonApp:BottomTick x:Name="SettingsPage_User" HorizontalAlignment="Left" Width="50" Height="40" Text="账号" Margin="40,0,0,0" MouseDown="SettingsPage_User_MouseDown"/>
                                     <LemonApp:BottomTick x:Name="SettingsPage_Keys" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="快捷键" MouseDown="SettingsPage_Keys_MouseDown"/>
                                     <LemonApp:BottomTick x:Name="SettingsPage_Capacity" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="性能" MouseDown="SettingsPage_Capacity_MouseDown"/>
                                     <LemonApp:BottomTick x:Name="SettingsPage_Feedback" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="反馈" MouseDown="SettingsPage_Feedback_MouseDown"/>
@@ -1107,11 +1108,23 @@
                                         <LemonApp:HotKeyChooser Height="25" desc="下一曲:" key="Down" Margin="0,0,20,10" KeyId="128"/>
                                     </WrapPanel>
                                     <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" TName="应用" Width="90" pData="{x:Null}" Margin="0,50,20,0" MouseDown="ApplyHotKey_MouseDown"/>
-                                    <CheckBox x:Name="OpenLyricAppBar" Content="使用LyricAppBar" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,100,0,0" Click="OpenLyricAppBar_Click"/>
+                                    <CheckBox x:Name="OpenLyricAppBar" Content="使用LyricAppBar" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="False" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,100,0,0" Click="OpenLyricAppBar_Click"/>
+                                </Grid>
+                                <Grid x:Name="SettingsPage_UserPage" Height="300" Visibility="Collapsed">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="UserInfo_GTK" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="60,0,30,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="40" Margin="10,5,0,0" Text="g_tk:"/>
+                                    <TextBox x:Name="UserInfo_Cookie" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="240" Margin="60,38,30,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Margin="10,43,0,0" Text="Cookies:" Width="45"/>
+                                    <LemonApp:MDButton x:Name="UserInfo_Logout" Grid.Column="1" pData="{x:Null}" VerticalAlignment="Top" Width="100" TName="退出登录" Theme="2" Margin="0,180,0,0" MouseDown="UserInfo_Logout_MouseDown"/>
+                                    <Border RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="100" Width="100" Background="{Binding Background, ElementName=UserTX}" Cursor="Hand" BorderBrush="{DynamicResource ImageBorderColor}" BorderThickness="{DynamicResource ImageBorder}" MouseDown="UserTX_MouseDown_1" Grid.Column="1" Margin="0,45,0,0"/>
                                 </Grid>
                                 <Grid x:Name="SettingsPage_CapacityPage" Height="200" Visibility="Collapsed">
                                     <TextBlock Text="This page is going to be used." Foreground="{DynamicResource PlayDLPage_Font_Low}"/>
-                                    <CheckBox x:Name="OpenLyricAppBar_Copy" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Click="OpenLyricAppBar_Click" Margin="0,20,0,0">
+                                    <CheckBox x:Name="OpenLyricAppBar_Copy" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,20,0,0">
                                         使用 SetProcessWorkingSetSize 进行内存压缩 (50tps)
                                     </CheckBox>
                                 </Grid>
@@ -1285,7 +1298,7 @@
                                 </Grid>
                             </Grid>
                             <Grid x:Name="DataPage_MainInfo" Height="200" VerticalAlignment="Top" Visibility="Visible">
-                                <Border x:Name="TXx" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Margin="20,15,0,15" Background="#FFE4E4E4" CornerRadius="{DynamicResource AppCornerRadius}" Width="170"/>
+                                <Border x:Name="TXx" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Margin="20,15,0,15" Background="#FFE4E4E4" CornerRadius="{DynamicResource AppCornerRadius}" Width="170" BorderThickness="{DynamicResource ImageBorder}" BorderBrush="{DynamicResource ImageBorderColor}"/>
                                 <Grid x:Name="DataPage_ContentInfo" Height="105" Margin="210,24,20,0" VerticalAlignment="Top">
                                     <TextBlock x:Name="TB" TextWrapping="NoWrap" Text="我喜欢的歌单wwwwwwww" Foreground="{DynamicResource ResuColorBrush}" FontSize="36" Margin="0,0,30,0" VerticalAlignment="Top" FontWeight="Bold"/>
                                     <Border x:Name="DataPage_TX" RenderOptions.BitmapScalingMode="Fant" HorizontalAlignment="Left" Width="28" Height="28" VerticalAlignment="Top" Margin="0,50,0,0" Background="#FFE2E2E2" CornerRadius="28,28,28,28"/>
@@ -1400,7 +1413,7 @@
                 </Grid>
                 <!--左边的菜单-->
                 <Grid x:Name="ControlPage" Background="{DynamicResource ControlPageBrush}" >
-                    <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="60" Width="60" Margin="0,65,0,0" MouseDown="UserTX_MouseDown" Background="#FFE0E0E0" Cursor="Hand"/>
+                    <Border x:Name="UserTX" RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="64" Width="64" Margin="0,65,0,0" Background="{DynamicResource PlayDLPage_Top}" Cursor="Hand" BorderBrush="{DynamicResource ImageBorderColor}" BorderThickness="{DynamicResource ImageBorder}" MouseDown="UserTX_MouseDown_1"/>
                     <TextBlock x:Name="UserName" Margin="10,135,10,0" TextWrapping="NoWrap" Text="点击登陆" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" MouseDown="UserTX_MouseDown" Cursor="Hand"/>
                     <StackPanel x:Name="PageControls" Margin="0,175,0,0" VerticalAlignment="Top" Orientation="Vertical">
                         <TextBlock Text="音乐库" Margin="6,0,15,0" Foreground="{DynamicResource ResuColorBrush}" Height="15.24" Width="75" Opacity="0.7"/>

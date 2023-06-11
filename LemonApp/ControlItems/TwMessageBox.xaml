@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:LemonApp"
         xmlns:LemonApp="clr-namespace:LemonApp" x:Class="LemonApp.TwMessageBox"
         mc:Ignorable="d"
-        Title="TwMessageBox" Height="160" Width="300" ResizeMode="NoResize" MouseLeftButtonDown="Window_MouseLeftButtonDown" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterOwner" Background="#FFFBFBFB" Loaded="Window_Loaded">
+        Title="TwMessageBox" Height="160" Width="300" MouseLeftButtonDown="Window_MouseLeftButtonDown" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterOwner" Background="#FFFBFBFB" Loaded="Window_Loaded" WindowStyle="None">
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="1" CaptionHeight="1" ResizeBorderThickness="0,1,0,0"/>
+        <WindowChrome GlassFrameThickness="-1" CaptionHeight="1" />
     </WindowChrome.WindowChrome>
     <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFF0F0F0" Background="Transparent">
         <Grid>

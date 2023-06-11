@@ -484,7 +484,7 @@ namespace LemonApp
                     DThemePage.Child = null;
                     App.BaseApp.Skin();
                     App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
-                    wac.Color = Color.FromArgb(200, 0, 0, 0);
+                    wac.Color = Color.FromArgb(180, 0, 0, 0);
                     wac.IsEnabled = true;
                 }
                 else
@@ -496,7 +496,7 @@ namespace LemonApp
                     App.BaseApp.Skin_Black();
                     Color co = Color.FromRgb(64, 64, 64);
                     App.BaseApp.SetColor("ResuColorBrush", co);
-                    wac.Color = (Color.FromArgb(200, 255, 255, 255));
+                    wac.Color = (Color.FromArgb(180, 255, 255, 255));
                     wac.IsEnabled = true;
                 }
                 DThemePage.Child = null;
@@ -585,6 +585,10 @@ namespace LemonApp
                     }
                 });
                 t.Start();
+            }
+            else {
+                UserTX.SetResourceReference(BackgroundProperty, "PlayDLPage_Top");
+                UserName.Text = "点击登录";
             }
             //-------是否打开了桌面歌词-----------
             OpenLyricAppBar.IsChecked= Settings.USettings.LyricAppBarOpen;
@@ -3921,7 +3925,8 @@ namespace LemonApp
                  }
                  Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
                  await Settings.SaveSettingsTaskAsync();
-                 Environment.Exit(0);
+                 Application.Current.Shutdown();
+
              };
             //关联托盘控件
             var a = new System.Windows.Forms.ContextMenuStrip();
@@ -4042,5 +4047,44 @@ namespace LemonApp
 
         private void SettingsPage_About_MouseDown(object sender, MouseButtonEventArgs e)
         => SettingsPage_NSPage(SettingsPage_AboutPage);
+
+        private async void UserTX_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            SettingsBtn_MouseDown(null, null);
+            await Task.Delay(500);
+            BtD.LastBt?.Check(false);
+            SettingsPage_User.Check(true);
+            BtD.LastBt = SettingsPage_User;
+            SettingsPage_User_MouseDown(null, null);
+        }
+
+        private void SettingsPage_User_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UserInfo_GTK.Text = Settings.USettings.g_tk;
+            UserInfo_Cookie.Text = Settings.USettings.Cookie;
+            if (Settings.USettings.LemonAreeunIts == "0") 
+            {
+                UserInfo_Logout.TName = "登录";
+            }
+            SettingsPage_NSPage(SettingsPage_UserPage);
+        }
+
+        private async void UserInfo_Logout_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LemonAreeunIts != "0")
+            {
+                //先保存当前用户的配置
+                await Settings.SaveSettingsTaskAsync();
+                Settings.LSettings.qq = "0";
+                await Settings.SaveLocaSettings();
+                await Settings.LoadUSettings("0");
+                UserInfo_GTK.Text = Settings.USettings.g_tk;
+                UserInfo_Cookie.Text = Settings.USettings.Cookie;
+                UserInfo_Logout.TName = "登录";
+                Load_Theme();
+                LoadMusicData();
+            }
+            else UserTX_MouseDown(null, null);
+        }
     }
 }

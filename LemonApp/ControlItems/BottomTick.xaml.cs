@@ -57,8 +57,7 @@ namespace LemonApp
 
         private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (BtD.LastBt != null)
-                BtD.LastBt.Check(false);
+            BtD.LastBt?.Check(false);
             Check(true);
             BtD.LastBt = this;
         }
