@@ -13,11 +13,10 @@ namespace LemonApp.ContentPage
     public partial class HomePage : UserControl
     {
         private MainWindow mw;
-        public HomePage(MainWindow Context, ControlTemplate ct)
+        public HomePage(MainWindow Context)
         {
             InitializeComponent();
             mw = Context;
-            sv.Template = ct;
             SizeChanged += delegate
             {
                 mw.WidthUI(HomePage_GFGD, HomePage_GFGD.ActualWidth - 12);

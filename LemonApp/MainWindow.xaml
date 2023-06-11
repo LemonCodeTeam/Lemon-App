@@ -1071,55 +1071,65 @@
                                 <TextBlock Margin="0,360,0,0" TextWrapping="Wrap" Text="这里似乎什么都没有嘞，快去找点东西吧ヾ(≧▽≦*)o" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="22" TextAlignment="Center" HorizontalAlignment="Center"/>
                             </Grid>
                         </Grid>
-                        <Grid x:Name="SettingsPage" Visibility="Collapsed">
-                            <LemonApp:MyScrollView x:Name="TemplateSv"  Template="{DynamicResource ScrollViewerControlTemplate}">
-                                <VirtualizingStackPanel Margin="15,0,15,0" Orientation="Vertical" VerticalAlignment="Top" >
-                                    <TextBlock TextWrapping="Wrap" Text="设置" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
-                                    <Grid Margin="0,10,0,0" Height="150">
-                                        <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Click="DownloadWithLyric_Click" Style="{DynamicResource CheckBoxStyle}"/>
-                                        <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
-                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="181" Height="23" FontWeight="Bold"/>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
-                                        <LemonApp:MDButton x:Name="CP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,60,0" TName="选择" Width="50" MouseDown="CP_ChooseBtn_MouseDown" pData="{x:Null}" cr="12"/>
-                                        <LemonApp:MDButton x:Name="CP_OpenBt" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,0,0" TName="打开" Width="50" MouseDown="CP_OpenBt_MouseDown" cr="12" pData="{x:Null}"/>
-                                        <TextBox x:Name="DownloadPathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,70,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="下载目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
-                                        <LemonApp:MDButton x:Name="DP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,60,0" TName="选择" Width="50" MouseDown="DP_ChooseBtn_MouseDown" cr="12" pData="{x:Null}"/>
-                                        <LemonApp:MDButton x:Name="DP_OpenBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,0,0" TName="打开" Width="50" MouseDown="DP_OpenBtn_MouseDown" cr="12" pData="{x:Null}"/>
-                                        <TextBox x:Name="DownloadNameTb" TextWrapping="Wrap" Text="[I].  [M] - [S]" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="346,125,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,130,0,-49" TextWrapping="Wrap" Text="下载文件名(序号用[I]表示  歌曲名用[M]表示  歌手名用[S]表示):" VerticalAlignment="Top" Width="341" Foreground="{DynamicResource ResuColorBrush}"/>
-                                        <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
+                        <Grid x:Name="SettingsPage">
+                            <VirtualizingStackPanel Margin="15,0,15,0" Orientation="Vertical" VerticalAlignment="Top" >
+                                <TextBlock TextWrapping="Wrap" Text="设置" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
+                                <WrapPanel x:Name="SettingsPage_Banna" Height="40" VerticalAlignment="Center" Margin="0,0,0,8">
+                                    <LemonApp:BottomTick x:Name="SettingsPage_Storage" HorizontalAlignment="Left" Width="50" IsChecked="True" HasBg="True" Height="40" Text="储存" MouseDown="SettingsPage_Storage_MouseDown"/>
+                                    <LemonApp:BottomTick x:Name="SettingsPage_Keys" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="快捷键" MouseDown="SettingsPage_Keys_MouseDown"/>
+                                    <LemonApp:BottomTick x:Name="SettingsPage_Capacity" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="性能" MouseDown="SettingsPage_Capacity_MouseDown"/>
+                                    <LemonApp:BottomTick x:Name="SettingsPage_Feedback" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="反馈" MouseDown="SettingsPage_Feedback_MouseDown"/>
+                                    <LemonApp:BottomTick x:Name="SettingsPage_About" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="关于" MouseDown="SettingsPage_About_MouseDown"/>
+                                </WrapPanel>
+                                <Grid x:Name="SettingsPage_Download" Margin="0,10,0,0" Height="150">
+                                    <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Click="DownloadWithLyric_Click" Style="{DynamicResource CheckBoxStyle}"/>
+                                    <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="181" Height="23" FontWeight="Bold"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,40,0,0" TextWrapping="Wrap" Text="缓存目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
+                                    <LemonApp:MDButton x:Name="CP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,60,0" TName="选择" Width="50" MouseDown="CP_ChooseBtn_MouseDown" pData="{x:Null}" cr="12"/>
+                                    <LemonApp:MDButton x:Name="CP_OpenBt" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,35,0,0" TName="打开" Width="50" MouseDown="CP_OpenBt_MouseDown" cr="12" pData="{x:Null}"/>
+                                    <TextBox x:Name="DownloadPathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,70,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,75,0,0" TextWrapping="Wrap" Text="下载目录:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
+                                    <LemonApp:MDButton x:Name="DP_ChooseBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,60,0" TName="选择" Width="50" MouseDown="DP_ChooseBtn_MouseDown" cr="12" pData="{x:Null}"/>
+                                    <LemonApp:MDButton x:Name="DP_OpenBtn" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,70,0,0" TName="打开" Width="50" MouseDown="DP_OpenBtn_MouseDown" cr="12" pData="{x:Null}"/>
+                                    <TextBox x:Name="DownloadNameTb" TextWrapping="Wrap" Text="[I].  [M] - [S]" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="346,125,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,130,0,-49" TextWrapping="Wrap" Text="下载文件名(序号用[I]表示  歌曲名用[M]表示  歌手名用[S]表示):" VerticalAlignment="Top" Width="341" Foreground="{DynamicResource ResuColorBrush}"/>
+                                    <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
 
-                                    </Grid>
-                                    <Grid Height="120" Margin="0,10,0,0">
-                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
-                                        <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0">
-                                            <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
-                                            <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="🐱‍💻Debug:" KeyId="129"/>
-                                            <LemonApp:HotKeyChooser Height="25" desc="播放/暂停:" key="Space" Margin="0,0,20,10" KeyId="126"/>
-                                            <LemonApp:HotKeyChooser Height="25" desc="上一曲:" key="Up" Margin="0,0,20,10" KeyId="127"/>
-                                            <LemonApp:HotKeyChooser Height="25" desc="下一曲:" key="Down" Margin="0,0,20,10" KeyId="128"/>
-                                        </WrapPanel>
-                                        <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" TName="应用" Width="90" pData="{x:Null}" Margin="0,50,20,0" MouseDown="ApplyHotKey_MouseDown"/>
-                                        <CheckBox x:Name="OpenLyricAppBar" Content="使用LyricAppBar" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,100,0,0" Click="OpenLyricAppBar_Click"/>
-                                    </Grid>
-                                    <Grid Margin="0,10,0,0" Visibility="Visible">
-                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
-                                        <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
-                                        <LemonApp:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
-                                        <TextBlock Margin="0,214,0,0" TextWrapping="Wrap" Text="联系方式:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Left" Width="60"/>
-                                        <TextBox x:Name="knowb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="65,210,205,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
-                                        <TextBlock x:Name="va" Margin="0,214,95,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF7C7C7C" TextAlignment="Center" HorizontalAlignment="Right" Width="105" Height="18"/>
-                                        <LemonApp:MDButton x:Name="UserSend_fj" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Margin="80,0,0,0" TName="添加附件" pData="{x:Null}" cr="12,12,12,12" AllowDrop="True" Drop="UserSend_fj_Drag" MouseDown="UserSend_fj_MouseDown"/>
-                                    </Grid>
-                                    <Grid Margin="0,10,0,0">
-                                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                        <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="正在使用官方音乐源."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 6 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2023 all rights reserved"/></TextBlock>
-                                    </Grid>
-                                    <!--留下一点空白行-->
-                                    <Border Height="200"/>
-                                </VirtualizingStackPanel>
-                            </LemonApp:MyScrollView>
+                                </Grid>
+                                <Grid x:Name="SettingsPage_KeysPage" Height="120" Margin="0,10,0,0" Visibility="Collapsed">
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
+                                    <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0">
+                                        <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
+                                        <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="🐱‍💻Debug:" KeyId="129"/>
+                                        <LemonApp:HotKeyChooser Height="25" desc="播放/暂停:" key="Space" Margin="0,0,20,10" KeyId="126"/>
+                                        <LemonApp:HotKeyChooser Height="25" desc="上一曲:" key="Up" Margin="0,0,20,10" KeyId="127"/>
+                                        <LemonApp:HotKeyChooser Height="25" desc="下一曲:" key="Down" Margin="0,0,20,10" KeyId="128"/>
+                                    </WrapPanel>
+                                    <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" TName="应用" Width="90" pData="{x:Null}" Margin="0,50,20,0" MouseDown="ApplyHotKey_MouseDown"/>
+                                    <CheckBox x:Name="OpenLyricAppBar" Content="使用LyricAppBar" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,100,0,0" Click="OpenLyricAppBar_Click"/>
+                                </Grid>
+                                <Grid x:Name="SettingsPage_CapacityPage" Height="200" Visibility="Collapsed">
+                                    <TextBlock Text="This page is going to be used." Foreground="{DynamicResource PlayDLPage_Font_Low}"/>
+                                    <CheckBox x:Name="OpenLyricAppBar_Copy" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Click="OpenLyricAppBar_Click" Margin="0,20,0,0">
+                                        使用 SetProcessWorkingSetSize 进行内存压缩 (50tps)
+                                    </CheckBox>
+                                </Grid>
+                                <Grid x:Name="SettingsPage_FeedbackPage" Margin="0,10,0,0" Visibility="Collapsed">
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
+                                    <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
+                                    <LemonApp:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
+                                    <TextBlock Margin="0,214,0,0" TextWrapping="Wrap" Text="联系方式:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Left" Width="60"/>
+                                    <TextBox x:Name="knowb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="65,210,205,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
+                                    <TextBlock x:Name="va" Margin="0,214,95,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF7C7C7C" TextAlignment="Center" HorizontalAlignment="Right" Width="105" Height="18"/>
+                                    <LemonApp:MDButton x:Name="UserSend_fj" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Margin="80,0,0,0" TName="添加附件" pData="{x:Null}" cr="12,12,12,12" AllowDrop="True" Drop="UserSend_fj_Drag" MouseDown="UserSend_fj_MouseDown"/>
+                                </Grid>
+                                <Grid x:Name="SettingsPage_AboutPage" Margin="0,10,0,0" Visibility="Collapsed">
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
+                                    <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="正在使用官方音乐源."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 6 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2023 all rights reserved"/></TextBlock>
+                                </Grid>
+                                <!--留下一点空白行-->
+                            </VirtualizingStackPanel>
                         </Grid>
                         <Grid x:Name="SkinPage" IsVisibleChanged="SkinPage_IsVisibleChanged" Visibility="Collapsed">
                             <LemonApp:MyScrollView Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">

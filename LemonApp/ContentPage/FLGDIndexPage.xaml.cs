@@ -14,11 +14,10 @@ namespace LemonApp.ContentPage
     public partial class FLGDIndexPage : UserControl
     {
         private MainWindow mw;
-        public FLGDIndexPage(MainWindow m, ControlTemplate ct)
+        public FLGDIndexPage(MainWindow m)
         {
             InitializeComponent();
             mw = m;
-            FLGDPage_sv.Template = ct;
             SizeChanged += delegate
             {
                 mw.WidthUI(FLGDItemsList);

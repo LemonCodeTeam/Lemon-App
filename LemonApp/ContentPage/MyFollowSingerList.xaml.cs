@@ -11,11 +11,10 @@ namespace LemonApp
     public partial class MyFollowSingerList : UserControl
     {
         private MainWindow mw;
-        public MyFollowSingerList(MainWindow m, ControlTemplate ct)
+        public MyFollowSingerList(MainWindow m)
         {
             InitializeComponent();
             mw = m;
-            sv.Template = ct;
             SizeChanged += delegate
             {
                 mw.WidthUI(ItemsList);

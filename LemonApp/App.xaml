@@ -15,6 +15,8 @@
             </Style>
             <!--全局圆角-->
             <CornerRadius x:Key="AppCornerRadius">10,10,10,10</CornerRadius>
+            <Thickness x:Key="ImageBorder">4</Thickness>
+            <SolidColorBrush x:Key="ImageBorderColor" Color="#14000000"></SolidColorBrush>
             <!--主题颜色 默认值:#FF31C27C-->
             <SolidColorBrush x:Key="ThemeColor" Color="#FF31C27C"/>
             <!--字体颜色 默认值:#FF93A1AE-->

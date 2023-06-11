@@ -43,7 +43,7 @@ namespace Lierda.WPFHelper
             }
             currentUser.Dispose();
         }
-
+        public bool Enabled { get; set; }
         public void Cracker(int sleepSpan = 50)
         {
             _ = Task.Factory.StartNew(delegate
@@ -52,9 +52,12 @@ namespace Lierda.WPFHelper
                 {
                     try
                     {
-                        SetDate();
-                        FlushMemory();
-                        Thread.Sleep(TimeSpan.FromSeconds((double)sleepSpan));
+                        if (Enabled)
+                        {
+                            SetDate();
+                            FlushMemory();
+                            Thread.Sleep(TimeSpan.FromSeconds((double)sleepSpan));
+                        }
                     }
                     catch { }
                 }

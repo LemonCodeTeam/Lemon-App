@@ -15,12 +15,11 @@ namespace LemonApp.ContentPage
     {
         private MainWindow mw;
         private Action GetTo;
-        public SingerIndexPage(MainWindow m, ControlTemplate ct, Action Gt)
+        public SingerIndexPage(MainWindow m, Action Gt)
         {
             InitializeComponent();
             mw = m;
             GetTo = Gt;
-            SingerPage_sv.Template = ct;
             SizeChanged += delegate
             {
                 mw.WidthUI(SingerItemsList);

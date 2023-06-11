@@ -7,7 +7,7 @@
              xmlns:LemonApp="clr-namespace:LemonApp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
-    <LemonApp:MyScrollView x:Name="SingerPage_sv" ScrollChanged="SingerPage_sv_ScrollChanged">
+    <LemonApp:MyScrollView x:Name="SingerPage_sv" ScrollChanged="SingerPage_sv_ScrollChanged" Template="{DynamicResource ScrollViewerControlTemplate}">
         <WrapPanel x:Name="wrapPanel">
             <Grid HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="{Binding ActualWidth, ElementName=wrapPanel, Mode=OneWay}">
                 <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>

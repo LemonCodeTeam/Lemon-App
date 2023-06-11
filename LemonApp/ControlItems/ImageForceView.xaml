@@ -44,7 +44,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Grid x:Name="mj">
-        <Border x:Name="Image" Margin="0,0,0,0" CornerRadius="{DynamicResource AppCornerRadius}">
+        <Border x:Name="Image" Margin="0,0,0,0" CornerRadius="{DynamicResource AppCornerRadius}" BorderBrush="{DynamicResource ImageBorderColor}" BorderThickness="{DynamicResource ImageBorder}">
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFFF2222"/>

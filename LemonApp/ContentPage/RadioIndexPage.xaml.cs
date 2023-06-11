@@ -13,11 +13,10 @@ namespace LemonApp.ContentPage
     public partial class RadioIndexPage : UserControl
     {
         private MainWindow mw;
-        public RadioIndexPage(MainWindow m, ControlTemplate ct)
+        public RadioIndexPage(MainWindow m)
         {
             InitializeComponent();
             mw = m;
-            sv.Template = ct;
             SizeChanged += delegate
             {
                 mw.WidthUI(RadioItemsList);

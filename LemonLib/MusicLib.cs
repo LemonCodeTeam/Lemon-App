@@ -450,7 +450,7 @@ jpg
         /// <param name="wx">当前window</param>
         /// <param name="getAll">获取歌单 歌曲总数</param>
         /// <returns></returns>
-        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<MusicGData> GetInfo = null, Action<int, Music, bool> callback = null, Window wx = null, Action<int> getAll = null)
+        public static async Task<MusicGData> GetGDAsync(string id = "2591355982", Action<MusicGData> GetInfo = null,Window wx = null)
         {
             var s = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid={id}&format=json&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
             JObject o = JObject.Parse(s);
@@ -469,72 +469,77 @@ jpg
             };
             GetInfo?.Invoke(dt);
             var c0s = c0["songlist"];
-            await wx?.Dispatcher.BeginInvoke(new Action(() => getAll?.Invoke(c0s.Count())));
+            // await wx?.Dispatcher.BeginInvoke(new Action(() => getAll?.Invoke(c0s.Count())));
             //使用多线程并发 但是会打乱歌曲顺序
-            Parallel.For(0, c0s.Count(), async (index) =>
+            //   Parallel.For(0, c0s.Count(), async (index) =>
+            //    {
+            int count = c0s.Count();
+            for (int index = 0; index < count; index++)
+            {
+                string singer = "";
+                var c0si = c0s[index];
+                string songtype = c0si["songtype"].ToString();
+                if (songtype == "0")
                 {
-                    string singer = "";
-                    var c0si = c0s[index];
-                    string songtype = c0si["songtype"].ToString();
-                    if (songtype == "0")
+                    var c0sis = c0si["singer"];
+                    List<MusicSinger> lm = new List<MusicSinger>();
+                    foreach (var cc in c0sis)
                     {
-                        var c0sis = c0si["singer"];
-                        List<MusicSinger> lm = new List<MusicSinger>();
-                        foreach (var cc in c0sis)
+                        singer += cc["name"].ToString() + "&";
+                        lm.Add(new MusicSinger()
                         {
-                            singer += cc["name"].ToString() + "&";
-                            lm.Add(new MusicSinger()
-                            {
-                                Name = cc["name"].ToString(),
-                                Mid = cc["mid"].ToString()
-                            });
-                        }
-                        Music m = new Music();
-                        m.MusicName = c0si["songname"].ToString();
-                        m.MusicName_Lyric = c0si["albumdesc"].ToString();
-                        m.Singer = lm;
-                        m.SingerText = singer.Substring(0, singer.Length - 1);
-                        m.MusicID = c0si["songmid"].ToString();
-                        var amid = c0si["albummid"].ToString();
-                        if (amid == "001ZaCQY2OxVMg")
-                            m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
-                        else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
-                        else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
-                        if (amid != "")
-                            m.Album = new MusicGD()
-                            {
-                                ID = amid,
-                                Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                                Name = c0si["albumname"].ToString()
-                            };
-                        if (c0si["size320"].ToString() != "0")
-                            m.Pz = "HQ";
-                        if (c0si["sizeflac"].ToString() != "0")
-                            m.Pz = "SQ";
-                        m.Mvmid = c0si["vid"].ToString();
-                        m.Littleid = dt.ids[index];
-                        dt.Data.Add(m);
-                        await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
+                            Name = cc["name"].ToString(),
+                            Mid = cc["mid"].ToString()
+                        });
                     }
-                    else {
-                        var c0sis = c0si["singer"];
-                        List<MusicSinger> lm = new List<MusicSinger>();
-                        foreach (var cc in c0sis)
+                    Music m = new Music();
+                    m.MusicName = c0si["songname"].ToString();
+                    m.MusicName_Lyric = c0si["albumdesc"].ToString();
+                    m.Singer = lm;
+                    m.SingerText = singer.Substring(0, singer.Length - 1);
+                    m.MusicID = c0si["songmid"].ToString();
+                    var amid = c0si["albummid"].ToString();
+                    if (amid == "001ZaCQY2OxVMg")
+                        m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T001R500x500M000{c0si["singer"][0]["mid"].ToString()}.jpg?max_age=2592000";
+                    else if (amid == "") m.ImageUrl = $"https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                    else m.ImageUrl = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000";
+                    if (amid != "")
+                        m.Album = new MusicGD()
                         {
-                            singer += cc["name"].ToString() + "&";
-                            lm.Add(new MusicSinger()
-                            {
-                                Name = cc["name"].ToString()
-                            });
-                        }
-                        Music m = new Music();
-                        m.MusicID = null;
-                        m.MusicName = c0si["songname"].ToString();
-                        m.Singer = lm;
-                        m.SingerText = singer.Substring(0, singer.Length - 1);
-                        await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
+                            ID = amid,
+                            Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
+                            Name = c0si["albumname"].ToString()
+                        };
+                    if (c0si["size320"].ToString() != "0")
+                        m.Pz = "HQ";
+                    if (c0si["sizeflac"].ToString() != "0")
+                        m.Pz = "SQ";
+                    m.Mvmid = c0si["vid"].ToString();
+                    m.Littleid = dt.ids[index];
+                    dt.Data.Add(m);
+                //    await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
+                }
+                else
+                {
+                    var c0sis = c0si["singer"];
+                    List<MusicSinger> lm = new List<MusicSinger>();
+                    foreach (var cc in c0sis)
+                    {
+                        singer += cc["name"].ToString() + "&";
+                        lm.Add(new MusicSinger()
+                        {
+                            Name = cc["name"].ToString()
+                        });
                     }
-                });
+                    Music m = new Music();
+                    m.MusicID = null;
+                    m.MusicName = c0si["songname"].ToString();
+                    m.Singer = lm;
+                    m.SingerText = singer.Substring(0, singer.Length - 1);
+               //     await wx?.Dispatcher.BeginInvoke(new Action(() => { callback?.Invoke(index, m, dt.IsOwn); }));
+                }
+            }
+           //     });
             return dt;
         }
         /// <summary>

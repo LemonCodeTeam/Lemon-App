@@ -10,11 +10,10 @@ namespace LemonApp.ContentPage
     public partial class TopPage : UserControl
     {
         private MainWindow mw;
-        public TopPage(MainWindow Context, ControlTemplate ct)
+        public TopPage(MainWindow Context)
         {
             InitializeComponent();
             mw = Context;
-            sv.Template = ct;
             SizeChanged += delegate
             {
                 mw.WidthUI(topIndexList);
