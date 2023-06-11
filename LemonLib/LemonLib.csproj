@@ -4,9 +4,10 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon />
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <StartupObject />
-    <Version>1.2.4.6</Version>
+    <Version>1.2.5.2</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
 

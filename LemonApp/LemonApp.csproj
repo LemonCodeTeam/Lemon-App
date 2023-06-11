@@ -10,7 +10,7 @@
     <StartupObject>LemonApp.App</StartupObject>
     <AssemblyName>LemonApp</AssemblyName>
     <RootNamespace>LemonApp</RootNamespace>
-    <Version>1.2.4.6</Version>
+    <Version>1.2.5.2</Version>
     <Authors>TwilightLemon</Authors>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
@@ -25,7 +25,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DebugConsole\DebugConsole.csproj" />
     <ProjectReference Include="..\LemonLib\LemonLib.csproj" />
   </ItemGroup>
 

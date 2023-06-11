@@ -22,7 +22,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1246";
+        public static string EM = "1252";
         #region 启动时 进程检测 配置 登录
         //放在全局变量  防止GC回收  导致失效
         private System.Threading.Mutex mutex;
@@ -172,6 +172,15 @@ namespace LemonApp
         #endregion
     }
     #region Console 调试模式
+    public class DebugData
+    {
+        /// <summary>
+        /// blue red yellow
+        /// </summary>
+        public string color = "";
+        public string title = "";
+        public string data = "";
+    }
     public class Console
     {
         private static Process p = null;
@@ -195,7 +204,7 @@ namespace LemonApp
             {
                 try
                 {
-                    string json = TextHelper.JSON.ToJSON(new DebugConsole.DebugData()
+                    string json = TextHelper.JSON.ToJSON(new DebugData()
                     {
                         title = title,
                         data = text.ToString(),
