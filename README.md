@@ -11,7 +11,7 @@ Lemon App 是一款基于QQ音乐的在线音乐播放器。
  
 ### UI界面
 ![主页](https://raw.githubusercontent.com/TwilightLemon/Data/master/home.jpg)
-![歌单](https://raw.githubusercontent.com/TwilightLemon/Data/master/pc_gdindex.jpg.jpg)
+![歌单](https://raw.githubusercontent.com/TwilightLemon/Data/master/pc_gdindex.jpg)
 ![列表](https://raw.githubusercontent.com/TwilightLemon/Data/master/pc_gd.jpg)
 ![歌词](https://raw.githubusercontent.com/TwilightLemon/Data/master/lyric.jpg)
 ![歌手](https://raw.githubusercontent.com/TwilightLemon/Data/master/pc_singer.jpg)
