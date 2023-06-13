@@ -597,6 +597,8 @@ namespace LemonApp
                 if (Settings.USettings.LyricAppBarOpen)
                 {
                     lyricTa = new LyricBar();
+                    lyricTa.LyricFontSize = Settings.USettings.LyricAppBar_Size;
+                    SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
                     lyricTa.PopOut.MouseUp += PopOut_MouseUp;
                     lyricTa.Show();
                 }
@@ -819,6 +821,9 @@ namespace LemonApp
                 await Settings.SaveLocaSettings();
                 await ml.GetMusicLikeGDid();
                 Toast.Send("登陆成功! o(*￣▽￣*)ブ  欢迎回来" + name);
+                UserInfo_Logout.TName = "退出登录";
+                UserInfo_GTK.Text = Settings.USettings.g_tk;
+                UserInfo_Cookie.Text = Settings.USettings.Cookie;
                 Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
                 Load_Theme();
                 LoadMusicData();
@@ -826,6 +831,85 @@ namespace LemonApp
         }
         #endregion
         #region 设置
+        private void SettingsPage_LyricAppBar_FortSize_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
+        }
+
+        private void ApplyLyricAppBarSize_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            int value = int.Parse(SettingsPage_LyricAppBar_FortSize.Text);
+            Settings.USettings.LyricAppBar_Size = value;
+            lyricTa.LyricFontSize = value;
+        }
+
+        private FrameworkElement Set_LastPage = null;
+        private void SettingsPage_NSPage(FrameworkElement fm)
+        {
+            (Set_LastPage != null ? Set_LastPage : SettingsPage_Download).Visibility = Visibility.Collapsed;
+            fm.Visibility = Visibility.Visible;
+            ContentAnimation(fm);
+            Set_LastPage = fm;
+        }
+
+        private void SettingsPage_Storage_MouseDown(object sender, MouseButtonEventArgs e)
+            => SettingsPage_NSPage(SettingsPage_Download);
+
+        private void SettingsPage_Keys_MouseDown(object sender, MouseButtonEventArgs e)
+            => SettingsPage_NSPage(SettingsPage_KeysPage);
+
+        private void SettingsPage_Capacity_MouseDown(object sender, MouseButtonEventArgs e)
+            => SettingsPage_NSPage(SettingsPage_CapacityPage);
+
+        private void SettingsPage_Feedback_MouseDown(object sender, MouseButtonEventArgs e)
+        => SettingsPage_NSPage(SettingsPage_FeedbackPage);
+
+        private async void SettingsPage_About_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string data= await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Windows_LemonApp_AboutPage.xaml");
+            SettingsPage_AboutPage.Children.Clear();
+            SettingsPage_AboutPage.Children.Add((Grid)XamlReader.Parse(data));
+            SettingsPage_NSPage(SettingsPage_AboutPage);
+        }
+
+        private async void UserTX_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            SettingsBtn_MouseDown(null, null);
+            await Task.Delay(500);
+            BtD.LastBt?.Check(false);
+            SettingsPage_User.Check(true);
+            BtD.LastBt = SettingsPage_User;
+            SettingsPage_User_MouseDown(null, null);
+        }
+
+        private void SettingsPage_User_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UserInfo_GTK.Text = Settings.USettings.g_tk;
+            UserInfo_Cookie.Text = Settings.USettings.Cookie;
+            if (Settings.USettings.LemonAreeunIts == "0")
+            {
+                UserInfo_Logout.TName = "登录";
+            }
+            SettingsPage_NSPage(SettingsPage_UserPage);
+        }
+
+        private async void UserInfo_Logout_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LemonAreeunIts != "0")
+            {
+                //先保存当前用户的配置
+                await Settings.SaveSettingsTaskAsync();
+                Settings.LSettings.qq = "0";
+                await Settings.SaveLocaSettings();
+                await Settings.LoadUSettings("0");
+                UserInfo_GTK.Text = Settings.USettings.g_tk;
+                UserInfo_Cookie.Text = Settings.USettings.Cookie;
+                UserInfo_Logout.TName = "登录";
+                Load_Theme();
+                LoadMusicData();
+            }
+            else UserTX_MouseDown(null, null);
+        }
         private void ApplyHotKey_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Settings.USettings.HotKeys.Clear();
@@ -1381,7 +1465,7 @@ namespace LemonApp
             //新开个线程，不需要占用加载时
             Thread t = new Thread(async () =>
             {
-                var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/UpdataForWindows/raw/master/WindowsUpdata.json"));
+                var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/WindowsUpdate.json"));
                 string v = o["version"].ToString();
                 string dt = o["description"].ToString().Replace("#", "\n");
                 if (int.Parse(v) > int.Parse(App.EM))
@@ -4022,69 +4106,6 @@ namespace LemonApp
         private void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
-        }
-
-        private FrameworkElement Set_LastPage = null;
-        private void SettingsPage_NSPage(FrameworkElement fm)
-        {
-            (Set_LastPage != null ? Set_LastPage : SettingsPage_Download).Visibility = Visibility.Collapsed;
-            fm.Visibility = Visibility.Visible;
-            ContentAnimation(fm);
-            Set_LastPage = fm;
-        }
-
-        private void SettingsPage_Storage_MouseDown(object sender, MouseButtonEventArgs e)
-            => SettingsPage_NSPage(SettingsPage_Download);
-
-        private void SettingsPage_Keys_MouseDown(object sender, MouseButtonEventArgs e) 
-            => SettingsPage_NSPage(SettingsPage_KeysPage);
-
-        private void SettingsPage_Capacity_MouseDown(object sender, MouseButtonEventArgs e) 
-            => SettingsPage_NSPage(SettingsPage_CapacityPage);
-
-        private void SettingsPage_Feedback_MouseDown(object sender, MouseButtonEventArgs e)
-        => SettingsPage_NSPage(SettingsPage_FeedbackPage);
-
-        private void SettingsPage_About_MouseDown(object sender, MouseButtonEventArgs e)
-        => SettingsPage_NSPage(SettingsPage_AboutPage);
-
-        private async void UserTX_MouseDown_1(object sender, MouseButtonEventArgs e)
-        {
-            SettingsBtn_MouseDown(null, null);
-            await Task.Delay(500);
-            BtD.LastBt?.Check(false);
-            SettingsPage_User.Check(true);
-            BtD.LastBt = SettingsPage_User;
-            SettingsPage_User_MouseDown(null, null);
-        }
-
-        private void SettingsPage_User_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            UserInfo_GTK.Text = Settings.USettings.g_tk;
-            UserInfo_Cookie.Text = Settings.USettings.Cookie;
-            if (Settings.USettings.LemonAreeunIts == "0") 
-            {
-                UserInfo_Logout.TName = "登录";
-            }
-            SettingsPage_NSPage(SettingsPage_UserPage);
-        }
-
-        private async void UserInfo_Logout_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Settings.USettings.LemonAreeunIts != "0")
-            {
-                //先保存当前用户的配置
-                await Settings.SaveSettingsTaskAsync();
-                Settings.LSettings.qq = "0";
-                await Settings.SaveLocaSettings();
-                await Settings.LoadUSettings("0");
-                UserInfo_GTK.Text = Settings.USettings.g_tk;
-                UserInfo_Cookie.Text = Settings.USettings.Cookie;
-                UserInfo_Logout.TName = "登录";
-                Load_Theme();
-                LoadMusicData();
-            }
-            else UserTX_MouseDown(null, null);
         }
     }
 }

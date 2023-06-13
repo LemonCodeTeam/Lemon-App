@@ -34,7 +34,7 @@ namespace LemonApp.ContentPage
             NewSongs.Visibility = Visibility.Hidden;
             var data = await MusicLib.GetHomePageData();
             //--Top Focus--------
-            HomePage_IFV.Updata(data.focus, mw);
+            HomePage_IFV.Update(data.focus, mw);
             HomePage_GFGD.Children.Clear();
             //--官方歌单----------
             foreach (var a in data.GFdata)

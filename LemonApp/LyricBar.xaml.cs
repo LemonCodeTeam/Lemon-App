@@ -26,6 +26,10 @@ namespace LemonApp
         {
             InitializeComponent();
         }
+        public int LyricFontSize { 
+            get => (int)text.FontSize;
+            set { int v=value; text.FontSize = v; Height = value+6; }
+        }
         public void Update(string txt) {
             text.Text = txt.Replace("\r\n","   ");
         }
@@ -46,6 +50,7 @@ namespace LemonApp
                     {
                         Background = new SolidColorBrush(c);
                     });
+                    wac.enableBlurin = true;
                     wac.Color = Color.FromArgb(200, 255, 255, 255);
                     wac.IsEnabled = true;
                 }
@@ -55,6 +60,7 @@ namespace LemonApp
                     {
                         Background = new SolidColorBrush(c);
                     });
+                    wac.enableBlurin = true;
                     wac.Color = Color.FromArgb(220, 0, 0, 0);
                     wac.IsEnabled = true;
                 }

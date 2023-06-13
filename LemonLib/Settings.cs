@@ -161,6 +161,8 @@ namespace LemonLib
                 USettings.RomajiLyric = bool.Parse(o["RomajiLyric"].ToString());
             if (data.Contains("LyricAppBarOpen"))
                 USettings.LyricAppBarOpen = bool.Parse(o["LyricAppBarOpen"].ToString());
+            if (data.Contains("LyricAppBar_Size"))
+                USettings.LyricAppBar_Size = int.Parse(o["LyricAppBar_Size"].ToString());
         }
         public class UserSettings
         {
@@ -226,6 +228,7 @@ namespace LemonLib
             public bool DoesOpenDeskLyric { get; set; } = true;
             //是否打开歌词AppBar
             public bool LyricAppBarOpen { get; set; } = false;
+            public int LyricAppBar_Size { get; set; } = 14;
             /// <summary>
             /// 主题类型 0:Normal 1:Picture Theme 2.Blur For Win10 3:live theme
             /// </summary>

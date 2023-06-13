@@ -43,7 +43,7 @@ namespace LemonApp
             else t.Stop();
         }
 
-        public async void Updata(List<IFVData> iFVData, MainWindow m)
+        public async void Update(List<IFVData> iFVData, MainWindow m)
         {
             iv = iFVData;
             index = 0;

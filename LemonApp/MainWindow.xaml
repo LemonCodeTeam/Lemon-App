@@ -23,6 +23,7 @@
     </Window.Triggers>
     <Window.Resources>
         <!--#region 控件模板-->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <!--#region SearchBox 搜索框模板-->
         <Style x:Key="SearchBox" TargetType="{x:Type TextBox}">
             <Setter Property="Template">
@@ -49,10 +50,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--#endregion-->
         <!--#region TextBox 模板-->
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
-            <Setter Property="TextBox.CaretBrush" Value="{DynamicResource ResuColorBrush}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ResuColorBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
@@ -63,7 +63,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--#endregion-->
         <!--#region Slider 模板 横向 竖向-->
         <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
             <Setter Property="Template">
@@ -205,7 +204,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--#endregion-->
         <!--#region ListBox样式-->
         <Style x:Key="ListBoxStyleForDataList" TargetType="{x:Type ListBox}">
             <Setter Property="Template">
@@ -229,8 +227,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--#endregion-->
-        <!--#endregion-->
         <!--#region 动画资源-->
         <Storyboard x:Key="DrAddGDPage">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="IntoGDPage_main">
@@ -883,7 +879,6 @@
                 <EasingThicknessKeyFrame KeyTime="00:00:01.7000000" Value="880,0,0,0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
-        <!--#endregion-->
     </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="1" GlassFrameThickness="-1"/>
@@ -1098,9 +1093,9 @@
                                     <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
 
                                 </Grid>
-                                <Grid x:Name="SettingsPage_KeysPage" Height="120" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid x:Name="SettingsPage_KeysPage" Height="180" Margin="0,10,0,0" Visibility="Collapsed">
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
-                                    <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0">
+                                    <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0" VerticalAlignment="Top">
                                         <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
                                         <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="🐱‍💻Debug:" KeyId="129"/>
                                         <LemonApp:HotKeyChooser Height="25" desc="播放/暂停:" key="Space" Margin="0,0,20,10" KeyId="126"/>
@@ -1109,6 +1104,12 @@
                                     </WrapPanel>
                                     <LemonApp:MDButton x:Name="ApplyHotKey" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" TName="应用" Width="90" pData="{x:Null}" Margin="0,50,20,0" MouseDown="ApplyHotKey_MouseDown"/>
                                     <CheckBox x:Name="OpenLyricAppBar" Content="使用LyricAppBar" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="False" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,100,0,0" Click="OpenLyricAppBar_Click"/>
+                                    <Grid HorizontalAlignment="Left" Height="25" Margin="0,122,0,0" VerticalAlignment="Top" Width="170" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=OpenLyricAppBar}">
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,2,0,0" TextWrapping="Wrap" Text="字体大小:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
+                                        <TextBox x:Name="SettingsPage_LyricAppBar_FortSize" InputMethod.IsInputMethodEnabled="False" TextWrapping="Wrap" Text="14" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="60,0,0,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Center" SelectionTextBrush="#FF1B1B1C" HorizontalAlignment="Left" Width="35" PreviewTextInput="SettingsPage_LyricAppBar_FortSize_PreviewTextInput"/>
+                                        <TextBlock HorizontalAlignment="Left" Margin="98,0,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Width="20"/>
+                                        <LemonApp:MDButton x:Name="ApplyLyricAppBarSize" HorizontalAlignment="Left" Height="25" VerticalAlignment="Center" TName="应用" Width="50" pData="{x:Null}" Margin="120,0,0,0" cr="12,12,12,12" MouseDown="ApplyLyricAppBarSize_MouseDown"/>
+                                    </Grid>
                                 </Grid>
                                 <Grid x:Name="SettingsPage_UserPage" Height="300" Visibility="Collapsed">
                                     <Grid.ColumnDefinitions>
@@ -1137,10 +1138,7 @@
                                     <TextBlock x:Name="va" Margin="0,214,95,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF7C7C7C" TextAlignment="Center" HorizontalAlignment="Right" Width="105" Height="18"/>
                                     <LemonApp:MDButton x:Name="UserSend_fj" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Margin="80,0,0,0" TName="添加附件" pData="{x:Null}" cr="12,12,12,12" AllowDrop="True" Drop="UserSend_fj_Drag" MouseDown="UserSend_fj_MouseDown"/>
                                 </Grid>
-                                <Grid x:Name="SettingsPage_AboutPage" Margin="0,10,0,0" Visibility="Collapsed">
-                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="关于" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="124" Height="23" FontWeight="Bold"/>
-                                    <TextBlock Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}"><Run Text="设计/编码: 一只江仔 - Twilight./Lemon(QQ:2728578956)"/><LineBreak/><LineBreak/><Run Text="免责申明:"/><LineBreak/><Run Text="歌曲版权由QQ音乐(y.qq.com)所有."/><LineBreak/><Run Text="正在使用官方音乐源."/><LineBreak/><LineBreak/><Run Text="应用内部分图标资源来自: www.iconfont.cn"/><LineBreak/><LineBreak/><Run Text="Powered by .Net 6 on WPF"/><LineBreak/><Run Text="© Twilight./Lemon 2016-2023 all rights reserved"/></TextBlock>
-                                </Grid>
+                                <Grid x:Name="SettingsPage_AboutPage" Margin="0,10,0,0" Visibility="Collapsed"/>
                                 <!--留下一点空白行-->
                             </VirtualizingStackPanel>
                         </Grid>

@@ -78,6 +78,7 @@ namespace LemonApp
             Composite(handle, isEnabled);
         }
 
+        public bool enableBlurin = false;
         private void Composite(IntPtr handle, bool isEnabled)
         {
             // 操作系统版本判定。
@@ -85,7 +86,7 @@ namespace LemonApp
             var windows10_1809 = new Version(10, 0, 17763);
             var windows10 = new Version(10, 0);
             var windows11 = new Version(10, 0,22621);
-            if (osVersion >= windows11)
+            if (osVersion >= windows11 && !enableBlurin)
             {
                 _window.Background = new SolidColorBrush(Color.FromArgb(180, 0, 0, 0));
                 WindowBlur.SetWindowBlur(handle, 1, WindowBlur.BlurMode.Acrylic);

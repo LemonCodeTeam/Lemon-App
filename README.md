@@ -26,9 +26,9 @@ p.s. 32位平台的自行编译
 使用和传播请遵守GPL以及Anti 996协议
 
 #### 免责声明
-本应用中的歌曲和部分API来自QQ音乐(y.qq.com),音乐及歌词翻译版权归QQ音乐所有。
-本应用中的部分图标来自www.iconfont.cn.
-本应用使用BASS.NET解码 PERSONAL-USE License
-登录即代表同意Lemon App通过你的QQ账号获取你在QQ音乐上的内容，
-Lemon App只能通过 y.qq.com网页端 获得你所登录QQ用户能获得的歌曲以及MV等资源。
+本应用中的歌曲和部分API来自QQ音乐(y.qq.com),音乐及歌词翻译版权归QQ音乐所有。  
+本应用中的部分图标来自www.iconfont.cn.  
+本应用使用BASS.NET解码 PERSONAL-USE License  
+登录即代表同意Lemon App通过你的QQ账号获取你在QQ音乐上的内容，  
+Lemon App只能通过 y.qq.com网页端 获得你所登录QQ用户能获得的歌曲以及MV等资源。  
 本软件仅用于学习交流，禁止用于商业用途。

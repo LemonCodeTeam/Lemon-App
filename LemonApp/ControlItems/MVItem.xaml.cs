@@ -20,10 +20,10 @@ namespace LemonApp
             get => mData; set
             {
                 mData = value;
-                Updata();
+                Update();
             }
         }
-        private async void Updata()
+        private async void Update()
         {
             img.Background = new ImageBrush(await LemonLib.ImageCacheHelp.GetImageByUrl(mData.img, new int[2] { 150, 200 }));
             tit.Text = mData.name;
