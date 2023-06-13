@@ -4103,8 +4103,33 @@ namespace LemonApp
         #endregion
         //想写新功能来着...
 
-        private void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (Settings.USettings.LemonAreeunIts == "0")
+                NSPage(new MeumInfo(NonePage, Meum_MYGD));
+            else {
+                NSPage(new MeumInfo(BoughtPage, Meum_Bought));
+                OpenLoading();
+                var data = await MusicLib.GetMyHasBought_Albums();
+                BoughtList.Children.Clear();
+                foreach(var d in data) {
+                    var ks = new FLGDIndexItem(new MusicGD(){ 
+                        ID = d.ID, 
+                        Name = d.Name,
+                        Photo =d.Photo,
+                        ListenCount = 0 }, false)
+                    { Margin = new Thickness(12, 0, 12, 20) };
+
+                    ks.ImMouseDown += delegate {
+                        IFVCALLBACK_LoadAlbum(d.ID);
+                    };
+                    BoughtList.Children.Add(ks);
+                }
+                WidthUI(BoughtList);
+                ContentAnimation(BoughtList, BoughtList.Margin);
+                CloseLoading();
+            }
+            
 
         }
     }

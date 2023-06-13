@@ -1599,10 +1599,21 @@ jpg
         }
         #endregion
         #region 已购
-        //public static async Task<List<MusicGD>> GetMyHasBought_Albums() 
-        //{
-        //    string data =await HttpHelper.GetWebDatacAsync("");
-        //}
+        public static async Task<List<MusicGD>> GetMyHasBought_Albums() 
+        {
+            string data =await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/shop/fcgi-bin/fcg_get_order?from=1&cmd=sales_album&type=1&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=1&uin={qq}&g_tk={Settings.USettings.g_tk}&start=0&num=20");
+            var obj=JObject.Parse(data)["data"]["albumlist"];
+            var list=new List<MusicGD>();
+            foreach(var i in obj)
+            {
+                var d=new MusicGD();
+                d.ID=i["albummid"].ToString();
+                d.Name=i["album_name"].ToString();
+                d.Photo=$"https://y.qq.com/music/photo_new/T002R300x300M000{i["albummid"]}.jpg?max_age=2592000";
+                list.Add(d);
+            }
+            return list;
+        }
         #endregion
         #region 评论 网易云|QQ音乐
         /// <summary>
