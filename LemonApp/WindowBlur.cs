@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Shell;
 using System.Windows.Media;
 
 namespace LemonApp
@@ -88,6 +89,12 @@ namespace LemonApp
             var windows11 = new Version(10, 0,22621);
             if (osVersion >= windows11 && !enableBlurin)
             {
+                //对于win11需要  其它默认1的边框
+                WindowChrome.SetWindowChrome(_window, new WindowChrome()
+                {
+                    GlassFrameThickness = new Thickness(-1),
+                    CaptionHeight = 1
+                });
                 _window.Background = new SolidColorBrush(Color.FromArgb(180, 0, 0, 0));
                 WindowBlur.SetWindowBlur(handle, 1, WindowBlur.BlurMode.Acrylic);
             }

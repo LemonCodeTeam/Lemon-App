@@ -881,7 +881,7 @@
         </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="1" GlassFrameThickness="-1"/>
+        <WindowChrome CaptionHeight="1" GlassFrameThickness="1"/>
     </WindowChrome.WindowChrome>
     <!--窗口边框-->
     <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFB7AEB8">
