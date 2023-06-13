@@ -38,6 +38,7 @@ namespace LemonApp
                     {
                         Background = new SolidColorBrush(c);
                     });
+                    wac.enableBlurin = true;
                     wac.Color = Color.FromArgb(200, 255, 255, 255);
                     wac.IsEnabled = true;
                 }
@@ -47,6 +48,7 @@ namespace LemonApp
                     {
                         Background = new SolidColorBrush(c);
                     });
+                    wac.enableBlurin = true;
                     wac.Color = Color.FromArgb(220, 0, 0, 0);
                     wac.IsEnabled = true;
                 }

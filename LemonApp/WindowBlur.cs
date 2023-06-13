@@ -25,7 +25,32 @@ namespace LemonApp
         public WindowAccentCompositor(Window window, Action<Color> nofun)
         {
             _window = window;
+            var osVersion = Environment.OSVersion.Version;
+            var windows11 = new Version(10, 0, 22621);
+            if (osVersion >= windows11 && !enableBlurin)
+            {
+                _window.LostFocus += _window_LostFocus;
+                _window.GotFocus += _window_GotFocus;
+            }
             NoFunCallback = nofun;
+        }
+
+        private void _window_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _window.Background = new SolidColorBrush(
+                    App.BaseApp.ThemeColor == 0 ?
+                    Color.FromArgb(180, 255, 255, 255) :
+                    Color.FromArgb(180, 0, 0, 0)
+                    );
+        }
+
+        private void _window_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _window.Background = new SolidColorBrush(
+                    App.BaseApp.ThemeColor == 0 ?
+                    Color.FromArgb(255, 242, 242, 242) :
+                    Color.FromArgb(255, 32, 32, 23)
+                    );
         }
 
         /// <summary>
@@ -80,6 +105,7 @@ namespace LemonApp
         }
 
         public bool enableBlurin = false;
+        public bool darkmode=false;
         private void Composite(IntPtr handle, bool isEnabled)
         {
             // 操作系统版本判定。
@@ -95,7 +121,11 @@ namespace LemonApp
                     GlassFrameThickness = new Thickness(-1),
                     CaptionHeight = 1
                 });
-                _window.Background = new SolidColorBrush(Color.FromArgb(180, 0, 0, 0));
+                _window.Background = new SolidColorBrush(
+                    App.BaseApp.ThemeColor == 0?
+                    Color.FromArgb(180,255,255,255):
+                    Color.FromArgb(180, 0, 0, 0)
+                    );
                 WindowBlur.SetWindowBlur(handle, 1, WindowBlur.BlurMode.Acrylic);
             }
             else
