@@ -28,17 +28,20 @@ namespace LemonApp
         public double LastLocation = 0;
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            double WheelChange = e.Delta * 0.5;
-            double newOffset = LastLocation - (WheelChange * 2);
-            ScrollToVerticalOffset(LastLocation);
-            if (newOffset < 0)
-                newOffset = 0;
-            if (newOffset > ScrollableHeight)
-                newOffset = ScrollableHeight;
-
-            AnimateScroll(newOffset);
-            LastLocation = newOffset;
-            e.Handled = true;
+            if (Settings.USettings.Animation_Scroll)
+            {
+                double WheelChange = e.Delta * 0.5;
+                double newOffset = LastLocation - (WheelChange * 2);
+                ScrollToVerticalOffset(LastLocation);
+                if (newOffset < 0)
+                    newOffset = 0;
+                if (newOffset > ScrollableHeight)
+                    newOffset = ScrollableHeight;
+                AnimateScroll(newOffset);
+                LastLocation = newOffset;
+                e.Handled = true;
+            }
+            else base.OnMouseWheel(e);
         }
 
         private void AnimateScroll(double ToValue)

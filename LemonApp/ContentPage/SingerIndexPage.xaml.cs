@@ -52,6 +52,7 @@ namespace LemonApp.ContentPage
             if (cur_page == 1)
             {
                 await Task.Yield();
+                SingerItemsList.Opacity = 1;
                 mw.ContentAnimation(SingerItemsList);
             }
         }

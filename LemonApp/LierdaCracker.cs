@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using LemonLib;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -43,7 +44,6 @@ namespace Lierda.WPFHelper
             }
             currentUser.Dispose();
         }
-        public bool Enabled { get; set; }
         public void Cracker(int sleepSpan = 50)
         {
             _ = Task.Factory.StartNew(delegate
@@ -52,12 +52,12 @@ namespace Lierda.WPFHelper
                 {
                     try
                     {
-                        if (Enabled)
+                        if (Settings.USettings.MemoryFlush)
                         {
                             SetDate();
                             FlushMemory();
-                            Thread.Sleep(TimeSpan.FromSeconds((double)sleepSpan));
                         }
+                        Thread.Sleep(TimeSpan.FromSeconds((double)sleepSpan));
                     }
                     catch { }
                 }

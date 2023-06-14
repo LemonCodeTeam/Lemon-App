@@ -679,6 +679,10 @@ namespace LemonApp
                 2 => Properties.Resources.Random,
                 _ => null
             });
+            //-------------加载设置项--------------
+            Settings_Animation_Refrech.IsChecked= Settings.USettings.Animation_Refrech;
+            Settings_Animation_Scroll.IsChecked = Settings.USettings.Animation_Scroll;
+            Settings_MemoryFlush.IsChecked = Settings.USettings.MemoryFlush;
         }
 
         private void PopOut_MouseUp(object sender, MouseButtonEventArgs e)
@@ -803,7 +807,6 @@ namespace LemonApp
                     Settings.USettings.Cookie = data.cookie;
                 }
                 var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={qq}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={qq}&reqfrom=1&reqtype=0");
-                Console.WriteLine(sl);
                 var sdc = JObject.Parse(sl)["data"]["creator"];
                 await HttpHelper.HttpDownloadFileAsync(sdc["headpic"].ToString().Replace("http://", "https://"), Settings.USettings.DataCachePath + qq + ".jpg");
                 string name = sdc["nick"].ToString();
@@ -831,6 +834,10 @@ namespace LemonApp
         }
         #endregion
         #region 设置
+        private void Page_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
         private void SettingsPage_LyricAppBar_FortSize_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
@@ -1480,35 +1487,43 @@ namespace LemonApp
         #endregion
         #region N/S Page 切换页面
 
-        public void ContentAnimation(DependencyObject TPage, Thickness value = new Thickness())
+        public void ContentAnimation(FrameworkElement TPage, Thickness value = new Thickness())
         {
-            var sb = Resources["LoadContentAnimation"] as Storyboard;
-            foreach (Timeline ac in sb.Children)
+            if (Settings.USettings.Animation_Refrech)
             {
-                Storyboard.SetTarget(ac, TPage);
-                if (ac is ThicknessAnimationUsingKeyFrames)
+                var sb = Resources["LoadContentAnimation"] as Storyboard;
+                foreach (Timeline ac in sb.Children)
                 {
-                    var ta = ac as ThicknessAnimationUsingKeyFrames;
-                    ta.KeyFrames[0].Value = new Thickness(0, 200 + value.Top, 0, -200 + value.Bottom);
-                    ta.KeyFrames[1].Value = value;
+                    if (Settings.USettings.Animation_Refrech)
+                        Storyboard.SetTarget(ac, TPage);
+                    if (ac is ThicknessAnimationUsingKeyFrames)
+                    {
+                        var ta = ac as ThicknessAnimationUsingKeyFrames;
+                        ta.KeyFrames[0].Value = new Thickness(0, 200 + value.Top, 0, -200 + value.Bottom);
+                        ta.KeyFrames[1].Value = value;
+                    }
                 }
+                sb.Begin();
             }
-            sb.Begin();
         }
-        public void RunAnimation(DependencyObject TPage, Thickness value = new Thickness())
+        public void RunAnimation(UIElement TPage, Thickness value = new Thickness())
         {
-            var sb = Resources["NSPageAnimation"] as Storyboard;
-            foreach (Timeline ac in sb.Children)
+            if (Settings.USettings.Animation_Refrech)
             {
-                Storyboard.SetTarget(ac, TPage);
-                if (ac is ThicknessAnimationUsingKeyFrames)
+                var sb = Resources["NSPageAnimation"] as Storyboard;
+                foreach (Timeline ac in sb.Children)
                 {
-                    var ta = ac as ThicknessAnimationUsingKeyFrames;
-                    ta.KeyFrames[0].Value = new Thickness(200, value.Top, -200, value.Bottom);
-                    ta.KeyFrames[1].Value = value;
+                    Storyboard.SetTarget(ac, TPage);
+                    if (ac is ThicknessAnimationUsingKeyFrames)
+                    {
+                        var ta = ac as ThicknessAnimationUsingKeyFrames;
+                        ta.KeyFrames[0].Value = new Thickness(200, value.Top, -200, value.Bottom);
+                        ta.KeyFrames[1].Value = value;
+                    }
                 }
+                sb.Begin();
             }
-            sb.Begin();
+            else TPage.Opacity = 1;
         }
 
         private MainMeumItem LastClickLabel = null;
@@ -1546,7 +1561,6 @@ namespace LemonApp
                 Point p = gT.Transform(new Point(0, 0));
                 //动画相对位置 
                 double op = p.Y - point.Y;
-                Console.WriteLine(op);
                 if (op > 0)
                 {
                     ani = Resources["ControlsAniDown"] as Storyboard;
@@ -1659,10 +1673,6 @@ namespace LemonApp
                 }
             PageData.Add(data);
             QHNowPageIndex = PageData.Count - 1;
-            foreach (var a in PageData)
-            {
-                Console.WriteLine(PageData.IndexOf(a) + " " + a.Page);
-            }
             Console.WriteLine(QHNowPageIndex);
         }
 
@@ -1674,7 +1684,6 @@ namespace LemonApp
                 var a = PageData[QHNowPageIndex];
                 NSPage(a, false, true);
             }
-            Console.WriteLine(QHNowPageIndex);
         }
 
         private void NextPageBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1685,7 +1694,6 @@ namespace LemonApp
                 var a = PageData[QHNowPageIndex];
                 NSPage(a, false, true);
             }
-            Console.WriteLine(QHNowPageIndex);
         }
         #endregion
         #region Singer 歌手界面
@@ -2108,20 +2116,30 @@ namespace LemonApp
             {
                 int p = (index + 1) * 45;
                 double os = p - (DataItemsList.ActualHeight / 2) + 10;
-                Console.WriteLine(os);
-                var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
-                da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
-                Datasv.LastLocation = os;
-                Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+                if (Settings.USettings.Animation_Scroll)
+                {
+                    var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(300));
+                    da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+                    Datasv.LastLocation = os;
+                    Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+                }
+                else { Datasv.ScrollToVerticalOffset(os); }
             }
         }
 
         private void DataPage_Top_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
-            da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
-            Datasv.LastLocation = 0;
-            Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            if (Settings.USettings.Animation_Scroll)
+            {
+                var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
+                da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
+                Datasv.LastLocation = 0;
+                Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
+            }
+            else {
+                Datasv.LastLocation = 0;
+                Datasv.ScrollToTop();
+            }
         }
 
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2208,7 +2226,9 @@ namespace LemonApp
                     if (HB == 0)
                     {
                         HB = 1;
-                        (Resources["DataPage_Min"] as Storyboard).Begin();
+                        var sb = Resources["DataPage_Min"] as Storyboard;
+                        sb.Begin();
+                        if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
                     }
                 }
                 else
@@ -2216,7 +2236,9 @@ namespace LemonApp
                     if (HB == 1)
                     {
                         HB = 0;
-                        (Resources["DataPage_Max"] as Storyboard).Begin();
+                        var sb = Resources["DataPage_Max"] as Storyboard;
+                        sb.Begin();
+                        if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
                     }
                 }
             if (Datasv.IsVerticalScrollBarAtButtom())
@@ -2257,9 +2279,10 @@ namespace LemonApp
             }
         }
 
+        bool EnableSearchBoxShow = true;
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SearchBox.Text.Trim() != string.Empty)
+            if (SearchBox.Text.Trim() != string.Empty&& EnableSearchBoxShow)
             {
                 await Task.Yield();
                 if (!Search_SmartBox.IsOpen)
@@ -2284,16 +2307,19 @@ namespace LemonApp
                 Search_SmartBoxList.Focus();
             else if (e.Key == Key.Enter && SearchBox.Text.Trim() != string.Empty)
             {
+                EnableSearchBoxShow = false;
                 SearchMusic(SearchBox.Text);
                 ixPlay = 1;
                 Search_SmartBox.IsOpen = false;
             }
+            else EnableSearchBoxShow = true;
         }
 
         private void Search_SmartBoxList_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
+                EnableSearchBoxShow = false;
                 SearchBox.Text = (Search_SmartBoxList.SelectedItem as ListBoxItem).Content.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
                 Search_SmartBox.IsOpen = false;
                 SearchMusic(SearchBox.Text); ixPlay = 1;
@@ -2302,6 +2328,7 @@ namespace LemonApp
 
         private void Bd_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            EnableSearchBoxShow = false;
             SearchBox.Text = (sender as ListBoxItem).Content.ToString().Replace("歌曲:", "").Replace("歌手:", "").Replace("专辑:", "");
             Search_SmartBox.IsOpen = false;
             SearchMusic(SearchBox.Text); ixPlay = 1;
@@ -4151,9 +4178,19 @@ namespace LemonApp
         }
         #endregion
 
-        private void Page_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Settings_Animation_Check_Click(object sender, RoutedEventArgs e)
         {
-            Keyboard.ClearFocus();
+            Settings.USettings.Animation_Refrech = (bool)Settings_Animation_Refrech.IsChecked;
+        }
+
+        private void Settings_Animation_Scroll_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.Animation_Scroll = (bool)Settings_Animation_Scroll.IsChecked;
+        }
+
+        private void Settings_MemoryFlush_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.MemoryFlush = (bool)Settings_MemoryFlush.IsChecked;
         }
     }
 }

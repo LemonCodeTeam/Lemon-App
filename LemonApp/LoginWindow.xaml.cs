@@ -27,7 +27,6 @@ namespace LemonApp
         {
             wb.Navigated += delegate
             {
-                Console.WriteLine("", "Arrive");
                 wb.Document.GetElementById("title_0").InnerText = "登录到 Lemon App";
                 loading.Visibility = Visibility.Collapsed;
                 wf.Visibility = Visibility.Visible;

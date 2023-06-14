@@ -49,6 +49,7 @@ namespace LemonApp
             if (cur_page == 1)
             {
                 await Task.Yield();
+                ItemsList.Opacity = 1;
                 mw.ContentAnimation(ItemsList, new Thickness(0, 50, 0, 0));
             }
         }

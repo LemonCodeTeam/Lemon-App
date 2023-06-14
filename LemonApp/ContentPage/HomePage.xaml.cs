@@ -28,10 +28,7 @@ namespace LemonApp.ContentPage
         {
             //---------加载主页HomePage----动画加持--
             mw.OpenLoading();
-            JCTJ.Visibility = Visibility.Hidden;
-            GFGD.Visibility = Visibility.Hidden;
-            GDTJ.Visibility = Visibility.Hidden;
-            NewSongs.Visibility = Visibility.Hidden;
+            this.Visibility = Visibility.Hidden;
             var data = await MusicLib.GetHomePageData();
             //--Top Focus--------
             HomePage_IFV.Update(data.focus, mw);
@@ -82,18 +79,9 @@ namespace LemonApp.ContentPage
             }
             //------------------
             mw.CloseLoading();
-            await Task.Yield();
-            JCTJ.Visibility = Visibility.Visible;
-            mw.ContentAnimation(JCTJ);
             await Task.Delay(200);
-            GFGD.Visibility = Visibility.Visible;
-            mw.ContentAnimation(GFGD);
-            await Task.Delay(200);
-            GDTJ.Visibility = Visibility.Visible;
-            mw.ContentAnimation(GDTJ);
-            await Task.Delay(200);
-            NewSongs.Visibility = Visibility.Visible;
-            mw.RunAnimation(NewSongs);
+            this.Visibility = Visibility.Visible;
+            mw.ContentAnimation(this);
         }
 
         private void page_Loaded(object sender, RoutedEventArgs e)

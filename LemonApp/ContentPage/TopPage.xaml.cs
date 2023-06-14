@@ -23,7 +23,7 @@ namespace LemonApp.ContentPage
         {
             mw.OpenLoading();
             var dt = await mw.ml.GetTopIndexAsync();
-            topIndexList.Visibility = Visibility.Hidden;
+            topIndexList.Opacity = 0;
             topIndexList.Children.Clear();
             foreach (var d in dt)
             {
@@ -37,8 +37,8 @@ namespace LemonApp.ContentPage
             }
             await Task.Yield();
             mw.CloseLoading();
-            topIndexList.Visibility = Visibility.Visible;
             mw.WidthUI(topIndexList);
+            topIndexList.Opacity = 1;
             mw.ContentAnimation(topIndexList);
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

@@ -163,6 +163,12 @@ namespace LemonLib
                 USettings.LyricAppBarOpen = bool.Parse(o["LyricAppBarOpen"].ToString());
             if (data.Contains("LyricAppBar_Size"))
                 USettings.LyricAppBar_Size = int.Parse(o["LyricAppBar_Size"].ToString());
+            if (data.Contains("Animation_Refrech"))
+                USettings.Animation_Refrech = bool.Parse(o["Animation_Refrech"].ToString());
+            if (data.Contains("Animation_Scroll"))
+                USettings.Animation_Scroll = bool.Parse(o["Animation_Scroll"].ToString());
+            if (data.Contains("MemoryFlush"))
+                USettings.MemoryFlush = bool.Parse(o["MemoryFlush"].ToString());
         }
         public class UserSettings
         {
@@ -253,6 +259,11 @@ namespace LemonLib
             public string DownloadPath = "";
             public string DownloadName = "[I].  [M] - [S]";
             public bool DownloadWithLyric = true;
+            #endregion
+            #region 性能选项
+            public bool Animation_Refrech { get; set; } = true;
+            public bool Animation_Scroll { get; set; } = true;
+            public bool MemoryFlush { get; set; } = true;
             #endregion
 
             public Dictionary<string, QuickGoToData> QuickGoToData = new Dictionary<string, QuickGoToData>();

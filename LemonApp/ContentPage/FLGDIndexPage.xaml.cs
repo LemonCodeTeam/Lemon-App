@@ -107,6 +107,7 @@ namespace LemonApp.ContentPage
             if (osx == 1)
             {
                 await Task.Yield();
+                FLGDItemsList.Opacity = 1;
                 mw.ContentAnimation(FLGDItemsList);
             }
         }

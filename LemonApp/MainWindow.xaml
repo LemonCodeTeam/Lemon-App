@@ -250,7 +250,7 @@
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="ContentIndex">
                 <EasingThicknessKeyFrame KeyTime="0" Value="280,0,-280,0"/>
-                <EasingThicknessKeyFrame KeyTime="0:0:0.4" Value="0">
+                <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0">
                     <EasingThicknessKeyFrame.EasingFunction>
                         <CubicEase EasingMode="EaseOut"/>
                     </EasingThicknessKeyFrame.EasingFunction>
@@ -1124,10 +1124,11 @@
                                     <Border RenderOptions.BitmapScalingMode="Fant"  VerticalAlignment="Top" CornerRadius="75" Height="100" Width="100" Background="{Binding Background, ElementName=UserTX}" Cursor="Hand" BorderBrush="{DynamicResource ImageBorderColor}" BorderThickness="{DynamicResource ImageBorder}" MouseDown="UserTX_MouseDown_1" Grid.Column="1" Margin="0,45,0,0"/>
                                 </Grid>
                                 <Grid x:Name="SettingsPage_CapacityPage" Height="200" Visibility="Collapsed">
-                                    <TextBlock Text="This page is going to be used." Foreground="{DynamicResource PlayDLPage_Font_Low}"/>
-                                    <CheckBox x:Name="OpenLyricAppBar_Copy" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="0,20,0,0">
-                                        使用 SetProcessWorkingSetSize 进行内存压缩 (50tps)
-                                    </CheckBox>
+                                    <StackPanel HorizontalAlignment="Left" Orientation="Vertical" VerticalAlignment="Top">
+                                        <CheckBox x:Name="Settings_Animation_Refrech" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" IsChecked="True" Content="使用过渡动画" Margin="0,10,0,0" Click="Settings_Animation_Check_Click"/>
+                                        <CheckBox x:Name="Settings_Animation_Scroll" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" IsChecked="True" Content="使用滚动动画" Margin="0,10,0,0" Click="Settings_Animation_Scroll_Click"/>
+                                        <CheckBox x:Name="Settings_MemoryFlush" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Content="使用 SetProcessWorkingSetSize 进行内存压缩 (50tps)" Margin="0,10,0,0" Click="Settings_MemoryFlush_Click"/>
+                                    </StackPanel>
                                 </Grid>
                                 <Grid x:Name="SettingsPage_FeedbackPage" Margin="0,10,0,0" Visibility="Collapsed" Background="#00000000">
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
