@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:LemonApp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <local:MyScrollView x:Name="sv" ScrollChanged="SingerPage_sv_ScrollChanged" Template="{DynamicResource ScrollViewerControlTemplate}">
+    <local:MyScrollViewer x:Name="sv" ScrollChanged="SingerPage_sv_ScrollChanged" Template="{DynamicResource ScrollViewerControlTemplate}">
         <Grid>
             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="我关注的歌手" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
             <WrapPanel x:Name="ItemsList" Margin="0,50,0,0" Uid="4"/>
         </Grid>
-    </local:MyScrollView>
+    </local:MyScrollViewer>
 </UserControl>

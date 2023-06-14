@@ -15,7 +15,8 @@ namespace LemonApp
         public int KeyId { get; set; }
         public Key key
         {
-            get => (Key)tKey.Tag; set
+            get => (Key)tKey.Tag;
+            set
             {
                 tKey.Tag = value;
                 tKey.Text = value.ToString();

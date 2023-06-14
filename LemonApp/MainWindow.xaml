@@ -209,9 +209,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBox}">
-                        <LemonApp:MyScrollView x:Name="Datasv"  Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged"  Focusable="False" Padding="{TemplateBinding Padding}" >
+                        <LemonApp:MyScrollViewer x:Name="Datasv"  Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Datasv_ScrollChanged"  Focusable="False" Padding="{TemplateBinding Padding}" >
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </LemonApp:MyScrollView>
+                        </LemonApp:MyScrollViewer>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -220,9 +220,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBox}">
-                        <LemonApp:MyScrollView x:Name="PlayDLDatasv"  Template="{DynamicResource ScrollViewerControlTemplate}"  Focusable="False" Padding="{TemplateBinding Padding}" Loaded="PlayDLDatasv_Loaded" >
+                        <LemonApp:MyScrollViewer x:Name="PlayDLDatasv"  Template="{DynamicResource ScrollViewerControlTemplate}"  Focusable="False" Padding="{TemplateBinding Padding}" Loaded="PlayDLDatasv_Loaded" >
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </LemonApp:MyScrollView>
+                        </LemonApp:MyScrollViewer>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -885,7 +885,7 @@
     </WindowChrome.WindowChrome>
     <!--窗口边框-->
     <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFB7AEB8">
-        <Grid x:Name="Page" Background="White" Margin="-1">
+        <Grid x:Name="Page" Background="White" Margin="-1" MouseDown="Page_MouseDown">
             <!--主题背景或动态皮肤放置于此-->
             <Border x:Name="DThemePage"/>
 
@@ -1038,9 +1038,9 @@
                         <!--保留必要的页面  其他的页面存放于/ContentPage/ 按需舍取-->
                         <Grid x:Name="DownloadPage" Visibility="Collapsed">
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="下载管理" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
-                            <LemonApp:MyScrollView x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollViewer x:Name="sv"  Margin="0,51,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <VirtualizingStackPanel x:Name="DownloadItemsList" Orientation="Vertical"/>
-                            </LemonApp:MyScrollView>
+                            </LemonApp:MyScrollViewer>
                             <LemonApp:MDButton x:Name="Download_pause" HorizontalAlignment="Left" Height="25" Margin="140,14,0,0" Width="70" TName="暂停" MouseDown="Download_pause_MouseDown" VerticalAlignment="Top" pData="{x:Null}" cr="13"/>
                             <LemonApp:MDButton x:Name="Download_clear" HorizontalAlignment="Left" Height="25" Margin="225,14,0,0" Width="70" TName="取消全部" MouseDown="Download_clear_MouseDown" VerticalAlignment="Top" cr="13" pData="{x:Null}"/>
                             <Grid x:Name="NonePage_Copy">
@@ -1097,7 +1097,7 @@
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
                                     <WrapPanel x:Name="KeysWrap" Orientation="Horizontal" Margin="0,30,115,0" VerticalAlignment="Top">
                                         <LemonApp:HotKeyChooser Height="25" desc="快速召唤:" key="L" Margin="0,0,20,10" KeyId="124"/>
-                                        <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="🐱‍💻Debug:" KeyId="129"/>
+                                        <LemonApp:HotKeyChooser Height="25" key="C" Margin="0,0,20,10" desc="Debug:" KeyId="129"/>
                                         <LemonApp:HotKeyChooser Height="25" desc="播放/暂停:" key="Space" Margin="0,0,20,10" KeyId="126"/>
                                         <LemonApp:HotKeyChooser Height="25" desc="上一曲:" key="Up" Margin="0,0,20,10" KeyId="127"/>
                                         <LemonApp:HotKeyChooser Height="25" desc="下一曲:" key="Down" Margin="0,0,20,10" KeyId="128"/>
@@ -1129,7 +1129,7 @@
                                         使用 SetProcessWorkingSetSize 进行内存压缩 (50tps)
                                     </CheckBox>
                                 </Grid>
-                                <Grid x:Name="SettingsPage_FeedbackPage" Margin="0,10,0,0" Visibility="Collapsed">
+                                <Grid x:Name="SettingsPage_FeedbackPage" Margin="0,10,0,0" Visibility="Collapsed" Background="#00000000">
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="用户反馈" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="82" Height="23" FontWeight="Bold"/>
                                     <TextBox x:Name="UserSendText" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="167" Margin="0,35,0,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" Text="在此处输入你的建议或问题，或拖动附件到上方" SelectionTextBrush="#FF1B1B1C"/>
                                     <LemonApp:MDButton x:Name="UserSendButton" HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Margin="0,209,0,0" TName="提交" Width="90" MouseDown="UserSendButton_MouseDown" pData="{x:Null}"/>
@@ -1143,9 +1143,9 @@
                             </VirtualizingStackPanel>
                         </Grid>
                         <Grid x:Name="SkinPage" IsVisibleChanged="SkinPage_IsVisibleChanged" Visibility="Collapsed">
-                            <LemonApp:MyScrollView Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollViewer Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <WrapPanel x:Name="SkinIndexList" Uid="4" Margin="0"/>
-                            </LemonApp:MyScrollView>
+                            </LemonApp:MyScrollViewer>
                             <Border x:Name="ColorThemeBtn" HorizontalAlignment="Right" Height="45" VerticalAlignment="Bottom" Width="45" Margin="0,0,25,22" CornerRadius="100" Background="{DynamicResource ThemeColor}" MouseDown="ColorThemeBtn_MouseDown">
                                 <Border Width="20" Height="20">
                                     <Border.Background>
@@ -1205,14 +1205,14 @@
                             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="个性主题" VerticalAlignment="Top" Width="170" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
                         </Grid>
                         <Grid x:Name="MyGDIndexPage" Visibility="Collapsed">
-                            <LemonApp:MyScrollView  Margin="0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollViewer  Margin="0" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <WrapPanel Orientation="Vertical">
                                     <TextBlock HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="我的歌单" VerticalAlignment="Top" Width="101" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,10,0,0" FontWeight="Bold"/>
                                     <WrapPanel x:Name="GDItemsList" Margin="0,10,0,0" Uid="4"/>
                                     <TextBlock HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="我喜欢的歌单" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Width="145" Margin="20,10,0,0" FontWeight="Bold"/>
                                     <WrapPanel x:Name="GDILikeItemsList" Margin="0,10,0,0" Uid="4"/>
                                 </WrapPanel>
-                            </LemonApp:MyScrollView>
+                            </LemonApp:MyScrollViewer>
                             <Border x:Name="AddGDPage_OpenBtn" HorizontalAlignment="Right" Height="45" VerticalAlignment="Bottom" Width="45" Margin="0,0,25,22" CornerRadius="100" Background="{DynamicResource ThemeColor}" MouseDown="AddGDPage_OpenBtn_MouseDown">
                                 <Path Data="M861.541 469.516h-307.058v-307.058c0-23.464-19.020-42.484-42.484-42.484-23.463 0-42.484 19.020-42.484 42.484v307.058h-307.058c-23.464 0-42.484 19.020-42.484 42.484 0 23.463 19.020 42.484 42.484 42.484h307.058v307.058c0 23.463 19.020 42.484 42.484 42.484 23.463 0 42.484-19.021 42.484-42.484v-307.058h307.058c23.463 0 42.484-19.020 42.484-42.484-0.001-23.463-19.022-42.484-42.485-42.484z" Stretch="UniformToFill" Fill="White" Width="16" Height="16"/>
                             </Border>
@@ -1327,7 +1327,7 @@
                             </Border>
                         </Grid>
                         <Grid x:Name="SingerDataPage" Margin="0,-50,0,0" Visibility="Collapsed" IsVisibleChanged="SingerDataPage_IsVisibleChanged" Opacity="0">
-                            <LemonApp:MyScrollView x:Name="Cisv" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Cisv_ScrollChanged" />
+                            <LemonApp:MyScrollViewer x:Name="Cisv" Template="{DynamicResource ScrollViewerControlTemplate}" ScrollChanged="Cisv_ScrollChanged" />
                             <Grid x:Name="SingerDP_Top" Height="50" VerticalAlignment="Top" Visibility="Collapsed"/>
                         </Grid>
                         <Grid x:Name="MusicPLPage" Visibility="Collapsed">
@@ -1344,9 +1344,9 @@
                                     </Grid>
                                 </Border>
                             </Grid>
-                            <LemonApp:MyScrollView x:Name="MusicPlScrollViewer"  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollViewer x:Name="MusicPlScrollViewer"  Margin="0,50,0,0" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <VirtualizingStackPanel x:Name="MusicPlList"/>
-                            </LemonApp:MyScrollView>
+                            </LemonApp:MyScrollViewer>
                         </Grid>
                         <Grid x:Name="NonePage" Visibility="Collapsed">
                             <Border Width="300" Height="300" Margin="0,0,0,100" >
@@ -1371,12 +1371,12 @@
                             </Border>
                         </Grid>
                         <Grid x:Name="BoughtPage" Visibility="Collapsed">
-                            <LemonApp:MyScrollView  Margin="0" Template="{DynamicResource ScrollViewerControlTemplate}">
+                            <LemonApp:MyScrollViewer  Margin="0" Template="{DynamicResource ScrollViewerControlTemplate}">
                                 <WrapPanel Orientation="Vertical">
                                     <TextBlock HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="我的已购" VerticalAlignment="Top" Width="101" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" Margin="20,10,0,0" FontWeight="Bold"/>
                                     <WrapPanel x:Name="BoughtList" Margin="0,10,0,0" Uid="4"/>
                                 </WrapPanel>
-                            </LemonApp:MyScrollView>
+                            </LemonApp:MyScrollViewer>
                             <!--Popup x:Name="IntoGDPop" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade"-->
                             <!--lemonlib:MyPopup x:Name="AddGDPop" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade"-->
                         </Grid>
@@ -1398,7 +1398,7 @@
                                         VirtualizingPanel.IsVirtualizing="True"  Style="{DynamicResource ListBoxStyleForPlayDl}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{DynamicResource ListBoxItemStyleForMeum}" Margin="5" Foreground="{DynamicResource PlayDLPage_Font_Most}" BorderThickness="0" Background="{DynamicResource PlayDLPage_Bg}" />
                                 </Border>
                             </lemonlib:MyPopup>
-                            <TextBox x:Name="SearchBox" TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="0,0,0,1" Style="{DynamicResource SearchBox}" Foreground="{DynamicResource ResuColorBrush}" Background="#0C000000" Height="25" TextChanged="SearchBox_TextChanged" MinWidth="175" PreviewKeyDown="SearchBox_PreviewKeyDown" Width="220" BorderBrush="{x:Null}" SelectionTextBrush="#FF1B1B1C" SelectionBrush="{DynamicResource ThemeColor}" CaretBrush="{DynamicResource ResuColorBrush}" MouseLeftButtonUp="SearchBox_LeftMouseUp"/>
+                            <TextBox x:Name="SearchBox" TextWrapping="NoWrap" HorizontalAlignment="Left" Margin="0,0,0,1" Style="{DynamicResource SearchBox}" Foreground="{DynamicResource ResuColorBrush}" Background="#0C000000" Height="25" TextChanged="SearchBox_TextChanged" MinWidth="175" PreviewKeyDown="SearchBox_PreviewKeyDown" Width="220" BorderBrush="{x:Null}" SelectionTextBrush="#FF1B1B1C" SelectionBrush="{DynamicResource ThemeColor}" MouseLeftButtonUp="SearchBox_LeftMouseUp"/>
                         </Grid>
                         <Border x:Name="LastPageBtn" HorizontalAlignment="Left" Height="25" VerticalAlignment="Center" Width="25" Margin="20,0,0,0" MouseDown="LastPageBtn_MouseDown" Background="#00000000" Cursor="Hand">
                             <Path Fill="{DynamicResource ResuColorBrush}" Data="M675 765l-36 37-290-290 290-290 36 37-254 253z" Stretch="Uniform" Height="15"/>

@@ -9,10 +9,11 @@ namespace LemonApp
     /// <summary>
     /// 全局ScrollView 行为 滚动
     /// </summary>
-    public class MyScrollView : ScrollViewer
+    public class MyScrollViewer : ScrollViewer
     {
-        public MyScrollView()
+        public MyScrollViewer()
         {
+            this.FocusVisualStyle = null;
             this.PreviewMouseUp += MyScrollView_PreviewMouseUp;
             this.PanningMode= PanningMode.VerticalOnly;
             this.SnapsToDevicePixels = true;

@@ -7,7 +7,7 @@
              xmlns:LemonApp="clr-namespace:LemonApp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
-    <LemonApp:MyScrollView x:Name="sv">
+    <LemonApp:MyScrollViewer x:Name="sv">
         <Grid>
             <TextBlock HorizontalAlignment="Left" Height="30" Margin="20,10,0,0" TextWrapping="Wrap" Text="在线电台" VerticalAlignment="Top" Width="101" Foreground="{DynamicResource ResuColorBrush}" FontSize="24" FontWeight="Bold"/>
             <WrapPanel x:Name="RadioIndexList" Margin="10,45,10,0" VerticalAlignment="Top" Height="30"/>
@@ -15,5 +15,5 @@
                 <WrapPanel x:Name="RadioItemsList" Uid="4"/>
             </Border>
         </Grid>
-    </LemonApp:MyScrollView>
+    </LemonApp:MyScrollViewer>
 </UserControl>

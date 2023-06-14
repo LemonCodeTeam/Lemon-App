@@ -7,13 +7,14 @@
              mc:Ignorable="d" 
              Height="25">
     <Grid HorizontalAlignment="Stretch" Height="25" VerticalAlignment="Stretch">
-        <ComboBox x:Name="mainKey" Template="{DynamicResource ComboBoxTemplate}" Margin="60,0,0,0" Background="#07000000" SelectedIndex="0" Width="60" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource PlayDLPage_Font_Most}">
+        <ComboBox x:Name="mainKey" Template="{DynamicResource ComboBoxTemplate}" Margin="70,0,0,0" Background="#07000000" SelectedIndex="0" Width="60" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource PlayDLPage_Font_Most}">
             <ComboBoxItem Content="Alt" Uid="1"/>
             <ComboBoxItem Content="Shift" Uid="4"/>
             <ComboBoxItem Content="Ctrl" Uid="2"/>
             <ComboBoxItem Content="Win" Uid="8"/>
+            <ComboBoxItem Content="禁用" Uid="0"/>
         </ComboBox>
-        <TextBlock x:Name="des" HorizontalAlignment="Left" TextWrapping="Wrap" Text="🐱‍💻Debug:" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Width="60"/>
-        <TextBox Style="{DynamicResource TextBoxStyleSimple}" x:Name="tKey" TextWrapping="NoWrap" Text="Space" Foreground="{DynamicResource ResuColorBrush}" Background="#14000000" Height="25" Margin="125,0,0,0" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Center" SelectionTextBrush="#FF1B1B1C" HorizontalAlignment="Left" PreviewKeyDown="TextBox_KeyDown" TextAlignment="Center" MinWidth="25" IsReadOnly="True"/>
+        <TextBlock x:Name="des" HorizontalAlignment="Left" TextWrapping="Wrap" Text="🐱‍💻Debug:" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Width="70"/>
+        <TextBox Style="{DynamicResource TextBoxStyleSimple}" x:Name="tKey" TextWrapping="NoWrap" Text="Space" Foreground="{DynamicResource ResuColorBrush}" Background="#14000000" Height="25" Margin="135,0,0,0" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Center" SelectionTextBrush="#FF1B1B1C" HorizontalAlignment="Left" PreviewKeyDown="TextBox_KeyDown" TextAlignment="Center" MinWidth="25" IsReadOnly="True"/>
     </Grid>
 </UserControl>

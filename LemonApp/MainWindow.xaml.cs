@@ -383,7 +383,7 @@ namespace LemonApp
             //----Load Mini-----------------
             mini = new MiniPlayer(this);
             //--------去除可恶的焦点边缘线
-            UIHelper.G(Page);
+        //    UIHelper.G(Page);
             #endregion
             #region Part3
             //--------读取登录数据------
@@ -933,7 +933,9 @@ namespace LemonApp
                 hk.MainKey = dt.MainKey;
                 hk.MainKeyIndex = dt.index;
                 Settings.USettings.HotKeys.Add(hk);
-                RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
+                if (dt.MainKey != 0)
+                    RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
+                else UnregisterHotKey(handle, dt.KeyId);
                 Toast.Send("设置热键成功！");
             }
         }
@@ -2194,11 +2196,11 @@ namespace LemonApp
 
         private TopControl tc_now;
         private int ixTop = 1;
-        private MyScrollView Datasv = null;
+        private MyScrollViewer Datasv = null;
         int HB = 0;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (Datasv == null) Datasv = (MyScrollView)DataItemsList.Template.FindName("Datasv", DataItemsList);
+            if (Datasv == null) Datasv = (MyScrollViewer)DataItemsList.Template.FindName("Datasv", DataItemsList);
             double offset = Datasv.ContentVerticalOffset;
             if (!DataPage_ControlMod && np != NowPage.Search)
                 if (offset > 0)
@@ -3235,10 +3237,10 @@ namespace LemonApp
             PlayDLSV.LastLocation = 0;
             PlayDLSV.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
-        MyScrollView PlayDLSV = null;
+        MyScrollViewer PlayDLSV = null;
         private void PlayDLDatasv_Loaded(object sender, RoutedEventArgs e)
         {
-            PlayDLSV = sender as MyScrollView;
+            PlayDLSV = sender as MyScrollViewer;
         }
         private void DataPlayAllBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -3926,6 +3928,40 @@ namespace LemonApp
             np = NowPage.GDItem;
         }
         #endregion
+        #region HasBought
+
+        private async void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Settings.USettings.LemonAreeunIts == "0")
+                NSPage(new MeumInfo(NonePage, Meum_MYGD));
+            else
+            {
+                NSPage(new MeumInfo(BoughtPage, Meum_Bought));
+                OpenLoading();
+                var data = await MusicLib.GetMyHasBought_Albums();
+                BoughtList.Children.Clear();
+                foreach (var d in data)
+                {
+                    var ks = new FLGDIndexItem(new MusicGD()
+                    {
+                        ID = d.ID,
+                        Name = d.Name,
+                        Photo = d.Photo,
+                        ListenCount = 0
+                    }, false)
+                    { Margin = new Thickness(12, 0, 12, 20) };
+
+                    ks.ImMouseDown += delegate {
+                        IFVCALLBACK_LoadAlbum(d.ID);
+                    };
+                    BoughtList.Children.Add(ks);
+                }
+                WidthUI(BoughtList);
+                ContentAnimation(BoughtList, BoughtList.Margin);
+                CloseLoading();
+            }
+        }
+        #endregion
         #endregion
         #region MV
         public void PlayMv(MVData mVData)
@@ -3962,9 +3998,22 @@ namespace LemonApp
             }
             else
             {
+                Dictionary<int, HotKeyInfo> dic = new();
                 foreach (var hk in Settings.USettings.HotKeys)
                 {
+                    dic.Add(hk.KeyID, hk);
                     RegisterHotKey(handle, hk.KeyID, (uint)hk.MainKey, (uint)(System.Windows.Forms.Keys)KeyInterop.VirtualKeyFromKey(hk.tKey));
+                }
+                foreach (HotKeyChooser h in KeysWrap.Children) {
+                    if (dic.ContainsKey(h.KeyId)) {
+                        var d = dic[h.KeyId];
+                        h.index = d.MainKeyIndex;
+                        h.key = d.tKey;
+                    }
+                    else
+                    {
+                        h.index = 4;
+                    }
                 }
                 InstallHotKeyHook(this);
             }
@@ -4066,14 +4115,14 @@ namespace LemonApp
                     IntPtr hx = MsgHelper.FindWindow(null, "LemonApp Debug Console");
                     if (hx == IntPtr.Zero)
                     {
-                        Toast.Send("已进入调试模式🐱‍👤");
+                        Toast.Send("已进入调试模式");
                         Console.Open();
                         Console.WriteLine("调试模式");
                     }
                     else
                     {
                         Console.Close();
-                        Toast.Send("已退出调试模式🐱‍👤");
+                        Toast.Send("已退出调试模式");
                     }
                 }
             }
@@ -4101,36 +4150,10 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-        //想写新功能来着...
 
-        private async void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Page_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Settings.USettings.LemonAreeunIts == "0")
-                NSPage(new MeumInfo(NonePage, Meum_MYGD));
-            else {
-                NSPage(new MeumInfo(BoughtPage, Meum_Bought));
-                OpenLoading();
-                var data = await MusicLib.GetMyHasBought_Albums();
-                BoughtList.Children.Clear();
-                foreach(var d in data) {
-                    var ks = new FLGDIndexItem(new MusicGD(){ 
-                        ID = d.ID, 
-                        Name = d.Name,
-                        Photo =d.Photo,
-                        ListenCount = 0 }, false)
-                    { Margin = new Thickness(12, 0, 12, 20) };
-
-                    ks.ImMouseDown += delegate {
-                        IFVCALLBACK_LoadAlbum(d.ID);
-                    };
-                    BoughtList.Children.Add(ks);
-                }
-                WidthUI(BoughtList);
-                ContentAnimation(BoughtList, BoughtList.Margin);
-                CloseLoading();
-            }
-            
-
+            Keyboard.ClearFocus();
         }
     }
 }
