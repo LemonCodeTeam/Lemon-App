@@ -42,16 +42,16 @@ namespace LemonApp
             DarkMode = Settings.USettings.Skin_FontColor == "White";
         }
 
-        private void _window_Activated(object? sender, EventArgs e)
+        private void _window_Activated(object sender, EventArgs e)
         {
             _window.Background = new SolidColorBrush(_color);
         }
 
-        private void _window_Deactivated(object? sender, EventArgs e)
+        private void _window_Deactivated(object sender, EventArgs e)
         {
             _window.Background = new SolidColorBrush(
                    DarkMode ?
-                   Color.FromArgb(255, 32, 32, 23) :
+                   Color.FromArgb(255, 32, 32, 32) :
                    Color.FromArgb(255, 242, 242, 242)
                    );
         }

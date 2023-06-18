@@ -23,7 +23,7 @@ namespace LemonApp
     {
         public delegate void NextData(string lyric, string trans);
         public event NextData NextLyric;
-        #region 
+        #region LrcModel
         public class LrcModel
         {
             public TextBlock c_LrcTb { get; set; }
@@ -33,14 +33,14 @@ namespace LemonApp
             public double Time { get; set; }
         }
         #endregion
-        #region 
+        #region Properties
         public Dictionary<double, LrcModel> Lrcs = new();
         private List<Run> TransRunReference = new();
         private List<Run> RomajiRunReference = new();
         public LrcModel foucslrc { get; set; }
 
         public SolidColorBrush NormalLrcColor;
-        public TextAlignment TextAlignment = TextAlignment.Center;
+        public TextAlignment TextAlignment = TextAlignment.Left;
         #endregion
         public LyricView()
         {
@@ -155,11 +155,13 @@ namespace LemonApp
                             trans = lrc != string.Empty && !a.Contains("//") ? a : null;
                         }
 
-                        TextBlock c_lrcbk = new TextBlock();
-                        c_lrcbk.FontSize = Settings.USettings.LyricFontSize;
-                        c_lrcbk.Foreground = NormalLrcColor;
-                        c_lrcbk.TextWrapping = TextWrapping.Wrap;
-                        c_lrcbk.TextAlignment = TextAlignment;
+                        TextBlock c_lrcbk = new()
+                        {
+                            FontSize = Settings.USettings.LyricFontSize,
+                            Foreground = NormalLrcColor,
+                            TextWrapping = TextWrapping.Wrap,
+                            TextAlignment = TextAlignment
+                        };
                         c_lrcbk.MouseDown += ClickLyric;
 
                         if (LoadRomaji)
@@ -183,7 +185,7 @@ namespace LemonApp
                             {
                                 Text = trans,
                                 FontWeight = FontWeights.Regular,
-                                FontSize = c_lrcbk.FontSize - 4,
+                                FontSize = c_lrcbk.FontSize - 6,
                                 Foreground = Settings.USettings.TransLyric ? NormalLrcColor : null
                             };
                             c_lrcbk.Inlines.Add(ts);

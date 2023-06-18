@@ -236,8 +236,7 @@ namespace LemonApp
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
             lv.ClickLyric += Lv_ClickLyric;
-            lv.NormalLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) { Opacity = 0.4 };
-            lv.TextAlignment = TextAlignment.Center;
+            lv.NormalLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) { Opacity = 0.6 };
             ly.Child = lv;
             lv.NextLyric += async (lrc, trans) =>
             {
@@ -2403,7 +2402,10 @@ namespace LemonApp
             }
             CloseLoading();
             if (osx == 0)
+            {
+                DataItemsList.Opacity = 1;
                 ContentAnimation(DataItemsList, new Thickness(0, 75, 0, 0));
+            }
         }
         #endregion
         #region PlayMusic 播放时的逻辑处理

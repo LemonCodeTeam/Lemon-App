@@ -881,7 +881,7 @@
         </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="1" GlassFrameThickness="1"/>
+        <WindowChrome CaptionHeight="1" GlassFrameThickness="1" ResizeBorderThickness="5"/>
     </WindowChrome.WindowChrome>
     <!--窗口边框-->
     <Border x:Name="WdBorder" BorderThickness="1" BorderBrush="#FFB7AEB8">
@@ -1535,7 +1535,7 @@
                                 <RowDefinition Height="340*"/>
                                 <RowDefinition Height="200*"/>
                             </Grid.RowDefinitions>
-                            <Grid x:Name="LyricBigGrid"  Grid.Row="1" Margin="0,0,80,0" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=LyricBig}" HorizontalAlignment="Right">
+                            <Grid x:Name="LyricBigGrid"  Grid.Row="1" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=LyricBig}">
                                 <Border x:Name="LyricBig" RenderOptions.BitmapScalingMode="Fant"   Background="{Binding Background, ElementName=MusicImage}" CornerRadius="{Binding ActualHeight, ElementName=LyricBig, Mode=OneWay}" BorderThickness="10" BorderBrush="#33000000" MouseDown="LyricBig_MouseDown" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
                                     <Border.RenderTransform>
                                         <TransformGroup>
@@ -1551,7 +1551,7 @@
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="0,150,150,200" Grid.Column="1" MinWidth="300" MaxWidth="500"/>
+                        <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="80,150,150,190" Grid.Column="1" MinWidth="300" MaxWidth="500"/>
                     </Grid>
                     <Grid x:Name="LyricImm" Visibility="Collapsed" Margin="0,0,10,0">
                         <TextBlock x:Name="LyricImm_tb" TextWrapping="Wrap" Foreground="#FFFBFBFB" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0,50,0" FontSize="72" FontWeight="Bold" TextAlignment="Center" Visibility="Visible"><Run x:Name="ImmTb_Lyric" Text="You don't have to try so hard"/><LineBreak/><Run x:Name="ImmTb_Trans" Text="Translation" FontSize="36" FontWeight="Normal" Foreground="#B2FBFBFB"/></TextBlock>
