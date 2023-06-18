@@ -161,7 +161,7 @@ namespace LemonApp
             Settings.SaveHandle();
             LoadSEND_SHOW();
             //-------注册个模糊效果------
-            wac = new WindowAccentCompositor(this, (c) =>
+            wac = new WindowAccentCompositor(this,false, (c) =>
             {
                 Page.Background = new SolidColorBrush(c);
             });
@@ -399,6 +399,7 @@ namespace LemonApp
                 Settings.LSettings.qq = qq;
                 await Settings.SaveLocaSettings();
             }
+            ml.CreateDirectory();
             LoadHotDog();
             Load_Theme();
             LoadMusicData();
@@ -485,6 +486,7 @@ namespace LemonApp
                     App.BaseApp.Skin();
                     App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
                     wac.Color = Color.FromArgb(180, 0, 0, 0);
+                    wac.DarkMode = true;
                     wac.IsEnabled = true;
                 }
                 else
@@ -497,6 +499,7 @@ namespace LemonApp
                     Color co = Color.FromRgb(64, 64, 64);
                     App.BaseApp.SetColor("ResuColorBrush", co);
                     wac.Color = (Color.FromArgb(180, 255, 255, 255));
+                    wac.DarkMode = false;
                     wac.IsEnabled = true;
                 }
                 DThemePage.Child = null;
@@ -650,7 +653,8 @@ namespace LemonApp
                     {
                         dt.Add(mid, id);
                     }));
-                    Settings.USettings.MusicGDataLike.ids = dt;
+                    AppConstants.MusicGDataLike.ids = dt;
+                    Console.WriteLine(dt.Count, "MY Favorite");
                 });
                 tx.Start();
             }
@@ -1196,6 +1200,8 @@ namespace LemonApp
                     co = Color.FromRgb(255, 255, 255);
                     App.BaseApp.Skin();
                 }
+                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                    lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
                 App.BaseApp.SetColor("ThemeColor", sc.theme);
                 App.BaseApp.SetColor("ResuColorBrush", co);
                 Settings.USettings.Skin_Type = 3;
@@ -1227,6 +1233,8 @@ namespace LemonApp
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 Page.Background = new SolidColorBrush(Color.FromRgb(45, 45, 48));
+                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                    lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
@@ -1243,6 +1251,8 @@ namespace LemonApp
             {
                 if (wac.IsEnabled) wac.IsEnabled = false;
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                    lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
                 DThemePage.Child = null;
                 App.BaseApp.unSkin();
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
@@ -1266,7 +1276,10 @@ namespace LemonApp
                 DThemePage.Child = null;
                 App.BaseApp.Skin();
                 wac.Color = Color.FromArgb(200, 0, 0, 0);
+                wac.DarkMode = true;
                 wac.IsEnabled = true;
+                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                    lyricTa.UpdataWindowBlurMode(true);
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
@@ -1287,8 +1300,11 @@ namespace LemonApp
                 App.BaseApp.Skin_Black();
                 Color co = Color.FromRgb(64, 64, 64);
                 App.BaseApp.SetColor("ResuColorBrush", co);
+                wac.DarkMode = false;
                 wac.Color = (Color.FromArgb(200, 255, 255, 255));
                 wac.IsEnabled = true;
+                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                    lyricTa.UpdataWindowBlurMode(false);
                 Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
@@ -1330,6 +1346,8 @@ namespace LemonApp
                     {
                         co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
                     }
+                    if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                        lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
                     App.BaseApp.SetColor("ThemeColor", sc.theme);
                     App.BaseApp.SetColor("ResuColorBrush", co);
                     Settings.USettings.Skin_Type = 1;
@@ -1909,15 +1927,15 @@ namespace LemonApp
         {
             if (MusicName.Text != "MusicName")
             {
-                if (Settings.USettings.MusicGDataLike.ids.ContainsKey(MusicData.Data.MusicID))
+                if (AppConstants.MusicGDataLike.ids.ContainsKey(MusicData.Data.MusicID))
                 {
                     LikeBtnUp();
-                    foreach (var ac in Settings.USettings.MusicGDataLike.ids)
+                    foreach (var ac in AppConstants.MusicGDataLike.ids)
                     {
                         if (ac.Key == MusicData.Data.MusicID)
                         {
                             string a = await MusicLib.DeleteMusicFromGDAsync(new string[1] { ac.Value }, MusicLib.MusicLikeGDdirid);
-                            Settings.USettings.MusicGDataLike.ids.Remove(MusicData.Data.MusicID);
+                            AppConstants.MusicGDataLike.ids.Remove(MusicData.Data.MusicID);
                             Toast.Send(a);
                         }
                     }
@@ -1926,7 +1944,7 @@ namespace LemonApp
                 {
                     string[] a = await MusicLib.AddMusicToGDAsync(MusicData.Data.MusicID, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a[1] + ": " + a[0]);
-                    Settings.USettings.MusicGDataLike.ids.Add(MusicData.Data.MusicID, MusicData.Data.Littleid);
+                    AppConstants.MusicGDataLike.ids.Add(MusicData.Data.MusicID, MusicData.Data.Littleid);
                     LikeBtnDown();
                 }
             }
@@ -1953,8 +1971,8 @@ namespace LemonApp
                 DataItemsList.Items.Clear();
                 DataCollectBtn.Visibility = Visibility.Collapsed;
                 string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
-                Settings.USettings.MusicGDataLike.ids.Clear();
-                var data = He.MGData_Now = await MusicLib.GetGDAsync(id,
+                AppConstants.MusicGDataLike.ids.Clear();
+                var data = AppConstants.MGData_Now = await MusicLib.GetGDAsync(id,
                    (dt) =>
                    {
                        Dispatcher.Invoke(async () =>
@@ -1980,7 +1998,7 @@ namespace LemonApp
                         {
                             k.ShowDx();
                         }
-                        Settings.USettings.MusicGDataLike.ids.Add(item.MusicID, item.Littleid);
+                        AppConstants.MusicGDataLike.ids.Add(item.MusicID, item.Littleid);
                     }
                     else
                     {
@@ -2000,7 +2018,7 @@ namespace LemonApp
         {
             Clipboard.SetText(np switch
             {
-                NowPage.GDItem => $"https://y.qq.com/n/yqq/playsquare/{He.MGData_Now.id}.html#stat=y_new.index.playlist.pic",
+                NowPage.GDItem => $"https://y.qq.com/n/yqq/playsquare/{AppConstants.MGData_Now.id}.html#stat=y_new.index.playlist.pic",
                 NowPage.Top => $"https://y.qq.com/n/yqq/toplist/{tc_now.Data.ID}.html",
                 NowPage.Search => $"https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w={HttpUtility.HtmlDecode(SearchKey)}",
                 _ => null
@@ -2010,7 +2028,7 @@ namespace LemonApp
 
         private async void DataCollectBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            await MusicLib.AddGDILikeAsync(He.MGData_Now.id);
+            await MusicLib.AddGDILikeAsync(AppConstants.MGData_Now.id);
             Toast.Send("收藏成功");
         }
         private async void Md_MouseDown(object sender, MouseButtonEventArgs e)
@@ -2082,14 +2100,14 @@ namespace LemonApp
                     if (d.music.MusicID != null && d.isChecked)
                     {
                         ReadytoDelete.Add(d);
-                        Musicid.Add(He.MGData_Now.ids[d.index]);
+                        Musicid.Add(AppConstants.MGData_Now.ids[d.index]);
                     }
                 }
-                string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
+                string dirid = await MusicLib.GetGDdiridByNameAsync(AppConstants.MGData_Now.name);
                 Toast.Send(await MusicLib.DeleteMusicFromGDAsync(Musicid.ToArray(), dirid));
                 foreach (var d in ReadytoDelete)
                 {
-                    He.MGData_Now.Data.Remove(d.music);
+                    AppConstants.MGData_Now.Data.Remove(d.music);
                     DataItemsList.Items.Remove(d);
                 }
             }
@@ -2099,7 +2117,7 @@ namespace LemonApp
         {
             DataPage_CMType = 1;
             OpenDataControlPage();
-            DataPage_PLCZ_Delete.Visibility = He.MGData_Now.IsOwn ? Visibility.Visible : Visibility.Collapsed;
+            DataPage_PLCZ_Delete.Visibility = AppConstants.MGData_Now.IsOwn ? Visibility.Visible : Visibility.Collapsed;
         }
         private void DataPage_GOTO_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -2652,7 +2670,7 @@ namespace LemonApp
                     //Expection: Operations that change non-concurrent collections must have exclusive access. 
                     //A concurrent update was performed on this collection and
                     //corrupted its state. The collection's state is no longer correct.
-                    if (Settings.USettings.MusicGDataLike.ids.ContainsKey(data.MusicID))
+                    if (AppConstants.MusicGDataLike.ids.ContainsKey(data.MusicID))
                         LikeBtnDown();
                     else LikeBtnUp();
                 }
@@ -3912,10 +3930,11 @@ namespace LemonApp
             NSPage(new MeumInfo(Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.data.ID + "\",\"name\":\"" + dt.data.Name + "\",\"img\":\"" + dt.data.Photo + "\"}" }, NeedSave, false);
             NowType = dt;
             TB.Text = dt.data.Name;
+            DataItemsList.Opacity = 0;
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.data.Photo));
             OpenLoading();
-            var data = He.MGData_Now = await MusicLib.GetGDAsync(dt.data.ID,
+            var data = AppConstants.MGData_Now = await MusicLib.GetGDAsync(dt.data.ID,
                 (dt) =>
                 {
                     Dispatcher.Invoke(async () =>
@@ -3951,6 +3970,7 @@ namespace LemonApp
             }
             CloseLoading();
             await Task.Yield();
+            DataItemsList.Opacity = 1;
             ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
             np = NowPage.GDItem;
         }

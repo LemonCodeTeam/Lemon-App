@@ -31,20 +31,9 @@ namespace LemonLib
         #region  构造函数
         public MusicLib(string id)
         {
-            if (!Directory.Exists(Settings.USettings.DownloadPath))
-                Directory.CreateDirectory(Settings.USettings.DownloadPath);
-            if (!Directory.Exists(Settings.USettings.MusicCachePath))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath);
-            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Music\\"))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Music\\");
-            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Lyric\\"))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Lyric\\");
-            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Image\\"))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Image\\");
             qq = id;
         }
-        public MusicLib()
-        {
+        public void CreateDirectory() {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
             if (!Directory.Exists(Settings.USettings.MusicCachePath))

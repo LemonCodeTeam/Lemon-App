@@ -126,11 +126,6 @@ namespace LemonLib
                 USettings.MusicCachePath = dir + "LemonAppCache\\";
                 USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
-            if (data.Contains("MusicGDataLike"))
-            {
-                string json=o["MusicGDataLike"]["ids"].ToString();
-                USettings.MusicGDataLike.ids=JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-            }
             if (data.Contains("HotKeys")) {
                 string json = o["HotKeys"].ToString();
                 USettings.HotKeys = JsonConvert.DeserializeObject<List<HotKeyInfo>>(json);
@@ -268,7 +263,6 @@ namespace LemonLib
 
             public Dictionary<string, QuickGoToData> QuickGoToData = new Dictionary<string, QuickGoToData>();
             public List<HotKeyInfo> HotKeys = new List<HotKeyInfo>();
-            public MusicGLikeData MusicGDataLike = new MusicGLikeData();
         }
         #endregion
 

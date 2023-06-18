@@ -33,6 +33,7 @@ namespace LemonApp
         public void Update(string txt) {
             text.Text = txt.Replace("\r\n","   ");
         }
+        private WindowAccentCompositor wac = null;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WindowInteropHelper wndHelper = new WindowInteropHelper(this);
@@ -40,32 +41,23 @@ namespace LemonApp
             exStyle |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             SetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
 
-            var osVersion = Environment.OSVersion.Version;
-            var windows10_1809 = new Version(10, 0, 17763);
-            if (osVersion >= windows10_1809)
+
+            wac = new WindowAccentCompositor(this,true, (c) =>
             {
-                if (App.BaseApp.ThemeColor == 0)
-                {
-                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
-                    {
-                        Background = new SolidColorBrush(c);
-                    });
-                    wac.enableBlurin = true;
-                    wac.Color = Color.FromArgb(200, 255, 255, 255);
-                    wac.IsEnabled = true;
-                }
-                else
-                {
-                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
-                    {
-                        Background = new SolidColorBrush(c);
-                    });
-                    wac.enableBlurin = true;
-                    wac.Color = Color.FromArgb(220, 0, 0, 0);
-                    wac.IsEnabled = true;
-                }
-            }
-            else bg.Visibility = Visibility.Visible;
+                c.A = 255;
+                Background = new SolidColorBrush(c);
+            });
+            wac.Color = App.BaseApp.ThemeColor == 0 ?
+            Color.FromArgb(200, 255, 255, 255) :
+            Color.FromArgb(200, 0, 0, 0);
+            wac.IsEnabled = true;
+        }
+        public void UpdataWindowBlurMode(bool darkmode) {
+            wac.Color = App.BaseApp.ThemeColor == 0 ?
+            Color.FromArgb(200, 255, 255, 255) :
+            Color.FromArgb(200, 0, 0, 0);
+            wac.DarkMode = darkmode;
+            wac.IsEnabled= true;
         }
     }
 }

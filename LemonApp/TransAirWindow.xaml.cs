@@ -28,32 +28,15 @@ namespace LemonApp
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             (Resources["Open"] as Storyboard).Begin();
-            var osVersion = Environment.OSVersion.Version;
-            var windows10_1809 = new Version(10, 0, 17763);
-            if (osVersion >= windows10_1809)
+            WindowAccentCompositor wac = new WindowAccentCompositor(this, true, (c) =>
             {
-                if (App.BaseApp.ThemeColor == 0)
-                {
-                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
-                    {
-                        Background = new SolidColorBrush(c);
-                    });
-                    wac.enableBlurin = true;
-                    wac.Color = Color.FromArgb(200, 255, 255, 255);
-                    wac.IsEnabled = true;
-                }
-                else
-                {
-                    WindowAccentCompositor wac = new WindowAccentCompositor(this, (c) =>
-                    {
-                        Background = new SolidColorBrush(c);
-                    });
-                    wac.enableBlurin = true;
-                    wac.Color = Color.FromArgb(220, 0, 0, 0);
-                    wac.IsEnabled = true;
-                }
-            }
-            else bg.Visibility = Visibility.Visible;
+                c.A = 255;
+                Background = new SolidColorBrush(c);
+            });
+            wac.Color = App.BaseApp.ThemeColor == 0 ?
+            Color.FromArgb(200, 255, 255, 255) :
+            Color.FromArgb(200, 0, 0, 0);
+            wac.IsEnabled = true;
         }
 
         private void TranslationPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)

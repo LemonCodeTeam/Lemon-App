@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using static LemonLib.InfoHelper;
+using static LemonLib.Settings;
 
 namespace LemonApp
 {
@@ -107,7 +108,7 @@ namespace LemonApp
         private void LoadUI()
         {
             //TODO: 优化性能 控件在需要之时创建
-            string Buttonsxaml = @"<Grid " + He.XAMLUSINGS + @" x:Name=""Buttons"" Margin=""0,15,10,15"" HorizontalAlignment=""Right"" Width=""65"" Visibility=""Collapsed""/>";
+            string Buttonsxaml = @"<Grid " + AppConstants.XAMLUSINGS + @" x:Name=""Buttons"" Margin=""0,15,10,15"" HorizontalAlignment=""Right"" Width=""65"" Visibility=""Collapsed""/>";
             Buttons = (Grid)XamlReader.Parse(Buttonsxaml);
             TitlePageBtn DownloadBtn = new TitlePageBtn() { Pathness = new Thickness(0), PathData = Geometry.Parse("M168.064,498.7008L493.9008,824.5376C496.2944,826.9312 499.0848,828.7232 502.0416,829.9648 502.0544,829.9648 502.0544,829.9776 502.0672,829.9776 503.3216,830.5024 504.6144,830.8608 505.92,831.1808 506.2656,831.2704 506.5856,831.4112 506.944,831.488 510.2848,832.1536 513.728,832.1536 517.056,831.488 517.4144,831.4112 517.7344,831.2704 518.08,831.1808 519.3856,830.8608 520.6784,830.5024 521.9328,829.9776 521.9456,829.9648 521.9584,829.9648 521.984,829.952 524.9408,828.7104 527.7056,826.9184 530.0992,824.5248L855.936,498.7008C865.8944,488.7424 865.8944,472.448 855.936,462.5024 845.9776,452.544 829.6832,452.544 819.7376,462.5024L537.6,744.64 537.6,89.6128C537.6,75.5328 526.08,64.0128 512,64.0128 497.92,64.0128 486.4,75.5328 486.4,89.6128L486.4,744.64 204.2624,462.5024C194.304,452.544 178.0096,452.544 168.064,462.5024 158.1056,472.4608 158.1056,488.7424 168.064,498.7008z M972.8,729.6L972.8,857.6C972.8,885.8752,949.8752,908.8,921.6,908.8L102.4,908.8C74.1248,908.8,51.2,885.8752,51.2,857.6L51.2,729.6C51.2,715.456,39.744,704,25.6,704L25.6,704C11.456,704,0,715.456,0,729.6L0,857.6C0,913.92,46.08,960,102.4,960L921.6,960C977.92,960,1024,913.92,1024,857.6L1024,729.6C1024,715.456,1012.544,704,998.4,704L998.4,704C984.256,704,972.8,715.456,972.8,729.6z"), Height = 15, Width = 15, HorizontalAlignment = HorizontalAlignment.Right };
             DownloadBtn.MouseDown += DownloadBtn_MouseDown;
@@ -127,13 +128,13 @@ namespace LemonApp
         }
         private void LoadCheckView()
         {
-            string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource ResuColorBrush}"" Visibility=""Collapsed""/>";
+            string CheckViewxaml = @"<Border " + AppConstants.XAMLUSINGS + @" x:Name=""CheckView"" HorizontalAlignment=""Left"" Width=""14"" Height=""14"" Margin=""25,0,0,0"" BorderThickness=""1"" BorderBrush=""{DynamicResource ResuColorBrush}"" Visibility=""Collapsed""/>";
             CheckView = (Border)XamlReader.Parse(CheckViewxaml);
             grid.Children.Add(CheckView);
         }
         private void LoadGO()
         {
-            string CheckViewxaml = @"<Border " + He.XAMLUSINGS + @" x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
+            string CheckViewxaml = @"<Border " + AppConstants.XAMLUSINGS + @" x:Name=""GO"" Margin=""1"" Visibility=""Collapsed"">
                     <Border.Background>
                         <VisualBrush Stretch=""Uniform"">
                             <VisualBrush.Visual>
@@ -165,15 +166,15 @@ namespace LemonApp
         public bool pv;
         public void ShowDx()
         {
-            if (He.LastItem != null)
+            if (AppConstants.LastItem != null)
             {
-                He.LastItem.mss.Opacity = 0.6;
-                He.LastItem.ser.Opacity = 0.8;
-                He.LastItem.bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-                He.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                He.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");
-                He.LastItem.color.Visibility = Visibility.Collapsed;
-                He.LastItem.pv = false;
+                AppConstants.LastItem.mss.Opacity = 0.6;
+                AppConstants.LastItem.ser.Opacity = 0.8;
+                AppConstants.LastItem.bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                AppConstants.LastItem.namss.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                AppConstants.LastItem.ser.SetResourceReference(ForegroundProperty, "ResuColorBrush");
+                AppConstants.LastItem.color.Visibility = Visibility.Collapsed;
+                AppConstants.LastItem.pv = false;
             }
             pv = true;
             bg.Background = new SolidColorBrush(Color.FromArgb(10, 0, 0, 0));
@@ -183,7 +184,7 @@ namespace LemonApp
             mss.Opacity = 1;
             ser.Opacity = 1;
 
-            He.LastItem = this;
+            AppConstants.LastItem = this;
         }
         public void NSDownload(bool ns)
         {
@@ -245,7 +246,7 @@ namespace LemonApp
         {
             if (Gdpop == null)
             {
-                string Gdpopxaml = "<Popup " + He.XAMLUSINGS + @" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
+                string Gdpopxaml = "<Popup " + AppConstants.XAMLUSINGS + @" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
                 <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
                     <Grid>
                         <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling"" BorderThickness=""0""
@@ -290,11 +291,11 @@ namespace LemonApp
         {
             if (TwMessageBox.Show("确定要删除此歌曲吗?"))
             {
-                string dirid = await MusicLib.GetGDdiridByNameAsync(He.MGData_Now.name);
-                string Musicid = He.MGData_Now.ids[index];
+                string dirid = await MusicLib.GetGDdiridByNameAsync(AppConstants.MGData_Now.name);
+                string Musicid = AppConstants.MGData_Now.ids[index];
                 Toast.Send(await MusicLib.DeleteMusicFromGDAsync(new string[1] { Musicid }, dirid));
                 Mainwindow.DataItemsList.Items.Remove(this);
-                He.MGData_Now.Data.Remove(music);
+                AppConstants.MGData_Now.Data.Remove(music);
             }
         }
 
@@ -337,13 +338,5 @@ namespace LemonApp
                 namss.Width = wpl.ActualWidth - BtnWidth;
             else namss.Width = double.NaN;
         }
-    }
-
-
-    public class He
-    {
-        public static DataItem LastItem = null;
-        public static MusicGData MGData_Now = null;
-        public static string XAMLUSINGS = @"xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""";
     }
 }

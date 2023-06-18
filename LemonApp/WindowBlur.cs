@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Shell;
 using System.Windows.Media;
+using LemonLib;
 
 namespace LemonApp
 {
@@ -13,46 +14,47 @@ namespace LemonApp
     /// </summary>
     public class WindowAccentCompositor
     {
+        public bool DarkMode = true;
+
         private readonly Window _window;
         private bool _isEnabled;
         private int _blurColor;
-        private Action<Color> NoFunCallback;
+        private Action<Color> NoneCallback;
 
         /// <summary>
         /// 创建 <see cref="WindowAccentCompositor"/> 的一个新实例。
         /// </summary>
-        /// <param name="window">要创建模糊特效的窗口实例。</param>
-        public WindowAccentCompositor(Window window, Action<Color> nofun)
+        /// <param name="window"></param>
+        /// <param name="enableBlurin">对ToolWindow启用模糊特效</param>
+        /// <param name="noneCallback">没有可以的模糊特效</param>
+        public WindowAccentCompositor(Window window, bool enableBlurin = false, Action<Color> noneCallback = null)
         {
             _window = window;
+            _enableBlurin = enableBlurin;
             var osVersion = Environment.OSVersion.Version;
             var windows11 = new Version(10, 0, 22621);
             if (osVersion >= windows11 && !enableBlurin)
             {
-                _window.LostFocus += _window_LostFocus;
-                _window.GotFocus += _window_GotFocus;
+                _window.Deactivated += _window_Deactivated;
+                _window.Activated += _window_Activated;
             }
-            NoFunCallback = nofun;
+            NoneCallback = noneCallback;
+            DarkMode = Settings.USettings.Skin_FontColor == "White";
         }
 
-        private void _window_GotFocus(object sender, RoutedEventArgs e)
+        private void _window_Activated(object? sender, EventArgs e)
+        {
+            _window.Background = new SolidColorBrush(_color);
+        }
+
+        private void _window_Deactivated(object? sender, EventArgs e)
         {
             _window.Background = new SolidColorBrush(
-                    App.BaseApp.ThemeColor == 0 ?
-                    Color.FromArgb(180, 255, 255, 255) :
-                    Color.FromArgb(180, 0, 0, 0)
-                    );
+                   DarkMode ?
+                   Color.FromArgb(255, 32, 32, 23) :
+                   Color.FromArgb(255, 242, 242, 242)
+                   );
         }
-
-        private void _window_LostFocus(object sender, RoutedEventArgs e)
-        {
-            _window.Background = new SolidColorBrush(
-                    App.BaseApp.ThemeColor == 0 ?
-                    Color.FromArgb(255, 242, 242, 242) :
-                    Color.FromArgb(255, 32, 32, 23)
-                    );
-        }
-
         /// <summary>
         /// 获取或设置此窗口模糊特效是否生效的一个状态。
         /// 默认为 false，即不生效。
@@ -67,24 +69,17 @@ namespace LemonApp
                 OnIsEnabledChanged(value);
             }
         }
-        private Color c;
+        private Color _color;
         /// <summary>
         /// 获取或设置此窗口模糊特效叠加的颜色。
         /// </summary>
         public Color Color
         {
-            get => Color.FromArgb(
-                // 取出红色分量。
-                (byte)((_blurColor & 0x000000ff) >> 0),
-                // 取出绿色分量。
-                (byte)((_blurColor & 0x0000ff00) >> 8),
-                // 取出蓝色分量。
-                (byte)((_blurColor & 0x00ff0000) >> 16),
-                // 取出透明分量。
-                (byte)((_blurColor & 0xff000000) >> 24));
+            get => _color;
+
             set
             {
-                c = value;
+                _color = value;
                 _blurColor =
                // 组装红色分量。
                value.R << 0 |
@@ -103,30 +98,32 @@ namespace LemonApp
             var handle = new WindowInteropHelper(window).EnsureHandle();
             Composite(handle, isEnabled);
         }
-
-        public bool enableBlurin = false;
-        public bool darkmode=false;
+        /// <summary>
+        /// 在win11下对特定窗口启用模糊特效
+        /// </summary>
+        public bool _enableBlurin = false;
         private void Composite(IntPtr handle, bool isEnabled)
         {
             // 操作系统版本判定。
             var osVersion = Environment.OSVersion.Version;
             var windows10_1809 = new Version(10, 0, 17763);
             var windows10 = new Version(10, 0);
-            var windows11 = new Version(10, 0,22621);
-            if (osVersion >= windows11 && !enableBlurin)
+            var windows11 = new Version(10, 0, 22621);
+            if (osVersion >= windows11 && !_enableBlurin)
             {
+                if (!isEnabled)
+                {
+                    SetWindowBlur(handle, 0, BlurMode.None);
+                    return;
+                }
                 //对于win11需要  其它默认1的边框
                 WindowChrome.SetWindowChrome(_window, new WindowChrome()
                 {
                     GlassFrameThickness = new Thickness(-1),
                     CaptionHeight = 1
                 });
-                _window.Background = new SolidColorBrush(
-                    App.BaseApp.ThemeColor == 0?
-                    Color.FromArgb(180,255,255,255):
-                    Color.FromArgb(180, 0, 0, 0)
-                    );
-                WindowBlur.SetWindowBlur(handle, 1, WindowBlur.BlurMode.Acrylic);
+                _window.Background = new SolidColorBrush(_color);
+                SetWindowBlur(handle, DarkMode ? 1 : 0, BlurMode.Acrylic);
             }
             else
             {
@@ -153,7 +150,6 @@ namespace LemonApp
                     // 如果系统在 Windows 10 以上，则启用 Windows 10 早期的模糊特效。
                     //  请参见《在 Windows 10 上为 WPF 窗口添加模糊特效》
                     //  https://blog.walterlv.com/post/win10/2017/10/02/wpf-transparent-blur-in-windows-10.html
-                    NoFunCallback(Color);
                     accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
                 }
                 else
@@ -161,6 +157,7 @@ namespace LemonApp
                     // 暂时不处理其他操作系统：
                     //  - Windows 8/8.1 不支持任何模糊特效
                     //  - Windows Vista/7 支持 Aero 毛玻璃效果
+                    NoneCallback?.Invoke(Color);
                     return;
                 }
 
@@ -243,10 +240,8 @@ namespace LemonApp
             Blur,
             Acrylic,
         }
-    }
 
-    public class WindowBlur
-    {
+
         [DllImport("dwmapi.dll")]
         static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, ref int pvAttribute, int cbAttribute);
 
@@ -259,18 +254,19 @@ namespace LemonApp
             DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
             DWMWA_SYSTEMBACKDROP_TYPE = 38
         }
-        public enum BlurMode 
+        public enum BlurMode
         {
-            Acrylic=3,
-            Mica=2,
-            Tabbed=4
+            None = 1,
+            Acrylic = 3,
+            Mica = 2,
+            Tabbed = 4
         }
         /// <summary>
         /// 应用模糊特效 for Win11
         /// </summary>
         /// <param name="win"></param>
         /// <param name="color">1:Dark 0:Light</param>
-        public static void SetWindowBlur(IntPtr handle,int color,BlurMode mode)
+        public static void SetWindowBlur(IntPtr handle, int color, BlurMode mode)
         {
             SetWindowAttribute(
                 handle,

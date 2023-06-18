@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using static LemonLib.InfoHelper;
 
 namespace LemonApp
 {
@@ -171,6 +172,15 @@ namespace LemonApp
         }
         #endregion
     }
+    #region 应用内常量
+    public class AppConstants
+    {
+        public static MusicGLikeData MusicGDataLike = new MusicGLikeData();
+        public static DataItem LastItem = null;
+        public static MusicGData MGData_Now = null;
+        public static string XAMLUSINGS = @"xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""";
+    }
+    #endregion
     #region Console 调试模式
     public class DebugData
     {
