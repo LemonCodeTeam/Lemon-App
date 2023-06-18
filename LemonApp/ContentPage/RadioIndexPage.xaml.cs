@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp.ContentPage
@@ -53,7 +54,7 @@ namespace LemonApp.ContentPage
                 foreach (var d in dat)
                 {
                     RadioItem a = new RadioItem(d) { Margin = new Thickness(12, 0, 12, 20) };
-                    a.im.MouseDown += mw.GetRadio;
+                    a.im.MouseDown += delegate { mw.GetRadio(a, null); };
                     a.Width = RadioItemsList.ActualWidth / 5;
                     RadioItemsList.Children.Add(a);
                 }

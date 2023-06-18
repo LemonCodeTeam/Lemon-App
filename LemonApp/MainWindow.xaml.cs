@@ -837,6 +837,21 @@ namespace LemonApp
         }
         #endregion
         #region 设置
+
+        private void Settings_Animation_Check_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.Animation_Refrech = (bool)Settings_Animation_Refrech.IsChecked;
+        }
+
+        private void Settings_Animation_Scroll_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.Animation_Scroll = (bool)Settings_Animation_Scroll.IsChecked;
+        }
+
+        private void Settings_MemoryFlush_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.MemoryFlush = (bool)Settings_MemoryFlush.IsChecked;
+        }
         private void Page_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Keyboard.ClearFocus();
@@ -1968,6 +1983,7 @@ namespace LemonApp
                 TB.Text = "我喜欢";
                 TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg"));
                 DataItemsList.Items.Clear();
+                DataItemsList.Opacity = 0;
                 DataCollectBtn.Visibility = Visibility.Collapsed;
                 string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
                 AppConstants.MusicGDataLike.ids.Clear();
@@ -2007,6 +2023,7 @@ namespace LemonApp
                     index++;
                 }
                 CloseLoading();
+                DataItemsList.Opacity = 1;
                 ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
                 np = NowPage.GDItem;
             }
@@ -4199,20 +4216,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void Settings_Animation_Check_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.USettings.Animation_Refrech = (bool)Settings_Animation_Refrech.IsChecked;
-        }
-
-        private void Settings_Animation_Scroll_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.USettings.Animation_Scroll = (bool)Settings_Animation_Scroll.IsChecked;
-        }
-
-        private void Settings_MemoryFlush_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.USettings.MemoryFlush = (bool)Settings_MemoryFlush.IsChecked;
-        }
     }
 }
