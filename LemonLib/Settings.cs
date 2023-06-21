@@ -164,6 +164,8 @@ namespace LemonLib
                 USettings.Animation_Scroll = bool.Parse(o["Animation_Scroll"].ToString());
             if (data.Contains("MemoryFlush"))
                 USettings.MemoryFlush = bool.Parse(o["MemoryFlush"].ToString());
+            if (data.Contains("LyricAppBarEnableTrans"))
+                USettings.LyricAppBarEnableTrans = bool.Parse(o["LyricAppBarEnableTrans"].ToString());
         }
         public class UserSettings
         {
@@ -230,6 +232,7 @@ namespace LemonLib
             //是否打开歌词AppBar
             public bool LyricAppBarOpen { get; set; } = false;
             public int LyricAppBar_Size { get; set; } = 14;
+            public bool LyricAppBarEnableTrans { get; set; } = false;
             /// <summary>
             /// 主题类型 0:Normal 1:Picture Theme 2.Blur For Win10 3:live theme
             /// </summary>

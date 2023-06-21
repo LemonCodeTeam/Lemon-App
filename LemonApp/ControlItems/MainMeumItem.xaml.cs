@@ -23,6 +23,11 @@ namespace LemonApp.ControlItems
             };
         }
 
+        public bool isWorking
+        {
+            get => Working.Visibility == Visibility.Visible;
+            set => Working.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
         bool _hasChecked = false;
         public bool HasChecked
         {

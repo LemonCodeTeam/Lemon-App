@@ -247,10 +247,9 @@ namespace LemonApp
                     mini.lyric.Text = lrc;
                     if (Settings.USettings.DoesOpenDeskLyric)
                     {
-                        var str = lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : "");
                         if (Settings.USettings.LyricAppBarOpen)
-                            lyricTa.Update(str);
-                        else lyricToast.Update(str);
+                            lyricTa.Update(lrc + (Settings.USettings.LyricAppBarEnableTrans ? (trans == null ? "" : ("\r\n" + trans)) : ""));
+                        else lyricToast.Update(lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : ""));
                         lastlyric = lrc;
                     }
                     if (Settings.USettings.IsLyricImm)
@@ -686,6 +685,7 @@ namespace LemonApp
             Settings_Animation_Refrech.IsChecked= Settings.USettings.Animation_Refrech;
             Settings_Animation_Scroll.IsChecked = Settings.USettings.Animation_Scroll;
             Settings_MemoryFlush.IsChecked = Settings.USettings.MemoryFlush;
+            LyricAppBar_EnableTrans.IsChecked = Settings.USettings.LyricAppBarEnableTrans;
         }
 
         private void PopOut_MouseUp(object sender, MouseButtonEventArgs e)
@@ -1076,12 +1076,12 @@ namespace LemonApp
 
         private void CP_OpenBt_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("explorer", CachePathTb.Text);
+            Process.Start("explorer", Settings.USettings.MusicCachePath);
         }
 
         private void DP_OpenBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("explorer", DownloadPathTb.Text);
+            Process.Start("explorer", Settings.USettings.DownloadPath);
         }
 
         private void DownloadWithLyric_Click(object sender, RoutedEventArgs e)
@@ -2250,31 +2250,42 @@ namespace LemonApp
         private int ixTop = 1;
         private MyScrollViewer Datasv = null;
         int HB = 0;
-        private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        bool EnableDatasvAni = true;
+        private async void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (Datasv == null) Datasv = (MyScrollViewer)DataItemsList.Template.FindName("Datasv", DataItemsList);
             double offset = Datasv.ContentVerticalOffset;
             if (!DataPage_ControlMod && np != NowPage.Search)
-                if (offset > 0)
+            {
+                if (EnableDatasvAni)
                 {
-                    if (HB == 0)
+                    if (offset > 100)
                     {
-                        HB = 1;
-                        var sb = Resources["DataPage_Min"] as Storyboard;
-                        sb.Begin();
-                        if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
+                        if (HB == 0)
+                        {
+                            HB = 1;
+                            var sb = Resources["DataPage_Min"] as Storyboard;
+                            sb.Begin();
+                            if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
+                        }
                     }
-                }
-                else
-                {
-                    if (HB == 1)
+                    else
                     {
-                        HB = 0;
-                        var sb = Resources["DataPage_Max"] as Storyboard;
-                        sb.Begin();
-                        if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
+                        if (HB == 1)
+                        {
+                            HB = 0;
+                            var sb = Resources["DataPage_Max"] as Storyboard;
+                            sb.Begin();
+                            if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
+                        }
                     }
+                    //600ms内不再触发
+                    EnableDatasvAni = false;
+                    await Task.Delay(400);
+                    EnableDatasvAni = true;
                 }
+            }
+
             if (Datasv.IsVerticalScrollBarAtButtom())
             {
                 if (np == NowPage.Search)
@@ -3729,7 +3740,7 @@ namespace LemonApp
                 else
                 {
                     DownloadIsFinish = true;
-                    (Resources["Downloading"] as Storyboard).Stop();
+                    Meum_Download.isWorking = false;
                 }
             };
             DownloadItemsList.Children.Add(di);
@@ -3738,9 +3749,8 @@ namespace LemonApp
         }
         public void K_Download(DataItem sender)
         {
-            var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)
-                cc.Begin();
+                Meum_Download.isWorking = true;
             AddDownloadTask(sender.music);
         }
         bool DownloadIsFinish = true;
@@ -3809,15 +3819,14 @@ namespace LemonApp
                 dl.d.Pause();
                 dl.d.Stop();
             }
-            (Resources["Downloading"] as Storyboard).Stop();
+            Meum_Download.isWorking = false;
             DownloadItemsList.Children.Clear();
             NonePage_Copy.Visibility = Visibility.Visible;
         }
         public void PushDownload(ListBox c)
         {
-            var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)
-                cc.Begin();
+                Meum_Download.isWorking = false;
             foreach (var x in c.Items)
             {
                 var f = x as DataItem;
@@ -3829,9 +3838,8 @@ namespace LemonApp
         }
         private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var cc = (Resources["Downloading"] as Storyboard);
             if (DownloadIsFinish)
-                cc.Begin();
+                Meum_Download.isWorking = true;
             foreach (DataItem f in DataItemsList.Items)
             {
                 if (f.music.MusicID != null)
@@ -4216,5 +4224,10 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void LyricAppBar_EnableTrans_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.LyricAppBarEnableTrans = (bool)LyricAppBar_EnableTrans.IsChecked;
+        }
     }
 }

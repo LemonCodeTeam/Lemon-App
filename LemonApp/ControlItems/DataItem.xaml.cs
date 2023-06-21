@@ -285,7 +285,8 @@ namespace LemonApp
             Toast.Send(a[1] + ": " + a[0]);
         }
 
-        private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e) => Download(this);
+        private void DownloadBtn_MouseDown(object sender, MouseButtonEventArgs e) 
+            => Download(this);
 
         private async void DeleteBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
