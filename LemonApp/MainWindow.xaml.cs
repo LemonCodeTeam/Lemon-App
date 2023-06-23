@@ -3721,9 +3721,16 @@ namespace LemonApp
             DownloadItem di = new DownloadItem(data, file, DownloadDL.Count());
             di.Delete += (s) =>
             {
-                s.d.Stop();
-                s.finished = true;
-                s.zt.Text = "已取消";
+                if (TwMessageBox.Show("确定要删除(含本地文件)吗？"))
+                {
+                    s.d.Stop();
+                    s.finished = true;
+                    System.IO.File.Delete(s.path);
+                    string lrcpath = s.path.Replace(".mp3", ".lrc");
+                    if (System.IO.File.Exists(lrcpath))
+                        System.IO.File.Delete(lrcpath);
+                    s.zt.Text = "已删除";
+                }
             };
             di.Finished += (s) =>
             {
