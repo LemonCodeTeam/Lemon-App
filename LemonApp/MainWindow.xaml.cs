@@ -1497,7 +1497,7 @@ namespace LemonApp
                 CloseLoading();
             }), osx);
             if (osx == 1)
-                ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+                ContentAnimation(DataItemsList, new Thickness(0, 175, 0, 0));
         }
         #endregion
         #region Update 检测更新
@@ -2024,7 +2024,7 @@ namespace LemonApp
                 }
                 CloseLoading();
                 DataItemsList.Opacity = 1;
-                ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+                ContentAnimation(DataItemsList, new Thickness(0, 175, 0, 0));
                 np = NowPage.GDItem;
             }
         }
@@ -2251,40 +2251,40 @@ namespace LemonApp
         private MyScrollViewer Datasv = null;
         int HB = 0;
         bool EnableDatasvAni = true;
-        private async void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (Datasv == null) Datasv = (MyScrollViewer)DataItemsList.Template.FindName("Datasv", DataItemsList);
             double offset = Datasv.ContentVerticalOffset;
-            if (!DataPage_ControlMod && np != NowPage.Search)
-            {
-                if (EnableDatasvAni)
-                {
-                    if (offset > 100)
-                    {
-                        if (HB == 0)
-                        {
-                            HB = 1;
-                            var sb = Resources["DataPage_Min"] as Storyboard;
-                            sb.Begin();
-                            if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
-                        }
-                    }
-                    else
-                    {
-                        if (HB == 1)
-                        {
-                            HB = 0;
-                            var sb = Resources["DataPage_Max"] as Storyboard;
-                            sb.Begin();
-                            if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
-                        }
-                    }
-                    //600ms内不再触发
-                    EnableDatasvAni = false;
-                    await Task.Delay(400);
-                    EnableDatasvAni = true;
-                }
-            }
+            //if (!DataPage_ControlMod && np != NowPage.Search)
+            //{
+            //    if (EnableDatasvAni)
+            //    {
+            //        if (offset > 80)
+            //        {
+            //            if (HB == 0)
+            //            {
+            //                HB = 1;
+            //                var sb = Resources["DataPage_Min"] as Storyboard;
+            //                sb.Begin();
+            //                if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (HB == 1)
+            //            {
+            //                HB = 0;
+            //                var sb = Resources["DataPage_Max"] as Storyboard;
+            //                sb.Begin();
+            //                if (!Settings.USettings.Animation_Refrech) sb.Seek(TimeSpan.FromSeconds(0.3));
+            //            }
+            //        }
+            //        //600ms内不再触发
+            //        EnableDatasvAni = false;
+            //        await Task.Delay(200);
+            //        EnableDatasvAni = true;
+            //    }
+            //}
 
             if (Datasv.IsVerticalScrollBarAtButtom())
             {
@@ -3350,15 +3350,36 @@ namespace LemonApp
             await Task.Yield();
             Pop_dl.HorizontalOffset = IsLyricPageOpen == 1 ? -310 : -40;
             Pop_dl.IsOpen = true;
+            string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
+            DeleteLocalCacheButton.TName = System.IO.File.Exists(file) ? "删除本地" : "导入本地";
         }
 
         private async void DeleteLocalCacheButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
-            System.IO.File.Delete(file);
-            DeleteLocalCacheButton.TName = "删除成功";
-            await Task.Delay(1000);
-            DeleteLocalCacheButton.TName = "删除本地";
+            if (DeleteLocalCacheButton.TName == "删除本地")
+            {
+                System.IO.File.Delete(file);
+                DeleteLocalCacheButton.TName = "删除成功";
+                await Task.Delay(1000);
+                DeleteLocalCacheButton.TName = "导入本地";
+            }
+            else {
+                System.Windows.Forms.OpenFileDialog ofd = new()
+                {
+                    Filter = "所有文件|*.*",
+                    ValidateNames = true,
+                    CheckPathExists = true,
+                    CheckFileExists = true
+                };
+                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string strFileName = ofd.FileName;
+                    System.IO.File.Copy(strFileName, file, true);
+                    DeleteLocalCacheButton.TName = "删除本地";
+
+                }
+            }
         }
         #endregion
         #region Lyric & 评论加载
@@ -4005,7 +4026,7 @@ namespace LemonApp
             CloseLoading();
             await Task.Yield();
             DataItemsList.Opacity = 1;
-            ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+            ContentAnimation(DataItemsList, new Thickness(0, 175, 0, 0));
             np = NowPage.GDItem;
         }
         #endregion
@@ -4014,7 +4035,7 @@ namespace LemonApp
         private async void Meum_Bought_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (Settings.USettings.LemonAreeunIts == "0")
-                NSPage(new MeumInfo(NonePage, Meum_MYGD));
+                NSPage(new MeumInfo(NonePage, Meum_Bought));
             else
             {
                 NSPage(new MeumInfo(BoughtPage, Meum_Bought));

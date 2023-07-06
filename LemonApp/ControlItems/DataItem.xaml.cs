@@ -339,5 +339,10 @@ namespace LemonApp
                 namss.Width = wpl.ActualWidth - BtnWidth;
             else namss.Width = double.NaN;
         }
+
+        private void userControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Play(this);
+        }
     }
 }

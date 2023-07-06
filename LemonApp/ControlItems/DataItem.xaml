@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LemonApp"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" x:Name="userControl" x:Class="LemonApp.DataItem"
-             mc:Ignorable="d" Height="45"  Background="#00000000" MouseLeave="UserControl_MouseLeave" MouseEnter="UserControl_MouseEnter" d:DesignWidth="500" HorizontalAlignment="Stretch">
+             mc:Ignorable="d" Height="55"  Background="#00000000" MouseLeave="UserControl_MouseLeave" MouseEnter="UserControl_MouseEnter" d:DesignWidth="500" HorizontalAlignment="Stretch" MouseDoubleClick="userControl_MouseDoubleClick">
     <Border x:Name="bg" CornerRadius="{DynamicResource AppCornerRadius}">
         <Grid x:Name="grid" Background="#00000000">
             <Grid.ColumnDefinitions>
