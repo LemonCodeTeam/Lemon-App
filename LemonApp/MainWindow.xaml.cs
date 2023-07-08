@@ -254,33 +254,15 @@ namespace LemonApp
                     }
                     if (Settings.USettings.IsLyricImm)
                     {
+                        LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
+                        await Task.Delay(450);
                         lastlyric = lrc;
                         ImmTb_Lyric.Text = "";
                         ImmTb_Trans.Text = "";
-                        string dt = lrc;
+                        LyricImm_tb.Opacity = 0;
                         ImmTb_Trans.Text = Settings.USettings.TransLyric ? (trans ?? "") : "";
-                        //分割划词
-                        string[] dta = dt.Split(' ');
-                        if (dta.Count() >= 3)
-                        {
-                            foreach (string a in dta)
-                            {
-                                ImmTb_Lyric.Text += a + " ";
-                                await Task.Delay(150);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < dt.Length; i += 4)
-                            {
-                                string a = "";
-                                if (i + 4 <= dt.Length)
-                                    a = dt.Substring(i, 4);
-                                else a = dt.Substring(i, dt.Length - i);
-                                ImmTb_Lyric.Text += a;
-                                await Task.Delay(150);
-                            }
-                        }
+                        ImmTb_Lyric.Text = lrc;
+                        LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
                     }
                 }
             };
@@ -837,7 +819,10 @@ namespace LemonApp
         }
         #endregion
         #region 设置
-
+        private void LyricAppBar_EnableTrans_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.LyricAppBarEnableTrans = (bool)LyricAppBar_EnableTrans.IsChecked;
+        }
         private void Settings_Animation_Check_Click(object sender, RoutedEventArgs e)
         {
             Settings.USettings.Animation_Refrech = (bool)Settings_Animation_Refrech.IsChecked;
@@ -1391,7 +1376,7 @@ namespace LemonApp
             b.Tag = data;
             b.ToolTip = data.name;
             RenderOptions.SetBitmapScalingMode(b, BitmapScalingMode.Fant);
-            b.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.imgurl, new int[2] { 50, 50 }));
+            b.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(data.imgurl, new int[2] { 50, 50 }));
             QuickGoToList.Children.Insert(0, b);
             if (needSave)
                 Settings.USettings.QuickGoToData.Add(data.type + data.id, data);
@@ -1441,10 +1426,10 @@ namespace LemonApp
                 index++;
             }), this, async (md) =>
             {
-                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.Creater.Photo, new int[2] { 36, 36 }));
+                DataPage_TX.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(md.Creater.Photo, new int[2] { 36, 36 }));
                 DataPage_Creater.Text = md.Creater.Name;
                 DataPage_Sim.Text = md.desc;
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(md.pic));
+                TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(md.pic));
                 TB.Text = md.name;
             }, count);
             await Task.Yield();
@@ -1468,10 +1453,10 @@ namespace LemonApp
                 DataCollectBtn.Visibility = Visibility.Collapsed;
                 DataItemsList.Opacity = 0;
                 NSPage(new MeumInfo(Data, null) { cmd = "[DataUrl]{\"type\":\"Top\",\"key\":\"" + g.Data.ID + "\",\"name\":\"" + g.Data.Name + "\",\"img\":\"" + g.Data.Photo + "\"}" }, NeedSave, false);
-                DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
+                DataPage_TX.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl("https://y.qq.com/favicon.ico"));
                 DataPage_Creater.Text = "QQ音乐官方";
                 DataPage_Sim.Text = g.Data.desc;
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(g.Data.Photo));
+                TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(g.Data.Photo));
                 TB.Text = g.Data.Name;
                 DataItemsList.Items.Clear();
             }
@@ -1825,7 +1810,7 @@ namespace LemonApp
                 SetTopWhite(true);
                 SingerDP_Top.Visibility = Visibility.Visible;
 
-                var im = await ImageCacheHelp.GetImageByUrl(data.mSinger.Photo);
+                var im = await ImageCacheHelper.GetImageByUrl(data.mSinger.Photo);
                 var rect = new System.Drawing.Rectangle(0, 0, im.PixelWidth, im.PixelHeight);
                 var imb = im.ToBitmap();
                 imb.GaussianBlur(ref rect, 80);
@@ -1981,7 +1966,7 @@ namespace LemonApp
                 NSPage(new MeumInfo(Data, Meum_ILike) { cmd = "DataUrl[ILike]" }, NeedSave, false);
                 OpenLoading();
                 TB.Text = "我喜欢";
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg"));
+                TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/y/img/cover_love_300.jpg"));
                 DataItemsList.Items.Clear();
                 DataItemsList.Opacity = 0;
                 DataCollectBtn.Visibility = Visibility.Collapsed;
@@ -1992,7 +1977,7 @@ namespace LemonApp
                    {
                        Dispatcher.Invoke(async () =>
                        {
-                           DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 36, 36 }));
+                           DataPage_TX.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(dt.Creater.Photo, new int[2] { 36, 36 }));
                            DataPage_Creater.Text = dt.Creater.Name;
                            DataPage_Sim.Text = dt.desc;
                        });
@@ -2250,11 +2235,11 @@ namespace LemonApp
         private int ixTop = 1;
         private MyScrollViewer Datasv = null;
         int HB = 0;
-        bool EnableDatasvAni = true;
         private void Datasv_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (Datasv == null) Datasv = (MyScrollViewer)DataItemsList.Template.FindName("Datasv", DataItemsList);
-            double offset = Datasv.ContentVerticalOffset;
+            Datasv ??= (MyScrollViewer)DataItemsList.Template.FindName("Datasv", DataItemsList);
+            //弃用的滚动动画  鼠标和触控操作难以协调...
+            //double offset = Datasv.ContentVerticalOffset;
             //if (!DataPage_ControlMod && np != NowPage.Search)
             //{
             //    if (EnableDatasvAni)
@@ -2405,7 +2390,7 @@ namespace LemonApp
                 }
                 HB = 1;
                 (Resources["DataPage_Min"] as Storyboard).Begin();
-                TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.First().ImageUrl));
+                TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(dt.First().ImageUrl));
             }
             if (osx == 0) NSPage(new MeumInfo(Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\"" + key + "\"}" }, NeedSave, false);
             int i = 0;
@@ -2633,7 +2618,7 @@ namespace LemonApp
                 LyricPage_TimeSetter.Text = "0.0s";
 
                 #region 专辑图
-                BitmapImage im = await ImageCacheHelp.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelp.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
+                BitmapImage im = await ImageCacheHelper.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
                 MusicImage.Background = new ImageBrush(im);
                 mini.img.Background = MusicImage.Background;
                 //模糊处理
@@ -2723,19 +2708,19 @@ namespace LemonApp
             var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
             if (gd.Count >= 1)
             {
-                LP_ag1_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
+                LP_ag1_img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
                 LP_ag1.Tag = new { id = gd[0].ID, name = gd[0].Name, img = gd[0].Photo };
                 LP_ag1_tx.Text = gd[0].Name;
             }
             if (gd.Count >= 2)
             {
-                LP_ag2_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
+                LP_ag2_img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(gd[1].Photo, new int[2] { 80, 80 }));
                 LP_ag2.Tag = new { id = gd[1].ID, name = gd[1].Name, img = gd[1].Photo };
                 LP_ag2_tx.Text = gd[1].Name;
             }
             if (gd.Count >= 3)
             {
-                LP_ag3_img.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
+                LP_ag3_img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
                 LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
                 LP_ag3_tx.Text = gd[2].Name;
             }
@@ -3739,7 +3724,7 @@ namespace LemonApp
                 .Replace("[M]", data.MusicName)
                 .Replace("[S]", data.SingerText));
             string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
-            DownloadItem di = new DownloadItem(data, file, DownloadDL.Count());
+            DownloadItem di = new(data, file, DownloadDL.Count);
             di.Delete += (s) =>
             {
                 if (TwMessageBox.Show("确定要删除(含本地文件)吗？"))
@@ -3987,7 +3972,7 @@ namespace LemonApp
             TB.Text = dt.data.Name;
             DataItemsList.Opacity = 0;
             DataItemsList.Items.Clear();
-            TXx.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.data.Photo));
+            TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(dt.data.Photo));
             OpenLoading();
             var data = AppConstants.MGData_Now = await MusicLib.GetGDAsync(dt.data.ID,
                 (dt) =>
@@ -3995,8 +3980,8 @@ namespace LemonApp
                     Dispatcher.Invoke(async () =>
                     {
                         if (dt.Creater.Name == "QQ音乐官方歌单")
-                            DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl("https://y.qq.com/favicon.ico"));
-                        else DataPage_TX.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(dt.Creater.Photo, new int[2] { 50, 50 }));
+                            DataPage_TX.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl("https://y.qq.com/favicon.ico"));
+                        else DataPage_TX.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(dt.Creater.Photo, new int[2] { 50, 50 }));
                         DataPage_Creater.Text = dt.Creater.Name;
                         DataPage_Sim.Text = dt.desc;
                         DataCollectBtn.Visibility = dt.IsOwn ? Visibility.Collapsed : Visibility.Visible;
@@ -4252,10 +4237,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void LyricAppBar_EnableTrans_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.USettings.LyricAppBarEnableTrans = (bool)LyricAppBar_EnableTrans.IsChecked;
-        }
     }
 }

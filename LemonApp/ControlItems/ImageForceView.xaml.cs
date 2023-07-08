@@ -57,7 +57,7 @@ namespace LemonApp
             {
 
                 Image.Background = null;
-                var ib = new ImageBrush(await ImageCacheHelp.GetImageByUrl(iv[index].pic, new int[2] { 363, 907 })) { Stretch = Stretch.Fill };
+                var ib = new ImageBrush(await ImageCacheHelper.GetImageByUrl(iv[index].pic, new int[2] { 363, 907 })) { Stretch = Stretch.Fill };
                 Image.Background = ib;
                 GC.Collect();
             }

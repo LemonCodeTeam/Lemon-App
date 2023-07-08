@@ -120,7 +120,8 @@ namespace LemonApp
                 WindowChrome.SetWindowChrome(_window, new WindowChrome()
                 {
                     GlassFrameThickness = new Thickness(-1),
-                    CaptionHeight = 1
+                    CaptionHeight = 1,
+                    ResizeBorderThickness = new Thickness(5)
                 });
                 _window.Background = new SolidColorBrush(_color);
                 SetWindowBlur(handle, DarkMode ? 1 : 0, BlurMode.Acrylic);

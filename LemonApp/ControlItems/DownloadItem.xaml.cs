@@ -40,7 +40,14 @@ namespace LemonApp
             d.Finished += async () =>
             {
                 if (Settings.USettings.DownloadWithLyric)
-                    await MusicLib.GetLyric(MData.MusicID, path.Replace(".mp3", ".lrc"));
+                {
+                    try
+                    {
+                        await MusicLib.GetLyric(MData.MusicID, path.Replace(".mp3", ".lrc"));
+                    }
+                    catch { }
+                }
+
                 Dispatcher.Invoke(() =>
                 {
                     Finished(this);

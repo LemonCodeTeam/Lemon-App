@@ -22,7 +22,7 @@ namespace LemonApp
             {
                 Height = ActualWidth + 40;
                 listenCount.Text = data.lstCount.IntToWn();
-                im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(data.Photo, new int[2] { 200, 200 }));
+                im.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(data.Photo, new int[2] { 200, 200 }));
             };
             MouseEnter += delegate
             {

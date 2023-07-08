@@ -14,7 +14,7 @@ namespace LemonLib
     /// <summary>
     /// 图像的三级缓存 网络-内存-储存
     /// </summary>
-    public class ImageCacheHelp
+    public class ImageCacheHelper
     {
         /// <summary>
         /// 图像的三级缓存 从URL中获取图像

@@ -22,7 +22,7 @@ namespace LemonApp
 
         private async void TopControl_Loaded(object sender, RoutedEventArgs e)
         {
-            im.Background = new ImageBrush(await ImageCacheHelp.GetImageByUrl(Data.Photo, new int[2] { 127, 127 }));
+            im.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(Data.Photo, new int[2] { 127, 127 }));
             title.Text = Data.Name;
             c1.Text = Data.content[0];
             c2.Text = Data.content[1];

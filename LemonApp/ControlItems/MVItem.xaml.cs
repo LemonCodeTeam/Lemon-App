@@ -25,7 +25,7 @@ namespace LemonApp
         }
         private async void Update()
         {
-            img.Background = new ImageBrush(await LemonLib.ImageCacheHelp.GetImageByUrl(mData.img, new int[2] { 150, 200 }));
+            img.Background = new ImageBrush(await LemonLib.ImageCacheHelper.GetImageByUrl(mData.img, new int[2] { 150, 200 }));
             tit.Text = mData.name;
             bfCount.Text = mData.lstCount;
         }

@@ -33,7 +33,7 @@ namespace LemonApp
                 }
                 else if (theme == 2)
                 {
-                    bd.SetResourceReference(BackgroundProperty, "ColorBrush");
+                    bd.SetResourceReference(BackgroundProperty, "ThemeColor");
                     tb.Foreground = new SolidColorBrush(Colors.White);
                 }
             }
