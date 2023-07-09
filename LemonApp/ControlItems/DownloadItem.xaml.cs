@@ -66,7 +66,9 @@ namespace LemonApp
             {
                 Dispatcher.Invoke(() =>
                 {
-                    DeleteBtn_MouseDown(null, null);
+                    Finished(this);
+                    finished = true;
+                    zt.Text = "找不到下载源";
                 });
             };
             if (index == 0)

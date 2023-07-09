@@ -1433,7 +1433,7 @@ namespace LemonApp
                 TB.Text = md.name;
             }, count);
             await Task.Yield();
-            ContentAnimation(DataItemsList, new Thickness(0, 200, 0, 0));
+            ContentAnimation(DataItemsList, new Thickness(0, 175, 0, 0));
         }
         #endregion
         #region Top 排行榜
@@ -2208,7 +2208,7 @@ namespace LemonApp
             DataPage_MainInfo.Visibility = Visibility.Visible;
             if (HB == 1)
                 DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 80, 0, 0), TimeSpan.FromSeconds(0)));
-            else DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 200, 0, 0), TimeSpan.FromSeconds(0)));
+            else DataItemsList.BeginAnimation(MarginProperty, new ThicknessAnimation(new Thickness(0, 175, 0, 0), TimeSpan.FromSeconds(0)));
             DataControlPage.Visibility = Visibility.Collapsed;
             foreach (DataItem x in DataItemsList.Items)
             {
@@ -2240,7 +2240,11 @@ namespace LemonApp
             Datasv ??= (MyScrollViewer)DataItemsList.Template.FindName("Datasv", DataItemsList);
             //弃用的滚动动画  鼠标和触控操作难以协调...
             //double offset = Datasv.ContentVerticalOffset;
-            //if (!DataPage_ControlMod && np != NowPage.Search)
+            if (!DataPage_ControlMod && np != NowPage.Search)
+            {
+                var sb = Resources["DataPage_Max"] as Storyboard;
+                sb.Begin();
+            }
             //{
             //    if (EnableDatasvAni)
             //    {
