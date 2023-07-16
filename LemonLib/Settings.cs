@@ -57,6 +57,12 @@ namespace LemonLib
                         string data =await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st");
                         Console.WriteLine(data);
                         XDUsettings(data);
+                        if (!Directory.Exists(USettings.DataCachePath))
+                            Directory.CreateDirectory(USettings.DataCachePath);
+                        if (!Directory.Exists(USettings.MusicCachePath))
+                            Directory.CreateDirectory(USettings.MusicCachePath);
+                        if (!Directory.Exists(USettings.MusicCachePath + "Skin"))
+                            Directory.CreateDirectory(USettings.MusicCachePath + "Skin");
                     }
                     else SaveSettingsAsync(qq);
                 }
@@ -244,7 +250,7 @@ namespace LemonLib
             /// <summary>
             /// 主题颜色
             /// </summary>
-            public byte Skin_ThemeColor_R = 49, Skin_ThemeColor_G = 194, Skin_ThemeColor_B = 124;
+            public byte Skin_ThemeColor_R = 249, Skin_ThemeColor_G = 119, Skin_ThemeColor_B = 114;
 
             /// <summary>
             /// (如果有) 主题背景图/动态主题dll路径
@@ -270,7 +276,7 @@ namespace LemonLib
         #endregion
 
         #region LSettings 用于保存上次登录的qq 在启动时读取
-        public static LocaSettings LSettings = new LocaSettings();
+        public static LocalSettings LSettings = new LocalSettings();
         public static async Task LoadLocaSettings()
         {
             try
@@ -289,7 +295,7 @@ namespace LemonLib
         {
             await File.WriteAllTextAsync(USettings.DataCachePath + "Data.st", TextHelper.JSON.ToJSON(LSettings));
         }
-        public class LocaSettings
+        public class LocalSettings
         {
             public string qq { get; set; } = "";
         }

@@ -1,8 +1,10 @@
 ﻿using LemonLib;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -26,7 +28,7 @@ namespace LemonApp
             Close();
         }
 
-        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             con.Visibility = Visibility.Collapsed;
             btn.Visibility = Visibility.Collapsed;
@@ -34,33 +36,43 @@ namespace LemonApp
             tb.Text = "下载升级包中...";
             Height = 210;
             var xpath = Settings.USettings.DataCachePath + "win-release.zip";
-            WebClient wb = new WebClient();
-            wb.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-            wb.Headers.Add("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-            wb.Headers.Add("cache-control", "no-cache");
-            wb.Headers.Add("pragma", "no-cache");
-            wb.Headers.Add("sec-fetch-dest", "document");
-            wb.Headers.Add("sec-fetch-mode", "navigate");
-            wb.Headers.Add("sec-fetch-site", "none");
-            wb.Headers.Add("sec-fetch-user", "?1");
-            wb.Headers.Add("upgrade-insecure-requests", "1");
-            wb.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
-            wb.DownloadProgressChanged += (o, ex) =>
+            using var hc = new HttpClient(HttpHelper.GetSta());
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\"");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("cache-control", "no-cache");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("pragma", "no-cache");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-dest", "document");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-mode", "navigate");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-site", "none");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-user", "?1");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("upgrade-insecure-requests", "1");
+           hc.DefaultRequestHeaders.TryAddWithoutValidation("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
+            var response =await hc.GetAsync("https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip", HttpCompletionOption.ResponseHeadersRead);
+            using Stream st = await response.Content.ReadAsStreamAsync();
+            pro.Maximum = st.Length;
+            using (var filestream = new FileStream(xpath, FileMode.Create,FileAccess.ReadWrite))
             {
-                pro.Value = ex.ProgressPercentage;
-            };
-            wb.DownloadFileCompleted += async delegate
-            {
-                tb.Text = "下载完成，解压升级包...";
-                string file = Settings.USettings.DataCachePath + "win-release.exe";
-                await Task.Run(() =>
+                byte[] bArry=new byte[4096];
+                int size = await st.ReadAsync(bArry);
+                pro.Value += size;
+                while(size>0)
                 {
-                    ZipFile.ExtractToDirectory(xpath, Settings.USettings.DataCachePath, true);
-                });
-                tb.Text = "完成";
-                Process.Start("explorer.exe", Settings.USettings.DataCachePath + "win-release.exe");
-            };
-            wb.DownloadFileAsync(new Uri("https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip"), xpath);
+                    await filestream.WriteAsync(bArry.AsMemory(0, size));
+                    size = await st.ReadAsync(bArry);
+                    pro.Value += size;
+                }
+                filestream.Close();
+            }
+            st.Close();
+            //Finished
+            tb.Text = "下载完成，解压升级包...";
+            string file = Settings.USettings.DataCachePath + "win-release.exe";
+            await Task.Run(() =>
+            {
+                ZipFile.ExtractToDirectory(xpath, Settings.USettings.DataCachePath, true);
+            });
+            tb.Text = "完成";
+            Process.Start("explorer.exe", Settings.USettings.DataCachePath + "win-release.exe");
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

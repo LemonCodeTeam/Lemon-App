@@ -17,8 +17,8 @@
             <CornerRadius x:Key="AppCornerRadius">10,10,10,10</CornerRadius>
             <Thickness x:Key="ImageBorder">4</Thickness>
             <SolidColorBrush x:Key="ImageBorderColor" Color="#14000000"></SolidColorBrush>
-            <!--主题颜色 默认值:#FF31C27C-->
-            <SolidColorBrush x:Key="ThemeColor" Color="#FF31C27C"/>
+            <!--主题颜色 默认值:#FFF97772-->
+            <SolidColorBrush x:Key="ThemeColor" Color="#FFF97772"/>
             <!--字体颜色 默认值:#FF93A1AE-->
             <SolidColorBrush x:Key="ResuColorBrush" Color="#FF272727"/>
             <!--菜单栏背景色 默认值:#FFFAFAFA-->

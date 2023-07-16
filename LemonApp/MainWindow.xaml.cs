@@ -424,7 +424,7 @@ namespace LemonApp
                 //默认主题  （主要考虑到切换登录）
                 if (wac.IsEnabled) wac.IsEnabled = false;
                 Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                App.BaseApp.unSkin();
+                App.BaseApp.UnSkin();
                 App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
                 DThemePage.Child = null;
             }
@@ -725,6 +725,11 @@ namespace LemonApp
         private void MinBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -1234,7 +1239,7 @@ namespace LemonApp
                 Page.Background = new SolidColorBrush(Color.FromRgb(45, 45, 48));
                 if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
                     lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
-                Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
+                Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
                 Settings.USettings.Skin_ThemeColor_B = theme.B;
@@ -1253,8 +1258,8 @@ namespace LemonApp
                 if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
                     lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
                 DThemePage.Child = null;
-                App.BaseApp.unSkin();
-                Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
+                App.BaseApp.UnSkin();
+                Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
                 Settings.USettings.Skin_ThemeColor_B = theme.B;

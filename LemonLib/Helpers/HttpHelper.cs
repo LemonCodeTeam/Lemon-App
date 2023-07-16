@@ -9,7 +9,7 @@ namespace LemonLib
 {
     public class HttpHelper
     {
-        public static SocketsHttpHandler GetSta()=> new SocketsHttpHandler()
+        public static SocketsHttpHandler GetSta() => new()
         {
             AutomaticDecompression = DecompressionMethods.GZip,
             KeepAlivePingPolicy = HttpKeepAlivePingPolicy.Always
@@ -30,7 +30,7 @@ namespace LemonLib
 
         public static async Task<long> GetHTTPFileSize(string url)
         {
-            long size = 0L;
+            long size;
             try
             {
                 using var hc = new HttpClient();
@@ -87,7 +87,8 @@ namespace LemonLib
             hc.DefaultRequestHeaders.TryAddWithoutValidation("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Host", "c.y.qq.com");
         }
-        public static WebHeaderCollection GetWebHeader_BaiduFY() => new WebHeaderCollection {
+        public static WebHeaderCollection GetWebHeader_BaiduFY() => new()
+        {
             {"Accept","*/*"},
             { "Accept-Language","zh-CN,zh;q=0.9"},
             { "Content-Type","application/x-www-form-urlencoded; charset=UTF-8"},
@@ -103,7 +104,7 @@ namespace LemonLib
         public static async Task<string> PostWeb(string url, string data, WebHeaderCollection Header = null)
         {
             byte[] postData = Encoding.UTF8.GetBytes(data);
-            using WebClient webClient = new WebClient();
+            using WebClient webClient = new();
             if (Header != null)
                 webClient.Headers = Header;
             byte[] responseData = await webClient.UploadDataTaskAsync(new Uri(url), "POST", postData);
@@ -120,8 +121,7 @@ namespace LemonLib
         public static async Task<string> PostWeb(string url, string data, Action<HttpClient> headers = null,string mediatype=null)
         {
             using var hc = new HttpClient(GetSta());
-            if (headers != null)
-                headers(hc);
+            headers?.Invoke(hc);
             var result = await hc.PostAsync(url, new StringContent(data,Encoding.UTF8,mediatype));
             return await result.Content.ReadAsStringAsync();
         }
@@ -167,11 +167,11 @@ namespace LemonLib
             using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
             {
                 byte[] bArr = new byte[1024];
-                int size = await st.ReadAsync(bArr, 0, bArr.Length);
+                int size = await st.ReadAsync(bArr);
                 while (size > 0)
                 {
-                    await stream.WriteAsync(bArr, 0, size);
-                    size = await st.ReadAsync(bArr, 0, bArr.Length);
+                    await stream.WriteAsync(bArr.AsMemory(0, size));
+                    size = await st.ReadAsync(bArr);
                 }
                 stream.Close();
             }
