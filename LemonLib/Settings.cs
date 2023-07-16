@@ -57,8 +57,6 @@ namespace LemonLib
                         string data =await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st");
                         Console.WriteLine(data);
                         XDUsettings(data);
-                        if (!Directory.Exists(USettings.DataCachePath))
-                            Directory.CreateDirectory(USettings.DataCachePath);
                         if (!Directory.Exists(USettings.MusicCachePath))
                             Directory.CreateDirectory(USettings.MusicCachePath);
                         if (!Directory.Exists(USettings.MusicCachePath + "Skin"))
@@ -259,9 +257,9 @@ namespace LemonLib
             #endregion
             #region 缓存/下载路径
             public string DataCachePath = "";
-            public string MusicCachePath = @"C:\Users\cz241\AppData\Roaming\LemonApp\";
+            public string MusicCachePath = "";
             public string DownloadPath = "";
-            public string DownloadName = "[I].  [M] - [S]";
+            public string DownloadName = "[M] - [S]";
             public bool DownloadWithLyric = true;
             #endregion
             #region 性能选项

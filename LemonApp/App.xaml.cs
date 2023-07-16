@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -43,6 +44,8 @@ namespace LemonApp
                 //To solve: HttpWebRequest The SSL connection could not be established
                 ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                if (!Directory.Exists(Settings.USettings.DataCachePath))
+                    Directory.CreateDirectory(Settings.USettings.DataCachePath);
                 new MainWindow().Show();
             }
         }
@@ -117,9 +120,9 @@ namespace LemonApp
         #region 全局异常捕获/处理
         public App()
         {
-            Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            //Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            //TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             BaseApp = this;
         }
 
