@@ -120,9 +120,9 @@ namespace LemonApp
         #region 全局异常捕获/处理
         public App()
         {
-            //Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
-            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            //TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             BaseApp = this;
         }
 
