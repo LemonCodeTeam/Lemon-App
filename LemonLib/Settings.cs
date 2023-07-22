@@ -26,13 +26,15 @@ namespace LemonLib
     public class Settings
     {
         #region USettings
-        public static UserSettings USettings = new UserSettings();
+        public static UserSettings USettings = new();
+        public static UserSettings_PlayList USettings_Playlist = new();
         public static async Task SaveSettingsTaskAsync(string id =null)
         {
             try
             {
                id ??=USettings.LemonAreeunIts;
                 await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
+                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".pl.st", TextHelper.JSON.ToJSON(USettings_Playlist,false));
             }
             catch { }
         }
@@ -42,6 +44,7 @@ namespace LemonLib
             {
                 id ??= USettings.LemonAreeunIts;
                 await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
+                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".pl.st", TextHelper.JSON.ToJSON(USettings_Playlist,false));
             }
             catch { }
         }
@@ -56,7 +59,7 @@ namespace LemonLib
                     {
                         string data =await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st");
                         Console.WriteLine(data);
-                        XDUsettings(data);
+                        XDUsettings(data, File.Exists(USettings.DataCachePath + qq + ".pl.st") ? await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".pl.st") : "");
                         if (!Directory.Exists(USettings.MusicCachePath))
                             Directory.CreateDirectory(USettings.MusicCachePath);
                         if (!Directory.Exists(USettings.MusicCachePath + "Skin"))
@@ -71,7 +74,7 @@ namespace LemonLib
         /// 从json中解析出Settings项
         /// </summary>
         /// <param name="data"></param>
-        private static void XDUsettings(string data)
+        private static void XDUsettings(string data,string playlist)
         {
             JObject o = JObject.Parse(data);
             USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
@@ -139,11 +142,6 @@ namespace LemonLib
                 string json = o["QuickGoToData"].ToString();
                 USettings.QuickGoToData= JsonConvert.DeserializeObject<Dictionary<string,QuickGoToData>>(json);
             }
-            if (data.Contains("MusicGDataPlayList"))
-            {
-                string json = o["MusicGDataPlayList"].ToString();
-                USettings.MusicGDataPlayList = JsonConvert.DeserializeObject<List<Music>>(json);
-            }
             if (data.Contains("PlayingIndex"))
                 USettings.PlayingIndex = int.Parse(o["PlayingIndex"].ToString());
             if (data.Contains("IsLyricImm"))
@@ -170,6 +168,11 @@ namespace LemonLib
                 USettings.MemoryFlush = bool.Parse(o["MemoryFlush"].ToString());
             if (data.Contains("LyricAppBarEnableTrans"))
                 USettings.LyricAppBarEnableTrans = bool.Parse(o["LyricAppBarEnableTrans"].ToString());
+
+            if (playlist.Contains("MusicGDataPlayList"))
+                USettings_Playlist= JsonConvert.DeserializeObject<UserSettings_PlayList>(playlist);
+            else if (data.Contains("MusicGDataPlayList"))
+                USettings_Playlist.MusicGDataPlayList = JsonConvert.DeserializeObject<List<Music>>(o["MusicGDataPlayList"].ToString());
         }
         public class UserSettings
         {
@@ -202,7 +205,6 @@ namespace LemonLib
             #region 播放
             public Music Playing { get; set; } = new Music();
             public int PlayingIndex = -1;
-            public List<Music> MusicGDataPlayList = new List<Music>();
             /// <summary>
             /// 播放模式 0列表循环 1单曲循环 2随机播放
             /// </summary>
@@ -270,6 +272,10 @@ namespace LemonLib
 
             public Dictionary<string, QuickGoToData> QuickGoToData = new Dictionary<string, QuickGoToData>();
             public List<HotKeyInfo> HotKeys = new List<HotKeyInfo>();
+        }
+        public class UserSettings_PlayList
+        {
+            public List<Music> MusicGDataPlayList = new List<Music>();
         }
         #endregion
 

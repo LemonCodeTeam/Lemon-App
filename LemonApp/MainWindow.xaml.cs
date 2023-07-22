@@ -604,7 +604,7 @@ namespace LemonApp
             {
                 np = NowPage.GDItem;
                 ListBox list = new ListBox();
-                foreach (var a in Settings.USettings.MusicGDataPlayList)
+                foreach (var a in Settings.USettings_Playlist.MusicGDataPlayList)
                 {
                     if (a.MusicID != "str.Null")
                     {
@@ -1284,7 +1284,7 @@ namespace LemonApp
                 wac.IsEnabled = true;
                 if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
                     lyricTa.UpdataWindowBlurMode(true);
-                Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
+                Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
                 Settings.USettings.Skin_ThemeColor_B = theme.B;
@@ -1309,7 +1309,7 @@ namespace LemonApp
                 wac.IsEnabled = true;
                 if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
                     lyricTa.UpdataWindowBlurMode(false);
-                Color theme = (Color)ColorConverter.ConvertFromString("#FF31C27C");
+                Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
                 Settings.USettings.Skin_ThemeColor_R = theme.R;
                 Settings.USettings.Skin_ThemeColor_G = theme.G;
                 Settings.USettings.Skin_ThemeColor_B = theme.B;
@@ -4139,17 +4139,17 @@ namespace LemonApp
                      notifyIcon.Dispose();
                  }
                  catch { }
-                 Settings.USettings.MusicGDataPlayList.Clear();
+                 Settings.USettings_Playlist.MusicGDataPlayList.Clear();
                  foreach (object a in PlayDL_List.Items)
                  {
                      if (a is PlayDLItem)
                      {
                          var ab = a as PlayDLItem;
-                         Settings.USettings.MusicGDataPlayList.Add(ab.Data);
+                         Settings.USettings_Playlist.MusicGDataPlayList.Add(ab.Data);
                      }
                      else
                      {
-                         Settings.USettings.MusicGDataPlayList.Add(new Music() { MusicID = "str.Null" });
+                         Settings.USettings_Playlist.MusicGDataPlayList.Add(new Music() { MusicID = "str.Null" });
                      }
                  }
                  Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
