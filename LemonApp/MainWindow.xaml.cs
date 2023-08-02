@@ -2779,8 +2779,9 @@ namespace LemonApp
             }
             else
             {
+                Pop_sp.PlacementTarget = sender as UIElement;
                 await Task.Yield();
-                Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -285 : -40;
+             //   Pop_sp.HorizontalOffset = IsLyricPageOpen == 1 ? -285 : -40;
                 Pop_sp.IsOpen = true;
                 MusicPlay_sp.Value = mp.Speed;
                 MusicPlay_pitch_sp.Value = mp.Pitch;
@@ -2847,6 +2848,7 @@ namespace LemonApp
 
         private async void AudioBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            Pop_voice.PlacementTarget = sender as UIElement;
             await Task.Yield();
             Pop_voice.IsOpen = true;
         }
@@ -3078,6 +3080,8 @@ namespace LemonApp
         private async void Border_MouseDown_2(object sender, MouseButtonEventArgs e)
         {
             IsLyricPageOpen = 0;
+            this.MinWidth = 875;
+            this.SizeChanged -= MainWindow_SizeChanged;
             CloseBtn.ColorDx = null;
             MaxBtn.ColorDx = null;
             MinBtn.ColorDx = null;
@@ -3086,9 +3090,12 @@ namespace LemonApp
             await Task.Delay(300);
             App.BaseApp.SetColor("ThemeColor", ThemeColor_ORD);
         }
+        
         private async void MusicImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
             IsLyricPageOpen = 1;
+            this.MinWidth = 410;
+            this.SizeChanged += MainWindow_SizeChanged;
             ThemeColor_ORD = (App.BaseApp.Resources["ThemeColor"] as SolidColorBrush).Color;
             var WhiteColorBrush = new SolidColorBrush(Colors.White);
             MinBtn.ColorDx = WhiteColorBrush;
@@ -3099,6 +3106,23 @@ namespace LemonApp
             await Task.Delay(200);
             App.BaseApp.SetColor("ThemeColor", AlbumColor);
         }
+        private Storyboard LyricMinimize;
+        private bool isMiniLyricPage = false;
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this.Width <= 600&&!isMiniLyricPage)
+            {
+                LyricMinimize ??= Resources["LyricPage_Minimize"] as Storyboard;
+                LyricMinimize.Begin();
+                isMiniLyricPage = true;
+            }
+            else if (Width >= 660&&isMiniLyricPage)
+            {
+                LyricMinimize.Stop();
+                isMiniLyricPage = false;
+            }
+        }
+
         private void MusicImage_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (MusicImage.CornerRadius.Equals(new CornerRadius(5)))
@@ -3114,8 +3138,8 @@ namespace LemonApp
         }
         private async void MoreBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            MoreBtn_Meum.PlacementTarget = sender as UIElement;
             await Task.Yield();
-            MoreBtn_Meum.HorizontalOffset = IsLyricPageOpen == 1 ? -320 : -70;
             MoreBtn_Meum.IsOpen = !MoreBtn_Meum.IsOpen;
         }
         private void MoreBtn_Meum_DL_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3341,8 +3365,8 @@ namespace LemonApp
 
         private async void SongSource_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            Pop_dl.PlacementTarget = sender as UIElement;
             await Task.Yield();
-            Pop_dl.HorizontalOffset = IsLyricPageOpen == 1 ? -310 : -40;
             Pop_dl.IsOpen = true;
             string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
             DeleteLocalCacheButton.TName = System.IO.File.Exists(file) ? "删除本地" : "导入本地";
