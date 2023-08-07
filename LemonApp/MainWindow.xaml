@@ -1524,7 +1524,7 @@
                                 <TextBlock x:Name="m_Name" Margin="60,0,30,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" Grid.Row="2"/>
                                 <TextBlock x:Name="m_Singer" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Grid.Row="2" Margin="60,40,30,0"/>
                             </Grid>
-                            <Grid VerticalAlignment="Bottom" Margin="45,0,45,10" Height="148">
+                            <Grid VerticalAlignment="Bottom" Margin="45,0,45,20" Height="148">
                                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,7,0,0">
                                     <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="50" Background="#00000000" MouseDown="FxDec_MouseDown">
                                         <Border BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" ToolTip="Fx效果器 双击可以保存mp3" Height="18">
@@ -1583,19 +1583,19 @@
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="1*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Height="30" MouseDown="PlayControl_PlayLast" Background="#00000000" Width="30" Margin="25,0,0,0">
-                                            <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="18"/>
+                                        <Border Height="55" MouseDown="PlayControl_PlayLast" Background="#00000000" Width="55">
+                                            <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="25"/>
                                         </Border>
-                                        <Border Height="45" MouseDown="PlayBtn_MouseDown" Background="#00000000" Width="45" Grid.Column="1">
+                                        <Border Height="60" MouseDown="PlayBtn_MouseDown" Background="#00000000" Width="60" Grid.Column="1">
                                             <Path x:Name="lyric_playcontrol" Data="{DynamicResource PlayIcon_Play}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}" Margin="3,3,3,3"/>
                                         </Border>
-                                        <Border Width="30" Height="30" MouseDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="2" Margin="0,0,25,0">
-                                            <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="18"/>
+                                        <Border Width="55" Height="55" MouseDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="2">
+                                            <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="25"/>
                                         </Border>
-                                        <Border HorizontalAlignment="Right" Width="30" MouseDown="XHBtn_MouseDown" Background="#00000000" Grid.Column="2" Height="30" VerticalAlignment="Center" Margin="0,0,-15,0">
+                                        <Border HorizontalAlignment="Right" Width="30" MouseDown="XHBtn_MouseDown" Background="#00000000" Grid.Column="2" Height="30" VerticalAlignment="Center" Margin="0,0,-45,0">
                                             <Path Data="{Binding Data, ElementName=path6}" Stretch="Uniform" Fill="White" StrokeThickness="5" Width="15" Height="15"/>
                                         </Border>
-                                        <Border HorizontalAlignment="Left" Width="30" Background="#00000000" MouseDown="GcBtn_MouseDown" Height="30" VerticalAlignment="Center" Margin="-15,0,0,0">
+                                        <Border HorizontalAlignment="Left" Width="30" Background="#00000000" MouseDown="GcBtn_MouseDown" Height="30" VerticalAlignment="Center" Margin="-40,0,0,0">
                                             <Path x:Name="lyric_opengc" Data="M267.31290994,336.0572459L267.31290994,816.61622664C299.13858517,786.97741836,333.16080231,752.98423003,370.45364197,714.57860402L391.29660469,799.05356336C330.94490654,861.59212748,266.21947743,917.55073983,198.19439504,965.82629201L167.48150614,895.6046677C182.83795058,881.34165672,191.62412019,865.98521131,191.62412022,848.422549L191.62412022,411.76538751 32.53445177,411.76538751 32.53445177,336.0572459z M349.56229756,180.26722879L295.80022712,235.13240865C249.73089379,181.36066225,186.09889717,124.30861643,107.11045611,65.07938056L161.98531193,11.30763417C236.60002105,67.26624654,299.13858515,123.21518295,349.6010033,180.26722879z M748.92661841,1002.02569917L729.23514775,926.31755658 858.71503673,928.53345235C894.9144439,928.53345235,913.55118682,908.77424618,913.55118682,869.27518767L913.55118682,121.02831698 389.09038585,121.02831698 389.09038585,46.41360787 991.46554823,46.41360787 991.46554823,892.30501636C991.46554823,964.73285951,951.98584259,1002.02569917,875.18426654,1002.02569917z M837.80433947,250.47917715L837.80433947,326.18731877 414.33610933,326.18731877 414.33610933,250.47917715z M793.94122401,445.77792871L793.94122401,785.88398489 453.83516879,785.88398489 453.83516879,445.77792871z M719.35554467,514.90611955L530.66577271,514.90611955 530.66577271,716.76546999 719.35554467,716.76546999z" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="15" Height="15"/>
                                         </Border>
                                     </Grid>
