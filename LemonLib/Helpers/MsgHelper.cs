@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO.Pipes;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 
 namespace LemonLib
@@ -28,9 +31,7 @@ namespace LemonLib
 
         public static async void SendMsg(String strSent, int WindowHandle = 0)
         {
-            int WINDOW_HANDLE = WindowHandle;
-            if (WindowHandle == 0)
-                WINDOW_HANDLE = (await Settings.ReadHandleAsync()).WINDOW_HANDLE;
+            int WINDOW_HANDLE = WindowHandle == 0 ? (await Settings.ReadHandleAsync()).WINDOW_HANDLE : WindowHandle;
             if (WINDOW_HANDLE != 0)
             {
                 byte[] arr = Encoding.Default.GetBytes(strSent);

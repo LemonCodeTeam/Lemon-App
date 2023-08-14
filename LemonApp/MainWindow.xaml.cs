@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -30,6 +31,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static LemonLib.InfoHelper;
+using static LemonLib.TextHelper;
 
 namespace LemonApp
 {
@@ -245,6 +247,18 @@ namespace LemonApp
                 {
                     //有歌词更新
                     mini.lyric.Text = lrc;
+                    m_lyric.Text = lrc;
+
+                    if (Settings.USettings.BindMyToolBar&& MsgHelper.FindWindow(null, "MyToolBar")!=IntPtr.Zero) 
+                    {
+                        Socket clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        await clientSocket.ConnectAsync("127.0.0.1", 3230);
+                        await clientSocket.SendAsync(Encoding.UTF8.GetBytes(lrc), SocketFlags.None);
+                    }
+
+                    var ptr=MsgHelper.FindWindow(null, "MyToolBar");
+                    MsgHelper.SendMsg(lrc,ptr.ToInt32());
+
                     if (Settings.USettings.DoesOpenDeskLyric)
                     {
                         if (Settings.USettings.LyricAppBarOpen)
@@ -667,6 +681,7 @@ namespace LemonApp
             Settings_Animation_Refrech.IsChecked= Settings.USettings.Animation_Refrech;
             Settings_Animation_Scroll.IsChecked = Settings.USettings.Animation_Scroll;
             Settings_MemoryFlush.IsChecked = Settings.USettings.MemoryFlush;
+            BindMyToolBar.IsChecked = Settings.USettings.BindMyToolBar;
             LyricAppBar_EnableTrans.IsChecked = Settings.USettings.LyricAppBarEnableTrans;
         }
 
@@ -886,7 +901,10 @@ namespace LemonApp
             SettingsPage_AboutPage.Children.Add((Grid)XamlReader.Parse(data));
             SettingsPage_NSPage(SettingsPage_AboutPage);
         }
-
+        private void BindMyToolBar_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.BindMyToolBar = (bool)BindMyToolBar.IsChecked;
+        }
         private async void UserTX_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
             SettingsBtn_MouseDown(null, null);
@@ -2617,7 +2635,6 @@ namespace LemonApp
 
                  LoadMusic(data, doesplay);
 
-                Title = "Lemon App  " + data.MusicName + " - " + data.SingerText;
                 Settings.USettings.Playing = MusicData.Data;
                 Singer.Text = data.SingerText;
                 mini.title.Text = data.MusicName + " - " + data.SingerText;

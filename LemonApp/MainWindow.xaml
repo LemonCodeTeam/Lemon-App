@@ -825,12 +825,21 @@
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="LyricPage_Minimize">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ly" Storyboard.TargetProperty="(UIElement.Visibility)">
-                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
-            </ObjectAnimationUsingKeyFrames>
             <Int32AnimationUsingKeyFrames Storyboard.TargetName="LyricPage_Left" Storyboard.TargetProperty="(Grid.ColumnSpan)">
                 <EasingInt32KeyFrame KeyTime="00:00:00" Value="2"/>
             </Int32AnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LyricTools" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_AboutGD" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ly" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="m_lyric" Storyboard.TargetProperty="(UIElement.Visibility)">
+                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
@@ -1072,6 +1081,7 @@
                                         <LemonApp:MDButton x:Name="ApplyLyricAppBarSize" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" TName="应用" Width="50" pData="{x:Null}" Margin="120,0,0,0" cr="12,12,12,12" MouseDown="ApplyLyricAppBarSize_MouseDown"/>
                                         <CheckBox x:Name="LyricAppBar_EnableTrans" Content="显示歌词翻译" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="3,30,0,0" Click="LyricAppBar_EnableTrans_Click"/>
                                     </Grid>
+                                    <CheckBox x:Name="BindMyToolBar" Content="与MyToolBar联动" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Style="{DynamicResource CheckBoxStyle}" Margin="120,100,0,0" Click="BindMyToolBar_Click"/>
                                 </Grid>
                                 <Grid x:Name="SettingsPage_UserPage" Height="300" Visibility="Collapsed">
                                     <Grid.ColumnDefinitions>
@@ -1504,9 +1514,9 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50*"/>
                                     <RowDefinition Height="340*"/>
-                                    <RowDefinition Height="200*"/>
+                                    <RowDefinition Height="240*"/>
                                 </Grid.RowDefinitions>
-                                <Grid x:Name="LyricBigGrid"  Grid.Row="1" MaxWidth="500" MaxHeight="500" Width="{Binding ActualHeight, ElementName=LyricBig}" Margin="0,8,0,32">
+                                <Grid x:Name="LyricBigGrid"  Grid.Row="1" MaxWidth="380" MinWidth="280" Height="{Binding ActualWidth, ElementName=LyricBig}" Margin="60,0,60,0">
                                     <Border x:Name="LyricBig" RenderOptions.BitmapScalingMode="Fant"   Background="{Binding Background, ElementName=MusicImage}" CornerRadius="{Binding ActualHeight, ElementName=LyricBig, Mode=OneWay}" BorderThickness="10" BorderBrush="#33000000" MouseDown="LyricBig_MouseDown" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
                                         <Border.RenderTransform>
                                             <TransformGroup>
@@ -1523,6 +1533,7 @@
                                 </Grid>
                                 <TextBlock x:Name="m_Name" Margin="60,0,30,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" Grid.Row="2"/>
                                 <TextBlock x:Name="m_Singer" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Grid.Row="2" Margin="60,40,30,0"/>
+                                <TextBlock x:Name="m_lyric" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Grid.Row="2" Margin="60,70,30,0" Visibility="Collapsed"/>
                             </Grid>
                             <Grid VerticalAlignment="Bottom" Margin="45,0,45,20" Height="148">
                                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,7,0,0">
@@ -1577,34 +1588,38 @@
                                 </Border>
                                 <Grid Height="85" VerticalAlignment="Bottom" >
                                     <Slider x:Name="lyric_jd" Height="12" Style="{DynamicResource SliderStyle}" PreviewMouseUp="Jd_PreviewMouseUp" PreviewMouseDown="Jd_PreviewMouseDown" ValueChanged="Jd_ValueChanged" Maximum="10" Value="2" VerticalAlignment="Top" Margin="20,-6,20,0"/>
-                                    <Grid Width="200" Cursor="Hand">
+                                    <Grid Cursor="Hand">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="8*"/>
+                                            <ColumnDefinition Width="8*"/>
+                                            <ColumnDefinition Width="8*"/>
+                                            <ColumnDefinition Width="10*"/>
+                                            <ColumnDefinition Width="8*"/>
+                                            <ColumnDefinition Width="8*"/>
+                                            <ColumnDefinition Width="8*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Height="55" MouseDown="PlayControl_PlayLast" Background="#00000000" Width="55">
-                                            <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="25"/>
+                                        <Border Height="55" MouseDown="PlayControl_PlayLast" Background="#00000000" Width="55" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                                            <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="22"/>
                                         </Border>
-                                        <Border Height="60" MouseDown="PlayBtn_MouseDown" Background="#00000000" Width="60" Grid.Column="1">
+                                        <Border Height="60" MouseDown="PlayBtn_MouseDown" Background="#00000000" Width="55" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <Path x:Name="lyric_playcontrol" Data="{DynamicResource PlayIcon_Play}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}" Margin="3,3,3,3"/>
                                         </Border>
-                                        <Border Width="55" Height="55" MouseDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="2">
-                                            <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="25"/>
+                                        <Border Width="55" Height="55" MouseDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="22"/>
                                         </Border>
-                                        <Border HorizontalAlignment="Right" Width="30" MouseDown="XHBtn_MouseDown" Background="#00000000" Grid.Column="2" Height="30" VerticalAlignment="Center" Margin="0,0,-45,0">
+                                        <Border HorizontalAlignment="Center" Width="30" MouseDown="XHBtn_MouseDown" Background="#00000000" Grid.Column="5" Height="30" VerticalAlignment="Center">
                                             <Path Data="{Binding Data, ElementName=path6}" Stretch="Uniform" Fill="White" StrokeThickness="5" Width="15" Height="15"/>
                                         </Border>
-                                        <Border HorizontalAlignment="Left" Width="30" Background="#00000000" MouseDown="GcBtn_MouseDown" Height="30" VerticalAlignment="Center" Margin="-40,0,0,0">
+                                        <Border HorizontalAlignment="Center" Width="30" Background="#00000000" MouseDown="GcBtn_MouseDown" Height="30" VerticalAlignment="Center" Grid.Column="1">
                                             <Path x:Name="lyric_opengc" Data="M267.31290994,336.0572459L267.31290994,816.61622664C299.13858517,786.97741836,333.16080231,752.98423003,370.45364197,714.57860402L391.29660469,799.05356336C330.94490654,861.59212748,266.21947743,917.55073983,198.19439504,965.82629201L167.48150614,895.6046677C182.83795058,881.34165672,191.62412019,865.98521131,191.62412022,848.422549L191.62412022,411.76538751 32.53445177,411.76538751 32.53445177,336.0572459z M349.56229756,180.26722879L295.80022712,235.13240865C249.73089379,181.36066225,186.09889717,124.30861643,107.11045611,65.07938056L161.98531193,11.30763417C236.60002105,67.26624654,299.13858515,123.21518295,349.6010033,180.26722879z M748.92661841,1002.02569917L729.23514775,926.31755658 858.71503673,928.53345235C894.9144439,928.53345235,913.55118682,908.77424618,913.55118682,869.27518767L913.55118682,121.02831698 389.09038585,121.02831698 389.09038585,46.41360787 991.46554823,46.41360787 991.46554823,892.30501636C991.46554823,964.73285951,951.98584259,1002.02569917,875.18426654,1002.02569917z M837.80433947,250.47917715L837.80433947,326.18731877 414.33610933,326.18731877 414.33610933,250.47917715z M793.94122401,445.77792871L793.94122401,785.88398489 453.83516879,785.88398489 453.83516879,445.77792871z M719.35554467,514.90611955L530.66577271,514.90611955 530.66577271,716.76546999 719.35554467,716.76546999z" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="15" Height="15"/>
                                         </Border>
+                                        <Border Width="30" Background="#00000000" MouseDown="AudioBtn_MouseDown" Cursor="Hand" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <Path Stretch="Fill" Fill="White" StrokeThickness="5" Data="M308.971 657.987l150.28 165.279a16 16 0 0 0 11.838 5.236c8.837 0 16-7.163 16-16v-600.67a16 16 0 0 0-5.236-11.839c-6.538-5.944-16.657-5.463-22.602 1.075l-150.28 165.279A112 112 0 0 1 226.105 403H177c-17.673 0-32 14.327-32 32v154.333c0 17.674 14.327 32 32 32h49.105a112 112 0 0 1 82.866 36.654zM177 701.333c-61.856 0-112-50.144-112-112V435c0-61.856 50.144-112 112-112h49.105a32 32 0 0 0 23.676-10.472l150.28-165.28c35.668-39.227 96.383-42.113 135.61-6.445a96 96 0 0 1 31.418 71.028v600.671c0 53.02-42.98 96-96 96a96 96 0 0 1-71.029-31.417l-150.28-165.28a32 32 0 0 0-23.675-10.472H177z m456.058-348.336c-18.47-12.118-23.621-36.915-11.503-55.386 12.118-18.471 36.916-23.621 55.387-11.503C752.495 335.675 799 419.908 799 512c0 92.093-46.505 176.325-122.058 225.892-18.471 12.118-43.269 6.968-55.387-11.503-12.118-18.471-6.968-43.268 11.503-55.386C686.303 636.07 719 576.848 719 512c0-64.848-32.697-124.07-85.942-159.003z m92.93-137.323c-18.07-12.71-22.415-37.66-9.706-55.73s37.66-22.415 55.73-9.706C888.942 232.478 960 366.298 960 512s-71.058 279.522-187.988 361.762c-18.07 12.71-43.021 8.364-55.73-9.706-12.709-18.07-8.363-43.02 9.706-55.73C821.838 740.912 880 631.38 880 512c0-119.38-58.161-228.912-154.012-296.326z" Height="16" Margin="-1,0,-1,0" Width="16"/>
+                                        </Border>
+                                        <Border Width="30" Background="#00000000" MouseDown="PlayLbBtn_MouseDown" Cursor="Hand" HorizontalAlignment="Center" Height="30" Grid.Column="6" VerticalAlignment="Center" Margin="0,0,0,0">
+                                            <Path Data="M124.342857,226.742857C124.342857,212.114286,135.314286,197.485714,153.6,197.485714L778.971429,197.485714C793.6,197.485714 808.228572,208.457143 808.228571,226.742857 804.571428,245.028571 793.6,256 775.314286,256L149.942857,256C135.314286,256,124.342857,245.028571,124.342857,226.742857z M149.942857,493.714286L533.942857,493.714286C548.571428,493.714286 563.2,504.685715 563.2,522.971429 563.2,537.6 552.228571,552.228572 533.942857,552.228571L149.942857,552.228571C135.314286,552.228571 120.685714,541.257142 120.685714,522.971429 124.342857,504.685715 135.314285,493.714286 149.942857,493.714286z M149.942857,786.285714L497.371429,786.285714C512,786.285714 526.628572,797.257143 526.628571,815.542857 526.628571,830.171428 515.657142,844.8 497.371429,844.8L149.942857,844.8C135.314286,844.8 120.685714,833.828571 120.685714,815.542857 124.342857,797.257143 135.314285,786.285714 149.942857,786.285714z M947.2,438.857143L837.485714,373.028571C826.514285,365.714285 815.542857,369.371428 804.571429,376.685714 797.257143,380.342857 793.6,391.314285 793.6,398.628571L793.6,661.942857C775.314286,650.971428 757.028571,643.657143 731.428571,643.657143 669.257142,643.657143 618.057142,694.857143 618.057143,757.028571 618.057144,819.199999 669.257143,877.714286 731.428571,877.714286 793.6,877.714286 844.8,826.514286 844.8,764.342857L844.8,446.171429 917.942857,486.4C932.571428,493.714286 947.2,490.057143 954.514286,475.428571 965.485715,464.457142 961.828572,446.171428 947.2,438.857143z M731.428571,822.857143C698.514285,822.857143 672.914285,797.257143 672.914286,764.342857 672.914287,731.428571 698.514286,705.828571 731.428571,705.828571 764.342856,705.828571 789.942857,731.428571 789.942857,764.342857 789.942857,797.257143 764.342857,822.857143 731.428571,822.857143z" Stretch="Uniform" Fill="White" StrokeThickness="5" Width="16" Height="16"/>
+                                        </Border>
                                     </Grid>
-                                    <Border Width="30" Background="#00000000" MouseDown="AudioBtn_MouseDown" Cursor="Hand" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0">
-                                        <Path Stretch="Fill" Fill="White" StrokeThickness="5" Data="M308.971 657.987l150.28 165.279a16 16 0 0 0 11.838 5.236c8.837 0 16-7.163 16-16v-600.67a16 16 0 0 0-5.236-11.839c-6.538-5.944-16.657-5.463-22.602 1.075l-150.28 165.279A112 112 0 0 1 226.105 403H177c-17.673 0-32 14.327-32 32v154.333c0 17.674 14.327 32 32 32h49.105a112 112 0 0 1 82.866 36.654zM177 701.333c-61.856 0-112-50.144-112-112V435c0-61.856 50.144-112 112-112h49.105a32 32 0 0 0 23.676-10.472l150.28-165.28c35.668-39.227 96.383-42.113 135.61-6.445a96 96 0 0 1 31.418 71.028v600.671c0 53.02-42.98 96-96 96a96 96 0 0 1-71.029-31.417l-150.28-165.28a32 32 0 0 0-23.675-10.472H177z m456.058-348.336c-18.47-12.118-23.621-36.915-11.503-55.386 12.118-18.471 36.916-23.621 55.387-11.503C752.495 335.675 799 419.908 799 512c0 92.093-46.505 176.325-122.058 225.892-18.471 12.118-43.269 6.968-55.387-11.503-12.118-18.471-6.968-43.268 11.503-55.386C686.303 636.07 719 576.848 719 512c0-64.848-32.697-124.07-85.942-159.003z m92.93-137.323c-18.07-12.71-22.415-37.66-9.706-55.73s37.66-22.415 55.73-9.706C888.942 232.478 960 366.298 960 512s-71.058 279.522-187.988 361.762c-18.07 12.71-43.021 8.364-55.73-9.706-12.709-18.07-8.363-43.02 9.706-55.73C821.838 740.912 880 631.38 880 512c0-119.38-58.161-228.912-154.012-296.326z" Height="16" Margin="-1,0,-1,0" Width="16"/>
-                                    </Border>
-                                    <Border Width="30" Background="#00000000" MouseDown="PlayLbBtn_MouseDown" Cursor="Hand" Margin="0,0,20,0" HorizontalAlignment="Right" Height="30">
-                                        <Path Data="M124.342857,226.742857C124.342857,212.114286,135.314286,197.485714,153.6,197.485714L778.971429,197.485714C793.6,197.485714 808.228572,208.457143 808.228571,226.742857 804.571428,245.028571 793.6,256 775.314286,256L149.942857,256C135.314286,256,124.342857,245.028571,124.342857,226.742857z M149.942857,493.714286L533.942857,493.714286C548.571428,493.714286 563.2,504.685715 563.2,522.971429 563.2,537.6 552.228571,552.228572 533.942857,552.228571L149.942857,552.228571C135.314286,552.228571 120.685714,541.257142 120.685714,522.971429 124.342857,504.685715 135.314285,493.714286 149.942857,493.714286z M149.942857,786.285714L497.371429,786.285714C512,786.285714 526.628572,797.257143 526.628571,815.542857 526.628571,830.171428 515.657142,844.8 497.371429,844.8L149.942857,844.8C135.314286,844.8 120.685714,833.828571 120.685714,815.542857 124.342857,797.257143 135.314285,786.285714 149.942857,786.285714z M947.2,438.857143L837.485714,373.028571C826.514285,365.714285 815.542857,369.371428 804.571429,376.685714 797.257143,380.342857 793.6,391.314285 793.6,398.628571L793.6,661.942857C775.314286,650.971428 757.028571,643.657143 731.428571,643.657143 669.257142,643.657143 618.057142,694.857143 618.057143,757.028571 618.057144,819.199999 669.257143,877.714286 731.428571,877.714286 793.6,877.714286 844.8,826.514286 844.8,764.342857L844.8,446.171429 917.942857,486.4C932.571428,493.714286 947.2,490.057143 954.514286,475.428571 965.485715,464.457142 961.828572,446.171428 947.2,438.857143z M731.428571,822.857143C698.514285,822.857143 672.914285,797.257143 672.914286,764.342857 672.914287,731.428571 698.514286,705.828571 731.428571,705.828571 764.342856,705.828571 789.942857,731.428571 789.942857,764.342857 789.942857,797.257143 764.342857,822.857143 731.428571,822.857143z" Stretch="Uniform" Fill="White" StrokeThickness="5" Width="16" Height="16"/>
-                                    </Border>
                                 </Grid>
                                 <Border HorizontalAlignment="Left" Width="45" MouseDown="likeBtn_MouseDown" Background="#00000000" VerticalAlignment="Top" Height="45" Margin="10,0,0,0">
                                     <Path x:Name="lyric_like" Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="24" Height="24"/>

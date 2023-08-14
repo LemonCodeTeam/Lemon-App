@@ -25,7 +25,7 @@
     </UserControl.Resources>
     <Grid x:Name="p">
         <ScrollViewer FocusVisualStyle="{x:Null}"  Name="c_scrollviewer" Template="{DynamicResource ScrollViewerControlTemplate1}">
-            <VirtualizingStackPanel Name="c_lrc_items"/>
+            <VirtualizingStackPanel Name="c_lrc_items" VirtualizingPanel.IsVirtualizing="True"/>
         </ScrollViewer>
 
     </Grid>
