@@ -58,6 +58,8 @@ namespace LemonApp
         LyricView lv;
         bool isLoading = false;
         public NowPage np;
+
+        private bool HasConnectedToMyToolBar = false;
         #endregion
         #region 任务栏 字段
         TabbedThumbnail TaskBarImg;
@@ -249,11 +251,10 @@ namespace LemonApp
                     mini.lyric.Text = lrc;
                     m_lyric.Text = lrc;
 
-                    if (Settings.USettings.BindMyToolBar&& MsgHelper.FindWindow(null, "MyToolBar")!=IntPtr.Zero) 
+                    //--------------MyToolBar Lyric Data--------------
+                    if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
                     {
-                        Socket clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        await clientSocket.ConnectAsync("127.0.0.1", 3230);
-                        await clientSocket.SendAsync(Encoding.UTF8.GetBytes(lrc), SocketFlags.None);
+                        await SendMsgToMyToolBar(lrc);
                     }
 
                     var ptr=MsgHelper.FindWindow(null, "MyToolBar");
@@ -377,9 +378,9 @@ namespace LemonApp
             //----Load Mini-----------------
             mini = new MiniPlayer(this);
             //--------去除可恶的焦点边缘线
-        //    UIHelper.G(Page);
+            //    UIHelper.G(Page);
             #endregion
-            #region Part3
+            #region Part3 Login
             //--------读取登录数据------
             await Settings.LoadLocaSettings();
             if (!string.IsNullOrEmpty(Settings.LSettings.qq))
@@ -403,6 +404,9 @@ namespace LemonApp
             ClHomePage = new HomePage(this);
             ContentPage.Children.Add(ClHomePage);
             NSPage(new MeumInfo(ClHomePage, Meum_MusicKu), true, false);
+            //-----Connect to MyToolBar
+            if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
+                await SendMsgToMyToolBar("Start", "LemonAppOrd");
         }
 
         private void Lv_ClickLyric(object sender, MouseButtonEventArgs e)
@@ -901,9 +905,15 @@ namespace LemonApp
             SettingsPage_AboutPage.Children.Add((Grid)XamlReader.Parse(data));
             SettingsPage_NSPage(SettingsPage_AboutPage);
         }
-        private void BindMyToolBar_Click(object sender, RoutedEventArgs e)
+        private async void BindMyToolBar_Click(object sender, RoutedEventArgs e)
         {
             Settings.USettings.BindMyToolBar = (bool)BindMyToolBar.IsChecked;
+            if (MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
+            {
+                if (Settings.USettings.BindMyToolBar)
+                    await SendMsgToMyToolBar("Start", "LemonAppOrd");
+                else await SendMsgToMyToolBar("Exit", "LemonAppOrd");
+            }
         }
         private async void UserTX_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
@@ -4174,7 +4184,11 @@ namespace LemonApp
                      if (Settings.USettings.LyricAppBarOpen)
                          lyricTa.Close();
                      else lyricToast.Close();
-                 try
+                 if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero) 
+                 {
+                     await SendMsgToMyToolBar("Exit", "LemonAppOrd");
+                 }
+                     try
                  {
                      mp.Free();
                      notifyIcon.Dispose();
@@ -4195,6 +4209,7 @@ namespace LemonApp
                  }
                  Settings.USettings.PlayingIndex = PlayDL_List.Items.IndexOf(MusicData);
                  await Settings.SaveSettingsTaskAsync();
+
                  Application.Current.Shutdown();
 
              };
@@ -4268,6 +4283,12 @@ namespace LemonApp
         private const int WM_HOTKEY = 0x0312;
         #endregion
         #region 进程通信
+        private async Task SendMsgToMyToolBar(string data,string type="LemonAppLyricData") {
+            string lrcdata = "{\"Sign\":\""+type+"\",\"Data\":\"" + data + "\"}";
+            Socket clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            await clientSocket.ConnectAsync("127.0.0.1", 3230);
+            await clientSocket.SendAsync(Encoding.UTF8.GetBytes(lrcdata), SocketFlags.None);
+        }
         private void LoadSEND_SHOW()
         {
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
