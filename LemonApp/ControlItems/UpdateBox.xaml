@@ -55,7 +55,7 @@
         <Border x:Name="CloseBtn" Width="20" Height="20" HorizontalAlignment="Right"  Margin="0,5,5,0" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown" Background="#00000000">
             <Path Data="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Stretch="Uniform" Fill="#FF474747" Width="10"/>
         </Border>
-        <ProgressBar x:Name="pro" Height="5" Margin="20,188,20,10" VerticalAlignment="Top" Foreground="#FF4EB7FB" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Background="#FFF0F0F0" Visibility="Collapsed"/>
+        <ProgressBar x:Name="pro" Height="5" Maximum="100" Margin="20,188,20,10" VerticalAlignment="Top" Foreground="#FF4EB7FB" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" Background="#FFF0F0F0" Visibility="Collapsed"/>
 
     </Grid>
 </Window>

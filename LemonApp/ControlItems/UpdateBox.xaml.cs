@@ -16,9 +16,11 @@ namespace LemonApp
     /// </summary>
     public partial class UpdateBox : Window
     {
-        public UpdateBox(string ver, string des)
+        string _url;
+        public UpdateBox(string ver, string des,string url)
         {
             InitializeComponent();
+            _url = url;
             con.Text = "最新版:" + ver + "\r\n" +
                 des.Replace("#", "\r\n#");
         }
@@ -47,19 +49,22 @@ namespace LemonApp
            hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-user", "?1");
            hc.DefaultRequestHeaders.TryAddWithoutValidation("upgrade-insecure-requests", "1");
            hc.DefaultRequestHeaders.TryAddWithoutValidation("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
-            var response =await hc.GetAsync("https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip", HttpCompletionOption.ResponseHeadersRead);
+            var response =await hc.GetAsync(_url);
             using Stream st = await response.Content.ReadAsStreamAsync();
-            pro.Maximum = st.Length;
+            var length = (long)response.Content.Headers.ContentLength;
+            int total = 0;
             using (var filestream = new FileStream(xpath, FileMode.Create,FileAccess.ReadWrite))
             {
-                byte[] bArry=new byte[4096];
+                byte[] bArry=new byte[409600];
                 int size = await st.ReadAsync(bArry);
-                pro.Value += size;
+                total += size;
                 while(size>0)
                 {
                     await filestream.WriteAsync(bArry.AsMemory(0, size));
                     size = await st.ReadAsync(bArry);
-                    pro.Value += size;
+                    total += size;
+                    int process = (int)(total*100/ length);
+                    pro.Value = process;
                 }
                 filestream.Close();
             }

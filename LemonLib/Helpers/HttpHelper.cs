@@ -162,7 +162,7 @@ namespace LemonLib
             hc.DefaultRequestHeaders.TryAddWithoutValidation("AcceptLanguage","zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.5;q=0.4");
             hc.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
             hc.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40");
-            var myrp = await hc.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            var myrp = await hc.GetAsync(url);
             using Stream st = await myrp.Content.ReadAsStreamAsync();
             using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
             {

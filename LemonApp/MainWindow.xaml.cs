@@ -1534,9 +1534,10 @@ namespace LemonApp
                 var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/WindowsUpdate.json"));
                 string v = o["version"].ToString();
                 string dt = o["description"].ToString().Replace("#", "\n");
+                string url = o["url"].ToString();
                 if (int.Parse(v) > int.Parse(App.EM))
                 {
-                    Dispatcher.Invoke(() => { new UpdateBox(v, dt).Show(); });
+                    Dispatcher.Invoke(() => { new UpdateBox(v, dt,url).Show(); });
                 }
             });
             t.Start();
