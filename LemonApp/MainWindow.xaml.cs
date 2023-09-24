@@ -541,6 +541,16 @@ namespace LemonApp
         private string lastlyric = "";
         private LyricBar lyricTa = null;
         private Toast lyricToast = null;
+        private void LoadLyricBar()
+        {
+            lyricTa = new LyricBar();
+            lyricTa.LyricFontSize = Settings.USettings.LyricAppBar_Size;
+            lyricTa.PopOut.MouseUp += PopOut_MouseUp;
+            lyricTa.Show();
+            lyricTa.PlayNext = () => PlayControl_PlayNext(null, null);
+            lyricTa.Play = () => PlayBtn_MouseDown(null, null);
+            lyricTa.PlayLast = () => PlayControl_PlayLast(null, null);
+        }
         private void LoadMusicData()
         {
             //-------[登录]用户的头像、名称等配置加载
@@ -597,11 +607,7 @@ namespace LemonApp
             {
                 if (Settings.USettings.LyricAppBarOpen)
                 {
-                    lyricTa = new LyricBar();
-                    lyricTa.LyricFontSize = Settings.USettings.LyricAppBar_Size;
-                    SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
-                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
-                    lyricTa.Show();
+                    LoadLyricBar();
                 }
                 else
                 {
@@ -687,6 +693,7 @@ namespace LemonApp
             Settings_MemoryFlush.IsChecked = Settings.USettings.MemoryFlush;
             BindMyToolBar.IsChecked = Settings.USettings.BindMyToolBar;
             LyricAppBar_EnableTrans.IsChecked = Settings.USettings.LyricAppBarEnableTrans;
+            SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
         }
 
         private void PopOut_MouseUp(object sender, MouseButtonEventArgs e)
@@ -3092,9 +3099,7 @@ namespace LemonApp
                 Settings.USettings.DoesOpenDeskLyric = true;
                 if (Settings.USettings.LyricAppBarOpen)
                 {
-                    lyricTa = new LyricBar();
-                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
-                    lyricTa.Show();
+                    LoadLyricBar();
                 }
                 else {
                     lyricToast = new Toast("", true);
@@ -3382,9 +3387,7 @@ namespace LemonApp
                 else
                 {
                     lyricToast.Close();
-                    lyricTa = new LyricBar();
-                    lyricTa.PopOut.MouseUp += PopOut_MouseUp;
-                    lyricTa.Show();
+                    LoadLyricBar();
                 }
             }
             Settings.USettings.LyricAppBarOpen = (bool)OpenLyricAppBar.IsChecked;

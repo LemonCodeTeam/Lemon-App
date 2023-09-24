@@ -25,10 +25,13 @@ namespace LemonApp
         public LyricBar()
         {
             InitializeComponent();
+            Closing += delegate {
+                AppBarFunctions.SetAppBar(this, ABEdge.None);
+            };
         }
         public int LyricFontSize { 
             get => (int)text.FontSize;
-            set { int v=value; text.FontSize = v; Height = value+6; }
+            set { int v=value; text.FontSize = v; Height = value+8; }
         }
         public void Update(string txt) {
             text.Text = txt.Replace("\r\n","   ");
@@ -36,6 +39,8 @@ namespace LemonApp
         private WindowAccentCompositor wac = null;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            AppBarFunctions.SetAppBar(this, ABEdge.Top);
+
             WindowInteropHelper wndHelper = new WindowInteropHelper(this);
             int exStyle = (int)GetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
@@ -58,6 +63,21 @@ namespace LemonApp
             Color.FromArgb(200, 0, 0, 0);
             wac.DarkMode = darkmode;
             wac.IsEnabled= true;
+        }
+        public Action PlayLast,Play,PlayNext;
+        private void PlayControl_PlayLast(object sender, MouseButtonEventArgs e)
+        {
+            PlayNext?.Invoke();
+        }
+
+        private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Play?.Invoke();
+        }
+
+        private void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
+        {
+            PlayNext?.Invoke();
         }
     }
 }
