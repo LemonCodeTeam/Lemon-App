@@ -37,6 +37,7 @@ namespace LemonApp
         public Dictionary<double, LrcModel> Lrcs = new();
         private List<Run> TransRunReference = new();
         private List<Run> RomajiRunReference = new();
+        private double _FontSize;
         public LrcModel foucslrc { get; set; }
 
         public SolidColorBrush NormalLrcColor;
@@ -50,6 +51,7 @@ namespace LemonApp
         #region 
         public void SetFontSize(int size)
         {
+            _FontSize = size;
             foreach (TextBlock tb in c_lrc_items.Children)
             {
                 tb.FontSize = size;
@@ -155,6 +157,7 @@ namespace LemonApp
                             trans = lrc != string.Empty && !a.Contains("//") ? a : null;
                         }
 
+                        _FontSize = Settings.USettings.LyricFontSize;
                         TextBlock c_lrcbk = new()
                         {
                             FontSize = Settings.USettings.LyricFontSize,
@@ -293,31 +296,36 @@ namespace LemonApp
                 if (s.Count() > 0)
                 {
                     LrcModel lm = s.Last().Value;
+                    if (foucslrc == lm) return;
                     if (needScrol)
                     {
                         foucslrc.c_LrcTb.Foreground = NormalLrcColor;
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
+                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty, new DoubleAnimation(_FontSize , TimeSpan.FromSeconds(0.3)));
                     }
-
                     foucslrc = lm;
                     if (needScrol)
                     {
                         foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
+                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,new DoubleAnimation(_FontSize + 5, TimeSpan.FromSeconds(0.4)) {
+                            EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut }
+                        });
                         ResetLrcviewScroll();
                     }
                     NextLyric(foucslrc.LrcText, foucslrc.LrcTransText);
+                    
                 }
             }
         }
         #endregion
         #region 
-        public void ResetLrcviewScroll()
+        private void ResetLrcviewScroll()
         {
             GeneralTransform gf = foucslrc.c_LrcTb.TransformToVisual(c_lrc_items);
             Point p = gf.Transform(new Point(0, 0));
-            double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 60;
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(500));
+            double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 120;
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(400));
             da.EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut };
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }

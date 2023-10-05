@@ -1019,6 +1019,11 @@ jpg
             return dt;
         }
         #endregion
+        #region 我的音乐基因
+        public static void GetMyMusicDNA() { 
+        
+        }
+        #endregion
         #region 歌手
         /// <summary>
         /// 用于歌手页的数据

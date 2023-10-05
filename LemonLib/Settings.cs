@@ -239,7 +239,7 @@ namespace LemonLib
             public bool DoesOpenDeskLyric { get; set; } = true;
             //是否打开歌词AppBar
             public bool LyricAppBarOpen { get; set; } = false;
-            public int LyricAppBar_Size { get; set; } = 14;
+            public int LyricAppBar_Size { get; set; } = 16;
             public bool LyricAppBarEnableTrans { get; set; } = false;
             public bool BindMyToolBar { get; set; } = true;
 

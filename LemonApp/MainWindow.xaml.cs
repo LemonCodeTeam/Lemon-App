@@ -245,7 +245,7 @@ namespace LemonApp
             lv.NextLyric += async (lrc, trans) =>
             {
                 //主要用于桌面歌词的显示
-                if (lrc != "" && lastlyric != lrc)
+                if (lrc != "")
                 {
                     //有歌词更新
                     mini.lyric.Text = lrc;
@@ -265,13 +265,11 @@ namespace LemonApp
                         if (Settings.USettings.LyricAppBarOpen)
                             lyricTa.Update(lrc + (Settings.USettings.LyricAppBarEnableTrans ? (trans == null ? "" : ("\r\n" + trans)) : ""));
                         else lyricToast.Update(lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : ""));
-                        lastlyric = lrc;
                     }
                     if (Settings.USettings.IsLyricImm)
                     {
                         LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
                         await Task.Delay(450);
-                        lastlyric = lrc;
                         ImmTb_Lyric.Text = "";
                         ImmTb_Trans.Text = "";
                         LyricImm_tb.Opacity = 0;
@@ -538,14 +536,13 @@ namespace LemonApp
         }
         private double now = 0;
         private double all = 0;
-        private string lastlyric = "";
         private LyricBar lyricTa = null;
         private Toast lyricToast = null;
         private void LoadLyricBar()
         {
             lyricTa = new LyricBar();
             lyricTa.LyricFontSize = Settings.USettings.LyricAppBar_Size;
-            lyricTa.PopOut.MouseUp += PopOut_MouseUp;
+            lyricTa.PopOutEvent=()=> PopOut_MouseUp();
             lyricTa.Show();
             lyricTa.PlayNext = () => PlayControl_PlayNext(null, null);
             lyricTa.Play = () => PlayBtn_MouseDown(null, null);
@@ -696,7 +693,7 @@ namespace LemonApp
             SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
         }
 
-        private void PopOut_MouseUp(object sender, MouseButtonEventArgs e)
+        private void PopOut_MouseUp()
         {
             OpenLyricAppBar.IsChecked = Settings.USettings.LyricAppBarOpen = false;
             lyricTa.Close();

@@ -6,7 +6,7 @@ Lemon App 是一款基于QQ音乐的在线音乐播放器。
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/TwilightLemon/Lemon-App/blob/master/LICENSE)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
-[![Download](https://img.shields.io/badge/Download-Lemon%20App-%23FF4D5B.svg?style=flat-squar)](https://files-cdn.cnblogs.com/files/TwilightLemon/win-release.zip)
+[![Release](https://img.shields.io/badge/Release-Lemon%20App-%23FF4D5B.svg?style=flat-squar)](https://gitee.com/TwilightLemon/LemonAppDynamics/releases)
 [![HitCount](http://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg)](http://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App)
  
 ### UI界面
@@ -17,12 +17,12 @@ Lemon App 是一款基于QQ音乐的在线音乐播放器。
 ![歌手](https://raw.githubusercontent.com/TwilightLemon/Data/master/pc_singer.jpg)
 
 ### 运行环境
-win7~win11 x64
-powered by .NET 6 on WPF
-p.s. 32位平台的自行编译
+win7~win11 x64  
+powered by .NET 6 on WPF  
+p.s. 32位平台请自行编译
 
 #### 软件版权
-本应用由 [Twilight./Lemon(https://lemonapp.tk)(QQ:2728578956)](https://lemonapp.tk) 开发，转载和使用请保留原网址和版权信息
+本应用由 [Twilight./Lemon(https://twlm.space)(QQ:2728578956)](https://twlm.space) 开发，转载和使用请保留原网址和版权信息
 使用和传播请遵守GPL以及Anti 996协议
 
 #### 免责声明

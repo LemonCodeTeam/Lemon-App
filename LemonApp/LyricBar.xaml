@@ -5,9 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="LyricBar" Height="20" Width="800" WindowStyle="None" Background="{x:Null}" Loaded="Window_Loaded" AllowsTransparency="True" ShowInTaskbar="False">
+    <Window.Resources>
+        <Storyboard x:Key="TouchAni_Last">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="path_last" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="30,-40,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.2000000" Value="30,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.4000000" Value="30,0,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="30,-40,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="TouchAni_Next">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="path_next" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:00" Value="0,-40,125,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0,0,125,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.4000000" Value="0,0,125,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:00.6000000" Value="0,-40,125,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="TouchDown" SourceName="PlayLastBtn">
+            <BeginStoryboard Storyboard="{DynamicResource TouchAni_Last}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="TouchDown" SourceName="PlayNextBtn">
+            <BeginStoryboard Storyboard="{DynamicResource TouchAni_Next}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Grid Background="{DynamicResource ControlPageBrush}">
         <TextBlock x:Name="text" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" VerticalAlignment="Center" FontSize="14"/>
-        <Border x:Name="PopOut" HorizontalAlignment="Left" Margin="10,0,0,0" Width="30" Opacity="0.4">
+        <Border x:Name="PopOut" HorizontalAlignment="Left" Margin="10,0,0,0" Width="30" Opacity="0.4" MouseDown="PopOut_MouseDown">
             <Path Data="M673.92 757.12H114.56a94.08 94.08 0 0 1-94.08-94.72V103.04A94.08 94.08 0 0 1 114.56 8.96h559.36A94.08 94.08 0 0 1 768 103.04v559.36a94.72 94.72 0 0 1-94.08 94.72zM114.56 71.68a31.36 31.36 0 0 0-31.36 31.36v559.36a31.36 31.36 0 0 0 31.36 31.36h559.36a31.36 31.36 0 0 0 31.36-31.36V103.04a31.36 31.36 0 0 0-31.36-31.36z M915.2 1016.32H355.84a94.08 94.08 0 0 1-94.08-94.08V362.88A94.08 94.08 0 0 1 355.84 268.8h559.36a94.08 94.08 0 0 1 94.08 94.08v559.36a94.08 94.08 0 0 1-94.08 94.08zM355.84 331.52a31.36 31.36 0 0 0-31.36 31.36v559.36a31.36 31.36 0 0 0 31.36 31.36h559.36a31.36 31.36 0 0 0 31.36-31.36V362.88a31.36 31.36 0 0 0-31.36-31.36z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5" Width="10" Height="10"/>
         </Border>
         <Grid x:Name="PlayControl">
@@ -16,12 +74,12 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Border x:Name="PlayLastBtn" Background="#00000000" Margin="65,0,0,0" MouseDown="PlayControl_PlayLast">
-                <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ResuColorBrush}" Width="10" Height="15" Opacity="0.3" HorizontalAlignment="Left" Margin="30,0,0,0"/>
+            <Border x:Name="PlayLastBtn" Background="#00000000" Margin="65,0,0,0" TouchDown="PlayControl_PlayLast">
+                <Path x:Name="path_last" Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ResuColorBrush}" Width="10" Height="15" Opacity="0.3" HorizontalAlignment="Left" Margin="30,-40,0,0"/>
             </Border>
-            <Border x:Name="PlayBtn" MouseDown="PlayBtn_MouseDown" Background="#00000000" Grid.Column="1"/>
-            <Border x:Name="PlayNextBtn" MouseDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="2">
-                <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ResuColorBrush}" Width="10" Height="15" Opacity="0.3" HorizontalAlignment="Right" Margin="0,0,125,0"/>
+            <Border x:Name="PlayBtn" TouchDown="PlayBtn_TouchDown" Background="#00000000" Grid.Column="1"/>
+            <Border x:Name="PlayNextBtn" TouchDown="PlayControl_PlayNext" Background="#00000000" Grid.Column="2">
+                <Path x:Name="path_next" Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ResuColorBrush}" Width="10" Height="15" Opacity="0.3" HorizontalAlignment="Right" Margin="0,-40,125,0"/>
             </Border>
         </Grid>
 

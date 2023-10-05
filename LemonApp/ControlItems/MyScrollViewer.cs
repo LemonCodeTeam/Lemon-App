@@ -1,5 +1,8 @@
 ﻿using LemonLib;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -7,7 +10,7 @@ using System.Windows.Media.Animation;
 namespace LemonApp
 {
     /// <summary>
-    /// 全局ScrollView 行为 滚动
+    /// 全局ScrollViewer 行为 滚动
     /// </summary>
     public class MyScrollViewer : ScrollViewer
     {
@@ -30,8 +33,7 @@ namespace LemonApp
         {
             if (Settings.USettings.Animation_Scroll)
             {
-                double WheelChange = e.Delta * 0.5;
-                double newOffset = LastLocation - (WheelChange * 2);
+                double newOffset = LastLocation - e.Delta;
                 ScrollToVerticalOffset(LastLocation);
                 if (newOffset < 0)
                     newOffset = 0;

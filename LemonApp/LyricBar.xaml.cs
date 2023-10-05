@@ -64,18 +64,23 @@ namespace LemonApp
             wac.DarkMode = darkmode;
             wac.IsEnabled= true;
         }
-        public Action PlayLast,Play,PlayNext;
-        private void PlayControl_PlayLast(object sender, MouseButtonEventArgs e)
+        public Action PlayLast,Play,PlayNext,PopOutEvent;
+        private void PlayControl_PlayLast(object sender, TouchEventArgs e)
         {
-            PlayNext?.Invoke();
+            PlayLast?.Invoke();
         }
 
-        private void PlayBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        private void PopOut_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            PopOutEvent?.Invoke();
+        }
+
+        private void PlayBtn_TouchDown(object sender, TouchEventArgs e)
         {
             Play?.Invoke();
         }
 
-        private void PlayControl_PlayNext(object sender, MouseButtonEventArgs e)
+        private void PlayControl_PlayNext(object sender, TouchEventArgs e)
         {
             PlayNext?.Invoke();
         }
