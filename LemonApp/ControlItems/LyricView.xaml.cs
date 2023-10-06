@@ -32,6 +32,8 @@ namespace LemonApp
             public string LrcRomajiText { get; set; }
             public double Time { get; set; }
         }
+
+        private const double LyricOpacity = 0.8;
         #endregion
         #region Properties
         public Dictionary<double, LrcModel> Lrcs = new();
@@ -163,7 +165,8 @@ namespace LemonApp
                             FontSize = Settings.USettings.LyricFontSize,
                             Foreground = NormalLrcColor,
                             TextWrapping = TextWrapping.Wrap,
-                            TextAlignment = TextAlignment
+                            TextAlignment = TextAlignment,
+                            Opacity=LyricOpacity
                         };
                         c_lrcbk.MouseDown += ClickLyric;
 
@@ -289,6 +292,7 @@ namespace LemonApp
                 foucslrc = Lrcs.Values.First();
                 foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                 foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
+                foucslrc.c_LrcTb.Opacity = 1;
             }
             else
             {
@@ -301,17 +305,19 @@ namespace LemonApp
                     {
                         foucslrc.c_LrcTb.Foreground = NormalLrcColor;
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
-                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty, new DoubleAnimation(_FontSize , TimeSpan.FromSeconds(0.3)));
+                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty, null);
+                        foucslrc.c_LrcTb.Opacity = LyricOpacity;
                     }
                     foucslrc = lm;
                     if (needScrol)
                     {
+                        ResetLrcviewScroll();
+                        foucslrc.c_LrcTb.Opacity = 1;
                         foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
-                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,new DoubleAnimation(_FontSize + 5, TimeSpan.FromSeconds(0.4)) {
+                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,new DoubleAnimation(_FontSize + 6, TimeSpan.FromSeconds(0.4)) {
                             EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut }
                         });
-                        ResetLrcviewScroll();
                     }
                     NextLyric(foucslrc.LrcText, foucslrc.LrcTransText);
                     

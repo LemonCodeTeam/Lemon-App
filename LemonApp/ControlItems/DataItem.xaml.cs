@@ -302,17 +302,21 @@ namespace LemonApp
 
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (Buttons == null) LoadUI();
-            Buttons.Visibility = Visibility.Visible;
-            if (ns)
-                wpl.Margin = new Thickness(60, 10, 80, 10);
-            else wpl.Margin = new Thickness(15, 10, 80, 10);
-            if (needb) DeleteBtn.Visibility = Visibility.Visible;
+            if (!AppConstants.TouchDown)
+            {
+                if (Buttons == null) LoadUI();
+                Buttons.Visibility = Visibility.Visible;
+                if (ns)
+                    wpl.Margin = new Thickness(60, 10, 80, 10);
+                else wpl.Margin = new Thickness(15, 10, 80, 10);
+                if (needb) DeleteBtn.Visibility = Visibility.Visible;
+            }
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
-            Buttons.Visibility = Visibility.Collapsed;
+            if (Buttons != null)
+                Buttons.Visibility = Visibility.Collapsed;
             DeleteBtn.Visibility = Visibility.Collapsed;
             if (ns)
                 wpl.Margin = new Thickness(60, 10, 10, 10);

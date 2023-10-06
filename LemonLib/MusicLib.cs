@@ -723,10 +723,14 @@ jpg
         /// <param name="tb"></param>
         /// <param name="pb"></param>
         /// <param name="Finished"></param>
-        public async void GetGDbyWYAsync(string id, Window x, TextBlock tb, ProgressBar pb, Action Finished)
+        public async Task GetGDbyWYAsync(string id,Action<int> GetCount,Action<int,string> GetItem, Action Finished)
         {
-            string data = await HttpHelper.GetWebAsync($"http://music.163.com/api/playlist/detail?id={id}&updateTime=-1");
+            string data = await HttpHelper.GetWebAsync($"https://music.163.com/api/playlist/detail?id={id}");
+            MainClass.DebugCallBack("GETWYGD",data);
             JObject o = JObject.Parse(data);
+            if (o["code"].ToString() != "200") {
+                GetItem(0, o["msg"].ToString());
+            }
             var dt = new MusicGData();
             string ids = "";
             string typelist = "";
@@ -735,7 +739,7 @@ jpg
             dt.id = pl["id"].ToString();
             dt.pic = pl["coverImgUrl"].ToString();
             var pl_t = pl["tracks"];
-            x.Dispatcher.Invoke(() => { pb.Maximum = pl_t.Count(); });
+            GetCount(pl_t.Count());
             int i = 1;
             foreach (var pl_t_i in pl_t)
             {
@@ -752,9 +756,8 @@ jpg
                     dt.Data.Add(dtv);
                     ids += dtv.MusicID + ",";
                     typelist += "13,";
-                    x.Dispatcher.Invoke(() => { pb.Value = i; tb.Text = dtv.MusicName + " - " + dtv.SingerText; });
+                    GetItem(i, dtv.MusicName + " - " + dtv.SingerText);
                 }
-                else x.Dispatcher.Invoke(() => { pb.Value--; });
                 i++;
             }
             ids = ids.Substring(0, ids.LastIndexOf(","));
@@ -763,10 +766,7 @@ jpg
             await Task.Delay(500);
             string dir = await GetGDdiridByNameAsync(dt.name);
             var amt = await AddMusicToGDPLAsync(ids, dir, typelist);
-            x.Dispatcher.Invoke(() =>
-            {
-                Finished();
-            });
+            Finished();
         }
 
         #endregion

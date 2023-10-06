@@ -28,6 +28,7 @@ namespace LemonApp
             grid.Children.Add(DeleteBtn);
             MouseEnter += delegate
             {
+                if (AppConstants.TouchDown) return;
                 DeleteBtn.Visibility = Visibility.Visible;
             };
             MouseLeave += delegate

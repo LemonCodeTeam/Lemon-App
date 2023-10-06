@@ -24,7 +24,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1265";
+        public static string EM = "1270";
         #region 启动时 进程检测 配置 登录
         //放在全局变量  防止GC回收  导致失效
         private System.Threading.Mutex mutex;
@@ -174,6 +174,7 @@ namespace LemonApp
     #region 应用内常量
     public class AppConstants
     {
+        public static bool TouchDown = false;
         public static MusicGLikeData MusicGDataLike = new();
         public static DataItem LastItem;
         public static MusicGData MGData_Now;

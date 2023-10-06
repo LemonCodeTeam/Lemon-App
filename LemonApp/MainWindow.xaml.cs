@@ -169,6 +169,13 @@ namespace LemonApp
             {
                 Page.Background = new SolidColorBrush(c);
             });
+            //----------优化触屏
+            TouchDown += delegate {
+                AppConstants.TouchDown = true;
+            };
+            TouchUp += delegate {
+                AppConstants.TouchDown = false;
+            };
             //---------Popup的移动事件
             LocationChanged += delegate
             {
@@ -3734,12 +3741,14 @@ namespace LemonApp
             {
                 IntoGDPage_main.Visibility = Visibility.Collapsed;
                 IntoGDPage_loading.Visibility = Visibility.Visible;
-                ml.GetGDbyWYAsync(IntoGDPage_id.Text, this, IntoGDPage_ps_name, IntoGDPage_ps_jd,
+                await ml.GetGDbyWYAsync(IntoGDPage_id.Text,
+                    (count)=> { IntoGDPage_ps_jd.Maximum = count; },
+                    (i, title) => { IntoGDPage_ps_jd.Value = i; IntoGDPage_ps_name.Text = title; },
                     () =>
                     {
                         IntoGDPop.IsOpen = false;
                         GDBtn_MouseDown(null, null);
-                    });
+                    });;
             }
         }
         #endregion
