@@ -15,6 +15,16 @@ namespace LemonLib
     public static class ImageHelper
     {
         #region Image类互转的拓展方法
+        public static Bitmap Snapshot(int x, int y, int width, int height)
+        {
+            Bitmap bitmap = new(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(width, height), CopyPixelOperation.SourceCopy);
+            }
+            return bitmap;
+        }
+
         [DllImport("gdi32.dll", SetLastError = true)]
         private static extern bool DeleteObject(IntPtr hObject);
         public static ImageSource ToImageSource(this Bitmap bitmap)

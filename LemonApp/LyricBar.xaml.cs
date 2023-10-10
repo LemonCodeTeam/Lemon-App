@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Interop;
 using static LemonLib.WindowStyles;
+using System.Windows.Forms;
 
 namespace LemonApp
 {
@@ -26,6 +27,7 @@ namespace LemonApp
         {
             InitializeComponent();
             Closing += delegate {
+                t.Stop();
                 AppBarFunctions.SetAppBar(this, ABEdge.None);
             };
         }
@@ -37,6 +39,7 @@ namespace LemonApp
             text.Text = txt.Replace("\r\n","   ");
         }
         private WindowAccentCompositor wac = null;
+        private Timer t = new();
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AppBarFunctions.SetAppBar(this, ABEdge.Top);
@@ -53,14 +56,35 @@ namespace LemonApp
                 Background = new SolidColorBrush(c);
             });
             wac.Color = App.BaseApp.ThemeColor == 0 ?
-            Color.FromArgb(200, 255, 255, 255) :
-            Color.FromArgb(200, 0, 0, 0);
+            Color.FromArgb(180, 255, 255, 255) :
+            Color.FromArgb(180, 0, 0, 0);
             wac.IsEnabled = true;
+
+            t.Interval = 500;
+            t.Tick += T_Tick;
+            t.Start();
         }
-        public void UpdataWindowBlurMode(bool darkmode) {
+
+        private IntPtr LockedMaxWindow =IntPtr.Zero;
+        private void T_Tick(object sender, EventArgs e)
+        {
+            var fore = WindowHelper.GetForegroundwindow();
+            if (fore.IsZoomedWindow()&&LockedMaxWindow==IntPtr.Zero)
+            {
+                LockedMaxWindow = fore;
+                UpdataWindowBlurMode(App.BaseApp.ThemeColor == 1, 240);
+            }
+
+            if (!LockedMaxWindow.IsZoomedWindow())
+            {
+                LockedMaxWindow = IntPtr.Zero;
+                UpdataWindowBlurMode(App.BaseApp.ThemeColor == 1, 180);
+            }
+        }
+        public void UpdataWindowBlurMode(bool darkmode,byte opacity=180) {
             wac.Color = App.BaseApp.ThemeColor == 0 ?
-            Color.FromArgb(200, 255, 255, 255) :
-            Color.FromArgb(200, 0, 0, 0);
+            Color.FromArgb(opacity, 255, 255, 255) :
+            Color.FromArgb(opacity, 0, 0, 0);
             wac.DarkMode = darkmode;
             wac.IsEnabled= true;
         }

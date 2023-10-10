@@ -49,6 +49,7 @@ namespace LemonApp
            hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-user", "?1");
            hc.DefaultRequestHeaders.TryAddWithoutValidation("upgrade-insecure-requests", "1");
            hc.DefaultRequestHeaders.TryAddWithoutValidation("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
+            tb.Text = "连接至服务器...";
             var response =await hc.GetAsync(_url);
             using Stream st = await response.Content.ReadAsStreamAsync();
             var length = (long)response.Content.Headers.ContentLength;

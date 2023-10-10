@@ -307,10 +307,9 @@ namespace LemonApp
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
                         foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty, null);
                         foucslrc.c_LrcTb.Opacity = LyricOpacity;
-                    }
-                    foucslrc = lm;
-                    if (needScrol)
-                    {
+
+                        foucslrc = lm;
+
                         ResetLrcviewScroll();
                         foucslrc.c_LrcTb.Opacity = 1;
                         foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
@@ -319,7 +318,7 @@ namespace LemonApp
                             EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut }
                         });
                     }
-                    NextLyric(foucslrc.LrcText, foucslrc.LrcTransText);
+                    NextLyric(lm.LrcText, lm.LrcTransText);
                     
                 }
             }

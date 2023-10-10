@@ -125,6 +125,15 @@ namespace LemonLib
     }
 
     #region Window styles
+    public static class WindowHelper {
+        [DllImport("user32", EntryPoint = "GetForegroundWindow")]
+        public  static extern IntPtr GetForegroundwindow();
+        [DllImport("user32.dll")]
+        private static extern bool IsZoomed(IntPtr hWnd);
+
+        public static bool IsZoomedWindow(this IntPtr intPtr) => IsZoomed(intPtr);
+
+    }
     public class WindowStyles
     {
         [Flags]
@@ -321,8 +330,7 @@ namespace LemonLib
 
             public Rect? DockedSize { get; set; }
 
-            public IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam,
-                                    IntPtr lParam, ref bool handled)
+            public IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam,IntPtr lParam, ref bool handled)
             {
                 if (msg == CallbackId)
                 {
@@ -417,7 +425,7 @@ namespace LemonLib
             if (!info.IsRegistered)
             {
                 info.IsRegistered = true;
-                info.CallbackId = Interop.RegisterWindowMessage("AppBarMessage");
+                info.CallbackId = Interop.RegisterWindowMessage("LemonApp_LyricBarMessage");
                 abd.uCallbackMessage = info.CallbackId;
 
                 var ret = Interop.SHAppBarMessage((int)Interop.ABMsg.ABM_NEW, ref abd);
