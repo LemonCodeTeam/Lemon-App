@@ -11,8 +11,13 @@ namespace LemonLib
         public class DnaInfo {
             public string Keyword, Title, Desc, PicUrl;
         }
+        public enum MusicQuality
+        {
+            SQ,HQ,_120k
+        }
         public class MusicUrlData {
-            public string Url, Source, Quality;
+            public string Url, Source;
+            public MusicQuality Quality;
         }
 
         public class LyricData {
@@ -144,7 +149,7 @@ namespace LemonLib
             public string ImageUrl { set; get; } = "";
             public MusicGD Album { set; get; } = new MusicGD();
             public string Mvmid { set; get; } = "";
-            public string Pz { set; get; } = "";
+            public MusicQuality Quality { set; get; }
 
             /// <summary>
             /// 相对于个人歌单里的id   用于“我喜欢”歌单

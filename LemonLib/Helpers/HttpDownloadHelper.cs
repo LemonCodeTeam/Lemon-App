@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using Un4seen.Bass;
 using static LemonLib.InfoHelper;
 
@@ -32,7 +33,10 @@ namespace LemonLib
         {
             await Task.Run(async () =>
             {
-                var Url = await MusicLib.GetUrlAsync(mData);
+                var PQ = Settings.USettings.PreferQuality;
+                MusicQuality ava = PQ == mData.Quality ? PQ : (PQ < mData.Quality ? mData.Quality : PQ);
+                var Url = await MusicLib.GetUrlAsync(mData,ava);
+                Path += MusicLib.QualityMatcher(Url.Quality)[0];
                 if (Url != null)
                 {
                     Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url.Url);

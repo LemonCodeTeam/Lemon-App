@@ -58,8 +58,6 @@ namespace LemonApp
         LyricView lv;
         bool isLoading = false;
         public NowPage np;
-
-        private bool HasConnectedToMyToolBar = false;
         #endregion
         #region 任务栏 字段
         TabbedThumbnail TaskBarImg;
@@ -698,6 +696,7 @@ namespace LemonApp
             BindMyToolBar.IsChecked = Settings.USettings.BindMyToolBar;
             LyricAppBar_EnableTrans.IsChecked = Settings.USettings.LyricAppBarEnableTrans;
             SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
+            QualityChooser.SelectedIndex = (int)Settings.USettings.PreferQuality;
         }
 
         private void PopOut_MouseUp()
@@ -2584,12 +2583,17 @@ namespace LemonApp
         }
         public async void LoadMusic(Music data, bool doesplay)
         {
-            string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID +MusicLib.QualityPatcher(data);
+            var PQ = Settings.USettings.PreferQuality;
+            MusicQuality ava = PQ == data.Quality ? PQ : (PQ < data.Quality ? data.Quality : PQ);
+            var qual = MusicLib.QualityMatcher(PQ);
+
+            string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + qual[0];
             MusicPlay_LoadProc.Value = 0;
             if (!System.IO.File.Exists(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
-                var musicurl = await MusicLib.GetUrlAsync(data);
+                var musicurl = await MusicLib.GetUrlAsync(data,ava);
+                downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + MusicLib.QualityMatcher(musicurl.Quality)[0];
                 Console.WriteLine(musicurl.Url,"MUSIC GET");
                 if (musicurl == null)
                 {
@@ -2614,7 +2618,7 @@ namespace LemonApp
                     mp.Play();
                 MusicName.Text = data.MusicName;
                 SongSource_tb.Text = musicurl.Source;
-                QualityChooser_Now.Text = musicurl.Quality;
+                QualityChooser_Now.Text =MusicLib.QualityMatcher(musicurl.Quality)[1];
             }
             else
             {
@@ -2622,7 +2626,7 @@ namespace LemonApp
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
-                QualityChooser_Now.Text = data.Pz;
+                QualityChooser_Now.Text = qual[1];
                 SongSource_tb.Text = "Local";
             }
         }
@@ -3795,7 +3799,7 @@ namespace LemonApp
                 .Replace("[I]", (DownloadDL.Count() + 1).ToString())
                 .Replace("[M]", data.MusicName)
                 .Replace("[S]", data.SingerText));
-            string file = Settings.USettings.DownloadPath + "\\"+name+MusicLib.QualityPatcher(data);
+            string file = Settings.USettings.DownloadPath + "\\" + name;
             DownloadItem di = new(data, file, DownloadDL.Count);
             di.Delete += (s) =>
             {
@@ -4321,9 +4325,9 @@ namespace LemonApp
         }
         #endregion
 
-        private void QualityChooser_MouseDown(object sender, MouseButtonEventArgs e)
+        private void QualityChooser_Confirm_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            Settings.USettings.PreferQuality = (MusicQuality)QualityChooser.SelectedIndex;
         }
     }
 }

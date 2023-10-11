@@ -168,8 +168,8 @@ namespace LemonLib
                 USettings.Animation_Scroll = bool.Parse(o["Animation_Scroll"].ToString());
             if (data.Contains("MemoryFlush"))
                 USettings.MemoryFlush = bool.Parse(o["MemoryFlush"].ToString());
-            if (data.Contains("LyricAppBarEnableTrans"))
-                USettings.LyricAppBarEnableTrans = bool.Parse(o["LyricAppBarEnableTrans"].ToString());
+            if (data.Contains("PreferQuality"))
+                USettings.PreferQuality = (MusicQuality)int.Parse(o["PreferQuality"].ToString());
 
             if (playlist.Contains("MusicGDataPlayList"))
                 USettings_Playlist= JsonConvert.DeserializeObject<UserSettings_PlayList>(playlist);
@@ -224,20 +224,36 @@ namespace LemonLib
             /// 开启罗马音译
             /// </summary>
             public bool RomajiLyric = true;
+            /// <summary>
+            /// 优先选择的音质
+            /// </summary>
+            public MusicQuality PreferQuality = 0;
             #endregion
             #region 主题配置
-            //启用圆的MusicImage?
+            /// <summary>
+            /// 启用圆的MusicImage?
+            /// </summary>
             public int IsRoundMusicImage { get; set; } = 5;
-            //启动歌词页动效
-            //0=波澜 1=无 2=转动
+            /// <summary>
+            /// 启动歌词页动效
+            /// 0=波澜 1=无 2=转动
+            /// </summary>
             public int LyricAnimationMode { get; set; } = 0;
-            //是否打开了沉浸歌词
+            /// <summary>
+            /// 是否打开了沉浸歌词
+            /// </summary>
             public bool IsLyricImm { get; set; } = false;
-            //是否打开了mini小窗
+            /// <summary>
+            /// 是否打开了mini小窗
+            /// </summary>
             public bool IsMiniOpen { get; set; } = true;
-            //是否打开桌面歌词
+            /// <summary>
+            /// 是否打开桌面歌词
+            /// </summary>
             public bool DoesOpenDeskLyric { get; set; } = true;
-            //是否打开歌词AppBar
+            /// <summary>
+            /// 是否打开歌词AppBar
+            /// </summary>
             public bool LyricAppBarOpen { get; set; } = false;
             public int LyricAppBar_Size { get; set; } = 16;
             public bool LyricAppBarEnableTrans { get; set; } = false;

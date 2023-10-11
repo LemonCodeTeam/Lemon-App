@@ -43,7 +43,7 @@ namespace LemonApp
                 {
                     try
                     {
-                        await MusicLib.GetLyric(MData.MusicID, path.Replace(".mp3", ".lrc"));
+                        await MusicLib.GetLyric(MData.MusicID, path+ ".lrc");
                     }
                     catch { }
                 }

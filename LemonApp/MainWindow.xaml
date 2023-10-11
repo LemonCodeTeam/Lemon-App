@@ -964,7 +964,7 @@
                                 </Border>
                             </Border>
 
-                            <Border x:Name="QualityChooser" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="200,0,0,-2"  Background="#00000000" Cursor="Hand" MouseDown="QualityChooser_MouseDown" >
+                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="200,0,0,-2"  Background="#00000000" Cursor="Hand" >
                                 <Border  BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7"  Background="#00000000" Width="30" Height="18">
                                     <TextBlock x:Name="QualityChooser_Now"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="SQ" FontWeight="Bold" Background="Transparent" Margin="0,0,0,1"/>
                                 </Border>
@@ -1054,7 +1054,7 @@
                                     <LemonApp:BottomTick x:Name="SettingsPage_Feedback" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="反馈" MouseDown="SettingsPage_Feedback_MouseDown"/>
                                     <LemonApp:BottomTick x:Name="SettingsPage_About" HorizontalAlignment="Left" Width="50" Height="40" Margin="40,0,0,0" Text="关于" MouseDown="SettingsPage_About_MouseDown"/>
                                 </WrapPanel>
-                                <Grid x:Name="SettingsPage_Download" Margin="0,10,0,0" Height="150">
+                                <Grid x:Name="SettingsPage_Download" Height="264">
                                     <CheckBox x:Name="DownloadWithLyric" Content="下载带歌词" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,105,0,0" IsChecked="True" BorderBrush="{DynamicResource ResuColorBrush}" Foreground="{DynamicResource ResuColorBrush}" Click="DownloadWithLyric_Click" Style="{DynamicResource CheckBoxStyle}"/>
                                     <TextBox x:Name="CachePathTb" TextWrapping="Wrap" Text="" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="57,35,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="下载&amp;缓存目录" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Width="181" Height="23" FontWeight="Bold"/>
@@ -1068,6 +1068,14 @@
                                     <TextBox x:Name="DownloadNameTb" TextWrapping="Wrap" Text="[I].  [M] - [S]" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="346,125,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
                                     <TextBlock HorizontalAlignment="Left" Margin="0,130,0,-49" TextWrapping="Wrap" Text="下载文件名(序号用[I]表示  歌曲名用[M]表示  歌手名用[S]表示):" VerticalAlignment="Top" Width="341" Foreground="{DynamicResource ResuColorBrush}"/>
                                     <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
+                                    <ComboBox x:Name="QualityChooser" Template="{DynamicResource ComboBoxTemplate}"  Margin="57,151,0,0" Background="#07000000" SelectedIndex="0" Width="60" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="{DynamicResource PlayDLPage_Font_Most}">
+                                        <ComboBoxItem Content="SQ"/>
+                                        <ComboBoxItem Content="HQ" />
+                                        <ComboBoxItem Content="渣渣"/>
+                                        <LemonApp:MDButton x:Name="DownloadNameOK复制__C_" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
+                                    </ComboBox>
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,156,0,0" TextWrapping="Wrap" Text="优先品质:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
+                                    <LemonApp:MDButton x:Name="QualityChooser_Confirm" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Margin="122,152,0,0" TName="确定" Width="50" cr="12" pData="{x:Null}" MouseDown="QualityChooser_Confirm_MouseDown"/>
 
                                 </Grid>
                                 <Grid x:Name="SettingsPage_KeysPage" Height="180" Margin="0,10,0,0" Visibility="Collapsed">

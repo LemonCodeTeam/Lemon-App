@@ -118,9 +118,9 @@ namespace LemonLib
                         };
                     var file = dsli["file"];
                     if (file["size_320mp3"].ToString() != "0")
-                        m.Pz = "HQ";
+                        m.Quality = MusicQuality.HQ;
                     if (file["size_flac"].ToString() != "0")
-                        m.Pz = "SQ";
+                        m.Quality = MusicQuality.SQ;
                     m.Mvmid = dsli["mv"]["vid"].ToString();
                     dt.Add(m);
             }
@@ -502,9 +502,9 @@ jpg
                             Name = c0si["albumname"].ToString()
                         };
                     if (c0si["size320"].ToString() != "0")
-                        m.Pz = "HQ";
+                        m.Quality = MusicQuality.HQ;
                     if (c0si["sizeflac"].ToString() != "0")
-                        m.Pz = "SQ";
+                        m.Quality = MusicQuality.SQ;
                     m.Mvmid = c0si["vid"].ToString();
                     m.Littleid = dt.ids[index];
                     dt.Data.Add(m);
@@ -775,10 +775,18 @@ jpg
         #endregion
         #region 播放相关 获取链接
 
-        public static string QualityPatcher(Music m)
+        /// <summary>
+        /// 获取音质对应文件拓展名
+        /// 0:filetype 1:title
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
+        public static string[] QualityMatcher(MusicQuality m)
         {
-            return m.Pz switch { 
-            "SQ"=>".flac",_=>".mp3"
+            return m switch {
+                MusicQuality.SQ =>new string[2]{".flac","SQ"},
+                MusicQuality.HQ => new string[2] { ".mp3", "HQ" },
+                MusicQuality._120k => new string[2] { ".mp3", "120k" }
             };
         }
 
@@ -787,21 +795,30 @@ jpg
         /// </summary>
         /// <param name="Musicid"></param>
         /// <returns>string[] 0:url 1:From where</returns>
-        public static async Task<MusicUrlData> GetUrlAsync(Music d)
+        public static async Task<MusicUrlData> GetUrlAsync(Music d, MusicQuality PQ)
         {
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
+
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From gcsp-------------------");
-            var data = await Extension.GetMusicUrl(d.MusicID,d.Pz switch {"SQ"=>Quality.sq,"HQ"=>Quality.hq,_=>Quality.mp3});
+            Quality quality = (Quality)(int)PQ;
+            var data = await Extension.GetMusicUrl(d.MusicID, quality);
             if (await HttpHelper.GetHTTPFileSize(data) > 1024)
-                return new MusicUrlData() {Url=data,Source="GCSP",Quality=d.Pz};
+                return new MusicUrlData()
+                {
+                    Url = data,
+                    Source = "GCSP",
+                    Quality = (MusicQuality)quality
+                };
+
+
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
             data = await GetUrlOfficialLine(d.MusicID);
             if (await HttpHelper.GetHTTPFileSize(data) > 1024)
-                return new MusicUrlData() { Url = data, Source = "QQ", Quality = "120k" };
+                return new MusicUrlData() { Url = data, Source = "QQ", Quality =MusicQuality._120k };
             else if (!string.IsNullOrEmpty(d.Mvmid))
             {
                 MainClass.DebugCallBack(d.Mvmid, "Fetching Url From QMV------------------");
-                return new MusicUrlData() {Url= await GetMVUrl(d.Mvmid, false),Source= "QMV",Quality="Low" };
+                return new MusicUrlData() {Url= await GetMVUrl(d.Mvmid, false),Source= "QMV", Quality= MusicQuality._120k };
             }
             else
             {
@@ -1021,9 +1038,9 @@ jpg
                         Name = sid["albumname"].ToString()
                     };
                 if (sid["size320"].ToString() != "0")
-                    m.Pz = "HQ";
+                    m.Quality = MusicQuality.HQ;
                 if (sid["sizeflac"].ToString() != "0")
-                    m.Pz = "SQ";
+                    m.Quality = MusicQuality.SQ;
                 m.Mvmid = sid["vid"].ToString();
                 wx.Dispatcher.Invoke(() => { callback(m, false); });
                 dt.Add(m);
@@ -1110,9 +1127,9 @@ jpg
                         m.Album = new MusicGD() { Name = data["album"]["name"].ToString(), ID = amid, Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000" };
                     var file = data["file"];
                     if (file["size_320mp3"].ToString() != "0")
-                        m.Pz = "HQ";
+                        m.Quality = MusicQuality.HQ;
                     if (file["size_flac"].ToString() != "0")
-                        m.Pz = "SQ";
+                        m.Quality = MusicQuality.SQ;
                     m.Mvmid = data["mv"]["vid"].ToString();
                     HotSongs.Add(m);
                 }
@@ -1339,9 +1356,9 @@ jpg
                         Name = dsli["album"]["name"].ToString()
                     };
                 if (dsli["file"]["size_320mp3"].ToString() != "0")
-                    m.Pz = "HQ";
+                    m.Quality = MusicQuality.HQ;
                 if (dsli["file"]["size_flac"].ToString() != "0")
-                    m.Pz = "SQ";
+                    m.Quality = MusicQuality.SQ;
                 m.Mvmid = dsli["mv"]["vid"].ToString();
                 dt.Add(m);
             }
@@ -1459,9 +1476,9 @@ jpg
                 }
                 m.SingerText = m.SingerText.Substring(0, m.SingerText.Length - 1);
                 if (a["size320"].ToString() != "0")
-                    m.Pz = "HQ";
+                    m.Quality = MusicQuality.HQ;
                 if (a["sizeflac"].ToString() != "0")
-                    m.Pz = "SQ";
+                    m.Quality = MusicQuality.SQ;
                 m.Mvmid = a["vid"].ToString();
                 wx.Dispatcher.Invoke(() => { callback(m, false); });
                 i++;
