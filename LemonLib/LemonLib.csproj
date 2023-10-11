@@ -3,10 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon />
     <OutputType>Library</OutputType>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <StartupObject />
     <Version>1.2.7.0</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
@@ -16,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.2" />
   </ItemGroup>
 
@@ -27,6 +25,9 @@
   <ItemGroup>
     <Reference Include="Bass.Net">
       <HintPath>Dll\Bass.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="LemonApp.Extension.GetMusic">
+      <HintPath>Dll\LemonApp.Extension.GetMusic.dll</HintPath>
     </Reference>
   </ItemGroup>
 

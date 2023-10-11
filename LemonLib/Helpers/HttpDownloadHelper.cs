@@ -32,10 +32,10 @@ namespace LemonLib
         {
             await Task.Run(async () =>
             {
-                string[] Url = await MusicLib.GetUrlAsync(mData);
+                var Url = await MusicLib.GetUrlAsync(mData);
                 if (Url != null)
                 {
-                    Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url);
+                    Console.WriteLine(Path + "  " + Downloading + "\r\n" + Url.Url);
                     using var hc=new HttpClient(new SocketsHttpHandler(){KeepAlivePingPolicy=HttpKeepAlivePingPolicy.WithActiveRequests});
                    
                     hc.DefaultRequestHeaders.Accept.TryParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
@@ -43,7 +43,7 @@ namespace LemonLib
                     hc.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
                     hc.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.66 Safari/537.36 Edg/80.0.361.40");
                    
-                    var myrp = await hc.GetAsync(Url[0],HttpCompletionOption.ResponseHeadersRead);
+                    var myrp = await hc.GetAsync(Url.Url,HttpCompletionOption.ResponseHeadersRead);
                     Console.WriteLine(myrp.StatusCode.ToString());
                     var totalBytes = (long)myrp.Content.Headers.ContentLength;
                     GetSize(Getsize(totalBytes));

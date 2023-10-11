@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LemonApp.Extension.GetMusic;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml.Linq;
 using static LemonLib.InfoHelper;
 /*
@@ -772,22 +774,34 @@ jpg
         #endregion
         #endregion
         #region 播放相关 获取链接
+
+        public static string QualityPatcher(Music m)
+        {
+            return m.Pz switch { 
+            "SQ"=>".flac",_=>".mp3"
+            };
+        }
+
         /// <summary>
         /// 获取歌曲播放链接
         /// </summary>
         /// <param name="Musicid"></param>
         /// <returns>string[] 0:url 1:From where</returns>
-        public static async Task<string[]> GetUrlAsync(Music d)
+        public static async Task<MusicUrlData> GetUrlAsync(Music d)
         {
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
-            var data = await GetUrlOfficialLine(d.MusicID);
+            MainClass.DebugCallBack(d.MusicID, "Fetching Url From gcsp-------------------");
+            var data = await Extension.GetMusicUrl(d.MusicID,d.Pz switch {"SQ"=>Quality.sq,"HQ"=>Quality.hq,_=>Quality.mp3});
+            if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                return new MusicUrlData() {Url=data,Source="GCSP",Quality=d.Pz};
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
-            if (await HttpHelper.GetHTTPFileSize(data[0]) > 1024)
-                return new string[2] { data[0], "QQ" };
+            data = await GetUrlOfficialLine(d.MusicID);
+            if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                return new MusicUrlData() { Url = data, Source = "QQ", Quality = "120k" };
             else if (!string.IsNullOrEmpty(d.Mvmid))
             {
                 MainClass.DebugCallBack(d.Mvmid, "Fetching Url From QMV------------------");
-                return new string[2] { await GetMVUrl(d.Mvmid, false), "QMV" };
+                return new MusicUrlData() {Url= await GetMVUrl(d.Mvmid, false),Source= "QMV",Quality="Low" };
             }
             else
             {
@@ -801,7 +815,7 @@ jpg
         /// </summary>
         /// <param name="Musicid"></param>
         /// <returns></returns>
-        private static async Task<string[]> GetUrlOfficialLine(string Musicid) {
+        private static async Task<string> GetUrlOfficialLine(string Musicid) {
            string surl="https://i.y.qq.com/v8/playsong.html?songmid="+Musicid;
            using var hc=new HttpClient(HttpHelper.GetSta());
             hc.DefaultRequestHeaders.TryAddWithoutValidation("CacheControl", "max-age=0");
@@ -824,7 +838,7 @@ jpg
             string des = obj["metaData"]["description"].ToString();
             string songtitle = TextHelper.FindTextByAB(des, "歌曲：", "，", 0);
             string singer = TextHelper.FindTextByAB(des, "歌手：", "。", 0);
-            return new string[3]{url,songtitle,singer};
+            return url;
         }
 
         private static async Task<string> GetUrlOutLine(Music songdata) {
@@ -1020,8 +1034,24 @@ jpg
         }
         #endregion
         #region 我的音乐基因
-        public static void GetMyMusicDNA() { 
-        
+        public static async Task<List<DnaInfo>> GetMyMusicDNA() {
+            string data =TextHelper.FindTextByAB(await HttpHelper.GetWebDatacAsync("https://i.y.qq.com/n2/m/client/portrait"), "window.__ssrFirstPageData__=", "</script>",0);
+            Console.WriteLine(data);
+            var obj=JObject.Parse(data)["data"];
+            List<DnaInfo> info = new();
+
+            Action<JToken> add = (a) =>
+            {
+                var inf = new DnaInfo();
+                inf.Desc = a["Base"]["Slogan"].ToString();
+                inf.Keyword = a["Base"]["KeyWord"].ToString();
+                inf.PicUrl = a["Base"]["Pic"].ToString();
+                inf.Title = a["Base"]["TypeTitle"].ToString();
+                info.Add(inf);
+            };
+            for(int i=0; i < obj["Singer"].Count();i++)
+                add(obj["Singer"][i]);
+            return info;
         }
         #endregion
         #region 歌手

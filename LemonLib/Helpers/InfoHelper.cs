@@ -8,6 +8,13 @@ namespace LemonLib
 {
     public class InfoHelper
     {
+        public class DnaInfo {
+            public string Keyword, Title, Desc, PicUrl;
+        }
+        public class MusicUrlData {
+            public string Url, Source, Quality;
+        }
+
         public class LyricData {
             public string lyric;
             public string id;

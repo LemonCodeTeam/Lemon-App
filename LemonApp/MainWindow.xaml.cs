@@ -2584,19 +2584,19 @@ namespace LemonApp
         }
         public async void LoadMusic(Music data, bool doesplay)
         {
-            string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + ".mp3";
+            string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID +MusicLib.QualityPatcher(data);
             MusicPlay_LoadProc.Value = 0;
             if (!System.IO.File.Exists(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
                 var musicurl = await MusicLib.GetUrlAsync(data);
+                Console.WriteLine(musicurl.Url,"MUSIC GET");
                 if (musicurl == null)
                 {
                     SongSource_tb.Text = "No Source";
                     return;
                 }
-                Console.WriteLine("FROM:" + musicurl[1] + "\r\n" + musicurl[0]);
-                mp.LoadUrl(downloadpath, musicurl[0], (max, value) =>
+                mp.LoadUrl(downloadpath, musicurl.Url, (max, value) =>
                 {
                     Dispatcher.Invoke(() =>
                     {
@@ -2613,7 +2613,8 @@ namespace LemonApp
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
-                SongSource_tb.Text = musicurl[1];
+                SongSource_tb.Text = musicurl.Source;
+                QualityChooser_Now.Text = musicurl.Quality;
             }
             else
             {
@@ -2621,6 +2622,7 @@ namespace LemonApp
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
+                QualityChooser_Now.Text = data.Pz;
                 SongSource_tb.Text = "Local";
             }
         }
@@ -3789,11 +3791,11 @@ namespace LemonApp
         private List<Music> DownloadDL = new List<Music>();
         public void AddDownloadTask(Music data)
         {
-            string name = TextHelper.MakeValidFileName(Settings.USettings.DownloadName
+            string name = MakeValidFileName(Settings.USettings.DownloadName
                 .Replace("[I]", (DownloadDL.Count() + 1).ToString())
                 .Replace("[M]", data.MusicName)
                 .Replace("[S]", data.SingerText));
-            string file = Settings.USettings.DownloadPath + $"\\{name}.mp3";
+            string file = Settings.USettings.DownloadPath + "\\"+name+MusicLib.QualityPatcher(data);
             DownloadItem di = new(data, file, DownloadDL.Count);
             di.Delete += (s) =>
             {
@@ -4318,5 +4320,10 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
+        private void QualityChooser_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

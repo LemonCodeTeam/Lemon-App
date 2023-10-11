@@ -963,7 +963,14 @@
                                     <TextBlock x:Name="MusicPlay_tb" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" FontWeight="Bold" Background="Transparent"/>
                                 </Border>
                             </Border>
-                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="195,0,0,-2" Height="30" MouseDown="SongSource_MouseDown" Background="#00000000" Cursor="Hand">
+
+                            <Border x:Name="QualityChooser" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="200,0,0,-2"  Background="#00000000" Cursor="Hand" MouseDown="QualityChooser_MouseDown" >
+                                <Border  BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7"  Background="#00000000" Width="30" Height="18">
+                                    <TextBlock x:Name="QualityChooser_Now"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="SQ" FontWeight="Bold" Background="Transparent" Margin="0,0,0,1"/>
+                                </Border>
+                            </Border>
+
+                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="240,0,0,-2" Height="30" MouseDown="SongSource_MouseDown" Background="#00000000" Cursor="Hand">
                                 <Border x:Name="SongSource" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" Height="18">
                                     <Grid Margin="4,0,4,0">
                                         <TextBlock x:Name="SongSource_tb" Foreground="{DynamicResource ResuColorBrush}" Text="QQ" FontWeight="Bold"/>

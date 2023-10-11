@@ -12,13 +12,8 @@ namespace LemonLib
         static async Task Main()
         {
             await Settings.LoadUSettings("2728578956");
-            //var _ = await MusicLib.SearchMusicAsync("怪物");
-            // Console.WriteLine(_[0]);
-            //var d=await RomajiHelper.GetRomaji(" \r\n \r\nつまりは好奇心に\r\n囚われてたんだ");
-            //foreach (var s in d)
-            //    Console.WriteLine(s);
-            var a=await MusicLib.GetMyHasBought_Albums();
-            Console.WriteLine(a[0].Name);
+            var a = await MusicLib.GetMyMusicDNA();
+            Console.WriteLine(a[0].Desc);
             Console.ReadLine();
         }
         public static Action<string,string> DebugCallBack = new Action<string,string>((a,b) => {
