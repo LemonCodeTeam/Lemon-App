@@ -64,7 +64,7 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid Background="{DynamicResource ControlPageBrush}">
-        <TextBlock x:Name="text" TextWrapping="Wrap" Text="TextBlock" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" VerticalAlignment="Center" FontSize="14"/>
+        <TextBlock x:Name="text" TextWrapping="Wrap" Foreground="{DynamicResource ResuColorBrush}" TextAlignment="Center" VerticalAlignment="Center" FontSize="14"/>
         <Border x:Name="PopOut" HorizontalAlignment="Left" Margin="10,0,0,0" Width="30" Opacity="0.4" MouseDown="PopOut_MouseDown">
             <Path Data="M673.92 757.12H114.56a94.08 94.08 0 0 1-94.08-94.72V103.04A94.08 94.08 0 0 1 114.56 8.96h559.36A94.08 94.08 0 0 1 768 103.04v559.36a94.72 94.72 0 0 1-94.08 94.72zM114.56 71.68a31.36 31.36 0 0 0-31.36 31.36v559.36a31.36 31.36 0 0 0 31.36 31.36h559.36a31.36 31.36 0 0 0 31.36-31.36V103.04a31.36 31.36 0 0 0-31.36-31.36z M915.2 1016.32H355.84a94.08 94.08 0 0 1-94.08-94.08V362.88A94.08 94.08 0 0 1 355.84 268.8h559.36a94.08 94.08 0 0 1 94.08 94.08v559.36a94.08 94.08 0 0 1-94.08 94.08zM355.84 331.52a31.36 31.36 0 0 0-31.36 31.36v559.36a31.36 31.36 0 0 0 31.36 31.36h559.36a31.36 31.36 0 0 0 31.36-31.36V362.88a31.36 31.36 0 0 0-31.36-31.36z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5" Width="10" Height="10"/>
         </Border>

@@ -697,6 +697,7 @@ namespace LemonApp
             LyricAppBar_EnableTrans.IsChecked = Settings.USettings.LyricAppBarEnableTrans;
             SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
             QualityChooser.SelectedIndex = (int)Settings.USettings.PreferQuality;
+            QualityChooser_Download.SelectedIndex = (int)Settings.USettings.PreferQuality_Download;
         }
 
         private void PopOut_MouseUp()
@@ -2618,7 +2619,7 @@ namespace LemonApp
                     mp.Play();
                 MusicName.Text = data.MusicName;
                 SongSource_tb.Text = musicurl.Source;
-                QualityChooser_Now.Text =MusicLib.QualityMatcher(musicurl.Quality)[1];
+                QualityChooser_Now_Lyric.Text=QualityChooser_Now.Text =MusicLib.QualityMatcher(musicurl.Quality)[1];
             }
             else
             {
@@ -2626,7 +2627,7 @@ namespace LemonApp
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
-                QualityChooser_Now.Text = qual[1];
+                QualityChooser_Now_Lyric.Text = QualityChooser_Now.Text = qual[1];
                 SongSource_tb.Text = "Local";
             }
         }
@@ -3402,6 +3403,24 @@ namespace LemonApp
                 }
             }
             Settings.USettings.LyricAppBarOpen = (bool)OpenLyricAppBar.IsChecked;
+        }
+
+        private void QualityChooser_Confirm_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.PreferQuality = (MusicQuality)QualityChooser.SelectedIndex;
+            Pop_Quality.IsOpen = false;
+        }
+
+        private void QualityChooser_Confirm_Download_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.PreferQuality_Download = (MusicQuality)QualityChooser_Download.SelectedIndex;
+        }
+
+        private async void Border_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            Pop_Quality.PlacementTarget = sender as UIElement;
+            await Task.Yield();
+            Pop_Quality.IsOpen = true;
         }
 
         private async void SongSource_MouseDown(object sender, MouseButtonEventArgs e)
@@ -4324,10 +4343,5 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
-
-        private void QualityChooser_Confirm_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Settings.USettings.PreferQuality = (MusicQuality)QualityChooser.SelectedIndex;
-        }
     }
 }

@@ -170,6 +170,8 @@ namespace LemonLib
                 USettings.MemoryFlush = bool.Parse(o["MemoryFlush"].ToString());
             if (data.Contains("PreferQuality"))
                 USettings.PreferQuality = (MusicQuality)int.Parse(o["PreferQuality"].ToString());
+            if (data.Contains("PreferQuality_Download"))
+                USettings.PreferQuality_Download = (MusicQuality)int.Parse(o["PreferQuality_Download"].ToString());
 
             if (playlist.Contains("MusicGDataPlayList"))
                 USettings_Playlist= JsonConvert.DeserializeObject<UserSettings_PlayList>(playlist);
@@ -228,6 +230,7 @@ namespace LemonLib
             /// 优先选择的音质
             /// </summary>
             public MusicQuality PreferQuality = 0;
+            public MusicQuality PreferQuality_Download = 0;
             #endregion
             #region 主题配置
             /// <summary>
