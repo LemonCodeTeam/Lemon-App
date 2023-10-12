@@ -964,13 +964,13 @@
                                 </Border>
                             </Border>
 
-                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="200,0,0,-2"  Background="#00000000" Cursor="Hand" >
+                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="195,0,0,-2"  Background="#00000000" Cursor="Hand" MouseDown="Border_MouseDown_1" >
                                 <Border  BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7"  Background="#00000000" Width="30" Height="18">
                                     <TextBlock x:Name="QualityChooser_Now"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="SQ" FontWeight="Bold" Background="Transparent" Margin="0,0,0,1"/>
                                 </Border>
                             </Border>
 
-                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="240,0,0,-2" Height="30" MouseDown="SongSource_MouseDown" Background="#00000000" Cursor="Hand">
+                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="230,0,0,-2" Height="30" MouseDown="SongSource_MouseDown" Background="#00000000" Cursor="Hand">
                                 <Border x:Name="SongSource" Background="#00000000" BorderBrush="{DynamicResource ResuColorBrush}" BorderThickness="1" CornerRadius="7" Height="18">
                                     <Grid Margin="4,0,4,0">
                                         <TextBlock x:Name="SongSource_tb" Foreground="{DynamicResource ResuColorBrush}" Text="QQ" FontWeight="Bold"/>
@@ -988,6 +988,21 @@
                                     </Grid>
                                 </Border>
                             </Border>
+                            <lemonlib:MyPopup x:Name="Pop_Quality" PopupAnimation="Fade" StaysOpen="False" Placement="Top" AllowsTransparency="True" HorizontalOffset="-40" Margin="0,0,308,35">
+                                <Border Width="100" Height="150">
+                                    <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="10" Margin="10,20,10,20" Effect="{DynamicResource WindowDrop}">
+                                        <Grid>
+                                            <TextBlock HorizontalAlignment="Center" Text="音质" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="速度 Tempo 双击恢复" MouseDown="Tempo_MouseDown" Foreground="{DynamicResource PlayDLPage_Font_Most}" Margin="0,10,0,0" FontSize="14" FontWeight="Bold"/>
+                                            <ComboBox x:Name="QualityChooser" Template="{DynamicResource ComboBoxTemplate}" Background="{x:Null}" SelectedIndex="0" Width="60" Height="26" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="{DynamicResource PlayDLPage_Font_Most}" Margin="0,40,0,0">
+                                                <ComboBoxItem Content="SQ"/>
+                                                <ComboBoxItem Content="HQ" />
+                                                <ComboBoxItem Content="渣渣"/>
+                                            </ComboBox>
+                                            <LemonApp:MDButton x:Name="QualityChooser_Confirm" HorizontalAlignment="Center" Height="25" VerticalAlignment="Top" TName="确定" Width="50" cr="12" pData="{x:Null}" MouseDown="QualityChooser_Confirm_MouseDown" Margin="0,75,0,0"/>
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                            </lemonlib:MyPopup>
                         </Grid>
                         <WrapPanel Grid.Column="2" Margin="0,0,48,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                             <TextBlock x:Name="timetb" Foreground="{DynamicResource ResuColorBrush}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Opacity="0.7" Margin="0,0,20,0"><Run x:Name="Play_Now" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All" Text="00:00"/></TextBlock>
@@ -1068,15 +1083,13 @@
                                     <TextBox x:Name="DownloadNameTb" TextWrapping="Wrap" Text="[I].  [M] - [S]" Foreground="{DynamicResource ResuColorBrush}" Background="#07000000" Height="25" Margin="346,125,120,0" Style="{DynamicResource TextBoxStyle}" SelectionBrush="{DynamicResource ThemeColor}" VerticalAlignment="Top" SelectionTextBrush="#FF1B1B1C"/>
                                     <TextBlock HorizontalAlignment="Left" Margin="0,130,0,-49" TextWrapping="Wrap" Text="下载文件名(序号用[I]表示  歌曲名用[M]表示  歌手名用[S]表示):" VerticalAlignment="Top" Width="341" Foreground="{DynamicResource ResuColorBrush}"/>
                                     <LemonApp:MDButton x:Name="DownloadNameOK" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Margin="0,125,60,0" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
-                                    <ComboBox x:Name="QualityChooser" Template="{DynamicResource ComboBoxTemplate}"  Margin="57,151,0,0" Background="#07000000" SelectedIndex="0" Width="60" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="{DynamicResource PlayDLPage_Font_Most}">
+                                    <ComboBox x:Name="QualityChooser_Download" Template="{DynamicResource ComboBoxTemplate}" Background="{x:Null}" SelectedIndex="0" Width="60" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="{DynamicResource PlayDLPage_Font_Most}" Margin="83,154,0,0">
                                         <ComboBoxItem Content="SQ"/>
                                         <ComboBoxItem Content="HQ" />
                                         <ComboBoxItem Content="渣渣"/>
-                                        <LemonApp:MDButton x:Name="DownloadNameOK复制__C_" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" TName="确定" Width="50" MouseDown="DownloadNameOK_MouseDown" cr="12" pData="{x:Null}"/>
                                     </ComboBox>
-                                    <TextBlock HorizontalAlignment="Left" Margin="0,156,0,0" TextWrapping="Wrap" Text="优先品质:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="52"/>
-                                    <LemonApp:MDButton x:Name="QualityChooser_Confirm" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Margin="122,152,0,0" TName="确定" Width="50" cr="12" pData="{x:Null}" MouseDown="QualityChooser_Confirm_MouseDown"/>
-
+                                    <LemonApp:MDButton x:Name="QualityChooser_Confirm_Download" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" TName="确定" Width="50" cr="12" pData="{x:Null}" Margin="153,154,0,0" MouseDown="QualityChooser_Confirm_Download_MouseDown"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,159,0,0" TextWrapping="Wrap" Text="优先下载音质:" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" Width="76"/>
                                 </Grid>
                                 <Grid x:Name="SettingsPage_KeysPage" Height="180" Margin="0,10,0,0" Visibility="Collapsed">
                                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="全局快捷键" VerticalAlignment="Top" Foreground="{DynamicResource ResuColorBrush}" FontSize="18" Height="23" FontWeight="Bold" Width="95"/>
@@ -1557,7 +1570,12 @@
                                             <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0" FontWeight="Bold" Background="Transparent" MouseDown="FxDec_MouseDown"/>
                                         </Border>
                                     </Border>
-                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Margin="65,0,0,0" Background="#00000000" MouseDown="SongSource_MouseDown">
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Margin="65,0,0,0"  Background="#00000000" Cursor="Hand" MouseDown="Border_MouseDown_1" >
+                                        <Border  BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7"  Background="#00000000" Width="30" Height="18">
+                                            <TextBlock x:Name="QualityChooser_Now_Lyric"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="SQ" FontWeight="Bold" Background="Transparent" Margin="0,0,0,1"/>
+                                        </Border>
+                                    </Border>
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Margin="105,0,0,0" Background="#00000000" MouseDown="SongSource_MouseDown">
                                         <Border BorderBrush="White" BorderThickness="1" CornerRadius="7" Height="18">
                                             <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="White" Text="{Binding Text, ElementName=SongSource_tb}" Margin="5,0,5,0" FontWeight="Bold" MouseDown="SongSource_MouseDown"/>
                                         </Border>

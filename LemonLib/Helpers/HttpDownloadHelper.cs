@@ -33,7 +33,7 @@ namespace LemonLib
         {
             await Task.Run(async () =>
             {
-                var PQ = Settings.USettings.PreferQuality;
+                var PQ = Settings.USettings.PreferQuality_Download;
                 MusicQuality ava = PQ == mData.Quality ? PQ : (PQ < mData.Quality ? mData.Quality : PQ);
                 var Url = await MusicLib.GetUrlAsync(mData,ava);
                 Path += MusicLib.QualityMatcher(Url.Quality)[0];
