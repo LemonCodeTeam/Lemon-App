@@ -29,6 +29,9 @@ p.s. 32位平台请自行编译
 本应用中的歌曲和部分API来自QQ音乐(y.qq.com),音乐及歌词翻译版权归QQ音乐所有。  
 本应用中的部分图标来自www.iconfont.cn.  
 本应用使用BASS.NET解码 PERSONAL-USE License  
+
 登录即代表同意Lemon App通过你的QQ账号获取你在QQ音乐上的内容，  
+对于官方通道:  
 Lemon App只能通过 y.qq.com网页端 获得你所登录QQ用户能获得的歌曲以及MV等资源。  
+Release 1.7.2.2之后 使用GCSP客户端 (侵删)  
 本软件仅用于学习交流，禁止用于商业用途。
