@@ -553,7 +553,7 @@ namespace LemonApp
             lyricTa.Play = () => PlayBtn_MouseDown(null, null);
             lyricTa.PlayLast = () => PlayControl_PlayLast(null, null);
         }
-        private void LoadMusicData()
+        private async void LoadMusicData()
         {
             //-------[登录]用户的头像、名称等配置加载
             if (Settings.USettings.LemonAreeunIts != "0")
@@ -625,6 +625,17 @@ namespace LemonApp
             }
             else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
             //---------加载上一次播放-------与播放列表
+            //---------------登陆之后-同步"我喜欢"歌单ids----------
+            if (Settings.USettings.LemonAreeunIts != "0")
+            {
+                    Dictionary<string, string> dt = new Dictionary<string, string>();
+                    MusicLib.GetGDAsync(MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid(), (mid, id) =>
+                    {
+                        dt.Add(mid, id);
+                    });
+                    AppConstants.MusicGDataLike.ids = dt;
+                    Console.WriteLine(dt.Count, "MY Favorite");
+            }
             //如果已经保存过播放列表
             if (Settings.USettings.PlayingIndex != -1)
             {
@@ -648,21 +659,6 @@ namespace LemonApp
             {
                 MusicData = new PlayDLItem(Settings.USettings.Playing);
                 PlayMusic(Settings.USettings.Playing, false);
-            }
-            //---------------登陆之后-同步"我喜欢"歌单ids----------
-            if (Settings.USettings.LemonAreeunIts != "0")
-            {
-                Thread tx = new Thread(async () =>
-                {
-                    Dictionary<string, string> dt = new Dictionary<string, string>();
-                    MusicLib.GetGDAsync(MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid(), new Action<string, string>((mid, id) =>
-                    {
-                        dt.Add(mid, id);
-                    }));
-                    AppConstants.MusicGDataLike.ids = dt;
-                    Console.WriteLine(dt.Count, "MY Favorite");
-                });
-                tx.Start();
             }
             //-------------------
             AudioSlider.Value = 100;
@@ -2589,12 +2585,15 @@ namespace LemonApp
             var qual = MusicLib.QualityMatcher(PQ);
 
             string downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + qual[0];
+            Settings.USettings.PlayingFileName= data.MusicID + qual[0];
             MusicPlay_LoadProc.Value = 0;
             if (!System.IO.File.Exists(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
                 var musicurl = await MusicLib.GetUrlAsync(data,ava);
-                downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + MusicLib.QualityMatcher(musicurl.Quality)[0];
+                var d = MusicLib.QualityMatcher(musicurl.Quality);
+                downloadpath = Settings.USettings.MusicCachePath + "Music\\" + data.MusicID + d[0];
+                Settings.USettings.PlayingFileName = data.MusicID + qual[0];
                 Console.WriteLine(musicurl.Url,"MUSIC GET");
                 if (musicurl == null)
                 {
@@ -2735,16 +2734,10 @@ namespace LemonApp
                     }
                 }
 
-                try
-                {
-                    //Expection: Operations that change non-concurrent collections must have exclusive access. 
-                    //A concurrent update was performed on this collection and
-                    //corrupted its state. The collection's state is no longer correct.
-                    if (AppConstants.MusicGDataLike.ids.ContainsKey(data.MusicID))
-                        LikeBtnDown();
-                    else LikeBtnUp();
-                }
-                catch { }
+                if (AppConstants.MusicGDataLike.ids.ContainsKey(data.MusicID))
+                    LikeBtnDown();
+                else LikeBtnUp();
+
                 try
                 {
                     TaskBarImg.SetImage(im);
@@ -3428,13 +3421,13 @@ namespace LemonApp
             Pop_dl.PlacementTarget = sender as UIElement;
             await Task.Yield();
             Pop_dl.IsOpen = true;
-            string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
+            string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.PlayingFileName;
             DeleteLocalCacheButton.TName = System.IO.File.Exists(file) ? "删除本地" : "导入本地";
         }
 
         private async void DeleteLocalCacheButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.Playing.MusicID + ".mp3";
+            string file = Settings.USettings.MusicCachePath + "Music\\" + Settings.USettings.PlayingFileName;
             if (DeleteLocalCacheButton.TName == "删除本地")
             {
                 System.IO.File.Delete(file);
@@ -3827,7 +3820,7 @@ namespace LemonApp
                     s.d.Stop();
                     s.finished = true;
                     System.IO.File.Delete(s.path);
-                    string lrcpath = s.path.Replace(".mp3", ".lrc");
+                    string lrcpath = s.path+".lrc";
                     if (System.IO.File.Exists(lrcpath))
                         System.IO.File.Delete(lrcpath);
                     s.zt.Text = "已删除";

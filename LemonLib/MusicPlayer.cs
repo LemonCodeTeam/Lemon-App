@@ -340,7 +340,7 @@ namespace LemonLib
                 _fs.Close();
                 _fs = null;
                 FileInfo fi = new FileInfo(DLPath + ".cache");
-                if (fi.Length - len>2000)
+                if (fi.Length != len)
                 {
                     MainClass.DebugCallBack(fi.Length.ToString(), len.ToString());
                     fi.Delete();

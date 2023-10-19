@@ -208,6 +208,7 @@ namespace LemonLib
             #endregion
             #region 播放
             public Music Playing { get; set; } = new Music();
+            public string PlayingFileName = "";
             public int PlayingIndex = -1;
             /// <summary>
             /// 播放模式 0列表循环 1单曲循环 2随机播放
