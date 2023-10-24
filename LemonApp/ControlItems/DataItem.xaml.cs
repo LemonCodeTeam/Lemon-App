@@ -54,7 +54,7 @@ namespace LemonApp
                 ser.Inlines.Clear();
                 needb = needDeleteBtn;
                 name.Text = music.MusicName;
-                if (music.Album.Name != null)
+                if (music.Album != null)
                     ab.Text = music.Album.Name.Replace("空", "");
                 foreach (MusicSinger a in music.Singer)
                 {

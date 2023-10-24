@@ -146,8 +146,7 @@ namespace LemonLib
             public List<MusicSinger> Singer { set; get; } = new List<MusicSinger>();
             public string SingerText { get; set; } = "";
             public string MusicID { set; get; } = "";
-            public string ImageUrl { set; get; } = "";
-            public MusicGD Album { set; get; } = new MusicGD();
+            public MusicGD Album { set; get; } = null;
             public string Mvmid { set; get; } = "";
             public MusicQuality Quality { set; get; }
 

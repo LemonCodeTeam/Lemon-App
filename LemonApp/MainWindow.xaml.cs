@@ -247,131 +247,11 @@ namespace LemonApp
             lv.ClickLyric += Lv_ClickLyric;
             lv.NormalLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) { Opacity = 0.6 };
             ly.Child = lv;
-            lv.NextLyric += async (lrc, trans) =>
-            {
-                //主要用于桌面歌词的显示
-                if (lrc != "")
-                {
-                    //有歌词更新
-                    mini.lyric.Text = lrc;
-                    m_lyric.Text = lrc;
-
-                    //--------------MyToolBar Lyric Data--------------
-                    if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
-                    {
-                        await SendMsgToMyToolBar(lrc);
-                    }
-
-                    var ptr=MsgHelper.FindWindow(null, "MyToolBar");
-                    MsgHelper.SendMsg(lrc,ptr.ToInt32());
-
-                    if (Settings.USettings.DoesOpenDeskLyric)
-                    {
-                        if (Settings.USettings.LyricAppBarOpen)
-                            lyricTa.Update(lrc + (Settings.USettings.LyricAppBarEnableTrans ? (trans == null ? "" : ("\r\n" + trans)) : ""));
-                        else lyricToast.Update(lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : ""));
-                    }
-                    if (Settings.USettings.IsLyricImm)
-                    {
-                        LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
-                        await Task.Delay(450);
-                        ImmTb_Lyric.Text = "";
-                        ImmTb_Trans.Text = "";
-                        LyricImm_tb.Opacity = 0;
-                        ImmTb_Trans.Text = Settings.USettings.TransLyric ? (trans ?? "") : "";
-                        ImmTb_Lyric.Text = lrc;
-                        LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
-                    }
-                }
-            };
+            lv.NextLyric += Lv_NextLyric;
             ml = new MusicLib(Settings.USettings.LemonAreeunIts);
             //--------播放时的Timer 进度/歌词
             t.Interval = 500;
-            t.Tick += delegate
-            {
-                try
-                {
-                    now = mp.Position.TotalMilliseconds;
-                    if (CanJd)
-                    {
-                        jd.Value = now;
-                        mini.jd.Value = now;
-                        lyric_jd.Value = now;
-                        Play_Now.Text = TimeSpan.FromMilliseconds(now).ToString(@"mm\:ss");
-                    }
-                    all = mp.GetLength.TotalMilliseconds;
-                    string alls = TimeSpan.FromMilliseconds(all).ToString(@"mm\:ss");
-                    Play_All.Text = alls;
-                    jd.Maximum = all;
-                    mini.jd.Maximum = all;
-                    lyric_jd.Maximum = all;
-                    if (IsLyricPageOpen == 1)
-                    {
-                        if (Settings.USettings.LyricAnimationMode == 0)
-                        {
-                            float[] data = mp.GetFFTData();
-                            float sv = 0;
-                            foreach (var c in data)
-                                if (c > 0.06)
-                                {
-                                    sv = c;
-                                    break;
-                                }
-                            if (sv != 0)
-                            {
-                                if (Settings.USettings.IsLyricImm && sv > 0.25)
-                                {
-                                    (Resources["LyricImm_High"] as Storyboard).Begin();
-                                }
-                                else
-                                {
-                                    Border b = new Border();
-                                    b.BorderThickness = new Thickness(1);
-                                    b.BorderBrush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
-                                    b.Height = LyricBig.ActualHeight;
-                                    b.Width = LyricBig.ActualWidth;
-                                    b.CornerRadius = LyricBig.CornerRadius;
-                                    b.HorizontalAlignment = HorizontalAlignment.Center;
-                                    b.VerticalAlignment = VerticalAlignment.Center;
-                                    var v = b.Height + sv * 500;
-                                    Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
-                                    var f = s.Children[0] as DoubleAnimationUsingKeyFrames;
-                                    (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
-                                    Storyboard.SetTarget(f, b);
-                                    var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
-                                    (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
-                                    Storyboard.SetTarget(f1, b);
-                                    var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
-                                    Storyboard.SetTarget(f2, b);
-                                    s.Completed += delegate { LyricAni.Children.Remove(b); };
-                                    LyricAni.Children.Add(b);
-                                    s.Begin();
-                                }
-                            }
-                        }
-                        lv.LrcRoll(now + lyrictime_offset * 1000, true);
-                    }
-                    else lv.LrcRoll(now + lyrictime_offset * 1000, false);
-                    //now does not necessarily equal to total...
-                    if (Play_Now.Text.Equals(alls) && now > 2000 && all != 0)
-                    {
-                        now = 0;
-                        all = 0;
-                        mp.Position = TimeSpan.FromSeconds(0);
-                        t.Stop();
-                        //-----------播放完成时，判断单曲还是下一首
-                        jd.Value = 0;
-                        if (Settings.USettings.PlayXHMode == 1)//单曲循环
-                        {
-                            mp.Position = TimeSpan.FromMilliseconds(0);
-                            mp.Play();
-                            t.Start();
-                        }
-                        else if (Settings.USettings.PlayXHMode == 0 || Settings.USettings.PlayXHMode == 2) PlayControl_PlayNext(null, null);//下一曲
-                    }
-                }
-                catch { }
-            };
+            t.Tick += Playing_Tick;
             //---------------------
             LP_ag1.MouseDown += LP_ag_MouseDown;
             LP_ag2.MouseDown += LP_ag_MouseDown;
@@ -410,6 +290,130 @@ namespace LemonApp
             //-----Connect to MyToolBar
             if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
                 await SendMsgToMyToolBar("Start", "LemonAppOrd");
+        }
+
+        private void Playing_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                now = mp.Position.TotalMilliseconds;
+                if (CanJd)
+                {
+                    jd.Value = now;
+                    mini.jd.Value = now;
+                    lyric_jd.Value = now;
+                    Play_Now.Text = TimeSpan.FromMilliseconds(now).ToString(@"mm\:ss");
+                }
+                all = mp.GetLength.TotalMilliseconds;
+                string alls = TimeSpan.FromMilliseconds(all).ToString(@"mm\:ss");
+                Play_All.Text = alls;
+                jd.Maximum = all;
+                mini.jd.Maximum = all;
+                lyric_jd.Maximum = all;
+                if (IsLyricPageOpen == 1)
+                {
+                    if (Settings.USettings.LyricAnimationMode == 0)
+                    {
+                        float[] data = mp.GetFFTData();
+                        float sv = 0;
+                        foreach (var c in data)
+                            if (c > 0.06)
+                            {
+                                sv = c;
+                                break;
+                            }
+                        if (sv != 0)
+                        {
+                            if (Settings.USettings.IsLyricImm && sv > 0.25)
+                            {
+                                (Resources["LyricImm_High"] as Storyboard).Begin();
+                            }
+                            else
+                            {
+                                Border b = new Border();
+                                b.BorderThickness = new Thickness(1);
+                                b.BorderBrush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
+                                b.Height = LyricBig.ActualHeight;
+                                b.Width = LyricBig.ActualWidth;
+                                b.CornerRadius = LyricBig.CornerRadius;
+                                b.HorizontalAlignment = HorizontalAlignment.Center;
+                                b.VerticalAlignment = VerticalAlignment.Center;
+                                var v = b.Height + sv * 500;
+                                Storyboard s = (Resources["LyricAnit"] as Storyboard).Clone();
+                                var f = s.Children[0] as DoubleAnimationUsingKeyFrames;
+                                (f.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
+                                Storyboard.SetTarget(f, b);
+                                var f1 = s.Children[1] as DoubleAnimationUsingKeyFrames;
+                                (f1.KeyFrames[0] as SplineDoubleKeyFrame).Value = v;
+                                Storyboard.SetTarget(f1, b);
+                                var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
+                                Storyboard.SetTarget(f2, b);
+                                s.Completed += delegate { LyricAni.Children.Remove(b); };
+                                LyricAni.Children.Add(b);
+                                s.Begin();
+                            }
+                        }
+                    }
+                    lv.LrcRoll(now + lyrictime_offset * 1000, true);
+                }
+                else lv.LrcRoll(now + lyrictime_offset * 1000, false);
+                //now does not necessarily equal to total...
+                if (Play_Now.Text.Equals(alls) && now > 2000 && all != 0)
+                {
+                    now = 0;
+                    all = 0;
+                    mp.Position = TimeSpan.FromSeconds(0);
+                    t.Stop();
+                    //-----------播放完成时，判断单曲还是下一首
+                    jd.Value = 0;
+                    if (Settings.USettings.PlayXHMode == 1)//单曲循环
+                    {
+                        mp.Position = TimeSpan.FromMilliseconds(0);
+                        mp.Play();
+                        t.Start();
+                    }
+                    else if (Settings.USettings.PlayXHMode == 0 || Settings.USettings.PlayXHMode == 2) PlayControl_PlayNext(null, null);//下一曲
+                }
+            }
+            catch { }
+        }
+
+        private async void Lv_NextLyric(string lrc, string trans)
+        {
+                //主要用于桌面歌词的显示
+                if (lrc != "")
+                {
+                    //有歌词更新
+                    mini.lyric.Text = lrc;
+                    m_lyric.Text = lrc;
+
+                    //--------------MyToolBar Lyric Data--------------
+                    if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
+                    {
+                        await SendMsgToMyToolBar(lrc);
+                    }
+
+                    var ptr = MsgHelper.FindWindow(null, "MyToolBar");
+                    MsgHelper.SendMsg(lrc, ptr.ToInt32());
+
+                    if (Settings.USettings.DoesOpenDeskLyric)
+                    {
+                        if (Settings.USettings.LyricAppBarOpen)
+                            lyricTa.Update(lrc + (Settings.USettings.LyricAppBarEnableTrans ? (trans == null ? "" : ("\r\n" + trans)) : ""));
+                        else lyricToast.Update(lrc + (Settings.USettings.TransLyric ? (trans == null ? "" : ("\r\n" + trans)) : ""));
+                    }
+                    if (Settings.USettings.IsLyricImm)
+                    {
+                        LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.5)));
+                        await Task.Delay(450);
+                        ImmTb_Lyric.Text = "";
+                        ImmTb_Trans.Text = "";
+                        LyricImm_tb.Opacity = 0;
+                        ImmTb_Trans.Text = Settings.USettings.TransLyric ? (trans ?? "") : "";
+                        ImmTb_Lyric.Text = lrc;
+                        LyricImm_tb.BeginAnimation(OpacityProperty, new DoubleAnimation(0.3, 1, TimeSpan.FromSeconds(0.5)));
+                    }
+                }
         }
 
         private void Lv_ClickLyric(object sender, MouseButtonEventArgs e)
@@ -2435,7 +2439,7 @@ namespace LemonApp
                 }
                 HB = 1;
                 (Resources["DataPage_Min"] as Storyboard).Begin();
-                TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(dt.First().ImageUrl));
+                TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverImgUrl(dt.First())));
             }
             if (osx == 0) NSPage(new MeumInfo(Data, null) { cmd = "[DataUrl]{\"type\":\"Search\",\"key\":\"" + key + "\"}" }, NeedSave, false);
             int i = 0;
@@ -2672,7 +2676,7 @@ namespace LemonApp
                 LyricPage_TimeSetter.Text = "0.0s";
 
                 #region 专辑图
-                BitmapImage im = await ImageCacheHelper.GetImageByUrl(data.ImageUrl) ?? await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
+                BitmapImage im = await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverImgUrl(data)) ?? await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
                 MusicImage.Background = new ImageBrush(im);
                 mini.img.Background = MusicImage.Background;
                 //模糊处理
@@ -3124,7 +3128,7 @@ namespace LemonApp
             MinBtn.ColorDx = null;
             var ol = Resources["CloseLyricPage"] as Storyboard;
             ol.Begin();
-            await Task.Delay(300);
+            await Task.Delay(400);
             App.BaseApp.SetColor("ThemeColor", ThemeColor_ORD);
         }
         
@@ -3456,11 +3460,8 @@ namespace LemonApp
         #region Lyric & 评论加载
         private void LyricFontSize_UpBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Settings.USettings.LyricFontSize <= 28)
-            {
                 Settings.USettings.LyricFontSize += 2;
                 lv.SetFontSize(Settings.USettings.LyricFontSize);
-            }
         }
 
         private void LyricFontSize_DownBtn_MouseDown(object sender, MouseButtonEventArgs e)

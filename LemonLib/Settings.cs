@@ -82,7 +82,6 @@ namespace LemonLib
             USettings.UserName = o["UserName"].ToString();
             USettings.Cookie = o["Cookie"].ToString();
             USettings.g_tk = o["g_tk"].ToString();
-            USettings.Playing.ImageUrl = o["Playing"]["ImageUrl"].ToString();
             USettings.Playing.MusicID = o["Playing"]["MusicID"].ToString();
             USettings.Playing.MusicName = o["Playing"]["MusicName"].ToString();
             USettings.Playing.SingerText = o["Playing"]["SingerText"].ToString();

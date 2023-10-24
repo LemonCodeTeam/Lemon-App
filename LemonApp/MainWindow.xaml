@@ -1565,7 +1565,7 @@
                             </Grid>
                             <Grid VerticalAlignment="Bottom" Margin="45,0,45,20" Height="148">
                                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,7,0,0">
-                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="50" Background="#00000000" MouseDown="FxDec_MouseDown">
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="50" Background="#00000000" MouseDown="FxDec_MouseDown" Cursor="Hand">
                                         <Border BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" ToolTip="Fx效果器 双击可以保存mp3" Height="18">
                                             <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="FxDec" Margin="5,0,5,0" FontWeight="Bold" Background="Transparent" MouseDown="FxDec_MouseDown"/>
                                         </Border>
@@ -1575,13 +1575,13 @@
                                             <TextBlock x:Name="QualityChooser_Now_Lyric"  HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeColor}" Text="SQ" FontWeight="Bold" Background="Transparent" Margin="0,0,0,1"/>
                                         </Border>
                                     </Border>
-                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Margin="105,0,0,0" Background="#00000000" MouseDown="SongSource_MouseDown">
+                                    <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Margin="105,0,0,0" Background="#00000000" MouseDown="SongSource_MouseDown" Cursor="Hand">
                                         <Border BorderBrush="White" BorderThickness="1" CornerRadius="7" Height="18">
                                             <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Stretch" Foreground="White" Text="{Binding Text, ElementName=SongSource_tb}" Margin="5,0,5,0" FontWeight="Bold" MouseDown="SongSource_MouseDown"/>
                                         </Border>
                                     </Border>
                                 </Grid>
-                                <Border HorizontalAlignment="Right" Width="30" Background="#00000000" Margin="0,0,20,0" MouseDown="MoreBtn_MouseDown" Height="30" VerticalAlignment="Top">
+                                <Border HorizontalAlignment="Right" Width="30" Background="#00000000" Margin="0,0,20,0" MouseDown="MoreBtn_MouseDown" Height="30" VerticalAlignment="Top" Cursor="Hand">
                                     <Grid>
                                         <Popup x:Name="MoreBtn_Meum1"  Placement="Top" HorizontalOffset="-65" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="5" StaysOpen="False">
                                             <Border Height="166" Width="140">
@@ -1654,7 +1654,7 @@
                                         </Border>
                                     </Grid>
                                 </Grid>
-                                <Border HorizontalAlignment="Left" Width="45" MouseDown="likeBtn_MouseDown" Background="#00000000" VerticalAlignment="Top" Height="45" Margin="10,0,0,0">
+                                <Border HorizontalAlignment="Left" Width="45" MouseDown="likeBtn_MouseDown" Background="#00000000" VerticalAlignment="Top" Height="45" Margin="10,0,0,0" Cursor="Hand">
                                     <Path x:Name="lyric_like" Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" StrokeThickness="5" Fill="White" Width="24" Height="24"/>
                                 </Border>
                                 <TextBlock Foreground="White" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Opacity="0.7" Margin="0,34,10,0" Text="{Binding Text, ElementName=timetb}"><Run x:Name="Play_Now1" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All1" Text="00:00"/></TextBlock>
@@ -1668,7 +1668,7 @@
                     <Border HorizontalAlignment="Left" Height="45" Margin="20,20,0,0" VerticalAlignment="Top" Width="45" Background="#00000000" MouseDown="Border_MouseDown_2" Cursor="Hand">
                         <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="18" Width="18"/>
                     </Border>
-                    <Border x:Name="LyricPage_AboutGD" Margin="0,0,-20,65" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Background="#66000000" CornerRadius="6,6,6,6">
+                    <Border x:Name="LyricPage_AboutGD" Margin="0,0,-20,65" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Cursor="Hand" Width="100" Background="#66000000" CornerRadius="6,6,6,6">
                         <Grid>
                             <TextBlock x:Name="textBlock2" Text="相关的歌单" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" FontWeight="Normal" Foreground="#FFEFEFEF"/>
                             <Grid x:Name="LP_ag1" HorizontalAlignment="Stretch" Margin="12,50,12,0" VerticalAlignment="Top" Visibility="Collapsed" Background="Transparent">

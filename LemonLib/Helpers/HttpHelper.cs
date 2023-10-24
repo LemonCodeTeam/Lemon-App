@@ -129,7 +129,7 @@ namespace LemonLib
 
 
         /// <summary>
-        /// 针对wk_v17 y.qq.com的反防盗链 发送POST请求
+        /// 针对wk_v17 u.y.qq.com的反防盗链 发送POST请求
         /// </summary>
         /// <param name="url"></param>
         /// <param name="data"></param>
@@ -178,7 +178,7 @@ namespace LemonLib
             st.Close();
         }
         /// <summary>
-        /// y.qq.com fcg客户端 Get请求
+        /// c.y.qq.com fcg客户端 Get请求
         /// </summary>
         /// <param name="url"></param>
         /// <param name="c"></param>

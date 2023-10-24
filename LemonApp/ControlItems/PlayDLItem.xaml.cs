@@ -37,7 +37,7 @@ namespace LemonApp
             };
         }
         public static Action<PlayDLItem> Delete;
-        public PlayDLItem(Music m, bool NeedImg, string imgUrl)
+        public PlayDLItem(Music m, bool NeedImg)
         {
             InitializeComponent();
             RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
@@ -48,7 +48,7 @@ namespace LemonApp
                     img.Visibility = Visibility.Visible;
                     SingerName.Margin = new Thickness(66, 32, 10, 0);
                     MusicName.Margin = new Thickness(66, 12, 10, 0);
-                    img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(imgUrl, new int[2] { 100, 100 }));
+                    img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverImgUrl(Data), new int[2] { 100, 100 }));
                 }
             };
             Data = m;
