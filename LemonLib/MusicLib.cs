@@ -1,4 +1,4 @@
-﻿using LemonApp.Extension.GetMusic;
+﻿using LemonLib.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -28,14 +29,10 @@ Please retain the copyright information, rights reserved.
 
 namespace LemonLib
 {
-    public class MusicLib
+    public static class MusicLib
     {
         #region  构造函数
-        public MusicLib(string id)
-        {
-            qq = id;
-        }
-        public void CreateDirectory()
+        public static void CreateDirectory()
         {
             if (!Directory.Exists(Settings.USettings.DownloadPath))
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
@@ -48,9 +45,42 @@ namespace LemonLib
             if (!Directory.Exists(Settings.USettings.MusicCachePath + "Image\\"))
                 Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Image\\");
         }
+        private static lmExtension Extension_GetMusic = new();
+        public static async void UpdateMusicLib()
+        {
+            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Extension_GetMusicUpdate.json"));
+            var v =Version.Parse(o["version"].ToString());
+            string path = AppDomain.CurrentDomain.BaseDirectory + "/LemonApp.Extension.GetMusic.dll";
+
+            var DownloadAssembly = async () => {
+                string url = o["url"].ToString();
+                await HttpHelper.HttpDownloadFileAsync(url, path);
+                Extension_GetMusic.AssemblyVersion = v;
+                await Settings.SaveLocaSettings();
+            };
+            var LoadAssembly = () => {
+                var a = Assembly.LoadFrom(path);
+                Extension_GetMusic.ExtensionClass = a.GetType("LemonApp.Extension.GetMusic.Extension");
+                Extension_GetMusic.MethodName = "GetMusicUrl";
+                Extension_GetMusic.AssemblyVersion = a.GetName().Version;
+            };
+
+            if (File.Exists(path))
+            {
+                LoadAssembly();
+                if (Extension_GetMusic.AssemblyVersion < v)
+                    //Extension有新版本
+                    await DownloadAssembly();
+            }
+            else
+            {
+                await DownloadAssembly();
+                LoadAssembly();
+            }
+
+        }
         #endregion
         #region 一些字段
-        public static string qq = "";
         public static string MusicLikeGDid = null;
         public static string MusicLikeGDdirid = "";
         #endregion
@@ -124,7 +154,7 @@ namespace LemonLib
             }
             return dt;
         }
-        public async Task<List<string>> Search_SmartBoxAsync(string key)
+        public static async Task<List<string>> Search_SmartBoxAsync(string key)
         {
             var data = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?key={HttpUtility.UrlDecode(key)}&utf8=1&is_xml=0&loginUin={Settings.USettings.LemonAreeunIts}&qqmusic_ver=1592&searchid=3DA3E73D151F48308932D9680A3A5A1722872&pcachetime=1535710304"))["data"];
             List<String> list = new List<String>();
@@ -330,11 +360,11 @@ Content-Disposition: form-data; name=""parentid""
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""fileid""
 
-{qq}_{new Random().Next(100000000, 999999999)}{new Random().Next(1000, 9999)}
+{Settings.USettings.LemonAreeunIts}_{new Random().Next(100000000, 999999999)}{new Random().Next(1000, 9999)}
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""uin""
 
-{qq}
+{Settings.USettings.LemonAreeunIts}
 ------WebKitFormBoundarye8oXp9zt6XFYGpye
 Content-Disposition: form-data; name=""crop""
 
@@ -410,7 +440,7 @@ jpg
         /// <summary>
         /// 获取“我喜欢”的歌单ID
         /// </summary>
-        public async Task<string> GetMusicLikeGDid()
+        public static async Task<string> GetMusicLikeGDid()
         {
             try
             {
@@ -590,7 +620,7 @@ jpg
         /// 获取 我收藏的歌单 列表
         /// </summary>
         /// <returns></returns>
-        public async Task<SortedDictionary<string, MusicGData>> GetGdILikeListAsync()
+        public static async Task<SortedDictionary<string, MusicGData>> GetGdILikeListAsync()
         {
             var dt = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&ct=20&cid=205360956&userid={Settings.USettings.LemonAreeunIts}&reqtype=3&sin=0&ein=25");
             var o = JObject.Parse(dt);
@@ -620,7 +650,7 @@ jpg
         /// <param name="sortId">最新:2  推荐:5 </param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<MusicGD>> GetFLGDAsync(string id, string sortId = "5", int osx = 1)
+        public static async Task<List<MusicGD>> GetFLGDAsync(string id, string sortId = "5", int osx = 1)
         {
             int start = (osx - 1) * 30;
             int end = start + 29;
@@ -647,7 +677,7 @@ jpg
         /// 获取分类歌单的分类Tag
         /// </summary>
         /// <returns></returns>
-        public async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync()
+        public static async Task<MusicFLGDIndexItemsList> GetFLGDIndexAsync()
         {
             var o = JObject.Parse(await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0"));
             var data = new MusicFLGDIndexItemsList();
@@ -720,7 +750,7 @@ jpg
         /// <param name="tb"></param>
         /// <param name="pb"></param>
         /// <param name="Finished"></param>
-        public async Task GetGDbyWYAsync(string id, Action<int> GetCount, Action<int, string> GetItem, Action Finished)
+        public static async Task GetGDbyWYAsync(string id, Action<int> GetCount, Action<int, string> GetItem, Action Finished)
         {
             string data = await HttpHelper.GetWebAsync($"https://music.163.com/api/playlist/detail?id={id}");
             MainClass.DebugCallBack("GETWYGD", data);
@@ -797,16 +827,14 @@ jpg
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
 
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From gcsp-------------------");
-            Quality quality = (Quality)(int)PQ;
-            var data = await Extension.GetMusicUrl(d.MusicID, quality);
+            var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ });
             if (await HttpHelper.GetHTTPFileSize(data) > 1024)
                 return new MusicUrlData()
                 {
                     Url = data,
                     Source = "GCSP",
-                    Quality = (MusicQuality)quality
+                    Quality = PQ
                 };
-
 
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
             data = await GetUrlOfficialLine(d.MusicID);
@@ -966,7 +994,7 @@ jpg
         /// 排行榜列表
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MusicTop>> GetTopIndexAsync()
+        public static async Task<List<MusicTop>> GetTopIndexAsync()
         {
             var dt = await HttpHelper.GetWebAsync("https://u.y.qq.com/cgi-bin/musicu.fcg?_=1580276407716&data={%22comm%22:{%22g_tk%22:5381,%22uin%22:%22%22,%22format%22:%22json%22,%22inCharset%22:%22utf-8%22,%22outCharset%22:%22utf-8%22,%22notice%22:0,%22platform%22:%22h5%22,%22needNewCode%22:1,%22ct%22:23,%22cv%22:0},%22topList%22:{%22module%22:%22musicToplist.ToplistInfoServer%22,%22method%22:%22GetAll%22,%22param%22:{}}}");
             var o = JObject.Parse(dt);
@@ -998,7 +1026,7 @@ jpg
         /// <param name="TopID"></param>
         /// <param name="osx"></param>
         /// <returns></returns>
-        public async Task<List<Music>> GetToplistAsync(string TopID, Action<Music, bool> callback, Window wx, Action finished, int osx = 1)
+        public static async Task<List<Music>> GetToplistAsync(string TopID, Action<Music, bool> callback, Window wx, Action finished, int osx = 1)
         {
             int index = (osx - 1) * 30;
             string json = await HttpHelper.GetWebAsync($"https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?tpl=3&page=detail&topid={TopID}&type=top&song_begin={index}&song_num=30&g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0");
@@ -1637,7 +1665,7 @@ jpg
         #region 已购
         public static async Task<List<MusicGD>> GetMyHasBought_Albums()
         {
-            string data = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/shop/fcgi-bin/fcg_get_order?from=1&cmd=sales_album&type=1&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=1&uin={qq}&g_tk={Settings.USettings.g_tk}&start=0&num=20");
+            string data = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/shop/fcgi-bin/fcg_get_order?from=1&cmd=sales_album&type=1&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=1&uin={Settings.USettings.LemonAreeunIts}&g_tk={Settings.USettings.g_tk}&start=0&num=20");
             var obj = JObject.Parse(data)["data"]["albumlist"];
             var list = new List<MusicGD>();
             foreach (var i in obj)

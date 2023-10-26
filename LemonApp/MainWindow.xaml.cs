@@ -44,7 +44,6 @@ namespace LemonApp
         //-------Mini--------
         private MiniPlayer mini;
         System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
-        public MusicLib ml;
         public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
@@ -157,6 +156,7 @@ namespace LemonApp
             #region Part1
             //--------检测更新-------
             Update();
+            MusicLib.UpdateMusicLib();
             //--------应用程序配置 热键和消息回调--------
             Settings.Handle.WINDOW_HANDLE = new WindowInteropHelper(this).Handle.ToInt32();
             Settings.Handle.ProcessId = Process.GetCurrentProcess().Id;
@@ -248,7 +248,6 @@ namespace LemonApp
             lv.NormalLrcColor = new SolidColorBrush(Color.FromRgb(255, 255, 255)) { Opacity = 0.6 };
             ly.Child = lv;
             lv.NextLyric += Lv_NextLyric;
-            ml = new MusicLib(Settings.USettings.LemonAreeunIts);
             //--------播放时的Timer 进度/歌词
             t.Interval = 500;
             t.Tick += Playing_Tick;
@@ -277,7 +276,7 @@ namespace LemonApp
                 Settings.LSettings.qq = qq;
                 await Settings.SaveLocaSettings();
             }
-            ml.CreateDirectory();
+            MusicLib.CreateDirectory();
             LoadHotDog();
             Load_Theme();
             LoadMusicData();
@@ -633,7 +632,7 @@ namespace LemonApp
             if (Settings.USettings.LemonAreeunIts != "0")
             {
                     Dictionary<string, string> dt = new Dictionary<string, string>();
-                    MusicLib.GetGDAsync(MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid(), (mid, id) =>
+                    MusicLib.GetGDAsync(MusicLib.MusicLikeGDid ?? await MusicLib.GetMusicLikeGDid(), (mid, id) =>
                     {
                         dt.Add(mid, id);
                     });
@@ -842,7 +841,7 @@ namespace LemonApp
                 await Settings.SaveSettingsTaskAsync();
                 Settings.LSettings.qq = qq;
                 await Settings.SaveLocaSettings();
-                await ml.GetMusicLikeGDid();
+                await MusicLib.GetMusicLikeGDid();
                 Toast.Send("登陆成功! o(*￣▽￣*)ブ  欢迎回来" + name);
                 UserInfo_Logout.TName = "退出登录";
                 UserInfo_GTK.Text = Settings.USettings.g_tk;
@@ -1505,7 +1504,7 @@ namespace LemonApp
                 DataItemsList.Items.Clear();
             }
             int index = 0;
-            var dta = await ml.GetToplistAsync(g.Data.ID, new Action<Music, bool>((j, f) =>
+            var dta = await MusicLib.GetToplistAsync(g.Data.ID, new Action<Music, bool>((j, f) =>
             {
                 var k = new DataItem(j, this, index);
                 DataItemsList.Items.Add(k);
@@ -2015,7 +2014,7 @@ namespace LemonApp
                 DataItemsList.Items.Clear();
                 DataItemsList.Opacity = 0;
                 DataCollectBtn.Visibility = Visibility.Collapsed;
-                string id = MusicLib.MusicLikeGDid ?? await ml.GetMusicLikeGDid();
+                string id = MusicLib.MusicLikeGDid ?? await MusicLib.GetMusicLikeGDid();
                 AppConstants.MusicGDataLike.ids.Clear();
                 var data = AppConstants.MGData_Now = await MusicLib.GetGDAsync(id,
                    (dt) =>
@@ -2366,7 +2365,7 @@ namespace LemonApp
                 await Task.Yield();
                 if (!Search_SmartBox.IsOpen)
                     Search_SmartBox.IsOpen = true;
-                var data = await ml.Search_SmartBoxAsync(SearchBox.Text);
+                var data = await MusicLib.Search_SmartBoxAsync(SearchBox.Text);
                 Search_SmartBoxList.Items.Clear();
                 if (data.Count == 0)
                     Search_SmartBox.IsOpen = false;
@@ -3760,7 +3759,7 @@ namespace LemonApp
             {
                 IntoGDPage_main.Visibility = Visibility.Collapsed;
                 IntoGDPage_loading.Visibility = Visibility.Visible;
-                await ml.GetGDbyWYAsync(IntoGDPage_id.Text,
+                await MusicLib.GetGDbyWYAsync(IntoGDPage_id.Text,
                     (count)=> { IntoGDPage_ps_jd.Maximum = count; },
                     (i, title) => { IntoGDPage_ps_jd.Value = i; IntoGDPage_ps_name.Text = title; },
                     () =>
@@ -4008,7 +4007,7 @@ namespace LemonApp
                     ContentAnimation(GDItemsList, GDItemsList.Margin);
                 }
 
-                var GdLikeData = await ml.GetGdILikeListAsync();
+                var GdLikeData = await MusicLib.GetGdILikeListAsync();
                 renew_ = false;
                 if (GdLikeData.Count != GDILikeItemsList.Children.Count)
                 {

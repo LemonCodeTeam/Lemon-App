@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using LemonLib;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -22,7 +23,7 @@ namespace LemonApp.ContentPage
         public async void LoadTopData()
         {
             mw.OpenLoading();
-            var dt = await mw.ml.GetTopIndexAsync();
+            var dt = await MusicLib.GetTopIndexAsync();
             topIndexList.Opacity = 0;
             topIndexList.Children.Clear();
             foreach (var d in dt)

@@ -88,7 +88,7 @@ namespace LemonApp.ContentPage
             FLGDPage_Tag.Uid = id;
             ixFLGD = osx;
             mw.OpenLoading();
-            var data = await mw.ml.GetFLGDAsync(id, sortId, osx);
+            var data = await MusicLib.GetFLGDAsync(id, sortId, osx);
             if (osx == 1) FLGDItemsList.Children.Clear();
             foreach (var d in data)
             {
@@ -115,7 +115,7 @@ namespace LemonApp.ContentPage
         {
             mw.OpenLoading();
             //加载Tag标签
-            var wk = await mw.ml.GetFLGDIndexAsync();
+            var wk = await MusicLib.GetFLGDIndexAsync();
             //--------语种------------
             foreach (var d in wk.Lauch)
             {

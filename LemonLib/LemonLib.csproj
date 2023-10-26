@@ -5,7 +5,7 @@
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <Version>1.2.7.2</Version>
+    <Version>1.2.7.3</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
 
@@ -25,9 +25,6 @@
   <ItemGroup>
     <Reference Include="Bass.Net">
       <HintPath>Dll\Bass.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="LemonApp.Extension.GetMusic">
-      <HintPath>Dll\LemonApp.Extension.GetMusic.dll</HintPath>
     </Reference>
   </ItemGroup>
 
