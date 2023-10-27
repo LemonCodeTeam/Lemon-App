@@ -443,75 +443,39 @@ namespace LemonApp
         /// <param name="hasAnimation"></param>
         private void Load_Theme()
         {
+            var theme = Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B);
+            bool DarkMode = Settings.USettings.Skin_FontColor == "White";
             if (Settings.USettings.Skin_Type == 0)
             {
-                //默认主题  （主要考虑到切换登录）
-                if (wac.IsEnabled) wac.IsEnabled = false;
-                Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                App.BaseApp.UnSkin();
-                App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
-                DThemePage.Child = null;
+                //默认主题  (主要考虑到切换登录)
+                if (Settings.USettings.EnableThemeBlur)
+                {
+                    var bg = !DarkMode ? Color.FromArgb(180, 255, 255, 255) : Color.FromArgb(180,0,0,0);
+                    ApplyTheme(DarkMode, true, theme, null, null, null, false, 0, bg);
+                    bg.A = 100;
+                    MainPage.Background = new SolidColorBrush(bg);
+                }
+                else
+                {
+                    var bg = new SolidColorBrush(DarkMode ? Color.FromRgb(45, 45, 48) : Color.FromRgb(255, 255, 255));
+                    ApplyTheme(DarkMode, false, theme, bg, null, null, false);
+                }
             }
             else if (Settings.USettings.Skin_Type == 1)
             {
                 //图片主题
-
-                //    主题背景图片
-                if (Settings.USettings.Skin_ImagePath != "" && System.IO.File.Exists(Settings.USettings.Skin_ImagePath))
-                    Page.Background = new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_ImagePath, UriKind.Absolute)));
-                else if (Settings.USettings.Skin_ImagePath == "[Dark]")
-                {
-                    Page.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF2D2D30"));
-                }
-
-                //字体颜色
-                Color co;
-                if (Settings.USettings.Skin_FontColor == "Black")
-                {
-                    co = Color.FromRgb(64, 64, 64);
-                    App.BaseApp.Skin_Black();
-                }
-                else
-                {
-                    co = Color.FromRgb(255, 255, 255);
-                    App.BaseApp.Skin();
-                }
-                App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
-                App.BaseApp.SetColor("ResuColorBrush", co);
+                var bg= new ImageBrush(new BitmapImage(new Uri(Settings.USettings.Skin_ImagePath, UriKind.Absolute)));
+                ApplyTheme(DarkMode,false,theme,bg,null,null, false);
             }
             else if (Settings.USettings.Skin_Type == 2)
             {
                 //----新的[磨砂黑/白]主题---
-                if (Settings.USettings.Skin_FontColor == "White")
-                {
-                    WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
-                    Page.Background = new SolidColorBrush(Colors.Transparent);
-                    DThemePage.Child = null;
-                    App.BaseApp.Skin();
-                    App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
-                    wac.Color = Color.FromArgb(180, 0, 0, 0);
-                    wac.DarkMode = true;
-                    wac.IsEnabled = true;
-                }
-                else
-                {
-                    WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
-                    Page.Background = new SolidColorBrush(Colors.Transparent);
-                    DThemePage.Child = null;
-                    App.BaseApp.SetColor("ThemeColor", Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B));
-                    App.BaseApp.Skin_Black();
-                    Color co = Color.FromRgb(64, 64, 64);
-                    App.BaseApp.SetColor("ResuColorBrush", co);
-                    wac.Color = (Color.FromArgb(180, 255, 255, 255));
-                    wac.DarkMode = false;
-                    wac.IsEnabled = true;
-                }
-                DThemePage.Child = null;
+                ApplyTheme(DarkMode, true, theme, null, null, null, false);
             }
             else if (Settings.USettings.Skin_Type == 3)
             {
                 //动态主题
-                string NameSpace = TextHelper.FindTextByAB(Settings.USettings.Skin_ImagePath, "DTheme[", "]", 0);
+                string NameSpace = FindTextByAB(Settings.USettings.Skin_ImagePath, "DTheme[", "]", 0);
                 ThemeBase tb = null;
                 if (NameSpace == Theme.Dtpp.Drawer.NameSpace)
                     tb = new Theme.Dtpp.Drawer(false);
@@ -523,23 +487,8 @@ namespace LemonApp
                     tb = new Theme.TechDMusic.Drawer(false);
                 else if (NameSpace == Theme.FerrisWheel.Drawer.NameSpace)
                     tb = new Theme.FerrisWheel.Drawer(false);
-                DThemePage.Child = tb;
-                //字体颜色
-                Color col;
-                if (tb.FontColor == "Black")
-                {
-                    col = Color.FromRgb(64, 64, 64);
-                    App.BaseApp.Skin_Black();
-                }
-                else
-                {
-                    col = Color.FromRgb(255, 255, 255);
-                    App.BaseApp.Skin();
-                }
-                Color theme = Color.FromRgb(Settings.USettings.Skin_ThemeColor_R, Settings.USettings.Skin_ThemeColor_G, Settings.USettings.Skin_ThemeColor_B);
-                App.BaseApp.SetColor("ThemeColor", theme);
-                App.BaseApp.SetColor("ResuColorBrush", col);
-                tb.Draw();
+
+                ApplyTheme(DarkMode, false, theme, null, tb, null, false);
             }
         }
         private double now = 0;
@@ -697,6 +646,7 @@ namespace LemonApp
             SettingsPage_LyricAppBar_FortSize.Text = Settings.USettings.LyricAppBar_Size.ToString();
             QualityChooser.SelectedIndex = (int)Settings.USettings.PreferQuality;
             QualityChooser_Download.SelectedIndex = (int)Settings.USettings.PreferQuality_Download;
+           Settings_Theme_EnableBlur.IsChecked=Settings.USettings.EnableThemeBlur;
         }
 
         private void PopOut_MouseUp()
@@ -865,6 +815,11 @@ namespace LemonApp
         private void Settings_Animation_Scroll_Click(object sender, RoutedEventArgs e)
         {
             Settings.USettings.Animation_Scroll = (bool)Settings_Animation_Scroll.IsChecked;
+        }
+
+        private void Settings_Theme_EnableBlur_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.USettings.EnableThemeBlur = (bool)Settings_Theme_EnableBlur.IsChecked;
         }
 
         private void Settings_MemoryFlush_Click(object sender, RoutedEventArgs e)
@@ -1212,6 +1167,60 @@ namespace LemonApp
             }
         }
         #endregion
+
+        /// <summary>
+        /// 应用主题
+        /// </summary>
+        /// <param name="DarkMode">黑暗模式</param>
+        /// <param name="EnableBlur">启用模糊特效</param>
+        /// <param name="ThemeColor">主题颜色</param>
+        /// <param name="PageBackground">背景画刷</param>
+        /// <param name="DynamicBg">动态背景对象</param>
+        /// <param name="ImgPath">图像/程序集路径</param>
+        /// <param name="SaveToSettings">保存到设置</param>
+        /// <param name="ThemeType">0:Normal 1:Picture Theme 2.Blur 3:Dynamic theme</param>
+        private void ApplyTheme(bool DarkMode,bool EnableBlur,Color ThemeColor,
+            Brush PageBackground,ThemeBase DynamicBg,string ImgPath,
+            bool SaveToSettings,int ThemeType=-1,Color? BlurBg=null)
+        {
+            //是否启用模糊特效
+          if(!EnableBlur)
+            {
+                if (wac.IsEnabled) wac.IsEnabled = false;
+            }
+            else
+            {
+                if (BlurBg == null)
+                    wac.Color = DarkMode ? Color.FromArgb(200, 0, 0, 0) : Color.FromArgb(200, 255, 255, 255);
+                else wac.Color = (Color)BlurBg;
+                wac.DarkMode = DarkMode;
+                wac.IsEnabled = true;
+            }
+            //字体颜色
+            if (DarkMode) App.BaseApp.Skin();
+            else App.BaseApp.Skin_Black();
+            //应用背景
+            DThemePage.Child = DynamicBg;//Dynamic Theme
+            DynamicBg?.Draw();
+            Page.Background = PageBackground;//Img Theme
+            MainPage.Background = null;
+            //更新LyricBar
+            if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
+                lyricTa.UpdataWindowBlurMode(DarkMode);
+            //更新主题颜色
+            App.BaseApp.SetColor("ThemeColor", ThemeColor);
+            if (SaveToSettings)
+            {
+                Settings.USettings.Skin_Type = ThemeType;
+                Settings.USettings.Skin_ThemeColor_R = ThemeColor.R;
+                Settings.USettings.Skin_ThemeColor_G = ThemeColor.G;
+                Settings.USettings.Skin_ThemeColor_B = ThemeColor.B;
+                Settings.USettings.Skin_ImagePath =DynamicBg==null?(ImgPath==null?"":ImgPath): "DTheme[" + ImgPath + "]";
+                Settings.USettings.Skin_FontColor = DarkMode ? "White" : "Black";
+                Settings.SaveSettingsAsync();
+            }
+        }
+
         private void LoadDTheme(ThemeBase bg)
         {
             string ThemeName = bg.ThemeName;
@@ -1227,32 +1236,9 @@ namespace LemonApp
             sc.Margin = new Thickness(12, 0, 12, 20);
             sc.MouseDown += (s, n) =>
             {
-                if (wac.IsEnabled) wac.IsEnabled = false;
                 var bgl = bg.GetPage();
-                DThemePage.Child = bgl;
-                Page.Background = null;
-                Color co;
-                if (sc.txtColor == "Black")
-                {
-                    co = Color.FromRgb(64, 64, 64);
-                    App.BaseApp.Skin_Black();
-                }
-                else
-                {
-                    co = Color.FromRgb(255, 255, 255);
-                    App.BaseApp.Skin();
-                }
-                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                    lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
-                App.BaseApp.SetColor("ThemeColor", sc.theme);
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                Settings.USettings.Skin_Type = 3;
-                Settings.USettings.Skin_ThemeColor_R = sc.theme.R;
-                Settings.USettings.Skin_ThemeColor_G = sc.theme.G;
-                Settings.USettings.Skin_ThemeColor_B = sc.theme.B;
-                Settings.USettings.Skin_ImagePath = "DTheme[" + bg + "]";
-                Settings.USettings.Skin_FontColor = ThemeName;
-                Settings.SaveSettingsAsync();
+                bool DarkMode = sc.txtColor == "White";
+                ApplyTheme(DarkMode, false, bg.ThemeColor, null, bgl, bg.ToString(), true,3);
             };
             SkinIndexList.Children.Add(sc);
         }
@@ -1271,40 +1257,38 @@ namespace LemonApp
             SkinControl sxc_black = new SkinControl("暗黑", new SolidColorBrush(Color.FromRgb(60, 60, 60)), Color.FromRgb(0, 0, 0));
             sxc_black.MouseDown += (s, n) =>
             {
-                if (wac.IsEnabled) wac.IsEnabled = false;
-                DThemePage.Child = null;
-                App.BaseApp.Skin();
-                Page.Background = new SolidColorBrush(Color.FromRgb(45, 45, 48));
-                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                    lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
                 Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
-                Settings.USettings.Skin_ThemeColor_R = theme.R;
-                Settings.USettings.Skin_ThemeColor_G = theme.G;
-                Settings.USettings.Skin_ThemeColor_B = theme.B;
-                Settings.USettings.Skin_Type = 1;
-                Settings.USettings.Skin_FontColor = "White";
-                Settings.USettings.Skin_ImagePath = "[Dark]";
-                Settings.SaveSettingsAsync();
+                if (Settings.USettings.EnableThemeBlur)
+                {
+                    var c = Color.FromArgb(180, 0, 0, 0);
+                    ApplyTheme(true, true, theme, null, null, null, true, 0,c);
+                    c.A = 100;
+                    MainPage.Background = new SolidColorBrush(c);
+                }
+                else
+                {
+                    var bg = new SolidColorBrush(Color.FromRgb(45, 45, 48));
+                    ApplyTheme(true, false, theme, bg, null, null, true, 0);
+                }
             };
             sxc_black.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(sxc_black);
             SkinControl sxc = new SkinControl("-1", "素白", Color.FromArgb(0, 0, 0, 0));
             sxc.MouseDown += (s, n) =>
             {
-                if (wac.IsEnabled) wac.IsEnabled = false;
-                Page.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                    lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
-                DThemePage.Child = null;
-                App.BaseApp.UnSkin();
                 Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
-                Settings.USettings.Skin_ThemeColor_R = theme.R;
-                Settings.USettings.Skin_ThemeColor_G = theme.G;
-                Settings.USettings.Skin_ThemeColor_B = theme.B;
-                Settings.USettings.Skin_Type = 0;
-                Settings.USettings.Skin_FontColor = "";
-                Settings.USettings.Skin_ImagePath = "";
-                Settings.SaveSettingsAsync();
+                if (Settings.USettings.EnableThemeBlur)
+                {
+                    var c = Color.FromArgb(180, 255, 255, 255);
+                    ApplyTheme(false, true, theme, null, null, null, true, 0, c);
+                    c.A = 100;
+                    MainPage.Background = new SolidColorBrush(c);
+                }
+                else
+                {
+                    var bg = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                    ApplyTheme(false, false, theme, bg, null, null, true, 0);
+                }
             };
             sxc.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(sxc);
@@ -1313,48 +1297,16 @@ namespace LemonApp
             SkinControl blur = new SkinControl("-2", "磨砂黑", Color.FromArgb(0, 0, 0, 0));
             blur.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(32, 32, 32));
-                DThemePage.Child = null;
-                App.BaseApp.Skin();
-                wac.Color = Color.FromArgb(200, 0, 0, 0);
-                wac.DarkMode = true;
-                wac.IsEnabled = true;
-                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                    lyricTa.UpdataWindowBlurMode(true);
                 Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
-                Settings.USettings.Skin_ThemeColor_R = theme.R;
-                Settings.USettings.Skin_ThemeColor_G = theme.G;
-                Settings.USettings.Skin_ThemeColor_B = theme.B;
-                Settings.USettings.Skin_Type = 2;
-                Settings.USettings.Skin_FontColor = "White";
-                Settings.USettings.Skin_ImagePath = "";
-                Settings.SaveSettingsAsync();
+                ApplyTheme(true,true,theme,null,null, null, true,2);
             };
             blur.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blur);
             SkinControl blurWhite = new SkinControl("-3", "亚克力白", Color.FromArgb(255, 240, 240, 240));
             blurWhite.MouseDown += (s, n) =>
             {
-                Page.Background = new SolidColorBrush(Colors.Transparent);
-                WdBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(180, 180, 180));
-                DThemePage.Child = null;
-                App.BaseApp.Skin_Black();
-                Color co = Color.FromRgb(64, 64, 64);
-                App.BaseApp.SetColor("ResuColorBrush", co);
-                wac.DarkMode = false;
-                wac.Color = (Color.FromArgb(200, 255, 255, 255));
-                wac.IsEnabled = true;
-                if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                    lyricTa.UpdataWindowBlurMode(false);
                 Color theme = (Color)ColorConverter.ConvertFromString("#FFF97772");
-                Settings.USettings.Skin_ThemeColor_R = theme.R;
-                Settings.USettings.Skin_ThemeColor_G = theme.G;
-                Settings.USettings.Skin_ThemeColor_B = theme.B;
-                Settings.USettings.Skin_Type = 2;
-                Settings.USettings.Skin_FontColor = "Black";
-                Settings.USettings.Skin_ImagePath = "";
-                Settings.SaveSettingsAsync();
+                ApplyTheme(false,true,theme,null,null, null, true,2);
             };
             blurWhite.Margin = new Thickness(12, 0, 12, 20);
             SkinIndexList.Children.Add(blurWhite);
@@ -1374,31 +1326,12 @@ namespace LemonApp
                 sc.txtColor = dx["TextColor"].ToString();
                 sc.MouseDown += async (s, n) =>
                 {
-                    if (wac.IsEnabled) wac.IsEnabled = false;
-                    if (!System.IO.File.Exists(Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png"))
-                        await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png");
-                    Page.Background = new ImageBrush(new System.Drawing.Bitmap(Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png").ToImageSource());
-                    DThemePage.Child = null;
-                    Color co;
-                    if (sc.txtColor == "Black")
-                    {
-                        co = Color.FromRgb(64, 64, 64); App.BaseApp.Skin_Black();
-                    }
-                    else
-                    {
-                        co = Color.FromRgb(255, 255, 255); App.BaseApp.Skin();
-                    }
-                    if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                        lyricTa.UpdataWindowBlurMode(Settings.USettings.Skin_FontColor == "White");
-                    App.BaseApp.SetColor("ThemeColor", sc.theme);
-                    App.BaseApp.SetColor("ResuColorBrush", co);
-                    Settings.USettings.Skin_Type = 1;
-                    Settings.USettings.Skin_ImagePath = Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png";
-                    Settings.USettings.Skin_FontColor = sc.txtColor;
-                    Settings.USettings.Skin_ThemeColor_R = sc.theme.R;
-                    Settings.USettings.Skin_ThemeColor_G = sc.theme.G;
-                    Settings.USettings.Skin_ThemeColor_B = sc.theme.B;
-                    Settings.SaveSettingsAsync();
+                    string imgpath = Settings.USettings.MusicCachePath + "Skin\\" + sc.imgurl + ".png";
+                    if (!System.IO.File.Exists(imgpath))
+                        await HttpHelper.HttpDownloadFileAsync($"https://gitee.com/TwilightLemon/ux/raw/master/{sc.imgurl}.png", imgpath);
+                    var bg = new ImageBrush(new System.Drawing.Bitmap(imgpath).ToImageSource());
+                    ApplyTheme(sc.txtColor == "White", false, sc.theme, bg, null, imgpath, true,1);
+                  
                 };
                 sc.Margin = new Thickness(12, 0, 12, 20);
                 SkinIndexList.Children.Add(sc);

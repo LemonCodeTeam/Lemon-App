@@ -83,24 +83,8 @@ namespace LemonApp
         {
             ThemeColor = 0;
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FFF97772"));
-            SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FFFFFF"));
-
-            SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
-            SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));
-            SetColor("PlayDLPage_Border", (Color)ColorConverter.ConvertFromString("#FFF2F2F2"));
-            SetColor("PlayDLPage_Font_Most", (Color)ColorConverter.ConvertFromString("#FF232323"));
-            SetColor("PlayDLPage_Font_Low", (Color)ColorConverter.ConvertFromString("#FF707070"));
-        }
-        /// <summary>
-        /// 恢复 默认主题  /卸载主题
-        /// </summary>
-        public void UnSkin()
-        {
-            ThemeColor = 0;
-            SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FFF97772"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
-            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#05000000"));
+            SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FFFFFF"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));

@@ -167,6 +167,8 @@ namespace LemonLib
                 USettings.Animation_Scroll = bool.Parse(o["Animation_Scroll"].ToString());
             if (data.Contains("MemoryFlush"))
                 USettings.MemoryFlush = bool.Parse(o["MemoryFlush"].ToString());
+            if (data.Contains("EnableThemeBlur"))
+                USettings.EnableThemeBlur = bool.Parse(o["EnableThemeBlur"].ToString());
             if (data.Contains("PreferQuality"))
                 USettings.PreferQuality = (MusicQuality)int.Parse(o["PreferQuality"].ToString());
             if (data.Contains("PreferQuality_Download"))
@@ -264,7 +266,7 @@ namespace LemonLib
 
 
             /// <summary>
-            /// 主题类型 0:Normal 1:Picture Theme 2.Blur For Win10 3:live theme
+            /// 主题类型 0:Normal 1:Picture Theme 2.Blur 3:Dynamic theme
             /// </summary>
             public int Skin_Type = -1;
             /// <summary>
@@ -292,6 +294,7 @@ namespace LemonLib
             public bool Animation_Refrech { get; set; } = true;
             public bool Animation_Scroll { get; set; } = true;
             public bool MemoryFlush { get; set; } = true;
+            public bool EnableThemeBlur { get; set; } = true;
             #endregion
 
             public Dictionary<string, QuickGoToData> QuickGoToData = new Dictionary<string, QuickGoToData>();

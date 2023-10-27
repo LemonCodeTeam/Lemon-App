@@ -19,6 +19,7 @@ namespace LemonApp
         private readonly Window _window;
         private bool _isEnabled;
         private int _blurColor;
+        private Version osVersion;
         private Action<Color> NoneCallback;
 
         /// <summary>
@@ -31,30 +32,11 @@ namespace LemonApp
         {
             _window = window;
             _enableBlurin = enableBlurin;
-            var osVersion = Environment.OSVersion.Version;
-            var windows11 = new Version(10, 0, 22621);
-            if (osVersion >= windows11 && !enableBlurin)
-            {
-                _window.Deactivated += _window_Deactivated;
-                _window.Activated += _window_Activated;
-            }
+            osVersion = Environment.OSVersion.Version;
             NoneCallback = noneCallback;
             DarkMode = Settings.USettings.Skin_FontColor == "White";
         }
 
-        private void _window_Activated(object sender, EventArgs e)
-        {
-            _window.Background = new SolidColorBrush(_color);
-        }
-
-        private void _window_Deactivated(object sender, EventArgs e)
-        {
-            _window.Background = new SolidColorBrush(
-                   DarkMode ?
-                   Color.FromArgb(255, 32, 32, 32) :
-                   Color.FromArgb(255, 242, 242, 242)
-                   );
-        }
         /// <summary>
         /// 获取或设置此窗口模糊特效是否生效的一个状态。
         /// 默认为 false，即不生效。
@@ -76,19 +58,10 @@ namespace LemonApp
         public Color Color
         {
             get => _color;
-
             set
             {
                 _color = value;
-                _blurColor =
-               // 组装红色分量。
-               value.R << 0 |
-               // 组装绿色分量。
-               value.G << 8 |
-               // 组装蓝色分量。
-               value.B << 16 |
-               // 组装透明分量。
-               value.A << 24;
+                _blurColor =value.R << 0 | value.G << 8 | value.B << 16 | value.A << 24;
             }
         }
 
@@ -98,14 +71,14 @@ namespace LemonApp
             var handle = new WindowInteropHelper(window).EnsureHandle();
             Composite(handle, isEnabled);
         }
+
         /// <summary>
-        /// 在win11下对特定窗口启用模糊特效
+        /// 在win11下对ToolWindow窗口启用模糊特效
         /// </summary>
-        public bool _enableBlurin = false;
+        private bool _enableBlurin = false;
         private void Composite(IntPtr handle, bool isEnabled)
         {
             // 操作系统版本判定。
-            var osVersion = Environment.OSVersion.Version;
             var windows10_1809 = new Version(10, 0, 17763);
             var windows10 = new Version(10, 0);
             var windows11 = new Version(10, 0, 22621);
@@ -128,49 +101,31 @@ namespace LemonApp
             }
             else
             {
-                // 创建 AccentPolicy 对象。
                 var accent = new AccentPolicy();
-
-                // 设置特效。
                 if (!isEnabled)
-                {
                     accent.AccentState = AccentState.ACCENT_DISABLED;
-                }
                 else if (osVersion >= windows10_1809)
                 {
                     //1803能用但是兼容性不好哇----  1903完美支持 
-
-                    // 如果系统在 Windows 10 (1809) 以上，则启用亚克力效果，并组合已设置的叠加颜色和透明度。
-                    //  请参见《在 WPF 程序中应用 Windows 10 真•亚克力效果》
-                    //  https://blog.walterlv.com/post/using-acrylic-in-wpf-application.html
                     accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
                     accent.GradientColor = _blurColor;
                 }
                 else if (osVersion >= windows10)
                 {
-                    // 如果系统在 Windows 10 以上，则启用 Windows 10 早期的模糊特效。
-                    //  请参见《在 Windows 10 上为 WPF 窗口添加模糊特效》
-                    //  https://blog.walterlv.com/post/win10/2017/10/02/wpf-transparent-blur-in-windows-10.html
                     accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
                 }
                 else
                 {
-                    // 暂时不处理其他操作系统：
-                    //  - Windows 8/8.1 不支持任何模糊特效
-                    //  - Windows Vista/7 支持 Aero 毛玻璃效果
                     NoneCallback?.Invoke(Color);
                     return;
                 }
 
-                // 将托管结构转换为非托管对象。
                 var accentPolicySize = Marshal.SizeOf(accent);
                 var accentPtr = Marshal.AllocHGlobal(accentPolicySize);
                 Marshal.StructureToPtr(accent, accentPtr, false);
 
-                // 设置窗口组合特性。
                 try
                 {
-                    // 设置模糊特效。
                     var data = new WindowCompositionAttributeData
                     {
                         Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY,
@@ -181,11 +136,12 @@ namespace LemonApp
                 }
                 finally
                 {
-                    // 释放非托管对象。
                     Marshal.FreeHGlobal(accentPtr);
                 }
             }
         }
+
+        #region
 
         [DllImport("user32.dll")]
         private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
@@ -278,5 +234,6 @@ namespace LemonApp
                 DWMWINDOWATTRIBUTE.DWMWA_SYSTEMBACKDROP_TYPE,
                 (int)mode);
         }
+        #endregion
     }
 }
