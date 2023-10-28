@@ -268,7 +268,7 @@ namespace LemonLib
             /// <summary>
             /// 主题类型 0:Normal 1:Picture Theme 2.Blur 3:Dynamic theme
             /// </summary>
-            public int Skin_Type = -1;
+            public int Skin_Type = 0;
             /// <summary>
             /// 主题字体颜色 Black:黑字白底 White:白字黑底
             /// </summary>

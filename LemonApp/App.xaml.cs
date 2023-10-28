@@ -24,7 +24,7 @@ namespace LemonApp
         /// <summary>
         /// 程序版本号 （用于检测更新）
         /// </summary>
-        public static string EM = "1273";
+        public static string EM = "1274";
         #region 启动时 进程检测 配置 登录
         //放在全局变量  防止GC回收  导致失效
         private System.Threading.Mutex mutex;
