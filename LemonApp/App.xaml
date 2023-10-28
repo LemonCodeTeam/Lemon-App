@@ -23,6 +23,8 @@
             <SolidColorBrush x:Key="ResuColorBrush" Color="#FF272727"/>
             <!--菜单栏背景色 默认值:#FFFAFAFA-->
             <SolidColorBrush x:Key="ControlPageBrush" Color="#05000000"/>
+            <!--MouseOver Mask Default:#0CFFFFFF(DarkMode) #14000000(LightMode)-->
+            <SolidColorBrush x:Key="MouseOverMask" Color="#14FFFFFF"/>
 
             <!--用于播放队列 弹出框 的主题配置 仅白色或暗色-->
             <!--播放列表顶部栏背景色-->

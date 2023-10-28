@@ -60,6 +60,10 @@ namespace LemonApp
             var color = new SolidColorBrush() { Color = c };
             Resources[id] = color;
         }
+        public Brush GetColor(string id)
+        {
+            return (Brush)Resources[id];
+        }
         /// <summary>
         /// 适配白色字体的主题配置（默认）
         /// </summary>
@@ -69,6 +73,7 @@ namespace LemonApp
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FFF97772"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("White"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19000000"));
+            SetColor("MouseOverMask", (Color)ColorConverter.ConvertFromString("#0CFFFFFF"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FF2D2D30"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("#FF3E3E42"));
@@ -85,6 +90,7 @@ namespace LemonApp
             SetColor("ThemeColor", (Color)ColorConverter.ConvertFromString("#FFF97772"));
             SetColor("ResuColorBrush", (Color)ColorConverter.ConvertFromString("#FF272727"));
             SetColor("ControlPageBrush", (Color)ColorConverter.ConvertFromString("#19FFFFFF"));
+            SetColor("MouseOverMask", (Color)ColorConverter.ConvertFromString("#14000000"));
 
             SetColor("PlayDLPage_Top", (Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
             SetColor("PlayDLPage_Bg", (Color)ColorConverter.ConvertFromString("White"));

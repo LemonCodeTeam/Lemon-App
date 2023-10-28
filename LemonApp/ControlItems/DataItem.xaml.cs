@@ -1,6 +1,7 @@
 ﻿using LemonLib;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -163,6 +164,9 @@ namespace LemonApp
 
         bool ns = false;
         public bool isChecked = false;
+        /// <summary>
+        /// 播放中
+        /// </summary>
         public bool pv;
         public void ShowDx()
         {
@@ -177,7 +181,7 @@ namespace LemonApp
                 AppConstants.LastItem.pv = false;
             }
             pv = true;
-            bg.Background = new SolidColorBrush(Color.FromArgb(10, 0, 0, 0));
+            bg.Background = App.BaseApp.GetColor("MouseOverMask");
             ser.SetResourceReference(ForegroundProperty, "ThemeColor");
             namss.SetResourceReference(ForegroundProperty, "ThemeColor");
             color.Visibility = Visibility.Visible;
@@ -246,7 +250,7 @@ namespace LemonApp
         {
             if (Gdpop == null)
             {
-                string Gdpopxaml = "<Popup " + AppConstants.XAMLUSINGS + @" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"">
+                string Gdpopxaml = "<Popup " + AppConstants.XAMLUSINGS + @" x:Name=""Gdpop"" AllowsTransparency=""True"" Placement=""Mouse"" StaysOpen=""False"">
                 <Border Background=""{DynamicResource PlayDLPage_Bg}"" CornerRadius=""5"" Margin=""10"" BorderBrush=""{DynamicResource PlayDLPage_Border}"" BorderThickness=""1"">
                     <Grid>
                         <ListBox x:Name=""Add_Gdlist""  VirtualizingPanel.VirtualizationMode=""Recycling"" BorderThickness=""0""
@@ -273,6 +277,7 @@ namespace LemonApp
             var md = new ListBoxItem { Background = new SolidColorBrush(Colors.Transparent), Height = 30, Content = "取消", Margin = new Thickness(10, 10, 10, 0) };
             md.PreviewMouseDown += delegate { Gdpop.IsOpen = false; };
             Add_Gdlist.Items.Add(md);
+            await Task.Yield();
             Gdpop.IsOpen = true;
         }
 
@@ -310,6 +315,9 @@ namespace LemonApp
                     wpl.Margin = new Thickness(60, 10, 80, 10);
                 else wpl.Margin = new Thickness(15, 10, 80, 10);
                 if (needb) DeleteBtn.Visibility = Visibility.Visible;
+
+                if(!pv)
+                    bg.Background = App.BaseApp.GetColor("MouseOverMask");
             }
         }
 
@@ -321,6 +329,9 @@ namespace LemonApp
             if (ns)
                 wpl.Margin = new Thickness(60, 10, 10, 10);
             else wpl.Margin = new Thickness(15, 10, 10, 10);
+
+            if (!pv)
+                bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         }
 
         private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
