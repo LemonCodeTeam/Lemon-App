@@ -1206,7 +1206,7 @@ namespace LemonApp
             MainPage.Background = null;
             //更新LyricBar
             if (Settings.USettings.LyricAppBarOpen && Settings.USettings.DoesOpenDeskLyric)
-                lyricTa.UpdataWindowBlurMode(DarkMode);
+                lyricTa?.UpdataWindowBlurMode(DarkMode);
             //更新主题颜色
             App.BaseApp.SetColor("ThemeColor", ThemeColor);
             if (SaveToSettings)
