@@ -46,6 +46,10 @@ namespace LemonApp
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
                 if (!Directory.Exists(Settings.USettings.DataCachePath))
                     Directory.CreateDirectory(Settings.USettings.DataCachePath);
+                int version = WebBrowserHelper.GetBrowserVersion();
+                if(version>=10)
+                    WebBrowserHelper.SetWebBrowserFeatures(version);
+
                 new MainWindow().Show();
             }
         }

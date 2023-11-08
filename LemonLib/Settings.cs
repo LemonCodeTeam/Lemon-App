@@ -28,6 +28,12 @@ namespace LemonLib
         #region USettings
         public static UserSettings USettings = new();
         public static UserSettings_PlayList USettings_Playlist = new();
+        //help me write some explanatory notes here:
+        //1. Settings configuration file is placed in the user directory %AppData% (C:\User\xxx\AppData\Roaming\LemonApp)
+        //2. Music, lyrics, pictures and other cache directories are placed in the second drive letter (if it exists)\LemonAppCache\
+        //3. The download directory is placed in the user directory My Music folder
+        //The above 2 and 3 items can be set in the application..
+        //Load the default cache and download folder
         public static async Task SaveSettingsTaskAsync(string id =null)
         {
             try
@@ -261,8 +267,11 @@ namespace LemonLib
             /// </summary>
             public bool LyricAppBarOpen { get; set; } = false;
             public int LyricAppBar_Size { get; set; } = 16;
+            /// <summary>
+            ///  是否启用歌词AppBar翻译
+            /// </summary>
             public bool LyricAppBarEnableTrans { get; set; } = false;
-            public bool BindMyToolBar { get; set; } = true;
+            public bool BindMyToolBar { get; set; } = false;
 
 
             /// <summary>

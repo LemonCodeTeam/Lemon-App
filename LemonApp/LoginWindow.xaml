@@ -18,6 +18,5 @@
         <WindowsFormsHost x:Name="wf" Margin="0,30,0,0" Visibility="Collapsed">
         </WindowsFormsHost>
         <TextBlock x:Name="loading" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Center" FontSize="20"/>
-
     </Grid>
 </Window>

@@ -520,8 +520,8 @@ namespace LemonApp
                 //检测登录是否已失效
                 Thread t = new Thread(async () =>
                 {
-                    var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205360838&ct=20&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0");
-                    Debug.WriteLine(sl);
+                    var sl = await HttpHelper.GetWebDatacAsync($"https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&g_tk={Settings.USettings.g_tk}&cid=205360838&userid={Settings.USettings.LemonAreeunIts}&reqfrom=1&reqtype=0&hostUin=0&loginUin={Settings.USettings.LemonAreeunIts}");
+                    Console.WriteLine(sl);
                     JObject j = JObject.Parse(sl);
                     if (j["code"].ToString() == "0")
                     {
@@ -537,7 +537,7 @@ namespace LemonApp
                         });
                         Dispatcher.Invoke(() =>
                         {
-                            Toast.Send("登陆成功! o(*￣▽￣*)ブ  欢迎回来" + name);
+                            Toast.Send("登录成功! o(*￣▽￣*)ブ  欢迎回来" + name);
                         });
                     }
                     else
@@ -577,7 +577,7 @@ namespace LemonApp
             }
             else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
             //---------加载上一次播放-------与播放列表
-            //---------------登陆之后-同步"我喜欢"歌单ids----------
+            //---------------登录之后-同步"我喜欢"歌单ids----------
             if (Settings.USettings.LemonAreeunIts != "0")
             {
                     Dictionary<string, string> dt = new Dictionary<string, string>();
@@ -792,7 +792,7 @@ namespace LemonApp
                 Settings.LSettings.qq = qq;
                 await Settings.SaveLocaSettings();
                 await MusicLib.GetMusicLikeGDid();
-                Toast.Send("登陆成功! o(*￣▽￣*)ブ  欢迎回来" + name);
+                Toast.Send("登录成功! o(*￣▽￣*)ブ  欢迎回来" + name);
                 UserInfo_Logout.TName = "退出登录";
                 UserInfo_GTK.Text = Settings.USettings.g_tk;
                 UserInfo_Cookie.Text = Settings.USettings.Cookie;
@@ -2730,7 +2730,6 @@ namespace LemonApp
         {
             lyrictime_offset -= 0.1;
             LyricPage_TimeSetter.Text = lyrictime_offset.ToString("0.0") + "s";
-            Console.WriteLine(lyrictime_offset + "s", "LYRIC_OFFSET");
         }
         private bool isLyricPage_TimeSet_Open = false;
         private void LyricPage_TimeSet_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3890,7 +3889,7 @@ namespace LemonApp
         LoginWindow lw;
         private void UserTX_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            lw = new LoginWindow(this);
+            lw = new LoginWindow(Login);
             lw.Show();
         }
         #endregion
