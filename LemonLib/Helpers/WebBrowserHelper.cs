@@ -15,9 +15,6 @@ namespace LemonLib
         /// </summary>  
         public static void SetWebBrowserFeatures(int ieVersion)
         {
-            // don't change the registry if running in-proc inside Visual Studio  
-            if (LicenseManager.UsageMode != LicenseUsageMode.Runtime)
-                return;
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             UInt32 ieMode = GeoEmulationModee(ieVersion);
             var featureControlRegKey = @"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\";
