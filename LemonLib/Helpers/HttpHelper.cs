@@ -111,6 +111,7 @@ namespace LemonLib
 
             return Encoding.UTF8.GetString(responseData);
         }
+
         /// <summary>
         /// 发送一个简单的POST请求
         /// </summary>
@@ -190,7 +191,7 @@ namespace LemonLib
             hc.DefaultRequestHeaders.Add("CacheControl", "max-age=0");
             hc.DefaultRequestHeaders.Add("Upgrade", "1");
             hc.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36");
-            hc.DefaultRequestHeaders.Add("Referer", "https://y.qq.com/portal/player.html");
+            hc.DefaultRequestHeaders.Add("Referer", "https://y.qq.com/");
             hc.DefaultRequestHeaders.Host = "c.y.qq.com";
             hc.DefaultRequestHeaders.TryAddWithoutValidation("AcceptLanguage","zh-CN,zh;q=0.8");
             hc.DefaultRequestHeaders.Add("Cookie", Settings.USettings.Cookie);
