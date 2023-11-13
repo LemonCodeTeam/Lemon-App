@@ -5,7 +5,6 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <StartupObject>DebugConsole.Program</StartupObject>
 	 <Authors>TwilightLemon</Authors>
-	 <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

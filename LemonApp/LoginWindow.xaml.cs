@@ -46,7 +46,7 @@ namespace LemonApp
         }
         string rCookie=null, rUrl=null;
         Dictionary<string, string> cookies = new Dictionary<string, string>();
-        private async void Wb_Dc_Login(object sender, EventArgs e)
+        private void Wb_Dc_Login(object sender, EventArgs e)
         {
             string url = wb.Url.ToString();
             var cookie = wb.Document.Cookie;
