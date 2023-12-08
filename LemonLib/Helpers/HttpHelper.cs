@@ -87,6 +87,17 @@ namespace LemonLib
             hc.DefaultRequestHeaders.TryAddWithoutValidation("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Host", "c.y.qq.com");
         }
+        public static void GetWebHeader_Netease(HttpClient hc)
+        {
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("AcceptLanguage", "zh-CN,zh;q=0.9");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("ContentType", "application/x-www-form-urlencoded; charset=UTF-8");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Cookie", Settings.USettings.NetEaseCookie);
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Referer", "https://music.163.com/");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("UserAgent", "Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Host", "music.163.com");
+        }
+
         public static WebHeaderCollection GetWebHeader_BaiduFY() => new()
         {
             {"Accept","*/*"},

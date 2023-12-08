@@ -752,13 +752,13 @@ jpg
         /// <param name="Finished"></param>
         public static async Task GetGDbyWYAsync(string id, Action<int> GetCount, Action<int, string> GetItem, Action Finished)
         {
-            string data = await HttpHelper.GetWebAsync($"https://api.yimian.xyz/msc/?type=playlist&id={id}");
+            string data = await HttpHelper.GetWebAsync($"http://music.163.com/api/v6/playlist/detail?id={id}&offset=0&total=true&limit=100000&n=1000");
             MainClass.DebugCallBack("GETWYGD", data);
             JObject o = JObject.Parse(data);
             var dt = new MusicGData();
             string ids = "";
             string typelist = "";
-            var pl = o["result"];
+            var pl = o["playlist"];
             dt.name = pl["name"].ToString();
             dt.id = pl["id"].ToString();
             dt.pic = pl["coverImgUrl"].ToString();
@@ -769,10 +769,10 @@ jpg
             {
                 var dtname = pl_t_i["name"].ToString();
                 var dtsinger = "";
-                var pl_t_i_ar = pl_t_i["artists"];
-                for (int dx = 0; dx != pl_t_i_ar.Count(); dx++)
-                    dtsinger += pl_t_i_ar[0]["name"] + "&";
-                dtsinger = dtsinger.Substring(0, dtsinger.LastIndexOf("&"));
+                var pl_t_i_ar = pl_t_i["ar"];
+                foreach (var a in pl_t_i_ar)
+                    dtsinger += a["name"] + " ";
+                dtsinger = dtsinger[..^1];
                 var dtf = await SearchMusicAsync(dtname + "-" + dtsinger);
                 if (dtf.Count > 0)
                 {
@@ -788,6 +788,7 @@ jpg
             typelist = typelist.Substring(0, typelist.LastIndexOf(","));
             await AddNewGdAsync(dt.name);
             await Task.Delay(500);
+            //TODO:同步歌单封面:download to local and upload to y.qq.com
             string dir = await GetGDdiridByNameAsync(dt.name);
             var amt = await AddMusicToGDPLAsync(ids, dir, typelist);
             Finished();
