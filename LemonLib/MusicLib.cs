@@ -246,18 +246,18 @@ namespace LemonLib
         /// <returns></returns>
         public static async Task<string> DeleteMusicFromGDAsync(string[] Musicids, string dirid)
         {
-            string Musicid = "";
-            string types = "";
-            foreach (string id in Musicids)
+            string items = "";
+            //{\"songType\":0,\"songId\":Musicids}
+            foreach (var item in Musicids)
             {
-                types += "3,";
+                items += "{\"songType\":0,\"songId\":" + item + "},";
             }
-            Musicid = string.Join(",", Musicids);
-            types = types[0..^1];
-            string result = await HttpHelper.PostWeb("https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=" + Settings.USettings.g_tk,
-                $"loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.post&needNewCode=0&uin={Settings.USettings.LemonAreeunIts}&dirid={dirid}&ids={Musicid}&source=103&types={types}&formsender=4&flag=2&from=3&utf8=1&g_tk=" + Settings.USettings.g_tk, HttpHelper.GetWebHeader_YQQCOM);
-            string ok = JObject.Parse(result)["msg"].ToString();
-            return ok;
+            items = items[..^1];
+            string requestData = "{\"comm\":{\"cv\":4747474,\"ct\":24,\"format\":\"json\",\"inCharset\":\"utf-8\",\"outCharset\":\"utf-8\",\"notice\":0,\"platform\":\"yqq.json\",\"needNewCode\":1,\"uin\":"+Settings.USettings.LemonAreeunIts
+                +",\"g_tk_new_20200303\":"+ Settings.USettings.LemonAreeunIts + ",\"g_tk\":"+ Settings.USettings.LemonAreeunIts 
+                + "},\"req_1\":{\"module\":\"music.musicasset.PlaylistDetailWrite\",\"method\":\"DelSonglist\",\"param\":{\"dirId\":"+dirid+",\"v_songInfo\":["+items+"]}}}";
+            var json = await HttpHelper.PostInycAsync("https://u.y.qq.com/cgi-bin/musicu.fcg",requestData);
+            return JObject.Parse(json)["req_1"]["data"]["msg"].ToString();
         }
 
         /// <summary>
@@ -752,13 +752,9 @@ jpg
         /// <param name="Finished"></param>
         public static async Task GetGDbyWYAsync(string id, Action<int> GetCount, Action<int, string> GetItem, Action Finished)
         {
-            string data = await HttpHelper.GetWebAsync($"https://music.163.com/api/playlist/detail?id={id}");
+            string data = await HttpHelper.GetWebAsync($"https://api.yimian.xyz/msc/?type=playlist&id={id}");
             MainClass.DebugCallBack("GETWYGD", data);
             JObject o = JObject.Parse(data);
-            if (o["code"].ToString() != "200")
-            {
-                GetItem(0, o["msg"].ToString());
-            }
             var dt = new MusicGData();
             string ids = "";
             string typelist = "";
