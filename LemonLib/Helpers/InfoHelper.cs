@@ -143,6 +143,12 @@ namespace LemonLib
             public string cookie;
             public string g_tk = null;
         }
+        public class SearchTipData
+        {
+            public List<MusicGD> MusicGDs = new List<MusicGD>();
+            public List<MusicSinger> MusicSingers = new List<MusicSinger>();
+            public List<Music> Musics = new List<Music>();
+        }
         public class Music
         {
             public Plantform Source { set; get; } = Plantform.qq;

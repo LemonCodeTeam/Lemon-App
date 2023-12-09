@@ -157,27 +157,57 @@ namespace LemonLib
             }catch { }
             return dt;
         }
-        public static async Task<List<string>> Search_SmartBoxAsync(string key)
+        public static async Task<SearchTipData> GetSearchTipAsync(string key)
         {
             var data = JObject.Parse(await HttpHelper.GetWebAsync($"https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg?key={HttpUtility.UrlDecode(key)}&utf8=1&is_xml=0&loginUin={Settings.USettings.LemonAreeunIts}&qqmusic_ver=1592&searchid=3DA3E73D151F48308932D9680A3A5A1722872&pcachetime=1535710304"))["data"];
-            List<String> list = new List<String>();
+            SearchTipData tips = new();
             var song = data["song"]["itemlist"];
-            for (int i = 0; i < song.Count(); i++)
+            foreach(var o in song)
             {
-                var o = song[i];
-                list.Add("歌曲:" + o["name"] + " - " + o["singer"]);
+                tips.Musics.Add(new Music()
+                {
+                    MusicName = o["name"].ToString(),
+                    SingerText = o["singer"].ToString(),
+                    MusicID = o["mid"].ToString()
+                });
             }
             var album = data["album"]["itemlist"];
-            for (int i = 0; i < album.Count(); i++)
+            foreach (var o in album)
             {
-                var o = album[i];
-                list.Add("专辑:" + o["singer"] + " - 《" + o["name"] + "》");
+                tips.MusicGDs.Add(new MusicGD()
+                {
+                    Name = o["name"].ToString(),
+                    ID = o["mid"].ToString(),
+                    Photo = o["pic"].ToString()
+                });
             }
             var singer = data["singer"]["itemlist"];
-            for (int i = 0; i < singer.Count(); i++)
+            foreach(var o in singer)
             {
-                var o = singer[i];
-                list.Add("歌手:" + o["singer"]);
+                tips.MusicSingers.Add(new MusicSinger()
+                {
+                    Name = o["name"].ToString(),
+                    Mid = o["mid"].ToString(),
+                    Photo = o["pic"].ToString()
+                });
+            }
+            return tips;
+        }
+        public static async Task<List<string>> Search_SmartBoxAsync(string key)
+        {
+            var data=await GetSearchTipAsync(key);
+            List<String> list = new List<String>();
+            foreach (var o in data.Musics)
+            {
+                list.Add("歌曲:" + o.MusicName + " - " + o.SingerText);
+            }
+            foreach(var o in data.MusicGDs)
+            {
+                list.Add("专辑:" + o.Name);
+            }
+            foreach(var o in data.MusicSingers)
+            {
+                list.Add("歌手:" + o.Name);
             }
             return list;
         }

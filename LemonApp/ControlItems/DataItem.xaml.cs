@@ -155,10 +155,20 @@ namespace LemonApp
             InitializeComponent();
             music = dat;
         }
-        private void R_MouseDown(object sender, MouseButtonEventArgs e)
+        //跳转到歌手页面
+        private async void R_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Ran r = sender as Ran;
             MusicSinger ms = r.data as MusicSinger;
+            if (music.Source == Plantform.wyy)
+            {
+                var data = await MusicLib.GetSearchTipAsync(ms.Name);
+                if (data.MusicSingers.Count > 0)
+                {
+                    ms = data.MusicSingers[0];
+                }
+                else return;
+            }
             GetToSingerPage(ms);
         }
 
@@ -286,7 +296,20 @@ namespace LemonApp
             Gdpop.IsOpen = false;
             string name = (sender as ListBoxItem).Content.ToString();
             string id = ListData[name];
-            string[] a = await MusicLib.AddMusicToGDAsync(music.MusicID, id);
+            string mid = music.MusicID;
+            if (music.Source == Plantform.wyy)
+            {
+                var data=await MusicLib.GetSearchTipAsync(music.SingerText + " " + music.MusicName);
+                if (data.Musics.Count > 0)
+                {
+                    var found = data.Musics[0];
+                    mid = found.MusicID;
+                    Toast.Send("Found:"+found.MusicName+"-"+found.SingerText);
+                }
+                else return;
+            }
+
+            string[] a = await MusicLib.AddMusicToGDAsync(mid, id);
             Toast.Send(a[1] + ": " + a[0]);
         }
 
@@ -334,9 +357,19 @@ namespace LemonApp
                 bg.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         }
 
-        private void Ab_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void Ab_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Mainwindow.IFVCALLBACK_LoadAlbum(music.Album.ID);
+            string id = music.Album.ID;
+            if (music.Source == Plantform.wyy)
+            {
+                var data = await MusicLib.GetSearchTipAsync(music.SingerText+" "+music.Album.Name);
+                if (data.MusicGDs.Count > 0)
+                {
+                    id = data.MusicGDs[0].ID;
+                }
+                else return;
+            }
+            Mainwindow.IFVCALLBACK_LoadAlbum(id);
         }
 
         private void MV_MouseDown(object sender, MouseButtonEventArgs e)

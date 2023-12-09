@@ -7,15 +7,15 @@ namespace LemonApp
     /// </summary>
     public partial class LoadingWindow : Window
     {
-        public LoadingWindow()
+        public LoadingWindow(int maxValue)
         {
             InitializeComponent();
+            jd.Maximum = maxValue;
         }
-
-        private void window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        public void Update(string text,int value)
         {
-            if (e.ClickCount >= 2)
-                Close();
+            SignText.Text = text;
+            jd.Value = value;
         }
     }
 }

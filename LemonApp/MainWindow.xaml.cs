@@ -14,6 +14,7 @@ using System.Net.Mail;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -53,7 +54,6 @@ namespace LemonApp
         /// 歌词页面是否打开
         /// </summary>
         int IsLyricPageOpen = 0;
-        bool mod = true;//true : qq false : wy
         LyricView lv;
         bool isLoading = false;
         public NowPage np;
@@ -181,7 +181,6 @@ namespace LemonApp
                 RUNPopup(SingerListPop);
                 RUNPopup(MoreBtn_Meum);
                 RUNPopup(Gdpop);
-                RUNPopup(IntoGDPop);
                 RUNPopup(AddGDPop);
             };
             FixPopupBug();//a disgusting & stupid thing...
@@ -647,6 +646,7 @@ namespace LemonApp
             QualityChooser.SelectedIndex = (int)Settings.USettings.PreferQuality;
             QualityChooser_Download.SelectedIndex = (int)Settings.USettings.PreferQuality_Download;
            Settings_Theme_EnableBlur.IsChecked=Settings.USettings.EnableThemeBlur;
+            BindingToNetease.Visibility = string.IsNullOrEmpty(Settings.USettings.NetEaseCookie) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void PopOut_MouseUp()
@@ -797,6 +797,7 @@ namespace LemonApp
                 UserInfo_GTK.Text = Settings.USettings.g_tk;
                 UserInfo_Cookie.Text = Settings.USettings.Cookie;
                 UserInfo_Netease.Text = Settings.USettings.NetEaseCookie;
+                BindingToNetease.Visibility = string.IsNullOrEmpty(Settings.USettings.NetEaseCookie) ? Visibility.Collapsed : Visibility.Visible;
                 Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
                 Load_Theme();
                 LoadMusicData();
@@ -907,6 +908,7 @@ namespace LemonApp
             new LoginNetease((cookie,id) => {
                 Settings.USettings.NetEaseCookie = cookie;
                 Settings.USettings.NeteaseId = id;
+                BindingToNetease.Visibility = string.IsNullOrEmpty(Settings.USettings.NetEaseCookie) ? Visibility.Collapsed : Visibility.Visible;
                 UserInfo_Netease.Text = cookie;
             }).Show();
         }
@@ -924,6 +926,7 @@ namespace LemonApp
                 UserInfo_Cookie.Text = Settings.USettings.Cookie;
                 UserInfo_Netease.Text = Settings.USettings.NetEaseCookie;
                 UserInfo_Logout.TName = "登录";
+                BindingToNetease.Visibility = string.IsNullOrEmpty(Settings.USettings.NetEaseCookie) ? Visibility.Collapsed : Visibility.Visible;
                 Load_Theme();
                 LoadMusicData();
             }
@@ -1609,8 +1612,10 @@ namespace LemonApp
                                     string name = o["name"].ToString();
                                     string img = o["img"].ToString();
                                     var a = new FLGDIndexItem();
+                                    a.data.Name = name;
                                     a.data.ID = key;
                                     a.data.Photo = img;
+                                    a.data.Source = o["source"].ToString()=="0"?Plantform.qq:Plantform.wyy;
                                     LoadFxGDItems(a, false);
                                     break;
                                 case "Album":
@@ -1929,9 +1934,22 @@ namespace LemonApp
                 }
                 else
                 {
-                    string[] a = await MusicLib.AddMusicToGDAsync(MusicData.Data.MusicID, MusicLib.MusicLikeGDdirid);
+                    string mid = MusicData.Data.MusicID;
+                    if (MusicData.Data.Source == Plantform.wyy)
+                    {
+                        var data = await MusicLib.GetSearchTipAsync(MusicData.Data.SingerText + " " + MusicData.Data.MusicName);
+                        if (data.Musics.Count > 0)
+                        {
+                            var found = data.Musics[0];
+                            mid = found.MusicID;
+                            Toast.Send("Found:" + found.MusicName + "-" + found.SingerText);
+                        }
+                        else return;
+                    }
+
+                    string[] a = await MusicLib.AddMusicToGDAsync(mid, MusicLib.MusicLikeGDdirid);
                     Toast.Send(a[1] + ": " + a[0]);
-                    AppConstants.MusicGDataLike.ids.Add(MusicData.Data.MusicID, MusicData.Data.Littleid);
+                    AppConstants.MusicGDataLike.ids.Add(mid, MusicData.Data.Littleid);
                     LikeBtnDown();
                 }
             }
@@ -2007,7 +2025,7 @@ namespace LemonApp
         {
             Clipboard.SetText(np switch
             {
-                NowPage.GDItem => $"https://y.qq.com/n/yqq/playsquare/{AppConstants.MGData_Now.id}.html#stat=y_new.index.playlist.pic",
+                NowPage.GDItem =>AppConstants.MGData_Now.Source==Plantform.qq? $"https://y.qq.com/n/yqq/playsquare/{AppConstants.MGData_Now.id}.html#stat=y_new.index.playlist.pic":$"https://music.163.com/#/playlist?id={AppConstants.MGData_Now.id}",
                 NowPage.Top => $"https://y.qq.com/n/yqq/toplist/{tc_now.Data.ID}.html",
                 NowPage.Search => $"https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w={HttpUtility.HtmlDecode(SearchKey)}",
                 _ => null
@@ -2027,16 +2045,42 @@ namespace LemonApp
             string id = _ListData[name];
             string Musicid = "";
             string types = "";
+            LoadingWindow lw = null;
+            int count = 0;
+            if (AppConstants.MGData_Now.Source == Plantform.wyy)
+            {
+                foreach (DataItem d in DataItemsList.Items)
+                    if (d.music.MusicID != null && d.isChecked)
+                        count++;
+                lw = new(count);
+                lw.Owner = this;
+                lw.Show();
+            }
+            int checkedcount = 0;
             foreach (DataItem d in DataItemsList.Items)
             {
                 if (d.music.MusicID != null && d.isChecked)
                 {
+                    checkedcount++;
+                    string mid = d.music.MusicID;
+                    if (lw != null)
+                    {
+                        var data = await MusicLib.GetSearchTipAsync(d.music.SingerText + " " + d.music.MusicName);
+                        if (data.Musics.Count > 0)
+                        {
+                            var found = data.Musics[0];
+                            mid = found.MusicID;
+                            lw.Update(found.MusicName + " " + found.SingerText, checkedcount);
+                        }
+                        else continue;
+                    }
                     types += "3,";
-                    Musicid += d.music.MusicID + ",";
+                    Musicid += mid + ",";
                 }
             }
             Musicid = Musicid[0..^1];
             types = types[0..^1];
+            lw?.Close();
             string[] a = await MusicLib.AddMusicToGDPLAsync(Musicid, id, types);
             Toast.Send(a[1] + ": " + a[0]);
         }
@@ -3664,57 +3708,13 @@ namespace LemonApp
         }
         #endregion
         #region IntoGD 导入歌单
-        private void IntoGDPage_CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            IntoGDPop.IsOpen = false;
-        }
-        private void IntoGDPage_qqmod_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!mod)
-            {
-                mod = true;
-                QPath_Bg.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF8C913"));
-                QPath_Ic.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF02B053"));
-                IntoGDPage_wymod.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFB2B2B2"));
-            }
-        }
-
-        private void IntoGDPage_wymod_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (mod)
-            {
-                mod = false;
-                QPath_Bg.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF1F1F1"));
-                QPath_Ic.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFB2B2B2"));
-                IntoGDPage_wymod.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE72D2C"));
-            }
-        }
+      
         private void IntoGDPage_OpenBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            IntoGDPop.IsOpen = !IntoGDPop.IsOpen;
-        }
-        private async void IntoGDPage_DrBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (mod)
-            {
-                await MusicLib.AddGDILikeAsync(IntoGDPage_id.Text);
-                TwMessageBox.Show("添加成功");
-                IntoGDPop.IsOpen = false;
-                GDBtn_MouseDown(null, null);
-            }
-            else
-            {
-                IntoGDPage_main.Visibility = Visibility.Collapsed;
-                IntoGDPage_loading.Visibility = Visibility.Visible;
-                await MusicLib.GetGDbyWYAsync(IntoGDPage_id.Text,
-                    (count)=> { IntoGDPage_ps_jd.Maximum = count; },
-                    (i, title) => { IntoGDPage_ps_jd.Value = i; IntoGDPage_ps_name.Text = title; },
-                    () =>
-                    {
-                        IntoGDPop.IsOpen = false;
-                        GDBtn_MouseDown(null, null);
-                    });;
-            }
+            var intro = new IntroWindow();
+            intro.Owner = this;
+            intro.FinishedEvent+=delegate { GDBtn_MouseDown(null, null); };
+            intro.Show();
         }
         #endregion
         #region AddGD 创建歌单
@@ -4011,7 +4011,7 @@ namespace LemonApp
         private FLGDIndexItem NowType;
         private async void LoadFxGDItems(FLGDIndexItem dt, bool NeedSave = true)
         {
-            NSPage(new MeumInfo(Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.data.ID + "\",\"name\":\"" + dt.data.Name + "\",\"img\":\"" + dt.data.Photo + "\"}" }, NeedSave, false);
+            NSPage(new MeumInfo(Data, null) { cmd = "[DataUrl]{\"type\":\"GD\",\"key\":\"" + dt.data.ID + "\",\"name\":\"" + dt.data.Name + "\",\"img\":\"" + dt.data.Photo + "\",\"source\":\""+dt.data.Source+"\"}" }, NeedSave, false);
             NowType = dt;
             TB.Text = dt.data.Name;
             DataItemsList.Opacity = 0;

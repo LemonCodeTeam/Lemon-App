@@ -4,7 +4,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="SCDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/SCDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!--全局TextBlock文本样式-->
             <Style TargetType="{x:Type TextBlock}">

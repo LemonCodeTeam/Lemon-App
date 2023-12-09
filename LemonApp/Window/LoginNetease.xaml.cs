@@ -1,5 +1,6 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -33,18 +34,34 @@ namespace LemonApp
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           await wb.EnsureCoreWebView2Async(null);
-            wb.NavigationCompleted += Wb_NavigationCompleted;
+            string core = null;
+            try
+            {
+                core=CoreWebView2Environment.GetAvailableBrowserVersionString();
+            }
+            catch { }
+            if(string.IsNullOrEmpty(core))
+            {
+                if(TwMessageBox.Show("没有检测到WebView2 Runtime 现在安装吗？")) {
+                Process.Start("explorer","https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/");
+                }
+                Close();
+                return;
+            }
+
+            await wb.EnsureCoreWebView2Async(null);
+            wb.CoreWebView2.CookieManager.DeleteAllCookies();
+            wb.CoreWebView2.FrameNavigationCompleted += CoreWebView2_FrameNavigationCompleted;
         }
 
-        private async void Wb_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private async void CoreWebView2_FrameNavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             string html = await wb.CoreWebView2.ExecuteScriptAsync("document.body.innerHTML");
-            bool success =!html.Contains("登录网易云音乐");
-            if (success&&html.Contains("退出"))
+            var regex = Regex.Match(html, @"(?<=/user/home\?id=)\d+");
+            if (regex.Success)
             {
                 string cookie = "";
-                var a=await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://music.163.com");
+                var a = await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://music.163.com");
                 foreach (var item in a)
                 {
                     cookie += item.Name + "=" + item.Value + ";";
@@ -53,8 +70,8 @@ namespace LemonApp
                 cookie = cookie[..^1];
                 Console.WriteLine(cookie);
                 //用正则表达式提取用户ID：/user/home?id=323840418"
-                string id = Regex.Match(html, @"(?<=/user/home\?id=)\d+").Value;
-                LoginCallBack(cookie,id);
+                string id = regex.Value;
+                LoginCallBack(cookie, id);
                 Close();
             }
         }
