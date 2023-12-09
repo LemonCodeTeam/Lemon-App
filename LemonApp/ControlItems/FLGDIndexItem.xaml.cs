@@ -89,6 +89,7 @@ namespace LemonApp
                 {
                     type = "GD",
                     id = data.ID,
+                    source=data.Source,
                     name = data.Name,
                     imgurl = data.Photo
                 });

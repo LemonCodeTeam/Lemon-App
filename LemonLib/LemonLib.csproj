@@ -4,7 +4,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
-    <Version>1.2.8.0</Version>
+    <Version>1.2.8.1</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
 

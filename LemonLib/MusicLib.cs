@@ -787,14 +787,15 @@ jpg
             var dt = new List<MusicGData>();
             foreach (var a in o["playlist"])
             {
-                int lc = int.Parse(a["playCount"].ToString());
+                int lc = -1;
+                int.TryParse(a["playCount"].ToString(),out lc);
                 dt.Add(new MusicGData()
                 {
                     id = a["id"].ToString(),
                     name = a["name"].ToString(),
                     pic = a["coverImgUrl"].ToString(),
                     listenCount = lc,
-                    subtitle = $"{a["trackCount"]}首   {lc.IntToWn()}次播放",
+                    subtitle =lc!=-1? $"{a["trackCount"]}首   {lc.IntToWn()}次播放": "{a[\"trackCount\"]}首  超级多人听",
                     IsOwn=false,
                     Source=Plantform.wyy
                 });

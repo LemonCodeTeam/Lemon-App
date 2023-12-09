@@ -38,6 +38,7 @@ namespace LemonLib
             public string id;
             public string name;
             public string imgurl;
+            public Plantform source;
         }
         public class HotKeyInfo {
             public string desc { get; set; }

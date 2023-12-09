@@ -1,7 +1,9 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using LemonLib;
+using Microsoft.Web.WebView2.Core;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,10 +50,11 @@ namespace LemonApp
                 Close();
                 return;
             }
-
-            await wb.EnsureCoreWebView2Async(null);
+            var webView2Environment = await CoreWebView2Environment.CreateAsync(null, Settings.USettings.DataCachePath);
+            await wb.EnsureCoreWebView2Async(webView2Environment);
             wb.CoreWebView2.CookieManager.DeleteAllCookies();
             wb.CoreWebView2.FrameNavigationCompleted += CoreWebView2_FrameNavigationCompleted;
+            wb.CoreWebView2.Navigate("https://music.163.com/#/my/");
         }
 
         private async void CoreWebView2_FrameNavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)

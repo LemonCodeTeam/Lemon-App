@@ -1378,7 +1378,7 @@ namespace LemonApp
             if (data.type == "Singer")
                 K_GetToSingerPage(new MusicSinger() { Mid = data.id, Name = data.name, Photo = data.imgurl });
             else if (data.type == "GD")
-                LoadFxGDItems(new FLGDIndexItem() { data = new MusicGD() { ID = data.id, Name = data.name, Photo = data.imgurl, ListenCount = 0 } });
+                LoadFxGDItems(new FLGDIndexItem() { data = new MusicGD() {Source=data.source, ID = data.id, Name = data.name, Photo = data.imgurl, ListenCount = 0 } });
             else if (data.type == "TopList")
                 GetTopItems(new TopControl(new MusicTop() { ID = data.id, Name = data.name, Photo = data.imgurl }));
             else if (data.type == "Radio")
