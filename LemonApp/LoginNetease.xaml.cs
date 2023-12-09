@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Web.WebView2.Core;
+using System;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,22 +14,16 @@ namespace LemonApp
     /// </summary>
     public partial class LoginNetease : Window
     {
-        private System.Windows.Forms.WebBrowser wb;
-        private Action<string> LoginCallBack;
-        public LoginNetease(Action<string> loginCallBack)
+        private Action<string,string> LoginCallBack;
+        /// <summary>
+        /// Log in Netease
+        /// </summary>
+        /// <param name="loginCallBack">string cookie,string NeteaseId</param>
+        public LoginNetease(Action<string,string> loginCallBack)
         {
             InitializeComponent();
-            wb = new();
-            wb.ScriptErrorsSuppressed = true;
-            wb.IsWebBrowserContextMenuEnabled = false;
-            wb.WebBrowserShortcutsEnabled = false;
-            wf.Child = wb;
             LoginCallBack = loginCallBack;
         }
-
-        [DllImport("urlmon.dll", CharSet = CharSet.Ansi)]
-        private static extern int UrlMkSetSessionOption(int dwOption, string pBuffer, int dwBufferLength, int dwReserved);
-        const int URLMON_OPTION_USERAGENT = 0x10000001;
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -35,23 +31,37 @@ namespace LemonApp
                 DragMove();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           string userAgent = "Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36 Edg/119.0.0.0";
-            UrlMkSetSessionOption(URLMON_OPTION_USERAGENT, userAgent, userAgent.Length, 0);
-            wb.Navigated += delegate
-            {
-                loading.Visibility = Visibility.Collapsed;
-                wf.Visibility = Visibility.Visible;
-            };
-            wb.Navigate(new Uri("https://music.163.com/#/login"));
-            Activate();
-            wb.DocumentTitleChanged += Wb_DocumentTitleChanged;
+           await wb.EnsureCoreWebView2Async(null);
+            wb.NavigationCompleted += Wb_NavigationCompleted;
         }
 
-        private void Wb_DocumentTitleChanged(object sender, EventArgs e)
+        private async void Wb_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            string html = await wb.CoreWebView2.ExecuteScriptAsync("document.body.innerHTML");
+            bool success =!html.Contains("登录网易云音乐");
+            if (success&&html.Contains("退出"))
+            {
+                string cookie = "";
+                var a=await wb.CoreWebView2.CookieManager.GetCookiesAsync("https://music.163.com");
+                foreach (var item in a)
+                {
+                    cookie += item.Name + "=" + item.Value + ";";
+                }
+                //去除首尾的双引号：
+                cookie = cookie[..^1];
+                Console.WriteLine(cookie);
+                //用正则表达式提取用户ID：/user/home?id=323840418"
+                string id = Regex.Match(html, @"(?<=/user/home\?id=)\d+").Value;
+                LoginCallBack(cookie,id);
+                Close();
+            }
+        }
+
+        private void CloseBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.Close();
         }
     }
 }

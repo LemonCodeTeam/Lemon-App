@@ -50,9 +50,10 @@ namespace LemonLib
         /// <param name="url"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        public static async Task<string> GetWebAsync(string url)
+        public static async Task<string> GetWebAsync(string url,Action<HttpClient> setHeader=null)
         {
             using var hc = new HttpClient(GetSta());
+            setHeader?.Invoke(hc);
             var a = await hc.GetAsync(url);
             return await a.Content.ReadAsStringAsync();
         }

@@ -796,6 +796,7 @@ namespace LemonApp
                 UserInfo_Logout.TName = "退出登录";
                 UserInfo_GTK.Text = Settings.USettings.g_tk;
                 UserInfo_Cookie.Text = Settings.USettings.Cookie;
+                UserInfo_Netease.Text = Settings.USettings.NetEaseCookie;
                 Console.WriteLine(Settings.USettings.g_tk + "  " + Settings.USettings.Cookie);
                 Load_Theme();
                 LoadMusicData();
@@ -894,11 +895,20 @@ namespace LemonApp
         {
             UserInfo_GTK.Text = Settings.USettings.g_tk;
             UserInfo_Cookie.Text = Settings.USettings.Cookie;
+            UserInfo_Netease.Text = Settings.USettings.NetEaseCookie;
             if (Settings.USettings.LemonAreeunIts == "0")
             {
                 UserInfo_Logout.TName = "登录";
             }
             SettingsPage_NSPage(SettingsPage_UserPage);
+        }
+        private void UserInfo_BindNetease_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            new LoginNetease((cookie,id) => {
+                Settings.USettings.NetEaseCookie = cookie;
+                Settings.USettings.NeteaseId = id;
+                UserInfo_Netease.Text = cookie;
+            }).Show();
         }
 
         private async void UserInfo_Logout_MouseDown(object sender, MouseButtonEventArgs e)
@@ -912,6 +922,7 @@ namespace LemonApp
                 await Settings.LoadUSettings("0");
                 UserInfo_GTK.Text = Settings.USettings.g_tk;
                 UserInfo_Cookie.Text = Settings.USettings.Cookie;
+                UserInfo_Netease.Text = Settings.USettings.NetEaseCookie;
                 UserInfo_Logout.TName = "登录";
                 Load_Theme();
                 LoadMusicData();
@@ -2608,7 +2619,10 @@ namespace LemonApp
                 LyricPage_TimeSetter.Text = "0.0s";
 
                 #region 专辑图
-                BitmapImage im = await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverImgUrl(data)) ?? await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
+                BitmapImage im;
+                if (data.Source == Plantform.qq)
+                    im = await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverImgUrl(data)) ?? await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
+                else im = await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverNetease(data.MusicID));
                 MusicImage.Background = new ImageBrush(im);
                 mini.img.Background = MusicImage.Background;
                 //模糊处理
@@ -2648,7 +2662,8 @@ namespace LemonApp
                 LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
                 #endregion
 
-                LyricData dt = await MusicLib.GetLyric(Settings.USettings.Playing.MusicID);
+                LyricData dt =data.Source==Plantform.qq?( await MusicLib.GetLyric(Settings.USettings.Playing.MusicID)):
+                    (await MusicLib.GetLyric_Netease(data.MusicID));
                 //用日语平假名来判断 基本避开中文字符干扰
                 bool ldrm = Regex.Match(dt.lyric, @"[\u3040-\u309f]").Length > 0 && dt.HasTrans;
                 Console.WriteLine(ldrm, "ISJAPANESE");
@@ -3905,6 +3920,14 @@ namespace LemonApp
                 NSPage(new MeumInfo(MyGDIndexPage, Meum_MYGD));
                 OpenLoading();
                 var GdData = await MusicLib.GetGdListAsync();
+                if(!string.IsNullOrEmpty(Settings.USettings.NeteaseId))
+                {
+                    var GdData2 = await MusicLib.GetNeteaseUserGDAsync();
+                    foreach (var jm in GdData2)
+                    {
+                            GdData.Add(jm.id,jm);
+                    }
+                }
                 bool renew_ = false;
                 if (GdData.Count != GDItemsList.Children.Count)
                 {
@@ -3916,8 +3939,9 @@ namespace LemonApp
                 {
                     if (!GData_Now.Contains(jm.Key))
                     {
-                        var ks = new FLGDIndexItem(new MusicGD() { ID = jm.Value.id, Name = jm.Value.name, Photo = jm.Value.pic, ListenCount = 0 }, true, jm.Value.subtitle) { Margin = new Thickness(12, 0, 12, 20) };
-                        ks.DeleteEvent += async (fl) =>
+                        var ks = new FLGDIndexItem(new MusicGD() {Source=jm.Value.Source, ID = jm.Value.id, Name = jm.Value.name, Photo = jm.Value.pic, ListenCount = 0 }, jm.Value.Source==Plantform.qq, jm.Value.subtitle) { Margin = new Thickness(12, 0, 12, 20) };
+                        if(jm.Value.Source==Plantform.qq)
+                            ks.DeleteEvent += async (fl) =>
                         {
                             if (TwMessageBox.Show("确定要删除吗?"))
                             {
@@ -3994,7 +4018,7 @@ namespace LemonApp
             DataItemsList.Items.Clear();
             TXx.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(dt.data.Photo));
             OpenLoading();
-            var data = AppConstants.MGData_Now = await MusicLib.GetGDAsync(dt.data.ID,
+            MusicGData data = AppConstants.MGData_Now =dt.data.Source==Plantform.qq?( await MusicLib.GetGDAsync(dt.data.ID,
                 (dt) =>
                 {
                     Dispatcher.Invoke(async () =>
@@ -4006,7 +4030,14 @@ namespace LemonApp
                         DataPage_Sim.Text = dt.desc;
                         DataCollectBtn.Visibility = dt.IsOwn ? Visibility.Collapsed : Visibility.Visible;
                     });
-                }, this);
+                }, this)):(await MusicLib.GetMusicGDataFromNeteaseAsync(dt.data.ID));
+            if(dt.data.Source == Plantform.wyy)
+            {
+                DataPage_TX.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(data.Creater.Photo, new int[2] { 50, 50 }));
+                DataPage_Creater.Text = data.Creater.Name;
+                DataPage_Sim.Text = data.desc;
+                DataCollectBtn.Visibility = Visibility.Collapsed;
+            }
             int index = 0;
             foreach(var item in data.Data)
             {

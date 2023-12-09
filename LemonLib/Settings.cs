@@ -181,6 +181,8 @@ namespace LemonLib
                 USettings.PreferQuality_Download = (MusicQuality)int.Parse(o["PreferQuality_Download"].ToString());
             if (data.Contains("NetEaseCookie"))
                 USettings.NetEaseCookie = o["NetEaseCookie"].ToString();
+            if(data.Contains("NeteaseId"))
+                USettings.NeteaseId = o["NeteaseId"].ToString();
             if (playlist.Contains("MusicGDataPlayList"))
                 USettings_Playlist= JsonConvert.DeserializeObject<UserSettings_PlayList>(playlist);
             else if (data.Contains("MusicGDataPlayList"))
@@ -214,6 +216,7 @@ namespace LemonLib
             public string Cookie { get; set; } = "pgv_info=ssid=s8469992130; pgv_pvid=7657244050; pgv_pvi=1902315520; pgv_si=s2246959104";
             public string g_tk { get; set; } = "5381";
             public string NetEaseCookie { get; set; } = "";
+            public string NeteaseId { get; set; } = "";
             #endregion
             #region 播放
             public Music Playing { get; set; } = new Music();

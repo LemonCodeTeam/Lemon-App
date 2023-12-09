@@ -120,38 +120,41 @@ namespace LemonLib
             var o = JObject.Parse(await HttpHelper.GetWebDataqAsync($"https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk={Settings.USettings.g_tk}&loginUin={Settings.USettings.LemonAreeunIts}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=" +
                 HttpUtility.UrlEncode("{\"req_0\":{\"method\":\"DoSearchForQQMusicDesktop\",\"module\":\"music.search.SearchCgiService\",\"param\":{\"remoteplace\":\"txt.mqq.all\",\"searchid\":\"54355611513934060\",\"search_type\":0,\"query\":\"" + Content + "\",\"page_num\":" + osx + ",\"num_per_page\":20}},\"comm\":{\"ct\":24,\"cv\":0}}")));
             List<Music> dt = new List<Music>();
-            var dsl = o["req_0"]["data"]["body"]["song"]["list"];
-            foreach (var dsli in dsl)
+            try
             {
-                Music m = new Music();
-                m.MusicName = dsli["title"].ToString();
-                m.MusicName_Lyric = dsli["desc"].ToString();
-                string Singer = "";
-                List<MusicSinger> lm = new List<MusicSinger>();
-                foreach (var d in dsli["singer"])
+                var dsl = o["req_0"]["data"]["body"]["song"]["list"];
+                foreach (var dsli in dsl)
                 {
-                    Singer += d["name"] + "&";
-                    lm.Add(new MusicSinger() { Name = d["name"].ToString(), Mid = d["mid"].ToString() });
-                }
-                m.Singer = lm;
-                m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
-                m.MusicID = dsli["mid"].ToString();
-                var amid = dsli["album"]["mid"].ToString();
-                if (amid != "")
-                    m.Album = new MusicGD()
+                    Music m = new Music();
+                    m.MusicName = dsli["title"].ToString();
+                    m.MusicName_Lyric = dsli["desc"].ToString();
+                    string Singer = "";
+                    List<MusicSinger> lm = new List<MusicSinger>();
+                    foreach (var d in dsli["singer"])
                     {
-                        ID = amid,
-                        Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
-                        Name = dsli["album"]["name"].ToString()
-                    };
-                var file = dsli["file"];
-                if (file["size_320mp3"].ToString() != "0")
-                    m.Quality = MusicQuality.HQ;
-                if (file["size_flac"].ToString() != "0")
-                    m.Quality = MusicQuality.SQ;
-                m.Mvmid = dsli["mv"]["vid"].ToString();
-                dt.Add(m);
-            }
+                        Singer += d["name"] + "&";
+                        lm.Add(new MusicSinger() { Name = d["name"].ToString(), Mid = d["mid"].ToString() });
+                    }
+                    m.Singer = lm;
+                    m.SingerText = Singer.Substring(0, Singer.LastIndexOf("&"));
+                    m.MusicID = dsli["mid"].ToString();
+                    var amid = dsli["album"]["mid"].ToString();
+                    if (amid != "")
+                        m.Album = new MusicGD()
+                        {
+                            ID = amid,
+                            Photo = $"https://y.gtimg.cn/music/photo_new/T002R500x500M000{amid}.jpg?max_age=2592000",
+                            Name = dsli["album"]["name"].ToString()
+                        };
+                    var file = dsli["file"];
+                    if (file["size_320mp3"].ToString() != "0")
+                        m.Quality = MusicQuality.HQ;
+                    if (file["size_flac"].ToString() != "0")
+                        m.Quality = MusicQuality.SQ;
+                    m.Mvmid = dsli["mv"]["vid"].ToString();
+                    dt.Add(m);
+                }
+            }catch { }
             return dt;
         }
         public static async Task<List<string>> Search_SmartBoxAsync(string key)
@@ -743,6 +746,104 @@ jpg
         #endregion
         #region 网易云音乐
         /// <summary>
+        /// 获取所绑定账号的网易云音乐歌单
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<MusicGData>> GetNeteaseUserGDAsync()
+        {
+            string data=await HttpHelper.GetWebAsync($"http://music.163.com/api/user/playlist/?offset=0&limit=1000&uid={Settings.USettings.NeteaseId}", HttpHelper.GetWebHeader_Netease);
+            MainClass.DebugCallBack("GetNeteaseUserGD", data);
+            JObject o = JObject.Parse(data);
+            var dt = new List<MusicGData>();
+            foreach (var a in o["playlist"])
+            {
+                int lc = int.Parse(a["playCount"].ToString());
+                dt.Add(new MusicGData()
+                {
+                    id = a["id"].ToString(),
+                    name = a["name"].ToString(),
+                    pic = a["coverImgUrl"].ToString(),
+                    listenCount = lc,
+                    subtitle = $"{a["trackCount"]}首   {lc.IntToWn()}次播放",
+                    IsOwn=false,
+                    Source=Plantform.wyy
+                });
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// 获取网易云音乐歌单中的歌曲
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static async Task<MusicGData> GetMusicGDataFromNeteaseAsync(string id)
+        {
+            string data = await HttpHelper.GetWebAsync($"http://music.163.com/api/v6/playlist/detail?id={id}&offset=0&total=true&limit=100000&n=10000", HttpHelper.GetWebHeader_Netease);
+            MainClass.DebugCallBack("GETWYGD", data);
+            JObject o = JObject.Parse(data);
+            var dt = new MusicGData();
+            var pl = o["playlist"];
+            //暂时不支持网易云歌单的管理
+            dt.IsOwn = false;
+            dt.Source = Plantform.wyy;
+            dt.name = pl["name"].ToString();
+            dt.id = pl["id"].ToString();
+            dt.pic = pl["coverImgUrl"].ToString();
+            dt.desc = pl["description"].ToString();
+            dt.Creater = new MusicSinger()
+            {
+                Name = pl["creator"]["nickname"].ToString(),
+                Photo = pl["creator"]["avatarUrl"].ToString()
+            };
+            var pl_t = pl["tracks"];
+            foreach (var pl_t_i in pl_t)
+            {
+                var dtname = pl_t_i["name"].ToString();
+                var dtsinger = "";
+                var pl_t_i_ar = pl_t_i["ar"];
+                var singers=new List<MusicSinger>();
+                foreach (var a in pl_t_i_ar) { 
+                    dtsinger += a["name"] + " ";
+                    singers.Add(new MusicSinger()
+                    {
+                        Name = a["name"].ToString(),
+                        Mid = a["id"].ToString()
+                    });
+                }
+                dtsinger = dtsinger[..^1];
+                string alia = "";
+                if (pl_t_i["alia"].Count()>0)
+                    alia = pl_t_i["alia"][0].ToString();
+                MusicQuality quality;
+                if (!string.IsNullOrEmpty(pl_t_i["sq"].ToString()))
+                    quality = MusicQuality.SQ;
+                else if (!string.IsNullOrEmpty(pl_t_i["h"].ToString()))
+                    quality = MusicQuality.HQ;
+                else
+                    quality = MusicQuality._120k;
+                dt.Data.Add(new Music()
+                {
+                    MusicName = dtname,
+                    Singer=singers,
+                    MusicName_Lyric=alia,
+                    Source=Plantform.wyy,
+                    Quality=quality,
+                    SingerText = dtsinger,
+                    Album = new MusicGD()
+                    {
+                        ID = pl_t_i["al"]["id"].ToString(),
+                        Name = pl_t_i["al"]["name"].ToString(),
+                        Photo = pl_t_i["al"]["picUrl"].ToString()
+                    },
+                    Mvmid = null,
+                    MusicID = pl_t_i["id"].ToString()
+                });
+            }
+            return dt;
+        }
+
+        /// <summary>
         /// 从网易云音乐中导入歌单
         /// </summary>
         /// <param name="id"></param>
@@ -752,7 +853,7 @@ jpg
         /// <param name="Finished"></param>
         public static async Task GetGDbyWYAsync(string id, Action<int> GetCount, Action<int, string> GetItem, Action Finished)
         {
-            string data = await HttpHelper.GetWebAsync($"http://music.163.com/api/v6/playlist/detail?id={id}&offset=0&total=true&limit=100000&n=1000");
+            string data = await HttpHelper.GetWebAsync($"http://music.163.com/api/v6/playlist/detail?id={id}&offset=0&total=true&limit=100000&n=10000",HttpHelper.GetWebHeader_Netease);
             MainClass.DebugCallBack("GETWYGD", data);
             JObject o = JObject.Parse(data);
             var dt = new MusicGData();
@@ -824,7 +925,7 @@ jpg
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
 
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From gcsp-------------------");
-            var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ });
+            var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ,d.Source });
             if (await HttpHelper.GetHTTPFileSize(data) > 1024)
                 return new MusicUrlData()
                 {
@@ -984,6 +1085,16 @@ jpg
                     return data;
                 }
             }
+        }
+
+        public static async Task<LyricData> GetLyric_Netease(string id)
+        {
+            string lrc= await HttpHelper.GetWebWithHeaderAsync("https://api.yimian.xyz/msc/?type=lrc&id=" + id);
+            LyricData data = new LyricData();
+            data.id = id;
+            data.lyric= lrc;
+            data.HasTrans = false;
+            return data;
         }
         #endregion
         #region 排行榜
@@ -1450,6 +1561,10 @@ jpg
         }
         #endregion
         #region 专辑
+        public static async Task<string> GetCoverNetease(string id)
+        {
+            return JObject.Parse(await HttpHelper.GetWebWithHeaderAsync("https://api.yimian.xyz/msc/?type=single&id="+id))["cover"].ToString();
+        }
         public static async Task<string> GetCoverImgUrl(Music m)
         {
             if (m.Album != null&&m.Album.ID!=null)
