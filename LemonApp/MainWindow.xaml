@@ -1337,7 +1337,7 @@
                 <Grid x:Name="TitlePage" VerticalAlignment="Top" Height="50" Background="#00000000">
                     <WrapPanel x:Name="QuickGoTo" Margin="330,0,280,0" Height="25">
                         <WrapPanel x:Name="QuickGoToList" Cursor="Hand"/>
-                        <Border x:Name="QGT_AddBtn" Height="25" Width="25" CornerRadius="25,25,25,25" Background="#0C000000" Margin="10,0,0,0">
+                        <Border x:Name="QGT_AddBtn" ToolTip="右键可删除嗷" Height="25" Width="25" CornerRadius="25,25,25,25" Background="#0C000000" Margin="10,0,0,0">
                             <Path Data="{DynamicResource QuickGoToIcon}" Fill="{DynamicResource ResuColorBrush}" Stretch="Uniform" Width="10" Height="10" Opacity="0.7"/>
                         </Border>
                     </WrapPanel>
