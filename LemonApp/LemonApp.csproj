@@ -10,7 +10,7 @@
     <StartupObject>LemonApp.App</StartupObject>
     <AssemblyName>LemonApp</AssemblyName>
     <RootNamespace>LemonApp</RootNamespace>
-    <Version>1.2.8.2</Version>
+    <Version>1.2.8.4</Version>
     <Authors>TwilightLemon</Authors>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2210.55" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
 

@@ -26,12 +26,11 @@ p.s. 32位平台请自行编译
 使用和传播请遵守GPL以及Anti 996协议
 
 #### 免责声明
-本应用中的歌曲和部分API来自QQ音乐(y.qq.com),音乐及歌词翻译版权归QQ音乐所有。  
+本应用中的歌曲和部分API来自QQ音乐和网易云音乐,音乐及歌词翻译版权分别归QQ音乐和网易云音乐所有。  
 本应用中的部分图标来自www.iconfont.cn.  
-本应用使用BASS.NET解码 PERSONAL-USE License  
+本应用使用BASS.NET解码 PERSONAL-USE License.  
 
 登录即代表同意Lemon App通过你的QQ账号获取你在QQ音乐上的内容，  
-对于官方通道:  
-Lemon App只能通过 y.qq.com网页端 获得你所登录QQ用户能获得的歌曲以及MV等资源。  
-Release 1.7.2.2之后 使用GCSP客户端 (侵删)  
+绑定网易云音乐账号即代表同意Lemon App通过你的网易云音乐账号获得你在网易云音乐上的内容，  
+Lemon App只能通过 y.qq.com以及music.163.com网页端来获得你所登录QQ用户和绑定网易云音乐账号能获得的歌曲以及MV等资源。  
 本软件仅用于学习交流，禁止用于商业用途。

@@ -954,31 +954,56 @@ jpg
         public static async Task<MusicUrlData> GetUrlAsync(Music d, MusicQuality PQ)
         {
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
-
-            MainClass.DebugCallBack(d.MusicID, "Fetching Url From gcsp-------------------");
+            //GetFrom:Extension
+            MainClass.DebugCallBack(d.MusicID, "Fetching Url From Extension-------------------");
             var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ,d.Source });
             if (await HttpHelper.GetHTTPFileSize(data) > 1024)
                 return new MusicUrlData()
                 {
                     Url = data,
-                    Source = "GCSP",
+                    Source = "Ext",
                     Quality = PQ
                 };
+            //GetFrom:WYY official line
+            if (d.Source == Plantform.wyy)
+            {
+                MainClass.DebugCallBack(d.MusicID, "Fetching Url From wyy-------------------");
+                data = await GetUrlFromWYY(d.MusicID);
+                if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                    return new MusicUrlData() { Url = data, Source = "WYY", Quality = MusicQuality._120k };
+                else
+                {
+                    var match = await GetSearchTipAsync(d.MusicName + "-" + d.SingerText);
+                    if (match.Musics.Count > 0)
+                    {
+                        d = match.Musics[0];
+                        MainClass.DebugCallBack(d.MusicID, "Matched wyy to yqq: " + d.MusicName + " - " + d.SingerText);
+                    }
+                }
+            }
+            //GetFrom:QQ official line
+            if (d.Source == Plantform.qq)
+            {
+                MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
+                data = await GetUrlOfficialLine(d.MusicID);
+                if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                    return new MusicUrlData() { Url = data, Source = "QQ", Quality = MusicQuality._120k };
+                else if (!string.IsNullOrEmpty(d.Mvmid))
+                {
+                    MainClass.DebugCallBack(d.Mvmid, "Fetching Url From QMV------------------");
+                    return new MusicUrlData() { Url = await GetMVUrl(d.Mvmid, false), Source = "QMV", Quality = MusicQuality._120k };
+                }
+            }
+            MainClass.DebugCallBack(d.Mvmid, "Noting is gotten..------------------");
+            return null;
+        }
+        private static async Task<string> GetUrlFromWYY(string id)
+        {
+            string data = await HttpHelper.GetWebAsync($"http://music.163.com/api/song/enhance/player/url?ids=[{id}]&br=320000", HttpHelper.GetWebHeader_Netease);
+            MainClass.DebugCallBack("GetUrlFromWYY", data);
+            JObject o = JObject.Parse(data);
+            return o["data"][0]["url"].ToString();
 
-            MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
-            data = await GetUrlOfficialLine(d.MusicID);
-            if (await HttpHelper.GetHTTPFileSize(data) > 1024)
-                return new MusicUrlData() { Url = data, Source = "QQ", Quality = MusicQuality._120k };
-            else if (!string.IsNullOrEmpty(d.Mvmid))
-            {
-                MainClass.DebugCallBack(d.Mvmid, "Fetching Url From QMV------------------");
-                return new MusicUrlData() { Url = await GetMVUrl(d.Mvmid, false), Source = "QMV", Quality = MusicQuality._120k };
-            }
-            else
-            {
-                MainClass.DebugCallBack(d.Mvmid, "Noting is gotten..------------------");
-                return null;
-            }
         }
 
         /// <summary>
