@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LemonApp"
         mc:Ignorable="d"
-        Title="MiniPlayer" Height="110" Width="350" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" ShowInTaskbar="False" Topmost="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="MiniPlayer" Height="200" Width="340" ResizeMode="NoResize" Background="Transparent" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" ShowInTaskbar="False" Topmost="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -132,55 +132,34 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-    <Window.Effect>
-        <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.4"/>
-    </Window.Effect>
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="-1" />
+        <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
     </WindowChrome.WindowChrome>
-    <Border Background="{DynamicResource PlayDLPage_Bg}" CornerRadius="{DynamicResource AppCornerRadius}" Margin="20,20,20,20">
-        <Border.Clip>
-            <RectangleGeometry RadiusX="10" RadiusY="10">
-                <RectangleGeometry.Rect>
-                    <Rect Width="310" Height="90" X="0" Y="-20"/>
-                </RectangleGeometry.Rect>
-            </RectangleGeometry>
-        </Border.Clip>
-        <Grid>
-            <Border x:Name="img" HorizontalAlignment="Left" Width="75" Height="75" Margin="10,-15,0,10" Background="#FFF3F3F3" CornerRadius="50,50,50,50" BorderBrush="{DynamicResource PlayDLPage_Font_Low}" BorderThickness="2,2,2,2" ToolTip="开启/关闭 歌词" MouseDown="img_MouseDown"/>
-            <Grid x:Name="Context" Visibility="Visible" d:IsHidden="True">
-                <Grid x:Name="WithLyric" Visibility="Collapsed">
-                    <TextBlock x:Name="title" Margin="90,10,20,0" Text="Title" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}" TextAlignment="Center" Height="15"/>
-                    <Border Margin="90,30,20,5" >
-                        <TextBlock x:Name="lyric" TextWrapping="NoWrap" Foreground="{DynamicResource PlayDLPage_Font_Low}" TextAlignment="Center" Text="Lyric" VerticalAlignment="Center"/>
-                    </Border>
-                </Grid>
-                <Grid x:Name="Simple">
-                    <TextBlock x:Name="MusicName"  Margin="90,16,20,0" Text="Title" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}" TextAlignment="Center" Height="15"/>
-                    <TextBlock x:Name="SingerText" TextWrapping="NoWrap" Foreground="{DynamicResource PlayDLPage_Font_Low}" TextAlignment="Center" Text="Lyric" VerticalAlignment="Top" Margin="90,38,20,0"/>
-                </Grid>
-            </Grid>
-            <Grid x:Name="Control" Visibility="Collapsed">
-                <Border Height="25" MouseDown="LastBtnDown" Background="#00000000" Width="25" Margin="130,0,0,0" HorizontalAlignment="Left">
-                    <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="15" Height="15"/>
-                </Border>
-                <Border x:Name="PlayBtn" Height="30" MouseDown="PlayBtnDown" Background="#00000000" Width="30" Margin="167,0,0,0" HorizontalAlignment="Left">
-                    <Path x:Name="play" Data="M514 114.3c-219.9 0-398.9 178.9-398.9 398.9 0.1 219.9 179 398.8 398.9 398.8 219.9 0 398.8-178.9 398.8-398.8S733.9 114.3 514 114.3z m173 421.9L437.1 680.5c-17.7 10.2-39.8-2.6-39.8-23V368.9c0-20.4 22.1-33.2 39.8-23L687 490.2c17.7 10.2 17.7 35.8 0 46z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
-                </Border>
-                <Border Width="25" Height="25" Background="#00000000" Margin="210,0,0,0" HorizontalAlignment="Left" MouseDown="NextBtnDown">
-                    <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="15" Height="15"/>
-                </Border>
-                <Border x:Name="likeBtn" HorizontalAlignment="Left" Width="15" Background="#00000000" Height="15" VerticalAlignment="Center" Margin="100,0,0,0" MouseDown="likeBtn_MouseDown">
-                    <Path x:Name="likeBtn_path" Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
-                </Border>
-                <Border x:Name="XHBtn" HorizontalAlignment="Left" Width="15" Background="#00000000" Height="15" Margin="255,0,0,0" MouseDown="XHBtn_MouseDown">
-                    <Path x:Name="XHPath" Data="M694.4,854.4L195.2,854.4 243.2,899.2C252.8,905.6 259.2,915.2 259.2,928 256,947.2 240,960 220.8,960 211.2,960 198.4,953.6 192,947.2L83.2,851.2C70.4,838.4,67.2,816,83.2,803.2L192,704C198.4,697.6 211.2,694.4 220.8,694.4 240,694.4 256,710.4 256,729.6 256,739.2 249.6,748.8 243.2,755.2L201.6,793.6 697.6,793.6C809.6,793.6,896,704,896,595.2L896,508.8C896,489.6 908.8,476.8 928,476.8 947.2,476.8 960,489.6 960,508.8L960,595.2C960,736,841.6,854.4,694.4,854.4z M329.6,169.6L825.6,169.6 777.6,124.8C768,118.4 761.6,108.8 761.6,96 764.8,76.8 780.8,64 800,64 809.6,64 822.4,70.4 828.8,76.8L937.6,172.8C950.4,185.6,953.6,208,937.6,220.8L832,320C825.6,326.4 812.8,329.6 803.2,329.6 784,329.6 768,313.6 768,294.4 768,284.8 774.4,275.2 780.8,268.8L822.4,230.4 326.4,230.4C217.6,233.6,128,323.2,128,435.2L128,524.8C128,544 115.2,556.8 96,556.8 76.8,556.8 64,544 64,524.8L64,438.4C64,288,182.4,169.6,329.6,169.6z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
-                </Border>
-                <Border x:Name="CloseBtn" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown" Background="#00000000" Margin="0,5,5,0">
-                    <Path Data="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Stretch="Uniform" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="10"/>
-                </Border>
-            </Grid>
-            <Slider x:Name="jd" FocusVisualStyle="{x:Null}"  Template="{DynamicResource SimpleSlider}" VerticalAlignment="Bottom" Margin="0,0,0,-6.5"/>
+    <Grid>
+        <Border x:Name="CloseBtn" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" MouseDown="CloseBtn_MouseDown" Background="#00000000" Margin="0,5,12,0">
+            <Path Data="M583.168 523.776L958.464 148.48c18.944-18.944 18.944-50.176 0-69.12l-2.048-2.048c-18.944-18.944-50.176-18.944-69.12 0L512 453.12 136.704 77.312c-18.944-18.944-50.176-18.944-69.12 0l-2.048 2.048c-19.456 18.944-19.456 50.176 0 69.12l375.296 375.296L65.536 899.072c-18.944 18.944-18.944 50.176 0 69.12l2.048 2.048c18.944 18.944 50.176 18.944 69.12 0L512 594.944 887.296 970.24c18.944 18.944 50.176 18.944 69.12 0l2.048-2.048c18.944-18.944 18.944-50.176 0-69.12L583.168 523.776z" Stretch="Uniform" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="10"/>
+        </Border>
+        <Border x:Name="img" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True" Width="75" Height="75" Background="#FFF3F3F3" CornerRadius="50,50,50,50" BorderBrush="#66000000" BorderThickness="2" ToolTip="开启/关闭 歌词" Margin="20,10,0,80"/>
+        <TextBlock x:Name="MusicName"  Margin="90,40,20,0" Text="Title" FontSize="16" FontWeight="Bold" TextWrapping="NoWrap" VerticalAlignment="Top" Foreground="{DynamicResource PlayDLPage_Font_Most}" TextAlignment="Center"/>
+        <TextBlock x:Name="SingerText" TextWrapping="NoWrap" Foreground="{DynamicResource PlayDLPage_Font_Low}" TextAlignment="Center" Text="Lyric" VerticalAlignment="Top" Margin="90,64,20,0"/>
+        <TextBlock x:Name="lyric" FontSize="12" TextWrapping="NoWrap" Foreground="{DynamicResource PlayDLPage_Font_Low}" TextAlignment="Center" VerticalAlignment="Top" Margin="50,110,50,0"/>
+        <Grid x:Name="Control" VerticalAlignment="Bottom" Height="30" Margin="0,0,0,14">
+            <Border Height="25" MouseDown="LastBtnDown" Background="#00000000" Width="25" Margin="110,0,0,0" HorizontalAlignment="Left">
+                <Path Data="{DynamicResource PlayIcon_Last}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="15" Height="15"/>
+            </Border>
+            <Border x:Name="PlayBtn" Height="30" MouseDown="PlayBtnDown" Background="#00000000" Width="30" HorizontalAlignment="Center">
+                <Path x:Name="play" Data="M514 114.3c-219.9 0-398.9 178.9-398.9 398.9 0.1 219.9 179 398.8 398.9 398.8 219.9 0 398.8-178.9 398.8-398.8S733.9 114.3 514 114.3z m173 421.9L437.1 680.5c-17.7 10.2-39.8-2.6-39.8-23V368.9c0-20.4 22.1-33.2 39.8-23L687 490.2c17.7 10.2 17.7 35.8 0 46z" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource ThemeColor}"/>
+            </Border>
+            <Border Width="25" Height="25" Background="#00000000" Margin="0,0,110,0" HorizontalAlignment="Right" MouseDown="NextBtnDown">
+                <Path Data="{DynamicResource PlayIcon_Next}" Stretch="Uniform" StrokeThickness="5" Fill="{DynamicResource PlayDLPage_Font_Most}" Width="15" Height="15"/>
+            </Border>
+            <Border x:Name="likeBtn" HorizontalAlignment="Left" Width="15" Background="#00000000" Height="15" VerticalAlignment="Center" Margin="70,0,0,0" MouseDown="likeBtn_MouseDown">
+                <Path x:Name="likeBtn_path" Data="M729.068827,119.55798C634.382304,119.55798 552.163745,167.872359 511.998976,238.198054 471.835231,167.872359 389.616671,119.55798 294.954708,119.55798 151.18735,119.55798 65.2889810000001,243.218394 65.2889810000001,362.777397 65.2889810000001,645.905756 481.159597,890.6192 498.865864,900.903428 502.92839,903.267265 507.45038,904.442021 511.997952,904.442021 516.545525,904.442021 521.068538,903.267265 525.13004,900.903428 542.836307,890.620224 958.706923,645.905756 958.706923,362.777397 958.708971,243.218394 872.811626,119.55798 729.068827,119.55798z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
+            </Border>
+            <Border x:Name="XHBtn" HorizontalAlignment="Right" Width="15" Background="#00000000" Height="15" Margin="0,0,70,0" MouseDown="XHBtn_MouseDown">
+                <Path x:Name="XHPath" Data="M694.4,854.4L195.2,854.4 243.2,899.2C252.8,905.6 259.2,915.2 259.2,928 256,947.2 240,960 220.8,960 211.2,960 198.4,953.6 192,947.2L83.2,851.2C70.4,838.4,67.2,816,83.2,803.2L192,704C198.4,697.6 211.2,694.4 220.8,694.4 240,694.4 256,710.4 256,729.6 256,739.2 249.6,748.8 243.2,755.2L201.6,793.6 697.6,793.6C809.6,793.6,896,704,896,595.2L896,508.8C896,489.6 908.8,476.8 928,476.8 947.2,476.8 960,489.6 960,508.8L960,595.2C960,736,841.6,854.4,694.4,854.4z M329.6,169.6L825.6,169.6 777.6,124.8C768,118.4 761.6,108.8 761.6,96 764.8,76.8 780.8,64 800,64 809.6,64 822.4,70.4 828.8,76.8L937.6,172.8C950.4,185.6,953.6,208,937.6,220.8L832,320C825.6,326.4 812.8,329.6 803.2,329.6 784,329.6 768,313.6 768,294.4 768,284.8 774.4,275.2 780.8,268.8L822.4,230.4 326.4,230.4C217.6,233.6,128,323.2,128,435.2L128,524.8C128,544 115.2,556.8 96,556.8 76.8,556.8 64,544 64,524.8L64,438.4C64,288,182.4,169.6,329.6,169.6z" Stretch="Uniform" Fill="{DynamicResource ResuColorBrush}" StrokeThickness="5"/>
+            </Border>
         </Grid>
-    </Border>
+        <Slider x:Name="jd" FocusVisualStyle="{x:Null}"  Template="{DynamicResource SimpleSlider}" VerticalAlignment="Bottom" Margin="25,0,25,50"/>
+    </Grid>
 </Window>

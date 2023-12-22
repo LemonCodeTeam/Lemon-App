@@ -283,8 +283,8 @@ namespace LemonApp
             //组件加载完成................进入主页..
             //--------加载主页---------
             ClHomePage = new HomePage(this);
-            ContentPage.Children.Add(ClHomePage);
             NSPage(new MeumInfo(ClHomePage, Meum_MusicKu), true, false);
+            ContentPage.Children.Add(ClHomePage);
             //-----Connect to MyToolBar
             if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
                 await SendMsgToMyToolBar("Start", "LemonAppOrd");
@@ -1546,6 +1546,11 @@ namespace LemonApp
             LastClickLabel.HasChecked = false;
             if (data.MeumItem != null) (data.MeumItem as MainMeumItem).HasChecked = true;
             if (LastPage == null) LastPage = ClHomePage;
+            LastPage.Visibility = Visibility.Collapsed;
+            data.Page.Uid = data.cmd;
+            data.Page.Visibility = Visibility.Visible;
+            LastPage = data.Page;
+            RunAnimation(data.Page, data.value);
             Border com = (Border)(data.MeumItem is MainMeumItem ? (data.MeumItem as MainMeumItem).ComBlock : null);
 
             //从其他页面跳转过来的没有COM
@@ -1586,7 +1591,7 @@ namespace LemonApp
                 }
                 ani.Begin();
             }
-            LastPage.Visibility = Visibility.Collapsed;
+           
 
             //-----cmd跳转处理----
             if (Check)
@@ -1644,12 +1649,8 @@ namespace LemonApp
                 }
             }
             //------------------
-            data.Page.Uid = data.cmd;
-            data.Page.Visibility = Visibility.Visible;
-            RunAnimation(data.Page, data.value);
 
             if (data.MeumItem != null) LastClickLabel = data.MeumItem as MainMeumItem;
-            LastPage = data.Page;
             LastCom = com;
             if (needSave)
             {
@@ -2656,7 +2657,6 @@ namespace LemonApp
 
                 Settings.USettings.Playing = MusicData.Data;
                 Singer.Text = data.SingerText;
-                mini.title.Text = data.MusicName + " - " + data.SingerText;
                 mini.MusicName.Text = data.MusicName;
                 mini.SingerText.Text = data.SingerText;
                 lyrictime_offset = 0;
@@ -3922,10 +3922,17 @@ namespace LemonApp
                 var GdData = await MusicLib.GetGdListAsync();
                 if(!string.IsNullOrEmpty(Settings.USettings.NeteaseId))
                 {
-                    var GdData2 = await MusicLib.GetNeteaseUserGDAsync();
-                    foreach (var jm in GdData2)
+                    try
                     {
-                            GdData.Add(jm.id,jm);
+                        var GdData2 = await MusicLib.GetNeteaseUserGDAsync();
+                        foreach (var jm in GdData2)
+                        {
+                            GdData.Add(jm.id, jm);
+                        }
+                    }
+                    catch
+                    {
+                        Toast.Send("网易云音乐登录失效咯qwq");
                     }
                 }
                 bool renew_ = false;

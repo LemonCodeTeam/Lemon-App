@@ -28,7 +28,7 @@ namespace LemonApp.ContentPage
         {
             //---------加载主页HomePage----动画加持--
             mw.OpenLoading();
-            this.Visibility = Visibility.Hidden;
+            sv.Visibility = Visibility.Hidden;
             var data = await MusicLib.GetHomePageData();
             //--Top Focus--------
             HomePage_IFV.Update(data.focus, mw);
@@ -80,8 +80,8 @@ namespace LemonApp.ContentPage
             //------------------
             mw.CloseLoading();
             await Task.Delay(200);
-            this.Visibility = Visibility.Visible;
-            mw.ContentAnimation(this);
+            sv.Visibility = Visibility.Visible;
+            mw.ContentAnimation(sv);
         }
 
         private void page_Loaded(object sender, RoutedEventArgs e)
