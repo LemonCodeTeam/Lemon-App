@@ -11,7 +11,7 @@ namespace LemonLib
         public class DnaInfo {
             public string Keyword, Title, Desc, PicUrl;
         }
-        public enum Plantform
+        public enum Platform
         {
             qq,wyy
         }
@@ -38,7 +38,7 @@ namespace LemonLib
             public string id;
             public string name;
             public string imgurl;
-            public Plantform source;
+            public Platform source;
         }
         public class HotKeyInfo {
             public string desc { get; set; }
@@ -152,7 +152,7 @@ namespace LemonLib
         }
         public class Music
         {
-            public Plantform Source { set; get; } = Plantform.qq;
+            public Platform Source { set; get; } = Platform.qq;
             public string MusicName { set; get; } = "";
             public string MusicName_Lyric { get; set; } = "";
             public List<MusicSinger> Singer { set; get; } = new List<MusicSinger>();
@@ -175,7 +175,7 @@ namespace LemonLib
         }
         public class MusicGD
         {
-            public Plantform Source { set; get; } = Plantform.qq;
+            public Platform Source { set; get; } = Platform.qq;
             public string Name { set; get; }
             public string Photo { set; get; }
             public string ID { set; get; }
@@ -234,7 +234,7 @@ namespace LemonLib
             public string desc;
             public MusicSinger Creater;
             public string id { get; set; }
-            public Plantform Source { get; set; } = Plantform.qq;
+            public Platform Source { get; set; } = Platform.qq;
             public bool IsOwn = false;
             public int listenCount { get; set; }
             public List<string> ids = new List<string>();

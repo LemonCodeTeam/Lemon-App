@@ -38,31 +38,29 @@ namespace LemonLib
                 Directory.CreateDirectory(Settings.USettings.DownloadPath);
             if (!Directory.Exists(Settings.USettings.MusicCachePath))
                 Directory.CreateDirectory(Settings.USettings.MusicCachePath);
-            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Music\\"))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Music\\");
-            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Lyric\\"))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Lyric\\");
-            if (!Directory.Exists(Settings.USettings.MusicCachePath + "Image\\"))
-                Directory.CreateDirectory(Settings.USettings.MusicCachePath + "Image\\");
+            if (!Directory.Exists(Path.Combine(Settings.USettings.MusicCachePath , "Music")))
+                Directory.CreateDirectory(Path.Combine(Settings.USettings.MusicCachePath, "Music"));
+            if (!Directory.Exists(Path.Combine(Settings.USettings.MusicCachePath, "Lyric")))
+                Directory.CreateDirectory(Path.Combine(Settings.USettings.MusicCachePath, "Lyric"));
+            if (!Directory.Exists(Path.Combine(Settings.USettings.MusicCachePath, "Image")))
+                Directory.CreateDirectory(Path.Combine(Settings.USettings.MusicCachePath, "Image"));
         }
-        private static lmExtension Extension_GetMusic = new();
+        private static lmExtension Extension_GetMusic = null;
         public static async void UpdateMusicLib()
         {
-            var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Extension_GetMusicUpdate.json"));
+           var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Extension_GetMusicUpdate.json"));
             var v =Version.Parse(o["version"].ToString());
             string path = AppDomain.CurrentDomain.BaseDirectory + "/LemonApp.Extension.GetMusic.dll";
 
+            var LoadAssembly = () => {
+                Extension_GetMusic = new lmExtension(path, "LemonApp.Extension.GetMusic.Extension", "GetMusicUrl");
+                Extension_GetMusic.Load();
+            };
             var DownloadAssembly = async () => {
+                Extension_GetMusic?.Unload();
                 string url = o["url"].ToString();
                 await HttpHelper.HttpDownloadFileAsync(url, path);
-                Extension_GetMusic.AssemblyVersion = v;
-                await Settings.SaveLocaSettings();
-            };
-            var LoadAssembly = () => {
-                var a = Assembly.LoadFrom(path);
-                Extension_GetMusic.ExtensionClass = a.GetType("LemonApp.Extension.GetMusic.Extension");
-                Extension_GetMusic.MethodName = "GetMusicUrl";
-                Extension_GetMusic.AssemblyVersion = a.GetName().Version;
+                LoadAssembly();
             };
 
             if (File.Exists(path))
@@ -797,7 +795,7 @@ jpg
                     listenCount = lc,
                     subtitle =lc!=-1? $"{a["trackCount"]}首   {lc.IntToWn()}次播放": "{a[\"trackCount\"]}首  超级多人听",
                     IsOwn=false,
-                    Source=Plantform.wyy
+                    Source=Platform.wyy
                 });
             }
             return dt;
@@ -817,7 +815,7 @@ jpg
             var pl = o["playlist"];
             //暂时不支持网易云歌单的管理
             dt.IsOwn = false;
-            dt.Source = Plantform.wyy;
+            dt.Source = Platform.wyy;
             dt.name = pl["name"].ToString();
             dt.id = pl["id"].ToString();
             dt.pic = pl["coverImgUrl"].ToString();
@@ -858,7 +856,7 @@ jpg
                     MusicName = dtname,
                     Singer=singers,
                     MusicName_Lyric=alia,
-                    Source=Plantform.wyy,
+                    Source=Platform.wyy,
                     Quality=quality,
                     SingerText = dtsinger,
                     Album = new MusicGD()
@@ -964,8 +962,9 @@ jpg
                     Source = "Ext",
                     Quality = PQ
                 };
+
             //GetFrom:WYY official line
-            if (d.Source == Plantform.wyy)
+            if (d.Source == Platform.wyy)
             {
                 MainClass.DebugCallBack(d.MusicID, "Fetching Url From wyy-------------------");
                 data = await GetUrlFromWYY(d.MusicID);
@@ -982,7 +981,7 @@ jpg
                 }
             }
             //GetFrom:QQ official line
-            if (d.Source == Plantform.qq)
+            if (d.Source == Platform.qq)
             {
                 MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
                 data = await GetUrlOfficialLine(d.MusicID);
@@ -1003,7 +1002,6 @@ jpg
             MainClass.DebugCallBack("GetUrlFromWYY", data);
             JObject o = JObject.Parse(data);
             return o["data"][0]["url"].ToString();
-
         }
 
         /// <summary>
@@ -1083,7 +1081,7 @@ jpg
         {
             string split = "\n<LemonApp TransLyric/>\n";//分隔符
             if (file == "")
-                file = Settings.USettings.MusicCachePath + "Lyric\\" + McMind + ".lmrc";
+                file = Path.Combine(Settings.USettings.MusicCachePath, "Lyric", McMind + ".lmrc");
             if (!File.Exists(file))
             {
                 using var hc = new HttpClient(HttpHelper.GetSta());

@@ -160,7 +160,7 @@ namespace LemonApp
         {
             Ran r = sender as Ran;
             MusicSinger ms = r.data as MusicSinger;
-            if (music.Source == Plantform.wyy)
+            if (music.Source == Platform.wyy)
             {
                 var data = await MusicLib.GetSearchTipAsync(ms.Name);
                 if (data.MusicSingers.Count > 0)
@@ -297,7 +297,7 @@ namespace LemonApp
             string name = (sender as ListBoxItem).Content.ToString();
             string id = ListData[name];
             string mid = music.MusicID;
-            if (music.Source == Plantform.wyy)
+            if (music.Source == Platform.wyy)
             {
                 var data=await MusicLib.GetSearchTipAsync(music.SingerText + " " + music.MusicName);
                 if (data.Musics.Count > 0)
@@ -360,7 +360,7 @@ namespace LemonApp
         private async void Ab_MouseDown(object sender, MouseButtonEventArgs e)
         {
             string id = music.Album.ID;
-            if (music.Source == Plantform.wyy)
+            if (music.Source == Platform.wyy)
             {
                 var data = await MusicLib.GetSearchTipAsync(music.SingerText+" "+music.Album.Name);
                 if (data.MusicGDs.Count > 0)

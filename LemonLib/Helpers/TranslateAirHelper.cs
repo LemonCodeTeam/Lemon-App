@@ -34,7 +34,7 @@ namespace LemonLib
         {
             var url = $"https://dict.youdao.com/dictvoice?audio={HttpUtility.UrlEncode(text)}&le={(await GetLang(text)).Replace("jp","ja")}";
             MainClass.DebugCallBack(url,"blue");
-            string path = Settings.USettings.MusicCachePath + "\\ta.mp3";
+            string path =Path.Combine(Settings.USettings.MusicCachePath ,"ta.mp3");
             await HttpDownloadFileAsync(url, path);
             return path;
         }

@@ -38,7 +38,7 @@ namespace LemonApp
             else listenCount.Text = dat.ListenCount.IntToWn();
             if (subtitle != "")
                 listenCount.Text = subtitle;
-            if (data.Source == Plantform.qq)
+            if (data.Source == Platform.qq)
             {
                 if (!hasDeleteBtn)
                 {

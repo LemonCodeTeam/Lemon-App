@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static LemonLib.InfoHelper;
@@ -215,7 +216,7 @@ namespace LemonApp
             }
             if (LoadRomaji)
             {
-                string file = Settings.USettings.MusicCachePath + "Lyric\\" + data.id + ".rm.lmrc";
+                string file =Path.Combine(Settings.USettings.MusicCachePath , "Lyric",  data.id + ".rm.lmrc");
                 if (File.Exists(file))
                 {
                     var listu = await LoadRomajiLrcFromFile(data.id);
@@ -248,12 +249,12 @@ namespace LemonApp
         }
         private async void SaveRomajiLrc(string id, string data)
         {
-            string file = Settings.USettings.MusicCachePath + "Lyric\\" + id + ".rm.lmrc";
+            string file = Path.Combine(Settings.USettings.MusicCachePath, "Lyric", id + ".rm.lmrc");
             await File.WriteAllTextAsync(file, data);
         }
         private async Task<List<string>> LoadRomajiLrcFromFile(string id)
         {
-            string file = Settings.USettings.MusicCachePath + "Lyric\\" + id + ".rm.lmrc";
+            string file = Path.Combine(Settings.USettings.MusicCachePath, "Lyric", id + ".rm.lmrc");
             return (await File.ReadAllLinesAsync(file)).ToList();
         }
         public bool CanSolve(string str)

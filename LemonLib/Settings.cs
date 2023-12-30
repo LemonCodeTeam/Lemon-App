@@ -68,8 +68,8 @@ namespace LemonLib
                         XDUsettings(data, File.Exists(USettings.DataCachePath + qq + ".pl.st") ? await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".pl.st") : "");
                         if (!Directory.Exists(USettings.MusicCachePath))
                             Directory.CreateDirectory(USettings.MusicCachePath);
-                        if (!Directory.Exists(USettings.MusicCachePath + "Skin"))
-                            Directory.CreateDirectory(USettings.MusicCachePath + "Skin");
+                        if (!Directory.Exists(Path.Combine(USettings.MusicCachePath , "Skin")))
+                            Directory.CreateDirectory(Path.Combine(USettings.MusicCachePath, "Skin"));
                     }
                     else SaveSettingsAsync(qq);
                 }
@@ -252,7 +252,7 @@ namespace LemonLib
             public int IsRoundMusicImage { get; set; } = 5;
             /// <summary>
             /// 启动歌词页动效
-            /// 0=波澜 1=无 2=转动
+            /// 0=波澜 1=无 2=转动 3=方形
             /// </summary>
             public int LyricAnimationMode { get; set; } = 0;
             /// <summary>

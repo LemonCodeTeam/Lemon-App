@@ -1436,7 +1436,7 @@
                 </Grid>
             </Border>
             <Grid x:Name="Lyric_Content" Margin="0,0,0,0">
-                <Grid x:Name="LyricNor" Visibility="Visible">
+                <Grid x:Name="LyricNor">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1.2*"/>
@@ -1450,6 +1450,9 @@
                             </Grid.RowDefinitions>
                             <Grid x:Name="LyricBigGrid"  Grid.Row="1" MaxWidth="380" MinWidth="280" Height="{Binding ActualWidth, ElementName=LyricBig}" Margin="60,0,60,0">
                                 <Border x:Name="LyricBig" RenderOptions.BitmapScalingMode="Fant"   Background="{Binding Background, ElementName=MusicImage}" CornerRadius="{Binding ActualHeight, ElementName=LyricBig, Mode=OneWay}" BorderThickness="10" BorderBrush="#33000000" MouseDown="LyricBig_MouseDown" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
+                                    </Border.Effect>
                                     <Border.RenderTransform>
                                         <TransformGroup>
                                             <ScaleTransform/>
