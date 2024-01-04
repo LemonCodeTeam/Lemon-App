@@ -19,13 +19,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Linq;
 using static LemonLib.InfoHelper;
-/*
-   作者:Twilight./Lemon        QQ:2728578956
-   请保留版权信息，侵权必究。
-     
-     Author:Twilight./Lemon QQ:2728578956
-Please retain the copyright information, rights reserved.
-     */
 
 namespace LemonLib
 {
@@ -48,34 +41,39 @@ namespace LemonLib
         private static lmExtension Extension_GetMusic = null;
         public static async void UpdateMusicLib()
         {
-           var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Extension_GetMusicUpdate.json"));
-            var v =Version.Parse(o["version"].ToString());
-            string path = AppDomain.CurrentDomain.BaseDirectory + "/LemonApp.Extension.GetMusic.dll";
-
-            var LoadAssembly = () => {
-                Extension_GetMusic = new lmExtension(path, "LemonApp.Extension.GetMusic.Extension", "GetMusicUrl");
-                Extension_GetMusic.Load();
-            };
-            var DownloadAssembly = async () => {
-                Extension_GetMusic?.Unload();
-                string url = o["url"].ToString();
-                await HttpHelper.HttpDownloadFileAsync(url, path);
-                LoadAssembly();
-            };
-
-            if (File.Exists(path))
+            try
             {
-                LoadAssembly();
-                if (Extension_GetMusic.AssemblyVersion < v)
-                    //Extension有新版本
+                var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Extension_GetMusicUpdate.json"));
+                var v = Version.Parse(o["version"].ToString());
+                string path = Path.Combine(Settings.USettings.DataCachePath, "LemonApp.Extension.GetMusic.dll");
+
+                var LoadAssembly = () =>
+                {
+                    Extension_GetMusic = new lmExtension(path, "LemonApp.Extension.GetMusic.Extension", "GetMusicUrl");
+                    Extension_GetMusic.Load();
+                };
+                var DownloadAssembly = async () =>
+                {
+                    Extension_GetMusic?.Unload();
+                    string url = o["url"].ToString();
+                    await HttpHelper.HttpDownloadFileAsync(url, path);
+                    LoadAssembly();
+                };
+
+                if (File.Exists(path))
+                {
+                    LoadAssembly();
+                    if (Extension_GetMusic.AssemblyVersion < v)
+                        //Extension有新版本
+                        await DownloadAssembly();
+                }
+                else
+                {
                     await DownloadAssembly();
+                    LoadAssembly();
+                }
             }
-            else
-            {
-                await DownloadAssembly();
-                LoadAssembly();
-            }
-
+            catch { }
         }
         #endregion
         #region 一些字段
@@ -954,20 +952,25 @@ jpg
             MainClass.DebugCallBack(d.MusicID, d.Mvmid);
             //GetFrom:Extension
             MainClass.DebugCallBack(d.MusicID, "Fetching Url From Extension-------------------");
-            var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ,d.Source });
-            if (await HttpHelper.GetHTTPFileSize(data) > 1024)
-                return new MusicUrlData()
-                {
-                    Url = data,
-                    Source = "Ext",
-                    Quality = PQ
-                };
+            try
+            {
+                //从插件中加载
+                var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ, d.Source });
+                if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                    return new MusicUrlData()
+                    {
+                        Url = data,
+                        Source = "Ext",
+                        Quality = PQ
+                    };
+            }
+            catch { }
 
             //GetFrom:WYY official line
             if (d.Source == Platform.wyy)
             {
                 MainClass.DebugCallBack(d.MusicID, "Fetching Url From wyy-------------------");
-                data = await GetUrlFromWYY(d.MusicID);
+                var data = await GetUrlFromWYY(d.MusicID);
                 if (await HttpHelper.GetHTTPFileSize(data) > 1024)
                     return new MusicUrlData() { Url = data, Source = "WYY", Quality = MusicQuality._120k };
                 else
@@ -984,7 +987,7 @@ jpg
             if (d.Source == Platform.qq)
             {
                 MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
-                data = await GetUrlOfficialLine(d.MusicID);
+                var data = await GetUrlOfficialLine(d.MusicID);
                 if (await HttpHelper.GetHTTPFileSize(data) > 1024)
                     return new MusicUrlData() { Url = data, Source = "QQ", Quality = MusicQuality._120k };
                 else if (!string.IsNullOrEmpty(d.Mvmid))
