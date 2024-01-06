@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using static LemonLib.InfoHelper;
 
 namespace LemonApp
@@ -37,6 +38,7 @@ namespace LemonApp
         private const double LyricOpacity = 0.8;
         #endregion
         #region Properties
+        public Effect Hightlighter=new DropShadowEffect() { BlurRadius = 20,Color=Colors.White, Opacity = 0.5, ShadowDepth = 0,Direction=0 };
         public Dictionary<double, LrcModel> Lrcs = new();
         private List<Run> TransRunReference = new();
         private List<Run> RomajiRunReference = new();
@@ -209,6 +211,7 @@ namespace LemonApp
                                 Time = time.TotalMilliseconds,
                                 LrcTransText = trans
                             });
+                        c_lrcbk.Padding = new Thickness(10, 0, 0, 0);
                         c_lrc_items.Children.Add(c_lrcbk);
                     }
                 }
@@ -286,6 +289,7 @@ namespace LemonApp
         }
         #endregion
         #region
+        Brush hl= new SolidColorBrush(Colors.White);
         public void LrcRoll(double nowtime, bool needScrol)
         {
             if (foucslrc == null)
@@ -308,14 +312,17 @@ namespace LemonApp
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
                         foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty, null);
                         foucslrc.c_LrcTb.Opacity = LyricOpacity;
+                        foucslrc.c_LrcTb.Effect = null;
 
                         foucslrc = lm;
 
                         ResetLrcviewScroll();
                         foucslrc.c_LrcTb.Opacity = 1;
-                        foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
+                        foucslrc.c_LrcTb.Foreground = hl;
+                        //foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
-                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,new DoubleAnimation(_FontSize + 6, TimeSpan.FromSeconds(0.4)) {
+                        foucslrc.c_LrcTb.Effect = Hightlighter;
+                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,new DoubleAnimation(_FontSize + 8, TimeSpan.FromSeconds(0.5)) {
                             EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut }
                         });
                     }

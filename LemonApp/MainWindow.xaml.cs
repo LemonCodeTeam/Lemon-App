@@ -168,7 +168,7 @@ namespace LemonApp
             {
                 Page.Background = new SolidColorBrush(c);
             });
-            //----------优化触屏
+            //----------优化触屏：按下时不进行鼠标经过的UI处理----------
             TouchDown += delegate {
                 AppConstants.TouchDown = true;
             };

@@ -229,7 +229,7 @@ namespace LemonLib
             /// <summary>
             /// 歌词字体大小..
             /// </summary>
-            public int LyricFontSize = 18;
+            public int LyricFontSize = 22;
 
             /// <summary>
             /// 开启歌词翻译
@@ -254,7 +254,7 @@ namespace LemonLib
             /// 启动歌词页动效
             /// 0=波澜 1=无 2=转动 3=方形
             /// </summary>
-            public int LyricAnimationMode { get; set; } = 0;
+            public int LyricAnimationMode { get; set; } = 3;
             /// <summary>
             /// 是否打开了沉浸歌词
             /// </summary>
@@ -262,7 +262,7 @@ namespace LemonLib
             /// <summary>
             /// 是否打开了mini小窗
             /// </summary>
-            public bool IsMiniOpen { get; set; } = true;
+            public bool IsMiniOpen { get; set; } = false;
             /// <summary>
             /// 是否打开桌面歌词
             /// </summary>

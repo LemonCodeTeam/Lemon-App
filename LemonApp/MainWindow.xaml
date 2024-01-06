@@ -1567,7 +1567,16 @@
                             <TextBlock Foreground="White" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Opacity="0.7" Margin="0,34,10,0" Text="{Binding Text, ElementName=timetb}"><Run x:Name="Play_Now1" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All1" Text="00:00"/></TextBlock>
                         </Grid>
                     </Grid>
-                    <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="50,100,100,80" Grid.Column="1" MinWidth="300" MaxWidth="500"/>
+                    <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="50,100,100,80" Grid.Column="1" MinWidth="300" MaxWidth="500">
+                        <Border.OpacityMask>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Transparent"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                                <GradientStop Color="Black" Offset="0.2"/>
+                                <GradientStop Color="Black" Offset="0.8"/>
+                            </LinearGradientBrush>
+                        </Border.OpacityMask>
+                    </Border>
                 </Grid>
                 <Grid x:Name="LyricImm" Margin="0,0,10,0" Visibility="Collapsed">
                     <TextBlock x:Name="LyricImm_tb" TextWrapping="Wrap" Foreground="#FFFBFBFB" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0,50,0" FontSize="72" FontWeight="Bold" TextAlignment="Center" Visibility="Visible"><Run x:Name="ImmTb_Lyric" Text="You don't have to try so hard"/><LineBreak/><Run x:Name="ImmTb_Trans" Text="Translation" FontSize="36" FontWeight="Normal" Foreground="#B2FBFBFB"/></TextBlock>
