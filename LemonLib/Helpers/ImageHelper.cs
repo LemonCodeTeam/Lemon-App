@@ -120,7 +120,9 @@ namespace LemonLib
         private static extern int GdipSetEffectParameters(IntPtr effect, IntPtr parameters, uint size);
         public static IntPtr NativeHandle(this Bitmap Bmp)
         {
-            return Bmp.GetPrivateField<IntPtr>("nativeImage");
+            // 通过反射获取Bitmap的私有字段nativeImage的值，该值为GDI+的内部图像句柄
+            //在.NET 8中字段由 nativeImage变更为_nativeImage
+            return Bmp.GetPrivateField<IntPtr>("_nativeImage");
         }
         [DllImport("gdiplus.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
         private static extern int GdipDeleteEffect(IntPtr effect);

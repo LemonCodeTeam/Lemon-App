@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
     <Version>1.2.8.6</Version>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.2" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>

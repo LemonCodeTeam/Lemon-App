@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
@@ -10,7 +10,7 @@
     <StartupObject>LemonApp.App</StartupObject>
     <AssemblyName>LemonApp</AssemblyName>
     <RootNamespace>LemonApp</RootNamespace>
-    <Version>1.2.8.7</Version>
+    <Version>1.2.8.9</Version>
     <Authors>TwilightLemon</Authors>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>

@@ -121,6 +121,8 @@ namespace LemonApp
             RomajiRunReference.Clear();
             foucslrc = null;
 
+            c_lrc_items.Children.Add(new TextBlock() { Text = "lemonapp", Height = 200 });
+
             string[] lrcdata = data.lyric.Split('\n');
             string[] transdata = null;
             Dictionary<double, string> transDic = null;
@@ -249,6 +251,7 @@ namespace LemonApp
                     SaveRomajiLrc(data.id, s.ToString());
                 }
             }
+            c_lrc_items.Children.Add(new TextBlock() {Text="lemonapp", Height = 200 });
         }
         private async void SaveRomajiLrc(string id, string data)
         {
