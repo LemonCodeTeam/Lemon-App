@@ -13,6 +13,12 @@
                     <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
                 </Style.Setters>
             </Style>
+            <!--全局Path图标样式-->
+            <Style TargetType="{x:Type Path}">
+                <Style.Setters>
+                    <Setter Property="Path.CacheMode" Value="BitmapCache"/>
+                </Style.Setters>
+            </Style>
             <!--全局圆角-->
             <CornerRadius x:Key="AppCornerRadius">10,10,10,10</CornerRadius>
             <Thickness x:Key="ImageBorder">4</Thickness>

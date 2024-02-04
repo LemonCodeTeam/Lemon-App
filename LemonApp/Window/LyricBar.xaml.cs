@@ -35,6 +35,10 @@ namespace LemonApp
             get => (int)text.FontSize;
             set { int v=value; text.FontSize = v; Height = value+8; }
         }
+        public void SetMusicInfo(string str)
+        {
+            MusicInfo.Text = str+"✨";
+        }
         public void Update(string txt) {
             text.Text = txt.Replace("\r\n","   ");
         }

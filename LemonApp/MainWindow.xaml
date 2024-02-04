@@ -5,13 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lemonlib="clr-namespace:LemonLib;assembly=LemonLib"
         xmlns:LemonApp="clr-namespace:LemonApp"
-        xmlns:con="clr-namespace:LemonApp.ControlItems"
+        xmlns:con="clr-namespace:LemonApp.ControlItems" x:Name="window"
         x:Class="LemonApp.MainWindow"
         mc:Ignorable="d"
         Title="Lemon App" Height="760" Width="1126" WindowStartupLocation="CenterScreen"
     MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="window_Loaded" SizeChanged="window_SizeChanged"
     MinWidth="875" MinHeight="700" Background="{x:Null}" WindowStyle="SingleBorderWindow" Closing="Window_Closing">
     <Window.Triggers>
+        <EventTrigger RoutedEvent="MouseLeftButtonDown" SourceName="MusicImage">
+            <BeginStoryboard x:Name="LP_Ani" Storyboard="{DynamicResource LyricPage_DynamicBg}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MouseDown" SourceName="LyricPage_CloseBtn">
+            <PauseStoryboard BeginStoryboardName="LP_Ani"/>
+        </EventTrigger>
         <!--#region 歌词页   相关的歌单-->
         <EventTrigger RoutedEvent="MouseEnter" SourceName="LyricPage_AboutGD">
             <BeginStoryboard Storyboard="{DynamicResource LP_AboutGD_MouseEnter}"/>
@@ -813,6 +819,23 @@
                 <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Key="LyricPage_DynamicBg" Timeline.DesiredFrameRate="10"
+                    RepeatBehavior="Forever" AutoReverse="True">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_Background"
+                                              Storyboard.TargetProperty="(FrameworkElement.Margin)">
+                <EasingThicknessKeyFrame KeyTime="00:00:02" Value="-100,-100,0,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:06" Value="-100,-100,0,0"/>
+                
+                <EasingThicknessKeyFrame KeyTime="00:00:08" Value="-100,0,0,-100"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:12" Value="-100,0,0,-100"/>
+                
+                <EasingThicknessKeyFrame KeyTime="00:00:14" Value="0,-100,-100,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:18" Value="0,-100,-100,0"/>
+
+                <EasingThicknessKeyFrame KeyTime="00:00:20" Value="-100,0,-100,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:24" Value="-100,0,-100,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
     </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="1" GlassFrameThickness="1" ResizeBorderThickness="5"/>
@@ -1394,7 +1417,7 @@
                 </StackPanel>
                 <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="20" Background="Transparent" Margin="0,0,0,15">
                     <Path HorizontalAlignment="Left" Data="M321.828571 226.742857c-14.628571-14.628571-36.571429-14.628571-51.2 0L7.314286 482.742857c-14.628571 14.628571-14.628571 36.571429 0 51.2l256 256c14.628571 14.628571 36.571429 14.628571 51.2 0 14.628571-14.628571 14.628571-36.571429 0-51.2L87.771429 512l234.057142-234.057143c7.314286-14.628571 7.314286-36.571429 0-51.2z m263.314286 0c-14.628571 0-36.571429 7.314286-43.885714 29.257143l-131.657143 497.371429c-7.314286 21.942857 7.314286 36.571429 29.257143 43.885714s36.571429-7.314286 43.885714-29.257143l131.657143-497.371429c7.314286-14.628571-7.314286-36.571429-29.257143-43.885714z m431.542857 256l-256-256c-14.628571-14.628571-36.571429-14.628571-51.2 0-14.628571 14.628571-14.628571 36.571429 0 51.2L936.228571 512l-234.057142 234.057143c-14.628571 14.628571-14.628571 36.571429 0 51.2 14.628571 14.628571 36.571429 14.628571 51.2 0l256-256c14.628571-14.628571 14.628571-43.885714 7.314285-58.514286z" Width="13" Stretch="Uniform" StrokeThickness="0" Height="20" Fill="#FF3399FF" Margin="0,0,3,0"/>
-                    <TextBlock Text="Powered by .NET 6" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.3" FontSize="12"/>
+                    <TextBlock Text="Powered by .NET 8" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ResuColorBrush}" Opacity="0.3" FontSize="12"/>
                 </WrapPanel>
                 <Border x:Name="AniCom" HorizontalAlignment="Left" Margin="5,209,0,0" Background="{DynamicResource ThemeColor}" Width="5" Height="20" VerticalAlignment="Top" Visibility="Visible" CornerRadius="2.5,2.5,2.5,2.5"/>
                 <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Margin="0,20,0,0">
@@ -1430,7 +1453,7 @@
         <!--歌词页面-->
         <Grid x:Name="LyricPage" Visibility="Collapsed">
             <Border x:Name="ThemeColor" Background="White"  Grid.ColumnSpan="2">
-                <Grid x:Name="LyricPage_Background" RenderOptions.BitmapScalingMode="Fant">
+                <Grid x:Name="LyricPage_Background" Margin="-50" RenderOptions.BitmapScalingMode="LowQuality">
                     <Border x:Name="LyricPage_AlbumColor" Opacity="0.2"/>
                     <Border Background="#99000000"/>
                 </Grid>
@@ -1442,35 +1465,34 @@
                         <ColumnDefinition Width="1.2*"/>
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="LyricPage_Left">
-                        <Grid ToolTip="单击切换动效">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="50*"/>
-                                <RowDefinition Height="340*"/>
-                                <RowDefinition Height="240*"/>
-                            </Grid.RowDefinitions>
-                            <Grid x:Name="LyricBigGrid"  Grid.Row="1" MaxWidth="380" MinWidth="280" Height="{Binding ActualWidth, ElementName=LyricBig}" Margin="60,0,60,0">
-                                <Border x:Name="LyricBig" RenderOptions.BitmapScalingMode="Fant"   Background="{Binding Background, ElementName=MusicImage}" CornerRadius="{Binding ActualHeight, ElementName=LyricBig, Mode=OneWay}" BorderThickness="10" BorderBrush="#33000000" MouseDown="LyricBig_MouseDown" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
-                                    </Border.Effect>
-                                    <Border.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform/>
-                                            <SkewTransform/>
-                                            <RotateTransform Angle="0"/>
-                                            <TranslateTransform/>
-                                        </TransformGroup>
-                                    </Border.RenderTransform>
-                                </Border>
-                                <Grid x:Name="LyricAni" Margin="-1000" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Border x:Name="ookok"  BorderThickness="1" BorderBrush="White" Height="409" Width="409" CornerRadius="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                </Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7*"/>
+                            <RowDefinition Height="40*"/>
+                            <RowDefinition Height="8*"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="LyricBigGrid" MaxWidth="380" MinWidth="280" Height="{Binding ActualWidth, ElementName=LyricBig}" Margin="60,0,60,0" Grid.Row="1">
+                            <Border x:Name="LyricBig" RenderOptions.BitmapScalingMode="Fant"   Background="{Binding Background, ElementName=MusicImage}" CornerRadius="{Binding ActualHeight, ElementName=LyricBig, Mode=OneWay}" BorderThickness="10" BorderBrush="#33000000" MouseDown="LyricBig_MouseDown" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,0">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
+                                </Border.Effect>
+                                <Border.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Border.RenderTransform>
+                            </Border>
+                            <Grid x:Name="LyricAni" Margin="-1000" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Border x:Name="ookok"  BorderThickness="1" BorderBrush="White" Height="409" Width="409" CornerRadius="1000" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                             </Grid>
-                            <TextBlock x:Name="m_Name" Margin="60,0,30,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" Grid.Row="2"/>
-                            <TextBlock x:Name="m_Singer" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Grid.Row="2" Margin="60,40,30,0"/>
-                            <TextBlock x:Name="m_lyric" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Grid.Row="2" Margin="60,70,30,0" Visibility="Collapsed"/>
                         </Grid>
-                        <Grid VerticalAlignment="Bottom" Margin="45,0,45,20" Height="148">
+                        <TextBlock x:Name="m_Name" Margin="60,0,30,0" TextWrapping="Wrap" Text="{Binding Text, ElementName=MusicName}" VerticalAlignment="Top" Foreground="#FFFDFDFD" FontSize="22" Height="30" Grid.Row="2"/>
+                        <TextBlock x:Name="m_Singer" TextWrapping="Wrap" Text="{Binding Text, ElementName=Singer}" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Margin="60,40,30,0" Grid.Row="2"/>
+                        <TextBlock x:Name="m_lyric" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFE0E0E0" FontSize="16" Height="25" Opacity="0.7" Margin="60,70,30,0" Visibility="Collapsed" Grid.Row="2" Grid.RowSpan="2"/>
+                        <Grid VerticalAlignment="Top" Margin="45,30,45,0" Height="148" Grid.Row="3">
                             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,7,0,0">
                                 <Border HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="50" Background="#00000000" MouseDown="FxDec_MouseDown" Cursor="Hand">
                                     <Border BorderBrush="{DynamicResource ThemeColor}" BorderThickness="1" CornerRadius="7" ToolTip="Fx效果器 双击可以保存mp3" Height="18">
@@ -1567,7 +1589,7 @@
                             <TextBlock Foreground="White" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Opacity="0.7" Margin="0,34,10,0" Text="{Binding Text, ElementName=timetb}"><Run x:Name="Play_Now1" Text="00:00"/><Run Text="/"/><Run x:Name="Play_All1" Text="00:00"/></TextBlock>
                         </Grid>
                     </Grid>
-                    <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="50,100,100,80" Grid.Column="1" MinWidth="300" MaxWidth="500">
+                    <Border x:Name="ly" SizeChanged="ly_SizeChanged" Margin="50,100,100,80" Grid.Column="1" MinWidth="300">
                         <Border.OpacityMask>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                 <GradientStop Color="Transparent"/>
@@ -1581,7 +1603,7 @@
                 <Grid x:Name="LyricImm" Margin="0,0,10,0" Visibility="Collapsed">
                     <TextBlock x:Name="LyricImm_tb" TextWrapping="Wrap" Foreground="#FFFBFBFB" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0,50,0" FontSize="72" FontWeight="Bold" TextAlignment="Center" Visibility="Visible"><Run x:Name="ImmTb_Lyric" Text="You don't have to try so hard"/><LineBreak/><Run x:Name="ImmTb_Trans" Text="Translation" FontSize="36" FontWeight="Normal" Foreground="#B2FBFBFB"/></TextBlock>
                 </Grid>
-                <Border HorizontalAlignment="Left" Height="45" Margin="20,20,0,0" VerticalAlignment="Top" Width="45" Background="#00000000" MouseDown="Border_MouseDown_2" Cursor="Hand">
+                <Border x:Name="LyricPage_CloseBtn" HorizontalAlignment="Left" Height="45" Margin="20,20,0,0" VerticalAlignment="Top" Width="45" Background="#00000000" MouseDown="Border_MouseDown_2" Cursor="Hand">
                     <Path Data="M511.609097 961.619254 M511.906879 662.759609 511.906879 662.759609 129.831974 280.679587c-14.788821-14.762215-38.777165-14.762215-53.585429 0-14.788821 14.812357-14.788821 38.799678 0 53.607942l405.851425 405.805376c0.867764 1.107217 1.824555 2.190899 2.843768 3.206018 14.808264 14.788821 38.795585 14.788821 53.585429 0l408.230612-408.226518c14.807241-14.808264 14.807241-38.795585 0-53.584406-14.767332-14.785751-38.754652-14.785751-53.562916 0L511.906879 662.759609 511.906879 662.759609zM511.906879 662.759609" Fill="White" Stretch="Uniform" Height="18" Width="18"/>
                 </Border>
                 <Border x:Name="LyricPage_AboutGD" Margin="0,0,-20,65" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Cursor="Hand" Width="100" Background="#66000000" CornerRadius="6,6,6,6">

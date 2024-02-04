@@ -2662,6 +2662,7 @@ namespace LemonApp
                 Singer.Text = data.SingerText;
                 mini.MusicName.Text = data.MusicName;
                 mini.SingerText.Text = data.SingerText;
+                lyricTa?.SetMusicInfo(data.MusicName);
                 lyrictime_offset = 0;
                 LyricPage_TimeSetter.Text = "0.0s";
 
