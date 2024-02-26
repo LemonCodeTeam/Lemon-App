@@ -2908,6 +2908,8 @@ namespace LemonApp
         public void Jd_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             CanJd = false;
+            var jd = sender as Slider;
+            jd.Value = (e.GetPosition(jd).X / jd.ActualWidth)*jd.Maximum;
         }
         public void Jd_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

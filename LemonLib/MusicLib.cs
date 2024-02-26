@@ -44,6 +44,8 @@ namespace LemonLib
             try
             {
                 var o = JObject.Parse(await HttpHelper.GetWebAsync("https://gitee.com/TwilightLemon/LemonAppDynamics/raw/master/Extension_GetMusicUpdate.json"));
+                bool ava = Boolean.Parse(o["Available"].ToString());
+                if (!ava) return;
                 var v = Version.Parse(o["version"].ToString());
                 string path = Path.Combine(Settings.USettings.DataCachePath, "LemonApp.Extension.GetMusic.dll");
 
@@ -955,14 +957,17 @@ jpg
             try
             {
                 //从插件中加载
-                var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ, d.Source });
-                if (await HttpHelper.GetHTTPFileSize(data) > 1024)
-                    return new MusicUrlData()
-                    {
-                        Url = data,
-                        Source = "Ext",
-                        Quality = PQ
-                    };
+                if (Extension_GetMusic != null)
+                {
+                    var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ, d.Source });
+                    if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                        return new MusicUrlData()
+                        {
+                            Url = data,
+                            Source = "Ext",
+                            Quality = PQ
+                        };
+                }
             }
             catch { }
 
