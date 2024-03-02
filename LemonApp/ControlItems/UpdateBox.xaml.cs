@@ -17,7 +17,7 @@ namespace LemonApp
     public partial class UpdateBox : Window
     {
         string _url;
-        public UpdateBox(string ver, string des,string url)
+        public UpdateBox(string ver, string des, string url)
         {
             InitializeComponent();
             _url = url;
@@ -40,31 +40,31 @@ namespace LemonApp
             var xpath = Settings.USettings.DataCachePath + "win-release.zip";
             using var hc = new HttpClient(HttpHelper.GetSta());
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\"");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("cache-control", "no-cache");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("pragma", "no-cache");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-dest", "document");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-mode", "navigate");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-site", "none");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-user", "?1");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("upgrade-insecure-requests", "1");
-           hc.DefaultRequestHeaders.TryAddWithoutValidation("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("cache-control", "no-cache");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("pragma", "no-cache");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-dest", "document");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-mode", "navigate");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-site", "none");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("sec-fetch-user", "?1");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("upgrade-insecure-requests", "1");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36 Edg/84.0.522.44");
             tb.Text = "连接至服务器...";
-            var response =await hc.GetAsync(_url);
+            var response = await hc.GetAsync(_url);
             using Stream st = await response.Content.ReadAsStreamAsync();
             var length = (long)response.Content.Headers.ContentLength;
             int total = 0;
-            using (var filestream = new FileStream(xpath, FileMode.Create,FileAccess.ReadWrite))
+            using (var filestream = new FileStream(xpath, FileMode.Create, FileAccess.ReadWrite))
             {
-                byte[] bArry=new byte[409600];
+                byte[] bArry = new byte[409600];
                 int size = await st.ReadAsync(bArry);
                 total += size;
-                while(size>0)
+                while (size > 0)
                 {
                     await filestream.WriteAsync(bArry.AsMemory(0, size));
                     size = await st.ReadAsync(bArry);
                     total += size;
-                    int process = (int)(total*100/ length);
+                    int process = (int)(total * 100 / length);
                     pro.Value = process;
                 }
                 filestream.Close();

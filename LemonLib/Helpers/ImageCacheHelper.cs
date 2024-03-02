@@ -12,10 +12,11 @@ using System.Windows.Media.Imaging;
 namespace LemonLib
 {
     /// <summary>
-    /// 图像的三级缓存 网络-内存-储存
+    /// 图像的三级缓存 MemoryCache->FileCache->Internet
     /// </summary>
     public class ImageCacheHelper
     {
+        private static ConditionalWeakTable<string, BitmapImage> MemoryCache = new();
         /// <summary>
         /// 图像的三级缓存 从URL中获取图像
         /// </summary>
@@ -27,8 +28,20 @@ namespace LemonLib
             try
             {
                 url += DecodePixel != null ? "#" + string.Join(",", DecodePixel) : "";
+                //signed by HashCode, swifter than MD5.
+                string id = url.GetHashCode().ToString();
                 MainClass.DebugCallBack("IMAGE GETER",url);
-                BitmapImage bi = GetImageFromFile(url);
+                //Get from MemoryCache
+                if (MemoryCache.TryGetValue(id, out BitmapImage bi))
+                    return bi;
+                //Get from FileCache
+                BitmapImage bf = GetImageFromFile(url);
+                if (bf != null)
+                {
+                    MemoryCache.Add(id, bf);
+                    return bf;
+                }
+                //Get from Internet
                 return await GetImageFromInternet(url, DecodePixel);
             }
             catch(Exception e)
@@ -39,7 +52,8 @@ namespace LemonLib
         }
         private static BitmapImage GetImageFromFile(string url)
         {
-            string file = Path.Combine(Settings.USettings.MusicCachePath, "Image", TextHelper.MD5.EncryptToMD5string(url) + ".jpg");
+            //id signed by MD5 for long-time use
+            string file = Path.Combine(Settings.USettings.MusicCachePath, "Image", TextHelper.MD5.EncryptToMD5string(url)+ ".jpg");
             if (File.Exists(file))
                 return GetBitMapImageFromFile(file);
             else return null;

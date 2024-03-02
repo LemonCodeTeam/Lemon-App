@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LemonApp"
         xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" x:Class="LemonApp.LoginNetease"
         mc:Ignorable="d"
-        Title="LoginNetease" Height="660" Width="830" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
+        Title="LoginNetease" Height="660" Width="830" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" CaptionHeight="1" />
     </WindowChrome.WindowChrome>

@@ -17,6 +17,7 @@ using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Xml.Linq;
 using static LemonLib.InfoHelper;
 
@@ -938,10 +939,24 @@ jpg
         {
             return m switch
             {
+                
                 MusicQuality.SQ => new string[2] { ".flac", "SQ" },
                 MusicQuality.HQ => new string[2] { ".mp3", "HQ" },
                 MusicQuality._120k => new string[2] { ".mp3", "120k" }
             };
+        }
+
+        public static (string,MusicQuality) FindExistingFile(Music m,MusicQuality PQ)
+        {
+            do
+            {
+                var qual = QualityMatcher(PQ);
+                string downloadpath = Path.Combine(Settings.USettings.MusicCachePath, "Music", m.MusicID + qual[0]);
+                if(File.Exists(downloadpath))
+                    return (downloadpath,PQ);
+                PQ++;
+            } while (PQ != MusicQuality._120k);
+            return (null,PQ);
         }
 
         /// <summary>
@@ -961,12 +976,21 @@ jpg
                 {
                     var data = await (Task<string>)Extension_GetMusic.Invoke(new object[] { d.MusicID, PQ, d.Source });
                     if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                    {
                         return new MusicUrlData()
                         {
                             Url = data,
                             Source = "Ext",
                             Quality = PQ
                         };
+                    }
+                    else
+                    {
+                        if (PQ == MusicQuality.SQ)
+                        {
+                            return await GetUrlAsync(d, MusicQuality.HQ);
+                        }
+                    }
                 }
             }
             catch { }

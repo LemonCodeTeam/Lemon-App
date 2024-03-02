@@ -2577,12 +2577,9 @@ namespace LemonApp
         {
             var PQ = Settings.USettings.PreferQuality;
             MusicQuality ava = PQ == data.Quality ? PQ : (PQ < data.Quality ? data.Quality : PQ);
-            var qual = MusicLib.QualityMatcher(PQ);
-
-            string downloadpath =System.IO.Path.Combine(Settings.USettings.MusicCachePath , "Music", data.MusicID + qual[0]);
-            Settings.USettings.PlayingFileName= data.MusicID + qual[0];
+            var (downloadpath,qua)=MusicLib.FindExistingFile(data, ava);
             MusicPlay_LoadProc.Value = 0;
-            if (!System.IO.File.Exists(downloadpath))
+            if (string.IsNullOrEmpty(downloadpath))
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
                 var musicurl = await MusicLib.GetUrlAsync(data,ava);
@@ -2621,6 +2618,8 @@ namespace LemonApp
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
+                var qual=MusicLib.QualityMatcher(qua);
+                Settings.USettings.PlayingFileName = data.MusicID + qual[0];
                 QualityChooser_Now_Lyric.Text = QualityChooser_Now.Text = qual[1];
                 SongSource_tb.Text = "Local";
             }
@@ -2752,7 +2751,7 @@ namespace LemonApp
                 AbleToClick = true;
             }
             //-------加载歌曲相关歌单功能-------
-            var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
+ /*           var gd = await MusicLib.GetSongListAboutSong(data.MusicID);
             if (gd.Count >= 1)
             {
                 LP_ag1_img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(gd[0].Photo, new int[2] { 80, 80 }));
@@ -2770,7 +2769,7 @@ namespace LemonApp
                 LP_ag3_img.Background = new ImageBrush(await ImageCacheHelper.GetImageByUrl(gd[2].Photo, new int[2] { 80, 80 }));
                 LP_ag3.Tag = new { id = gd[2].ID, name = gd[2].Name, img = gd[2].Photo };
                 LP_ag3_tx.Text = gd[2].Name;
-            }
+            }*/
         }
 
         private void LP_ag_MouseDown(object sender, MouseButtonEventArgs e)
@@ -3703,26 +3702,38 @@ namespace LemonApp
             else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
         }
         bool HasOpenLranslationPage = false;
+        /// <summary>
+        /// TransAirWindow 的实例
+        /// </summary>
         TransAirWindow ta = null;
         private void TransAir_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!HasOpenLranslationPage)
             {
                 HasOpenLranslationPage = true;
-                ta = new TransAirWindow();
-                ta.Owner = this;
-                ta.Top = ta.Owner.Top;
-                ta.Left = ta.Owner.Left;
-                ta.Height = ta.Owner.ActualHeight;
-                ta.Closed += delegate { HasOpenLranslationPage = false; };
-                ta.Owner.LocationChanged += delegate
+                ta = new TransAirWindow
                 {
-                    ta.Top = ta.Owner.Top;
-                    ta.Left = ta.Owner.Left;
-                    ta.Height = ta.Owner.ActualHeight;
+                    Owner = this,
+                    Top = Top,
+                    Left = Left,
+                    Height = ActualHeight
                 };
+                ta.Closed += delegate {
+                    this.SizeChanged-= TransWindow_Locate;
+                    this.StateChanged -= TransWindow_Locate;
+                    HasOpenLranslationPage = false; 
+                };
+                this.SizeChanged += TransWindow_Locate;
+                this.StateChanged += TransWindow_Locate;
                 ta.Show();
             }
+        }
+
+        private void TransWindow_Locate(object sender,EventArgs e)
+        {
+            ta.Top = Top;
+            ta.Left = Left;
+            ta.Height = ActualHeight;
         }
         #endregion
         #region IntoGD 导入歌单

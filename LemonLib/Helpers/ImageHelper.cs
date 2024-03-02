@@ -121,7 +121,7 @@ namespace LemonLib
         public static IntPtr NativeHandle(this Bitmap Bmp)
         {
             // 通过反射获取Bitmap的私有字段nativeImage的值，该值为GDI+的内部图像句柄
-            //在.NET 8中字段由 nativeImage变更为_nativeImage
+            //新版Drawing的Nuget包中字段由 nativeImage变更为_nativeImage
             return Bmp.GetPrivateField<IntPtr>("_nativeImage");
         }
         [DllImport("gdiplus.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]

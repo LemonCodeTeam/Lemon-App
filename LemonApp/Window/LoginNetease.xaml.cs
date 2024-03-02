@@ -83,5 +83,13 @@ namespace LemonApp
         {
             this.Close();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //释放WebView2
+            wb.CoreWebView2.FrameNavigationCompleted -= CoreWebView2_FrameNavigationCompleted;
+            wb.CoreWebView2.Stop();
+            wb.Dispose();
+        }
     }
 }
