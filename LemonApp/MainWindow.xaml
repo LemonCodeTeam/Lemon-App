@@ -823,17 +823,33 @@
                     RepeatBehavior="Forever" AutoReverse="True">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="LyricPage_Background"
                                               Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                <EasingThicknessKeyFrame KeyTime="00:00:02" Value="-100,-100,0,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:06" Value="-100,-100,0,0"/>
-                
-                <EasingThicknessKeyFrame KeyTime="00:00:08" Value="-100,0,0,-100"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:12" Value="-100,0,0,-100"/>
-                
-                <EasingThicknessKeyFrame KeyTime="00:00:14" Value="0,-100,-100,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:18" Value="0,-100,-100,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:05" Value="-100,-100,0,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:10" Value="-100,-100,0,0"/>
 
-                <EasingThicknessKeyFrame KeyTime="00:00:20" Value="-100,0,-100,0"/>
-                <EasingThicknessKeyFrame KeyTime="00:00:24" Value="-100,0,-100,0"/>
+                <EasingThicknessKeyFrame KeyTime="00:00:15" Value="-100,0,0,-100">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:20" Value="-100,0,0,-100"/>
+
+                <EasingThicknessKeyFrame KeyTime="00:00:25" Value="0,-100,-100,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:30" Value="0,-100,-100,0"/>
+
+                <EasingThicknessKeyFrame KeyTime="00:00:35" Value="-100,0,-100,0">
+                    <EasingThicknessKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseOut"/>
+                    </EasingThicknessKeyFrame.EasingFunction>
+                </EasingThicknessKeyFrame>
+                <EasingThicknessKeyFrame KeyTime="00:00:40" Value="-100,0,-100,0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
@@ -1452,12 +1468,10 @@
         </Grid>
         <!--歌词页面-->
         <Grid x:Name="LyricPage" Visibility="Collapsed">
-            <Border x:Name="ThemeColor" Background="White"  Grid.ColumnSpan="2">
-                <Grid x:Name="LyricPage_Background" Margin="-50" RenderOptions.BitmapScalingMode="LowQuality">
-                    <Border x:Name="LyricPage_AlbumColor" Opacity="0.2"/>
-                    <Border Background="#99000000"/>
-                </Grid>
-            </Border>
+            <Grid  Grid.ColumnSpan="2" x:Name="LyricPage_Background" Margin="-50" RenderOptions.BitmapScalingMode="LowQuality" Background="White">
+                <Border x:Name="LyricPage_AlbumColor" Opacity="0.2"/>
+                <Border x:Name="LyricPage_ThemeColor" Background="#99000000"/>
+            </Grid>
             <Grid x:Name="Lyric_Content" Margin="0,0,0,0">
                 <Grid x:Name="LyricNor">
                     <Grid.ColumnDefinitions>

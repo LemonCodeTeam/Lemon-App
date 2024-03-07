@@ -246,7 +246,7 @@ namespace LemonLib
         /// <returns></returns>
         public float[] GetFFTData()
         {
-            float[] fft = new float[256];
+            float[] fft = new float[128];
             Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT256);
             return fft;
         }
@@ -340,7 +340,7 @@ namespace LemonLib
                 _fs.Close();
                 _fs = null;
                 FileInfo fi = new FileInfo(DLPath + ".cache");
-                if (fi.Length != len)
+                if (len>down)
                 {
                     MainClass.DebugCallBack(fi.Length.ToString(), len.ToString());
                     fi.Delete();

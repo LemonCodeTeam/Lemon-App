@@ -45,7 +45,7 @@ namespace LemonApp
         #region 一些字段
         //-------Mini--------
         private MiniPlayer mini;
-        System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer LyricTimer = new System.Windows.Forms.Timer();
         public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
         bool IsRadio = false;
@@ -235,7 +235,7 @@ namespace LemonApp
             LoadingAni = Resources["LoadingAni"] as Storyboard;
             //-----Timer 更新播放设备
             var ds = new System.Windows.Forms.Timer() { Interval = 5000 };
-            ds.Tick += delegate { if (t.Enabled) mp.UpdateDevice(); };
+            ds.Tick += delegate { if (LyricTimer.Enabled) mp.UpdateDevice(); };
             ds.Start();
             #endregion
             #region Part2
@@ -249,8 +249,8 @@ namespace LemonApp
             ly.Child = lv;
             lv.NextLyric += Lv_NextLyric;
             //--------播放时的Timer 进度/歌词
-            t.Interval = 500;
-            t.Tick += Playing_Tick;
+            LyricTimer.Interval = 500;
+            LyricTimer.Tick += Playing_Tick;
             //---------------------
             LP_ag1.MouseDown += LP_ag_MouseDown;
             LP_ag2.MouseDown += LP_ag_MouseDown;
@@ -290,8 +290,9 @@ namespace LemonApp
             if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
                 await SendMsgToMyToolBar("Start", "LemonAppOrd");
         }
-
-        private void Playing_Tick(object sender, EventArgs e)
+        private static float LyricAni_LastSv = 0;
+        private static bool LyricAni_Playing = false;
+        private async void Playing_Tick(object sender, EventArgs e)
         {
             try
             {
@@ -311,24 +312,26 @@ namespace LemonApp
                 lyric_jd.Maximum = all;
                 if (IsLyricPageOpen == 1)
                 {
-                    if (Settings.USettings.LyricAnimationMode == 0)
+                    if (Settings.USettings.LyricAnimationMode == 0&&!LyricAni_Playing)
                     {
                         float[] data = mp.GetFFTData();
-                        float sv = 0;
-                        foreach (var c in data)
-                            if (c > 0.06)
-                            {
-                                sv = c;
-                                break;
-                            }
+                        float sv = 0,sum=0;
+                        for(int i = 0; i < 3; i++)
+                        {
+                            sum += data[i];
+                        }
+                        float temp = sum / 3;
+                        sv=temp>0.06?temp:0;
                         if (sv != 0)
                         {
-                            if (Settings.USettings.IsLyricImm && sv > 0.25)
+                            float offset = Math.Abs(LyricAni_LastSv - sv);
+                            if (Settings.USettings.IsLyricImm&&sv>0.2)
                             {
                                 (Resources["LyricImm_High"] as Storyboard).Begin();
                             }
-                            else
+                            else if(offset>=0.05)
                             {
+                                LyricAni_Playing = true;
                                 Border b = new Border();
                                 b.BorderThickness = new Thickness(1);
                                 b.BorderBrush = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255));
@@ -347,10 +350,15 @@ namespace LemonApp
                                 Storyboard.SetTarget(f1, b);
                                 var f2 = s.Children[2] as DoubleAnimationUsingKeyFrames;
                                 Storyboard.SetTarget(f2, b);
-                                s.Completed += delegate { LyricAni.Children.Remove(b); };
+                                s.Completed += delegate { 
+                                    LyricAni.Children.Remove(b);
+                                };
                                 LyricAni.Children.Add(b);
                                 s.Begin();
+                                await Task.Delay(400);
+                                LyricAni_Playing = false;
                             }
+                            LyricAni_LastSv = sv;
                         }
                     }
                     lv.LrcRoll(now + lyrictime_offset * 1000, true);
@@ -362,14 +370,14 @@ namespace LemonApp
                     now = 0;
                     all = 0;
                     mp.Position = TimeSpan.FromSeconds(0);
-                    t.Stop();
+                    LyricTimer.Stop();
                     //-----------播放完成时，判断单曲还是下一首
                     jd.Value = 0;
                     if (Settings.USettings.PlayXHMode == 1)//单曲循环
                     {
                         mp.Position = TimeSpan.FromMilliseconds(0);
                         mp.Play();
-                        t.Start();
+                        LyricTimer.Start();
                     }
                     else if (Settings.USettings.PlayXHMode == 0 || Settings.USettings.PlayXHMode == 2) PlayControl_PlayNext(null, null);//下一曲
                 }
@@ -1904,6 +1912,7 @@ namespace LemonApp
             likeBtn_path.Tag = false;
             mini.likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
             likeBtn_path.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
+            lyric_like.SetResourceReference(Shape.FillProperty, "ResuColorBrush");
         }
         /// <summary>
         /// 添加喜欢 变红色
@@ -2646,7 +2655,7 @@ namespace LemonApp
                     PlayControl_PlayNext(null, null);
                     return;
                 }
-                t.Stop();
+                LyricTimer.Stop();
                 if (mp.BassdlList.Count > 0)
                     mp.BassdlList.Last().SetClose();
 
@@ -2706,6 +2715,7 @@ namespace LemonApp
                 AlbumColor = col;
                 if (IsLyricPageOpen == 1) App.BaseApp.SetColor("ThemeColor", AlbumColor);
                 Console.WriteLine(col.R + " " + col.G + " " + col.B, "ThemeColor of image");
+              //  LyricPage_ThemeColor.Background=new SolidColorBrush() { Color = col };
                 LyricPage_Background.Background = new ImageBrush(imb.ToBitmapImage()) { Stretch = Stretch.UniformToFill };
                 #endregion
 
@@ -2723,7 +2733,7 @@ namespace LemonApp
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.MiniPause);
                     TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                     lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
-                    t.Start();
+                    LyricTimer.Start();
                     isplay = true;
                     if (Settings.USettings.LyricAnimationMode == 2)
                     {
@@ -3061,7 +3071,7 @@ namespace LemonApp
                 if (Settings.USettings.LyricAnimationMode == 2)
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
-                t.Stop();
+                LyricTimer.Stop();
                 (PlayBtn.Child as Path).Data = lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPlay);
             }
             else
@@ -3081,7 +3091,7 @@ namespace LemonApp
                     }
                 }
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
-                t.Start();
+                LyricTimer.Start();
                 (PlayBtn.Child as Path).Data = lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
             }
         }
@@ -3497,6 +3507,15 @@ namespace LemonApp
         private bool IsBigAniRunning = false;
         private void CheckLyricAnimation(int mode)
         {
+            if (mode == 0)
+            {
+                LyricTimer.Interval = 100;
+            }
+            else
+            {
+                LyricTimer.Interval = 1000;
+            }
+
             if (mode == 2)
             {
                 LyricBigAniRound.Begin();
