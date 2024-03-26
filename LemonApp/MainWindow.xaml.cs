@@ -4330,7 +4330,8 @@ namespace LemonApp
         #endregion
         #region 进程通信
         private async Task SendMsgToMyToolBar(string data,string type="LemonAppLyricData") {
-            string lrcdata = "{\"Sign\":\""+type+"\",\"Data\":\"" + data + "\"}";
+            int handle =new WindowInteropHelper(this).Handle.ToInt32();
+            string lrcdata = "{\"Sign\":\""+type+"\",\"Data\":\"" + data + "\",\"Handle\":\""+handle+"\"}";
             Socket clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             await clientSocket.ConnectAsync("127.0.0.1", 3230);
             await clientSocket.SendAsync(Encoding.UTF8.GetBytes(lrcdata), SocketFlags.None);
@@ -4348,8 +4349,21 @@ namespace LemonApp
                 MsgHelper.COPYDATASTRUCT cdata = new MsgHelper.COPYDATASTRUCT();
                 Type mytype = cdata.GetType();
                 cdata = (MsgHelper.COPYDATASTRUCT)Marshal.PtrToStructure(lParam, mytype);
-                if (cdata.lpData == MsgHelper.SEND_SHOW)
-                    exShow();
+                switch (cdata.lpData)
+                {
+                    case MsgHelper.SEND_SHOW:
+                         exShow();
+                        break;
+                    case MsgHelper.SEND_LAST:
+                        PlayControl_PlayLast(null, null);
+                        break;
+                    case MsgHelper.SEND_NEXT:
+                        PlayControl_PlayNext(null, null);
+                        break;
+                    case MsgHelper.SEND_PAUSE:
+                        PlayBtn_MouseDown(null, null);
+                        break;
+                }
             }
             return IntPtr.Zero;
         }

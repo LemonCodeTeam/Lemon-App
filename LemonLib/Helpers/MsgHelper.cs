@@ -14,6 +14,9 @@ namespace LemonLib
     {
         public const int WM_COPYDATA = 0x004A;
         public const string SEND_SHOW = "SEND_SHOW";
+        public const string SEND_LAST = "SEND_LAST",
+            SEND_PAUSE = "SEND_PAUSE",
+            SEND_NEXT = "SEND_NEXT";
 
         public struct COPYDATASTRUCT
         {
