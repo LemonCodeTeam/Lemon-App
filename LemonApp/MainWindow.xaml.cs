@@ -956,6 +956,7 @@ namespace LemonApp
                 Toast.Send("居然有重复的热键???");
                 return;
             }
+            UnHotKey();
             foreach (HotKeyChooser dt in KeysWrap.Children)
             {
                 HotKeyInfo hk = new HotKeyInfo();
@@ -2592,6 +2593,10 @@ namespace LemonApp
             {
                 MusicPlay_LoadProc.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(0)));
                 var musicurl = await MusicLib.GetUrlAsync(data,ava);
+                if (data.MusicID != ToPlayData?.MusicID)
+                {
+                    return;
+                }
                 var d = MusicLib.QualityMatcher(musicurl.Quality);
                 downloadpath = System.IO.Path.Combine(Settings.USettings.MusicCachePath, "Music", data.MusicID + d[0]);
                 Settings.USettings.PlayingFileName = data.MusicID + d[0];
@@ -2624,6 +2629,10 @@ namespace LemonApp
             else
             {
                 mp.Load(downloadpath);
+                if (data.MusicID != ToPlayData?.MusicID)
+                {
+                    return;
+                }
                 if (doesplay)
                     mp.Play();
                 MusicName.Text = data.MusicName;
@@ -2658,11 +2667,10 @@ namespace LemonApp
                 LyricTimer.Stop();
                 if (mp.BassdlList.Count > 0)
                     mp.BassdlList.Last().SetClose();
-
                 MusicName.Text = "连接资源中...";
                 ImmTb_Lyric.Text = "";
                 ImmTb_Trans.Text = "";
-                mp.Pause();
+                mp.Stop();
 
                  LoadMusic(data, doesplay);
 
@@ -2752,9 +2760,12 @@ namespace LemonApp
                     TaskBarImg.Title = data.MusicName + " - " + data.SingerText;
                 }
                 catch { }
+
                 Console.WriteLine(ToPlayData.MusicName + "\r\n" + data.MusicName, "ToPlayData");
                 if (ToPlayData != null && ToPlayData != data)
+                {
                     PlayMusic(ToPlayData, true, true);
+                }
             }
             finally
             {
@@ -4182,11 +4193,12 @@ namespace LemonApp
             IntPtr handle = new WindowInteropHelper(this).Handle;
             if (Settings.USettings.HotKeys.Count == 0)
             {
-                RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
-                RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
-                RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
-                RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
-                RegisterHotKey(handle, 129, 1, (uint)System.Windows.Forms.Keys.C);
+                //默认不加全局快捷键
+                /* RegisterHotKey(handle, 124, 1, (uint)System.Windows.Forms.Keys.L);
+                 RegisterHotKey(handle, 126, 1, (uint)System.Windows.Forms.Keys.Space);
+                 RegisterHotKey(handle, 127, 1, (uint)System.Windows.Forms.Keys.Up);
+                 RegisterHotKey(handle, 128, 1, (uint)System.Windows.Forms.Keys.Down);
+                 RegisterHotKey(handle, 129, 1, (uint)System.Windows.Forms.Keys.C);*/
                 InstallHotKeyHook(this);
             }
             else

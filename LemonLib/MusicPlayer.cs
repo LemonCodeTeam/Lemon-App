@@ -282,6 +282,15 @@ namespace LemonLib
             Bass.BASS_Stop();
             Bass.BASS_Free();
         }
+
+        /// <summary>
+        /// 停止当前播放
+        /// </summary>
+        public void Stop()
+        {
+            Bass.BASS_ChannelStop(stream);
+            Bass.BASS_StreamFree(stream);
+        }
     }
 
     /// <summary>
