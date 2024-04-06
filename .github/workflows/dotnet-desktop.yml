@@ -1,0 +1,51 @@
+name: Publish Exe Files
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: windows-latest 
+    env:
+      Solution_Name: LemonApp.sln                       # Replace with your solution name, i.e. MyWpfApp.sln.
+      PublishFile:  LemonApp\Properties\PublishProfiles\FolderProfile.pubxml
+      PublishFilex86: LemonApp\Properties\PublishProfiles\FolderProfilex86.pubxml
+      PublishPath: LemonApp\bin\Publish\
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore
+      run: dotnet restore
+
+    - name: Publishx64
+      run: dotnet publish  -p:PublishProfile=${{env.PublishFile}}
+
+    - name: Publishx86
+      run: dotnet publish  -p:PublishProfile=${{env.PublishFilex86}}
+       
+
+    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Bin
+        path: ${{env.PublishPath}}
