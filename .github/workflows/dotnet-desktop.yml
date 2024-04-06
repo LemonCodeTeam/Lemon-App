@@ -42,10 +42,15 @@ jobs:
     - name: Publishx86
       run: dotnet publish  -p:PublishProfile=${{env.PublishFilex86}}
        
-
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: Bin
-        path: ${{env.PublishPath}}
+        name: Release win-x64
+        path: ${{env.PublishPath}}\x64
+
+    - name: Upload build artifacts x86
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release win-x86
+        path: ${{env.PublishPath}}\x86
+        
