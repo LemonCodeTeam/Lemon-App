@@ -152,6 +152,7 @@ namespace LemonApp
             }
 
         }
+
         private async void window_Loaded(object sender, RoutedEventArgs e)
         {
             #region Part1
@@ -2194,17 +2195,7 @@ namespace LemonApp
 
         private void DataPage_Top_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Settings.USettings.Animation_Scroll)
-            {
-                var da = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
-                da.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
-                Datasv.LastLocation = 0;
-                Datasv.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
-            }
-            else {
-                Datasv.LastLocation = 0;
-                Datasv.ScrollToTop();
-            }
+            Datasv.ScrollToVerticalOffset(0);
         }
 
         private void DataPlayBtn_MouseDown(object sender, MouseButtonEventArgs e)

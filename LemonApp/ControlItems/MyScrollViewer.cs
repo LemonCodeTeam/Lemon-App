@@ -29,12 +29,24 @@ namespace LemonApp
         }
 
         public double LastLocation = 0;
+        public new void ScrollToVerticalOffset(double offset)
+        {
+            if (Settings.USettings.Animation_Scroll)
+            {
+                AnimateScroll(offset);
+                LastLocation = offset;
+            }
+            else
+            {
+                base.ScrollToVerticalOffset(offset);
+            }
+        }
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             if (Settings.USettings.Animation_Scroll)
             {
                 double newOffset = LastLocation - e.Delta;
-                ScrollToVerticalOffset(LastLocation);
+                base.ScrollToVerticalOffset(LastLocation);
                 if (newOffset < 0)
                     newOffset = 0;
                 if (newOffset > ScrollableHeight)

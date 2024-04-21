@@ -38,7 +38,7 @@ namespace LemonApp
         private const double LyricOpacity = 0.8;
         #endregion
         #region Properties
-        public Effect Hightlighter=new DropShadowEffect() { BlurRadius = 20,Color=Colors.White, Opacity = 0.5, ShadowDepth = 0,Direction=0 };
+        public Effect Hightlighter = new DropShadowEffect() { BlurRadius = 20,Color=Colors.White, Opacity = 0.5, ShadowDepth = 0,Direction=0 };
         public Dictionary<double, LrcModel> Lrcs = new();
         private List<Run> TransRunReference = new();
         private List<Run> RomajiRunReference = new();
@@ -187,7 +187,11 @@ namespace LemonApp
                             RomajiRunReference.Add(rm);
                             c_lrcbk.Inlines.Add(new LineBreak());
                         }
-                        c_lrcbk.Inlines.Add(new Run() {Name="main", Text = lrc });
+                        var mainLine = new TextBlock()
+                        {Text = lrc, TextWrapping = TextWrapping.Wrap };
+                        c_lrcbk.Inlines.Add(mainLine);
+                        c_lrcbk.Tag = mainLine;
+
                         if (trans != null)
                         {
                             var bl = new LineBreak();
@@ -290,6 +294,45 @@ namespace LemonApp
                 s = Convert.ToInt32(sp[1]);
             return new TimeSpan(0, 0, m, s, f);
         }
+
+        private static double pixelsPerDip = VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+        public string InsertLineBreaks(string text, double fontSize, double maxWidth)
+        {
+            string result = string.Empty;
+            string line = string.Empty;
+            bool hasBlank = text.Contains(' ');
+            var list =hasBlank?text.Split(' '):text.Split();
+            foreach (var word in list)
+            {
+                var typeface = new Typeface("Segoe UI");
+                var formattedLine = new FormattedText(line + " " + word,
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    typeface,
+                    fontSize,
+                    Brushes.Black,
+                    pixelsPerDip);
+
+                if (formattedLine.WidthIncludingTrailingWhitespace > maxWidth)
+                {
+                    result += line + "\n";
+                    line = hasBlank ? word + " " : word;
+                }
+                else
+                {
+                    line += hasBlank ? word+ " " : word;
+                }
+            }
+
+            result += line;
+            //去除result的第一个换行符
+            if (result.StartsWith("\n"))
+            {
+                result = result.Substring(1);
+            }
+            return result;
+        }
+
         #endregion
         #region
         Brush hl= new SolidColorBrush(Colors.White);
@@ -311,23 +354,34 @@ namespace LemonApp
                     if (foucslrc == lm) return;
                     if (needScrol)
                     {
+
                         foucslrc.c_LrcTb.Foreground = NormalLrcColor;
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Regular;
                         foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty, null);
                         foucslrc.c_LrcTb.Opacity = LyricOpacity;
+                        var ml=(TextBlock)foucslrc.c_LrcTb.Tag;
+                        if(ml.Tag!=null)ml.Text=ml.Tag.ToString();
+                        ml.TextWrapping = TextWrapping.Wrap;
                         foucslrc.c_LrcTb.Effect = null;
 
                         foucslrc = lm;
-
-                        ResetLrcviewScroll();
                         foucslrc.c_LrcTb.Opacity = 1;
                         foucslrc.c_LrcTb.Foreground = hl;
                         //foucslrc.c_LrcTb.SetResourceReference(ForegroundProperty, "ThemeColor");
                         foucslrc.c_LrcTb.FontWeight = FontWeights.Bold;
                         foucslrc.c_LrcTb.Effect = Hightlighter;
-                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,new DoubleAnimation(_FontSize + 8, TimeSpan.FromSeconds(0.5)) {
+                        double targetFontsize = _FontSize + 8;
+                        var mainLine= (TextBlock)foucslrc.c_LrcTb.Tag;
+                        mainLine.TextWrapping = TextWrapping.Wrap;
+                        mainLine.Tag = mainLine.Text;
+                        mainLine.Text = InsertLineBreaks(mainLine.Text, targetFontsize, mainLine.ActualWidth);
+                        var da = new DoubleAnimation(targetFontsize, TimeSpan.FromSeconds(0.3))
+                        {
                             EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut }
-                        });
+                        };
+                        Timeline.SetDesiredFrameRate(da, 60);
+                        ResetLrcviewScroll();
+                        foucslrc.c_LrcTb.BeginAnimation(FontSizeProperty,da);
                     }
                     NextLyric(lm.LrcText, lm.LrcTransText);
                     
@@ -341,8 +395,9 @@ namespace LemonApp
             GeneralTransform gf = foucslrc.c_LrcTb.TransformToVisual(c_lrc_items);
             Point p = gf.Transform(new Point(0, 0));
             double os = p.Y - (c_scrollviewer.ActualHeight / 2) + 120;
-            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(400));
+            var da = new DoubleAnimation(os, TimeSpan.FromMilliseconds(500));
             da.EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut };
+            Timeline.SetDesiredFrameRate(da, 60);
             c_scrollviewer.BeginAnimation(UIHelper.ScrollViewerBehavior.VerticalOffsetProperty, da);
         }
         #endregion
