@@ -34,13 +34,13 @@ namespace LemonLib
         //3. The download directory is placed in the user directory My Music folder
         //The above 2 and 3 items can be set in the application..
         //Load the default cache and download folder
-        public static async Task SaveSettingsTaskAsync(string id =null)
+        public static async Task SaveSettingsTaskAsync(string id = null)
         {
             try
             {
-               id ??=USettings.LemonAreeunIts;
+                id ??= USettings.LemonAreeunIts;
                 await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
-                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".pl.st", TextHelper.JSON.ToJSON(USettings_Playlist,false));
+                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".pl.st", TextHelper.JSON.ToJSON(USettings_Playlist, false));
             }
             catch { }
         }
@@ -50,7 +50,7 @@ namespace LemonLib
             {
                 id ??= USettings.LemonAreeunIts;
                 await File.WriteAllTextAsync(USettings.DataCachePath + id + ".st", TextHelper.JSON.ToJSON(USettings));
-                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".pl.st", TextHelper.JSON.ToJSON(USettings_Playlist,false));
+                await File.WriteAllTextAsync(USettings.DataCachePath + id + ".pl.st", TextHelper.JSON.ToJSON(USettings_Playlist, false));
             }
             catch { }
         }
@@ -63,24 +63,24 @@ namespace LemonLib
                     USettings = new UserSettings();
                     if (File.Exists(USettings.DataCachePath + qq + ".st"))
                     {
-                        string data =await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st");
+                        string data = await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".st");
                         Console.WriteLine(data);
                         XDUsettings(data, File.Exists(USettings.DataCachePath + qq + ".pl.st") ? await File.ReadAllTextAsync(USettings.DataCachePath + qq + ".pl.st") : "");
                         if (!Directory.Exists(USettings.MusicCachePath))
                             Directory.CreateDirectory(USettings.MusicCachePath);
-                        if (!Directory.Exists(Path.Combine(USettings.MusicCachePath , "Skin")))
+                        if (!Directory.Exists(Path.Combine(USettings.MusicCachePath, "Skin")))
                             Directory.CreateDirectory(Path.Combine(USettings.MusicCachePath, "Skin"));
                     }
                     else SaveSettingsAsync(qq);
                 }
-                catch{}
+                catch { }
             });
         }
         /// <summary>
         /// 从json中解析出Settings项
         /// </summary>
         /// <param name="data"></param>
-        private static void XDUsettings(string data,string playlist)
+        private static void XDUsettings(string data, string playlist)
         {
             JObject o = JObject.Parse(data);
             USettings.LemonAreeunIts = o["LemonAreeunIts"].ToString();
@@ -111,7 +111,7 @@ namespace LemonLib
                 USettings.DownloadWithLyric = bool.Parse(o["DownloadWithLyric"].ToString());
             if (data.Contains("Skin_Type"))
             {
-                USettings.Skin_Type =int.Parse( o["Skin_Type"].ToString());
+                USettings.Skin_Type = int.Parse(o["Skin_Type"].ToString());
                 USettings.Skin_ThemeColor_R = byte.Parse(o["Skin_ThemeColor_R"].ToString());
                 USettings.Skin_ThemeColor_G = byte.Parse(o["Skin_ThemeColor_G"].ToString());
                 USettings.Skin_ThemeColor_B = byte.Parse(o["Skin_ThemeColor_B"].ToString());
@@ -138,14 +138,15 @@ namespace LemonLib
                 USettings.MusicCachePath = dir + "LemonAppCache\\";
                 USettings.DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\LemonApp\\";
             }
-            if (data.Contains("HotKeys")) {
+            if (data.Contains("HotKeys"))
+            {
                 string json = o["HotKeys"].ToString();
                 USettings.HotKeys = JsonConvert.DeserializeObject<List<HotKeyInfo>>(json);
             }
             if (data.Contains("QuickGoToData"))
             {
                 string json = o["QuickGoToData"].ToString();
-                USettings.QuickGoToData= JsonConvert.DeserializeObject<Dictionary<string,QuickGoToData>>(json);
+                USettings.QuickGoToData = JsonConvert.DeserializeObject<Dictionary<string, QuickGoToData>>(json);
             }
             if (data.Contains("PlayingIndex"))
                 USettings.PlayingIndex = int.Parse(o["PlayingIndex"].ToString());
@@ -181,12 +182,14 @@ namespace LemonLib
                 USettings.PreferQuality_Download = (MusicQuality)int.Parse(o["PreferQuality_Download"].ToString());
             if (data.Contains("NetEaseCookie"))
                 USettings.NetEaseCookie = o["NetEaseCookie"].ToString();
-            if(data.Contains("NeteaseId"))
+            if (data.Contains("NeteaseId"))
                 USettings.NeteaseId = o["NeteaseId"].ToString();
             if (playlist.Contains("MusicGDataPlayList"))
-                USettings_Playlist= JsonConvert.DeserializeObject<UserSettings_PlayList>(playlist);
+                USettings_Playlist = JsonConvert.DeserializeObject<UserSettings_PlayList>(playlist);
             else if (data.Contains("MusicGDataPlayList"))
                 USettings_Playlist.MusicGDataPlayList = JsonConvert.DeserializeObject<List<Music>>(o["MusicGDataPlayList"].ToString());
+            if (data.Contains("DynamicEffect"))
+                USettings.DynamicEffect = int.Parse(o["DynamicEffect"].ToString());
         }
         public class UserSettings
         {
@@ -199,8 +202,10 @@ namespace LemonLib
                 //以上2、3项的目录可在应用中设置..
                 DriveInfo[] allDirves = DriveInfo.GetDrives();
                 string dir = "C:\\";
-                foreach (DriveInfo item in allDirves) {
-                    if (item.DriveType == DriveType.Fixed&& item.Name!= "C:\\") {
+                foreach (DriveInfo item in allDirves)
+                {
+                    if (item.DriveType == DriveType.Fixed && item.Name != "C:\\")
+                    {
                         dir = item.Name;
                         break;
                     }
@@ -244,6 +249,11 @@ namespace LemonLib
             /// </summary>
             public MusicQuality PreferQuality = 0;
             public MusicQuality PreferQuality_Download = 0;
+
+            /// <summary>
+            /// 开启封面图动效 0:disable 1:enable ...more
+            /// </summary>
+            public int DynamicEffect { get; set; } = 0;
             #endregion
             #region 主题配置
             /// <summary>
@@ -334,7 +344,7 @@ namespace LemonLib
                 }
                 else await SaveLocaSettings();
             }
-            catch{}
+            catch { }
         }
         public async static Task SaveLocaSettings()
         {
@@ -353,7 +363,7 @@ namespace LemonLib
         public static HANDLE Handle = new HANDLE();
         public async static void SaveHandle()
         {
-             await File.WriteAllTextAsync(USettings.DataCachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
+            await File.WriteAllTextAsync(USettings.DataCachePath + "HANDLE.st", TextHelper.JSON.ToJSON(Handle));
         }
         public static async Task<HANDLE> ReadHandleAsync()
         {

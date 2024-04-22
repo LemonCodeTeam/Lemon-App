@@ -250,6 +250,10 @@ namespace LemonLib
             Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT256);
             return fft;
         }
+        public void GetFFTDataRef(ref float[] fft)
+        {
+            Bass.BASS_ChannelGetData(stream, fft, (int)BASSData.BASS_DATA_FFT512);
+        }
         /// <summary>
         /// 更新设备
         /// </summary>

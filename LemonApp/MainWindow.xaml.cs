@@ -243,6 +243,7 @@ namespace LemonApp
             //----播放组件-----------
             await MusicPlayer.PrepareDll();
             mp = new MusicPlayer(new WindowInteropHelper(this).Handle);
+            LyricPage_Wave._mp = mp;
             //-----歌词显示 歌曲播放 等组件的加载
             lv = new LyricView();
             lv.ClickLyric += Lv_ClickLyric;
@@ -579,12 +580,25 @@ namespace LemonApp
                 }
                 path7.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
-            //------TransLyric Icon----------------
+            //------LyricPage Settings----------------
             if (Settings.USettings.TransLyric)
             {
                 TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
             else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+          
+            if (Settings.USettings.RomajiLyric)
+            {
+                RomajiLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+            else RomajiLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+
+            if (Settings.USettings.DynamicEffect!=0)
+            {
+                OpenDynamicEffectIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+            }
+            else OpenDynamicEffectIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+            
             //---------加载上一次播放-------与播放列表
             //---------------登录之后-同步"我喜欢"歌单ids----------
             if (Settings.USettings.LemonAreeunIts != "0")
@@ -2712,6 +2726,7 @@ namespace LemonApp
                     col.R += 80; col.G += 80; col.B += 80;
                 }
                 AlbumColor = col;
+                LyricPage_Wave.BrushColor = AlbumColor;
                 if (IsLyricPageOpen == 1) App.BaseApp.SetColor("ThemeColor", AlbumColor);
                 Console.WriteLine(col.R + " " + col.G + " " + col.B, "ThemeColor of image");
               //  LyricPage_ThemeColor.Background=new SolidColorBrush() { Color = col };
@@ -2733,6 +2748,7 @@ namespace LemonApp
                     TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                     lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
                     LyricTimer.Start();
+                    LyricPage_Wave.Start();
                     isplay = true;
                     if (Settings.USettings.LyricAnimationMode == 2)
                     {
@@ -3070,6 +3086,7 @@ namespace LemonApp
             {
                 isplay = false;
                 mp.Pause();
+                LyricPage_Wave.Stop();
                 if (Settings.USettings.LyricAnimationMode == 2)
                     LyricBigAniRound.Pause();
                 TaskBarBtn_Play.Icon = Properties.Resources.icon_play;
@@ -3080,6 +3097,7 @@ namespace LemonApp
             {
                 isplay = true;
                 mp.Play();
+                LyricPage_Wave.Start();
                 if (Settings.USettings.LyricAnimationMode == 2)
                 {
                     if (!IsBigAniRunning)
@@ -3711,6 +3729,26 @@ namespace LemonApp
                 TransLyricIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
             }
             else TransLyricIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+        }
+
+        private void OpenDynamicEffect_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.USettings.DynamicEffect = Settings.USettings.DynamicEffect switch
+            {
+                0 => 1,
+                1 => 0,
+                _ => 0
+            };
+            if (Settings.USettings.DynamicEffect == 1)
+            {
+                OpenDynamicEffectIcon.SetResourceReference(Path.FillProperty, "ThemeColor");
+                LyricPage_Wave.Start();
+            }
+            else
+            {
+                OpenDynamicEffectIcon.Fill = new SolidColorBrush(Color.FromArgb(140, 255, 255, 255));
+                LyricPage_Wave.Stop();
+            }
         }
         private void RomajiLyric_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -4371,5 +4409,6 @@ namespace LemonApp
             return IntPtr.Zero;
         }
         #endregion
+
     }
 }
