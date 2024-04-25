@@ -4372,7 +4372,8 @@ namespace LemonApp
         #region 进程通信
         private async Task SendMsgToMyToolBar(string data,string type="LemonAppLyricData") {
             int handle =new WindowInteropHelper(this).Handle.ToInt32();
-            string lrcdata = "{\"Sign\":\""+type+"\",\"Data\":\"" + data + "\",\"Handle\":\""+handle+"\"}";
+            var obj = new {Sign=type,Data=data,Handle=handle};
+            string lrcdata = JSON.ToJSON(obj);
             Socket clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             await clientSocket.ConnectAsync("127.0.0.1", 3230);
             await clientSocket.SendAsync(Encoding.UTF8.GetBytes(lrcdata), SocketFlags.None);
