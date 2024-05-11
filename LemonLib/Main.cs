@@ -12,8 +12,8 @@ namespace LemonLib
         static async Task Main()
         {
             await Settings.LoadUSettings("2728578956");
-            var a = await MusicLib.GetMyMusicDNA();
-            Console.WriteLine(a[0].Desc);
+            var a = await MusicLib.GetUrlAsync(new InfoHelper.Music() { Source=InfoHelper.Platform.qq,MusicID= "0031h9zO4WH5Fn" },InfoHelper.MusicQuality.SQ);
+            Console.WriteLine(a.Url);
             Console.ReadLine();
         }
         public static Action<string,string> DebugCallBack = new Action<string,string>((a,b) => {

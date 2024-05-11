@@ -59,11 +59,11 @@ namespace LemonApp.ControlItems
             {
                 if (token.IsCancellationRequested)
                     break;
-                _spectrumData = _doubleArrayPool.Rent(CircleStripCount*4);
+                _spectrumData = _doubleArrayPool.Rent(CircleStripCount*8);
                 _mp.GetFFTDataRef(ref _spectrumData);
                 InvalidateVisual();
 
-                await Task.Delay(16);
+                await Task.Delay(8);
             }
         }
 
@@ -73,7 +73,7 @@ namespace LemonApp.ControlItems
             if (_mp == null||!_isPlaying) return;
             if(Visibility!=Visibility.Visible) return;
             TimeSpan dt=DateTime.Now-_startTime;
-            var data = _spectrumData[5..];
+            var data = _spectrumData;
             DrawCircleStrips(drawingContext, data, dt.TotalSeconds, CircleStripCount);
         }
 
@@ -94,7 +94,7 @@ namespace LemonApp.ControlItems
             for (int i = 0; i < stripCount; i++)
             {
                 double x = blockWidth * i + rotationAngle;
-                double y = spectrumData[i * spectrumData.Length / stripCount] * scale*1.5; 
+                double y = spectrumData[i * spectrumData.Length / stripCount] * scale; 
                 points[i] = new Point(x, y);
             }
 

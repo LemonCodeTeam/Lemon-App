@@ -942,7 +942,7 @@ jpg
                 
                 MusicQuality.SQ => new string[2] { ".flac", "SQ" },
                 MusicQuality.HQ => new string[2] { ".mp3", "HQ" },
-                MusicQuality._120k => new string[2] { ".mp3", "120k" }
+                MusicQuality._120k => new string[2] { ".m4a", "120k" }
             };
         }
 
@@ -1016,7 +1016,10 @@ jpg
             if (d.Source == Platform.qq)
             {
                 MainClass.DebugCallBack(d.MusicID, "Fetching Url From qq-------------------");
-                var data = await GetUrlOfficialLine(d.MusicID);
+                var data = await GetUrlFcgLine(d.MusicID, PQ);
+                if (await HttpHelper.GetHTTPFileSize(data) > 1024)
+                    return new MusicUrlData() { Url = data, Source = "QQ", Quality = PQ };
+                data = await GetUrlOfficialLine(d.MusicID);
                 if (await HttpHelper.GetHTTPFileSize(data) > 1024)
                     return new MusicUrlData() { Url = data, Source = "QQ", Quality = MusicQuality._120k };
                 else if (!string.IsNullOrEmpty(d.Mvmid))
@@ -1035,7 +1038,24 @@ jpg
             JObject o = JObject.Parse(data);
             return o["data"][0]["url"].ToString();
         }
-
+        private static async Task<string> GetUrlFcgLine(string Musicid,MusicQuality quality)
+        {
+            string prefix = quality switch { 
+                MusicQuality._120k => "C400" ,
+                MusicQuality.HQ=>"M800",
+                MusicQuality.SQ=>"F000"
+            };
+            string surffix = quality switch {
+                MusicQuality._120k=>"m4a",
+                MusicQuality.HQ=>"mp3",
+                MusicQuality.SQ=>"flac"
+           };
+            string url = "https://u.y.qq.com/cgi-bin/musicu.fcg?format=json&data={%22req_0%22:{%22module%22:%22vkey.GetVkeyServer%22,%22method%22:%22CgiGetVkey%22,%22param%22:{%22filename%22:[%22PREFIXSONGMIDSONGMID.SUFFIX%22],%22guid%22:%2210000%22,%22songmid%22:[%22SONGMID%22],%22songtype%22:[0],%22uin%22:%220%22,%22loginflag%22:1,%22platform%22:%2220%22}},%22loginUin%22:%220%22,%22comm%22:{%22uin%22:%220%22,%22format%22:%22json%22,%22ct%22:24,%22cv%22:0}}";
+            url = url.Replace("SONGMID", Musicid).Replace("PREFIX", prefix).Replace("SUFFIX", surffix);
+            string data = await HttpHelper.GetWebDataqAsync(url);
+            JObject json = JObject.Parse(data);
+            return "https://ws.stream.qqmusic.qq.com/" + json["req_0"]["data"]["midurlinfo"][0]["purl"];
+        }
         /// <summary>
         /// Official
         /// </summary>
