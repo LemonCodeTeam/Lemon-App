@@ -45,6 +45,7 @@ namespace LemonApp
         #region 一些字段
         //-------Mini--------
         private MiniPlayer mini;
+        private SMTCHelper Smtc;
         System.Windows.Forms.Timer LyricTimer = new System.Windows.Forms.Timer();
         public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
@@ -261,6 +262,11 @@ namespace LemonApp
             PlayDLItem.Delete = new Action<PlayDLItem>((e) => this.PlayDL_List.Items.Remove(e));
             //----Load Mini-----------------
             mini = new MiniPlayer(this);
+            //-----Load SMTC--------------
+            Smtc = new SMTCHelper("Lemon App");
+            Smtc.PlayOrPause += delegate { Dispatcher.Invoke(() => PlayBtn_MouseDown(null, null)); };
+            Smtc.Next += delegate { Dispatcher.Invoke(() => PlayControl_PlayNext(null, null)); };
+            Smtc.Previous += delegate { Dispatcher.Invoke(() => PlayControl_PlayLast(null, null)); };
             //--------去除可恶的焦点边缘线
             //    UIHelper.G(Page);
             #endregion
@@ -288,9 +294,6 @@ namespace LemonApp
             ClHomePage = new HomePage(this);
             NSPage(new MeumInfo(ClHomePage, Meum_MusicKu), true, false);
             ContentPage.Children.Add(ClHomePage);
-            //-----Connect to MyToolBar
-            if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
-                await SendMsgToMyToolBar("Start", "LemonAppOrd");
         }
         private static float LyricAni_LastSv = 0;
         private static bool LyricAni_Playing = false;
@@ -399,7 +402,8 @@ namespace LemonApp
                     //--------------MyToolBar Lyric Data--------------
                     if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
                     {
-                        await SendMsgToMyToolBar(lrc);
+                        Smtc.Info.SetAlbumTitle(lrc)
+                             .Update();
                     }
 
                     var ptr = MsgHelper.FindWindow(null, "MyToolBar");
@@ -900,12 +904,6 @@ namespace LemonApp
         private async void BindMyToolBar_Click(object sender, RoutedEventArgs e)
         {
             Settings.USettings.BindMyToolBar = (bool)BindMyToolBar.IsChecked;
-            if (MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero)
-            {
-                if (Settings.USettings.BindMyToolBar)
-                    await SendMsgToMyToolBar("Start", "LemonAppOrd");
-                else await SendMsgToMyToolBar("Exit", "LemonAppOrd");
-            }
         }
         private async void UserTX_MouseDown_1(object sender, MouseButtonEventArgs e)
         {
@@ -2689,9 +2687,11 @@ namespace LemonApp
 
                 #region 专辑图
                 BitmapImage im;
+                string CoverImgUrl;
                 if (data.Source == Platform.qq)
-                    im = await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverImgUrl(data)) ?? await ImageCacheHelper.GetImageByUrl("https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000");
-                else im = await ImageCacheHelper.GetImageByUrl(await MusicLib.GetCoverNetease(data.MusicID));
+                    CoverImgUrl = (await MusicLib.GetCoverImgUrl(data)) ?? "https://y.gtimg.cn/mediastyle/global/img/album_300.png?max_age=31536000";
+                else CoverImgUrl = await MusicLib.GetCoverNetease(data.MusicID);
+                im = await ImageCacheHelper.GetImageByUrl(CoverImgUrl);
                 MusicImage.Background = new ImageBrush(im);
                 mini.img.Background = MusicImage.Background;
                 //模糊处理
@@ -2741,9 +2741,15 @@ namespace LemonApp
                 lv.LoadLrc(dt, ldrm);
                 RomajiLyric.Visibility = ldrm ? Visibility.Visible : Visibility.Collapsed;
                 TransLyric.Visibility = dt.HasTrans ? Visibility.Visible : Visibility.Collapsed;
+                //更新SMTC
+                Smtc.Info.SetTitle(data.MusicName)
+                    .SetArtist(data.SingerText)
+                    .SetThumbnail(CoverImgUrl)
+                    .Update();
                 if (doesplay)
                 {
                     //开始播放
+                    Smtc.SetMediaStatus(SMTCMediaStatus.Playing);
                     (PlayBtn.Child as Path).Data = Geometry.Parse(Properties.Resources.MiniPause);
                     TaskBarBtn_Play.Icon = Properties.Resources.icon_pause;
                     lyric_playcontrol.Data = mini.play.Data = Geometry.Parse(Properties.Resources.MiniPause);
@@ -3085,6 +3091,7 @@ namespace LemonApp
             if (isplay)
             {
                 isplay = false;
+                Smtc.SetMediaStatus(SMTCMediaStatus.Paused);
                 mp.Pause();
                 LyricPage_Wave.Stop();
                 if (Settings.USettings.LyricAnimationMode == 2)
@@ -3096,6 +3103,7 @@ namespace LemonApp
             else
             {
                 isplay = true;
+                Smtc.SetMediaStatus(SMTCMediaStatus.Playing);
                 mp.Play();
                 LyricPage_Wave.Start();
                 if (Settings.USettings.LyricAnimationMode == 2)
@@ -4271,10 +4279,6 @@ namespace LemonApp
                      if (Settings.USettings.LyricAppBarOpen)
                          lyricTa.Close();
                      else lyricToast.Close();
-                 if (Settings.USettings.BindMyToolBar && MsgHelper.FindWindow(null, "MyToolBar") != IntPtr.Zero) 
-                 {
-                     await SendMsgToMyToolBar("Exit", "LemonAppOrd");
-                 }
                      try
                  {
                      mp.Free();

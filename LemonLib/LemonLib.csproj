@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <Version>1.2.9.7</Version>
     <Authors>TwilightLemon</Authors>
   </PropertyGroup>
