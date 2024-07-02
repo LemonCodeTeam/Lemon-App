@@ -45,7 +45,7 @@ namespace LemonApp
         #region 一些字段
         //-------Mini--------
         private MiniPlayer mini;
-        private SMTCHelper Smtc;
+        private SMTCCreator Smtc;
         System.Windows.Forms.Timer LyricTimer = new System.Windows.Forms.Timer();
         public PlayDLItem MusicData = new PlayDLItem(new Music());
         bool isplay = false;
@@ -263,7 +263,7 @@ namespace LemonApp
             //----Load Mini-----------------
             mini = new MiniPlayer(this);
             //-----Load SMTC--------------
-            Smtc = new SMTCHelper("Lemon App");
+            Smtc = new ("Lemon App");
             Smtc.PlayOrPause += delegate { Dispatcher.Invoke(() => PlayBtn_MouseDown(null, null)); };
             Smtc.Next += delegate { Dispatcher.Invoke(() => PlayControl_PlayNext(null, null)); };
             Smtc.Previous += delegate { Dispatcher.Invoke(() => PlayControl_PlayLast(null, null)); };
@@ -901,7 +901,7 @@ namespace LemonApp
             SettingsPage_AboutPage.Children.Add((Grid)XamlReader.Parse(data));
             SettingsPage_NSPage(SettingsPage_AboutPage);
         }
-        private async void BindMyToolBar_Click(object sender, RoutedEventArgs e)
+        private void BindMyToolBar_Click(object sender, RoutedEventArgs e)
         {
             Settings.USettings.BindMyToolBar = (bool)BindMyToolBar.IsChecked;
         }
