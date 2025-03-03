@@ -1,3 +1,4 @@
+# 本项目不再更新，请移步：[TwilightLemon/Lemon-App](https://github.com/TwilightLemon/Lemon-App)
 # Lemon App
 Lemon App 是一款基于QQ音乐的在线音乐播放器。
 支持同步QQ音乐歌单及喜欢，更有排行榜、分类歌单、歌手、电台等功能 发现好音乐！
@@ -5,9 +6,6 @@ Lemon App 是一款基于QQ音乐的在线音乐播放器。
 #### Project
 [![Build status](https://github.com/LemonCodeTeam/Lemon-App/workflows/CodeQL/badge.svg)](https://github.com/LemonCodeTeam/Lemon-App/actions/workflows/codeql.yml)
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/TwilightLemon/Lemon-App/blob/master/LICENSE)
-[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
-[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
-[![HitCount](http://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App.svg)](http://hits.dwyl.com/TwilightLemon/TwilightLemon/Lemon-App)  
 #### Release
 [![Release](https://github.com/LemonCodeTeam/Lemon-App/workflows/Publish%20Exe%20Files/badge.svg)](https://github.com/LemonCodeTeam/Lemon-App/actions/workflows/dotnet-desktop.yml)
 [![Release](https://img.shields.io/badge/Release-Lemon%20App-%23FF4D5B.svg?style=flat-squar)](https://gitee.com/TwilightLemon/LemonAppDynamics/releases)  
@@ -25,8 +23,8 @@ powered by .NET 6 on WPF
 p.s. 32位平台请自行编译
 
 ### 软件版权
-本应用由 [Twilight./Lemon(https://twlm.space)(QQ:2728578956)](https://twlm.space) 开发，转载和使用请保留原网址和版权信息
-使用和传播请遵守GPL以及Anti 996协议
+本应用由 [Twilight./Lemon(QQ:2728578956)](https://blog.twlmgatito.cn) 开发，转载和使用请保留原网址和版权信息
+使用和传播请遵守GPL v3协议,详见LICENSE文件
 
 ### 免责声明
 本应用中的歌曲和部分API来自QQ音乐和网易云音乐,音乐及歌词翻译版权分别归QQ音乐和网易云音乐所有。  
